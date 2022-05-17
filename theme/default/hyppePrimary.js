@@ -1,0 +1,17 @@
+export const hyppePrimary = {
+  50: '#f5e4f5',
+  100: '#e6bde7',
+  200: '#d591d7',
+  300: '#c464c7',
+  400: '#b743bb',
+  500: '#aa22af',
+  600: '#a31ea8',
+  700: '#99199f',
+  800: '#901496',
+  900: '#7f0c86',
+  A100: '#fbb6ff',
+  A200: '#f883ff',
+  A400: '#f450ff',
+  A700: '#f336ff',
+  'contrastDefaultColor': 'light',
+};
