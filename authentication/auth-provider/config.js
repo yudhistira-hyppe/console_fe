@@ -1,6 +1,7 @@
 //# Default IP and Stream for sanbox equaly
 // export const DEFAULT_IP = `sandbox.hyppe.id`;
 // export const DEFAULT_STREAM_IP = `sandbox.hyppe.id`;
+//export const DEFAULT_IP = `project.com:5000/api`;
 export const DEFAULT_IP = `staging.hyppe.id/v2/api`;
 export const DEFAULT_STREAM_IP = `staging.hyppe.id`;
 

@@ -6,8 +6,10 @@ export const instance = axios.create({
   //baseURL: '/api',
   baseURL: REST_API_URL,
   timeout: 30000,
+  method: 'POST',
       mode: 'no-cors',
   headers: {
+    'Access-Control-Allow-Origin': true,
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   },
@@ -69,6 +71,7 @@ export const login = (data) => {
   formData.email = data.email;
   formData.password = data.password;
   formData.location = data.location ? data.location : { longitude: '0.0000', latitude: '0.0000' };
+  //formData.deviceId = `dw-ckEuZFESeqnWjzzz9UE:APA91bF2xMw67hdbbMgC2fXNXfo9BfLPmZZBVMFEDGMLStVdJFgfvjLlsqnMViLMhKx5aeY_25CoMqD3PnY-xvt-xHsE0F44WpnvLDvS8L0QNzRQzYmueyyFWdAyTHeyHnEl7RaLQOIa`;
   formData.deviceId = data.device ? data.device : uuidv4();
   return instance.post(url, JSON.stringify(formData));
 };
