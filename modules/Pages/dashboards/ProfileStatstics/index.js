@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
+import {Box, Button} from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
@@ -8,45 +8,96 @@ import { Area, AreaChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis }
 import { fakeDb } from '../../../FakeDb/fake-db';
 import { Typography } from '@material-ui/core';
 import TrendingDownIcon from '@material-ui/icons/TrendingDown';
+import CmtCardContent from "../../../../@coremat/CmtCard/CmtCardContent";
+import {ExpandMore} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
-  dot: {
-    height: 8,
-    width: 8,
-    borderRadius: '50%',
-    backgroundColor: '#1CACCE',
+  infoLabel: {
+    fontFamily: 'Lato',
+    fontSize: '14px',
+    lineHeight: '20px',
+    letterSpacing: '0.25px',
+    color: 'rgba(0, 0, 0, 0.6)'
   },
-  dotPrimary: {
-    backgroundColor: '#E36978',
+  precentageLabel: {
+    fontFamily: 'Lato',
+    fontSize: '16px',
+    lineHeight: '24px',
+    letterSpacing: '0.15px',
+    color: '#E00930'
   },
-  textCapitalize: {
-    textTransform: 'capitalize',
+  balanceLabel: {
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    fontSize: '24px',
+    lineHeight: '22px',
+    color: 'rgba(0, 0, 0, 0.87)'
   },
-  subTitle: {
-    color: theme.palette.text.secondary,
+  headTitle: {
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    fontSize: '20px',
+    lineHeight: '24px',
+    color: '#202020',
   },
-  textError: {
-    display: 'flex',
-    alignItems: 'center',
-    color: theme.palette.error.main,
-    marginLeft: 8,
-    marginTop: 4,
-    fontWeight: theme.typography.fontWeightRegular,
+  summaryHistLbl: {
+    fontFamily: 'Lato',
+    fontSize: '14px',
+    lineHeight: '20px',
+    color: '#202020'
   },
-  graphRoot: {
-    margin: '-40px 0px 0px 0px',
+  borderInBetween:{
+    borderTop: '1px solid rgba(0, 0, 0, 0.161741)',
+    '&:last-child': {
+      borderBottom: '1px solid rgba(0, 0, 0, 0.161741)',
+    },
+  },
+  labelLink: {
+    fontFamily: 'Lato',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    letterSpacing: '0.4px',
+    color: '#AB22AF'
+  },
+  tooltip: {
+    position: 'relative',
+    borderRadius: 6,
+    padding: '4px 12px',
+    backgroundColor: '#21C0E8',
+    color: theme.palette.common.white,
   },
 }));
 
 const DataChart = ({ chartData }) => {
+  const classes = useStyles();
   return (
-    <ResponsiveContainer width="100%" height={170}>
-      <LineChart data={chartData} margin={{ top: 0, right: 5, left: 5, bottom: 0 }}>
-        <XAxis dataKey="month" hide />
-        <Tooltip labelStyle={{ color: 'black' }} cursor={false} />
-        <Line dataKey="growth" strokeWidth={2} stroke="#F39711" dot={{ stroke: '#F39711', strokeWidth: 1 }} />
-      </LineChart>
-    </ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={120}>
+        <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+          <XAxis dataKey="month" hide />
+          <Tooltip
+              labelStyle={{ color: 'black' }}
+              cursor={false}
+              content={(data) => {
+                return data.payload[0] ? <Box className={classes.tooltip}>Week {data.payload[0].payload.month} : {data.payload[0].payload.growth}</Box> : null;
+              }}
+          />
+          <defs>
+            <linearGradient id="color11" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#21C0E8" stopOpacity={0.1} />
+              <stop offset="40%" stopColor="#fff" stopOpacity={0.5} />
+            </linearGradient>
+          </defs>
+          <Area
+              dataKey="growth"
+              type="monotone"
+              strokeWidth={2}
+              stackId="2"
+              stroke="#21C0E8"
+              fill="url(#color11)"
+              fillOpacity={1}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
   );
 };
 
@@ -55,23 +106,34 @@ const ProfileStatstics = () => {
   const { adsStatistics } = fakeDb;
 
   return (
-    <CmtCard>
-      <CmtCardHeader
-        title="Profile Visits"
-        subTitle={
-          <div className="mb-0" style={{ marginTop: 0, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Typography component="div" variant="h4">
-              242
-            </Typography>
-            <Typography component="span" variant="h4" className={classes.textError}>
-              -8%
-              <TrendingDownIcon fontSize="small" />
-            </Typography>
-          </div>
-        }
-      />
-       <DataChart chartData={adsStatistics.chartData}   />
-    </CmtCard>
+      <div style={{height: '250px'}} className='flex-auto'>
+        <CmtCard className='h-full w-full'>
+          <CmtCardContent>
+            <div className={classes.headTitle}>
+              Profile Visits
+            </div>
+            <div className='mt-7'>
+              <div className={classes.infoLabel}>
+                This Week
+              </div>
+              <div className='flex flex-row'>
+                <div className={classes.balanceLabel}>
+                  242
+                </div>
+                <div className='ml-1'>
+                                <span className={classes.precentageLabel}>
+                                    -8%
+                                </span>
+                </div>
+                <div className='ml-1'>
+                  <ExpandMore style={{fontSize: '20px'}}/>
+                </div>
+              </div>
+            </div>
+          </CmtCardContent>
+          <DataChart chartData={adsStatistics.chartData}/>
+        </CmtCard>
+      </div>
   );
 };
 

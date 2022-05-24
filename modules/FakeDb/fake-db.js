@@ -3,23 +3,25 @@ import { TouchApp } from '@material-ui/icons';
 import { Refresh } from '@material-ui/icons';
 import { FileCopy } from '@material-ui/icons';
 import { Share } from '@material-ui/icons';
+import TableCell from "@material-ui/core/TableCell";
+import CmtImage from "../../@coremat/CmtImage";
+import TableRow from "@material-ui/core/TableRow";
+import React from "react";
+
 export const fakeDb = {
   adsStatistics: {
-    labelBudget: 'Spent',
-    labelGrowth: 'Growth',
+    labelBudget: 'Impression',
+    labelGrowth: 'CTA',
     chartData: [
-      { month: 'Jan', budget: 500, growth: 500 },
-      { month: 'Feb', budget: 700, growth: 750 },
-      { month: 'Mar', budget: 900, growth: 1200 },
-      { month: 'Apr', budget: 1000, growth: 1350 },
-      { month: 'May', budget: 945, growth: 1400 },
-      { month: 'Jun', budget: 1100, growth: 1200 },
-      { month: 'Jul', budget: 1250, growth: 1000 },
-      { month: 'Aug', budget: 1400, growth: 500 },
-      { month: 'Sep', budget: 1120, growth: 500 },
-      { month: 'Oct', budget: 1030, growth: 500 },
-      { month: 'Nov', budget: 1150, growth: 500 },
-      { month: 'Dec', budget: 1500, growth: 500 },
+      { month: 'Jan', budget: 1500, growth:  1600},
+      { month: 'Feb', budget: 2000, growth: 2100 },
+      { month: 'Mar', budget: 1200, growth: 1300},
+      { month: 'Apr', budget: 2200, growth: 2300 },
+      { month: 'May', budget: 2600, growth: 2700 },
+      { month: 'Jun', budget: 4300, growth: 4400 },
+      { month: 'July', budget: 2900, growth: 3000 },
+      { month: 'Aug', budget: 3800, growth: 3900 },
+      { month: 'Sep', budget: 1500, growth: 1600 },
     ],
   },
   wallets: [
@@ -893,5 +895,223 @@ export const fakeDb = {
       harga: 'Rp. 1.000.000',
       id: '12549anfh852'
     },
-  ]
+  ],
+  adsTrends: {
+    enableCampaign: 7,
+    pauseCampaign: 2,
+    data: [
+      {year: '2021-10-11', cta: 0, cpv: 0},
+      {year: '2021-10-12', cta: 100, cpv: 90},
+      {year: '2021-10-13', cta: 20, cpv: 60},
+      {year: '2021-10-14', cta: 100, cpv: 110},
+    ]
+  },
+  campaign:[
+    {Status:'Active', Type: 'Content Ads',ImageUri:'/pict/612ce0bb-dd7a-4d8f-a3f6-d3ddbbb2de8f',Name:'Intan Jual Baju',Placement:'Pre-Hypee',ShowPlan:'827',Budget:'1500',Impression:'256',CPV:'826',Trafic:'Website',CTA:'827',StartDate:'11 Dec 2021', EndDate:'15 Dec 2021'}
+  ],
+  reachTrends: {
+    title: 'Reach',
+    hoverButton: {
+      text: 'This Week',
+      color: '#5D9405',
+      hoverText: 'Past Month',
+      hoverColor: '#fff',
+    },
+    analyticData: {
+      amount: '580',
+      label: 'Total Reach',
+      percentage: '98%',
+      onHover: {
+        amount: '390,200',
+        percentage: '98.8%',
+      },
+    },
+    primaryColor: {
+      solid: '#ADDC4C',
+      light: '#D7F5B1',
+    },
+    secondaryColor: {
+      solid: '#C8372D',
+      light: '#FADEE3',
+    }
+  },
+  impressionTrends: {
+    title: 'Impression',
+    hoverButton: {
+      text: 'This Week',
+      color: '#5D9405',
+      hoverText: 'Past Month',
+      hoverColor: '#fff',
+    },
+    analyticData: {
+      amount: '320',
+      label: 'Total Reach',
+      percentage: '98%',
+      onHover: {
+        amount: '390,200',
+        percentage: '98.8%',
+      },
+    },
+    primaryColor: {
+      solid: '#ADDC4C',
+      light: '#D7F5B1',
+    },
+    secondaryColor: {
+      solid: '#C8372D',
+      light: '#FADEE3',
+    }
+  },
+  cpvTrends: {
+    title: 'Cost Per View (CPV)',
+    hoverButton: {
+      text: 'This Week',
+      color: '#5D9405',
+      hoverText: 'Past Month',
+      hoverColor: '#fff',
+    },
+    analyticData: {
+      amount: 'Rp. 870.000',
+      label: 'Total Reach',
+      percentage: '98%',
+      onHover: {
+        amount: '390,200',
+        percentage: '98.8%',
+      },
+    },
+    primaryColor: {
+      solid: '#ADDC4C',
+      light: '#D7F5B1',
+    },
+    secondaryColor: {
+      solid: '#C8372D',
+      light: '#FADEE3',
+    }
+  },
+  ctaTrends: {
+    title: 'Call to Action (CTA)',
+    hoverButton: {
+      text: 'This Week',
+      color: '#5D9405',
+      hoverText: 'Past Month',
+      hoverColor: '#fff',
+    },
+    analyticData: {
+      amount: '580',
+      label: 'Total Reach',
+      percentage: '98%',
+      onHover: {
+        amount: '390,200',
+        percentage: '98.8%',
+      },
+    },
+    primaryColor: {
+      solid: '#ADDC4C',
+      light: '#D7F5B1',
+    },
+    secondaryColor: {
+      solid: '#C8372D',
+      light: '#FADEE3',
+    }
+  },
+  stackBar: {
+    title: 'Gender', dataLabel1: 'Male', dataLabel2: 'Female', value1: 93, value2: 145,
+    barChartData: {xAxisKey: 'date', yKey1 : 'male', yKey2: 'female', ykey1Label: 'Male', ykey2Label: 'Female',
+      data: [
+        {date: '2021-10-11', male: 2, female: 1},
+        {date: '2021-10-12', male: 10, female: 20},
+        {date: '2021-10-13', male: 30, female: 1},
+        {date: '2021-10-14', male: 15, female: 12},
+        {date: '2021-10-15', male: 20, female: 10},
+        {date: '2021-10-16', male: 20, female: 10},
+        {date: '2021-10-17', male: 20, female: 10},
+        {date: '2021-10-18', male: 20, female: 10},
+      ]
+    }
+  },
+  progressBar: {
+    title : '', label: 'Indonesia', value: 100, color: '#AB22AF'
+  },
+  voucherList:[
+    {voucherName: 'Voucher 1.000 Show', voucherInfo: '1 voucher is valid for 1 ad serving as much as 1000 times', price: 1500000, isCheck: false, many: 0},
+    {voucherName: 'Voucher 10.000 Show', voucherInfo: 'This 1 voucher is valid for 1 ad serving as much as 10.000 times', price: 15000000, isCheck: false, many: 0}
+  ],
+  transHistory:[
+    {date:'15 Dec 2021', time:'02:43 PM', type: 'Buy', description:'Content Of HyppePic', fromDesc:'From anthony (Anthony)',amount:'- Rp. 15.000.000',status:'sent'},
+    {date:'15 Dec 2021', time:'02:43 PM', type: 'Rewards', description:'Content Of HyppePic', fromDesc:'From Ad',amount:'+ Rp. 400',status:'receive'}
+  ],
+  genderBiography: {
+    title: 'Jenis Kelamin Penonton',
+    data: [{
+      label: 'Male', value: 52
+    },
+      {
+        label: 'Female', value: 48
+      }
+    ]
+  },
+  countryBiography: {
+    title: 'Negara Penonton',
+    data: [
+      {
+        label: 'Indonesia', value: 92
+      },
+      {
+        label: 'Lainnya', value: 8
+      }
+    ]
+  },
+  ageBiography: {
+    title: 'Rentang Umur Penonton',
+    data: [
+      {
+        label: '<14 Tahun', value: 10
+      },
+      {
+        label: '14-40 Tahun', value: 70
+      },
+      {
+        label: '40< Tahun', value: 20
+      }
+    ]
+  },
+  viewsBiography: {
+    title: 'Dilihat Dari',
+    data: [
+      {
+        label: 'Landing Page', value: 10
+      },
+      {
+        label: 'Followers', value: 70
+      },
+      {
+        label: 'Halaman Profile', value: 20
+      }
+    ]
+  },
+  contentList:[
+    {contentImage: '/images/content/content1.png', contentName:'By discovering nature, you discover yourself.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739334', views: 1203, likes: 600, share: 54, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content2.png', contentName:'It seems to me that the natural world is the greatest source of excitement; the greatest source...', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739335', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
+    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'}
+  ],
+  myVoucher: [
+    {title: 'Voucher 1.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
+    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
+    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
+    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
+    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'}
+  ],
+  voucherHistory:[
+    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000 Penayangan',status:'sent'},
+    {date:'15 Dec 2021', time:'02:43 PM', type: '10.000 Penayangan',status:'receive'},
+    {date:'15 Dec 2021', time:'02:43 PM', type: '100.000 Penayangan',status:'sent'},
+    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000.000 Penayangan',status:'receive'},
+    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000.000 Penayangan',status:'receive'},
+    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000.000 Penayangan',status:'receive'},
+  ],
 };

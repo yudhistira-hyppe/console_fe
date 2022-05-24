@@ -6,6 +6,7 @@ import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
 import clsx from 'clsx';
 import { Area, AreaChart,Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import { fakeDb } from '../../../FakeDb/fake-db';
+import CmtCardContent from "../../../../@coremat/CmtCard/CmtCardContent";
 
 const useStyles = makeStyles((theme) => ({
   dot: {
@@ -15,53 +16,91 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#1CACCE',
   },
   dotPrimary: {
-    backgroundColor: '#E36978',
+    backgroundColor: '#D133D7',
+  },
+  dotSecond:{
+    backgroundColor: '#6C166F'
   },
   textCapitalize: {
     textTransform: 'capitalize',
   },
+  headTitle: {
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    fontSize: '20px',
+    lineHeight: '24px',
+    color: '#202020',
+  }
 }));
 
 const DataChart = ({ chartData }) => {
   return (
     <ResponsiveContainer width="100%" height={170}>
-      <LineChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+      <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
         <XAxis dataKey="month" hide />
-        <Tooltip labelStyle={{ color: 'black' }} cursor={false} />
-        <Line dataKey="growth" strokeWidth={2} stroke="#1CACCE" dot={{ stroke: '#1CACCE', strokeWidth: 1 }} />
-        <Line dataKey="budget" strokeWidth={2} stroke="#E36978" dot={{ stroke: '#E36978', strokeWidth: 1 }} />
-      </LineChart>
+        <Tooltip />
+        <defs>
+          <linearGradient id="color11" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#951E99" stopOpacity={0.1} />
+            <stop offset="40%" stopColor="#fff" stopOpacity={0.5} />
+          </linearGradient>
+          <linearGradient id="color12" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#D133D7" stopOpacity={0.1} />
+            <stop offset="40%" stopColor="#fff" stopOpacity={0.5} />
+          </linearGradient>
+        </defs>
+        <Area
+            dataKey="budget"
+            type="monotone"
+            strokeWidth={2}
+            stackId="2"
+            stroke="#D133D7"
+            fill="url(#color12)"
+            fillOpacity={1}
+        />
+        <Area
+            dataKey="growth"
+            type="monotone"
+            strokeWidth={2}
+            stackId="2"
+            stroke="#951E99"
+            fill="url(#color11)"
+            fillOpacity={1}
+        />
+      </AreaChart>
     </ResponsiveContainer>
   );
 };
 
 const AdsStatstics = () => {
   const classes = useStyles();
-  const { adsStatistics } = fakeDb;
+  const {adsStatistics} = fakeDb;
 
   return (
-    <CmtCard>
-      <CmtCardHeader
-        title="Ads Statstics"
-        subTitle={
-          <Box display="flex" alignItems="center" mt={2}>
-            <Box component="span" display="flex" alignItems="center" mr={4}>
-              <Box component="span" className={clsx(classes.dot, classes.dotPrimary)} mr={1} />
-              <Box component="span" color="#E36978" fontSize={12} className={classes.textCapitalize}>
-                {adsStatistics.labelBudget}
+      <div style={{height: '250px'}} className='flex-auto'>
+        <CmtCard className='h-full w-full'>
+          <CmtCardContent>
+            <div className={classes.headTitle}>
+              Ads Traffic
+            </div>
+            <Box display="flex" alignItems="center" mt={2}>
+              <Box component="span" display="flex" alignItems="center" mr={4}>
+                <Box component="span" className={clsx(classes.dot, classes.dotPrimary)} mr={1}/>
+                <Box component="span" color="#E36978" fontSize={12} className={classes.textCapitalize}>
+                  {adsStatistics.labelBudget}
+                </Box>
+              </Box>
+              <Box component="span" display="flex" alignItems="center">
+                <Box component="span" className={clsx(classes.dot, classes.dotSecond)} mr={1}/>
+                <Box component="span" color="#1CACCE" fontSize={12} className={classes.textCapitalize}>
+                  {adsStatistics.labelGrowth}
+                </Box>
               </Box>
             </Box>
-            <Box component="span" display="flex" alignItems="center">
-              <Box component="span" className={classes.dot} mr={1} />
-              <Box component="span" color="#1CACCE" fontSize={12} className={classes.textCapitalize}>
-                {adsStatistics.labelGrowth}
-              </Box>
-            </Box>
-          </Box>
-        }
-      />
-      <DataChart chartData={adsStatistics.chartData} />
-    </CmtCard>
+          </CmtCardContent>
+          <DataChart chartData={adsStatistics.chartData}/>
+        </CmtCard>
+      </div>
   );
 };
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { wrapper } from '../redux/store/index';
 import AppWrapper from '../@jumbo/components/AppWrapper';
+import "typeface-lato";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'slick-carousel/slick/slick.css';
@@ -10,6 +11,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'react-notifications/lib/notifications.css';
 import 'prismjs/themes/prism-okaidia.css';
+import 'primeflex/primeflex.css';
 
 import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
 import { AuthProvider } from '../authentication';

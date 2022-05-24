@@ -1,7 +1,7 @@
 //MODIFIED HYPPE
 import SignInPage from './signin';
 import { useAuth } from '../authentication';
-import PremiumDashboard from './dashboard/premium';
+import PremiumDashboard from './premium';
 
 const HomePage = () => {
   const { authUser } = useAuth();

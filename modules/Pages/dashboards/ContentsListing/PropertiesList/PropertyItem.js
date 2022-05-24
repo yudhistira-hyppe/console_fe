@@ -147,19 +147,19 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
   const getContent = () => (
     <Box component="p" display="flex" flexDirection="row" mb={4} fontSize={12}>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight.likes}
+        {item.insight?item.insight.likes:0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Likes`}
         </Box>
       </Box>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight.comments}
+        {item.insight?item.insight.comments:0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Comments`}
         </Box>
       </Box>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight.views}
+        {item.insight?item.insight.views:0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Views`}
         </Box>
@@ -184,7 +184,7 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
       avatar={
         <Box position="relative">
           <CmtImage className={classes.imageThumbRoot} src={getMediaUri(item)} alt={item.title} />
-          {/*<CmtCarousel
+          {/*<getMediaUri
             data={item.images}
             dotPosition="bottom-left"
             className={classes.containerStyle}

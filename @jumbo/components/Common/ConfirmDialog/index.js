@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   dialogRoot: {

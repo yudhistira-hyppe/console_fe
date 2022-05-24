@@ -15,7 +15,6 @@ export default makeStyles((theme) => ({
       bottom: -38,
       zIndex: 1,
       width: 2,
-      borderLeft: '2px solid #dee2e6',
       '.right &': {
         left: 'auto',
         right: 22,

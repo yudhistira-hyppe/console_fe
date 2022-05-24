@@ -41,11 +41,6 @@ const HorizontalMinimal = ({ className, children }) => {
           </CmtHeaderMain>
         </CmtHeader>
       }
-      footer={
-        <CmtFooter type="static">
-          <Footer />
-        </CmtFooter>
-      }
       sidebar={
         <CmtSidebar>
           <SideBar />

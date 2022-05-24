@@ -179,19 +179,19 @@ const ContentDetail = ({ authUser, selectedContent, showContentList }) => {
 
             <Box component="p" display="flex" flexDirection="row" mb={2} fontSize={12}>
               <Box component="span" mr={{ xs: 3, md: 4 }}>
-                {selectedContent.insight.likes}
+                {selectedContent.insight?selectedContent.insight.likes:0}
                 <Box component="span" color="text.secondary" mr={1}>
                   {` Likes`}
                 </Box>
               </Box>
               <Box component="span" mr={{ xs: 3, md: 4 }}>
-                {selectedContent.insight.comments}
+                {selectedContent.insight?selectedContent.insight.comments:0}
                 <Box component="span" color="text.secondary" mr={1}>
                   {` Comments`}
                 </Box>
               </Box>
               <Box component="span" mr={{ xs: 3, md: 4 }}>
-                {selectedContent.insight.views}
+                {selectedContent.insight?selectedContent.insight.views:0}
                 <Box component="span" color="text.secondary" mr={1}>
                   {` Views`}
                 </Box>

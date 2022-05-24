@@ -201,7 +201,8 @@ const PostItem = ({ item, onPropertyClick }) => {
     <CmtMediaObject
       className={classes.mediaObjectRoot}
       avatar={
-        <CmtImage className={classes.imageThumbRoot} src={getMediaUri(item)} alt={item.title} />
+        // <CmtImage className={classes.imageThumbRoot} src={getMediaUri(item)} alt={item.title} />
+        <CmtImage className={classes.imageThumbRoot} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7-cgVNYcz5yJ-STMuanEypltgbfcyzvnh0Q&usqp=CAU" alt={item.title} />
       }
       avatarPos="center"
       title={getTitle()}

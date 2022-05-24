@@ -6,6 +6,7 @@ import Contents from './Contents'
 import userReducers from './userReducers'
 import monetizeReducers from './monetizeReducers'
 import helpCenterReducers from './helpCenterReducers'
+import Campaign from './Campaign'
 
 export default combineReducers({
   common: Common,
@@ -13,5 +14,6 @@ export default combineReducers({
   contentsReducer: Contents,
   userReducers,
   monetizeReducers,
-  helpCenterReducers
+  helpCenterReducers,
+  campaignReducer: Campaign
 });

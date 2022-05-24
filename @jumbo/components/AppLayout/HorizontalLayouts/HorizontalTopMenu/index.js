@@ -50,11 +50,6 @@ const HorizontalTopMenu = ({ className, children }) => {
           </CmtHeaderTop>
         </CmtHeader>
       }
-      footer={
-        <CmtFooter type="static">
-          <Footer />
-        </CmtFooter>
-      }
       sidebar={
         <CmtSidebar>
           <SideBar />

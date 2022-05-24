@@ -50,11 +50,6 @@ const HorizontalDefault = ({ className, children }) => {
           </Hidden>
         </CmtHeader>
       }
-      footer={
-        <CmtFooter type="static">
-          <Footer />
-        </CmtFooter>
-      }
       sidebar={
         <CmtSidebar>
           <SideBar />

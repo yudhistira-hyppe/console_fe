@@ -1,0 +1,16 @@
+{
+  CampaignName: string,
+  AdsObjective: enum -> traffic -> yg trlihat baru traffic,
+  Demographics: string -> untuk skrg baru Indonesia -> nama negara
+  Gender: enum -> NoLimit, Male, Female,
+  Intereset: array of string -> multi selection -> data dari API
+  Plan: enum -> untuk skrg ada : 1000 show, 10.000 show, 100.000 show,
+  StartDate: date or string of date ,
+  EndDate: date or string of date,
+  Traffic: enum -> Website or Whatsapp,
+  LinkUrl: string -> if traffic website,
+  PhoneNumber: number -> if traffic WA,
+  Type: enum -> ContentAd, SponsoredAd -> SponsoredAd Coming soon atau blm available
+  Placement: enum -> PreContent, Mid Content , Post Content-> Mid Content dan Post Content Coming soon,
+  VideoFile: File Form Part untuk upload atau byte -> video file campaign
+}

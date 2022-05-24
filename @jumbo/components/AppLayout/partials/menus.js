@@ -5,45 +5,70 @@ import IntlMessages from '../../../utils/IntlMessages';
 export const sidebarNavs = [
   {
     name: <IntlMessages id={'sidebar.main'} />,
-    type: 'section',
-    children: [
-      {
-        name: <IntlMessages id={'pages.samplePage'} />,
-        type: 'item',
-        icon: <PostAdd />,
-        link: '/profiles',
-      },
-    ],
+    type: 'mega',
+    link: '/'
   },
 ];
 
 export const horizontalDefaultNavs = [
   {
     name: <IntlMessages id={'sidebar.main'} />,
+    type: 'item',
+    link: '/'
+  },
+  {
+    name: 'Content Management',
+    type: 'item',
+    link: '/contents'
+  },
+  {
+    name: 'Ads Center',
     type: 'collapse',
     children: [
       {
-        name: <IntlMessages id={'pages.samplePage'} />,
+        name: 'Ads Center',
         type: 'item',
-        icon: <PostAdd />,
-        link: '/profiles',
+        link: '/ads',
       },
-    ],
+      {
+        name: 'Ads Guideline',
+        type: 'item',
+        link: '/adsGuideline',
+      },
+      {
+        name: 'About Hyppe Ads',
+        type: 'item',
+        link: '/aboutAds',
+      },
+      {
+        name: 'Ads Detail',
+        type: 'item',
+        link: '/ads/details',
+      },
+      {
+        name: 'Create Ads',
+        type: 'item',
+        link: '/ads/create',
+      },
+      {
+        name: 'Buy Voucher',
+        type: 'item',
+        link: '/voucher/buy',
+      },
+    ]
   },
+  {
+    name: 'Wallet',
+    type: 'item',
+    link: '/wallet'
+  }
 ];
 
 export const minimalHorizontalMenus = [
   {
     name: <IntlMessages id={'sidebar.main'} />,
-    type: 'collapse',
-    children: [
-      {
-        name: <IntlMessages id={'pages.samplePage'} />,
-        type: 'item',
-        icon: <PostAdd />,
-        link: '/profiles',
-      },
-    ],
+    type: 'mega',
+    link: '/'
   },
 ];
 

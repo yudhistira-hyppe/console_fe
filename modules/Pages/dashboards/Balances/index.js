@@ -9,43 +9,99 @@ import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
 import CmtAdvCardContent from '../../../../@coremat/CmtAdvCard/CmtAdvCardContent';
 
 import { fakeDb } from '../../../FakeDb/fake-db';
-import OverallBalance from './OverallBalance';
 import ActionButtons from './ActionButtons';
+import CmtCard from "../../../../@coremat/CmtCard";
+import CmtCardContent from "../../../../@coremat/CmtCard/CmtCardContent";
+import numberWithCommas from "../../../Components/CommonComponent/NumberWithCommas/NumberWithCommas";
+import {TrendingDown, TrendingUp} from "@material-ui/icons";
+import {Button} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  subTitle: {
-    color: theme.palette.text.secondary,
-  },
+    infoLabel: {
+        fontFamily: 'Lato',
+        fontSize: '14px',
+        lineHeight: '20px',
+        letterSpacing: '0.25px',
+        color: 'rgba(0, 0, 0, 0.6)'
+    },
+    precentageLabel: {
+        fontFamily: 'Lato',
+        fontSize: '16px',
+        lineHeight: '24px',
+        letterSpacing: '0.15px',
+        color: '#E00930'
+    },
+    balanceLabel: {
+        fontFamily: 'Lato',
+        fontWeight: 'bold',
+        fontSize: '24px',
+        lineHeight: '22px',
+        color: 'rgba(0, 0, 0, 0.87)'
+    },
+    headTitle: {
+        fontFamily: 'Lato',
+        fontWeight: 'bold',
+        fontSize: '20px',
+        lineHeight: '24px',
+        color: '#202020',
+    },
+    summaryHistLbl: {
+        fontFamily: 'Lato',
+        fontSize: '14px',
+        lineHeight: '20px',
+        color: '#202020'
+    },
+    borderInBetween:{
+        borderTop: '1px solid rgba(0, 0, 0, 0.161741)',
+        '&:last-child': {
+            borderBottom: '1px solid rgba(0, 0, 0, 0.161741)',
+        },
+    },
+    labelLink: {
+        fontFamily: 'Lato',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        letterSpacing: '0.4px',
+        color: '#AB22AF'
+    }
 }));
 
-const Balances = () => {
-  const classes = useStyles();
-
-  return (
-    <CmtAdvCard>
-      <CmtCardHeader
-        title={'Your Balance'}
-        titleProps={{
-          variant: 'h4',
-          component: 'div',
-        }}
-        alignCenter={true}
-      />
-      <CmtAdvCardContent
-        title={<OverallBalance />}
-        subTitle={'Overall balance'}
-        subTitleProps={{
-          variant: 'body2',
-          component: 'p',
-          className: classes.subTitle,
-        }}
-        extraContent={<ActionButtons />}
-        alignCenter={true}
-        reverseDir>
-        {/*<PortfolioDetails title={'Portfolio Distribution'} data={fakeDb.wallets} />*/}
-      </CmtAdvCardContent>
-    </CmtAdvCard>
-  );
-};
-
+const Balances = ({balance, precentage, trend}) => {
+    const classes = useStyles();
+    return (
+        <div style={{height: '250px'}} className='flex-auto'>
+            <CmtCard className='h-full w-full'>
+                <CmtCardContent>
+                    <div className={classes.headTitle}>
+                        Balance
+                    </div>
+                    <div className='mt-8'>
+                        <div className='flex flex-row'>
+                            <div className={classes.balanceLabel}>
+                                Rp {numberWithCommas(balance)}
+                            </div>
+                            <div className='ml-1'>
+                                <span className={classes.precentageLabel}>
+                                    {precentage}%
+                                </span>
+                            </div>
+                            <div className='ml-1'>
+                                {trend ? <TrendingUp/> : <TrendingDown/>}
+                            </div>
+                        </div>
+                        <div className={classes.infoLabel}>
+                            Overall Balance
+                        </div>
+                    </div>
+                    <div className='mt-8'>
+                        <Button variant='text' onClick={() => router.push('/wallet')}
+                                className='min-w-0 p-0 mt-2'>
+                            <div className={classes.labelLink}>GO TO WALLET</div>
+                        </Button>
+                    </div>
+                </CmtCardContent>
+            </CmtCard>
+        </div>
+    )
+}
 export default Balances;

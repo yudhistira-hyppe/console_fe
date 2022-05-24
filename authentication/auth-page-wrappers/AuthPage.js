@@ -10,10 +10,9 @@ const AuthPage = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("check auth ...");
     getAuthUser();
     if (!loadingAuthUser && authUser) {
-      router.push('/dashboard/premium').then((r) => r);
+      router.push('/premium').then((r) => r);
     }
 
     return () => setError('');

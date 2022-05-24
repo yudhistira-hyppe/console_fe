@@ -10,6 +10,11 @@ import ProfileStatstics from './ProfileStatstics';
 import Balances from './Balances';
 import ProfileDetails from './ProfileDetails';
 import ContentsListing from './ContentsListing';
+import {Comment} from "@material-ui/icons";
+import Comments from "./Comments";
+import LatestNotification from "./Latest Notification";
+import UserInfo from "./ProfileDetails/UserInfo";
+import {FixedSizeGrid} from "react-window";
 
 const useStyles = makeStyles((theme) => ({
   orderLg2: {
@@ -35,16 +40,25 @@ const PremiumDashboard = () => {
         <AdsStatstics />
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
-          <Balances/>
+          <Balances balance={1500000} precentage={23} trend={false}/>
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
           <ProfileStatstics/>
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
           <ProfileDetails/>
+          <div className='mt-5'>
+            <UserInfo/>
+          </div>
         </Grid>
         <Grid item xs={12} md={8} xl={8}>
           <ContentsListing/>
+        </Grid>
+        <Grid item xs={12} md={6} xl={6}>
+          <Comments/>
+        </Grid>
+        <Grid item xs={12} md={6} xl={6}>
+          <LatestNotification/>
         </Grid>
       </GridContainer>
     </PageContainer>

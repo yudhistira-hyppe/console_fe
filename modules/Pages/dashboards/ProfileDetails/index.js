@@ -13,6 +13,9 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CmtProgressBar from '../../../../@coremat/CmtProgressBar';
 import { useAuth } from '../../../../authentication';
 import { STREAM_URL } from '../../../../authentication/auth-provider/config';
+import CmtCard from "../../../../@coremat/CmtCard";
+import {Button} from "@material-ui/core";
+import clsx from "clsx";
 
 const actions = [
   {
@@ -46,14 +49,12 @@ const useStyles = makeStyles((theme) => ({
       zIndex: 1,
       width: '100%',
       height: '100%',
-      backgroundColor: alpha(theme.palette.common.black, 0.6),
     },
     '& .fab-button .MuiSvgIcon-root': {
       marginLeft: 4,
     },
   },
   cardMediaContent: {
-    padding: '35px 24px',
     position: 'relative',
     zIndex: 3,
     display: 'flex',
@@ -94,6 +95,13 @@ const useStyles = makeStyles((theme) => ({
       marginTop: -8,
     },
   },
+  labelLink: {
+    fontFamily: 'Lato',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    letterSpacing: '0.4px',
+    color: '#AB22AF'
+  }
 }));
 
 const ProfileDetails = () => {
@@ -102,51 +110,33 @@ const ProfileDetails = () => {
   const avatar = authUser.avatar
   ? STREAM_URL + authUser.avatar.mediaEndpoint + '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email
   : '';
-  
+
   return (
-    <CmtAdvCard
-      actionsPos="top-corner"
-      actions={actions}
-      actionHandleIcon={<MoreVertIcon />}
-      actionMenuClassName={classes.actionMenu}>
-      <CmtCardMedia
+      <CmtCard
         className={classes.cardMediaRoot}
-        title="User"
-        image={'/images/dashboard/userDetailsBg.png'}
-        fabButton={{ icon: <SendIcon />, color: 'primary', size: 'small' }}>
-        <Box className={classes.cardMediaContent}>
+        title="User">
+        <Box className={clsx(classes.cardMediaContent, 'p-3')}>
+          <div className='flex flex-row align-content-start w-full'>
+            <CmtImage src='/images/dashboard/badge.svg' alt="Badge"/>
+          </div>
           <CmtObjectSummary
             avatar={
               <CmtAvatar className={classes.avatarRoot} size={56} src={avatar} alt={authUser.email} />
             }
             title={authUser.fullName}
-            titleProps={{ style: { color: '#fff' } }}
-            subTitle={authUser.institution?authUser.institution:''}
-            subTitleProps={{ style: { color: '#fff' } }}
-            showItemBadge={false}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            badge={<div style={{backgroundColor: '#21C0E8'}}></div>}
+            titleProps={{ style: { color: 'black' } }}
+            subTitle={authUser.institution?authUser.institution:'General Manager'}
+            subTitleProps={{ style: { color: 'black' } }}
             avatarProps={{ variant: 'circle' }}
-            
             align="vertical"
           />
-          <Box className={classes.progBarView}>
-           {/* <CmtProgressBar
-              value={72}
-              renderValue={(value) => `${value}%`}
-              label="Tasks Completed"
-              containedColor="#FFFFFF"
-              emptyColor="rgba(0, 0, 0, 0.38)"
-           />*/}
-          </Box>
+          <Button variant='text' onClick={() => router.push('/voucher/buy')}
+                  className='min-w-0 p-0 mt-2'>
+            <div className={classes.labelLink}>View Profile</div>
+          </Button>
         </Box>
-      </CmtCardMedia>
-      <CmtAdvCardContent>
-        <UserInfo authUser={authUser} />
-      </CmtAdvCardContent>
-    </CmtAdvCard>
+      </CmtCard>
   );
 };
 

@@ -69,8 +69,8 @@ const getClientIp = async () =>
 const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const classes = useStyles({ variant });
   const { isLoading, error, userLogin, renderSocialMediaLogin } = useAuth();
-  const [email, setEmail] = useState(MODE=='DEV'?'xocegama@getnada.com':'');
-  const [password, setPassword] = useState(MODE=='DEV'?'12345':'');
+  const [email, setEmail] = useState(MODE=='DEV'?'kesiawendri@gmail.com':'');
+  const [password, setPassword] = useState(MODE=='DEV'?'2666':'');
   const [device, setDevice] = useState('');
 
   useEffect(() => {

@@ -52,11 +52,7 @@ const HorizontalDark = ({ className, children }) => {
           <SideBar />
         </CmtSidebar>
       }
-      footer={
-        <CmtFooter type="static">
-          <Footer />
-        </CmtFooter>
-      }>
+      >
       <CmtContent>
         {children}
         <ContentLoader />

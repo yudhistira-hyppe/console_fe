@@ -5,10 +5,11 @@ import PageLoader from '../../@jumbo/components/PageComponents/PageLoader';
 
 // eslint-disable-next-line react/prop-types
 const SecurePage = ({ children }) => {
-  const { loadingAuthUser, authUser, setError } = useAuth();
+  const { loadingAuthUser, authUser, getAuthUser, setError } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    getAuthUser();
     if (!loadingAuthUser && !authUser) {
       router.push('/signin').then((r) => r);
     }
