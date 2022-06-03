@@ -1,9 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { customBaseQuery } from 'api';
+import { customBaseQueryWithHandleReauth } from 'api';
 
 export const userApi = createApi({
   reducerPath: 'user/user',
-  baseQuery: customBaseQuery,
+  baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
     getAllUser: build.query({
       query: () => ({
@@ -14,7 +14,7 @@ export const userApi = createApi({
     getProfileByUserEmail: build.query({
       query: (email) => ({
         url: `/profile`,
-        method: 'GET',
+        method: 'POST',
         body: {
           email,
         },

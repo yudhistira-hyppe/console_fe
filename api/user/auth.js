@@ -9,27 +9,21 @@ export const authApi = createApi({
       query: (data) => ({
         url: `/user/login`,
         method: 'POST',
-        body: {
-          data,
-        },
+        body: data,
       }),
     }),
     refreshToken: build.mutation({
       query: (data) => ({
         url: `/user/refreshtoken`,
         method: 'POST',
-        body: {
-          data,
-        },
+        body: data,
       }),
     }),
     logout: build.mutation({
       query: (data) => ({
         url: `/user/logout`,
         method: 'POST',
-        body: {
-          data,
-        },
+        body: data,
       }),
     }),
   }),

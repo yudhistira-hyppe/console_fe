@@ -1,22 +1,31 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { customBaseQuery } from 'api';
+import { customBaseQueryWithHandleReauth } from 'api';
 
 export const dashboardApi = createApi({
   reducerPath: 'console/dashboard',
-  baseQuery: customBaseQuery,
+  baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
-    getUserActiveByYear: build.query({
-      query: (year) => ({
-        url: `/userbasics/useractiveyear`,
+    getUserActivityByDate: build.query({
+      query: (date) => ({
+        url: `/contentevents/useractivitynow`,
         method: 'POST',
         body: {
-          year,
+          date,
         },
       }),
     }),
-    getUserActiveBeforeToday: build.query({
+    getUserActivityBeforeToday: build.query({
       query: (day) => ({
-        url: `/userbasics/useractivebeforetoday`,
+        url: `/contentevents/useractivitybeforetoday`,
+        method: 'POST',
+        body: {
+          day,
+        },
+      }),
+    }),
+    getUserEventActivityBeforeToday: build.query({
+      query: (day) => ({
+        url: `/contentevents/useractivitysize`,
         method: 'POST',
         body: {
           day,
@@ -35,4 +44,9 @@ export const dashboardApi = createApi({
   }),
 });
 
-export const { useGetUserActiveByYearQuery, useGetUserActiveBeforeTodayQuery, useGetMonetizeByYearQuery } = dashboardApi;
+export const {
+  useGetUserActivityByDateQuery,
+  useGetUserActivityBeforeTodayQuery,
+  useGetUserEventActivityBeforeTodayQuery,
+  useGetMonetizeByYearQuery,
+} = dashboardApi;

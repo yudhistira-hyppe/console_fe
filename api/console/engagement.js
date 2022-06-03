@@ -1,11 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { customBaseQuery } from 'api';
+import { customBaseQueryWithHandleReauth } from 'api';
 
 export const engagementApi = createApi({
   reducerPath: 'console/engagement',
-  baseQuery: customBaseQuery,
+  baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
-    getLogActivitiesByYear: build.query({
+    getLogActivityByYear: build.query({
       query: (year) => ({
         url: `/activityevents/logsctivitas`,
         method: 'POST',
@@ -14,9 +14,18 @@ export const engagementApi = createApi({
         },
       }),
     }),
-    getEngagementInsightByYear: build.query({
+    getUserEventActivityByYear: build.query({
       query: (year) => ({
-        url: `/insights/engagement`,
+        url: `/contentevents/useractivitysizeYear`,
+        method: 'POST',
+        body: {
+          year,
+        },
+      }),
+    }),
+    getUserActivityByYear: build.query({
+      query: (year) => ({
+        url: `/contentevents/useractivityyear`,
         method: 'POST',
         body: {
           year,
@@ -26,4 +35,5 @@ export const engagementApi = createApi({
   }),
 });
 
-export const { useGetLogActivitiesByYearQuery, useGetEngagementInsightByYearQuery } = engagementApi;
+export const { useGetLogActivityByYearQuery, useGetUserEventActivityByYearQuery, useGetUserActivityByYearQuery } =
+  engagementApi;
