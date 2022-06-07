@@ -1,24 +1,26 @@
-//MODIFIED HYPPE
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../index';
-import PageLoader from '../../@jumbo/components/PageComponents/PageLoader';
+import { useAuth } from 'authentication';
 
-// eslint-disable-next-line react/prop-types
 const AuthPage = ({ children }) => {
-  const { loadingAuthUser, authUser, getAuthUser, setError } = useAuth();
   const router = useRouter();
+  const { authUser, getAuthUser, isLoading } = useAuth();
 
   useEffect(() => {
     getAuthUser();
-    if (!loadingAuthUser && authUser) {
-      router.push('/premium').then((r) => r);
+  }, []);
+
+  useEffect(() => {
+    if (authUser && !isLoading) {
+      if (router.query && router.query.redirect) {
+        router.push(router.query.redirect);
+      } else {
+        router.push('/');
+      }
     }
+  }, [authUser, isLoading]);
 
-    return () => setError('');
-  }, [authUser, loadingAuthUser]);
-
-  return authUser && loadingAuthUser ? <PageLoader /> : children;
+  return !authUser && !isLoading && children;
 };
 
 export default AuthPage;

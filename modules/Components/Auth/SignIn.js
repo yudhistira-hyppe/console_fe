@@ -1,5 +1,5 @@
-//MODIFIED HYPPE
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Box } from '@material-ui/core';
@@ -10,11 +10,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from 'next/link';
 import AuthWrapper from './AuthWrapper';
 import publicIp from 'public-ip';
-import CmtImage from '../../../@coremat/CmtImage';
-import IntlMessages from '../../../@jumbo/utils/IntlMessages';
-import { NotificationLoader } from '../../../@jumbo/components/ContentLoader';
-import { MODE } from '../../../authentication/auth-provider/config';
-import { useAuth } from '../../../authentication';
+import CmtImage from '@coremat/CmtImage';
+import IntlMessages from '@jumbo/utils/IntlMessages';
+import { NotificationLoader } from '@jumbo/components/ContentLoader';
+import { MODE } from 'authentication/auth-provider/config';
+import { useAuth } from 'authentication';
 import Logo from '@jumbo/components/AppLayout/partials/Logo';
 
 const useStyles = makeStyles((theme) => ({
@@ -64,26 +64,32 @@ const getClientIp = async () =>
     fallbackUrls: ['https://ifconfig.co/ip'],
   });
 
-//variant = 'default', 'standard'
-// eslint-disable-next-line react/prop-types
 const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const classes = useStyles({ variant });
   const { isLoading, error, userLogin, renderSocialMediaLogin } = useAuth();
-  const [email, setEmail] = useState(MODE=='DEV'?'kesiawendri@gmail.com':'');
-  const [password, setPassword] = useState(MODE=='DEV'?'2666':'');
+  const [location, setLocation] = useState({ latitude: '0', longitude: '0' });
+  const [email, setEmail] = useState(MODE == 'DEV' ? 'freeman27@getnada.com' : '');
+  const [password, setPassword] = useState(MODE == 'DEV' ? 'freeman27' : '');
   const [device, setDevice] = useState('');
 
   useEffect(() => {
-    console.log(isLoading);
-    if (!isLoading) {
-      getClientIp().then((data) => {
-        setDevice(data);
-      });
-    }
-  }, [isLoading]);
+    getClientIp().then((data) => {
+      setDevice(data);
+    });
+
+    navigator.geolocation.getCurrentPosition((position) =>
+      setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude }),
+    );
+  }, []);
 
   const onSubmit = () => {
-    userLogin({ email, password ,device});
+    userLogin({
+      email,
+      password,
+      location,
+      deviceId:
+        'dw-ckEuZFESeqnWjzzz9UE:APA91bF2xMw67hdbbMgC2fXNXfo9BfLPmZZBVMFEDGMLStVdJFgfvjLlsqnMViLMhKx5aeY_25CoMqD3PnY-xvt-xHsE0F44WpnvLDvS8L0QNzRQzYmueyyFWdAyTHeyHnEl7RaLQOIa',
+    });
   };
 
   return (
@@ -95,7 +101,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
       ) : null}
       <Box className={classes.authContent}>
         <Box mb={7}>
-          <Logo/>
+          <Logo />
         </Box>
         <Typography component="div" variant="h1" className={classes.titleRoot}>
           Login
@@ -138,12 +144,10 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
               </Link>
             </Box>
           </Box>
-
           <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
             <Button onClick={onSubmit} variant="contained" color="primary">
               <IntlMessages id="appModule.signIn" />
             </Button>
-
             <Box component="p" fontSize={{ xs: 12, sm: 16 }}>
               <Link href="/premium-subscribe">
                 <a>
@@ -153,13 +157,21 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
             </Box>
           </Box>
         </form>
-
         {renderSocialMediaLogin()}
-
         <NotificationLoader loading={isLoading} error={error} />
       </Box>
     </AuthWrapper>
   );
+};
+
+SignIn.propTypes = {
+  variant: PropTypes.string,
+  wrapperVariant: PropTypes.string,
+};
+
+SignIn.defaultProps = {
+  variant: 'default',
+  wrapperVariant: 'default',
 };
 
 export default SignIn;
