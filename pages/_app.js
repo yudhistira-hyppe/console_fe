@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { wrapper } from '../redux/store/index';
-import AppWrapper from '../@jumbo/components/AppWrapper';
-import "typeface-lato";
+import { wrapper } from 'redux/store';
+import AppWrapper from '@jumbo/components/AppWrapper';
+import 'typeface-lato';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'slick-carousel/slick/slick.css';
@@ -24,6 +24,10 @@ const MainApp = (props) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    }
   }, []);
 
   return (
@@ -33,11 +37,11 @@ const MainApp = (props) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <AuthProvider>
-      <AppContextProvider>
-        <AppWrapper>
-          <Component {...pageProps} />
-        </AppWrapper>
-      </AppContextProvider>
+        <AppContextProvider>
+          <AppWrapper>
+            <Component {...pageProps} />
+          </AppWrapper>
+        </AppContextProvider>
       </AuthProvider>
     </React.Fragment>
   );

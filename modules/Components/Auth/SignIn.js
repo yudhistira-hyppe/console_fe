@@ -9,13 +9,14 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from 'next/link';
 import AuthWrapper from './AuthWrapper';
-import publicIp from 'public-ip';
 import CmtImage from '@coremat/CmtImage';
 import IntlMessages from '@jumbo/utils/IntlMessages';
 import { NotificationLoader } from '@jumbo/components/ContentLoader';
 import { MODE } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import Logo from '@jumbo/components/AppLayout/partials/Logo';
+import { firebaseCloudMessaging } from 'helpers/firebaseHelper';
+import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
   authThumb: {
@@ -59,28 +60,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getClientIp = async () =>
-  await publicIp.v4({
-    fallbackUrls: ['https://ifconfig.co/ip'],
-  });
-
 const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const classes = useStyles({ variant });
   const { isLoading, error, userLogin, renderSocialMediaLogin } = useAuth();
   const [location, setLocation] = useState({ latitude: '0', longitude: '0' });
   const [email, setEmail] = useState(MODE == 'DEV' ? 'freeman27@getnada.com' : '');
   const [password, setPassword] = useState(MODE == 'DEV' ? 'freeman27' : '');
-  const [device, setDevice] = useState('');
+  const [deviceId, setDeviceId] = useState(uuidv4());
+  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
 
   useEffect(() => {
-    getClientIp().then((data) => {
-      setDevice(data);
-    });
-
-    navigator.geolocation.getCurrentPosition((position) =>
-      setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude }),
-    );
+    getCurrentUserLocation();
+    generateFCMToken();
   }, []);
+
+  const generateFCMToken = () => {
+    Notification.requestPermission(() => {
+      setIsLoginDisabled(true);
+      firebaseCloudMessaging
+        .getFCMToken()
+        .then((token) => {
+          setDeviceId(token);
+        })
+        .catch(() => {})
+        .finally(() => setIsLoginDisabled(false));
+    });
+  };
+
+  const getCurrentUserLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+    });
+  };
 
   const onSubmit = () => {
     userLogin({
@@ -145,7 +156,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
             </Box>
           </Box>
           <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
-            <Button onClick={onSubmit} variant="contained" color="primary">
+            <Button onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">
               <IntlMessages id="appModule.signIn" />
             </Button>
             <Box component="p" fontSize={{ xs: 12, sm: 16 }}>
