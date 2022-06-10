@@ -2,7 +2,9 @@ import React from 'react';
 import ActiveUsersGraph from './ActiveUsersGraph';
 import StatisticsClassicCard from '@jumbo/components/Common/StatisticsClassicCard';
 
-const ActiveUsersCard = ({title, jumlah, color, background}) => {
+const ActiveUsersCard = (props) => {
+  const { title, jumlah, color, background, dataGraph, xAxisKeyGraph, lineKeyGraph } = props;
+
   return (
     <StatisticsClassicCard
       backgroundColor={background}
@@ -11,7 +13,7 @@ const ActiveUsersCard = ({title, jumlah, color, background}) => {
       title={jumlah}
       subTitle={title}
       growth={0}>
-      <ActiveUsersGraph />
+      <ActiveUsersGraph data={dataGraph} xAxisKey={xAxisKeyGraph} lineKey={lineKeyGraph} />
     </StatisticsClassicCard>
   );
 };

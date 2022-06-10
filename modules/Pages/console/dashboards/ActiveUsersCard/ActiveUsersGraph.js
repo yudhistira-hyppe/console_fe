@@ -1,20 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Box } from '@material-ui/core';
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
-import { fakeDb } from 'modules/FakeDb/fake-db';
+import { formatDateString } from 'helpers/stringHelper';
 
-const ActiveUsersGraph = () => {
-  const { activeUsers } = fakeDb;
+const ActiveUsersGraph = (props) => {
+  const { data, xAxisKey, lineKey } = props;
+
   return (
     <ResponsiveContainer width="100%" height={120}>
-      <LineChart data={activeUsers} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+      <LineChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
         <Tooltip
           cursor={false}
           content={({ active, label, payload }) => {
             return active ? (
               <Box color="#fff">
                 {payload.map((row, index) => (
-                  <Box key={index}>{`${label}: ${row.value} pengguna`}</Box>
+                  <Box key={index}>{`${formatDateString(label)}: ${row.value} pengguna`}</Box>
                 ))}
               </Box>
             ) : null;
@@ -26,11 +28,17 @@ const ActiveUsersGraph = () => {
             overflow: 'hidden',
           }}
         />
-        <XAxis dataKey="month" hide />
-        <Line dataKey="count" type="monotone" dot={null} strokeWidth={3} stackId="2" stroke="#0062FF" />
+        <XAxis dataKey={xAxisKey} hide />
+        <Line dataKey={lineKey} type="monotone" dot={null} strokeWidth={3} stackId="2" stroke="#0062FF" />
       </LineChart>
     </ResponsiveContainer>
   );
+};
+
+ActiveUsersGraph.propTypes = {
+  data: PropTypes.array,
+  xAxisKey: PropTypes.string,
+  lineKey: PropTypes.string,
 };
 
 export default ActiveUsersGraph;
