@@ -1,6 +1,7 @@
+import Router from 'next/router';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { Mutex } from 'async-mutex';
-import { authApi } from './user';
+import { authApi } from 'api/user';
 
 const mutex = new Mutex();
 
@@ -47,6 +48,7 @@ export const customBaseQueryWithHandleReauth = async (args, api, extraOptions) =
 
           result = await customBaseQuery(args, api, extraOptions);
         } else {
+          Router.push('/signin');
           localStorage.removeItem('user');
         }
       } finally {
