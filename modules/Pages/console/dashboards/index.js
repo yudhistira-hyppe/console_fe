@@ -10,7 +10,7 @@ import CmtImage from '@coremat/CmtImage';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useGetUserActivityByYearQuery } from 'api/console/engagement';
-import { useGetUserActivityBeforeTodayQuery } from 'api/console/dashboard';
+import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
 
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
@@ -30,9 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ConsoleDashboardComponent = () => {
   const classes = useStyles();
+  const currentYear = new Date().getFullYear();
   const { data: activeUsersSevenDay } = useGetUserActivityBeforeTodayQuery(6);
   const { data: activeUsersThirtyDay } = useGetUserActivityBeforeTodayQuery(29);
-  const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(new Date().getFullYear());
+  const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
+  const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
 
   const countTotal = (data, key) => {
     let result = 0;
@@ -100,7 +102,7 @@ const ConsoleDashboardComponent = () => {
             <ActivitySize />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
-            <StatusKepemilikanCard />
+            <StatusKepemilikanCard data={usersMonetizeOneYear} />
           </Grid>
         </GridContainer>
       </PageContainer>
