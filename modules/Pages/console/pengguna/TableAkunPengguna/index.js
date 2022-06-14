@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@mui/x-data-grid';
 import { Tooltip } from '@mui/material';
-import { formatGender } from 'helpers/stringHelper';
+import { formatDateTimeString, formatGender } from 'helpers/stringHelper';
 
 const columns = [
   {
@@ -16,6 +16,7 @@ const columns = [
   {
     field: 'age',
     headerName: 'Umur',
+    type: 'number',
   },
   {
     field: 'cities',
@@ -61,10 +62,12 @@ const TableAkunPengguna = (props) => {
     id: item._id,
     fullName: item.fullName || 'Data tidak tersedia',
     gender: item.gender ? formatGender(item.gender) : 'Data tidak tersedia',
-    age: item.age ? `${item.age} Tahun` : 'Data tidak tersedia',
+    age: item.age || 'Data tidak tersedia',
     cities: item.cities || 'Data tidak tersedia',
     role: item.roles.join(', ') || 'Data tidak tersedia',
-    lastActive: '' || 'Data tidak tersedia',
+    lastActive: item.activity.payload.login_date
+      ? formatDateTimeString(item.activity.payload.login_date)
+      : 'Data tidak tersedia',
     status: item.status || 'Data tidak tersedia',
   }));
 
@@ -101,7 +104,7 @@ const TableAkunPengguna = (props) => {
           },
         }}
         autoHeight
-        rows={rows}
+        rows={!isLoading && rows}
         columns={formattedColumns}
         isRowSelectable={() => false}
         pageSize={pageSize}

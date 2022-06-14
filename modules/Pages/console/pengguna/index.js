@@ -15,7 +15,7 @@ const breadcrumbs = [
 const ConsolePenggunaComponent = () => {
   const [usersBodyData, setUserBodyData] = useState({});
   const [isSearchUsers, setIsSearchUsers] = useState(false);
-  const { data: users, isLoading } = useGetAllUserQuery(usersBodyData, { skip: !isSearchUsers });
+  const { data: users, isFetching } = useGetAllUserQuery(usersBodyData, { skip: !isSearchUsers });
 
   const handleSearchUsers = ({ fullName, gender, roles, age }) => {
     const bodyData = {
@@ -39,7 +39,7 @@ const ConsolePenggunaComponent = () => {
             <FilterTableAkunPengguna handleSearchUsers={handleSearchUsers} />
           </Grid>
           <Grid item xs={12} md={12} xl={12}>
-            <TableAkunPengguna data={users?.data || []} isLoading={isLoading} />
+            <TableAkunPengguna data={users?.data || []} isLoading={isFetching} />
           </Grid>
         </GridContainer>
       </PageContainer>
