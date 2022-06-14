@@ -6,9 +6,10 @@ export const userApi = createApi({
   baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
     getAllUser: build.query({
-      query: () => ({
-        url: `/userbasics`,
-        method: 'GET',
+      query: (data) => ({
+        url: `/getuserprofiles`,
+        method: 'POST',
+        body: data,
       }),
     }),
     getProfileByUserEmail: build.query({
