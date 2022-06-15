@@ -10,11 +10,11 @@ import ProfileStatstics from './ProfileStatstics';
 import Balances from './Balances';
 import ProfileDetails from './ProfileDetails';
 import ContentsListing from './ContentsListing';
-import {Comment} from "@material-ui/icons";
-import Comments from "./Comments";
-import LatestNotification from "./Latest Notification";
-import UserInfo from "./ProfileDetails/UserInfo";
-import {FixedSizeGrid} from "react-window";
+import { Comment } from '@material-ui/icons';
+import Comments from './Comments';
+import LatestNotification from './Latest Notification';
+import UserInfo from './ProfileDetails/UserInfo';
+import { FixedSizeGrid } from 'react-window';
 
 const useStyles = makeStyles((theme) => ({
   orderLg2: {
@@ -30,35 +30,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PremiumDashboard = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { authUser, isLoadingUser } = useAuth();
-  const welcomeNote = "Welcome " + authUser.fullName;
+  const welcomeNote = 'Welcome ' + authUser.fullName;
+
   return (
-    <PageContainer heading={welcomeNote} >
+    <PageContainer heading={welcomeNote}>
       <GridContainer>
         <Grid item xs={12} md={4} xl={4}>
-        <AdsStatstics />
+          <AdsStatstics />
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
-          <Balances balance={1500000} precentage={23} trend={false}/>
+          <Balances balance={1500000} precentage={23} trend={false} />
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
-          <ProfileStatstics/>
+          <ProfileStatstics />
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
-          <ProfileDetails/>
-          <div className='mt-5'>
-            <UserInfo/>
+          <ProfileDetails />
+          <div className="mt-5">
+            <UserInfo />
           </div>
         </Grid>
         <Grid item xs={12} md={8} xl={8}>
-          <ContentsListing/>
+          <ContentsListing />
         </Grid>
         <Grid item xs={12} md={6} xl={6}>
-          <Comments/>
+          <Comments />
         </Grid>
         <Grid item xs={12} md={6} xl={6}>
-          <LatestNotification/>
+          <LatestNotification />
         </Grid>
       </GridContainer>
     </PageContainer>

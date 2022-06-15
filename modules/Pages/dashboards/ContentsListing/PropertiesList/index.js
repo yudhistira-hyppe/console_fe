@@ -85,6 +85,7 @@ const PropertiesList = ({
   searchText,
   handleSearchTextChange,
   handlePageChange,
+  handleLoadMore,
 }) => {
   const classes = useStyles();
   return (
@@ -110,13 +111,7 @@ const PropertiesList = ({
       <CmtCardContent className={classes.cardContentRoot}>
         <PerfectScrollbar className={classes.scrollbarRoot}>
           <PropertiesDataList data={data} onPropertyClick={onPropertyClick} />
-          {data.length > 0 && (
-            <Box p={6} textAlign="center">
-              <Button className={classes.btnRoot} onClick={handlePageChange}>
-                Load More
-              </Button>
-            </Box>
-          )}
+          {data && handleLoadMore}
         </PerfectScrollbar>
       </CmtCardContent>
     </CmtCard>
