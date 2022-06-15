@@ -122,14 +122,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PropertyItem = ({ authUser, item, onPropertyClick }) => {
+  console.log('item:', item);
   const classes = useStyles();
 
   const getMediaUri = () => {
-    const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email;
-    const mediaUri = item.mediaType === 'video' ? item.mediaThumbEndpoint : item.mediaEndpoint;
-    const httpUri = STREAM_URL + mediaUri + authToken;
-    return httpUri;
+    // sesat : domain hyppe + mediaEndpoint + token + token auth
+    // need to be like this : domain hyppe + mediaEndpoint + token auth + email
+    // // ------
+    // const getTokenLokalStorage = localStorage.getItem('user');
+    // const parser = JSON.parse(getTokenLokalStorage);
+    // console.log('parser:', parser.token);
+    // // ------
+    // const tes = authUser.token;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = item.avatar.mediaEndpoint;
+
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+    // return tes;
+    // before
+    // const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email;
+    // const mediaUri = item.mediaType === 'video' ? item.mediaThumbEndpoint : item.mediaEndpoint;
+    // const httpUri = STREAM_URL + mediaUri + authToken;
+    // return httpUri;
   };
+  console.log('getMediaUri:', getMediaUri());
 
   const getPostType = () => fakeDb.postType.filter((type) => type.name === item.postType).map((opt) => opt.slug);
 
@@ -147,19 +163,19 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
   const getContent = () => (
     <Box component="p" display="flex" flexDirection="row" mb={4} fontSize={12}>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight?item.insight.likes:0}
+        {item.insight ? item.insight.likes : 0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Likes`}
         </Box>
       </Box>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight?item.insight.comments:0}
+        {item.insight ? item.insight.comments : 0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Comments`}
         </Box>
       </Box>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight?item.insight.views:0}
+        {item.insight ? item.insight.views : 0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Views`}
         </Box>
@@ -183,7 +199,13 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
       className={classes.mediaObjectRoot}
       avatar={
         <Box position="relative">
-          <CmtImage className={classes.imageThumbRoot} src={getMediaUri(item)} alt={item.title} />
+          <CmtImage
+            className={classes.imageThumbRoot}
+            // here
+            src={'../.'}
+            // src={getMediaUri()}
+            alt={item.title}
+          />
           {/*<getMediaUri
             data={item.images}
             dotPosition="bottom-left"
@@ -199,7 +221,7 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
       avatarPos="center"
       title={getTitle()}
       content={getContent(item)}
-      footerComponent={item.monetize?getFooter():null}
+      footerComponent={item.monetize ? getFooter() : null}
       footerComponentProps={{ className: classes.footerComponentRoot }}>
       <Box fontSize={12} color="text.disabled" display="flex" flexDirection="row" alignItems="center" mb={4}>
         <Box display="flex" flexDirection="row" alignItems="center" mr={4}>

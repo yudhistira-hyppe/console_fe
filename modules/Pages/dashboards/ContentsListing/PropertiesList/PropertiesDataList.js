@@ -5,7 +5,7 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListEmptyResult from '../../../../../@coremat/CmtList/ListEmptyResult';
 import { useAuth } from '../../../../../authentication';
-import CmtImage from "../../../../../@coremat/CmtImage";
+import CmtImage from '../../../../../@coremat/CmtImage';
 const useStyles = makeStyles((theme) => ({
   newsListRoot: {
     padding: 24,
@@ -37,10 +37,12 @@ const PropertiesDataList = ({ data, onPropertyClick }) => {
       data={data}
       renderRow={(item, index) => (
         <ListItem component="div" className={classes.newsListRoot} key={index}>
-         <PropertyItem authUser={authUser} item={item} onPropertyClick={onPropertyClick} />
+          <PropertyItem authUser={authUser} item={item} onPropertyClick={onPropertyClick} />
         </ListItem>
       )}
-      ListEmptyComponent={<ListEmptyResult title={<CmtImage src={'/images/dashboard/no_post.svg'}/>} content="You didn't have any post yet" />}
+      ListEmptyComponent={
+        <ListEmptyResult title={<CmtImage src={'/images/dashboard/no_post.svg'} />} content="You didn't have any post yet" />
+      }
     />
   );
 };

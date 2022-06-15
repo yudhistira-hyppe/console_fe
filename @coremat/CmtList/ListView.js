@@ -20,7 +20,7 @@ const ListView = ({ renderRow, onEndReached, data, ListFooterComponent, ListEmpt
 
   return (
     <Box {...rest}>
-      {data.length > 0 ? data.map((item, index) => renderRow(item, index)) : getEmptyContainer(ListEmptyComponent)}
+      {data?.length > 0 ? data?.map((item, index) => renderRow(item, index)) : getEmptyContainer(ListEmptyComponent)}
       {getFooterContainer(ListFooterComponent)}
     </Box>
   );

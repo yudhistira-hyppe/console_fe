@@ -11,6 +11,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import clsx from 'clsx';
 import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography';
+import { useAuth } from '../../../../../../authentication';
+import { useLatestNotificationQuery } from 'api/user/notification';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -65,6 +67,7 @@ const HeaderNotifications = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [counter, setCounter] = React.useState(5);
   const theme = useTheme();
+  const { authUser, isLoadingUser } = useAuth();
 
   const onOpenPopOver = (event) => {
     setAnchorEl(event.currentTarget);
@@ -77,6 +80,8 @@ const HeaderNotifications = () => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
+  const { data: dataNotification } = useLatestNotificationQuery(authUser.email);
 
   return (
     <Box pr={2}>
@@ -118,13 +123,15 @@ const HeaderNotifications = () => {
             }}
           />
           <CmtCardContent>
-            {headerNotifications.length > 0 ? (
-              <PerfectScrollbar className={classes.scrollbarRoot}>
-                <CmtList
-                  data={headerNotifications}
-                  renderRow={(item, index) => <NotificationItem key={index} item={item} />}
-                />
-              </PerfectScrollbar>
+            {dataNotification?.data?.length > 0 ? (
+              <>
+                <PerfectScrollbar className={classes.scrollbarRoot}>
+                  <CmtList
+                    data={dataNotification?.data}
+                    renderRow={(item, index) => <NotificationItem key={index} item={item} />}
+                  />
+                </PerfectScrollbar>
+              </>
             ) : (
               <Box p={6}>
                 <Typography variant="body2">No notifications found</Typography>
