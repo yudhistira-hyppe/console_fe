@@ -122,7 +122,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PropertyItem = ({ authUser, item, onPropertyClick }) => {
-  console.log('item:', item);
   const classes = useStyles();
 
   const getMediaUri = () => {
@@ -145,7 +144,6 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
     // const httpUri = STREAM_URL + mediaUri + authToken;
     // return httpUri;
   };
-  console.log('getMediaUri:', getMediaUri());
 
   const getPostType = () => fakeDb.postType.filter((type) => type.name === item.postType).map((opt) => opt.slug);
 
