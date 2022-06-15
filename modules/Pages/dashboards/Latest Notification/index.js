@@ -29,12 +29,26 @@ const LatestNotification = () => {
   const { authUser } = useAuth();
 
   const { data: latestNotification } = useLatestNotificationQuery(authUser.email);
+  // console.log('latestNotification:', latestNotification?.data[0].createdAt);
 
   const classes = useStyles();
-  const { userActivities } = intranet;
+  // const { userActivities } = intranet;
+
+  const lastActivityDate = latestNotification?.data[0]?.createdAt.split(' ')[0];
+  const todayDate = new Date().toISOString().slice(0, 10);
+
+  const date1 = new Date(lastActivityDate);
+  const date2 = new Date(todayDate);
+
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  // console.log(diffTime + ' milliseconds');
+  // console.log(diffDays + ' days');
+
   return (
     <CmtCard className={classes.cardRoot}>
-      <CmtCardHeader title="Latest Notification" subTitle={`Last activity was ${timeFromNow(userActivities[0].date)}`} />
+      <CmtCardHeader title="Latest Notification" subTitle={`Last activity was ${diffDays} Days`} />
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
           {/* <NotificationData data={userActivities} /> */}
