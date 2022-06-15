@@ -6,6 +6,7 @@ import ListFooter from './ListFooter';
 import ListView from './ListView';
 
 const CmtList = ({ footerProps, ...props }) => {
+  // data propsnya ada
   return (
     <ListView
       {...props}

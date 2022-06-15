@@ -6,8 +6,11 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import CmtCard from '../../../../@coremat/CmtCard';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import CmtList from '../../../../@coremat/CmtList';
-import { news} from "../../../FakeDb/news";
+// import { news } from '../../../FakeDb/news';
 import CommentItem from './CommentItem';
+
+import { useAuth } from 'authentication';
+import { useUserGetNewCommentQuery } from 'api/user/comment';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -36,15 +39,21 @@ const useStyles = makeStyles((theme) => ({
 
 const Comments = () => {
   const classes = useStyles();
-  const { comments } = news;
+  // const { comments } = news;
+
+  const { authUser } = useAuth();
+
+  const { data: dataComment } = useUserGetNewCommentQuery(authUser.email);
+  console.log('dataComment:', dataComment);
   return (
     <CmtCard className={classes.cardRoot}>
       <CmtCardHeader title="New Comment">
-        <Chip className={classes.chipRoot} label="23 New" color="primary" size="small" />
+        {/* please dont remove code below! this check/notif for readed and unreaded notification  */}
+        {/* <Chip className={classes.chipRoot} label="23 New" color="primary" size="small" /> */}
       </CmtCardHeader>
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
-          <CmtList data={comments} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
+          <CmtList data={dataComment?.data} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
         </PerfectScrollbar>
       </CmtCardContent>
     </CmtCard>

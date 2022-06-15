@@ -14,42 +14,45 @@ export const instance = axios.create({
 
 export const setAuthorizationHeader = (instance) => {
   const user = JSON.parse(localStorage.getItem('user'));
-  if(user) {
-      const accessToken = user.token;
-      const email = user.email;
+  if (user) {
+    const accessToken = user.token;
+    const email = user.email;
 
-      // Set the AUTH token for any request
-      instance.interceptors.request.use(function (request) {
-          //console.log('Starting Request', JSON.stringify(request, null, 2))
-          
-          if (accessToken) {
-              request.headers['x-auth-token'] = accessToken;
-              request.headers['x-auth-user'] = email;
-          } else {
-              //localStorage.removeItem("userInfo");
-              window.location.href = '/pages/logout';
-          }
-          return request;
-      });
+    // Set the AUTH token for any request
+    instance.interceptors.request.use(function (request) {
+      //console.log('Starting Request', JSON.stringify(request, null, 2))
 
-      instance.interceptors.response.use(function (response) {
-          //console.log('response :'+JSON.stringify(response))
-          /*if (response.data && !response.data.status) {
+      if (accessToken) {
+        request.headers['x-auth-token'] = accessToken;
+        request.headers['x-auth-user'] = email;
+      } else {
+        //localStorage.removeItem("userInfo");
+        window.location.href = '/pages/logout';
+      }
+      return request;
+    });
+
+    instance.interceptors.response.use(
+      function (response) {
+        //console.log('response :'+JSON.stringify(response))
+        /*if (response.data && !response.data.status) {
               window.location.href = '/pages/login';
               return Promise.reject(response.data.message);
           }*/
 
-          return response;
-      }, function (error) {
-        console.log('error response :'+error.response)
-          if (error.response && (401 === error.response.status)) {
-              localStorage.clear();
-              window.location.href = '/pages/logout';
-          } /*else {
+        return response;
+      },
+      function (error) {
+        console.log('error response :' + error.response);
+        if (error.response && 401 === error.response.status) {
+          localStorage.clear();
+          window.location.href = '/pages/logout';
+        } /*else {
               window.location.href = '/pages/error-404';
               return Promise.reject(error);
           }*/
-      });
+      },
+    );
   }
 
   return instance;
@@ -99,11 +102,11 @@ export const obtainProfiles = (data) => {
   const url = `/user/getprofiles`;
   const form = new FormData();
   if (data.search) {
-    form.append("search", data.search);
+    form.append('search', data.search);
   }
 
-  form.append("pageRow", 10);
-  form.append("pageNumber", 0);
+  form.append('pageRow', 10);
+  form.append('pageNumber', 0);
 
   return instance.post(url, form);
 };
@@ -115,11 +118,11 @@ export const obtainContents = (data) => {
   const url = `/posts/getuserposts`;
   const form = new FormData();
   if (data.email) {
-    form.append("search", data.email);
+    form.append('search', data.email);
   }
 
-  form.append("pageRow", 10);
-  form.append("pageNumber", 0);
+  form.append('pageRow', 10);
+  form.append('pageNumber', 0);
 
   return instance.post(url, form);
 };

@@ -34,25 +34,23 @@ const useRowStyles = makeStyles({
   profilePicture: {
     '& .makeStyles-medium-64': {
       width: 80,
-      height: 80
+      height: 80,
     },
     '& .Cmt-title': {
-      fontSize: 22
+      fontSize: 22,
     },
     '& .Cmt-sub-title': {
-      fontSize: 18
-    }
-  }
+      fontSize: 18,
+    },
+  },
 });
-
 
 const ConsolePenggunaDetailComponent = () => {
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
   const classes = useRowStyles();
-  const { id } = router.query
-  const userStore = useSelector((state) => state.userReducers)
-
+  const { id } = router.query;
+  const userStore = useSelector((state) => state.userReducers);
 
   // const pengguna = akunPengguna.filter((akun) => akun.id == id);
 
@@ -61,13 +59,15 @@ const ConsolePenggunaDetailComponent = () => {
   // }
 
   useEffect(() => {
-    console.log("masuk fungsi ini")
-    console.log(id)
-    dispatch(getListUsers({
-      page: 0,
-      rowsPerPage: 1,
-      search: id
-    }))
+    console.log('masuk fungsi ini');
+    console.log(id);
+    dispatch(
+      getListUsers({
+        page: 0,
+        rowsPerPage: 1,
+        search: id,
+      }),
+    );
   }, []);
 
   return (
@@ -76,57 +76,61 @@ const ConsolePenggunaDetailComponent = () => {
         <title key="title">Hyppe-Console :: Pengguna</title>
       </Head>
       <PageContainer heading="Pengguna" breadcrumbs={breadcrumbs}>
-        {
-          userStore.users && userStore.users.length > 0 && 
+        {userStore.users && userStore.users.length > 0 && (
           <GridContainer>
-          <Grid item xs={12} lg={3} className={classes.profilePicture}>
-            <CmtObjectSummary
-              avatar={<CmtAvatar src={userStore.users[0].avatar ? getMediaUri(userStore.users[0].avatar) : ProfilePicture} alt={userStore.users[0].fullName} />}
-              title={userStore.users[0].fullName}
-              subTitle={userStore.users[0].username}
-              showItemBadge={false}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              align={'horizontal'}
-            />
-          </Grid>
-          <Grid item xs={12} lg={7}>
-            <Box style={{height:'100%'}}>
-              <VerificationCode />
-            </Box>
-          </Grid>
-          <Grid item xs={12} lg={3}>
-            <Box style={{height:'100%'}}>
+            <Grid item xs={12} lg={3} className={classes.profilePicture}>
+              <CmtObjectSummary
+                avatar={
+                  <CmtAvatar
+                    src={userStore.users[0].avatar ? getMediaUri(userStore.users[0].avatar) : ProfilePicture}
+                    alt={userStore.users[0].fullName}
+                  />
+                }
+                title={userStore.users[0].fullName}
+                subTitle={userStore.users[0].username}
+                showItemBadge={false}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                align={'horizontal'}
+              />
+            </Grid>
+            <Grid item xs={12} lg={7}>
+              <Box style={{ height: '100%' }}>
+                <VerificationCode />
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={3}>
+              <Box style={{ height: '100%' }}>
                 <Contact userDetail={userStore.users[0]} />
-            </Box>
-          </Grid>
-          <Grid item xs={12} lg={9}>
-            <Box style={{height:'100%'}}>
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={9}>
+              <Box style={{ height: '100%' }}>
                 <About userDetail={userStore.users[0]} />
-            </Box>
-          </Grid>
-          <Grid item xs={12} lg={3}>
-            <Insight insight={userStore.users[0].insight} interest={userStore.users[0].interest}/>
-          </Grid>
-          <Grid item xs={12} lg={9}>
-            <PostListing email={id}/>
-          </Grid>
-          <Grid item xs={12} lg={7}>
-            <RecentOrders/>
-          </Grid>
-          <Grid item xs={12} lg={5}>
-            <ProjectWorkedHours/>
-          </Grid>
-          <Grid item xs={12} lg={12}>
-            <MarketingCampaign/>
-          </Grid>
-        </GridContainer>
-        }
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={3}>
+              <Insight insight={userStore.users[0].insight} interest={userStore.users[0].interest} />
+            </Grid>
+            <Grid item xs={12} lg={9}>
+              <PostListing email={id} />
+            </Grid>
+            <Grid item xs={12} lg={7}>
+              <RecentOrders />
+            </Grid>
+            <Grid item xs={12} lg={5}>
+              <ProjectWorkedHours />
+            </Grid>
+            <Grid item xs={12} lg={12}>
+              <MarketingCampaign />
+            </Grid>
+          </GridContainer>
+        )}
       </PageContainer>
     </>
-  )
-}
+  );
+};
 
 export default ConsolePenggunaDetailComponent;

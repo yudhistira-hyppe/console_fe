@@ -2,12 +2,14 @@ import React from 'react';
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
-import NotificationData from "./NotificationData";
-import { intranet } from "../../../FakeDb/intranet";
+import NotificationData from './NotificationData';
+import { intranet } from '../../../FakeDb/intranet';
 import { timeFromNow } from '../../../../@jumbo/utils/dateHelper';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+import { useAuth } from 'authentication';
+import { useLatestNotificationQuery } from 'api/user/notification';
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
     position: 'relative',
@@ -24,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LatestNotification = () => {
+  const { authUser } = useAuth();
+
+  const { data: latestNotification } = useLatestNotificationQuery(authUser.email);
+
   const classes = useStyles();
   const { userActivities } = intranet;
   return (
@@ -31,7 +37,8 @@ const LatestNotification = () => {
       <CmtCardHeader title="Latest Notification" subTitle={`Last activity was ${timeFromNow(userActivities[0].date)}`} />
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
-          <NotificationData data={userActivities} />
+          {/* <NotificationData data={userActivities} /> */}
+          <NotificationData data={latestNotification?.data} />
         </PerfectScrollbar>
       </CmtCardContent>
     </CmtCard>

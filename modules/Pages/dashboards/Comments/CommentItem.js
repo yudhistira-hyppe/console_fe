@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CmtMediaObject from '../../../../@coremat/CmtMediaObject';
 import Box from '@material-ui/core/Box';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import CmtAvatar from '../../../../@coremat/CmtAvatar';
-import { timeFromNow } from '../../../../@jumbo/utils/dateHelper';
+// import { timeFromNow } from '../../../../@jumbo/utils/dateHelper';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Fab } from '@material-ui/core';
+import { useUserUpdateCommentMutation } from 'api/user/comment';
+import { useAuth } from 'authentication';
 
 const useStyles = makeStyles((theme) => ({
   itemRoot: {
@@ -58,19 +60,69 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CommentItem = ({ item }) => {
+  const { authUser } = useAuth();
+  // const [uniqueID, setUniqueID] = React.useState('');
+
+  const [updateComment, { isSuccess, isLoading, isError }] = useUserUpdateCommentMutation();
+
+  // React.useEffect(() => {
+  //   if (isSuccess) {
+  //     return (
+  //       <CmtMediaObject
+  //         // avatar={<CmtAvatar className={classes.avatarRoot} src={item.user.profile_pic} />}
+  //         avatar={<CmtAvatar className={classes.avatarRoot} src={'image belum siap'} />}
+  //         title={getTitle()}
+  //         // subTitle={item.comment}
+  //         subTitle={item.txtMessages}
+  //         subTitleProps={{
+  //           className: classes.subTitleRoot,
+  //           component: 'div',
+  //           variant: 'inherit',
+  //           gutterBottom: false,
+  //         }}
+  //         footerComponent={getFooter()}
+  //       />
+  //     );
+  //   }
+  // }, [isSuccess]);
+  // const doneCommend = () => {
+  // const bodyPayload = {
+  // email: authUser.email,
+  // status: false,
+  // };
+  // console.log('isError:', isError);
+  // console.log('isSuccess:', isSuccess);
+  // console.log('updateComment:', updateComment);
+  // };
+  // console.log('updateComment:', updateComment);
+
   const classes = useStyles();
+
+  const formatDate = (date) => {
+    return new Date(date.createdAt.split(' ')[0]).toLocaleString('en-us', {
+      month: 'short',
+      year: 'numeric',
+      day: 'numeric',
+    });
+  };
+
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     refetch();
+  //   }
+  // }, [isSuccess]);
 
   const getTitle = () => {
     return (
       <Box color="text.primary">
         <Box component="span" color="primary.main">
-          {item.user.name}
+          {item.namesender}
         </Box>
         <Box component="span" mx={1}>
           commented on
         </Box>
         <Box component="span" color="primary.main">
-          {item.postTitle}
+          {item.title}
         </Box>
       </Box>
     );
@@ -79,13 +131,14 @@ const CommentItem = ({ item }) => {
   const getFooter = () => (
     <Box position="relative">
       <Box fontSize={14} color="text.disabled">
-        {timeFromNow(item.date)}
+        {formatDate(item)}
       </Box>
       <Box display="flex" alignItems="center" className={classes.actionButtons}>
         <Fab color="primary" size="small">
           <DoneIcon />
+          {/* <DoneIcon/> */}
         </Fab>
-        <Fab size="small" className="btn-white">
+        <Fab size="small" className="btn-white" onClick={() => updateComment({ id: item._id, active: false })}>
           <ClearIcon />
         </Fab>
       </Box>
@@ -95,9 +148,11 @@ const CommentItem = ({ item }) => {
   return (
     <Box className={classes.itemRoot}>
       <CmtMediaObject
-        avatar={<CmtAvatar className={classes.avatarRoot} src={item.user.profile_pic} />}
+        // avatar={<CmtAvatar className={classes.avatarRoot} src={item.user.profile_pic} />}
+        avatar={<CmtAvatar className={classes.avatarRoot} src={'image belum siap'} />}
         title={getTitle()}
-        subTitle={item.comment}
+        // subTitle={item.comment}
+        subTitle={item.txtMessages}
         subTitleProps={{
           className: classes.subTitleRoot,
           component: 'div',
