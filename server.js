@@ -11,8 +11,8 @@ const handle = app.getRequestHandler();
 const httpsOptions = {
   // key: readFileSync('D:/MyWork/Hyppe/Source/SSL/projectcom/server.key'),
   // cert: readFileSync('D:/MyWork/Hyppe/Source/SSL/projectcom/server.crt'),
-  key: readFileSync('C:/openSSL/new/certificate.key'),
-  cert: readFileSync('C:/openSSL/new/sslaja.crt'),
+  key: readFileSync('C:/SSL/new/certificate.key'),
+  cert: readFileSync('C:/SSL/new/sslaja.crt'),
 };
 
 app.prepare().then(() => {
