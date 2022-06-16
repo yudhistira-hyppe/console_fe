@@ -92,6 +92,7 @@ const ContentsListing = () => {
   };
 
   const { data: contentAll } = useUserContentsAllQuery(bodyPayloadContentAll);
+  console.log('contentAll:', contentAll)
   const { data: contentLatest } = useUserContentsLatestQuery(bodyPayloadContentLatest);
   const { data: contentPopular } = useUserContentsPopularQuery(bodyPayloadContentPopular);
   const { data: contentMonetize } = useUserContentsMonetizeQuery(bodyPayloadContentMonetize);

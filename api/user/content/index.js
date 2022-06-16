@@ -33,13 +33,7 @@ export const contentAPI = createApi({
         body: payload,
       }),
     }),
-    userContentsManagement: build.query({
-      query: (payload) => ({
-        url: `/getusercontents/management/grouping`,
-        method: 'POST',
-        body: payload,
-      }),
-    }),
+
   }),
 });
 
@@ -48,5 +42,4 @@ export const {
   useUserContentsLatestQuery,
   useUserContentsPopularQuery,
   useUserContentsMonetizeQuery,
-  useUserContentsManagementQuery,
 } = contentAPI;

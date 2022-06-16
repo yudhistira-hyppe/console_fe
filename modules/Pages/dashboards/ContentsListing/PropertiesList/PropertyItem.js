@@ -125,24 +125,10 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
   const classes = useStyles();
 
   const getMediaUri = () => {
-    // sesat : domain hyppe + mediaEndpoint + token + token auth
-    // need to be like this : domain hyppe + mediaEndpoint + token auth + email
-    // // ------
-    // const getTokenLokalStorage = localStorage.getItem('user');
-    // const parser = JSON.parse(getTokenLokalStorage);
-    // console.log('parser:', parser.token);
-    // // ------
-    // const tes = authUser.token;
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
     const mediaURI = item.avatar.mediaEndpoint;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;
-    // return tes;
-    // before
-    // const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email;
-    // const mediaUri = item.mediaType === 'video' ? item.mediaThumbEndpoint : item.mediaEndpoint;
-    // const httpUri = STREAM_URL + mediaUri + authToken;
-    // return httpUri;
   };
 
   const getPostType = () => fakeDb.postType.filter((type) => type.name === item.postType).map((opt) => opt.slug);
@@ -200,8 +186,8 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
           <CmtImage
             className={classes.imageThumbRoot}
             // here
-            src={'../.'}
-            // src={getMediaUri()}
+            // src={'../.'}
+            src={getMediaUri()}
             alt={item.title}
           />
           {/*<getMediaUri

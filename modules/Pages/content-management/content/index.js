@@ -1,44 +1,38 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageHeader from '../../../../@jumbo/components/PageComponents/PageHeader';
 import ContentDataCard from './ContentDataCard';
 import GridContainer from '../../../../@jumbo/components/GridContainer';
 import { Grid } from '@material-ui/core';
 import RegionViews from './RegionViews';
-import { useUserContentsAllQuery } from 'api/user/content';
+import { useUserContentsManagementQuery } from 'api/user/content/management';
 import { useAuth } from 'authentication';
 
 const Content = ({}) => {
   const { authUser, isLoadingUser } = useAuth();
-  //   const { month, setMonth } = useState(
-  //     'January',
-  //     'February',
-  //     'March',
-  //     'April',
-  //     'May',
-  //     'June',
-  //     'July',
-  //     'August',
-  //     'September',
-  //     'October',
-  //     'November',
-  //     'December',
-  //   );
-  //   const d = new Date();
+  // const [objVal, setObjVal] = useState([])
+  // console.log('objVal:', objVal)
 
-  const { data: contentManagement } = useUserContentsAllQuery(authUser.email);
-  return (
+  // const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
+  // const getKeys = Object.keys(contentManagement?.data)
+  // console.log('getKeys:', getKeys)
+
+  // useEffect(() => {
+  // },[])
+
+  return (  
     <div>
       <PageHeader heading={'Content Management'} />
       <GridContainer>
-        {contentManagement?.data.map((content) => {
+        {/* {contentManagement?.data?.popular.map((content) => {
+          console.log('content:', content)
           return (
             <Grid item md={4}>
               <ContentDataCard
                 key={content._id}
                 title={content.title}
                 contentTitle={content.description}
-                likes={content.likes}
+                likes={content.likes} 
                 views={content.views}
                 date={new Date(content.createdAt.split(' ')[0]).toLocaleString('en-us', {
                   month: 'short',
@@ -49,7 +43,8 @@ const Content = ({}) => {
               />
             </Grid>
           );
-        })}
+        })} */}
+  <div>tessss</div>
         {/* <Grid item md={4}>
           <ContentDataCard
             title={'Latest Monetize Content'}
