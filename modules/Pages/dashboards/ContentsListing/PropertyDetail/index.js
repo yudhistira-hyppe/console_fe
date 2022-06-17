@@ -81,7 +81,7 @@ const ContentDetail = ({ authUser, selectedContent, showContentList }) => {
 
   const getMediaUri = (authUser, item) => {
     const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email;
-    const mediaUri = item.mediaType === 'video' ? item.mediaThumbEndpoint : item.mediaEndpoint;
+    const mediaUri = item.mediaType === 'video' ? item.mediaThumbEndpoint : item.avatar.mediaEndpoint;
     const httpUri = STREAM_URL + mediaUri + authToken;
     return httpUri;
   };
