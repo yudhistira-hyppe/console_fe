@@ -45,6 +45,7 @@ const ContentsListing = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [selectedContent, setSelectedContent] = useState(null);
+  console.log('selectedContent:', selectedContent)
 
   //const [page, setPage] = useState(1);
   const [categoryData, setCategoryData] = useState([]);
@@ -92,7 +93,6 @@ const ContentsListing = () => {
   };
 
   const { data: contentAll } = useUserContentsAllQuery(bodyPayloadContentAll);
-  console.log('contentAll:', contentAll)
   const { data: contentLatest } = useUserContentsLatestQuery(bodyPayloadContentLatest);
   const { data: contentPopular } = useUserContentsPopularQuery(bodyPayloadContentPopular);
   const { data: contentMonetize } = useUserContentsMonetizeQuery(bodyPayloadContentMonetize);
@@ -114,10 +114,10 @@ const ContentsListing = () => {
     setShowContent(contentAll?.data);
   }, [contentAll]);
 
-  const handlePageChange = () => {
-    setRowsPerPage(5);
-    setPage(page + 1);
-  };
+  // const handlePageChange = () => {
+  //   setRowsPerPage(5);
+  //   setPage(page + 1);
+  // };
 
   const contentChange = (nameTab) => {
     switch (nameTab) {
@@ -203,11 +203,10 @@ const ContentsListing = () => {
     switch (tabValue) {
       case 'latest':
         setShowContent(contentLatest?.data);
-        return (
-          <Box p={6} textAlign="center">
+        // return ( <LoadMoreComponent clicked={() => setLimitContentAll(limitContentAll + 10)} />)
+          return (<Box p={6} textAlign="center">
             <Button
               className={classes.btnRoot}
-              onClick={handlePageChange}
               // eslint-disable-next-line react/jsx-no-duplicate-props
               onClick={() => setLimitContentLatest(limitContentLatest + 10)}>
               Load More
@@ -221,7 +220,6 @@ const ContentsListing = () => {
           <Box p={6} textAlign="center">
             <Button
               className={classes.btnRoot}
-              onClick={handlePageChange}
               // eslint-disable-next-line react/jsx-no-duplicate-props
               onClick={() => setLimitContentPopular(limitContentPopular + 10)}>
               Load More
@@ -233,7 +231,6 @@ const ContentsListing = () => {
           <Box p={6} textAlign="center">
             <Button
               className={classes.btnRoot}
-              onClick={handlePageChange}
               // eslint-disable-next-line react/jsx-no-duplicate-props
               onClick={() => setLimitContentMonetize(limitContentMonetize + 10)}>
               Load More
@@ -246,7 +243,6 @@ const ContentsListing = () => {
           <Box p={6} textAlign="center">
             <Button
               className={classes.btnRoot}
-              onClick={handlePageChange}
               // eslint-disable-next-line react/jsx-no-duplicate-props
               onClick={() => setLimitContentAll(limitContentAll + 10)}>
               Load More
@@ -260,21 +256,23 @@ const ContentsListing = () => {
 
   // i had try this but got limited looping react
 
-  // const LoadMoreComponent = () => {
-  //   const classes = useStyles();
+  const LoadMoreComponent = ({clicked}) => {
+    console.log('clicked:', clicked)
+    console.log('props:')
+    const classes = useStyles();
 
-  //   return (
-  //     <Box p={6} textAlign="center">
-  //       <Button
-  //         className={classes.btnRoot}
-  //         onClick={handlePageChange}
-  //         // eslint-disable-next-line react/jsx-no-duplicate-props
-  //         onClick={() => setLimitContentAll(limitContentAll + 10)}>
-  //         Load More
-  //       </Button>
-  //     </Box>
-  //   );
-  // };
+    return (
+      <Box p={6} textAlign="center">
+        <Button
+          className={classes.btnRoot}
+          // eslint-disable-next-line react/jsx-no-duplicate-props
+          onClick={clicked}
+          >
+          Load More
+        </Button>
+      </Box>
+    );
+  };
 
   return (
     <React.Fragment>
@@ -292,7 +290,7 @@ const ContentsListing = () => {
           data={showContent}
           searchText={searchText}
           handleSearchTextChange={handleSearchTextChange}
-          handlePageChange={handlePageChange}
+          // handlePageChange={handlePageChange}
           handleLoadMore={<LoadMore />}
         />
       </Collapse>
