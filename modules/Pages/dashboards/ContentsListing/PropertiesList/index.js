@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useRef,useEffect} from 'react';
 import Box from '@material-ui/core/Box';
 import CmtCard from '../../../../../@coremat/CmtCard';
 import CmtCardHeader from '../../../../../@coremat/CmtCard/CmtCardHeader';
@@ -87,6 +87,20 @@ const PropertiesList = ({
   handlePageChange,
   handleLoadMore,
 }) => {
+
+  // when contents tab change, it will automatically to top
+  const ps = useRef()
+  useEffect(() => {
+
+    function scrollToTop() {
+      const curr = ps.current
+      if (curr) {
+        curr.scrollTop = 0
+      }
+    }
+    scrollToTop()
+  },[tabValue])
+
   const classes = useStyles();
   return (
     <CmtCard>
@@ -109,7 +123,7 @@ const PropertiesList = ({
         </Box>
       </CmtCardHeader>
       <CmtCardContent className={classes.cardContentRoot}>
-        <PerfectScrollbar className={classes.scrollbarRoot}>
+        <PerfectScrollbar className={classes.scrollbarRoot} containerRef={el => (ps.current = el)}>
           <PropertiesDataList data={data} onPropertyClick={onPropertyClick} />
           {data && handleLoadMore}
         </PerfectScrollbar>
