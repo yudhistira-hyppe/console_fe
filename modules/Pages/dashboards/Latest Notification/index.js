@@ -37,10 +37,10 @@ const LatestNotification = () => {
   const lastActivityDate = latestNotification?.data[0]?.createdAt.split(' ')[0];
   const todayDate = new Date().toISOString().slice(0, 10);
 
-  const date1 = new Date(lastActivityDate);
-  const date2 = new Date(todayDate);
+  const lastActivity = new Date(lastActivityDate);
+  const today = new Date(todayDate);
 
-  const diffTime = Math.abs(date2 - date1);
+  const diffTime = Math.abs(today - lastActivity);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   // console.log(diffTime + ' milliseconds');

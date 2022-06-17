@@ -70,6 +70,7 @@ const formatDate = (date) => {
 };
 
 const NotificationData = ({ data }) => {
+  console.log('data:', data)
   const classes = useStyles();
   return (
     <Box className={classes.timelineView}>
@@ -88,7 +89,7 @@ const NotificationData = ({ data }) => {
                       {item.eventType}
                     </Typography>
                     <Typography component="p" className={classes.subTitleRoot} mt={0}>
-                      {item.body}
+                      {item.title} {item.body}
                     </Typography>
                   </Box>
                   <Box component="span" className={classes.dateRoot} ml="auto">

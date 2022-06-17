@@ -103,7 +103,7 @@ const getSharedContent = (item, classes) => (
 // );
 
 const NotificationItem = ({ item }) => {
-  console.log('item:', item);
+  // console.log('item:', item);
   const classes = useStyles();
 
   // before i rewrite start
@@ -156,10 +156,10 @@ const NotificationItem = ({ item }) => {
       <CmtMediaObject
         avatarPos="center"
         // avatar={<CmtAvatar size={40} src={item.user.profile_pic} alt={item.user.name} />}
-        title={getTitle(item, classes)}
-        // title={'tess'}
+        // title={getTitle(item, classes)}
+        title={'ini title'}
         // subTitle={getSubTitle()}
-        subTitle={'tess'}
+        subTitle={'(data udh kelooping tinggal tunggu API)'}
       />
     </Box>
   );
