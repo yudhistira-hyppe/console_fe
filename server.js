@@ -9,7 +9,7 @@ const app = next({ dev, dir: '.' });
 const handle = app.getRequestHandler();
 
 const httpsOptions = {
-  // tess push
+  // tess push lagi
   // key: readFileSync('D:/MyWork/Hyppe/Source/SSL/projectcom/server.key'),
   // cert: readFileSync('D:/MyWork/Hyppe/Source/SSL/projectcom/server.crt'),
   key: readFileSync('C:/SSL/new/certificate.key'),
