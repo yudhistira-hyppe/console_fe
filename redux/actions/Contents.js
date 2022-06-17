@@ -7,7 +7,6 @@ export const getContents = (authUser, filterOptions = [], searchTerm = '', callb
     dispatch(fetchStart());
     obtainContents(authUser)
       .then(({ data }) => {
-        console.log('this is response data', data);
         if (data && data.response_code == 202) {
           dispatch(fetchSuccess());
           dispatch({ type: GET_CONTENTS, payload: data.data });
