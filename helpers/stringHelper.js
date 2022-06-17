@@ -64,3 +64,19 @@ export const formatGender = (gender) => {
   }
   return formattedGender;
 };
+
+export const getDateBeforeToday = (dayBefore) => {
+  return new Date(Date.now() - dayBefore * 24 * 60 * 60 * 1000);
+};
+
+export const dateRange = (startDate, endDate, steps = 1) => {
+  const dateArray = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= new Date(endDate)) {
+    dateArray.push(new Date(currentDate).toLocaleDateString());
+    currentDate.setUTCDate(currentDate.getUTCDate() + steps);
+  }
+
+  return dateArray;
+};

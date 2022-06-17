@@ -9,7 +9,7 @@ import ActivitySize from './ActivitySize';
 import CmtImage from '@coremat/CmtImage';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { useGetUserActivityByYearQuery } from 'api/console/engagement';
+import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';
 import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +34,7 @@ const ConsoleDashboardComponent = () => {
   const { data: activeUsersSevenDay } = useGetUserActivityBeforeTodayQuery(6);
   const { data: activeUsersThirtyDay } = useGetUserActivityBeforeTodayQuery(29);
   const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
+  const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery('2022-06-16');
   const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
 
   const countTotal = (data, key) => {
@@ -95,11 +96,8 @@ const ConsoleDashboardComponent = () => {
               background={['#FFF2E2 -18.96%', '#FFFFFF 108.17%']}
             />
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={12}>
-            <ActivityChart/>
-          </Grid> */}
           <Grid item xs={12} sm={12} md={12}>
-            <ActivitySize />
+            <ActivitySize data={usersActivityHyppeSevenDay} />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <StatusKepemilikanCard data={usersMonetizeOneYear} />
