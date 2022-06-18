@@ -2,8 +2,9 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQueryWithHandleReauth } from 'api';
 
 export const commentAPI = createApi({
-  reducerPath: 'comments',
+  reducerPath: 'commentsAPI',
   baseQuery: customBaseQueryWithHandleReauth,
+  tagTypes:["comment"],
   endpoints: (build) => ({
     userGetNewComment: build.query({
       query: (email) => ({
@@ -13,6 +14,7 @@ export const commentAPI = createApi({
           email,
         },
       }),
+      providesTags: ['comment']
     }),
     userUpdateComment: build.mutation({
       query: ({ id, ...patch }) => ({
@@ -20,6 +22,7 @@ export const commentAPI = createApi({
         method: 'PUT',
         body: patch,
       }),
+      invalidatesTags:["comment"]
     }),
   }),
 });
