@@ -54,13 +54,13 @@ const DealsAnalytics = (props) => {
             <Box component="span" display="flex" alignItems="center" mr={2}>
               <Box component="span" className={clsx(classes.dotNotif, classes.dotPending)} mr={2} mt={1} />
               <Box component="span" color="text.secondary" fontSize={12}>
-                Tertunda
+                Tidak Bersertifikat
               </Box>
             </Box>
             <Box component="span" display="flex" alignItems="center">
               <Box component="span" className={clsx(classes.dotNotif, classes.dotSuccess)} mr={2} mt={1} />
               <Box component="span" color="text.secondary" fontSize={12}>
-                Berhasil
+                Bersertifikat
               </Box>
             </Box>
           </Box>
