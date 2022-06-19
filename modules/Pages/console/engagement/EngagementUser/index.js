@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
 import CmtAdvCard from '@coremat/CmtAdvCard';
@@ -7,9 +8,7 @@ import Box from '@material-ui/core/Box';
 import CmtList from '@coremat/CmtList';
 import EngagementItem from './EngagementItem';
 import EngagementGraph from './EngagementGraph';
-import { fakeDb } from 'modules/FakeDb/fake-db';
-
-const {engagementTitle} = fakeDb;
+import { Visibility, Favorite, ModeComment, AddBox, EmojiEmotions } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   cardContentRoot: {
@@ -43,8 +42,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EngagementUser = () => {
+const engagementTitle = [
+  {
+    label: 'Dilihat',
+    bgColor: '#D7F5B1',
+    color: '#5D9405',
+    icon: <Visibility />,
+  },
+  {
+    label: 'Disukai',
+    bgColor: '#F8BBD0',
+    color: '#E91E63',
+    icon: <Favorite />,
+  },
+  {
+    label: 'Dikomentari',
+    bgColor: '#9BE7FD',
+    color: '#0356AF',
+    icon: <ModeComment />,
+  },
+  {
+    label: 'Diposting',
+    bgColor: '#F2E7FE',
+    color: '#7F39FB',
+    icon: <AddBox />,
+  },
+  {
+    label: 'Direaksi',
+    bgColor: '#FFDE99',
+    color: '#D36F1A',
+    icon: <EmojiEmotions />,
+  },
+];
+
+const EngagementUser = (props) => {
+  const { data } = props;
   const classes = useStyles();
+
   return (
     <CmtAdvCard>
       <CmtCardHeader
@@ -52,8 +86,7 @@ const EngagementUser = () => {
           variant: 'h4',
           component: 'div',
         }}
-        title="Engagement">
-      </CmtCardHeader>
+        title="Engagement"></CmtCardHeader>
       <CmtAdvCardContent className={classes.cardContentRoot}>
         <CmtList
           className={classes.optionList}
@@ -61,11 +94,15 @@ const EngagementUser = () => {
           renderRow={(item, index) => <EngagementItem key={index} item={item} />}
         />
         <Box>
-          <EngagementGraph />
+          <EngagementGraph data={data} />
         </Box>
       </CmtAdvCardContent>
     </CmtAdvCard>
   );
+};
+
+EngagementUser.propTypes = {
+  data: PropTypes.array,
 };
 
 export default EngagementUser;

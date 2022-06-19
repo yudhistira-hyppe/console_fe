@@ -80,3 +80,7 @@ export const dateRange = (startDate, endDate, steps = 1) => {
 
   return dateArray;
 };
+
+export const getMonthName = (monthNumber, typeName = 'long') => {
+  return new Date(monthNumber.toString()).toLocaleString('id', { month: typeName });
+};
