@@ -68,7 +68,7 @@ const ConsoleDashboardComponent = () => {
               dataGraph={activeUsersSevenDay}
               xAxisKeyGraph="date"
               lineKeyGraph="user_activity_count"
-              jumlah={countTotal(activeUsersSevenDay, 'user_activity_count')}
+              jumlah={countTotal(activeUsersSevenDay, 'user_activity_count').toString()}
               title="Pengguna Aktif 7 Hari"
               color="#0062FF"
               background={['#E2EEFF -18.96%', '#FFFFFF 108.17%']}
@@ -79,7 +79,7 @@ const ConsoleDashboardComponent = () => {
               dataGraph={activeUsersThirtyDay}
               xAxisKeyGraph="date"
               lineKeyGraph="user_activity_count"
-              jumlah={countTotal(activeUsersThirtyDay, 'user_activity_count')}
+              jumlah={countTotal(activeUsersThirtyDay, 'user_activity_count').toString()}
               title="Pengguna Aktif 30 Hari"
               color="#4200FF"
               background={['#E2E3FF -18.96%', '#FFFFFF 108.17%']}
@@ -90,7 +90,7 @@ const ConsoleDashboardComponent = () => {
               dataGraph={activeUsersOneYear}
               xAxisKeyGraph="month_name"
               lineKeyGraph="count_user"
-              jumlah={countTotal(activeUsersOneYear, 'count_user')}
+              jumlah={countTotal(activeUsersOneYear, 'count_user').toString()}
               title={`Pengguna Aktif Tahun ${new Date().getFullYear()}`}
               color="#FFA601"
               background={['#FFF2E2 -18.96%', '#FFFFFF 108.17%']}

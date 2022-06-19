@@ -92,7 +92,7 @@ const ActivitySize = (props) => {
 };
 
 ActivitySize.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 
 export default ActivitySize;
