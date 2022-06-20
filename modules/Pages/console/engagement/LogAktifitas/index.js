@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
 import CmtAdvCard from '@coremat/CmtAdvCard';
@@ -14,8 +15,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LogAktifitas = () => {
+const LogAktifitas = (props) => {
+  const { data } = props;
   const classes = useStyles();
+
   return (
     <CmtAdvCard>
       <CmtCardHeader
@@ -23,15 +26,18 @@ const LogAktifitas = () => {
           variant: 'h4',
           component: 'div',
         }}
-        title="Log Aktifitas">
-      </CmtCardHeader>
+        title="Log Aktifitas"></CmtCardHeader>
       <CmtAdvCardContent className={classes.cardContentRoot}>
         <Box>
-          <LogAktifitasGraph />
+          <LogAktifitasGraph data={data} />
         </Box>
       </CmtAdvCardContent>
     </CmtAdvCard>
   );
+};
+
+LogAktifitas.propTypes = {
+  data: PropTypes.array,
 };
 
 export default LogAktifitas;

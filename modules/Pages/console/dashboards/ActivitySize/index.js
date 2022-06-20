@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
 import CmtAdvCard from '@coremat/CmtAdvCard';
@@ -7,9 +8,6 @@ import Box from '@material-ui/core/Box';
 import CmtList from '@coremat/CmtList';
 import ActivitySizeItem from './ActivitySizeItem';
 import ActivitySizeGraph from './ActivitySizeGraph';
-import { fakeDb } from 'modules/FakeDb/fake-db';
-
-const {measuredActivityTitle,measuredActivity} = fakeDb;
 
 const useStyles = makeStyles((theme) => ({
   cardContentRoot: {
@@ -43,8 +41,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActivitySize = () => {
+const measuredActivityTitle = [
+  {
+    label: 'HyppeStory',
+    bgColor: '#D7F5B1',
+    color: '#8DCD03',
+  },
+  {
+    label: 'HyppeVid',
+    bgColor: '#FFDE99',
+    color: '#FF8C00',
+  },
+  {
+    label: 'HyppeDiary',
+    bgColor: '#9BE7FD',
+    color: '#0795F4',
+  },
+  {
+    label: 'HyppePic',
+    bgColor: '#F2E7FE',
+    color: '#7F39FB',
+  },
+];
+
+const ActivitySize = (props) => {
   const classes = useStyles();
+  const { data } = props;
+
   return (
     <CmtAdvCard>
       <CmtCardHeader
@@ -52,11 +75,8 @@ const ActivitySize = () => {
           variant: 'h4',
           component: 'div',
         }}
-        title="Ukuran Aktifitas">
-        <Box component="span" className={classes.badgeRoot}>
-          HyppeVid
-        </Box>
-      </CmtCardHeader>
+        title="Ukuran Aktifitas"
+      />
       <CmtAdvCardContent className={classes.cardContentRoot}>
         <CmtList
           className={classes.optionList}
@@ -64,11 +84,15 @@ const ActivitySize = () => {
           renderRow={(item, index) => <ActivitySizeItem key={index} item={item} />}
         />
         <Box>
-          <ActivitySizeGraph />
+          <ActivitySizeGraph data={data ? data.data : {}} />
         </Box>
       </CmtAdvCardContent>
     </CmtAdvCard>
   );
+};
+
+ActivitySize.propTypes = {
+  data: PropTypes.object,
 };
 
 export default ActivitySize;

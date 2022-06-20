@@ -15,7 +15,7 @@ const ActiveUsersGraph = (props) => {
           content={({ active, label, payload }) => {
             return active ? (
               <Box color="#fff">
-                {payload.map((row, index) => (
+                {payload?.map((row, index) => (
                   <Box key={index}>{`${formatDateString(label)}: ${row.value} Pengguna`}</Box>
                 ))}
               </Box>

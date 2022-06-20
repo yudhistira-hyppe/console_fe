@@ -32,8 +32,21 @@ export const engagementApi = createApi({
         },
       }),
     }),
+    getUserActivityHyppeByDate: build.query({
+      query: (date) => ({
+        url: `/getaktifitas`,
+        method: 'POST',
+        body: {
+          date,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetLogActivityByYearQuery, useGetUserEventActivityByYearQuery, useGetUserActivityByYearQuery } =
-  engagementApi;
+export const {
+  useGetLogActivityByYearQuery,
+  useGetUserEventActivityByYearQuery,
+  useGetUserActivityByYearQuery,
+  useGetUserActivityHyppeByDateQuery,
+} = engagementApi;
