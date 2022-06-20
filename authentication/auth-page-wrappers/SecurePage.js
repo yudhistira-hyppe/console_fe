@@ -1,26 +1,37 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication';
+
+const PREMIUM_ROUTES = ['/ads', '/adsGuideline', '/aboutAds', '/ads/details', '/ads/create', '/voucher/buy', '/wallet'];
 
 const SecurePage = ({ children }) => {
   const router = useRouter();
   const { authUser, getAuthUser, isLoading } = useAuth();
+  const [isRenderChildren, setIsRenderChildren] = useState(false);
 
   useEffect(() => {
     getAuthUser();
   }, []);
 
   useEffect(() => {
-    if (!authUser && !isLoading) {
-      if (router.pathname !== '/') {
+    if (!isLoading) {
+      if (!authUser && router.pathname !== '/') {
         router.push({ pathname: '/signin', query: { redirect: router.pathname } });
-      } else {
-        router.push('/signin');
+        return;
       }
+      if (!authUser && router.pathname === '/') {
+        router.push('/signin');
+        return;
+      }
+      if (authUser && !authUser.roles.includes('ROLE_PREMIUM_ONLY') && PREMIUM_ROUTES.includes(router.pathname)) {
+        router.push('/');
+        return;
+      }
+      setIsRenderChildren(true);
     }
   }, [authUser, isLoading]);
 
-  return authUser && !isLoading && children;
+  return isRenderChildren && children;
 };
 
 export default SecurePage;
