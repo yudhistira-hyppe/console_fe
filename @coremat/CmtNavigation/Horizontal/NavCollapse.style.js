@@ -73,6 +73,8 @@ const useStyles = makeStyles((theme) => ({
       animationName: '$slideIn, $moveUp',
       animationTimingFunction: 'ease, ease',
       animationDuration: '0.4s, 0.4s',
+      // edited by vicky
+      background:"rgb(170, 34, 175)"
     },
 
     '& > $navCollapseItem $navCollapseBtn:hover > $navCollapseItem': {
