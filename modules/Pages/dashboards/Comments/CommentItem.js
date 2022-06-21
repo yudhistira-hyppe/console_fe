@@ -7,8 +7,9 @@ import CmtAvatar from '../../../../@coremat/CmtAvatar';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Fab } from '@material-ui/core';
-import { useUserUpdateCommentMutation } from 'api/user/comment';
+import { useUserGetNewCommentQuery, useUserUpdateCommentMutation } from 'api/user/comment';
 import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const useStyles = makeStyles((theme) => ({
   itemRoot: {
@@ -60,6 +61,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CommentItem = ({ item }) => {
+  console.log('item:', item)
+  
   const { authUser } = useAuth();
   // const [uniqueID, setUniqueID] = React.useState('');
 
@@ -134,22 +137,29 @@ const CommentItem = ({ item }) => {
         {formatDate(item)}
       </Box>
       <Box display="flex" alignItems="center" className={classes.actionButtons}>
-        <Fab color="primary" size="small">
+        {/* <Fab color="primary" size="small">
           <DoneIcon />
-          {/* <DoneIcon/> */}
         </Fab>
         <Fab size="small" className="btn-white" onClick={() => updateComment({ id: item._id, active: false })}>
           <ClearIcon />
-        </Fab>
+        </Fab> */}
       </Box>
     </Box>
   );
+
+
+  const getMediaUri = () => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = item.avatar.mediaEndpoint;
+    console.log('`${STREAM_URL}${mediaURI}${authToken}`', `${STREAM_URL}${mediaURI}${authToken}`)
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
 
   return (
     <Box className={classes.itemRoot}>
       <CmtMediaObject
         // avatar={<CmtAvatar className={classes.avatarRoot} src={item.user.profile_pic} />}
-        avatar={<CmtAvatar className={classes.avatarRoot} src={'image belum siap'} />}
+        avatar={<CmtAvatar className={classes.avatarRoot} src={getMediaUri()} />}
         title={getTitle()}
         // subTitle={item.comment}
         subTitle={item.txtMessages}
