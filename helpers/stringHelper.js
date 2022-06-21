@@ -45,3 +45,42 @@ export const formatDateString = (date) => {
   }
   return result;
 };
+
+export const formatDateTimeString = (date) => {
+  let result = date;
+  const formattedDate = new Date(date);
+  if (!Number.isNaN(formattedDate.getTime())) {
+    result = formattedDate.toLocaleString('id');
+  }
+  return result;
+};
+
+export const formatGender = (gender) => {
+  let formattedGender = gender.replace(/\s/g, '').toLowerCase();
+  if (formattedGender.includes('perempuan') || formattedGender.includes('female')) {
+    formattedGender = 'Perempuan';
+  } else if (formattedGender.includes('laki-laki') || formattedGender.includes('male')) {
+    formattedGender = 'Laki - Laki';
+  }
+  return formattedGender;
+};
+
+export const getDateBeforeToday = (dayBefore) => {
+  return new Date(Date.now() - dayBefore * 24 * 60 * 60 * 1000);
+};
+
+export const dateRange = (startDate, endDate, steps = 1) => {
+  const dateArray = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= new Date(endDate)) {
+    dateArray.push(new Date(currentDate).toLocaleDateString());
+    currentDate.setUTCDate(currentDate.getUTCDate() + steps);
+  }
+
+  return dateArray;
+};
+
+export const getMonthName = (monthNumber, typeName = 'long') => {
+  return new Date(monthNumber.toString()).toLocaleString('id', { month: typeName });
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import StatusKepemilikanGraph from './StatusKepemilikanGraph';
 import CmtCard from '@coremat/CmtCard';
@@ -30,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DealsAnalytics = () => {
+const DealsAnalytics = (props) => {
+  const { data } = props;
+
   const classes = useStyles();
   const getTitle = () => (
     <Typography component="div" variant="h4">
@@ -49,29 +52,27 @@ const DealsAnalytics = () => {
           {/* <Typography className={classes.subTitle}>This year</Typography> */}
           <Box display="flex" alignItems="center" ml="auto">
             <Box component="span" display="flex" alignItems="center" mr={2}>
-              <Box component="span" className={classes.dotNotif} mr={2} mt={1} />
-              <Box component="span" color="text.secondary" fontSize={12}>
-                Notif
-              </Box>
-            </Box>
-            <Box component="span" display="flex" alignItems="center" mr={2}>
               <Box component="span" className={clsx(classes.dotNotif, classes.dotPending)} mr={2} mt={1} />
               <Box component="span" color="text.secondary" fontSize={12}>
-                Pending
+                Tidak Bersertifikat
               </Box>
             </Box>
             <Box component="span" display="flex" alignItems="center">
               <Box component="span" className={clsx(classes.dotNotif, classes.dotSuccess)} mr={2} mt={1} />
               <Box component="span" color="text.secondary" fontSize={12}>
-                Sukses
+                Bersertifikat
               </Box>
             </Box>
           </Box>
         </Box>
-        <StatusKepemilikanGraph />
+        <StatusKepemilikanGraph data={data} />
       </CmtCardContent>
     </CmtCard>
   );
+};
+
+DealsAnalytics.propTypes = {
+  data: PropTypes.array,
 };
 
 export default DealsAnalytics;

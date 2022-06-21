@@ -1,6 +1,7 @@
 import React from 'react';
-import CmtAdvCard from '../../../../@coremat/CmtAdvCard';
-import CmtAdvCardContent from '../../../../@coremat/CmtAdvCard/CmtAdvCardContent';
+import PropTypes from 'prop-types';
+import CmtAdvCard from '@coremat/CmtAdvCard';
+import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
 import Box from '@material-ui/core/Box';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import TrendingDownIcon from '@material-ui/icons/TrendingDown';
@@ -35,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
 
 const StatisticsClassicCard = ({ title, subTitle, growth, color, labels, children, ...rest }) => {
   const classes = useStyles({ color });
+
   return (
     <CmtAdvCard className={classes.advCard} {...rest}>
       <CmtAdvCardContent alignCenter>
         {children}
-
         <Box display="flex" mt={2}>
           <Box>
             <Typography component="div" variant="h1" className={classes.titleRoot} style={{ color: color }}>
@@ -48,7 +49,7 @@ const StatisticsClassicCard = ({ title, subTitle, growth, color, labels, childre
             <Box className={classes.subTitleRoot}>{subTitle}</Box>
           </Box>
           <Box ml="auto">
-            {growth > 0 &&
+            {growth > 0 && (
               <Box display="flex" alignItems="center" justifyContent="flex-end" color={growth > 0 ? 'green' : 'red'}>
                 <Box>{Math.abs(growth)}%</Box>
                 <Box ml={1}>
@@ -59,7 +60,7 @@ const StatisticsClassicCard = ({ title, subTitle, growth, color, labels, childre
                   )}
                 </Box>
               </Box>
-            }
+            )}
             {labels && labels.length > 0 && (
               <Box mt={1} display="flex" alignItems="center" flexWrap="wrap" justifyContent="center">
                 {labels.map((item, index) => (
@@ -84,6 +85,15 @@ const StatisticsClassicCard = ({ title, subTitle, growth, color, labels, childre
       </CmtAdvCardContent>
     </CmtAdvCard>
   );
+};
+
+StatisticsClassicCard.propTypes = {
+  title: PropTypes.string,
+  subTitle: PropTypes.string,
+  growth: PropTypes.number,
+  color: PropTypes.string,
+  labels: PropTypes.array,
+  children: PropTypes.element,
 };
 
 export default StatisticsClassicCard;

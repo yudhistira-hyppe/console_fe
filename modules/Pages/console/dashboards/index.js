@@ -9,8 +9,8 @@ import ActivitySize from './ActivitySize';
 import CmtImage from '@coremat/CmtImage';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { useGetUserActivityByYearQuery } from 'api/console/engagement';
-import { useGetUserActivityBeforeTodayQuery } from 'api/console/dashboard';
+import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';
+import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
 
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
@@ -30,9 +30,12 @@ const useStyles = makeStyles((theme) => ({
 
 const ConsoleDashboardComponent = () => {
   const classes = useStyles();
+  const currentYear = new Date().getFullYear();
   const { data: activeUsersSevenDay } = useGetUserActivityBeforeTodayQuery(6);
   const { data: activeUsersThirtyDay } = useGetUserActivityBeforeTodayQuery(29);
-  const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(new Date().getFullYear());
+  const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
+  const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery('2022-06-16');
+  const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
 
   const countTotal = (data, key) => {
     let result = 0;
@@ -65,7 +68,7 @@ const ConsoleDashboardComponent = () => {
               dataGraph={activeUsersSevenDay}
               xAxisKeyGraph="date"
               lineKeyGraph="user_activity_count"
-              jumlah={countTotal(activeUsersSevenDay, 'user_activity_count')}
+              jumlah={countTotal(activeUsersSevenDay, 'user_activity_count').toString()}
               title="Pengguna Aktif 7 Hari"
               color="#0062FF"
               background={['#E2EEFF -18.96%', '#FFFFFF 108.17%']}
@@ -76,7 +79,7 @@ const ConsoleDashboardComponent = () => {
               dataGraph={activeUsersThirtyDay}
               xAxisKeyGraph="date"
               lineKeyGraph="user_activity_count"
-              jumlah={countTotal(activeUsersThirtyDay, 'user_activity_count')}
+              jumlah={countTotal(activeUsersThirtyDay, 'user_activity_count').toString()}
               title="Pengguna Aktif 30 Hari"
               color="#4200FF"
               background={['#E2E3FF -18.96%', '#FFFFFF 108.17%']}
@@ -87,20 +90,17 @@ const ConsoleDashboardComponent = () => {
               dataGraph={activeUsersOneYear}
               xAxisKeyGraph="month_name"
               lineKeyGraph="count_user"
-              jumlah={countTotal(activeUsersOneYear, 'count_user')}
+              jumlah={countTotal(activeUsersOneYear, 'count_user').toString()}
               title={`Pengguna Aktif Tahun ${new Date().getFullYear()}`}
               color="#FFA601"
               background={['#FFF2E2 -18.96%', '#FFFFFF 108.17%']}
             />
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={12}>
-            <ActivityChart/>
-          </Grid> */}
           <Grid item xs={12} sm={12} md={12}>
-            <ActivitySize />
+            <ActivitySize data={usersActivityHyppeSevenDay} />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
-            <StatusKepemilikanCard />
+            <StatusKepemilikanCard data={usersMonetizeOneYear} />
           </Grid>
         </GridContainer>
       </PageContainer>

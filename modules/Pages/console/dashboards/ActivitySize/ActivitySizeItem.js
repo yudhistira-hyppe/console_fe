@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/styles';
-import { TouchApp } from '@material-ui/icons';
+
 const useStyles = makeStyles({
   root: {
     display: 'flex',
@@ -22,15 +23,19 @@ const useStyles = makeStyles({
 
 const ActivitySizeItem = ({ item }) => {
   const classes = useStyles();
+
   return (
     <Box className={classes.root}>
-      <Box bgcolor={item.bgColor} color={item.color} className={classes.avatar}>
-        <TouchApp />
-      </Box>
+      <Box bgcolor={item.bgColor} color={item.color} className={classes.avatar} />
       <Box fontSize={16} fontWeight={700} color="text.primary">
         {item.label}
       </Box>
     </Box>
   );
 };
+
+ActivitySizeItem.propTypes = {
+  item: PropTypes.object,
+};
+
 export default ActivitySizeItem;

@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-
 import CmtCard from '@coremat/CmtCard';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
-
-import RevenueSummaryGraph from './RevenueSummaryGraph';
+import SummaryGraph from './SummaryGraph';
 import SummaryTabs from './SummaryTabs';
+import { useGetUserActivityByYearQuery } from 'api/console/engagement';
+import { getMonthName } from 'helpers/stringHelper';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -35,15 +34,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const GrafikInstalasi = () => {
-  const [tabValue, setTabValue] = useState(0);
   const classes = useStyles();
+  const currentYear = new Date().getFullYear();
+  const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
+  const [tabValue, setTabValue] = useState(0);
+  const [graphData, setGraphData] = useState([]);
+  const [graphAreaKey, setGraphAreaKey] = useState('');
+  const [graphXAxisKey, setGraphXAxisKey] = useState('');
+
+  useEffect(() => {
+    switch (tabValue) {
+      case 0:
+        setGraphData([]);
+        break;
+      case 1:
+        if (activeUsersOneYear) {
+          setGraphData(
+            activeUsersOneYear.map((item) => ({
+              ...item,
+              month_name: getMonthName(item.month, 'short'),
+            })),
+          );
+          setGraphAreaKey('count_user');
+          setGraphXAxisKey('month_name');
+        }
+        break;
+      default:
+        break;
+    }
+  }, [tabValue, activeUsersOneYear]);
 
   return (
     <CmtCard className={classes.cardRoot}>
       <CmtCardHeader>
         <SummaryTabs tabValue={tabValue} setTabValue={setTabValue} />
       </CmtCardHeader>
-      <RevenueSummaryGraph value={tabValue} />
+      <SummaryGraph graphData={graphData} graphAreaKey={graphAreaKey} graphXAxisKey={graphXAxisKey} />
     </CmtCard>
   );
 };
