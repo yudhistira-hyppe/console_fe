@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostDetail from './PostDetail';
 import PostList from './PostList';
 import Collapse from '@material-ui/core/Collapse';
-import { getListPosts } from 'redux/actions/postActions';
+// import { getListPosts } from 'redux/actions/postActions';
 //import { fakeDb } from 'modules/FakeDb/fake-db';
 
 //const {postList} = fakeDb;
@@ -20,13 +20,13 @@ const PostListing = ({email}) => {
   const contentStore = useSelector((state) => state.contentsReducer);
 
   useEffect(() => {
-    loadPostData();
+    // loadPostData();
   }, [tabValue, page, isLoadMore]);
 
   const handlePageChange = () => {
     setPage(page + 1);
     setLoadMore(true);
-    loadPostData();
+    // loadPostData();
   };
 
   const onChangeTab = (value) => {
@@ -34,16 +34,17 @@ const PostListing = ({email}) => {
     setPage(0);
     setLoadMore(false);
     setTabValue(value);
-    loadPostData();
+    // loadPostData();
   };
 
   const handleSearchTextChange = (e) => {
     setSearchText(e.target.value);
   };
 
-  const loadPostData = () => {
-    dispatch(getListPosts({page,rowsPerPage,isLoadMore,search: email, postType: tabValue}));
-  }
+  // const loadPostData = () => {
+  //   // do this use
+  //   dispatch(getListPosts({page,rowsPerPage,isLoadMore,search: email, postType: tabValue}));
+  // }
 
   const getFilteredData = () => {
     if (searchText) {
