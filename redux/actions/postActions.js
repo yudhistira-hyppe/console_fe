@@ -2,6 +2,8 @@ import { fetchError, fetchStart, fetchSuccess } from './Common';
 import { instance, setAuthorizationHeader } from 'authentication/auth-provider/AuthApi';
 import { GET_CONTENTS } from 'modules/Constants/ActionTypes';
 
+
+// idk this is use or not
 export const getListPosts = ({ page = 0, rowsPerPage = 10, isLoadMore = false, search = '', postType = '' }) => {
   return (dispatch) => {
     dispatch(fetchStart());

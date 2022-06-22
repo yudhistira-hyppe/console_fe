@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostDetail from './PostDetail';
 import PostList from './PostList';
 import Collapse from '@material-ui/core/Collapse';
-import { getListPosts } from 'redux/actions/postActions';
+// import { getListPosts } from 'redux/actions/postActions';
 
 const AdsListing = () => {
   const dispatch = useDispatch();
@@ -16,14 +16,14 @@ const AdsListing = () => {
   const [isLoadMore, setLoadMore] = useState(false);
   const contentStore = useSelector((state) => state.contentsReducer);
 
-  useEffect(() => {
-    loadPostData();
-  }, [tabValue, page, isLoadMore]);
+  // useEffect(() => {
+  //   loadPostData();
+  // }, [tabValue, page, isLoadMore]);
 
   const handlePageChange = () => {
     setPage(page + 1);
     setLoadMore(true);
-    loadPostData();
+    // loadPostData();
   };
 
   const onChangeTab = (value) => {
@@ -31,16 +31,17 @@ const AdsListing = () => {
     setPage(0);
     setLoadMore(false);
     setTabValue(value);
-    loadPostData();
+    // loadPostData();
   };
 
   const handleSearchTextChange = (e) => {
     setSearchText(e.target.value);
   };
 
-  const loadPostData = () => {
-    dispatch(getListPosts({page,rowsPerPage,isLoadMore,search: '', postType: 'advertise'}));
-  }
+  // do this use?
+  // const loadPostData = () => {
+  //   dispatch(getListPosts({page,rowsPerPage,isLoadMore,search: '', postType: 'advertise'}));
+  // }
 
   const getFilteredData = () => {
     if (searchText) {
