@@ -9,9 +9,7 @@ const app = next({ dev, dir: '.' });
 const handle = app.getRequestHandler();
 
 const httpsOptions = {
-  // tess
-  // key: readFileSync('D:/MyWork/Hyppe/Source/SSL/projectcom/server.key'),
-  // cert: readFileSync('D:/MyWork/Hyppe/Source/SSL/projectcom/server.crt'),
+  // change here to ur path file location
   key: readFileSync('C:/SSL/new/certificate.key'),
   cert: readFileSync('C:/SSL/new/sslaja.crt'),
 };
