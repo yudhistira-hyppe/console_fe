@@ -111,6 +111,7 @@ export const obtainProfiles = (data) => {
   return instance.post(url, form);
 };
 
+// idk this is use or not
 export const obtainContents = (data) => {
   instance.defaults.headers.post['x-auth-token'] = data.token;
   instance.defaults.headers.post['x-auth-user'] = data.email;

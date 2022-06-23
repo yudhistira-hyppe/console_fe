@@ -58,9 +58,9 @@ export const horizontalDefaultNavs = [
     ]
   },
   {
-    name: 'Wallet',
+    name: 'Transaction',
     type: 'item',
-    link: '/wallet'
+    link: '/transaction'
   }
 ];
 

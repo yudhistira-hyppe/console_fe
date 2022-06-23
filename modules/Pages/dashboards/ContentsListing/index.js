@@ -8,7 +8,7 @@ import Collapse from '@material-ui/core/Collapse';
 //Redux
 import { useAuth } from '../../../../authentication';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContents } from '../../../../redux/actions/Contents';
+// import { getContents } from '../../../../redux/actions/Contents';
 import { useDebounce } from '../../../../@jumbo/utils/commonHelper';
 import {
   useUserContentsAllQuery,
@@ -101,14 +101,14 @@ const ContentsListing = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(
-      getContents(authUser, filterOptions, debouncedSearchTerm, () => {
-        setFilterApplied(!!filterOptions.length || !!debouncedSearchTerm);
-        setContentsFetched(true);
-      }),
-    );
-  }, [dispatch, filterOptions, debouncedSearchTerm]);
+  // useEffect(() => {
+  //   dispatch(
+  //     getContents(authUser, filterOptions, debouncedSearchTerm, () => {
+  //       setFilterApplied(!!filterOptions.length || !!debouncedSearchTerm);
+  //       setContentsFetched(true);
+  //     }),
+  //   );
+  // }, [dispatch, filterOptions, debouncedSearchTerm]);
 
   useEffect(() => {
     setShowContent(contentAll?.data);
