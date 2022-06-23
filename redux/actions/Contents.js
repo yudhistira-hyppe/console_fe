@@ -2,6 +2,8 @@ import { fetchError, fetchStart, fetchSuccess } from './Common';
 import { obtainContents } from '../../authentication/auth-provider/AuthApi';
 import { GET_CONTENTS } from '../../modules/Constants/ActionTypes';
 
+
+// idk this is use or not
 export const getContents = (authUser, filterOptions = [], searchTerm = '', callbackFun) => {
   return (dispatch) => {
     dispatch(fetchStart());
