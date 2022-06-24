@@ -5,8 +5,9 @@ import { premiumSubscribe, premiumConfirm } from './AuthApi';
 import { authApi } from 'api/user';
 
 export const useProvideAuth = () => {
-  const { useLoginMutation } = authApi;
+  const { useLoginMutation,useLogoutMutation } = authApi;
   const [login] = useLoginMutation();
+  const [logout] = useLogoutMutation();
   const [authUser, setAuthUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -83,6 +84,13 @@ export const useProvideAuth = () => {
         fetchError(error.message);
         removeAuth();
       });
+  };
+
+  const userSignOut = (user) => {
+    // sementara gini dulu be belum siap
+    // fetchStart();
+    removeAuth();
+    // logout(user)
   };
   // End rewritten code
 
@@ -162,18 +170,19 @@ export const useProvideAuth = () => {
 
   const renderSocialMediaLogin = () => null;
 
-  const userSignOut = (callbackFun) => {
-    try {
-      fetchStart();
-      setTimeout(() => {
-        fetchSuccess();
-        removeAuth();
-        if (callbackFun) callbackFun();
-      }, 300);
-    } catch (error) {
-      fetchError(error.message);
-    }
-  };
+  // const userSignOut = (callbackFun) => {
+  //   try {
+  //     fetchStart();
+  //     logout()
+  //     setTimeout(() => {
+  //       fetchSuccess();
+  //       removeAuth();
+  //       if (callbackFun) callbackFun();
+  //     }, 300);
+  //   } catch (error) {
+  //     fetchError(error.message);
+  //   }
+  // };
 
   const getAuthUser = () => {
     try {

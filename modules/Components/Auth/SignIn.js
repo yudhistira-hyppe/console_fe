@@ -67,6 +67,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const [email, setEmail] = useState(MODE == 'DEV' ? 'freeman27@getnada.com' : '');
   const [password, setPassword] = useState(MODE == 'DEV' ? 'freeman27' : '');
   const [deviceId, setDeviceId] = useState(uuidv4());
+  console.log('deviceId:', deviceId)
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
 
   useEffect(() => {

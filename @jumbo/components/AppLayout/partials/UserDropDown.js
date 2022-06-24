@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import clsx from 'clsx';
 import CmtDropdownMenu from '../../../../@coremat/CmtDropdownMenu';
 import CmtAvatar from '../../../../@coremat/CmtAvatar';
@@ -8,7 +8,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useAuth } from '../../../../authentication';
 import { useRouter } from 'next/router';
-
+import { firebaseCloudMessaging } from 'helpers/firebaseHelper';
+import { v4 as uuidv4 } from 'uuid';
 const useStyles = makeStyles((theme) => ({
   profileRoot: {
     display: 'flex',
@@ -43,18 +44,42 @@ const actionsList = [
   },
 ];
 
+
+
+
 const UserDropDown = () => {
   const classes = useStyles();
-  //const { userSignOut } = useAuth();
+  const { userSignOut,authUser } = useAuth();
   const router = useRouter();
+  const [deviceId, setDeviceId] = useState(uuidv4());
+  
 
-  const onItemClick = (item) => {
-    if (item.label === 'Logout') {
-      //userSignOut(() => {
-       // router.push('/').then((r) => r);
-      //});
-    }
+  const generateFCMToken = () => {
+    Notification.requestPermission(() => {
+      firebaseCloudMessaging
+        .getFCMToken()
+        .then((token) => {
+          setDeviceId(token);
+        })
+        .catch(() => {})
+    });
   };
+  
+  useEffect(() => {
+    generateFCMToken()
+  },[])
+  
+  const onItemClick = (item) => {
+    
+    if (item.label === 'Logout') {
+      userSignOut(
+        {
+          email: authUser.email,
+          deviceId: deviceId
+        }
+      )
+    }
+  }
 
   return (
     <Box className={clsx(classes.profileRoot, 'Cmt-profile-pic')}>
