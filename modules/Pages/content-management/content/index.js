@@ -7,7 +7,7 @@ import { Grid } from '@material-ui/core';
 import RegionViews from './RegionViews';
 import { useUserContentsManagementQuery } from 'api/user/content/management';
 import { useAuth } from 'authentication';
-import SpinnerLoading from 'components/utils/spinner';
+import SpinnerLoading from 'components/common/spinner';
 
 const Content = ({ }) => {
   const { authUser, isLoadingUser } = useAuth();
