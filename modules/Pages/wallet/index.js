@@ -58,9 +58,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Wallet = ({}) => {
+const Transcation = ({}) => {
     const {getAuthUser} = useAuth()
-    const {data:accountBalanceData} = useAccountBalanceQuery(getAuthUser.email)
+    const { data:accountBalanceData } = useAccountBalanceQuery(getAuthUser.email)
     
     return (
         <div>
@@ -101,7 +101,9 @@ const Balance = ({balance, precentage, trend}) => {
                     <div className='mt-7'>
                         <div className='flex flex-row'>
                             <div className={classes.balanceLabel}>
-                                Rp {numberWithCommas(balance)}
+                                {/* there's a issues use this function */}
+                                {/* Rp {numberWithCommas(balance)} */}
+                                Rp {balance}
                             </div>
                             <div className='ml-1'>
                                 <span className={classes.precentageLabel}>
@@ -139,7 +141,9 @@ const TotalWithdraw = ({total}) => {
                     <div className='mt-7'>
                         <div className='flex flex-row'>
                             <div className={classes.balanceLabel}>
-                                Rp {numberWithCommas(total)}
+                                {/* there's a issues use this function */}
+                                {/* Rp {numberWithCommas(total)} */}
+                                Rp {total}
                             </div>
                         </div>
                         <div className='mt-2'>
@@ -194,4 +198,4 @@ const Trans=({date})=>{
 }
 
 
-export default Wallet;
+export default Transcation;
