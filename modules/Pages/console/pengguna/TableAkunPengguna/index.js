@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@mui/x-data-grid';
 import { Tooltip } from '@mui/material';
@@ -54,22 +54,32 @@ const columns = [
 ];
 
 const TableAkunPengguna = (props) => {
-  const { data, isLoading } = props;
-  const pageSizeOptions = [25, 50, 100];
-  const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
+  const { data, isLoading, page, onPageChange } = props;
+  const [rows, setRows] = useState([]);
+  const [rowCount, setRowCount] = useState(0);
 
-  const rows = data.map((item) => ({
-    id: item._id,
-    fullName: item.fullName || 'Data tidak tersedia',
-    gender: item.gender ? formatGender(item.gender) : 'Data tidak tersedia',
-    age: item.age || 'Data tidak tersedia',
-    cities: item.cities || 'Data tidak tersedia',
-    role: item.roles.join(', ') || 'Data tidak tersedia',
-    lastActive: item.activity.payload.login_date
-      ? formatDateTimeString(item.activity.payload.login_date)
-      : 'Data tidak tersedia',
-    status: item.status || 'Data tidak tersedia',
-  }));
+  useEffect(() => {
+    if (data && data?.data.length > 0) {
+      setRows(
+        data?.data.map((item) => ({
+          id: item._id,
+          fullName: item.fullName || 'Data tidak tersedia',
+          gender: item.gender ? formatGender(item.gender) : 'Data tidak tersedia',
+          age: item.age || 'Data tidak tersedia',
+          cities: item.cities || 'Data tidak tersedia',
+          role: item.roles.join(', ') || 'Data tidak tersedia',
+          lastActive: item.activity.payload.login_date
+            ? formatDateTimeString(item.activity.payload.login_date)
+            : 'Data tidak tersedia',
+          status: item.status || 'Data tidak tersedia',
+        })),
+      );
+      setRowCount(data.totalrow);
+    } else {
+      setRows([]);
+      setRowCount(0);
+    }
+  }, [data]);
 
   const formattedColumns = columns.map((column) => ({
     ...column,
@@ -105,20 +115,24 @@ const TableAkunPengguna = (props) => {
         }}
         autoHeight
         rows={!isLoading && rows}
+        rowCount={rowCount}
         columns={formattedColumns}
         isRowSelectable={() => false}
-        pageSize={pageSize}
-        rowsPerPageOptions={pageSizeOptions}
+        pageSize={15}
+        paginationMode="server"
+        onPageChange={(page) => onPageChange(page)}
+        page={page}
         loading={isLoading}
-        onPageSizeChange={(value) => setPageSize(value)}
       />
     </div>
   );
 };
 
 TableAkunPengguna.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
   isLoading: PropTypes.bool,
+  page: PropTypes.number,
+  onPageChange: PropTypes.func,
 };
 
 export default TableAkunPengguna;
