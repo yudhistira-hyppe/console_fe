@@ -12,6 +12,8 @@ import clsx from "clsx";
 import GridContainer from "../../../@jumbo/components/GridContainer";
 import MyVoucher from "./MyVoucher/MyVoucher";
 import VoucherHistory from "./VoucherHistory";
+import { useAccountBalanceQuery } from "api/user/accountBalances";
+import { useAuth } from "authentication";
 
 const useStyles = makeStyles((theme) => ({
     infoLabel: {
@@ -57,15 +59,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Wallet = ({}) => {
+    const {getAuthUser} = useAuth()
+    const {data:accountBalanceData} = useAccountBalanceQuery(getAuthUser.email)
+    
     return (
         <div>
-            <PageHeader heading={'Wallet'}/>
+            <PageHeader heading={'Transaction'}/>
             <GridContainer>
                 <Grid item md={4}>
-                    <Balance balance={1500000} precentage={23} trend={false}/>
+                    <Balance balance={accountBalanceData?.data[0]?.totalsaldo} precentage={23} trend={false}/>
                 </Grid>
                 <Grid item md={4}>
-                    <TotalWithdraw total={1500000}/>
+                    <TotalWithdraw total={accountBalanceData?.data[0]?.totalpenarikan}/>
                 </Grid>
                 <Grid item md={4}>
                     <TransSummary/>

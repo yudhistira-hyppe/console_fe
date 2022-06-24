@@ -8,6 +8,7 @@ import { notificationAPI } from 'api/user/notification';
 import { commentAPI } from 'api/user/comment';
 import { insightAPI } from 'api/user/insight';
 import { contentManagementAPI } from 'api/user/content/management';
+import { accountBalancesAPI } from 'api/user/accountBalances';
 
 const initStore = () => {
   const store = configureStore({
@@ -22,7 +23,8 @@ const initStore = () => {
         notificationAPI.middleware,
         commentAPI.middleware,
         insightAPI.middleware,
-        contentManagementAPI.middleware
+        contentManagementAPI.middleware,
+        accountBalancesAPI.middleware
       ]),
   });
   return store;

@@ -27,12 +27,6 @@ const Content = ({ }) => {
     }
   }, [contentManagement])
 
-  // mau ngakalin sejauh apa tetep aja ribet ada kata yang 'recentlyregion' && 'latestpost'
-  //   const titleFirstStrToUpperCase = (str) => {
-  //     const firstStr = str?.charAt(0).toUpperCase() + str?.slice(1);
-  //     return firstStr
-  // }
-
   return (
     <>
       {/* this component act like loading */}

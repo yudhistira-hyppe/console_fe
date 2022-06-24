@@ -13,6 +13,7 @@ import { contentAPI } from 'api/user/content';
 import { notificationAPI } from 'api/user/notification';
 import { commentAPI } from 'api/user/comment';
 import { insightAPI } from 'api/user/insight';
+import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 
 export default combineReducers({
@@ -31,5 +32,6 @@ export default combineReducers({
   [notificationAPI.reducerPath]: notificationAPI.reducer,
   [commentAPI.reducerPath]: commentAPI.reducer,
   [insightAPI.reducerPath]: insightAPI.reducer,
-  [contentManagementAPI.reducerPath] : contentManagementAPI.reducer
+  [contentManagementAPI.reducerPath] : contentManagementAPI.reducer,
+  [accountBalancesAPI.reducerPath] : accountBalancesAPI.reducer
 });

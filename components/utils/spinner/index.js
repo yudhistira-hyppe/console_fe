@@ -3,6 +3,7 @@ import Style from "./spinner.module.css"
 const SpinnerLoading = (props) => {
     return (
         <center>
+            {/* please dont remove one of the div inside (animation depends on it) */}
             <div className={Style.ldsRoller} {...props}>
                 <div>
                 </div>
