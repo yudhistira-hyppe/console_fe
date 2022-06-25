@@ -22,7 +22,7 @@ const initStore = () => {
         notificationAPI.middleware,
         commentAPI.middleware,
         insightAPI.middleware,
-        contentManagementAPI.middleware
+        contentManagementAPI.middleware,
       ]),
   });
   return store;

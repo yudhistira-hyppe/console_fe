@@ -31,5 +31,5 @@ export default combineReducers({
   [notificationAPI.reducerPath]: notificationAPI.reducer,
   [commentAPI.reducerPath]: commentAPI.reducer,
   [insightAPI.reducerPath]: insightAPI.reducer,
-  [contentManagementAPI.reducerPath] : contentManagementAPI.reducer
+  [contentManagementAPI.reducerPath]: contentManagementAPI.reducer,
 });
