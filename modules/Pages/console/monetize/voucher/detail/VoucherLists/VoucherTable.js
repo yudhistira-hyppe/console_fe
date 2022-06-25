@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import { useRouter } from 'next/router'
 import CmtObjectSummary from '@coremat/CmtObjectSummary';
 import CmtAvatar from '@coremat/CmtAvatar';
-import { fromatMoney,fromatDate } from 'helpers/stringHelper';
+import { formatCurrency,fromatDate } from 'helpers/stringHelper';
 
 const useRowStyles = makeStyles({
   root: {
@@ -46,7 +46,7 @@ function Row(props) {
       <TableRow className={classes.root}>
         <TableCell align="center">{row.code}</TableCell>
         <TableCell align="center">{row.status}</TableCell>
-        <TableCell align="center">Rp {fromatMoney(row.amount)}</TableCell>
+        <TableCell align="center">Rp {formatCurrency(row.amount)}</TableCell>
         <TableCell align="center">{dateParsedUsedAt}</TableCell>
         <TableCell align="center">
             { row.used_for && 
