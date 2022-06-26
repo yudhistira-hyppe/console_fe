@@ -11,6 +11,7 @@ export const userApi = createApi({
         method: 'POST',
         body: data,
       }),
+      keepUnusedDataFor: 600,
     }),
     getProfileByUserEmail: build.query({
       query: (email) => ({

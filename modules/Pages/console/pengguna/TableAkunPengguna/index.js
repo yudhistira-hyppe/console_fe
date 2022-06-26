@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { DataGrid } from '@mui/x-data-grid';
-import { Tooltip } from '@mui/material';
+import { DataGrid, gridPageCountSelector, gridPageSelector, useGridApiContext, useGridSelector } from '@mui/x-data-grid';
+import { Tooltip, Pagination, PaginationItem } from '@mui/material';
 import { formatDateTimeString, formatGender } from 'helpers/stringHelper';
 
 const columns = [
@@ -53,33 +53,65 @@ const columns = [
   },
 ];
 
+const CustomPagination = () => {
+  const apiRef = useGridApiContext();
+  const page = useGridSelector(apiRef, gridPageSelector);
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+  return (
+    <Pagination
+      color="primary"
+      variant="outlined"
+      shape="rounded"
+      page={page + 1}
+      count={pageCount}
+      renderItem={(props) => <PaginationItem {...props} disableRipple />}
+      onChange={(_, page) => apiRef.current.setPage(page - 1)}
+    />
+  );
+};
+
 const TableAkunPengguna = (props) => {
-  const { data, isLoading, page, onPageChange } = props;
+  const { data, isFetching, isFiltersChange, tablePage, onPageChange } = props;
+  const pageSize = 15;
   const [rows, setRows] = useState([]);
   const [rowCount, setRowCount] = useState(0);
 
   useEffect(() => {
-    if (data && data?.data.length > 0) {
-      setRows(
-        data?.data.map((item) => ({
-          id: item._id,
-          fullName: item.fullName || 'Data tidak tersedia',
-          gender: item.gender ? formatGender(item.gender) : 'Data tidak tersedia',
-          age: item.age || 'Data tidak tersedia',
-          cities: item.cities || 'Data tidak tersedia',
-          role: item.roles.join(', ') || 'Data tidak tersedia',
-          lastActive: item.activity.payload.login_date
-            ? formatDateTimeString(item.activity.payload.login_date)
-            : 'Data tidak tersedia',
-          status: item.status || 'Data tidak tersedia',
-        })),
-      );
-      setRowCount(data.totalrow);
-    } else {
+    if (isFiltersChange) {
       setRows([]);
       setRowCount(0);
     }
+  }, [isFiltersChange]);
+
+  useEffect(() => {
+    if (data) {
+      const newData = data?.data.map((item) => ({
+        id: item._id,
+        fullName: item.fullName || 'Data tidak tersedia',
+        gender: item.gender ? formatGender(item.gender) : 'Data tidak tersedia',
+        age: item.age || 'Data tidak tersedia',
+        cities: item.cities || 'Data tidak tersedia',
+        role: item.roles.join(', ') || 'Data tidak tersedia',
+        lastActive: item.activity.payload.login_date
+          ? formatDateTimeString(item.activity.payload.login_date)
+          : 'Data tidak tersedia',
+        status: item.status || 'Data tidak tersedia',
+      }));
+      setRows(newData);
+    } else {
+      setRows([]);
+    }
   }, [data]);
+
+  useEffect(() => {
+    if (rows.length === 0) {
+      setRowCount(0);
+    }
+    if (data && rows.length === 15 && rowCount < data.page + rows.length + 15) {
+      setRowCount(data.page + rows.length + 15);
+    }
+  }, [rows]);
 
   const formattedColumns = columns.map((column) => ({
     ...column,
@@ -113,16 +145,19 @@ const TableAkunPengguna = (props) => {
             backgroundColor: '#f8f8fa',
           },
         }}
+        components={{
+          Pagination: CustomPagination,
+        }}
         autoHeight
-        rows={!isLoading && rows}
+        rows={isFetching ? [] : rows}
         rowCount={rowCount}
         columns={formattedColumns}
         isRowSelectable={() => false}
-        pageSize={15}
+        page={tablePage}
+        pageSize={pageSize}
         paginationMode="server"
-        onPageChange={(page) => onPageChange(page)}
-        page={page}
-        loading={isLoading}
+        onPageChange={(toPage) => onPageChange(toPage)}
+        loading={isFetching}
       />
     </div>
   );
@@ -130,8 +165,9 @@ const TableAkunPengguna = (props) => {
 
 TableAkunPengguna.propTypes = {
   data: PropTypes.object,
-  isLoading: PropTypes.bool,
-  page: PropTypes.number,
+  isFetching: PropTypes.bool,
+  isFiltersChange: PropTypes.bool,
+  tablePage: PropTypes.number,
   onPageChange: PropTypes.func,
 };
 

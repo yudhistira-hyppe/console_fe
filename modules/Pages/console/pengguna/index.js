@@ -14,9 +14,10 @@ const breadcrumbs = [
 
 const ConsolePenggunaComponent = () => {
   const [tablePage, setTablePage] = useState(0);
-  const [usersBodyData, setUserBodyData] = useState({});
+  const [filters, setFilters] = useState({});
+  const [isFiltersChange, setIsFiltersChanges] = useState(false);
   const [isSearchUsers, setIsSearchUsers] = useState(false);
-  const { data: users, isFetching } = useGetAllUserQuery(usersBodyData, { skip: !isSearchUsers });
+  const { data: users, isFetching } = useGetAllUserQuery(filters, { skip: !isSearchUsers });
 
   const handleSearchUsers = ({ fullName, gender, roles, age }) => {
     const bodyData = {
@@ -26,17 +27,19 @@ const ConsolePenggunaComponent = () => {
       ...(age && { age }),
       page: 0,
     };
-    setUserBodyData(bodyData);
+    setFilters(bodyData);
     setTablePage(0);
+    setIsFiltersChanges(true);
     setIsSearchUsers(true);
   };
 
   const onPageChange = (page) => {
-    setUserBodyData({
-      ...usersBodyData,
-      page,
+    setFilters({
+      ...filters,
+      page: page * 15,
     });
     setTablePage(page);
+    setIsFiltersChanges(false);
   };
 
   return (
@@ -50,7 +53,13 @@ const ConsolePenggunaComponent = () => {
             <FilterTableAkunPengguna handleSearchUsers={handleSearchUsers} />
           </Grid>
           <Grid item xs={12} md={12} xl={12}>
-            <TableAkunPengguna data={users} isLoading={isFetching} page={tablePage} onPageChange={onPageChange} />
+            <TableAkunPengguna
+              data={users}
+              isFetching={isFetching}
+              isFiltersChange={isFiltersChange}
+              tablePage={tablePage}
+              onPageChange={onPageChange}
+            />
           </Grid>
         </GridContainer>
       </PageContainer>
