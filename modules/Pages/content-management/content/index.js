@@ -13,6 +13,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 const Content = ({ }) => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([])
+  console.log('mainData:', mainData?.recentlyregion)
 
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
@@ -28,9 +29,11 @@ const Content = ({ }) => {
   getMediaUri()
   }, [contentManagement])
 
+  
+  // {{MH_HOST_STREAM}}/thumb/fb96a169-70c9-4530-b9eb-6050863e2b41?x-auth-token={{MH_TOKEN}}&x-auth-user={{MH_HDR_USER}}
   const getMediaUri = () => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
-    const mediaURI = mainData?.popular?.mediaEndpoint;
+    const mediaURI = mainData?.latestpost?.mediaEndpoint;
 
     console.log('`${STREAM_URL}${mediaURI}${authToken}`:', `${STREAM_URL}${mediaURI}${authToken}`)
     return `${STREAM_URL}${mediaURI}${authToken}`;
@@ -95,7 +98,7 @@ const Content = ({ }) => {
           </Grid>
           <Grid item md={4}>
             {/* datanya belum ada dari be */}
-           <RegionViews/>
+           <RegionViews regions={mainData?.recentlyregion}/>
             {/* datanya belum ada dari be */}
           </Grid>
           <Grid item md={4}>
