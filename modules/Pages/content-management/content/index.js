@@ -13,7 +13,6 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 const Content = ({ }) => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([])
-  console.log('mainData:', mainData?.recentlyregion)
 
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
@@ -35,7 +34,6 @@ const Content = ({ }) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
     const mediaURI = mainData?.latestpost?.mediaEndpoint;
 
-    console.log('`${STREAM_URL}${mediaURI}${authToken}`:', `${STREAM_URL}${mediaURI}${authToken}`)
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
 
@@ -64,6 +62,7 @@ const Content = ({ }) => {
               views={mainData?.popular?.views}
               date={formatDate(mainData?.popular?.createdAt)}
               contentType={`Hyppe ${mainData?.popular?.postType}`}
+              postId={mainData?.popular?.postID}
             />
           </Grid>
           <Grid item md={4}>
@@ -97,9 +96,7 @@ const Content = ({ }) => {
             />
           </Grid>
           <Grid item md={4}>
-            {/* datanya belum ada dari be */}
            <RegionViews regions={mainData?.recentlyregion}/>
-            {/* datanya belum ada dari be */}
           </Grid>
           <Grid item md={4}>
             <ContentDataCard

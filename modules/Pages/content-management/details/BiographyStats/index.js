@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const BiographyStats = ({title, dataChart}) =>{
+
+const BiographyStats = ({title, dataChart}) => {
     const classes = useStyles();
     return(
         <CmtCard className='h-full'>
@@ -24,19 +25,24 @@ const BiographyStats = ({title, dataChart}) =>{
                     {title}
                 </div>
                 <div className='mt-1 h-full flex flex-column justify-content-evenly'>
-                    {dataChart.map((value, index) => (
-                        <CmtProgressBar key={index}
-                            label={<Box mb={-1}>{value.label}</Box>}
-                            labelPos="top-left"
-                            value={value.value}
-                            renderValue={(value) => {
-                                return `${value}%`;
-                            }}
-                            containedColor={'#AB22AF'}
-                            thickness={7}
-                            onlyContained
-                        />
-                    ))}
+                    {
+                        dataChart?.map((chart,index) => {
+                            return (
+                                <CmtProgressBar key={index}
+                                style={{minHeight:"8vh"}}
+                                label={<Box mb={-1}>{chart?._id}</Box>}
+                                labelPos="top-left"
+                                value={chart?.totalpost}
+                                renderValue={(totalpost) => {
+                                    return `${totalpost}%`;
+                                }}
+                                containedColor={'#AB22AF'}
+                                thickness={7}
+                                onlyContained
+                            />
+                            )
+                        })
+                    }
                 </div>
             </CmtCardContent>
         </CmtCard>
