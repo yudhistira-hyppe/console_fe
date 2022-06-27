@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Box, Button, Dialog, Grid, DialogContent, DialogActions, TextField, Typography } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Head from 'next/head';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import GridContainer from '@jumbo/components/GridContainer';
 import CmtCard from '@coremat/CmtCard';
@@ -11,50 +11,50 @@ import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import CmtCardContent from '@coremat/CmtCard/CmtCardContent';
 import InfoItem from './Item';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+// import EditIcon from '@material-ui/icons/Edit';
+// import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
-
-import { postNewInfo, setSelectedInfo } from 'redux/actions/helpCenterAction';
+// import { postNewInfo, setSelectedInfo } from 'redux/actions/helpCenterAction';
 import { useRouter } from 'next/router';
+import { useCreateFaqAndInfoMutation, useGetListFaqOrInfoByTypeQuery } from 'api/console/helpCenter/faqAndInfo';
 
 const useStyles = makeStyles(() => ({
-    root: {
-      '& .page-header': {
-        marginBottom: 0
-      }
+  root: {
+    '& .page-header': {
+      marginBottom: 0,
     },
-    header: {
-      borderBottom: '1px solid #ddd',
-      marginBottom: 24,
-      padding: '8px 24px',
-      '& .makeStyles-actionMenu-106 button': {
-          width: 28
-      }
+  },
+  header: {
+    borderBottom: '1px solid #ddd',
+    marginBottom: 24,
+    padding: '8px 24px',
+    '& .makeStyles-actionMenu-106 button': {
+      width: 28,
     },
-    headerButton: {
-      borderBottom: '1px solid #ddd',
-      paddingBottom: 16,
-    },
-    subtitle: {
-      color: 'rgba(0, 0, 0, 0.6)',
-      marginBottom: 24
-    }
+  },
+  headerButton: {
+    borderBottom: '1px solid #ddd',
+    paddingBottom: 16,
+  },
+  subtitle: {
+    color: 'rgba(0, 0, 0, 0.6)',
+    marginBottom: 24,
+  },
 }));
 
 const actions = [
-    {
-        label: 'Tambah',
-        icon: <AddIcon/>
-    },
-    {
-        label: 'Ubah',
-        icon: <EditIcon/>
-    },
-    {
-        label: 'Hapus',
-        icon: <DeleteIcon />
-    },
+  {
+    label: 'Tambah',
+    icon: <AddIcon />,
+  },
+  // {
+  //   label: 'Ubah',
+  //   icon: <EditIcon />,
+  // },
+  // {
+  //   label: 'Hapus',
+  //   icon: <DeleteIcon />,
+  // },
 ];
 
 const breadcrumbs = [
@@ -63,46 +63,67 @@ const breadcrumbs = [
   { label: 'Hyppe Info', isActive: true },
 ];
 
+const DialogAddCategory = ({ open, onClose, onSubmit }) => {
+  const [categoryTitle, setCategoryTitle] = useState('');
+
+  return (
+    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+      <DialogContent>
+        <TextField
+          margin="dense"
+          label="Kategori"
+          type="text"
+          fullWidth
+          variant="outlined"
+          value={categoryTitle}
+          onChange={(e) => setCategoryTitle(e.target.value)}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button variant="contained" startIcon={<AddIcon />} color="primary" onClick={() => onSubmit(categoryTitle)}>
+          Tambah
+        </Button>
+        <Button startIcon={<CloseIcon />} color="default" onClick={onClose}></Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+DialogAddCategory.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
+};
+
 const ConsoleInfoComponent = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const router = useRouter();
-  const { listHyppeInfo } = useSelector((state) => state.helpCenterReducers);
-  const [showDialogAddCategory,setShowDialogAddCategory] = useState(false);
+  const { data } = useGetListFaqOrInfoByTypeQuery('info');
+  const [addInfoCategory] = useCreateFaqAndInfoMutation();
+  const [infoList, setInfoList] = useState([]);
+  const [showDialogAddCategory, setShowDialogAddCategory] = useState(false);
 
-  const handleMoreMenuClick = (val,info) => {
-    dispatch(setSelectedInfo(info));
-    if(val.label == 'Tambah') {
-      router.push('/console/help_center/hyppe_info/add')
+  useEffect(() => {
+    if (data) {
+      setInfoList(data?.data);
+    } else {
+      setInfoList([]);
+    }
+  }, [data]);
+
+  const onClickMoreMenu = (val, info) => {
+    if (val.label == 'Tambah') {
+      router.push({
+        pathname: '/console/help_center/hyppe_info/add',
+        query: { id: info._id },
+      });
     }
   };
 
-  const submitNewCategory = (val) => {
-    dispatch(postNewInfo(val));
+  const onSubmitNewCategory = (newCategory) => {
+    addInfoCategory({ kategori: newCategory, tipe: 'info' });
     setShowDialogAddCategory(false);
-  }
-  
-  const createNewInfoCategory = () => {
-    setShowDialogAddCategory(true)
-  }
-
-  const DialogAddCategory = ({open,handleClose,handleSubmit}) => {
-    const [categoryTitle,setCategoryTitle] = useState("");
-
-    return (
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogContent>
-          <TextField autoFocus margin="dense" label="Kategori" type="text" fullWidth variant="outlined" value={categoryTitle} onChange={(e) => setCategoryTitle(e.target.value)} />
-        </DialogContent>
-        <DialogActions>
-          <Button variant='contained' startIcon={<AddIcon />} color="primary" onClick={() => handleSubmit(categoryTitle)}>
-            Tambah
-          </Button>
-          <Button startIcon={<CloseIcon />} color="default" onClick={handleClose}></Button>
-        </DialogActions>
-      </Dialog>
-    )
-  }
+  };
 
   return (
     <>
@@ -110,35 +131,46 @@ const ConsoleInfoComponent = () => {
         <title key="title">Hyppe-Console :: Hyppe Info</title>
       </Head>
       <PageContainer className={classes.root} heading="Hyppe Info" breadcrumbs={breadcrumbs}>
-        <Typography className={classes.subtitle} component="div" variant="h5">{listHyppeInfo.length} Kategori</Typography>
+        <Typography className={classes.subtitle} component="div" variant="h5">
+          {infoList.length} Kategori
+        </Typography>
         <GridContainer>
           <Grid item xs={12} sm={12} md={12}>
             <Box className={classes.headerButton}>
-              <Button variant='contained' startIcon={<AddIcon />} color="primary" onClick={createNewInfoCategory}>Buat Baru</Button>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                color="primary"
+                onClick={() => setShowDialogAddCategory(true)}>
+                Buat Baru
+              </Button>
             </Box>
           </Grid>
-
-            {listHyppeInfo && listHyppeInfo.map((faq,index) => 
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                    <CmtCard>
-                        <CmtCardHeader
-                            className={clsx(classes.headerRoot, classes.header)}
-                            title={faq.title}
-                            actionsPos="top-corner"
-                            actions={actions}
-                            actionHandler={(val) => handleMoreMenuClick(val,faq)}/>
-                        <CmtCardContent>
-                           {faq.details && faq.details.map((detail,detIdx) => 
-                                <InfoItem data={detail} key={detIdx}/>
-                           )}
-                        </CmtCardContent>
-                    </CmtCard>
-                </Grid>
-            )}
-        </GridContainer>    
+          {infoList.length > 0 &&
+            infoList.map((info, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <CmtCard>
+                  <CmtCardHeader
+                    className={clsx(classes.headerRoot, classes.header)}
+                    title={info.kategori}
+                    actionsPos="top-corner"
+                    actions={actions}
+                    actionHandler={(val) => onClickMoreMenu(val, info)}
+                  />
+                  <CmtCardContent>
+                    {info.replydata?.length > 0 &&
+                      info.replydata.map((detail, detIdx) => <InfoItem data={detail} key={detIdx} />)}
+                  </CmtCardContent>
+                </CmtCard>
+              </Grid>
+            ))}
+        </GridContainer>
       </PageContainer>
-
-      <DialogAddCategory open={showDialogAddCategory} handleClose={() => setShowDialogAddCategory(false)} handleSubmit={submitNewCategory} />
+      <DialogAddCategory
+        open={showDialogAddCategory}
+        onClose={() => setShowDialogAddCategory(false)}
+        onSubmit={onSubmitNewCategory}
+      />
     </>
   );
 };

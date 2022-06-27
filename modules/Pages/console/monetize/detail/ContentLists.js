@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 import CmtObjectSummary from '@coremat/CmtObjectSummary';
 import CmtAvatar from '@coremat/CmtAvatar';
 import { fakeDb } from 'modules/FakeDb/fake-db';
-import {fromatMoney} from 'helpers/stringHelper';
+import { formatCurrency } from 'helpers/stringHelper';
 
 import { getListRegisteredContent } from 'redux/actions/monetizeAction';
 
@@ -107,7 +107,7 @@ export default function ContentLists() {
       { meta &&
         <Box display="flex" justifyContent="space-between" marginBottom={4}>
             <Typography component="div" variant="colorPrimary">
-              Total penerimaan biaya pendaftaran konten: Rp {fromatMoney(meta.income)}
+              Total penerimaan biaya pendaftaran konten: Rp {formatCurrency(meta.income)}
             </Typography>
             <Typography component="div" variant="h4">
               Total pedaftaran konten: {meta.total}

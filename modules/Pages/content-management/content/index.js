@@ -8,24 +8,41 @@ import RegionViews from './RegionViews';
 import { useUserContentsManagementQuery } from 'api/user/content/management';
 import { useAuth } from 'authentication';
 import SpinnerLoading from 'components/common/spinner';
+import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const Content = ({ }) => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([])
-  console.log('mainData:', Object.keys(mainData))
 
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
 
   const val = Object?.values(contentManagement?.data || {})
-
+  
   useEffect(() => {
     for (let i = 0; i < val.length; i++) {
       const temp = val[i]
       const a = [temp].map((el) => el)
       setMainData(a[0])
     }
+  getMediaUri()
   }, [contentManagement])
+
+  const getMediaUri = () => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = mainData?.popular?.mediaEndpoint;
+
+    console.log('`${STREAM_URL}${mediaURI}${authToken}`:', `${STREAM_URL}${mediaURI}${authToken}`)
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
+
+  const formatDate = (date) => {
+    return new Date(date?.split(' ')[0]).toLocaleString('en-us', {
+      month: 'short',
+      year: 'numeric',
+      day: 'numeric',
+    });
+  };
 
   return (
     <>
@@ -37,17 +54,18 @@ const Content = ({ }) => {
         <GridContainer>
           <Grid item md={4}>
             <ContentDataCard
+              image={getMediaUri()}
               title={'Popular Konten'}
               contentTitle={mainData?.popular?.description}
               likes={mainData?.popular?.likes}
               views={mainData?.popular?.views}
-              date={'Jun 26, 2020'}
+              date={formatDate(mainData?.popular?.createdAt)}
               contentType={`Hyppe ${mainData?.popular?.postType}`}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
-              title={'Mostlikes'}
+              title={'Most Likes'}
               contentTitle={mainData?.mostlikes?.description}
               likes={mainData?.mostlikes?.likes}
               views={mainData?.mostlikes?.views}

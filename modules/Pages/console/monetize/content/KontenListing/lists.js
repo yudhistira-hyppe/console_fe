@@ -11,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router'
 import CmtObjectSummary from '@coremat/CmtObjectSummary';
 import CmtAvatar from '@coremat/CmtAvatar';
-import { fromatMoney } from 'helpers/stringHelper';
+import { formatCurrency } from 'helpers/stringHelper';
 
 const useRowStyles = makeStyles({
   root: {
@@ -54,7 +54,7 @@ function Row(props) {
         <TableCell align="center">{row.insight.likes}</TableCell>
         <TableCell align="center">{row.insight.comments}</TableCell>
         <TableCell align="center">{row.insight.share}</TableCell>
-        <TableCell align="center">{"Rp " + fromatMoney(row.price)}</TableCell>
+        <TableCell align="center">{"Rp " + formatCurrency(row.price)}</TableCell>
         <TableCell align="center">{row.id}</TableCell>
       </TableRow>
     </React.Fragment>

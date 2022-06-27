@@ -21,7 +21,7 @@ export const getMediaUri = (item) => {
   return httpUri;
 };
 
-export const fromatMoney = (price) => {
+export const formatCurrency = (price) => {
   let indonesianCurrency = Intl.NumberFormat('id-ID');
   let formatted = indonesianCurrency.format(price);
   return formatted;
