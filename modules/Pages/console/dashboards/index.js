@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';
 import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
@@ -31,10 +32,11 @@ const useStyles = makeStyles((theme) => ({
 const ConsoleDashboardComponent = () => {
   const classes = useStyles();
   const currentYear = new Date().getFullYear();
+  const formattedTodayDate = moment(new Date()).format('YYYY-MM-DD');
   const { data: activeUsersSevenDay } = useGetUserActivityBeforeTodayQuery(6);
   const { data: activeUsersThirtyDay } = useGetUserActivityBeforeTodayQuery(29);
   const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
-  const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery('2022-06-16');
+  const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery(formattedTodayDate);
   const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
 
   const countTotal = (data, key) => {
