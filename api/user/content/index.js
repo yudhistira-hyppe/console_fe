@@ -33,6 +33,13 @@ export const contentAPI = createApi({
         body: payload,
       }),
     }),
+    userContentEvent: build.query({
+      query: (payload) => ({
+        url: `/getcontentevents`,
+        method: 'POST',
+        body: payload,
+      }),
+    }),
 
   }),
 });
@@ -42,4 +49,5 @@ export const {
   useUserContentsLatestQuery,
   useUserContentsPopularQuery,
   useUserContentsMonetizeQuery,
+  useUserContentEventQuery,
 } = contentAPI;

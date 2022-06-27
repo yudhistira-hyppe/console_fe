@@ -76,8 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType, content, image }) => {
-  console.log('imagessssssssssss:', image)
+const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType, content, image,postId }) => {
   const classes = useStyles();
   const router = useRouter();
   return (
@@ -112,7 +111,9 @@ const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType,
                   <div className={classes.infoLabel}>{date}</div>
                   <Button
                     variant="text"
-                    onClick={() => router.push('/contents/details')}
+                    onClick={() => router.push({pathname:'/contents/details',query:{
+                      postId:postId
+                    }})}
                     className="min-w-0 p-0"
                     style={{ width: 'fit-content' }}>
                     <div className={classes.labelLink}>VIEW DETAILS</div>

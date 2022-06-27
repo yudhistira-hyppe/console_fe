@@ -28,11 +28,12 @@ const Content = ({ }) => {
   getMediaUri()
   }, [contentManagement])
 
+  
+  // {{MH_HOST_STREAM}}/thumb/fb96a169-70c9-4530-b9eb-6050863e2b41?x-auth-token={{MH_TOKEN}}&x-auth-user={{MH_HDR_USER}}
   const getMediaUri = () => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
-    const mediaURI = mainData?.popular?.mediaEndpoint;
+    const mediaURI = mainData?.latestpost?.mediaEndpoint;
 
-    console.log('`${STREAM_URL}${mediaURI}${authToken}`:', `${STREAM_URL}${mediaURI}${authToken}`)
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
 
@@ -61,6 +62,7 @@ const Content = ({ }) => {
               views={mainData?.popular?.views}
               date={formatDate(mainData?.popular?.createdAt)}
               contentType={`Hyppe ${mainData?.popular?.postType}`}
+              postId={mainData?.popular?.postID}
             />
           </Grid>
           <Grid item md={4}>
@@ -94,9 +96,7 @@ const Content = ({ }) => {
             />
           </Grid>
           <Grid item md={4}>
-            {/* datanya belum ada dari be */}
-           <RegionViews/>
-            {/* datanya belum ada dari be */}
+           <RegionViews regions={mainData?.recentlyregion}/>
           </Grid>
           <Grid item md={4}>
             <ContentDataCard

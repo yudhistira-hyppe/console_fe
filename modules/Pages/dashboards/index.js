@@ -15,6 +15,7 @@ import Comments from './Comments';
 import LatestNotification from './Latest Notification';
 import UserInfo from './ProfileDetails/UserInfo';
 import { FixedSizeGrid } from 'react-window';
+import { useGetAccountBalanceQuery } from 'api/user/user';
 
 const useStyles = makeStyles((theme) => ({
   orderLg2: {
@@ -29,10 +30,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const PremiumDashboard = () => {
   // const classes = useStyles();
   const { authUser, isLoadingUser } = useAuth();
   const welcomeNote = 'Welcome ' + authUser.fullName;
+
+  const {data:dataBalance} = useGetAccountBalanceQuery(authUser.email)
+  // console.log('dataBalance:', dataBalance?.data[0]?.totalsaldo)
 
   return (
     <PageContainer heading={welcomeNote}>
@@ -41,7 +46,7 @@ const PremiumDashboard = () => {
           <AdsStatstics />
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
-          <Balances balance={1500000} precentage={23} trend={false} />
+          <Balances balance={dataBalance?.data[0]?.totalsaldo} precentage={23} trend={false} />
         </Grid>
         <Grid item xs={12} md={4} xl={4}>
           <ProfileStatstics />
