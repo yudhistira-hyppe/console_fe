@@ -8,11 +8,12 @@ import monetizeReducers from './monetizeReducers';
 import helpCenterReducers from './helpCenterReducers';
 import Campaign from './Campaign';
 import { authApi, userApi } from 'api/user';
-import { dashboardApi, engagementApi } from 'api/console';
+import { dashboardApi, engagementApi, faqAndInfoApi } from 'api/console';
 import { contentAPI } from 'api/user/content';
 import { notificationAPI } from 'api/user/notification';
 import { commentAPI } from 'api/user/comment';
 import { insightAPI } from 'api/user/insight';
+import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 
 export default combineReducers({
@@ -27,9 +28,11 @@ export default combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [engagementApi.reducerPath]: engagementApi.reducer,
+  [faqAndInfoApi.reducerPath]: faqAndInfoApi.reducer,
   [contentAPI.reducerPath]: contentAPI.reducer,
   [notificationAPI.reducerPath]: notificationAPI.reducer,
   [commentAPI.reducerPath]: commentAPI.reducer,
   [insightAPI.reducerPath]: insightAPI.reducer,
-  [contentManagementAPI.reducerPath] : contentManagementAPI.reducer
+  [contentManagementAPI.reducerPath] : contentManagementAPI.reducer,
+  [accountBalancesAPI.reducerPath] : accountBalancesAPI.reducer
 });

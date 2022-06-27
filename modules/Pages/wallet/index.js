@@ -12,6 +12,8 @@ import clsx from "clsx";
 import GridContainer from "../../../@jumbo/components/GridContainer";
 import MyVoucher from "./MyVoucher/MyVoucher";
 import VoucherHistory from "./VoucherHistory";
+import { useAccountBalanceQuery } from "api/user/accountBalances";
+import { useAuth } from "authentication";
 
 const useStyles = makeStyles((theme) => ({
     infoLabel: {
@@ -56,16 +58,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Wallet = ({}) => {
+const Transcation = ({}) => {
+    const {getAuthUser} = useAuth()
+    const { data:accountBalanceData } = useAccountBalanceQuery(getAuthUser.email)
+    
     return (
         <div>
-            <PageHeader heading={'Wallet'}/>
+            <PageHeader heading={'Transaction'}/>
             <GridContainer>
                 <Grid item md={4}>
-                    <Balance balance={1500000} precentage={23} trend={false}/>
+                    <Balance balance={accountBalanceData?.data[0]?.totalsaldo} precentage={23} trend={false}/>
                 </Grid>
                 <Grid item md={4}>
-                    <TotalWithdraw total={1500000}/>
+                    <TotalWithdraw total={accountBalanceData?.data[0]?.totalpenarikan}/>
                 </Grid>
                 <Grid item md={4}>
                     <TransSummary/>
@@ -96,7 +101,9 @@ const Balance = ({balance, precentage, trend}) => {
                     <div className='mt-7'>
                         <div className='flex flex-row'>
                             <div className={classes.balanceLabel}>
-                                Rp {numberWithCommas(balance)}
+                                {/* there's a issues use this function */}
+                                {/* Rp {numberWithCommas(balance)} */}
+                                Rp {balance}
                             </div>
                             <div className='ml-1'>
                                 <span className={classes.precentageLabel}>
@@ -134,7 +141,9 @@ const TotalWithdraw = ({total}) => {
                     <div className='mt-7'>
                         <div className='flex flex-row'>
                             <div className={classes.balanceLabel}>
-                                Rp {numberWithCommas(total)}
+                                {/* there's a issues use this function */}
+                                {/* Rp {numberWithCommas(total)} */}
+                                Rp {total}
                             </div>
                         </div>
                         <div className='mt-2'>
@@ -189,4 +198,4 @@ const Trans=({date})=>{
 }
 
 
-export default Wallet;
+export default Transcation;

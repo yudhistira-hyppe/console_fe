@@ -11,6 +11,7 @@ export const userApi = createApi({
         method: 'POST',
         body: data,
       }),
+      keepUnusedDataFor: 600,
     }),
     getProfileByUserEmail: build.query({
       query: (email) => ({
@@ -21,7 +22,14 @@ export const userApi = createApi({
         },
       }),
     }),
+    getAccountBalance: build.query({
+      query: (data) => ({
+        url: `/accountbalances`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllUserQuery, useGetProfileByUserEmailQuery } = userApi;
+export const { useGetAllUserQuery, useGetProfileByUserEmailQuery, useGetAccountBalanceQuery } = userApi;

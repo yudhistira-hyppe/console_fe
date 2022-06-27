@@ -76,7 +76,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType, content }) => {
+const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType, content, image }) => {
+  console.log('imagessssssssssss:', image)
   const classes = useStyles();
   const router = useRouter();
   return (
@@ -97,7 +98,8 @@ const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType,
             <div className="mt-5">
               <div className="flex flex-row" style={{ height: '130px' }}>
                 <div style={{ width: '160px', height: '130px' }}>
-                  <CmtImage alt={'content'} src={'/images/dashboard/content_image.png'} />
+                  {/* <CmtImage alt={'content'} src={'/images/dashboard/content_image.png'} /> */}
+                  <CmtImage alt={'content'} src={image === undefined ? '/images/dashboard/content_image.png' : image } />
                 </div>
                 <div className="ml-3 flex flex-column justify-content-between">
                   <div className={classes.contentTitleLbl}>{contentTitle}</div>
