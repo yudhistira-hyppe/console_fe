@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CommentItem = ({ item }) => {
-  console.log('item:', item)
   
   const { authUser } = useAuth();
   // const [uniqueID, setUniqueID] = React.useState('');
@@ -151,7 +150,6 @@ const CommentItem = ({ item }) => {
   const getMediaUri = () => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
     const mediaURI = item.avatar.mediaEndpoint;
-    console.log('`${STREAM_URL}${mediaURI}${authToken}`', `${STREAM_URL}${mediaURI}${authToken}`)
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
 

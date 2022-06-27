@@ -78,7 +78,9 @@ const Balances = ({balance, precentage, trend}) => {
                     <div className='mt-8'>
                         <div className='flex flex-row'>
                             <div className={classes.balanceLabel}>
-                                Rp {numberWithCommas(balance)}
+                                {/* should use this but got an error */}
+                                {/* Rp {numberWithCommas(balance)} */}
+                                Rp {balance}
                             </div>
                             <div className='ml-1'>
                                 <span className={classes.precentageLabel}>
