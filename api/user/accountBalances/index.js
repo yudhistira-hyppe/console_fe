@@ -6,12 +6,10 @@ export const accountBalancesAPI = createApi({
   baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
     accountBalance: build.query({
-      query: (email) => ({
-        url: `/accountbalances`,
+      query: (payload) => ({
+        url: `/accountbalances/wallet`,
         method: 'POST',
-        body: {
-          email,
-        },
+        body: payload,
       }),
     }),
   }),
