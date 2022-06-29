@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ProfileBasic = () => {
+const ProfilePremium = () => {
   const classes = useStyles();
 
   return (
@@ -56,4 +56,4 @@ const ProfileBasic = () => {
   );
 };
 
-export default ProfileBasic;
+export default ProfilePremium;

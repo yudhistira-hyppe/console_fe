@@ -13,6 +13,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 const Content = ({ }) => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([])
+  console.log('mainData:', mainData)
 
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
@@ -73,6 +74,7 @@ const Content = ({ }) => {
               views={mainData?.mostlikes?.views}
               date={'Jun 26, 2020'}
               contentType={`Hyppe ${mainData?.mostlikes?.postType}`}
+              postId={mainData?.mostlikes?.postID}
             />
           </Grid>
           <Grid item md={4}>
@@ -83,6 +85,7 @@ const Content = ({ }) => {
               views={mainData?.mostshares?.views}
               date={'Jun 26, 2020'}
               contentType={`Hyppe ${mainData?.mostshares?.postType}`}
+              postId={mainData?.mostshares?.postID}
             />
           </Grid>
           <Grid item md={4}>
@@ -93,6 +96,7 @@ const Content = ({ }) => {
               views={mainData?.latestpost?.views}
               date={'Jun 26, 2020'}
               contentType={`Hyppe ${mainData?.latestpost?.postType}`}
+              postId={mainData?.latestpost?.postID}
             />
           </Grid>
           <Grid item md={4}>
@@ -106,6 +110,7 @@ const Content = ({ }) => {
               views={mainData?.traffic?.views}
               date={'Jun 26, 2020'}
               contentType={`Hyppe ${mainData?.traffic?.postType}`}
+              postId={mainData?.traffic?.postID}
             />
           </Grid>
           <Grid item md={4}>
@@ -116,6 +121,7 @@ const Content = ({ }) => {
               views={mainData?.moderate?.views}
               date={'Jun 26, 2020'}
               contentType={`Hyppe ${mainData?.moderate?.postType}`}
+              postId={mainData?.moderate?.postID}
             />
           </Grid>
 

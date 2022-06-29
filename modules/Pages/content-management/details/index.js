@@ -12,19 +12,22 @@ import { fakeDb } from "../../../FakeDb/fake-db";
 import { useAuth } from "authentication";
 import { useUserContentEventQuery } from "api/user/content";
 import { useRouter } from 'next/router';
+import { useUserContentTimeQuery } from "api/user/content";
 
 
 const Details = () => {
     const { authUser } = useAuth()
-
     const router = useRouter();
+
     const payload = {
         postID: router.query.postId
     }
+
     const { data: contentEvent } = useUserContentEventQuery(payload)
-    console.log('contentEvent:', contentEvent)
     const getValue = Object.values(contentEvent?.data || [])
 
+    const { data: contentTime } = useUserContentTimeQuery(payload)    
+    
     return (
         <div>
             <PageHeader heading={'Detail Content'} />
@@ -42,7 +45,10 @@ const Details = () => {
                     <Discover precentage={98} isNumber={true} number={1280} title={'Jangkauan'} subtitle={'Total Jangkauan'} isInceased={false} />
                 </Grid>
                 <Grid item md={3}>
-                    <Discover isNumber={false} precentage={'2 jam'} number={'120j 18m 14d'} title={'Total Waktu Tayang'} subtitle={'Rata-Rata'} />
+                    <Discover isNumber={false} precentage={'2 jam'} number={`${contentTime?.hours}h ${contentTime?.minutes}m ${contentTime?.days}d`} 
+                        title={'Total Waktu Tayang'} subtitle={'Rata-Rata'} 
+                    />
+                    {/* <Discover isNumber={false} precentage={'2 jam'} number={'120j 18m 14d'} title={'Total Waktu Tayang'} subtitle={'Rata-Rata'} /> */}
                 </Grid>
                 <Grid item md={3}>
                     <BiographyStats title={fakeDb.genderBiography.title} dataChart={getValue[0]}/>
