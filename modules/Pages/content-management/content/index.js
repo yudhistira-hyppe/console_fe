@@ -13,6 +13,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 const Content = ({ }) => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([])
+  console.log('mainData:', mainData)
 
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
