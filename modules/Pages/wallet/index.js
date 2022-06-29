@@ -12,8 +12,9 @@ import clsx from 'clsx';
 import GridContainer from '../../../@jumbo/components/GridContainer';
 import MyVoucher from './MyVoucher/MyVoucher';
 import VoucherHistory from './VoucherHistory';
+import { useAuth } from '../../../authentication';
 import { useAccountBalanceQuery } from 'api/user/accountBalances';
-import { useAuth } from 'authentication';
+import { getFormattedDate } from '@jumbo/utils/dateHelper';
 
 const useStyles = makeStyles((theme) => ({
   infoLabel: {
@@ -59,21 +60,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Transcation = ({}) => {
-  const { getAuthUser } = useAuth();
-  const { data: accountBalanceData } = useAccountBalanceQuery(getAuthUser.email);
+  const { authUser } = useAuth();
+
+  const payload = {
+    email: authUser.email,
+    // this should be dynamic but be doesnt know the pattern yet.
+    startdate: '2022-06-08',
+    enddate: '2022-06-09',
+  };
+
+  const { data: accountBalanceData } = useAccountBalanceQuery(payload);
 
   return (
     <div>
       <PageHeader heading={'Transaction'} />
       <GridContainer>
         <Grid item md={4}>
-          <Balance balance={accountBalanceData?.data[0]?.totalsaldo} precentage={23} trend={false} />
+          <Balance balance={accountBalanceData?.data?.totalsaldo} precentage={23} trend={false} />
         </Grid>
         <Grid item md={4}>
-          <TotalWithdraw total={accountBalanceData?.data[0]?.totalpenarikan} />
+          <TotalWithdraw total={accountBalanceData?.data?.totalpenarikan} />
         </Grid>
         <Grid item md={4}>
-          <TransSummary />
+          <TransSummary date={accountBalanceData.data || ''} />
         </Grid>
         <Grid item md={12}>
           <TransactionList />
@@ -146,16 +155,17 @@ const TotalWithdraw = ({ total }) => {
   );
 };
 
-const TransSummary = ({}) => {
+const TransSummary = ({ date }) => {
   const classes = useStyles();
+
   return (
     <div style={{ height: '250px' }} className="flex-auto">
       <CmtCard className="h-full w-full">
         <CmtCardContent>
           <div className={classes.headTitle}>Transactions Summary</div>
           <div className="mt-7">
-            <Trans date={'1 - 31 Juli 2021'} />
-            <Trans date={'1 - 31 Juni 2021'} />
+            <Trans date={`1 - ${getFormattedDate(date?.startdate, ' DD MMM')} 2021`} />
+            <Trans date={`1 - ${getFormattedDate(date?.startdate, ' DD MMM')} 2021`} />
           </div>
         </CmtCardContent>
       </CmtCard>
