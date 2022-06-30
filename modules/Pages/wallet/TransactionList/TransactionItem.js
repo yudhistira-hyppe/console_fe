@@ -64,7 +64,6 @@ function getBgColor(status) {
 }
 
 const TransactionItem = ({ row }) => {
-  console.log('row:', row);
   const classes = useStyles();
   return (
     <TableRow className={classes.tableRowRoot}>

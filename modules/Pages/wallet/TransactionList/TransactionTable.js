@@ -16,6 +16,11 @@ const TransactionTable = ({ tableData }) => {
           <TransactionHeading />
         </TableHead>
         <TableBody>
+          {tableData?.data?.length === 0 ? (
+            <div style={{ position: 'absolute', top: '50%', left: '45%' }}>data kosong</div>
+          ) : (
+            ''
+          )}
           {tableData?.data?.map((row, index) => (
             <TransactionItem authUser={authUser} row={row} key={index} />
           ))}
