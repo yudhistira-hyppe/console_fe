@@ -13,7 +13,7 @@ import GridContainer from '../../../@jumbo/components/GridContainer';
 import MyVoucher from './MyVoucher/MyVoucher';
 import VoucherHistory from './VoucherHistory';
 import { useAuth } from '../../../authentication';
-import { useAccountBalanceQuery } from 'api/user/accountBalances';
+import { useAccountBalanceQuery, useAccountBalanceHistoryQuery } from 'api/user/accountBalances';
 import { getFormattedDate } from '@jumbo/utils/dateHelper';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,14 +62,14 @@ const useStyles = makeStyles((theme) => ({
 const Transcation = ({}) => {
   const { authUser } = useAuth();
 
-  const payload = {
+  const payloadBalance = {
     email: authUser.email,
     // this should be dynamic but be doesnt know the pattern yet.
     startdate: '2022-06-08',
     enddate: '2022-06-09',
   };
 
-  const { data: accountBalanceData } = useAccountBalanceQuery(payload);
+  const { data: accountBalanceData } = useAccountBalanceQuery(payloadBalance);
 
   return (
     <div>
