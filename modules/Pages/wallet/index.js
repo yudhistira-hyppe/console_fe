@@ -82,7 +82,7 @@ const Transcation = ({}) => {
           <TotalWithdraw total={accountBalanceData?.data?.totalpenarikan} />
         </Grid>
         <Grid item md={4}>
-          <TransSummary date={accountBalanceData.data || ''} />
+          <TransSummary date={accountBalanceData?.data || ''} />
         </Grid>
         <Grid item md={12}>
           <TransactionList />
