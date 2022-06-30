@@ -3,19 +3,19 @@ import { TouchApp } from '@material-ui/icons';
 import { Refresh } from '@material-ui/icons';
 import { FileCopy } from '@material-ui/icons';
 import { Share } from '@material-ui/icons';
-import TableCell from "@material-ui/core/TableCell";
-import CmtImage from "../../@coremat/CmtImage";
-import TableRow from "@material-ui/core/TableRow";
-import React from "react";
+import TableCell from '@material-ui/core/TableCell';
+import CmtImage from '../../@coremat/CmtImage';
+import TableRow from '@material-ui/core/TableRow';
+import React from 'react';
 
 export const fakeDb = {
   adsStatistics: {
     labelBudget: 'Impression',
     labelGrowth: 'CTA',
     chartData: [
-      { month: 'Jan', budget: 1500, growth:  1600},
+      { month: 'Jan', budget: 1500, growth: 1600 },
       { month: 'Feb', budget: 2000, growth: 2100 },
-      { month: 'Mar', budget: 1200, growth: 1300},
+      { month: 'Mar', budget: 1200, growth: 1300 },
       { month: 'Apr', budget: 2200, growth: 2300 },
       { month: 'May', budget: 2600, growth: 2700 },
       { month: 'Jun', budget: 4300, growth: 4400 },
@@ -41,9 +41,9 @@ export const fakeDb = {
   postType: [
     { name: 'advertise', slug: 'HyppeAds' },
     { name: 'story', slug: 'HyppeStory' },
-    { name: 'diary', slug: 'HyppeDiary'},
-    { name: 'vid', slug: 'HyppeVideo'},
-    { name: 'pict', slug: 'HyppePic'}
+    { name: 'diary', slug: 'HyppeDiary' },
+    { name: 'vid', slug: 'HyppeVideo' },
+    { name: 'pict', slug: 'HyppePic' },
   ],
   postAdsType: [
     { name: 'Tayang', slug: 'publish' },
@@ -94,18 +94,18 @@ export const fakeDb = {
     { name: 'Page G', minggu1: 3490, minggu2: 4300, minggu3: 2100, minggu4: 4233 },
   ],
   statusKepemilikan: [
-    { month: 'Jan', notif: 400, pending: 400, sukses: 400},
-    { month: 'Feb', notif: 500, pending: 600, sukses: 254},
-    { month: 'Mar', notif: 400, pending: 300, sukses: 243},
-    { month: 'Apr', notif: 350, pending: 200, sukses: 225},
-    { month: 'May', notif: 700, pending: 700, sukses: 643},
-    { month: 'Jun', notif: 100, pending: 600, sukses: 350},
-    { month: 'Jul', notif: 500, pending: 50, sukses: 444},
-    { month: 'Aug', notif: 350, pending: 550, sukses: 440},
-    { month: 'Sep', notif: 300, pending: 200, sukses: 460},
-    { month: 'Oct', notif: 200, pending: 500, sukses: 430},
-    { month: 'Nov', notif: 200, pending: 600, sukses: 220},
-    { month: 'Dec', notif: 200, pending: 100, sukses: 730},
+    { month: 'Jan', notif: 400, pending: 400, sukses: 400 },
+    { month: 'Feb', notif: 500, pending: 600, sukses: 254 },
+    { month: 'Mar', notif: 400, pending: 300, sukses: 243 },
+    { month: 'Apr', notif: 350, pending: 200, sukses: 225 },
+    { month: 'May', notif: 700, pending: 700, sukses: 643 },
+    { month: 'Jun', notif: 100, pending: 600, sukses: 350 },
+    { month: 'Jul', notif: 500, pending: 50, sukses: 444 },
+    { month: 'Aug', notif: 350, pending: 550, sukses: 440 },
+    { month: 'Sep', notif: 300, pending: 200, sukses: 460 },
+    { month: 'Oct', notif: 200, pending: 500, sukses: 430 },
+    { month: 'Nov', notif: 200, pending: 600, sukses: 220 },
+    { month: 'Dec', notif: 200, pending: 100, sukses: 730 },
   ],
   akunPengguna: [
     {
@@ -122,8 +122,8 @@ export const fakeDb = {
       detail: {
         email: 'alex@gmail.com',
         dob: '20 Juni 1985',
-        status: 'complete_bio'
-      }
+        status: 'complete_bio',
+      },
     },
     {
       id: 2,
@@ -139,8 +139,8 @@ export const fakeDb = {
       detail: {
         email: 'janecooper@gmail.com',
         dob: '20 Juni 1985',
-        status: 'complete_bio'
-      }
+        status: 'complete_bio',
+      },
     },
     {
       id: 3,
@@ -156,8 +156,8 @@ export const fakeDb = {
       detail: {
         email: 'wade@gmail.com',
         dob: '20 Juni 1985',
-        status: 'complete_bio'
-      }
+        status: 'complete_bio',
+      },
     },
     {
       id: 4,
@@ -173,8 +173,8 @@ export const fakeDb = {
       detail: {
         email: 'esther@gmail.com',
         dob: '20 Juni 1985',
-        status: 'complete_bio'
-      }
+        status: 'complete_bio',
+      },
     },
     {
       id: 5,
@@ -190,9 +190,9 @@ export const fakeDb = {
       detail: {
         email: 'janecooper@gmail.com',
         dob: '20 Juni 1985',
-        status: 'complete_bio'
-      }
-    }
+        status: 'complete_bio',
+      },
+    },
   ],
   postTabCategories: [
     { name: 'HyppeVid', slug: 'hyppevid' },
@@ -577,7 +577,7 @@ export const fakeDb = {
     {
       jenis: 3,
       orderDate: '20.06.2020',
-      nominal: 'Rp. 1.000.000',      
+      nominal: 'Rp. 1.000.000',
       remarks: 'Transfer DANA',
     },
     {
@@ -663,7 +663,7 @@ export const fakeDb = {
       budget: '3.000.000',
       growth: 20,
     },
-  
+
     {
       id: 2,
       name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -673,7 +673,7 @@ export const fakeDb = {
       budget: '3.000.000',
       growth: -5,
     },
-  
+
     {
       id: 3,
       name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -683,7 +683,7 @@ export const fakeDb = {
       budget: '3.000.000',
       growth: 20,
     },
-  
+
     {
       id: 3,
       name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -744,52 +744,52 @@ export const fakeDb = {
       { name: 'Balikpapan', flagCode: 'fr', visitors: '445', badgeColor: '#3F51B5' },
       { name: 'Ambon', flagCode: 'gm', visitors: '36,855', badgeColor: '#FFA005' },
       { name: 'Palu', flagCode: 'es', visitors: '9,877', badgeColor: '#5D9405' },
-    ]
+    ],
   ],
   countryListMarker: [
     [
       {
         name: 'Jakarta',
-        latLng: [-6.1840025795983395, 106.83177614531071]
+        latLng: [-6.1840025795983395, 106.83177614531071],
       },
-      { name: 'Jawa Barat', latLng: [-6.9143152918417865, 107.60473009564406]},
-      { name: 'Jawa Timur', latLng: [-7.254158376719283, 112.75044704906571]},
-      { name: 'Bali', latLng: [-8.666567719982247, 115.20435833229052]},
+      { name: 'Jawa Barat', latLng: [-6.9143152918417865, 107.60473009564406] },
+      { name: 'Jawa Timur', latLng: [-7.254158376719283, 112.75044704906571] },
+      { name: 'Bali', latLng: [-8.666567719982247, 115.20435833229052] },
     ],
     [
       {
         name: 'Makasar',
-        latLng: [-5.12926724035593, 119.45446707302521]
+        latLng: [-5.12926724035593, 119.45446707302521],
       },
-      { name: 'Balikpapan', latLng: [-1.2310233619904665, 116.81355039461425]},
-      { name: 'Ambon', latLng: [-3.6595776907364366, 128.19778834813164]},
-      { name: 'Palu', latLng: [-0.8963805524896058, 119.8729662420806]},
-    ]
+      { name: 'Balikpapan', latLng: [-1.2310233619904665, 116.81355039461425] },
+      { name: 'Ambon', latLng: [-3.6595776907364366, 128.19778834813164] },
+      { name: 'Palu', latLng: [-0.8963805524896058, 119.8729662420806] },
+    ],
   ],
   engagementTitle: [
     {
       label: 'Dilihat',
       bgColor: '#D7F5B1',
       color: '#5D9405',
-      icon: <TouchApp/>
+      icon: <TouchApp />,
     },
     {
       label: 'Disukai',
       bgColor: '#FFDE99',
       color: '#D36F1A',
-      icon: <Refresh/>
+      icon: <Refresh />,
     },
     {
       label: 'Dibagikan',
       bgColor: '#9BE7FD',
       color: '#0356AF',
-      icon: <FileCopy/>
+      icon: <FileCopy />,
     },
     {
       label: 'Reaksi',
       bgColor: '#F2E7FE',
       color: '#7F39FB',
-      icon: <Share/>
+      icon: <Share />,
     },
   ],
   performance: [
@@ -815,7 +815,7 @@ export const fakeDb = {
         dibagikan: 12,
       },
       harga: 'Rp. 1.000.000',
-      id: '12549anfh852'
+      id: '12549anfh852',
     },
     {
       id: 1,
@@ -828,7 +828,7 @@ export const fakeDb = {
         dibagikan: 12,
       },
       harga: 'Rp. 1.000.000',
-      id: '12549anfh852'
+      id: '12549anfh852',
     },
     {
       id: 1,
@@ -841,7 +841,7 @@ export const fakeDb = {
         dibagikan: 12,
       },
       harga: 'Rp. 1.000.000',
-      id: '12549anfh852'
+      id: '12549anfh852',
     },
     {
       id: 1,
@@ -854,7 +854,7 @@ export const fakeDb = {
         dibagikan: 12,
       },
       harga: 'Rp. 1.000.000',
-      id: '12549anfh852'
+      id: '12549anfh852',
     },
     {
       id: 1,
@@ -867,7 +867,7 @@ export const fakeDb = {
         dibagikan: 12,
       },
       harga: 'Rp. 1.000.000',
-      id: '12549anfh852'
+      id: '12549anfh852',
     },
     {
       id: 1,
@@ -880,7 +880,7 @@ export const fakeDb = {
         dibagikan: 12,
       },
       harga: 'Rp. 1.000.000',
-      id: '12549anfh852'
+      id: '12549anfh852',
     },
     {
       id: 1,
@@ -893,21 +893,35 @@ export const fakeDb = {
         dibagikan: 12,
       },
       harga: 'Rp. 1.000.000',
-      id: '12549anfh852'
+      id: '12549anfh852',
     },
   ],
   adsTrends: {
     enableCampaign: 7,
     pauseCampaign: 2,
     data: [
-      {year: '2021-10-11', cta: 0, cpv: 0},
-      {year: '2021-10-12', cta: 100, cpv: 90},
-      {year: '2021-10-13', cta: 20, cpv: 60},
-      {year: '2021-10-14', cta: 100, cpv: 110},
-    ]
+      { year: '2021-10-11', cta: 0, cpv: 0 },
+      { year: '2021-10-12', cta: 100, cpv: 90 },
+      { year: '2021-10-13', cta: 20, cpv: 60 },
+      { year: '2021-10-14', cta: 100, cpv: 110 },
+    ],
   },
-  campaign:[
-    {Status:'Active', Type: 'Content Ads',ImageUri:'/pict/612ce0bb-dd7a-4d8f-a3f6-d3ddbbb2de8f',Name:'Intan Jual Baju',Placement:'Pre-Hypee',ShowPlan:'827',Budget:'1500',Impression:'256',CPV:'826',Trafic:'Website',CTA:'827',StartDate:'11 Dec 2021', EndDate:'15 Dec 2021'}
+  campaign: [
+    {
+      Status: 'Active',
+      Type: 'Content Ads',
+      ImageUri: '/pict/612ce0bb-dd7a-4d8f-a3f6-d3ddbbb2de8f',
+      Name: 'Intan Jual Baju',
+      Placement: 'Pre-Hypee',
+      ShowPlan: '827',
+      Budget: '1500',
+      Impression: '256',
+      CPV: '826',
+      Trafic: 'Website',
+      CTA: '827',
+      StartDate: '11 Dec 2021',
+      EndDate: '15 Dec 2021',
+    },
   ],
   reachTrends: {
     title: 'Reach',
@@ -933,7 +947,7 @@ export const fakeDb = {
     secondaryColor: {
       solid: '#C8372D',
       light: '#FADEE3',
-    }
+    },
   },
   impressionTrends: {
     title: 'Impression',
@@ -959,7 +973,7 @@ export const fakeDb = {
     secondaryColor: {
       solid: '#C8372D',
       light: '#FADEE3',
-    }
+    },
   },
   cpvTrends: {
     title: 'Cost Per View (CPV)',
@@ -985,7 +999,7 @@ export const fakeDb = {
     secondaryColor: {
       solid: '#C8372D',
       light: '#FADEE3',
-    }
+    },
   },
   ctaTrends: {
     title: 'Call to Action (CTA)',
@@ -1011,107 +1025,372 @@ export const fakeDb = {
     secondaryColor: {
       solid: '#C8372D',
       light: '#FADEE3',
-    }
+    },
   },
   stackBar: {
-    title: 'Gender', dataLabel1: 'Male', dataLabel2: 'Female', value1: 93, value2: 145,
-    barChartData: {xAxisKey: 'date', yKey1 : 'male', yKey2: 'female', ykey1Label: 'Male', ykey2Label: 'Female',
+    title: 'Gender',
+    dataLabel1: 'Male',
+    dataLabel2: 'Female',
+    value1: 93,
+    value2: 145,
+    barChartData: {
+      xAxisKey: 'date',
+      yKey1: 'male',
+      yKey2: 'female',
+      ykey1Label: 'Male',
+      ykey2Label: 'Female',
       data: [
-        {date: '2021-10-11', male: 2, female: 1},
-        {date: '2021-10-12', male: 10, female: 20},
-        {date: '2021-10-13', male: 30, female: 1},
-        {date: '2021-10-14', male: 15, female: 12},
-        {date: '2021-10-15', male: 20, female: 10},
-        {date: '2021-10-16', male: 20, female: 10},
-        {date: '2021-10-17', male: 20, female: 10},
-        {date: '2021-10-18', male: 20, female: 10},
-      ]
-    }
+        { date: '2021-10-11', male: 2, female: 1 },
+        { date: '2021-10-12', male: 10, female: 20 },
+        { date: '2021-10-13', male: 30, female: 1 },
+        { date: '2021-10-14', male: 15, female: 12 },
+        { date: '2021-10-15', male: 20, female: 10 },
+        { date: '2021-10-16', male: 20, female: 10 },
+        { date: '2021-10-17', male: 20, female: 10 },
+        { date: '2021-10-18', male: 20, female: 10 },
+      ],
+    },
   },
   progressBar: {
-    title : '', label: 'Indonesia', value: 100, color: '#AB22AF'
+    title: '',
+    label: 'Indonesia',
+    value: 100,
+    color: '#AB22AF',
   },
-  voucherList:[
-    {voucherName: 'Voucher 1.000 Show', voucherInfo: '1 voucher is valid for 1 ad serving as much as 1000 times', price: 1500000, isCheck: false, many: 0},
-    {voucherName: 'Voucher 10.000 Show', voucherInfo: 'This 1 voucher is valid for 1 ad serving as much as 10.000 times', price: 15000000, isCheck: false, many: 0}
+  voucherList: [
+    {
+      voucherName: 'Voucher 1.000 Show',
+      voucherInfo: '1 voucher is valid for 1 ad serving as much as 1000 times',
+      price: 1500000,
+      isCheck: false,
+      many: 0,
+    },
+    {
+      voucherName: 'Voucher 10.000 Show',
+      voucherInfo: 'This 1 voucher is valid for 1 ad serving as much as 10.000 times',
+      price: 15000000,
+      isCheck: false,
+      many: 0,
+    },
   ],
-  transHistory:[
-    {date:'15 Dec 2021', time:'02:43 PM', type: 'Buy', description:'Content Of HyppePic', fromDesc:'From anthony (Anthony)',amount:'- Rp. 15.000.000',status:'sent'},
-    {date:'15 Dec 2021', time:'02:43 PM', type: 'Rewards', description:'Content Of HyppePic', fromDesc:'From Ad',amount:'+ Rp. 400',status:'receive'}
+  transHistory: [
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Buy',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From anthony (Anthony)',
+      amount: '- Rp. 15.000.000',
+      status: 'sent',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
+    {
+      date: '15 Dec 2021',
+      time: '02:43 PM',
+      type: 'Rewards',
+      description: 'Content Of HyppePic',
+      fromDesc: 'From Ad',
+      amount: '+ Rp. 400',
+      status: 'receive',
+    },
   ],
   genderBiography: {
     title: 'Jenis Kelamin Penonton',
-    data: [{
-      label: 'Male', value: 52
-    },
+    data: [
       {
-        label: 'Female', value: 48
-      }
-    ]
+        label: 'Male',
+        value: 52,
+      },
+      {
+        label: 'Female',
+        value: 48,
+      },
+    ],
   },
   countryBiography: {
     title: 'Negara Penonton',
     data: [
       {
-        label: 'Indonesia', value: 92
+        label: 'Indonesia',
+        value: 92,
       },
       {
-        label: 'Lainnya', value: 8
-      }
-    ]
+        label: 'Lainnya',
+        value: 8,
+      },
+    ],
   },
   ageBiography: {
     title: 'Rentang Umur Penonton',
     data: [
       {
-        label: '<14 Tahun', value: 10
+        label: '<14 Tahun',
+        value: 10,
       },
       {
-        label: '14-40 Tahun', value: 70
+        label: '14-40 Tahun',
+        value: 70,
       },
       {
-        label: '40< Tahun', value: 20
-      }
-    ]
+        label: '40< Tahun',
+        value: 20,
+      },
+    ],
   },
   viewsBiography: {
     title: 'Dilihat Dari',
     data: [
       {
-        label: 'Landing Page', value: 10
+        label: 'Landing Page',
+        value: 10,
       },
       {
-        label: 'Followers', value: 70
+        label: 'Followers',
+        value: 70,
       },
       {
-        label: 'Halaman Profile', value: 20
-      }
-    ]
+        label: 'Halaman Profile',
+        value: 20,
+      },
+    ],
   },
-  contentList:[
-    {contentImage: '/images/content/content1.png', contentName:'By discovering nature, you discover yourself.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739334', views: 1203, likes: 600, share: 54, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content2.png', contentName:'It seems to me that the natural world is the greatest source of excitement; the greatest source...', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739335', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'},
-    {contentImage: '/images/content/content3.png', contentName:'Everything in nature invites us constantly to be what we are.', type:'HyppeVid', date:'08/11/2021', time:'12:00', contentId:'8739336', views: 12035, likes: 6000, share: 6475, certNumber: '398u3h23dy92'}
+  contentList: [
+    {
+      contentImage: '/images/content/content1.png',
+      contentName: 'By discovering nature, you discover yourself.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739334',
+      views: 1203,
+      likes: 600,
+      share: 54,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content2.png',
+      contentName: 'It seems to me that the natural world is the greatest source of excitement; the greatest source...',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739335',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content3.png',
+      contentName: 'Everything in nature invites us constantly to be what we are.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739336',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content3.png',
+      contentName: 'Everything in nature invites us constantly to be what we are.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739336',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content3.png',
+      contentName: 'Everything in nature invites us constantly to be what we are.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739336',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content3.png',
+      contentName: 'Everything in nature invites us constantly to be what we are.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739336',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content3.png',
+      contentName: 'Everything in nature invites us constantly to be what we are.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739336',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content3.png',
+      contentName: 'Everything in nature invites us constantly to be what we are.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739336',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
+    {
+      contentImage: '/images/content/content3.png',
+      contentName: 'Everything in nature invites us constantly to be what we are.',
+      type: 'HyppeVid',
+      date: '08/11/2021',
+      time: '12:00',
+      contentId: '8739336',
+      views: 12035,
+      likes: 6000,
+      share: 6475,
+      certNumber: '398u3h23dy92',
+    },
   ],
   myVoucher: [
-    {title: 'Voucher 1.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
-    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
-    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
-    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'},
-    {title: 'Voucher 10.000 Tayang', subTitle: 'PT Hyppe Teknologi Indonesia', expDate: '10-11-2021', voucherCode: '89E9-HI90-23HU-0129'}
+    {
+      title: 'Voucher 1.000 Tayang',
+      subTitle: 'PT Hyppe Teknologi Indonesia',
+      expDate: '10-11-2021',
+      voucherCode: '89E9-HI90-23HU-0129',
+    },
+    {
+      title: 'Voucher 10.000 Tayang',
+      subTitle: 'PT Hyppe Teknologi Indonesia',
+      expDate: '10-11-2021',
+      voucherCode: '89E9-HI90-23HU-0129',
+    },
+    {
+      title: 'Voucher 10.000 Tayang',
+      subTitle: 'PT Hyppe Teknologi Indonesia',
+      expDate: '10-11-2021',
+      voucherCode: '89E9-HI90-23HU-0129',
+    },
+    {
+      title: 'Voucher 10.000 Tayang',
+      subTitle: 'PT Hyppe Teknologi Indonesia',
+      expDate: '10-11-2021',
+      voucherCode: '89E9-HI90-23HU-0129',
+    },
+    {
+      title: 'Voucher 10.000 Tayang',
+      subTitle: 'PT Hyppe Teknologi Indonesia',
+      expDate: '10-11-2021',
+      voucherCode: '89E9-HI90-23HU-0129',
+    },
   ],
-  voucherHistory:[
-    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000 Penayangan',status:'sent'},
-    {date:'15 Dec 2021', time:'02:43 PM', type: '10.000 Penayangan',status:'receive'},
-    {date:'15 Dec 2021', time:'02:43 PM', type: '100.000 Penayangan',status:'sent'},
-    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000.000 Penayangan',status:'receive'},
-    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000.000 Penayangan',status:'receive'},
-    {date:'15 Dec 2021', time:'02:43 PM', type: '1.000.000 Penayangan',status:'receive'},
+  voucherHistory: [
+    { date: '15 Dec 2021', time: '02:43 PM', type: '1.000 Penayangan', status: 'sent' },
+    { date: '15 Dec 2021', time: '02:43 PM', type: '10.000 Penayangan', status: 'receive' },
+    { date: '15 Dec 2021', time: '02:43 PM', type: '100.000 Penayangan', status: 'sent' },
+    { date: '15 Dec 2021', time: '02:43 PM', type: '1.000.000 Penayangan', status: 'receive' },
+    { date: '15 Dec 2021', time: '02:43 PM', type: '1.000.000 Penayangan', status: 'receive' },
+    { date: '15 Dec 2021', time: '02:43 PM', type: '1.000.000 Penayangan', status: 'receive' },
   ],
 };

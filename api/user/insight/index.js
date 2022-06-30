@@ -14,7 +14,14 @@ export const insightAPI = createApi({
         },
       }),
     }),
+    userGetInsightView: build.query({
+      query: (payload) => ({
+        url: `/getinsight/view`,
+        method: 'POST',
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useUserGetInsightQuery } = insightAPI;
+export const { useUserGetInsightQuery, useUserGetInsightViewQuery } = insightAPI;
