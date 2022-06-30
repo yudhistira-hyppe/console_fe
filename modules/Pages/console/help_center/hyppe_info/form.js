@@ -10,7 +10,10 @@ import CmtCardContent from '@coremat/CmtCard/CmtCardContent';
 import GridContainer from '@jumbo/components/GridContainer';
 import CKEditor from 'react-ckeditor-component';
 // import DeleteIcon from '@material-ui/icons/Delete';
-import { useCreateDetailForFaqAndInfoMutation } from 'api/console/helpCenter/faqAndInfo';
+import {
+  useCreateDetailForFaqAndInfoMutation,
+  useUpdateDetailForFaqAndInfoMutation,
+} from 'api/console/helpCenter/faqAndInfo';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -65,14 +68,23 @@ const useRowStyles = makeStyles({
 const ConsoleAddInfoComponent = () => {
   const router = useRouter();
   const classes = useRowStyles();
-  const [disableSubmit, setDisableSubmit] = useState(true);
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
+  const queryContent = router.query.body || '';
+  const queryTitle = router.query.title || '';
+  const [isValidQuery, setIsValidQuery] = useState(false);
+  const [type, setType] = useState('add');
+  const [disableSubmit, setDisableSubmit] = useState(false);
+  const [content, setContent] = useState(router.query.body);
+  const [title, setTitle] = useState(router.query.title);
   const [addDetailInfo] = useCreateDetailForFaqAndInfoMutation();
+  const [updateDetailInfo] = useUpdateDetailForFaqAndInfoMutation();
 
   useEffect(() => {
-    if (!router.query.id) {
-      router.back();
+    const routerPathArr = router.pathname.split('/');
+    setType(routerPathArr[routerPathArr.length - 1]);
+    if (Object.keys(router.query).length < 1) {
+      router.push('/console/help_center/hyppe_info');
+    } else {
+      setIsValidQuery(true);
     }
   }, [router.query]);
 
@@ -82,7 +94,10 @@ const ConsoleAddInfoComponent = () => {
     } else {
       setDisableSubmit(true);
     }
-  }, [title, content]);
+    if (type === 'edit' && title === queryTitle && content === queryContent) {
+      setDisableSubmit(true);
+    }
+  }, [type, title, content]);
 
   const onChangeBody = (evt) => {
     const newContent = evt.editor.getData();
@@ -90,14 +105,33 @@ const ConsoleAddInfoComponent = () => {
   };
 
   const onSubmitDetail = () => {
-    if (title && content && router.query?.id) {
-      addDetailInfo({
-        Idfaqs: router.query?.id,
-        title: title,
-        body: content,
-      })
-        .then(() => router.push('/console/help_center/hyppe_info'))
-        .catch((err) => console.error(err));
+    switch (type) {
+      case 'add':
+        if (title && content) {
+          addDetailInfo({
+            Idfaqs: router.query._id,
+            title: title,
+            body: content,
+          })
+            .then(() => router.push('/console/help_center/hyppe_info'))
+            .catch((err) => console.error(err));
+        }
+        break;
+      case 'edit':
+        if (title && content) {
+          updateDetailInfo({
+            id: router.query._id,
+            body: {
+              title: title,
+              body: content,
+            },
+          })
+            .then(() => router.push('/console/help_center/hyppe_info'))
+            .catch((err) => console.error(err));
+        }
+        break;
+      default:
+        break;
     }
   };
 
@@ -110,64 +144,66 @@ const ConsoleAddInfoComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Detail Info</title>
       </Head>
-      <PageContainer heading="Detail Info" breadcrumbs={breadcrumbs}>
-        <CmtCard>
-          <CmtCardHeader title="Detail Info" />
-          <CmtCardContent>
-            <GridContainer>
-              <Grid item xs={12} lg={12}>
-                <Box className={classes.formRoot}>
-                  <TextField label="Judul" value={title} onChange={(e) => setTitle(e.target.value)} />
-                </Box>
-              </Grid>
-              <Grid item xs={12} lg={12}>
-                <CKEditor
-                  scriptUrl="https://cdn.ckeditor.com/4.17.2/full/ckeditor.js"
-                  config={{
-                    toolbarLocation: 'bottom',
-                    toolbarGroups: [
-                      { name: 'document', groups: ['mode', 'document', 'doctools'] },
-                      { name: 'clipboard', groups: ['clipboard', 'undo'] },
-                      { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
-                      { name: 'forms', groups: ['forms'] },
-                      { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-                      { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
-                      { name: 'links', groups: ['links'] },
-                      { name: 'insert', groups: ['Image', 'Table'] },
-                      { name: 'styles', groups: ['styles'] },
-                      { name: 'colors', groups: ['colors'] },
-                      { name: 'tools', groups: ['tools'] },
-                      { name: 'others', groups: ['others'] },
-                      { name: 'about', groups: ['about'] },
-                    ],
-                    removeButtons:
-                      'Subscript,Superscript,Strike,Source,Save,Templates,NewPage,ExportPdf,Preview,Print,PasteFromWord,PasteText,Paste,Copy,Cut,Redo,Undo,Find,Replace,SelectAll,Form,Scayt,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CopyFormatting,RemoveFormat,BulletedList,NumberedList,Outdent,CreateDiv,Indent,Blockquote,BidiLtr,BidiRtl,Language,HorizontalRule,Table,Anchor,Smiley,SpecialChar,PageBreak,Iframe,Format,Styles,Font,FontSize,Maximize,TextColor,About,ShowBlocks,BGColor,Unlink',
-                  }}
-                  activeClass={classes.editorRoot}
-                  content={content}
-                  events={{
-                    change: onChangeBody,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6} lg={6}>
-                <Button variant="outlined" color="primary" className={classes.btnSecondary} onClick={onCancel}>
-                  Batal
-                </Button>
-                {/* <Button variant="outlined" color="primary" className={classes.btnSecondary}>
+      {isValidQuery ? (
+        <PageContainer heading="Detail Info" breadcrumbs={breadcrumbs}>
+          <CmtCard>
+            <CmtCardHeader title="Detail Info" />
+            <CmtCardContent>
+              <GridContainer>
+                <Grid item xs={12} lg={12}>
+                  <Box className={classes.formRoot}>
+                    <TextField label="Judul" value={title} onChange={(e) => setTitle(e.target.value)} />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} lg={12}>
+                  <CKEditor
+                    scriptUrl="https://cdn.ckeditor.com/4.17.2/full/ckeditor.js"
+                    config={{
+                      toolbarLocation: 'bottom',
+                      toolbarGroups: [
+                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                        { name: 'forms', groups: ['forms'] },
+                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                        { name: 'links', groups: ['links'] },
+                        { name: 'insert', groups: ['Image', 'Table'] },
+                        { name: 'styles', groups: ['styles'] },
+                        { name: 'colors', groups: ['colors'] },
+                        { name: 'tools', groups: ['tools'] },
+                        { name: 'others', groups: ['others'] },
+                        { name: 'about', groups: ['about'] },
+                      ],
+                      removeButtons:
+                        'Subscript,Superscript,Strike,Source,Save,Templates,NewPage,ExportPdf,Preview,Print,PasteFromWord,PasteText,Paste,Copy,Cut,Redo,Undo,Find,Replace,SelectAll,Form,Scayt,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CopyFormatting,RemoveFormat,BulletedList,NumberedList,Outdent,CreateDiv,Indent,Blockquote,BidiLtr,BidiRtl,Language,HorizontalRule,Table,Anchor,Smiley,SpecialChar,PageBreak,Iframe,Format,Styles,Font,FontSize,Maximize,TextColor,About,ShowBlocks,BGColor,Unlink',
+                    }}
+                    activeClass={classes.editorRoot}
+                    content={content}
+                    events={{
+                      change: onChangeBody,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} lg={6}>
+                  <Button variant="outlined" color="primary" className={classes.btnSecondary} onClick={onCancel}>
+                    Batal
+                  </Button>
+                  {/* <Button variant="outlined" color="primary" className={classes.btnSecondary}>
                   Simpan Draf
                 </Button>
                 <Button color="default" startIcon={<DeleteIcon />} className={classes.btnSecondary}></Button> */}
-              </Grid>
-              <Grid item xs={6} lg={6} className={classes.btnBottomAction}>
-                <Button variant="contained" color="primary" disabled={disableSubmit} onClick={onSubmitDetail}>
-                  Simpan
-                </Button>
-              </Grid>
-            </GridContainer>
-          </CmtCardContent>
-        </CmtCard>
-      </PageContainer>
+                </Grid>
+                <Grid item xs={6} lg={6} className={classes.btnBottomAction}>
+                  <Button variant="contained" color="primary" disabled={disableSubmit} onClick={onSubmitDetail}>
+                    Simpan
+                  </Button>
+                </Grid>
+              </GridContainer>
+            </CmtCardContent>
+          </CmtCard>
+        </PageContainer>
+      ) : null}
     </>
   );
 };

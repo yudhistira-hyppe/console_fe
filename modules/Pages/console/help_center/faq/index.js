@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Button, Dialog, Grid, DialogContent, DialogActions, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Grid, TextField, Typography } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Head from 'next/head';
 import clsx from 'clsx';
@@ -11,11 +12,16 @@ import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import CmtCardContent from '@coremat/CmtCard/CmtCardContent';
 import FaqItem from './FaqItem';
 import AddIcon from '@material-ui/icons/Add';
-// import EditIcon from '@material-ui/icons/Edit';
-// import DeleteIcon from '@material-ui/icons/Delete';
-import CloseIcon from '@material-ui/icons/Close';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { useRouter } from 'next/router';
-import { useCreateFaqAndInfoMutation, useGetListFaqOrInfoByTypeQuery } from 'api/console/helpCenter/faqAndInfo';
+import {
+  useGetListFaqOrInfoByTypeQuery,
+  useCreateFaqAndInfoMutation,
+  useUpdateFaqAndInfoMutation,
+  useDeleteFaqAndInfoMutation,
+  useDeleteDetailForFaqAndInfoMutation,
+} from 'api/console/helpCenter/faqAndInfo';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,14 +52,14 @@ const actions = [
     label: 'Tambah',
     icon: <AddIcon />,
   },
-  // {
-  //   label: 'Ubah',
-  //   icon: <EditIcon />,
-  // },
-  // {
-  //   label: 'Hapus',
-  //   icon: <DeleteIcon />,
-  // },
+  {
+    label: 'Ubah',
+    icon: <EditIcon />,
+  },
+  {
+    label: 'Hapus',
+    icon: <DeleteIcon />,
+  },
 ];
 
 const breadcrumbs = [
@@ -61,35 +67,79 @@ const breadcrumbs = [
   { label: 'Help Center', link: '/console/help_center' },
   { label: 'FAQ', isActive: true },
 ];
-
-const DialogAddCategory = ({ open, onClose, onSubmit }) => {
+const ActionDialog = ({ open, type, isDetailAction, prevValue, onClose, onSubmit }) => {
   const [categoryTitle, setCategoryTitle] = useState('');
+  const [disableSubmitButton, setDisableSubmitButton] = useState(true);
+
+  useEffect(() => {
+    if (open) {
+      setCategoryTitle(prevValue.kategori);
+    } else {
+      setCategoryTitle(null);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (type.includes('Hapus')) {
+      setDisableSubmitButton(false);
+    } else {
+      if (categoryTitle === prevValue.kategori) {
+        setDisableSubmitButton(true);
+      } else {
+        setDisableSubmitButton(false);
+      }
+    }
+  }, [categoryTitle]);
+
+  const renderButtonIcon = () => {
+    if (type.includes('Tambah')) return <AddIcon />;
+    if (type.includes('Ubah')) return <EditIcon />;
+    if (type.includes('Hapus')) return <DeleteIcon />;
+  };
 
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>{type} Kategori</DialogTitle>
       <DialogContent>
-        <TextField
-          margin="dense"
-          label="Kategori"
-          type="text"
-          fullWidth
-          variant="outlined"
-          value={categoryTitle}
-          onChange={(e) => setCategoryTitle(e.target.value)}
-        />
+        {type.includes('Hapus') ? (
+          <p>
+            Apa anda yakin ingin menghapus {isDetailAction && 'detail'} kategori
+            <b> {prevValue.kategori || prevValue.title}</b>
+          </p>
+        ) : (
+          <TextField
+            margin="dense"
+            label="Kategori"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={categoryTitle}
+            onChange={(e) => setCategoryTitle(e.target.value)}
+          />
+        )}
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" startIcon={<AddIcon />} color="primary" onClick={() => onSubmit(categoryTitle)}>
-          Tambah
+        <Button color="default" onClick={onClose}>
+          Batal
         </Button>
-        <Button startIcon={<CloseIcon />} color="default" onClick={onClose}></Button>
+        <Button
+          variant="contained"
+          disabled={disableSubmitButton}
+          startIcon={renderButtonIcon()}
+          color="primary"
+          onClick={() => onSubmit(type, prevValue._id, categoryTitle)}>
+          {type}
+        </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-DialogAddCategory.propTypes = {
+ActionDialog.propTypes = {
   open: PropTypes.bool,
+  type: PropTypes.string,
+  isDetailAction: PropTypes.bool,
+  prevValue: PropTypes.object,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
 };
@@ -99,8 +149,14 @@ const ConsoleFaqComponent = () => {
   const classes = useStyles();
   const { data } = useGetListFaqOrInfoByTypeQuery('faq');
   const [addFaqCategory] = useCreateFaqAndInfoMutation();
+  const [updateFaqCategory] = useUpdateFaqAndInfoMutation();
+  const [deleteFaqCategory] = useDeleteFaqAndInfoMutation();
+  const [deleteDetailFaqCategory] = useDeleteDetailForFaqAndInfoMutation();
   const [faqList, setFaqList] = useState([]);
-  const [showDialogAddCategory, setShowDialogAddCategory] = useState(false);
+  const [showActionDialog, setShowActionDialog] = useState(false);
+  const [prevValueActionDialog, setPrevValueActionDialog] = useState({});
+  const [typeActionDialog, setTypeActionDialog] = useState('Tambah');
+  const [isDetailAction, setIsDetailAction] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -110,18 +166,81 @@ const ConsoleFaqComponent = () => {
     }
   }, [data]);
 
-  const onClickMoreMenu = (val, info) => {
-    if (val.label == 'Tambah') {
-      router.push({
-        pathname: '/console/help_center/faq/add',
-        query: { id: info._id },
-      });
+  const onClickCategoryMoreMenu = (type, faq) => {
+    switch (type) {
+      case 'Tambah':
+        router.push(
+          {
+            pathname: '/console/help_center/faq/add',
+            query: faq,
+          },
+          '/console/help_center/faq/add',
+        );
+        break;
+      case 'Ubah':
+        setTypeActionDialog('Ubah');
+        setIsDetailAction(false);
+        setPrevValueActionDialog(faq);
+        setShowActionDialog(true);
+        break;
+      case 'Hapus':
+        setTypeActionDialog('Hapus');
+        setIsDetailAction(false);
+        setPrevValueActionDialog(faq);
+        setShowActionDialog(true);
+        break;
+      default:
+        break;
     }
   };
 
-  const onSubmitNewCategory = (newCategory) => {
-    addFaqCategory({ kategori: newCategory, tipe: 'faq' });
-    setShowDialogAddCategory(false);
+  const onClickCategoryDetailMoreMenu = (type, detailFaq) => {
+    switch (type) {
+      case 'Ubah':
+        router.push(
+          {
+            pathname: '/console/help_center/faq/edit',
+            query: detailFaq,
+          },
+          '/console/help_center/faq/edit',
+        );
+        break;
+      case 'Hapus':
+        setTypeActionDialog('Hapus Detail');
+        setIsDetailAction(true);
+        setPrevValueActionDialog(detailFaq);
+        setShowActionDialog(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const onClickAddNewCategory = () => {
+    setTypeActionDialog('Tambah');
+    setIsDetailAction(false);
+    setPrevValueActionDialog({ kategori: '' });
+    setShowActionDialog(true);
+  };
+
+  const onSubmitActionDialog = (actionType, valueId, newCategory) => {
+    switch (actionType) {
+      case 'Tambah':
+        addFaqCategory({ kategori: newCategory, tipe: 'faq' });
+        break;
+      case 'Ubah':
+        updateFaqCategory({ id: valueId, body: { kategori: newCategory } });
+        break;
+      case 'Hapus':
+        deleteFaqCategory(valueId);
+        break;
+      case 'Hapus Detail':
+        deleteDetailFaqCategory(valueId);
+        break;
+      default:
+        break;
+    }
+    setShowActionDialog(false);
   };
 
   return (
@@ -136,39 +255,40 @@ const ConsoleFaqComponent = () => {
         <GridContainer>
           <Grid item xs={12} sm={12} md={12}>
             <Box className={classes.headerButton}>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                color="primary"
-                onClick={() => setShowDialogAddCategory(true)}>
+              <Button variant="contained" startIcon={<AddIcon />} color="primary" onClick={onClickAddNewCategory}>
                 Buat Baru
               </Button>
             </Box>
           </Grid>
-          {faqList &&
-            faqList.map((faq, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+          {faqList.length > 0 &&
+            faqList.map((faq) => (
+              <Grid item xs={12} sm={6} md={4} key={faq._id}>
                 <CmtCard>
                   <CmtCardHeader
                     className={clsx(classes.headerRoot, classes.header)}
                     title={faq.kategori}
                     actionsPos="top-corner"
                     actions={actions}
-                    actionHandler={(val) => onClickMoreMenu(val, faq)}
+                    actionHandler={({ label }) => onClickCategoryMoreMenu(label, faq)}
                   />
                   <CmtCardContent>
                     {faq.replydata?.length > 0 &&
-                      faq.replydata.map((detail, detIdx) => <FaqItem data={detail} key={detIdx} />)}
+                      faq.replydata.map((detail) => (
+                        <FaqItem key={detail._id} data={detail} onClickItem={onClickCategoryDetailMoreMenu} />
+                      ))}
                   </CmtCardContent>
                 </CmtCard>
               </Grid>
             ))}
         </GridContainer>
       </PageContainer>
-      <DialogAddCategory
-        open={showDialogAddCategory}
-        onClose={() => setShowDialogAddCategory(false)}
-        onSubmit={onSubmitNewCategory}
+      <ActionDialog
+        open={showActionDialog}
+        type={typeActionDialog}
+        isDetailAction={isDetailAction}
+        prevValue={prevValueActionDialog}
+        onClose={() => setShowActionDialog(false)}
+        onSubmit={onSubmitActionDialog}
       />
     </>
   );
