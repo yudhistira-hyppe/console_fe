@@ -6,6 +6,16 @@ export const faqAndInfoApi = createApi({
   baseQuery: customBaseQueryWithHandleReauth,
   tagTypes: ['FaqAndInfo'],
   endpoints: (build) => ({
+    getListFaqOrInfoByType: build.query({
+      query: (type) => ({
+        url: `/faqs/allfaqs`,
+        method: 'POST',
+        body: {
+          tipe: type,
+        },
+      }),
+      providesTags: ['FaqAndInfo'],
+    }),
     createFaqAndInfo: build.mutation({
       query: (data) => ({
         url: `/faqs/createfaq`,
@@ -22,18 +32,45 @@ export const faqAndInfoApi = createApi({
       }),
       invalidatesTags: ['FaqAndInfo'],
     }),
-    getListFaqOrInfoByType: build.query({
-      query: (type) => ({
-        url: `/faqs/allfaqs`,
-        method: 'POST',
-        body: {
-          tipe: type,
-        },
+    updateFaqAndInfo: build.mutation({
+      query: ({ id, body }) => ({
+        url: `/faqs/${id}`,
+        method: 'PUT',
+        body,
       }),
-      providesTags: ['FaqAndInfo'],
+      invalidatesTags: ['FaqAndInfo'],
+    }),
+    deleteFaqAndInfo: build.mutation({
+      query: (id) => ({
+        url: `/faqs/delete/${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['FaqAndInfo'],
+    }),
+    updateDetailForFaqAndInfo: build.mutation({
+      query: ({ id, body }) => ({
+        url: `/faqs/detail/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['FaqAndInfo'],
+    }),
+    deleteDetailForFaqAndInfo: build.mutation({
+      query: (id) => ({
+        url: `/faqs/detail/delete/${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['FaqAndInfo'],
     }),
   }),
 });
 
-export const { useCreateFaqAndInfoMutation, useCreateDetailForFaqAndInfoMutation, useGetListFaqOrInfoByTypeQuery } =
-  faqAndInfoApi;
+export const {
+  useGetListFaqOrInfoByTypeQuery,
+  useCreateFaqAndInfoMutation,
+  useCreateDetailForFaqAndInfoMutation,
+  useUpdateFaqAndInfoMutation,
+  useDeleteFaqAndInfoMutation,
+  useUpdateDetailForFaqAndInfoMutation,
+  useDeleteDetailForFaqAndInfoMutation,
+} = faqAndInfoApi;
