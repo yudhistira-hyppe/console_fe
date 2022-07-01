@@ -134,7 +134,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ userDetail, tabValue, handleTabChange }) => {
+const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
   // const Header = ({ userDetail, tabValue, handleTabChange }) => {
   //   const { name, profile_pic, location, followers, following, friends } = userDetail;
   const classes = useStyles();
@@ -153,28 +153,22 @@ const Header = ({ userDetail, tabValue, handleTabChange }) => {
           </Box>
           <Box>
             <Typography className={classes.titleRoot} component="div" variant="h1">
-              {/* {name} */}
-              Mang Ucup Sans
+              {dataUser?.data[0]?.fullName}
             </Typography>
-            <Typography className={classes.subTitleRoot}>
-              {/* {location} */}
-              @mangucupsans
-            </Typography>
+            <Typography className={classes.subTitleRoot}>{dataUser?.data[0]?.email}</Typography>
           </Box>
         </Box>
         <Box ml={{ sm: 'auto' }} mt={{ xs: 3, sm: 0 }}>
           <Box className={classes.followerList}>
             <Box className={classes.followerListItem}>
               <Typography className={classes.followerListTitle} component="div" variant="h3">
-                2000
-                {/* {followers > 2000 ? '2k+' : followers}{' '} */}
+                {dataUser?.data[0]?.insight?.followers}
               </Typography>
               <Box component="p">Followers</Box>
             </Box>
             <Box className={classes.followerListItem}>
               <Typography className={classes.followerListTitle} component="div" variant="h3">
-                {/* {following}{' '} */}
-                10000
+                {dataUser?.data[0]?.insight?.followings}
               </Typography>
               <Box component="p">Following</Box>
             </Box>
