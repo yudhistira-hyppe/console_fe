@@ -29,9 +29,9 @@ const Content = ({}) => {
   }, [contentManagement]);
 
   // {{MH_HOST_STREAM}}/thumb/fb96a169-70c9-4530-b9eb-6050863e2b41?x-auth-token={{MH_TOKEN}}&x-auth-user={{MH_HDR_USER}}
-  const getMediaUri = () => {
+  const getMediaUri = (url) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
-    const mediaURI = mainData?.latestpost?.mediaEndpoint;
+    const mediaURI = '/thumb/' + url;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
@@ -54,46 +54,49 @@ const Content = ({}) => {
         <GridContainer>
           <Grid item md={4}>
             <ContentDataCard
-              image={getMediaUri()}
+              image={getMediaUri(mainData?.popular?.postID)}
               title={'Popular Konten'}
               contentTitle={mainData?.popular?.description}
               likes={mainData?.popular?.likes}
               views={mainData?.popular?.views}
               date={formatDate(mainData?.popular?.createdAt)}
-              contentType={`Hyppe ${mainData?.popular?.postType}`}
+              contentType={`Hyppe${mainData?.popular?.postType}`}
               postId={mainData?.popular?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
+              image={getMediaUri(mainData?.mostlikes?.postID)}
               title={'Most Likes'}
               contentTitle={mainData?.mostlikes?.description}
               likes={mainData?.mostlikes?.likes}
               views={mainData?.mostlikes?.views}
               date={'Jun 26, 2020'}
-              contentType={`Hyppe ${mainData?.mostlikes?.postType}`}
+              contentType={`Hyppe${mainData?.mostlikes?.postType}`}
               postId={mainData?.mostlikes?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
+              image={getMediaUri(mainData?.mostshares?.postID)}
               title={'Most Share'}
               contentTitle={mainData?.mostshares?.description}
               likes={mainData?.mostshares?.likes}
               views={mainData?.mostshares?.views}
               date={'Jun 26, 2020'}
-              contentType={`Hyppe ${mainData?.mostshares?.postType}`}
+              contentType={`Hyppe${mainData?.mostshares?.postType}`}
               postId={mainData?.mostshares?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
+              image={getMediaUri(mainData?.latestpost?.postID)}
               title={'Latest Posted Content'}
               contentTitle={mainData?.latestpost?.description}
               likes={mainData?.latestpost?.likes}
               views={mainData?.latestpost?.views}
               date={'Jun 26, 2020'}
-              contentType={`Hyppe ${mainData?.latestpost?.postType}`}
+              contentType={`Hyppe${mainData?.latestpost?.postType}`}
               postId={mainData?.latestpost?.postID}
             />
           </Grid>
@@ -102,23 +105,25 @@ const Content = ({}) => {
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
+              image={getMediaUri(mainData?.traffic?.postID)}
               title={'Content Traffic'}
               contentTitle={mainData?.traffic?.description}
               likes={mainData?.traffic?.likes}
               views={mainData?.traffic?.views}
               date={'Jun 26, 2020'}
-              contentType={`Hyppe ${mainData?.traffic?.postType}`}
+              contentType={`Hyppe${mainData?.traffic?.postType}`}
               postId={mainData?.traffic?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
+              image={getMediaUri(mainData?.moderate?.postID)}
               title={'Moderate Content'}
               contentTitle={mainData?.moderate?.description}
               likes={mainData?.moderate?.likes}
               views={mainData?.moderate?.views}
               date={'Jun 26, 2020'}
-              contentType={`Hyppe ${mainData?.moderate?.postType}`}
+              contentType={`Hyppe${mainData?.moderate?.postType}`}
               postId={mainData?.moderate?.postID}
             />
           </Grid>
