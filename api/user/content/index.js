@@ -47,7 +47,13 @@ export const contentAPI = createApi({
         body: payload,
       }),
     }),
-
+    userContentDetails: build.query({
+      query: (payload) => ({
+        url: `/getusercontents/details`,
+        method: 'POST',
+        body: payload,
+      }),
+    }),
   }),
 });
 
@@ -58,4 +64,5 @@ export const {
   useUserContentsMonetizeQuery,
   useUserContentEventQuery,
   useUserContentTimeQuery,
+  useUserContentDetailsQuery,
 } = contentAPI;
