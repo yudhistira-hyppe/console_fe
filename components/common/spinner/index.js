@@ -1,10 +1,10 @@
 import Style from './spinner.module.css';
 
-const SpinnerLoading = (props) => {
+const SpinnerLoading = ({ style }) => {
   return (
     <center>
       {/* please dont remove one of the div inside (animation depends on it) */}
-      <div className={Style.ldsRoller}>
+      <div className={Style.ldsRoller} style={style}>
         <div></div>
         <div></div>
         <div></div>

@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import CmtDropdownMenu from '../../../../@coremat/CmtDropdownMenu';
 import CmtAvatar from '../../../../@coremat/CmtAvatar';
@@ -10,6 +10,9 @@ import { useAuth } from '../../../../authentication';
 import { useRouter } from 'next/router';
 import { firebaseCloudMessaging } from 'helpers/firebaseHelper';
 import { v4 as uuidv4 } from 'uuid';
+import ConsoleMonetizeComponent from 'modules/Pages/console/monetize';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+
 const useStyles = makeStyles((theme) => ({
   profileRoot: {
     display: 'flex',
@@ -44,15 +47,18 @@ const actionsList = [
   },
 ];
 
-
-
-
 const UserDropDown = () => {
   const classes = useStyles();
-  const { userSignOut,authUser } = useAuth();
+  const { userSignOut, authUser } = useAuth();
   const router = useRouter();
   const [deviceId, setDeviceId] = useState(uuidv4());
-  
+
+  const getMediaUri = () => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = authUser?.avatar?.mediaEndpoint;
+
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
 
   const generateFCMToken = () => {
     Notification.requestPermission(() => {
@@ -61,31 +67,31 @@ const UserDropDown = () => {
         .then((token) => {
           setDeviceId(token);
         })
-        .catch(() => {})
+        .catch(() => {});
     });
   };
-  
+
   useEffect(() => {
-    generateFCMToken()
-  },[])
-  
+    generateFCMToken();
+  }, []);
+
   const onItemClick = (item) => {
-    
     if (item.label === 'Logout') {
-      userSignOut(
-        {
-          email: authUser.email,
-          deviceId: deviceId
-        }
-      )
+      userSignOut({
+        email: authUser.email,
+        deviceId: deviceId,
+      });
     }
-  }
+    if (item.label === 'Account') {
+      router.push('/profile-basic');
+    }
+  };
 
   return (
     <Box className={clsx(classes.profileRoot, 'Cmt-profile-pic')}>
       <CmtDropdownMenu
         onItemClick={onItemClick}
-        TriggerComponent={<CmtAvatar size="small" src={'https://via.placeholder.com/150'} />}
+        TriggerComponent={<CmtAvatar size="small" src={getMediaUri()} />}
         items={actionsList}
       />
     </Box>

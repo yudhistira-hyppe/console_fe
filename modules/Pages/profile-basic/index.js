@@ -4,6 +4,8 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 import Contact from './Contact';
 import About from './About';
 import Header from './Header';
+import { useAuth } from 'authentication';
+import { useGetProfileByUserEmailQuery } from 'api/user/user';
 
 const useStyles = makeStyles(() => ({
   pageFull: {
@@ -25,26 +27,27 @@ const useStyles = makeStyles(() => ({
 
 const ProfileBasic = () => {
   const classes = useStyles();
-
+  const { authUser } = useAuth();
+  const { data: dataProfile } = useGetProfileByUserEmailQuery(authUser.email);
   return (
     <>
       <GridContainer>
         <Grid item xs={12} lg={12} className={classes.profileSidebar}>
           <Box>
-            <Header />
+            <Header dataUser={dataProfile} />
           </Box>
         </Grid>
         <Grid item xs={12} lg={4} className={classes.profileSidebar}>
           <Box mb={6}>
             {/* <Contact userDetail={userDetail} /> */}
-            <Contact />
+            <Contact dataUser={dataProfile} />
           </Box>
           <Box mb={6}>{/* <Friends friends={userDetail.friends} /> */}</Box>
           <Box mb={6}>{/* <UserPhotos /> */}</Box>
         </Grid>
         <Grid item xs={12} lg={8} className={classes.profileMainContent}>
           <Box mb={6}>
-            <About />
+            <About dataUser={dataProfile} />
           </Box>
           {/* <Box mb={6}>
             <Biography />
