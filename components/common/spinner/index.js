@@ -1,29 +1,21 @@
-import Style from "./spinner.module.css"
+import Style from './spinner.module.css';
 
 const SpinnerLoading = (props) => {
-    return (
-        <center>
-            {/* please dont remove one of the div inside (animation depends on it) */}
-            <div className={Style.ldsRoller} {...props}>
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
-            </div>
-        </center>
-    )
-}
+  return (
+    <center>
+      {/* please dont remove one of the div inside (animation depends on it) */}
+      <div className={Style.ldsRoller}>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </center>
+  );
+};
 
-export default SpinnerLoading
+export default SpinnerLoading;

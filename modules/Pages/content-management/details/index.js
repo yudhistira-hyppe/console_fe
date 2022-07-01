@@ -13,6 +13,7 @@ import { useAuth } from 'authentication';
 import { useUserContentEventQuery } from 'api/user/content';
 import { useRouter } from 'next/router';
 import { useUserContentTimeQuery, useUserContentDetailsQuery } from 'api/user/content';
+import SpinnerLoading from 'components/common/spinner';
 
 const Details = () => {
   const { authUser } = useAuth();
@@ -79,18 +80,27 @@ const Details = () => {
           />
           {/* <Discover isNumber={false} precentage={'2 jam'} number={'120j 18m 14d'} title={'Total Waktu Tayang'} subtitle={'Rata-Rata'} /> */}
         </Grid>
-        <Grid item md={3}>
-          <BiographyStats title={fakeDb.genderBiography.title} dataChart={getValue[0]} />
-        </Grid>
-        <Grid item md={3}>
-          <BiographyStats title={fakeDb.countryBiography.title} dataChart={getValue[2]} />
-        </Grid>
-        <Grid item md={3}>
-          <BiographyStats title={'Rentang Umur Penonton'} dataChart={getValue[1]} />
-        </Grid>
-        <Grid item md={3}>
-          <BiographyStats title={fakeDb.viewsBiography.title} dataChart={fakeDb.viewsBiography.data} />
-        </Grid>
+        {/* <div>tesss</div> */}
+        {contentDetails ? (
+          <div style={{ width: '100%', margin: '10% 0' }}>
+            <SpinnerLoading />
+          </div>
+        ) : (
+          <>
+            <Grid item md={3}>
+              <BiographyStats title={fakeDb.genderBiography.title} dataChart={getValue[0]} />
+            </Grid>
+            <Grid item md={3}>
+              <BiographyStats title={fakeDb.countryBiography.title} dataChart={getValue[2]} />
+            </Grid>
+            <Grid item md={3}>
+              <BiographyStats title={'Rentang Umur Penonton'} dataChart={getValue[1]} />
+            </Grid>
+            <Grid item md={3}>
+              <BiographyStats title={fakeDb.viewsBiography.title} dataChart={fakeDb.viewsBiography.data} />
+            </Grid>
+          </>
+        )}
       </GridContainer>
     </div>
   );
