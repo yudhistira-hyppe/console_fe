@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import VoucherPengguna from './VoucherPengguna';
-import FilterTableAkunPengguna from '../../pengguna/FilterTableAkunPengguna';
+import FilterTableAkunPengguna from '../../users/FilterTableAkunPengguna';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -13,7 +13,6 @@ const breadcrumbs = [
 ];
 
 const ConsoleVoucherComponent = () => {
-  
   return (
     <>
       <Head>
@@ -22,7 +21,7 @@ const ConsoleVoucherComponent = () => {
       <PageContainer heading="Campaign Voucher" breadcrumbs={breadcrumbs}>
         <GridContainer>
           <Grid item xs={12} md={12} xl={12}>
-            <FilterTableAkunPengguna/>
+            <FilterTableAkunPengguna />
           </Grid>
           <Grid item xs={12} md={12} xl={12}>
             <VoucherPengguna />
@@ -30,7 +29,7 @@ const ConsoleVoucherComponent = () => {
         </GridContainer>
       </PageContainer>
     </>
-  )
-}
+  );
+};
 
 export default ConsoleVoucherComponent;
