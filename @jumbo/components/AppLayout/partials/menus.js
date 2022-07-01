@@ -1,12 +1,12 @@
 import React from 'react';
-import { PostAdd,Home } from '@material-ui/icons';
+import { Home } from '@material-ui/icons';
 import IntlMessages from '../../../utils/IntlMessages';
 
 export const sidebarNavs = [
   {
     name: <IntlMessages id={'sidebar.main'} />,
     type: 'mega',
-    link: '/'
+    link: '/',
   },
 ];
 
@@ -14,12 +14,12 @@ export const horizontalDefaultNavs = [
   {
     name: <IntlMessages id={'sidebar.main'} />,
     type: 'item',
-    link: '/'
+    link: '/',
   },
   {
     name: 'Content Management',
     type: 'item',
-    link: '/contents'
+    link: '/contents',
   },
   {
     name: 'Ads Center',
@@ -55,20 +55,20 @@ export const horizontalDefaultNavs = [
         type: 'item',
         link: '/voucher/buy',
       },
-    ]
+    ],
   },
   {
     name: 'Transaction',
     type: 'item',
-    link: '/transaction'
-  }
+    link: '/transaction',
+  },
 ];
 
 export const minimalHorizontalMenus = [
   {
     name: <IntlMessages id={'sidebar.main'} />,
     type: 'mega',
-    link: '/'
+    link: '/',
   },
 ];
 
@@ -82,26 +82,26 @@ export const consoleNav = [
   {
     name: 'Pusat Bantuan',
     type: 'item',
-    link: '/console/help_center'
+    link: '/console/help-center',
   },
   {
     name: 'Database Akun Pengguna',
     type: 'item',
-    link: '/console/pengguna'
+    link: '/console/users',
   },
   {
     name: 'Engagement Pengguna',
     type: 'item',
-    link: '/console/user_engagement'
+    link: '/console/user-engagement',
   },
   {
     name: 'Monetize',
     type: 'item',
-    link: '/console/monetize'
+    link: '/console/monetize',
   },
   {
     name: 'Pusat Iklan',
     type: 'item',
-    link: '/console/ads_center'
-  }
+    link: '/console/ads-center',
+  },
 ];
