@@ -10,26 +10,24 @@ import { useAuth } from 'authentication';
 import SpinnerLoading from 'components/common/spinner';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 
-const Content = ({ }) => {
+const Content = ({}) => {
   const { authUser, isLoadingUser } = useAuth();
-  const [mainData, setMainData] = useState([])
-  console.log('mainData:', mainData)
-
+  const [mainData, setMainData] = useState([]);
+  console.log('mainData:', mainData);
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
 
-  const val = Object?.values(contentManagement?.data || {})
-  
+  const val = Object?.values(contentManagement?.data || {});
+
   useEffect(() => {
     for (let i = 0; i < val.length; i++) {
-      const temp = val[i]
-      const a = [temp].map((el) => el)
-      setMainData(a[0])
+      const temp = val[i];
+      const a = [temp].map((el) => el);
+      setMainData(a[0]);
     }
-  getMediaUri()
-  }, [contentManagement])
+    getMediaUri();
+  }, [contentManagement]);
 
-  
   // {{MH_HOST_STREAM}}/thumb/fb96a169-70c9-4530-b9eb-6050863e2b41?x-auth-token={{MH_TOKEN}}&x-auth-user={{MH_HDR_USER}}
   const getMediaUri = () => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
@@ -49,7 +47,7 @@ const Content = ({ }) => {
   return (
     <>
       {/* this component act like loading */}
-      { contentManagement?.data ? <PageHeader heading={'Content Management'} /> : ""}
+      {contentManagement?.data ? <PageHeader heading={'Content Management'} /> : ''}
 
       {/* i put loading here  */}
       {contentManagement?.data ? (
@@ -100,7 +98,7 @@ const Content = ({ }) => {
             />
           </Grid>
           <Grid item md={4}>
-           <RegionViews regions={mainData?.recentlyregion}/>
+            <RegionViews regions={mainData?.recentlyregion} />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
@@ -124,8 +122,10 @@ const Content = ({ }) => {
               postId={mainData?.moderate?.postID}
             />
           </Grid>
-
-        </GridContainer>) : <SpinnerLoading style={{marginTop:"15%"}}/>}
+        </GridContainer>
+      ) : (
+        <SpinnerLoading style={{ margin: '17% 0 17% 0' }} />
+      )}
     </>
   );
 };
