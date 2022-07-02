@@ -11,7 +11,7 @@ export const customBaseQuery = fetchBaseQuery({
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (user && user.token && endpoint !== 'login') {
-      headers.set('Authorization', user.token);
+      headers.set('x-auth-token', user.token);
     }
 
     return headers;
