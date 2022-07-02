@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication';
 
-const PREMIUM_ROUTES = ['/ads', '/adsGuideline', '/aboutAds', '/ads/details', '/ads/create', '/voucher/buy', '/wallet'];
+const PREMIUM_ROUTES = ['/ads', '/adsGuideline', '/aboutAds', '/ads/details', '/ads/create', '/voucher/buy', '/transaction'];
 
 const SecurePage = ({ children }) => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const SecurePage = ({ children }) => {
         router.push('/signin');
         return;
       }
-      if (authUser && !authUser.roles.includes('ROLE_PREMIUM_ONLY') && PREMIUM_ROUTES.includes(router.pathname)) {
+      if (authUser && !authUser.roles.includes('ROLE_PREMIUM') && PREMIUM_ROUTES.includes(router.pathname)) {
         router.push('/');
         return;
       }
