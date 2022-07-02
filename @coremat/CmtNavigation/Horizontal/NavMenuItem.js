@@ -64,7 +64,7 @@ const NavMenuItem = (props) => {
     '/transaction',
   ];
 
-  const tes = (e) => {
+  const handleUpgradePremium = (e) => {
     e.preventDefault();
     if (PREMIUM_ROUTES.includes(link)) {
       Swal.fire({
@@ -81,7 +81,6 @@ const NavMenuItem = (props) => {
 
           localStorage.removeItem('user');
 
-          // router.push('/');
           setTimeout(() => {
             window.location.reload();
           }, '3000');
@@ -90,7 +89,7 @@ const NavMenuItem = (props) => {
             if (result.isConfirmed) {
               setTimeout(() => {
                 window.location.reload();
-              }, '500');
+              }, '200');
             }
           });
         }
@@ -102,6 +101,7 @@ const NavMenuItem = (props) => {
     <List component="div" disablePadding onClick={handleClick}>
       <Link href={link}>
         <a
+          onClick={handleUpgradePremium}
           className={clsx(
             classes.navMenuLink,
             {
@@ -111,9 +111,7 @@ const NavMenuItem = (props) => {
           )}>
           {/* Display an icon if any */}
           {renderIcon()}
-          <span className={clsx(classes.navText, 'Cmt-nav-text')} onClick={tes}>
-            {name}
-          </span>
+          <span className={clsx(classes.navText, 'Cmt-nav-text')}>{name}</span>
         </a>
       </Link>
     </List>
