@@ -101,7 +101,6 @@ const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType,
                   style={{
                     width: '160px',
                     height: '130px',
-                    border: '1px solid red',
                     backgroundImage: `url('${image}')`,
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
