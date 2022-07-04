@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageHeader from '../../../../@jumbo/components/PageComponents/PageHeader';
 import GridContainer from '../../../../@jumbo/components/GridContainer';
 import DetailsCard from './DetailsCard';
 import ContentDataCard from '../content/ContentDataCard';
 import { Grid } from '@material-ui/core';
 import Statistics from './Statistics';
-import Comments from '../../dashboards/Comments';
+import Comments from './Comments';
 import Discover from './Discover';
 import BiographyStats from './BiographyStats';
 import { fakeDb } from '../../../FakeDb/fake-db';
@@ -34,7 +34,6 @@ const Details = () => {
   const getMediaUri = () => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
     const mediaURI = '/thumb/' + contentDetails?.data[0]?.postID;
-    console.log('contentDetails?.data?.postID:', contentDetails?.data[0]?.postID);
 
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
@@ -46,6 +45,7 @@ const Details = () => {
       day: 'numeric',
     });
   };
+
   return (
     <div>
       <PageHeader heading={'Detail Content'} />
@@ -68,7 +68,7 @@ const Details = () => {
           <Statistics data={contentDetails?.data[0]} />
         </Grid>
         <Grid item md={6}>
-          <Comments />
+          <Comments query={router.query.postId} />
         </Grid>
         <Grid item md={3}>
           <Discover
