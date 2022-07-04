@@ -5,8 +5,54 @@ import IntlMessages from '../../../utils/IntlMessages';
 export const sidebarNavs = [
   {
     name: <IntlMessages id={'sidebar.main'} />,
-    type: 'mega',
+    type: 'item',
     link: '/',
+  },
+  {
+    name: 'Content Management',
+    type: 'item',
+    link: '/contents',
+  },
+  {
+    name: 'Ads Center',
+    type: 'collapse',
+    children: [
+      {
+        name: 'Ads Center',
+        type: 'item',
+        link: '/ads',
+      },
+      {
+        name: 'Ads Guideline',
+        type: 'item',
+        link: '/adsGuideline',
+      },
+      {
+        name: 'About Hyppe Ads',
+        type: 'item',
+        link: '/aboutAds',
+      },
+      {
+        name: 'Ads Detail',
+        type: 'item',
+        link: '/ads/details',
+      },
+      {
+        name: 'Create Ads',
+        type: 'item',
+        link: '/ads/create',
+      },
+      {
+        name: 'Buy Voucher',
+        type: 'item',
+        link: '/voucher/buy',
+      },
+    ],
+  },
+  {
+    name: 'Transaction',
+    type: 'item',
+    link: '/transaction',
   },
 ];
 
