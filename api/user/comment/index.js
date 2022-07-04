@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const commentAPI = createApi({
   reducerPath: 'commentsAPI',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes:["comment"],
+  tagTypes: ['comment'],
   endpoints: (build) => ({
     userGetNewComment: build.query({
       query: (email) => ({
@@ -14,7 +14,7 @@ export const commentAPI = createApi({
           email,
         },
       }),
-      providesTags: ['comment']
+      providesTags: ['comment'],
     }),
     userUpdateComment: build.mutation({
       query: ({ id, ...patch }) => ({
@@ -22,9 +22,18 @@ export const commentAPI = createApi({
         method: 'PUT',
         body: patch,
       }),
-      invalidatesTags:["comment"]
+      invalidatesTags: ['comment'],
+    }),
+    commentDisquslogs: build.query({
+      query: (postID) => ({
+        url: `/getnewcomment/disquslogs`,
+        method: 'POST',
+        body: {
+          postID,
+        },
+      }),
     }),
   }),
 });
 
-export const { useUserGetNewCommentQuery, useUserUpdateCommentMutation } = commentAPI;
+export const { useUserGetNewCommentQuery, useUserUpdateCommentMutation, useCommentDisquslogsQuery } = commentAPI;
