@@ -14,6 +14,7 @@ import { useUserContentEventQuery } from 'api/user/content';
 import { useRouter } from 'next/router';
 import { useUserContentTimeQuery, useUserContentDetailsQuery } from 'api/user/content';
 import SpinnerLoading from 'components/common/spinner';
+import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const Details = () => {
   const { authUser } = useAuth();
@@ -29,6 +30,14 @@ const Details = () => {
   const { data: contentTime } = useUserContentTimeQuery(payload);
 
   const { data: contentDetails } = useUserContentDetailsQuery(payload);
+
+  const getMediaUri = () => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = '/thumb/' + contentDetails?.data[0]?.postID;
+    console.log('contentDetails?.data?.postID:', contentDetails?.data[0]?.postID);
+
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
 
   const formatDate = (date) => {
     return new Date(date?.split(' ')[0]).toLocaleString('en-us', {
@@ -52,6 +61,7 @@ const Details = () => {
             views={contentDetails?.data[0]?.views}
             date={`${formatDate(contentDetails?.data[0]?.createdAt)}`}
             contentType={`Hyppe${contentDetails?.data[0]?.postType}`}
+            image={getMediaUri()}
           />
         </Grid>
         <Grid item md={6}>
