@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CommentItem = ({ item }) => {
-  
   const { authUser } = useAuth();
   // const [uniqueID, setUniqueID] = React.useState('');
 
@@ -145,7 +144,6 @@ const CommentItem = ({ item }) => {
       </Box>
     </Box>
   );
-
 
   const getMediaUri = () => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
