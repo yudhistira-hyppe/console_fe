@@ -1,6 +1,8 @@
 import CmtAvatar from '@coremat/CmtAvatar';
 import CmtImage from '@coremat/CmtImage';
 import { alpha, Box, makeStyles, Tab, Tabs, Typography } from '@material-ui/core';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const tabs = [
   { id: 1, title: 'Timeline', slug: 'timeline' },
@@ -137,7 +139,15 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
   // const Header = ({ userDetail, tabValue, handleTabChange }) => {
   //   const { name, profile_pic, location, followers, following, friends } = userDetail;
+  const { authUser } = useAuth();
   const classes = useStyles();
+
+  const getMediaUri = () => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = dataUser?.data[0]?.avatar?.mediaEndpoint;
+
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
 
   return (
     // <Box className={classes.headerRoot}>
@@ -149,7 +159,7 @@ const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
         <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
           <Box mr={{ sm: 4, md: 5, lg: 6 }} mb={{ xs: 3, sm: 0 }}>
             {/* <CmtAvatar size={80} src={profile_pic} alt={name} /> */}
-            <CmtAvatar size={80} src={'/images/p.png'} alt={'pict'} />
+            <CmtAvatar size={80} src={getMediaUri()} alt={'pict'} />
           </Box>
           <Box>
             <Typography className={classes.titleRoot} component="div" variant="h1">

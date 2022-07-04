@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import { WindowScroller } from 'react-virtualized';
+import { useUpgradeUserMutation } from 'api/user/auth';
+import { useAuth } from 'authentication';
 
 const useStyles = makeStyles((theme) => ({
   navMenuLink: {
@@ -40,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NavMenuItem = (props) => {
+  const { authUser } = useAuth();
   const { name, icon, link, handleClick } = props;
   const classes = useStyles();
   const router = useRouter();
@@ -64,36 +67,39 @@ const NavMenuItem = (props) => {
     '/transaction',
   ];
 
+  const [upgradeUser, { isSuccess, isLoading, isError }] = useUpgradeUserMutation();
+
   const handleUpgradePremium = (e) => {
-    e.preventDefault();
-    if (PREMIUM_ROUTES.includes(link)) {
-      Swal.fire({
-        title: 'Anda harus upgrade premium untuk melihat ini, apakah ingin upgrade premium?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Upgrade',
-        denyButtonText: `Don't save`,
-        cancelButtonText: 'Batalkan',
-      }).then((result) => {
-        console.log('resultssss:', result);
-        if (result.isConfirmed) {
-          Swal.fire('Akun anda sudah Premium!', '', 'success');
-
-          localStorage.removeItem('user');
-
-          setTimeout(() => {
-            window.location.reload();
-          }, '3000');
-        } else if (result.isDismissed) {
-          Swal.fire('Anda harus menjadi akun Premium untuk melihat halaman tersebut', '', 'info').then((result) => {
-            if (result.isConfirmed) {
-              setTimeout(() => {
-                window.location.reload();
-              }, '200');
-            }
-          });
-        }
-      });
+    if (!authUser.roles.includes('ROLE_PREMIUM')) {
+      if (PREMIUM_ROUTES.includes(link)) {
+        e.preventDefault();
+        Swal.fire({
+          title: 'Anda harus upgrade premium untuk melihat ini, apakah ingin upgrade premium?',
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Upgrade',
+          denyButtonText: `Don't save`,
+          cancelButtonText: 'Batalkan',
+        }).then((result) => {
+          console.log('resultssss:', result);
+          if (result.isConfirmed) {
+            upgradeUser({ email: 'freeman27@getnada.com', roles: 'ROLE_PREMIUM' });
+            Swal.fire('Akun anda sudah Premium!', '', 'success');
+            localStorage.removeItem('user');
+            setTimeout(() => {
+              window.location.reload();
+            }, '2000');
+          } else if (result.isDismissed) {
+            Swal.fire('Anda harus menjadi akun Premium untuk melihat halaman tersebut', '', 'info').then((result) => {
+              if (result.isConfirmed) {
+                setTimeout(() => {
+                  window.location.reload();
+                }, '200');
+              }
+            });
+          }
+        });
+      }
     }
   };
 
