@@ -2,8 +2,23 @@ import CmtCard from '@coremat/CmtCard';
 import GridContainer from '@jumbo/components/GridContainer';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Button } from '@mui/material';
+import { useUpgradeUserMutation } from 'api/user/auth';
+import { useAuth } from 'authentication';
+import { useRouter } from 'next/router';
 
 const PremiumActivation = () => {
+  const { authUser } = useAuth();
+  const router = useRouter();
+  const [upgradeUser] = useUpgradeUserMutation();
+
+  const handleUpgradePremium = () => {
+    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM' }).then((res) => {
+      if (res?.data?.response_code === 202) {
+        router.push('/');
+      }
+    });
+  };
+
   return (
     <>
       <CmtCard>
@@ -42,7 +57,8 @@ const PremiumActivation = () => {
                   padding: '8px 20px',
                   borderRadius: '5px',
                   marginTop: '30px',
-                }}>
+                }}
+                onClick={handleUpgradePremium}>
                 Aktifkan
               </Button>
             </div>
