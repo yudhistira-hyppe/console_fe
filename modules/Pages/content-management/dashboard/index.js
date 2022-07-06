@@ -1,16 +1,14 @@
-/* eslint-disable react/jsx-key */
-import React, { useEffect, useState } from 'react';
-import PageHeader from '../../../../@jumbo/components/PageComponents/PageHeader';
-import ContentDataCard from './ContentDataCard';
-import GridContainer from '../../../../@jumbo/components/GridContainer';
+import GridContainer from '@jumbo/components/GridContainer';
 import { Grid } from '@material-ui/core';
-import RegionViews from './RegionViews';
-import { useUserContentsManagementQuery } from 'api/user/content/management';
-import { useAuth } from 'authentication';
 import SpinnerLoading from 'components/common/spinner';
+import { useState, useEffect } from 'react';
+import ContentDataCard from '../ContentDataCard';
+import { useAuth } from 'authentication';
+import RegionViews from '../RegionViews';
+import { useUserContentsManagementQuery } from 'api/user/content/management';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 
-const Content = ({}) => {
+const ContentManagement = () => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([]);
   console.log('mainData:', mainData);
@@ -43,13 +41,8 @@ const Content = ({}) => {
       day: 'numeric',
     });
   };
-
   return (
-    <>
-      {/* this component act like loading */}
-      {contentManagement?.data ? <PageHeader heading={'Content Management'} /> : ''}
-
-      {/* i put loading here  */}
+    <div>
       {contentManagement?.data ? (
         <GridContainer>
           <Grid item md={4}>
@@ -131,7 +124,8 @@ const Content = ({}) => {
       ) : (
         <SpinnerLoading style={{ margin: '17% 0 17% 0' }} />
       )}
-    </>
+    </div>
   );
 };
-export default Content;
+
+export default ContentManagement;

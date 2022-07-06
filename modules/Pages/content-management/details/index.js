@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PageHeader from '../../../../@jumbo/components/PageComponents/PageHeader';
 import GridContainer from '../../../../@jumbo/components/GridContainer';
 import DetailsCard from './DetailsCard';
-import ContentDataCard from '../content/ContentDataCard';
+import ContentDataCard from '../ContentDataCard';
 import { Grid } from '@material-ui/core';
 import Statistics from './Statistics';
 import Comments from './Comments';

@@ -1,13 +1,13 @@
 import React from 'react';
-import CmtCard from '../../../../../@coremat/CmtCard';
-import CmtCardContent from '../../../../../@coremat/CmtCard/CmtCardContent';
-import numberWithCommas from '../../../../Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import CmtCard from '../../../../@coremat/CmtCard';
+import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
+import numberWithCommas from '../../../Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { Button } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Box from '@material-ui/core/Box';
-import CmtImage from '../../../../../@coremat/CmtImage';
-import CmtCardHeader from '../../../../../@coremat/CmtCard/CmtCardHeader';
-import CmtProgressBar from '../../../../../@coremat/CmtProgressBar';
+import CmtImage from '../../../../@coremat/CmtImage';
+import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
+import CmtProgressBar from '../../../../@coremat/CmtProgressBar';
 import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({

@@ -24,7 +24,7 @@ const SecurePage = ({ children }) => {
         return;
       }
       if (authUser && !authUser.roles.includes('ROLE_PREMIUM') && PREMIUM_ROUTES.includes(router.pathname)) {
-        router.push('/');
+        router.push('/premium-activation');
         return;
       }
       setIsRenderChildren(true);
