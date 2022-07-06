@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic';
 import PageLoader from '../../@jumbo/components/PageComponents/PageLoader';
 import SecurePage from '../../authentication/auth-page-wrappers/SecurePage';
 
-const WalletModule = dynamic(() => import('../../modules/Pages/wallet'), {
+const TranscationModule = dynamic(() => import('../../modules/Pages/transcation'), {
   loading: () => <PageLoader />,
 });
 
-const WalletsPage = () => (
+const TranscationPage = () => (
   <SecurePage>
-    <WalletModule />
+    <TranscationModule />
   </SecurePage>
 );
 
-export default WalletsPage;
+export default TranscationPage;
