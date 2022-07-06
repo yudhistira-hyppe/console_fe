@@ -1,7 +1,10 @@
 import { Grid, Typography, Button } from '@material-ui/core';
 import CmtImage from '@coremat/CmtImage';
+import { useRouter } from 'next/router';
 
 const OrganizationBasic = () => {
+  const router = useRouter();
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={8}>
@@ -9,7 +12,11 @@ const OrganizationBasic = () => {
         <div style={{ color: 'rgba(0, 0, 0, 0.38)', marginTop: '5px' }}>
           Ubah akun Anda menjadi akun premium untuk dapat membuat dan mengelola organisasi Anda
         </div>
-        <Button variant="contained" color="primary" style={{ marginTop: '20px' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginTop: '20px' }}
+          onClick={() => router.push('/premium-activation')}>
           ACTIVATE
         </Button>
       </Grid>
