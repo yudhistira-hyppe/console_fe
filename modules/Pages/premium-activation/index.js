@@ -9,12 +9,14 @@ import { useRouter } from 'next/router';
 const PremiumActivation = () => {
   const { authUser } = useAuth();
   const router = useRouter();
-  const [upgradeUser] = useUpgradeUserMutation();
+  const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
 
   const handleUpgradePremium = () => {
-    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM' }).then((res) => {
+    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'ON_PROGRESS' }).then((res) => {
       if (res?.data?.response_code === 202) {
         router.push('/');
+      } else {
+        alert('update role failed');
       }
     });
   };
@@ -36,7 +38,7 @@ const PremiumActivation = () => {
           >
             <div
               style={{
-                width: '350px',
+                width: '300px',
                 height: '150px',
                 // border: '1px solid black'
               }}>
@@ -65,7 +67,7 @@ const PremiumActivation = () => {
           </Grid>
           <Grid item xs={12} md={6} xl={6} container direction="column" alignItems="center" justifyContent="center">
             <center>
-              <img src="/images/dashboard/content_details.png" width="400" height="auto" />
+              <img src="/images/active-premium.png" width="400" height="auto" />
             </center>
           </Grid>
         </GridContainer>

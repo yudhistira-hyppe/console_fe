@@ -6,8 +6,8 @@ const FinishActivation = () => {
   return (
     <>
       <CmtCard style={{ minHeight: '500px' }}>
-        <center style={{ marginTop: '7%' }}>
-          <img src="./images/kotak.png" width="100" height="100" style={{ display: 'block' }} />
+        <center>
+          <img src="./images/active-premium.png" width="300" style={{ display: 'block' }} />
           <Typography component="div" variant="h1" style={{ margin: '10px 0 ' }}>
             Selesaikan Aktivasi Anda
           </Typography>
