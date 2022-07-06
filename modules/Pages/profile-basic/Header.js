@@ -3,14 +3,15 @@ import CmtImage from '@coremat/CmtImage';
 import { alpha, Box, makeStyles, Tab, Tabs, Typography } from '@material-ui/core';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
+import { useUserListFriendQuery } from 'api/user/friend';
 
-const tabs = [
-  { id: 1, title: 'Timeline', slug: 'timeline' },
-  { id: 2, title: 'About', slug: 'about' },
-  { id: 3, title: 'Photos', slug: 'photos' },
-  { id: 4, title: 'Friends', slug: 'friends' },
-  { id: 5, title: 'More', slug: 'more' },
-];
+// const tabs = [
+//   { id: 1, title: 'Timeline', slug: 'timeline' },
+//   { id: 2, title: 'About', slug: 'about' },
+//   { id: 3, title: 'Photos', slug: 'photos' },
+//   { id: 4, title: 'Friends', slug: 'friends' },
+//   { id: 5, title: 'More', slug: 'more' },
+// ];
 
 const useStyles = makeStyles((theme) => ({
   headerRoot: {
@@ -148,6 +149,7 @@ const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
 
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
+  const { data: dataFriends } = useUserListFriendQuery(authUser.email);
 
   return (
     // <Box className={classes.headerRoot}>
@@ -185,7 +187,7 @@ const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
             <Box className={classes.followerListItem}>
               <Typography className={classes.followerListTitle} component="div" variant="h3">
                 {/* {friends.total}{' '} */}
-                202020
+                {dataFriends?.count_friend}
               </Typography>
               <Box component="p">Friends</Box>
             </Box>
