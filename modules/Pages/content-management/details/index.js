@@ -25,7 +25,7 @@ const Details = () => {
   };
 
   const { data: contentEvent } = useUserContentEventQuery(payload);
-  const getValue = Object.values(contentEvent?.data || []);
+  const getValue = Object.values(contentEvent?.data || {});
 
   const { data: contentTime } = useUserContentTimeQuery(payload);
 
@@ -90,12 +90,7 @@ const Details = () => {
           />
           {/* <Discover isNumber={false} precentage={'2 jam'} number={'120j 18m 14d'} title={'Total Waktu Tayang'} subtitle={'Rata-Rata'} /> */}
         </Grid>
-        {/* <div>tesss</div> */}
-        {contentDetails ? (
-          <div style={{ width: '100%', margin: '10% 0' }}>
-            <SpinnerLoading />
-          </div>
-        ) : (
+        {contentEvent ? (
           <>
             <Grid item md={3}>
               <BiographyStats title={fakeDb.genderBiography.title} dataChart={getValue[0]} />
@@ -110,6 +105,10 @@ const Details = () => {
               <BiographyStats title={fakeDb.viewsBiography.title} dataChart={fakeDb.viewsBiography.data} />
             </Grid>
           </>
+        ) : (
+          <div style={{ width: '100%', margin: '10% 0' }}>
+            <SpinnerLoading />
+          </div>
         )}
       </GridContainer>
     </div>
