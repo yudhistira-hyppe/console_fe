@@ -9,6 +9,7 @@ import { commentAPI } from 'api/user/comment';
 import { insightAPI } from 'api/user/insight';
 import { contentManagementAPI } from 'api/user/content/management';
 import { accountBalancesAPI } from 'api/user/accountBalances';
+import { userFriendAPI } from 'api/user/friend';
 
 const initStore = () => {
   const store = configureStore({
@@ -25,7 +26,8 @@ const initStore = () => {
         commentAPI.middleware,
         insightAPI.middleware,
         contentManagementAPI.middleware,
-        accountBalancesAPI.middleware
+        accountBalancesAPI.middleware,
+        userFriendAPI.middleware,
       ]),
   });
   return store;
