@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box';
 import { Button, IconButton, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { alpha, makeStyles } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Error404 = () => {
+  const router = useRouter();
   const classes = useStyles();
 
   return (
@@ -74,7 +76,7 @@ const Error404 = () => {
         </IconButton>
       </Box>
       <Box mt={8}>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={() => router.push('/')}>
           <IntlMessages id="extraPages.goHome" />
         </Button>
       </Box>
