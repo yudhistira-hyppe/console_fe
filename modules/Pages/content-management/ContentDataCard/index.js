@@ -85,9 +85,13 @@ const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType,
         <CmtCardContent className="p-3">
           <div className="flex flex-row w-full justify-content-between">
             <div className={classes.headTitle}>{title}</div>
-            <Box className={classes.badgeRoot} component="span" bgcolor={' rgba(252, 202, 70, 0.2)'}>
-              <div style={{ color: '#FFBC20', textAlign: 'center' }}>{contentType}</div>
-            </Box>
+            {contentType ? (
+              <Box className={classes.badgeRoot} component="span" bgcolor={' rgba(252, 202, 70, 0.2)'}>
+                <div style={{ color: '#FFBC20', textAlign: 'center' }}>{contentType}</div>
+              </Box>
+            ) : (
+              ''
+            )}
           </div>
           {content ? (
             <div style={{ height: '150px' }} className="flex flex-column justify-content-center">

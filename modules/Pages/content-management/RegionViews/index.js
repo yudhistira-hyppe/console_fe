@@ -3,14 +3,14 @@ import CmtProgressBar from '../../../../@coremat/CmtProgressBar';
 import React from 'react';
 import ContentDataCard from '../ContentDataCard';
 
-const RegionViews = ({ regions }) => {
+const RegionViews = ({ regions, contentType }) => {
   // const value = 1;
   // const label = 'Indonesia';
   const color = '#AB22AF';
   return (
     <ContentDataCard
       title={'Recently Region Viewers'}
-      contentType={'HyppeVid'}
+      // contentType={contentType}
       content={
         <Box width={1} mb={{ xs: 3, sm: 6 }}>
           {regions?.map((region) => {

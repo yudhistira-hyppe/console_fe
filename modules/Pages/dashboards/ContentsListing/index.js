@@ -45,7 +45,6 @@ const ContentsListing = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [selectedContent, setSelectedContent] = useState(null);
-  console.log('selectedContent:', selectedContent);
 
   //const [page, setPage] = useState(1);
   const [categoryData, setCategoryData] = useState([]);
@@ -96,8 +95,6 @@ const ContentsListing = () => {
   const { data: contentLatest } = useUserContentsLatestQuery(bodyPayloadContentLatest);
   const { data: contentPopular } = useUserContentsPopularQuery(bodyPayloadContentPopular);
   const { data: contentMonetize } = useUserContentsMonetizeQuery(bodyPayloadContentMonetize);
-
-  console.log('showContent:', showContent);
 
   const dispatch = useDispatch();
 
@@ -290,7 +287,7 @@ const ContentsListing = () => {
           searchText={searchText}
           handleSearchTextChange={handleSearchTextChange}
           // handlePageChange={handlePageChange}
-          handleLoadMore={<LoadMore />}
+          handleLoadMore={showContent?.length > 0 ? <LoadMore /> : ''}
         />
       </Collapse>
       {/*{selectedProperty ? (
