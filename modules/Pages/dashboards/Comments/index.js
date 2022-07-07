@@ -44,6 +44,7 @@ const Comments = () => {
   const { authUser } = useAuth();
 
   const { data: dataComment } = useUserGetNewCommentQuery(authUser.email);
+  console.log('dataComment2:', dataComment);
   return (
     <CmtCard className={classes.cardRoot}>
       <CmtCardHeader title="New Comment">
@@ -52,7 +53,11 @@ const Comments = () => {
       </CmtCardHeader>
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
-          <CmtList data={dataComment?.data} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
+          {dataComment?.data?.length > 0 ? (
+            <CmtList data={dataComment?.data} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
+          ) : (
+            <center>you have no comment</center>
+          )}
         </PerfectScrollbar>
       </CmtCardContent>
     </CmtCard>

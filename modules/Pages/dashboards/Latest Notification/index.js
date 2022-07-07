@@ -29,7 +29,6 @@ const LatestNotification = () => {
   const { authUser } = useAuth();
 
   const { data: latestNotification } = useLatestNotificationQuery(authUser.email);
-  // console.log('latestNotification:', latestNotification?.data[0].createdAt);
 
   const classes = useStyles();
   // const { userActivities } = intranet;
@@ -48,7 +47,10 @@ const LatestNotification = () => {
 
   return (
     <CmtCard className={classes.cardRoot}>
-      <CmtCardHeader title="Latest Notification" subTitle={`Last activity was ${diffDays} Days`} />
+      <CmtCardHeader
+        title="Latest Notification"
+        subTitle={latestNotification?.data.length > 0 ? `Last activity was ${diffDays} Days` : 'You have no activity'}
+      />
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
           {/* <NotificationData data={userActivities} /> */}
