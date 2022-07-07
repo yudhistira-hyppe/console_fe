@@ -1,9 +1,20 @@
 import CmtCard from '@coremat/CmtCard';
 import GridContainer from '@jumbo/components/GridContainer';
 import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { useUpgradeUserMutation } from 'api/user/auth';
 import { useRouter } from 'next/router';
+import { useAuth } from 'authentication';
+
 const VerificationEmail = () => {
+  const { authUser } = useAuth();
   const router = useRouter();
+  const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
+
+  const resendEmail = (e) => {
+    e.preventDefault();
+    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'ON_PROGRESS' });
+  };
+
   return (
     <>
       <CmtCard style={{ minHeight: '500px' }}>
@@ -17,7 +28,10 @@ const VerificationEmail = () => {
             Silakan periksa kotak masuk Anda dan klik tautan untuk memverifikasi email Anda <br />
           </Typography>
           <Typography variant="h4" style={{ margin: '20px' }}>
-            Belum menerima email ? Kirim Ulang Email
+            Belum menerima email?{' '}
+            <a href="/verification-email" style={{ color: 'blue' }} onClick={resendEmail}>
+              Kirim Ulang Email
+            </a>
           </Typography>
           <Button
             variant="outlined"
