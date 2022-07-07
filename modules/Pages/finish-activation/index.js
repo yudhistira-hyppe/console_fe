@@ -1,8 +1,10 @@
 import CmtCard from '@coremat/CmtCard';
 import GridContainer from '@jumbo/components/GridContainer';
 import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { useRouter } from 'next/router';
 
 const FinishActivation = () => {
+  const router = useRouter();
   return (
     <>
       <CmtCard style={{ minHeight: '500px' }}>
@@ -23,7 +25,8 @@ const FinishActivation = () => {
               padding: '8px 20px',
               borderRadius: '5px',
               marginTop: '10px',
-            }}>
+            }}
+            onClick={() => router.push('/')}>
             KONFIRMASI
           </Button>
         </center>
