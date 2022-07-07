@@ -1,25 +1,24 @@
-import { useEffect } from 'react';
 import { useUpgradeUserMutation } from 'api/user/auth';
-// import { useAuth } from 'authentication';
+import { useAuth } from 'authentication';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const LinkVerification = () => {
-  // const { authUser } = useAuth();
+  const { authUser } = useAuth();
   const router = useRouter();
   const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
 
   useEffect(() => {
-    // router.push(`link-verification?key=${authUser.email}`);
-    upgradeUser({ email: router.query.key, roles: 'ROLE_PREMIUM', status: 'FINISH' }).then((res) => {
-      if (res.data.status_user === 'FINISH') {
-        alert('akun anda sudah premium');
-        router.push('/');
-      } else {
-        alert('gagal upgrade premium');
+    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'FINISH' }).then((res) => {
+      if (res?.data?.status_user === 'FINISH') {
+        localStorage.removeItem('user');
+        setTimeout(() => {
+          window.location.href = window.location.href;
+        }, '2000');
       }
     });
   }, []);
-  return <div>Link LinkVerification</div>;
+  return <div></div>;
 };
 
 export default LinkVerification;
