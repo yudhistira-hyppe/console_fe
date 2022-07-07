@@ -12,11 +12,10 @@ const PremiumActivation = () => {
   const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
 
   const handleUpgradePremium = () => {
-    // router.push('/verification-email');
     upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'ON_PROGRESS' }).then((res) => {
-      if (res?.data?.status === 'ON_PROGRESS') {
-        alert('akun anda sudah ON_PROGRESS');
-        router.push('/');
+      console.log('res:', res?.data?.status_user);
+      if (res?.data?.status_user === 'ON_PROGRESS') {
+        router.push('/verification-email');
       } else {
         alert('update role failed');
       }
