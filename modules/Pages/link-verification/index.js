@@ -12,9 +12,10 @@ const LinkVerification = () => {
     upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'FINISH' }).then((res) => {
       if (res?.data?.status_user === 'FINISH') {
         localStorage.removeItem('user');
+
         setTimeout(() => {
-          window.location.href = window.location.href;
-        }, '2000');
+          router.push('/');
+        }, '1500');
       }
     });
   }, []);
