@@ -32,7 +32,7 @@ const Stats = ({ number, subTitle, precentage, isIncreased, fontSizeTitle, isNum
         {/* {isNumber ? numberWithCommas(number) : number} */}
         {isNumber ? number : number}
       </div>
-      <div className={classes.subtitle}>
+      <center className={classes.subtitle}>
         {subTitle}
 
         {/*plase dont remove code below, this is no use, still confusing */}
@@ -47,7 +47,7 @@ const Stats = ({ number, subTitle, precentage, isIncreased, fontSizeTitle, isNum
             <TrendingDown />
           </span>
         )} */}
-      </div>
+      </center>
     </div>
   );
 };
