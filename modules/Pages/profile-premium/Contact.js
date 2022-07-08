@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Contact = () => {
+const Contact = ({ dataUser }) => {
   const classes = useStyles();
 
   return (
@@ -52,7 +52,7 @@ const Contact = () => {
               </Box>
               <Box component="p" className={classes.wordAddress} fontSize={16}>
                 {/* <Box component="a" href={`mailto:email`}> */}
-                mangucupsans@gmail.com
+                {dataUser?.data[0]?.email}
                 {/* </Box> */}
               </Box>
             </Box>
@@ -67,7 +67,7 @@ const Contact = () => {
               </Box>
               <Box component="p" className={classes.wordAddress} fontSize={16}>
                 {/* <Box component="a" href="web"> */}
-                21/12/2020 - 12:00 WIB
+                {dataUser?.data[0]?.createdAt}
                 {/* </Box> */}
               </Box>
             </Box>
@@ -81,7 +81,7 @@ const Contact = () => {
                 Status
               </Box>
               <Box component="p" className={classes.wordAddress} fontSize={16} color="text.primary">
-                Premium
+                {dataUser?.data[0]?.roles.includes('ROLE_USER') ? 'Basic' : 'Premium'}
               </Box>
             </Box>
           </Box>
