@@ -45,7 +45,6 @@ const ContentsListing = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [selectedContent, setSelectedContent] = useState(null);
-  console.log('selectedContent:', selectedContent)
 
   //const [page, setPage] = useState(1);
   const [categoryData, setCategoryData] = useState([]);
@@ -97,8 +96,6 @@ const ContentsListing = () => {
   const { data: contentPopular } = useUserContentsPopularQuery(bodyPayloadContentPopular);
   const { data: contentMonetize } = useUserContentsMonetizeQuery(bodyPayloadContentMonetize);
 
-  console.log('showContent:', showContent);
-
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -137,7 +134,6 @@ const ContentsListing = () => {
       default:
         console.log('default');
         setShowContent(contentAll?.data);
-
         break;
     }
   };
@@ -204,7 +200,8 @@ const ContentsListing = () => {
       case 'latest':
         setShowContent(contentLatest?.data);
         // return ( <LoadMoreComponent clicked={() => setLimitContentAll(limitContentAll + 10)} />)
-          return (<Box p={6} textAlign="center">
+        return (
+          <Box p={6} textAlign="center">
             <Button
               className={classes.btnRoot}
               // eslint-disable-next-line react/jsx-no-duplicate-props
@@ -256,9 +253,9 @@ const ContentsListing = () => {
 
   // i had try this but got limited looping react
 
-  const LoadMoreComponent = ({clicked}) => {
-    console.log('clicked:', clicked)
-    console.log('props:')
+  const LoadMoreComponent = ({ clicked }) => {
+    console.log('clicked:', clicked);
+    console.log('props:');
     const classes = useStyles();
 
     return (
@@ -266,8 +263,7 @@ const ContentsListing = () => {
         <Button
           className={classes.btnRoot}
           // eslint-disable-next-line react/jsx-no-duplicate-props
-          onClick={clicked}
-          >
+          onClick={clicked}>
           Load More
         </Button>
       </Box>
@@ -291,7 +287,7 @@ const ContentsListing = () => {
           searchText={searchText}
           handleSearchTextChange={handleSearchTextChange}
           // handlePageChange={handlePageChange}
-          handleLoadMore={<LoadMore />}
+          handleLoadMore={showContent?.length > 0 ? <LoadMore /> : ''}
         />
       </Collapse>
       {/*{selectedProperty ? (

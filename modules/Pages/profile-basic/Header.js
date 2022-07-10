@@ -1,14 +1,17 @@
 import CmtAvatar from '@coremat/CmtAvatar';
 import CmtImage from '@coremat/CmtImage';
 import { alpha, Box, makeStyles, Tab, Tabs, Typography } from '@material-ui/core';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import { useUserListFriendQuery } from 'api/user/friend';
 
-const tabs = [
-  { id: 1, title: 'Timeline', slug: 'timeline' },
-  { id: 2, title: 'About', slug: 'about' },
-  { id: 3, title: 'Photos', slug: 'photos' },
-  { id: 4, title: 'Friends', slug: 'friends' },
-  { id: 5, title: 'More', slug: 'more' },
-];
+// const tabs = [
+//   { id: 1, title: 'Timeline', slug: 'timeline' },
+//   { id: 2, title: 'About', slug: 'about' },
+//   { id: 3, title: 'Photos', slug: 'photos' },
+//   { id: 4, title: 'Friends', slug: 'friends' },
+//   { id: 5, title: 'More', slug: 'more' },
+// ];
 
 const useStyles = makeStyles((theme) => ({
   headerRoot: {
@@ -137,7 +140,16 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
   // const Header = ({ userDetail, tabValue, handleTabChange }) => {
   //   const { name, profile_pic, location, followers, following, friends } = userDetail;
+  const { authUser } = useAuth();
   const classes = useStyles();
+
+  const getMediaUri = () => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = dataUser?.data[0]?.avatar?.mediaEndpoint;
+
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
+  const { data: dataFriends } = useUserListFriendQuery(authUser.email);
 
   return (
     // <Box className={classes.headerRoot}>
@@ -149,7 +161,7 @@ const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
         <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
           <Box mr={{ sm: 4, md: 5, lg: 6 }} mb={{ xs: 3, sm: 0 }}>
             {/* <CmtAvatar size={80} src={profile_pic} alt={name} /> */}
-            <CmtAvatar size={80} src={'/images/p.png'} alt={'pict'} />
+            <CmtAvatar size={80} src={getMediaUri()} alt={'pict'} />
           </Box>
           <Box>
             <Typography className={classes.titleRoot} component="div" variant="h1">
@@ -175,7 +187,7 @@ const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
             <Box className={classes.followerListItem}>
               <Typography className={classes.followerListTitle} component="div" variant="h3">
                 {/* {friends.total}{' '} */}
-                202020
+                {dataFriends?.count_friend}
               </Typography>
               <Box component="p">Friends</Box>
             </Box>

@@ -1,13 +1,13 @@
 import React from 'react';
-import CmtCard from '../../../../../@coremat/CmtCard';
-import CmtCardContent from '../../../../../@coremat/CmtCard/CmtCardContent';
-import numberWithCommas from '../../../../Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import CmtCard from '../../../../@coremat/CmtCard';
+import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
+import numberWithCommas from '../../../Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { Button } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Box from '@material-ui/core/Box';
-import CmtImage from '../../../../../@coremat/CmtImage';
-import CmtCardHeader from '../../../../../@coremat/CmtCard/CmtCardHeader';
-import CmtProgressBar from '../../../../../@coremat/CmtProgressBar';
+import CmtImage from '../../../../@coremat/CmtImage';
+import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
+import CmtProgressBar from '../../../../@coremat/CmtProgressBar';
 import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
@@ -85,9 +85,13 @@ const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType,
         <CmtCardContent className="p-3">
           <div className="flex flex-row w-full justify-content-between">
             <div className={classes.headTitle}>{title}</div>
-            <Box className={classes.badgeRoot} component="span" bgcolor={' rgba(252, 202, 70, 0.2)'}>
-              <div style={{ color: '#FFBC20', textAlign: 'center' }}>{contentType}</div>
-            </Box>
+            {contentType ? (
+              <Box className={classes.badgeRoot} component="span" bgcolor={' rgba(252, 202, 70, 0.2)'}>
+                <div style={{ color: '#FFBC20', textAlign: 'center' }}>{contentType}</div>
+              </Box>
+            ) : (
+              ''
+            )}
           </div>
           {content ? (
             <div style={{ height: '150px' }} className="flex flex-column justify-content-center">
@@ -101,7 +105,6 @@ const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType,
                   style={{
                     width: '160px',
                     height: '130px',
-                    border: '1px solid red',
                     backgroundImage: `url('${image}')`,
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',

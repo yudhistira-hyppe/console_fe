@@ -1,16 +1,14 @@
-/* eslint-disable react/jsx-key */
-import React, { useEffect, useState } from 'react';
-import PageHeader from '../../../../@jumbo/components/PageComponents/PageHeader';
-import ContentDataCard from './ContentDataCard';
-import GridContainer from '../../../../@jumbo/components/GridContainer';
+import GridContainer from '@jumbo/components/GridContainer';
 import { Grid } from '@material-ui/core';
-import RegionViews from './RegionViews';
-import { useUserContentsManagementQuery } from 'api/user/content/management';
-import { useAuth } from 'authentication';
 import SpinnerLoading from 'components/common/spinner';
+import { useState, useEffect } from 'react';
+import ContentDataCard from '../ContentDataCard';
+import { useAuth } from 'authentication';
+import RegionViews from '../RegionViews';
+import { useUserContentsManagementQuery } from 'api/user/content/management';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 
-const Content = ({}) => {
+const ContentManagement = () => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([]);
   console.log('mainData:', mainData);
@@ -45,93 +43,115 @@ const Content = ({}) => {
   };
 
   return (
-    <>
-      {/* this component act like loading */}
-      {contentManagement?.data ? <PageHeader heading={'Content Management'} /> : ''}
-
-      {/* i put loading here  */}
+    <div>
       {contentManagement?.data ? (
         <GridContainer>
           <Grid item md={4}>
             <ContentDataCard
-              image={getMediaUri(mainData?.popular?.postID)}
+              image={
+                mainData?.popular?.postID === undefined
+                  ? '/images/content/content1.png'
+                  : getMediaUri(mainData?.popular?.postID)
+              }
               title={'Popular Konten'}
               contentTitle={mainData?.popular?.description}
               likes={mainData?.popular?.likes}
               views={mainData?.popular?.views}
               date={formatDate(mainData?.popular?.createdAt)}
-              contentType={`Hyppe${mainData?.popular?.postType}`}
+              contentType={`Hyppe${mainData?.popular?.postType ? mainData?.popular?.postType : ''}`}
               postId={mainData?.popular?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
-              image={getMediaUri(mainData?.mostlikes?.postID)}
+              image={
+                mainData?.popular?.postID === undefined
+                  ? '/images/content/content1.png'
+                  : getMediaUri(mainData?.mostlikes?.postID)
+              }
               title={'Most Likes'}
               contentTitle={mainData?.mostlikes?.description}
               likes={mainData?.mostlikes?.likes}
               views={mainData?.mostlikes?.views}
-              date={'Jun 26, 2020'}
-              contentType={`Hyppe${mainData?.mostlikes?.postType}`}
+              date={formatDate(mainData?.mostlikes?.createdAt)}
+              contentType={`Hyppe${mainData?.mostlikes?.postType ? mainData?.mostlikes?.postType : ''}`}
               postId={mainData?.mostlikes?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
-              image={getMediaUri(mainData?.mostshares?.postID)}
+              image={
+                mainData?.mostshares?.postID === undefined
+                  ? '/images/content/content1.png'
+                  : getMediaUri(mainData?.mostshares?.postID)
+              }
               title={'Most Share'}
               contentTitle={mainData?.mostshares?.description}
               likes={mainData?.mostshares?.likes}
               views={mainData?.mostshares?.views}
-              date={'Jun 26, 2020'}
-              contentType={`Hyppe${mainData?.mostshares?.postType}`}
+              date={formatDate(mainData?.mostshares?.createdAt)}
+              contentType={`Hyppe${mainData?.mostshares?.postType ? mainData?.mostshares?.postType : ''}`}
               postId={mainData?.mostshares?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <ContentDataCard
-              image={getMediaUri(mainData?.latestpost?.postID)}
+              image={
+                mainData?.latestpost?.postID === undefined
+                  ? '/images/content/content1.png'
+                  : getMediaUri(mainData?.latestpost?.postID)
+              }
               title={'Latest Posted Content'}
               contentTitle={mainData?.latestpost?.description}
               likes={mainData?.latestpost?.likes}
               views={mainData?.latestpost?.views}
-              date={'Jun 26, 2020'}
-              contentType={`Hyppe${mainData?.latestpost?.postType}`}
+              date={formatDate(mainData?.latestpost?.createdAt)}
+              contentType={`Hyppe${mainData?.latestpost?.postType ? mainData?.latestpost?.postType : ''}`}
               postId={mainData?.latestpost?.postID}
+            />
+          </Grid>
+          <Grid item md={4}>
+            {/* <RegionViews regions={mainData?.recentlyregion} /> */}
+            <ContentDataCard
+              image={
+                mainData?.traffic?.postID === undefined
+                  ? '/images/content/content1.png'
+                  : getMediaUri(mainData?.moderate?.postID)
+              }
+              title={'Moderate Content'}
+              contentTitle={mainData?.moderate?.description}
+              likes={mainData?.moderate?.likes}
+              views={mainData?.moderate?.views}
+              date={formatDate(mainData?.moderate?.createdAt)}
+              contentType={`Hyppe${mainData?.moderate?.postType ? mainData?.moderate?.postType : ''}`}
+              postId={mainData?.moderate?.postID}
+            />
+          </Grid>
+          <Grid item md={4}>
+            <ContentDataCard
+              image={
+                mainData?.traffic?.postID === undefined
+                  ? '/images/content/content1.png'
+                  : getMediaUri(mainData?.traffic?.postID)
+              }
+              title={'Content Traffic'}
+              contentTitle={mainData?.traffic?.description}
+              likes={mainData?.traffic?.likes}
+              views={mainData?.traffic?.views}
+              date={formatDate(mainData?.traffic?.createdAt)}
+              contentType={`Hyppe${mainData?.traffic?.postType ? mainData?.traffic?.postType : ''}`}
+              postId={mainData?.traffic?.postID}
             />
           </Grid>
           <Grid item md={4}>
             <RegionViews regions={mainData?.recentlyregion} />
           </Grid>
-          <Grid item md={4}>
-            <ContentDataCard
-              image={getMediaUri(mainData?.traffic?.postID)}
-              title={'Content Traffic'}
-              contentTitle={mainData?.traffic?.description}
-              likes={mainData?.traffic?.likes}
-              views={mainData?.traffic?.views}
-              date={'Jun 26, 2020'}
-              contentType={`Hyppe${mainData?.traffic?.postType}`}
-              postId={mainData?.traffic?.postID}
-            />
-          </Grid>
-          <Grid item md={4}>
-            <ContentDataCard
-              image={getMediaUri(mainData?.moderate?.postID)}
-              title={'Moderate Content'}
-              contentTitle={mainData?.moderate?.description}
-              likes={mainData?.moderate?.likes}
-              views={mainData?.moderate?.views}
-              date={'Jun 26, 2020'}
-              contentType={`Hyppe${mainData?.moderate?.postType}`}
-              postId={mainData?.moderate?.postID}
-            />
-          </Grid>
         </GridContainer>
       ) : (
         <SpinnerLoading style={{ margin: '17% 0 17% 0' }} />
       )}
-    </>
+    </div>
   );
 };
-export default Content;
+
+export default ContentManagement;

@@ -122,7 +122,6 @@ const ProfileStatstics = () => {
   };
 
   const { data: insightVisited } = useUserGetInsightViewQuery(payload);
-  console.log('insightVisited:', typeof Number(insightVisited?.value));
 
   return (
     <div style={{ height: '250px' }} className="flex-auto">

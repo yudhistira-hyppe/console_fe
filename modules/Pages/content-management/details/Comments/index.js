@@ -1,16 +1,14 @@
 import React from 'react';
-import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
-import Chip from '@material-ui/core/Chip';
-import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import CmtCard from '../../../../@coremat/CmtCard';
+// import { useAuth } from 'authentication';
+// import { useUserGetNewCommentQuery } from 'api/user/comment';
+import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
+import CmtCard from '@coremat/CmtCard';
+import CmtCardContent from '@coremat/CmtCard/CmtCardContent';
 import { alpha, makeStyles } from '@material-ui/core/styles';
-import CmtList from '../../../../@coremat/CmtList';
-// import { news } from '../../../FakeDb/news';
-import CommentItem from './CommentItem';
-
-import { useAuth } from 'authentication';
-import { useUserGetNewCommentQuery } from 'api/user/comment';
+import CmtList from '@coremat/CmtList';
+import CommentItem from 'modules/Pages/dashboards/Comments/CommentItem';
+import { useCommentDisquslogsQuery } from 'api/user/comment';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -37,14 +35,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Comments = () => {
+const Comments = ({ query }) => {
   const classes = useStyles();
   // const { comments } = news;
+  //   const { authUser } = useAuth();
 
-  const { authUser } = useAuth();
+  const { data: dataCommentGrouping } = useCommentDisquslogsQuery(query);
 
-  const { data: dataComment } = useUserGetNewCommentQuery(authUser.email);
-  console.log('dataComment2:', dataComment);
   return (
     <CmtCard className={classes.cardRoot}>
       <CmtCardHeader title="New Comment">
@@ -53,11 +50,7 @@ const Comments = () => {
       </CmtCardHeader>
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
-          {dataComment?.data?.length > 0 ? (
-            <CmtList data={dataComment?.data} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
-          ) : (
-            <center>you have no comment</center>
-          )}
+          <CmtList data={dataCommentGrouping?.data} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
         </PerfectScrollbar>
       </CmtCardContent>
     </CmtCard>

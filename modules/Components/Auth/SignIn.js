@@ -64,10 +64,12 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const classes = useStyles({ variant });
   const { isLoading, error, userLogin, renderSocialMediaLogin } = useAuth();
   const [location, setLocation] = useState({ latitude: '0', longitude: '0' });
-  const [email, setEmail] = useState(MODE == 'DEV' ? 'freeman27@getnada.com' : '');
-  const [password, setPassword] = useState(MODE == 'DEV' ? 'freeman27' : '');
+  // const [email, setEmail] = useState(MODE === 'DEV' ? 'freeman27@getnada.com' : '');
+  const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState(MODE === 'DEV' ? 'freeman27' : '');
+  const [password, setPassword] = useState('');
   const [deviceId, setDeviceId] = useState(uuidv4());
-  console.log('deviceId:', deviceId)
+  console.log('deviceId:', deviceId);
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
 
   useEffect(() => {
@@ -160,13 +162,13 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
             <Button onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">
               <IntlMessages id="appModule.signIn" />
             </Button>
-            <Box component="p" fontSize={{ xs: 12, sm: 16 }}>
+            {/* <Box component="p" fontSize={{ xs: 12, sm: 16 }}>
               <Link href="/premium-subscribe">
                 <a>
                   <IntlMessages id="subscribe.premium.title" />
                 </a>
               </Link>
-            </Box>
+            </Box> */}
           </Box>
         </form>
         {renderSocialMediaLogin()}

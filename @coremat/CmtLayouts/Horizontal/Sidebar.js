@@ -32,6 +32,7 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     position: 'relative',
     transition: 'all 0.3s ease',
+    // the bug UI is here (vicky)
     backgroundColor: (props) => props.sidebarTheme.bgColor,
     color: (props) => props.sidebarTheme.textColor,
     overflow: 'hidden',

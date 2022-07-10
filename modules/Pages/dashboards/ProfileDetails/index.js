@@ -129,7 +129,10 @@ const ProfileDetails = () => {
           avatarProps={{ variant: 'circle' }}
           align="vertical"
         />
-        <Button variant="text" onClick={() => router.push('/profile-basic')} className="min-w-0 p-0 mt-2">
+        <Button
+          variant="text"
+          onClick={() => router.push(authUser.roles.includes('ROLE_PREMIUM') ? '/profile-premium' : '/profile-basic')}
+          className="min-w-0 p-0 mt-2">
           <div className={classes.labelLink}>View Profile</div>
         </Button>
       </Box>

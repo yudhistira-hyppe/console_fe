@@ -26,7 +26,14 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    upgradeUser: build.mutation({
+      query: ({ email, ...patch }) => ({
+        url: `/userauths/${email}`,
+        method: 'PUT',
+        body: patch,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRefreshTokenMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation, useRefreshTokenMutation, useLogoutMutation, useUpgradeUserMutation } = authApi;

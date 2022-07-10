@@ -15,6 +15,8 @@ import VoucherHistory from './VoucherHistory';
 import { useAuth } from '../../../authentication';
 import { useAccountBalanceQuery, useAccountBalanceHistoryQuery } from 'api/user/accountBalances';
 import { getFormattedDate } from '@jumbo/utils/dateHelper';
+import { useUpgradeUserMutation } from 'api/user/auth';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   infoLabel: {
@@ -70,7 +72,6 @@ const Transcation = ({}) => {
   };
 
   const { data: accountBalanceData } = useAccountBalanceQuery(payloadBalance);
-
   return (
     <div>
       <PageHeader heading={'Transaction'} />
@@ -100,6 +101,22 @@ const Transcation = ({}) => {
 
 const Balance = ({ balance, precentage, trend }) => {
   const classes = useStyles();
+  const { authUser } = useAuth();
+  const router = useRouter();
+
+  const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
+
+  const userPremiumCheck = () => {
+    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'CECK' }).then((res) => {
+      if (res?.data?.status_user === null) {
+        router.push('/premium-activation');
+      } else if (res?.data?.status_user === 'ON_PROGRESS') {
+        router.push('/verification-email');
+      } else {
+        alert('already finished (premium)');
+      }
+    });
+  };
   return (
     <div style={{ height: '250px' }} className="flex-auto">
       <CmtCard className="h-full w-full">
@@ -120,7 +137,7 @@ const Balance = ({ balance, precentage, trend }) => {
             <div className={classes.infoLabel}>Overall Balance</div>
           </div>
           <div className="mt-7">
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={userPremiumCheck}>
               WITHDRAW
             </Button>
           </div>
