@@ -1,3 +1,4 @@
 import { faqAndInfoApi } from './faqAndInfo';
+import { announcementApi } from './announcement';
 
-export { faqAndInfoApi };
+export { faqAndInfoApi, announcementApi };
