@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,7 +22,10 @@ import CmtCardContent from '@coremat/CmtCard/CmtCardContent';
 import GridContainer from '@jumbo/components/GridContainer';
 import CKEditor from 'react-ckeditor-component';
 import { KeyboardDatePicker, KeyboardTimePicker } from '@material-ui/pickers';
-import DeleteIcon from '@material-ui/icons/Delete';
+import {
+  useCreateAnnouncementToAllUsersMutation,
+  useCreateAnnouncementToSomeUsersMutation,
+} from 'api/console/helpCenter/announcement';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -77,25 +80,88 @@ const useRowStyles = makeStyles({
 const ConsolePengumumanCreateComponent = () => {
   const router = useRouter();
   const classes = useRowStyles();
+  const [sendToAllUser] = useCreateAnnouncementToAllUsersMutation();
+  const [sendToSomeUser] = useCreateAnnouncementToSomeUsersMutation();
+  const [data, setData] = useState({
+    title: '',
+    body: '',
+    pushMessage: false,
+    appMessage: false,
+    appInfo: false,
+    email: false,
+    datesend: '',
+  });
   const [content, setContent] = useState('');
-  const [pickedDate, setPickedDate] = useState(moment());
-  const [pickedTime, setPickedTime] = useState(moment());
-  const [title, setTitle] = useState('');
-  const [errorTitle, setErrorTitle] = useState('');
   const [penerima, setPenerima] = useState('all');
+  const [pickedDate, setPickedDate] = useState();
+  const [pickedTime, setPickedTime] = useState();
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(true);
   const [isButtonPilihPenerimaClicked, setButtonPilihPenerimaClicked] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(router.query).length > 0 && router.query.data) {
+      const parsedQueryData = JSON.parse(router.query.data);
+      setData(parsedQueryData);
+      setContent(parsedQueryData.body);
+      setPenerima(parsedQueryData.Detail ? 'selected' : 'all');
+      setPickedDate(moment(parsedQueryData.datesend));
+      setPickedTime(moment(parsedQueryData.datesend));
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    if (data.title && content && penerima) {
+      setIsSendButtonDisabled(false);
+    } else {
+      setIsSendButtonDisabled(true);
+    }
+  }, [data.title, content, penerima]);
 
   const onChangeBody = (evt) => {
     const newContent = evt.editor.getData();
     setContent(newContent);
   };
 
-  const onBlurBody = (evt) => {
-    console.log('onBlur event called with event info: ', evt);
+  const onChangeType = (event) => {
+    setData({
+      ...data,
+      [event.target.name]: event.target.checked,
+    });
   };
 
-  const afterPasteBody = (evt) => {
-    console.log('afterPaste event called with event info: ', evt);
+  const onClickSelectUsers = () => {
+    const formattedDate = moment(pickedDate).format('YYYY-MM-DD');
+    const formattedTime = moment(pickedTime).format('HH:mm:00');
+    router.push(
+      {
+        pathname: '/console/help-center/pengumuman/pilih-pengguna',
+        query: {
+          data: JSON.stringify({
+            ...data,
+            body: content,
+            datesend: `${formattedDate} ${formattedTime}`,
+          }),
+          actionType: 'create',
+        },
+      },
+      '/console/help-center/pengumuman/pilih-pengguna',
+    );
+  };
+
+  const onClickActionButton = (status) => {
+    const formattedDate = moment(pickedDate).format('YYYY-MM-DD');
+    const formattedTime = moment(pickedTime).format('HH:mm:00');
+    const bodyRequest = { ...data, body: content, datesend: `${formattedDate} ${formattedTime}`, status };
+    if (penerima === 'all') {
+      delete bodyRequest.Detail;
+      sendToAllUser(bodyRequest)
+        .then(() => router.push('/console/help-center/pengumuman'))
+        .catch((err) => console.error(err));
+    } else {
+      sendToSomeUser(bodyRequest)
+        .then(() => router.push('/console/help-center/pengumuman'))
+        .catch((err) => console.error(err));
+    }
   };
 
   return (
@@ -111,11 +177,9 @@ const ConsolePengumumanCreateComponent = () => {
               <Grid item xs={12} lg={12}>
                 <Box className={classes.formRoot}>
                   <TextField
-                    error={errorTitle != ''}
-                    helperText={errorTitle}
                     label="Judul"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={data.title}
+                    onChange={(e) => setData({ ...data, title: e.target.value })}
                   />
                 </Box>
               </Grid>
@@ -145,8 +209,6 @@ const ConsolePengumumanCreateComponent = () => {
                   activeClass={classes.editorRoot}
                   content={content}
                   events={{
-                    blur: onBlurBody,
-                    afterPaste: afterPasteBody,
                     change: onChangeBody,
                   }}
                 />
@@ -166,7 +228,7 @@ const ConsolePengumumanCreateComponent = () => {
                       onChange={(e) => setPenerima(e.target.value)}>
                       <FormControlLabel value="all" control={<Radio />} label="Semua pengguna" />
                       <FormControlLabel
-                        onClick={() => router.push('/console/help-center/pengumuman/pilih-pengguna')}
+                        onClick={onClickSelectUsers}
                         value="selected"
                         control={<Radio />}
                         label="Pengguna pilihan"
@@ -202,26 +264,26 @@ const ConsolePengumumanCreateComponent = () => {
                 <FormControl component="fieldset">
                   <FormGroup>
                     <FormControlLabel
-                      value="push"
-                      control={<Switch color="primary" />}
+                      control={
+                        <Switch color="primary" checked={data.pushMessage} onChange={onChangeType} name="pushMessage" />
+                      }
                       label="Pemberitahuan Dorong"
                       labelPlacement="start"
                     />
                     <FormControlLabel
-                      value="inapp"
-                      control={<Switch color="primary" />}
+                      control={
+                        <Switch color="primary" checked={data.appMessage} onChange={onChangeType} name="appMessage" />
+                      }
                       label="Pemberitahuan Dalam-App"
                       labelPlacement="start"
                     />
                     <FormControlLabel
-                      value="page"
-                      control={<Switch color="primary" />}
+                      control={<Switch color="primary" checked={data.appInfo} onChange={onChangeType} name="appInfo" />}
                       label="Halaman Pemberitahuan"
                       labelPlacement="start"
                     />
                     <FormControlLabel
-                      value="email"
-                      control={<Switch color="primary" />}
+                      control={<Switch color="primary" checked={data.email} onChange={onChangeType} name="email" />}
                       label="Email"
                       labelPlacement="start"
                     />
@@ -229,11 +291,20 @@ const ConsolePengumumanCreateComponent = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} lg={12} className={classes.btnBottomAction}>
-                <DeleteIcon />
-                <Button variant="outlined" color="primary" className={classes.btnSecondary}>
+                {/* <DeleteIcon /> */}
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.btnSecondary}
+                  onClick={() => onClickActionButton('draft')}>
                   Simpan Draf
                 </Button>
-                <Button variant="contained" disabled className={classes.btnSecondary}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={isSendButtonDisabled}
+                  className={classes.btnSecondary}
+                  onClick={() => onClickActionButton('send')}>
                   Pasang
                 </Button>
               </Grid>

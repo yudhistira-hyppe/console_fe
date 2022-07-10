@@ -8,7 +8,7 @@ import monetizeReducers from './monetizeReducers';
 import helpCenterReducers from './helpCenterReducers';
 import Campaign from './Campaign';
 import { authApi, userApi } from 'api/user';
-import { dashboardApi, engagementApi, faqAndInfoApi } from 'api/console';
+import { dashboardApi, engagementApi, faqAndInfoApi, announcementApi } from 'api/console';
 import { contentAPI } from 'api/user/content';
 import { notificationAPI } from 'api/user/notification';
 import { commentAPI } from 'api/user/comment';
@@ -30,6 +30,7 @@ export default combineReducers({
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [engagementApi.reducerPath]: engagementApi.reducer,
   [faqAndInfoApi.reducerPath]: faqAndInfoApi.reducer,
+  [announcementApi.reducerPath]: announcementApi.reducer,
   [contentAPI.reducerPath]: contentAPI.reducer,
   [notificationAPI.reducerPath]: notificationAPI.reducer,
   [commentAPI.reducerPath]: commentAPI.reducer,
