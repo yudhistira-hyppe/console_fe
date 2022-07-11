@@ -50,7 +50,11 @@ const Comments = ({ query }) => {
       </CmtCardHeader>
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
-          <CmtList data={dataCommentGrouping?.data} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
+          {dataCommentGrouping?.data?.length > 0 ? (
+            <CmtList data={dataCommentGrouping?.data} renderRow={(item, index) => <CommentItem key={index} item={item} />} />
+          ) : (
+            <center>Data Comment kosong</center>
+          )}
         </PerfectScrollbar>
       </CmtCardContent>
     </CmtCard>
