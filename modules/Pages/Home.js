@@ -1,7 +1,9 @@
 import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { Stack } from '@mui/material';
+import { useRouter } from 'next/router';
 
 const Home = () => {
+  const router = useRouter();
   return (
     <>
       <Grid container direction="row" justifyContent="space-between" alignItems="baseline" style={{ background: '#FFFFFF' }}>
@@ -21,7 +23,8 @@ const Home = () => {
                 borderRadius: '5.1504px',
                 color: '#FDFDFD',
                 padding: '0 2rem',
-              }}>
+              }}
+              onClick={() => router.push('/signin')}>
               Login
             </Button>
           </Stack>
