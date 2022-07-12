@@ -259,6 +259,10 @@ export default function TablePengumuman({ data, isFetching, filters, onPageChang
           },
           '& .MuiDataGrid-cell': {
             padding: '8px',
+            '> *': {
+              width: '100%',
+              overflowWrap: 'break-word',
+            },
           },
           '& .MuiDataGrid-cell--textCenter': {
             textAlign: 'center',

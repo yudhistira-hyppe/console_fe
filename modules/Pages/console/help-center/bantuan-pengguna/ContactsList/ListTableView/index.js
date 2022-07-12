@@ -1,74 +1,69 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Table, TableBody } from '@material-ui/core';
 import ListHeader from './ListHeader';
 import ContactCell from './ContactCell';
-import useStyles from '../../index.style';
-import { Table, TableBody, Box, Typography, TextField, Button } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import LaunchIcon from '@material-ui/icons/Launch';
-import CloseIcon from '@material-ui/icons/Close';
-import SendIcon from '@material-ui/icons/Send';
-import TrashIcon from '@material-ui/icons/Delete';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
-import MinimizeIcon from '@material-ui/icons/Minimize';
-import CKEditor from 'react-ckeditor-component';
+// import useStyles from '../../index.style';
+// import { Table, TableBody, Box, Typography, TextField, Button } from '@material-ui/core';
+// import EditIcon from '@material-ui/icons/Edit';
+// import LaunchIcon from '@material-ui/icons/Launch';
+// import CloseIcon from '@material-ui/icons/Close';
+// import SendIcon from '@material-ui/icons/Send';
+// import TrashIcon from '@material-ui/icons/Delete';
+// import AttachFileIcon from '@material-ui/icons/AttachFile';
+// import MinimizeIcon from '@material-ui/icons/Minimize';
+// import CKEditor from 'react-ckeditor-component';
 
-function HeaderDialog({ closeDialog }) {
-  const classes = useStyles();
+// function HeaderDialog({ closeDialog }) {
+//   const classes = useStyles();
 
-  return (
-    <Box className={classes.replyDialogHeader}>
-      <Box display="flex">
-        <EditIcon style={{ fontSize: 18, marginTop: 4 }} />
-        <Typography component="div" variant="h5" className={classes.replyDialogHeaderIcon}>
-          Teruskan
-        </Typography>
-      </Box>
-      <Box display="flex">
-        <MinimizeIcon className={classes.replyDialogHeaderIcon} />
-        <LaunchIcon className={classes.replyDialogHeaderIcon} />
-        <CloseIcon onClick={closeDialog} className={classes.replyDialogHeaderIcon} />
-      </Box>
-    </Box>
-  );
-}
+//   return (
+//     <Box className={classes.replyDialogHeader}>
+//       <Box display="flex">
+//         <EditIcon style={{ fontSize: 18, marginTop: 4 }} />
+//         <Typography component="div" variant="h5" className={classes.replyDialogHeaderIcon}>
+//           Teruskan
+//         </Typography>
+//       </Box>
+//       <Box display="flex">
+//         <MinimizeIcon className={classes.replyDialogHeaderIcon} />
+//         <LaunchIcon className={classes.replyDialogHeaderIcon} />
+//         <CloseIcon onClick={closeDialog} className={classes.replyDialogHeaderIcon} />
+//       </Box>
+//     </Box>
+//   );
+// }
 
-const ListTableView = ({ data }) => {
-  const classes = useStyles();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [content, setContent] = useState('');
+const ListTableView = ({ data, filters, onPageChange, onPageSizeChange, onClickTicket, onClickDeleteTicket }) => {
+  // const classes = useStyles();
+  // const [dialogOpen, setDialogOpen] = useState(false);
+  // const [content, setContent] = useState('');
 
-  const onClickReply = () => {
-    setDialogOpen(true);
-  };
-  const closeDialog = () => {
-    setDialogOpen(false);
-  };
-  const onClickDelete = () => {};
-  const onChangeBody = (evt) => {
-    const newContent = evt.editor.getData();
-    setContent(newContent);
-  };
-
-  const onBlurBody = (evt) => {
-    console.log('onBlur event called with event info: ', evt);
-  };
-
-  const afterPasteBody = (evt) => {
-    console.log('afterPaste event called with event info: ', evt);
-  };
+  // const closeDialog = () => {
+  //   setDialogOpen(false);
+  // };
+  // const onChangeBody = (evt) => {
+  //   const newContent = evt.editor.getData();
+  //   setContent(newContent);
+  // };
 
   return (
     <React.Fragment>
-      <ListHeader />
+      <ListHeader
+        rowInfo={{ totalRow: data?.totalrow, totalAllRow: data?.totalallrow }}
+        filters={filters}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+      />
       <Table>
         <TableBody>
-          {data &&
-            data.map((list, index) => (
-              <ContactCell key={index} contact={list} onClickReply={onClickReply} onClickDelete={onClickDelete} />
+          {data?.data &&
+            data?.data.map((item, index) => (
+              <ContactCell key={index} item={item} onClickTicket={onClickTicket} onClickDeleteTicket={onClickDeleteTicket} />
             ))}
         </TableBody>
       </Table>
-      {dialogOpen && (
+      {/* {dialogOpen && (
         <Box className={classes.replyDialog}>
           <HeaderDialog closeDialog={closeDialog} />
 
@@ -108,8 +103,6 @@ const ListTableView = ({ data }) => {
               activeClass={classes.replyDialogEditor}
               content={content}
               events={{
-                blur: onBlurBody,
-                afterPaste: afterPasteBody,
                 change: onChangeBody,
               }}
             />
@@ -124,9 +117,18 @@ const ListTableView = ({ data }) => {
             <Button startIcon={<TrashIcon />} style={{ color: '#dadada' }} onClick={closeDialog}></Button>
           </Box>
         </Box>
-      )}
+      )} */}
     </React.Fragment>
   );
+};
+
+ListTableView.propTypes = {
+  data: PropTypes.object,
+  filters: PropTypes.object,
+  onPageChange: PropTypes.func,
+  onPageSizeChange: PropTypes.func,
+  onClickTicket: PropTypes.func,
+  onClickDeleteTicket: PropTypes.func,
 };
 
 export default ListTableView;

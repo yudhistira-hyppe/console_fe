@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
-import CmtImage from '@coremat/CmtImage';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,11 +26,8 @@ const EmptyContactResult = () => {
   const classes = useStyles();
   return (
     <Box className={classes.root}>
-      <Box mb={{ xs: 4, lg: 6 }}>
-        <CmtImage src={'/images/icons/search-contact.png'} alt="Empty contacts" />
-      </Box>
       <Box className={classes.emptyTitle} component="p">
-        No contacts found
+        Data bantuan pengguna tidak ditemukan
       </Box>
     </Box>
   );
