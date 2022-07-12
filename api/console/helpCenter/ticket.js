@@ -12,7 +12,7 @@ export const ticketApi = createApi({
         method: 'POST',
         body: data,
       }),
-      keepUnusedDataFor: 300,
+      keepUnusedDataFor: 0,
       providesTags: ['TicketList'],
     }),
     getTicketById: build.query({
@@ -21,7 +21,7 @@ export const ticketApi = createApi({
         method: 'POST',
         body: { id },
       }),
-      keepUnusedDataFor: 300,
+      keepUnusedDataFor: 0,
       providesTags: ['TicketDetail'],
     }),
     createReplyTicket: build.mutation({
