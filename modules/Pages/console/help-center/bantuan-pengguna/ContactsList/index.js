@@ -1,47 +1,51 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Box } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import AppContext from '@jumbo/components/contextProvider/AppContextProvider/AppContext';
-import { getContactContainerHeight } from '@jumbo/constants/AppConstants';
+import SpinnerLoading from 'components/common/spinner';
 import useStyles from '../index.style';
 import ListTableView from './ListTableView';
 import EmptyContactResult from './EmptyContactResult';
 
-const contactsList = [
-  {
-    id: 124,
-    name: 'Jane_cooper',
-    problem: 'Akun tidak bisa dibuka',
-    problem_descriptions: 'Maecenas sem arcu, scelerisque in odio vel, porttitor dignissim purus.',
-    report_date: '5 Januari',
-  },
-  {
-    id: 125,
-    name: 'Intan_Jo',
-    problem: 'Wallet tidak bisa di sync',
-    problem_descriptions: 'Maecenas sem arcu, scelerisque in odio vel, porttitor dignissim purus.',
-    report_date: '4 Januari',
-  },
-];
+const ContactsList = ({ data, isFetching, filters, onPageChange, onPageSizeChange, onClickTicket, onClickDeleteTicket }) => {
+  const classes = useStyles();
 
-const ContactsList = ({ width, onShowContactDetail, onClickEditContact }) => {
-  const { showFooter } = useContext(AppContext);
-
-  const classes = useStyles({
-    height: getContactContainerHeight(width, showFooter),
-  });
-
-  return contactsList.length > 0 ? (
-    <Box className={classes.inBuildAppMainContent}>
-      <PerfectScrollbar className={classes.perfectScrollbarContactCon}>
-        <ListTableView data={contactsList} />
-      </PerfectScrollbar>
-    </Box>
-  ) : (
-    <Box className={classes.inBuildAppMainContent}>
-      <EmptyContactResult />
-    </Box>
+  return (
+    <>
+      {isFetching ? (
+        <Box width="100%" display="flex" justifyContent="center" alignItems="center">
+          <SpinnerLoading />
+        </Box>
+      ) : data?.data?.length > 0 ? (
+        <Box className={classes.inBuildAppMainContent}>
+          <PerfectScrollbar className={classes.perfectScrollbarContactCon}>
+            <ListTableView
+              data={data}
+              filters={filters}
+              onPageChange={onPageChange}
+              onPageSizeChange={onPageSizeChange}
+              onClickTicket={onClickTicket}
+              onClickDeleteTicket={onClickDeleteTicket}
+            />
+          </PerfectScrollbar>
+        </Box>
+      ) : (
+        <Box className={classes.inBuildAppMainContent}>
+          <EmptyContactResult />
+        </Box>
+      )}
+    </>
   );
+};
+
+ContactsList.propTypes = {
+  data: PropTypes.object,
+  isFetching: PropTypes.bool,
+  filters: PropTypes.object,
+  onPageChange: PropTypes.func,
+  onPageSizeChange: PropTypes.func,
+  onClickTicket: PropTypes.func,
+  onClickDeleteTicket: PropTypes.func,
 };
 
 export default ContactsList;

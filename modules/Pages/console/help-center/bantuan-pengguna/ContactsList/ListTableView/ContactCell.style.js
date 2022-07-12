@@ -9,12 +9,18 @@ const useStyles = makeStyles((theme) => ({
       transform: 'translateY(-4px)',
       boxShadow: `0 3px 10px 0 ${alpha(theme.palette.common.dark, 0.2)}`,
       borderTopColor: 'transparent',
+      '& .date-info': {
+        display: 'none',
+      },
+      '& .contact-options': {
+        display: 'flex',
+      },
       '& .action-option': {
         opacity: 1,
         visibility: 'visible',
         transform: 'translateX(0)',
       },
-      '& .star-view': {
+      '& .reply-option': {
         transform: 'translateX(0)',
       },
     },
@@ -23,26 +29,34 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   tableCellRoot: {
-    padding: '6px 10px',
+    maxWidth: 600,
+    padding: '20px',
     color: theme.palette.text.secondary,
-    whiteSpace: 'nowrap',
     cursor: 'pointer',
     borderBottom: '0 none',
     '&:first-child': {
-      paddingLeft: 15,
+      paddingRight: 0,
     },
     '&:last-child': {
-      paddingRight: 15,
-      [theme.breakpoints.up('lg')]: {
-        paddingRight: 35,
-      },
+      paddingLeft: 0,
+    },
+  },
+  tableCellStatus: {
+    '& div': {
+      borderRadius: 4,
+      color: '#FFF',
+      padding: '6px 8px',
+      textAlign: 'center',
+    },
+    '& .status-close': {
+      backgroundColor: '#00C4B4',
+    },
+    '& .status-onprogress': {
+      backgroundColor: '#FF8C00',
     },
   },
   tableCellDate: {
     textAlign: 'right',
-  },
-  tableCellAction: {
-    minWidth: 100,
   },
   gridContactCell: {
     border: `1px solid ${theme.palette.borderColor.main}`,
@@ -59,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
         visibility: 'visible',
         transform: 'translateX(0)',
       },
-      '& .star-view': {
+      '& .reply-option': {
         transform: 'translateX(0)',
       },
     },
@@ -74,16 +88,36 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
-  titleRoot: {
+  userName: {
+    fontSize: 12,
+    letterSpacing: 0.4,
+    color: theme.palette.text.secondary,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 1,
+    WebkitBoxOrient: 'vertical',
+  },
+  title: {
     marginBottom: 2,
     fontSize: 16,
     letterSpacing: 0.25,
     color: theme.palette.common.dark,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 1,
+    WebkitBoxOrient: 'vertical',
   },
-  subTitleRoot: {
+  body: {
     fontSize: 12,
     letterSpacing: 0.4,
     color: theme.palette.text.secondary,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
   },
   textTruncate: {
     overflow: 'hidden',
