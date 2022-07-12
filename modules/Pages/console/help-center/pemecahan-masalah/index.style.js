@@ -1,6 +1,13 @@
 import { alpha, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+  tableRowDetail: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#FFFFFF',
+  },
   replyDialog: {
     width: 640,
     position: 'fixed',
@@ -31,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     '& .cke_bottom': {
       borderTop: 'none',
     },
+    '& .cke_contents': {
+      padding: '8px 0 8px 4px',
+    },
   },
   datePicker: {
     '& .MuiInput-underline:before': {
@@ -41,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px 20px',
     borderBottom: '1px solid #ccc',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   inBuildAppCard: {
     backgroundColor: theme.palette.background.paper,
