@@ -10,8 +10,14 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(() => ({
   contactCellOptionsRoot: {
-    position: 'relative',
-    display: 'none',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    height: 'fit-content',
+    margin: 'auto',
+    paddingRight: '14px',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     overflow: 'hidden',
@@ -19,13 +25,13 @@ const useStyles = makeStyles(() => ({
   replyOptionRoot: {
     transition: 'all 0.3s ease',
     transform: 'translateX(200%)',
+    visibility: 'hidden',
   },
   actionOptionRoot: {
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
     transition: 'all 0.3s ease',
-    opacity: 0,
     visibility: 'hidden',
     transform: 'translateX(100%)',
   },
@@ -38,7 +44,7 @@ const ContactCellOptions = ({ data, onClickDeleteTicket }) => {
     <Box className={clsx(classes.contactCellOptionsRoot, 'contact-options')}>
       {/* <Box className={clsx(classes.replyOptionRoot, 'reply-option')}>
         <Box ml={1}>
-          <Tooltip title="Reply">
+          <Tooltip title="Balas">
             <IconButton size="small" onClick={() => console.log('reply')}>
               <ReplyIcon />
             </IconButton>
@@ -47,7 +53,7 @@ const ContactCellOptions = ({ data, onClickDeleteTicket }) => {
       </Box> */}
       <Box className={clsx(classes.actionOptionRoot, 'action-option')}>
         <Box ml={1}>
-          <Tooltip title="Delete">
+          <Tooltip title="Hapus">
             <IconButton size="small" onClick={() => onClickDeleteTicket(data._id)}>
               <DeleteIcon />
             </IconButton>

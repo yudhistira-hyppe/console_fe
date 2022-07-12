@@ -10,17 +10,17 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: `0 3px 10px 0 ${alpha(theme.palette.common.dark, 0.2)}`,
       borderTopColor: 'transparent',
       '& .date-info': {
-        display: 'none',
+        visibility: 'hidden',
       },
       '& .contact-options': {
         display: 'flex',
       },
       '& .action-option': {
-        opacity: 1,
         visibility: 'visible',
         transform: 'translateX(0)',
       },
       '& .reply-option': {
+        visibility: 'visible',
         transform: 'translateX(0)',
       },
     },
@@ -38,11 +38,15 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: 0,
     },
     '&:last-child': {
+      width: '82px',
+      position: 'relative',
       paddingLeft: 0,
     },
   },
   tableCellStatus: {
+    width: '80px',
     '& div': {
+      width: 'fit-content',
       borderRadius: 4,
       color: '#FFF',
       padding: '6px 8px',
@@ -70,11 +74,11 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.14), 0px 1px 18px rgba(0, 0, 0, 0.12), 0px 3px 5px rgba(0, 0, 0, 0.2)',
       '& .action-option': {
-        opacity: 1,
         visibility: 'visible',
         transform: 'translateX(0)',
       },
       '& .reply-option': {
+        visibility: 'visible',
         transform: 'translateX(0)',
       },
     },
