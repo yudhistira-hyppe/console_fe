@@ -30,7 +30,6 @@ const ConsoleHelpCenterComponent = () => {
               clickedElement={() => router.push('/console/help-center/bantuan-pengguna')}
               icon={iconHelp}
               title="Bantuan Pengguna"
-              subtitle="22 Email baru"
               backgroundColor="#FFFFFF"
             />
           </Grid>
@@ -39,7 +38,6 @@ const ConsoleHelpCenterComponent = () => {
               clickedElement={() => router.push('/console/help-center/pemecahan-masalah')}
               icon={iconWrench}
               title="Pemecahan Masalah"
-              subtitle="5 Masalah baru"
               backgroundColor="#FFFFFF"
             />
           </Grid>
