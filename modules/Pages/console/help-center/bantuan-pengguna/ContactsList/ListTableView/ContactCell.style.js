@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tableCellDate: {
     textAlign: 'right',
+    minWidth: 'max-content',
   },
   gridContactCell: {
     border: `1px solid ${theme.palette.borderColor.main}`,
