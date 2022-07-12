@@ -41,7 +41,7 @@ const ContactCellOptions = ({ data, onClickDeleteTicket }) => {
   const classes = useStyles();
 
   return (
-    <Box className={clsx(classes.contactCellOptionsRoot, 'contact-options')}>
+    <Box className={clsx(classes.contactCellOptionsRoot, 'contact-options')} onClick={(e) => e.stopPropagation()}>
       {/* <Box className={clsx(classes.replyOptionRoot, 'reply-option')}>
         <Box ml={1}>
           <Tooltip title="Balas">
