@@ -103,6 +103,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
       location,
       deviceId:
         'dw-ckEuZFESeqnWjzzz9UE:APA91bF2xMw67hdbbMgC2fXNXfo9BfLPmZZBVMFEDGMLStVdJFgfvjLlsqnMViLMhKx5aeY_25CoMqD3PnY-xvt-xHsE0F44WpnvLDvS8L0QNzRQzYmueyyFWdAyTHeyHnEl7RaLQOIa',
+      devicetype: 'WEB',
     });
   };
 
