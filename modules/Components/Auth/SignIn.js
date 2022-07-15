@@ -15,7 +15,9 @@ import { NotificationLoader } from '@jumbo/components/ContentLoader';
 import { MODE } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import Logo from '@jumbo/components/AppLayout/partials/Logo';
-import { firebaseCloudMessaging } from 'helpers/firebaseHelper';
+import { firebaseCloudMessaging, auth } from 'helpers/firebaseHelper';
+import { GoogleAuthProvider } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
@@ -107,6 +109,10 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     });
   };
 
+  function signInWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider);
+  }
   return (
     <AuthWrapper variant={wrapperVariant}>
       {variant === 'default' ? (
@@ -121,6 +127,17 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         <Typography component="div" variant="h1" className={classes.titleRoot}>
           Login
         </Typography>
+        <div
+          onClick={
+            signInWithGoogle
+            // .then((user) => {
+            //   handleRedirectToOrBack();
+            //   console.log(user);
+            // })
+            // .catch((e) => console.log(e.message))
+          }>
+          testing login with google
+        </div>
         <form>
           <Box mb={2}>
             <TextField

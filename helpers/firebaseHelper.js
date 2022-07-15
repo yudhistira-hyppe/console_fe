@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat/app';
 import { getMessaging, getToken } from 'firebase/messaging';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -22,4 +23,6 @@ const firebaseCloudMessaging = {
   },
 };
 
-export { firebaseCloudMessaging };
+const auth = getAuth(firebaseApp);
+
+export { firebaseCloudMessaging, auth };
