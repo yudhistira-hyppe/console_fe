@@ -38,72 +38,57 @@ const useStyles = makeStyles((theme) => ({
   btnFilter: {
     fontSize: '10px',
     color: 'rgba(0, 0, 0, 0.38)',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
   },
 }));
 
 const ContentList = () => {
-  const { contentList } = fakeDb;
+  // const { contentList } = fakeDb;
   const router = useRouter();
   const numberPerPage = 5;
   const [nPage, setnPage] = useState(0);
-  const [tableData, setTableData] = useState(contentList);
+  // const [tableData, setTableData] = useState(contentList);
   const [page, setPage] = useState(1);
+  const [payloads, setPayloads] = useState();
   const classes = useStyles();
-  // const [query, setQuery] = useState(['post']);
-  // const [key, setKey] = useState('');
-  // console.log('key:', key);
-
-  // const [payload, setPayload] = useState({
-  //   email: 'freeman27@getnada.com',
-  //   ownership: false,
-  //   monetesisasi: false,
-  //   archived: false,
-  //   buy: false,
-  //   // ini untuk filter
-  //   // startdate: '2022-01-11',
-  //   // enddate: '2022-01-11',
-  //   // postType: 'diary',
-  //   skip: 0,
-  //   limit: 10,
-  // });
 
   const [btnLooping, setBtnLooping] = useState([
     {
-      name: 'tes1',
-      id: '1',
+      name: 'dipost',
+      title: 'Konten Dipost',
     },
     {
-      name: 'tes2',
-      id: '2',
+      name: 'ownership',
+      title: 'Konten Ownership',
     },
     {
-      name: 'tes3',
-      id: '3',
+      name: 'dijual',
+      title: 'Konten Dijual',
     },
     {
-      name: 'tes4',
-      id: '4',
+      name: 'dibeli',
+      title: 'Konten Dibeli',
     },
     {
-      name: 'tes5',
-      id: '5',
+      name: 'arsip',
+      title: 'Arsip',
     },
   ]);
 
-  const [state, setState] = useState(['tes1']);
-  console.log('state:', state);
+  const [state, setState] = useState(['dipost']);
+  console.log('state:', state.length);
 
-  // const aish = ['tes2', 'tes3', 'tes4', 'tes5'];
+  // const aish = ['ownership', 'dijual', 'dibeli', 'arsip'];
 
   const clickedButton = (name) => {
-    if (name === 'tes1') return setState(['tes1']);
+    if (name === 'dipost') return setState(['dipost']);
 
-    if (name !== 'tes1') {
-      if (state.includes('tes1')) {
+    if (name !== 'dipost') {
+      if (state.includes('dipost')) {
         setState((prev) => {
-          const removeTes1 = prev.filter((e) => e !== 'tes1');
-          console.log('removeTes1:', removeTes1);
-          return [...removeTes1];
+          const removedipost = prev.filter((e) => e !== 'dipost');
+          // console.log('removedipost:', removedipost);
+          return [...removedipost];
         });
       }
       setState((prev) => [...prev, name]);
@@ -117,18 +102,60 @@ const ContentList = () => {
     }
   };
 
-  useEffect(() => {
-    var quotient = Math.floor(contentList.length / numberPerPage);
-    var remainder = contentList.length % numberPerPage;
-    if (remainder > 0) quotient++;
-    setnPage(quotient);
-    setTableData(contentList.slice((page - 1) * numberPerPage, page * numberPerPage));
-  }, [contentList]);
+  // useEffect(() => {
+  //   var quotient = Math.floor(contentList.length / numberPerPage);
+  //   var remainder = contentList.length % numberPerPage;
+  //   if (remainder > 0) quotient++;
+  //   setnPage(quotient);
+  //   setTableData(contentList.slice((page - 1) * numberPerPage, page * numberPerPage));
+  // }, [contentList]);
 
-  const handleChange = (event, value) => {
-    setTableData(contentList.slice((value - 1) * numberPerPage, value * numberPerPage));
-    setPage(value);
-  };
+  // const handleChange = (event, value) => {
+  //   setTableData(contentList.slice((value - 1) * numberPerPage, value * numberPerPage));
+  //   setPage(value);
+  // };
+
+  useEffect(() => {
+    const payload = {
+      email: 'freeman27@getnada.com',
+      ownership: state.includes('ownership') ? true : false,
+      monetesisasi: state.includes('dibeli') ? true : false,
+      archived: state.includes('arsip') ? true : false,
+      buy: state.includes('dijual') ? true : false,
+      // startdate: '2022-01-11',
+      // enddate: '2022-01-11',
+      // postType: 'diary',
+      skip: 0,
+      limit: 10,
+    };
+    console.log(state.includes('ownership ') ? true : false);
+    setPayloads(payload);
+
+    if (state.length === 0 || state.length === 4) {
+      setState(['dipost']);
+    }
+  }, [state]);
+
+  const { data: contentGroup } = useUserContentsGroupQuery(payloads);
+  console.log('contentGroup:', contentGroup);
+
+  // useEffect(() => {
+  //   for (let i = 0; i < state.length; i++) {
+  //     switch (state[i]) {
+  //       case 'dipost':
+  //         return console.log('dipost om');
+
+  //       case 'ownership':
+  //         return console.log('ownership om');
+
+  //       case 'dijual':
+  //         return console.log('dijual om');
+
+  //       default:
+  //         return console.log('masuk ke default');
+  //     }
+  //   }
+  // }, [state]);
 
   return (
     <div>
@@ -149,7 +176,7 @@ const ContentList = () => {
                       : null
                   }
                   onClick={() => clickedButton(btn.name)}>
-                  {btn.name}
+                  {btn.title}
                 </Button>
               );
             })}
@@ -178,12 +205,13 @@ const ContentList = () => {
       <CmtCard>
         <CmtCardContent className={classes.cardContentRoot}>
           <div>
-            <ContentTable tableData={tableData} />
+            <ContentTable tableData={contentGroup?.data} />
           </div>
         </CmtCardContent>
       </CmtCard>
       <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} count={nPage} onChange={handleChange} />
+        {/* <Pagination page={page} count={nPage} onChange={handleChange} /> */}
+        <Pagination page={1} count={10} />
       </div>
     </div>
   );
