@@ -93,10 +93,10 @@ const Details = () => {
         {contentEvent ? (
           <>
             <Grid item md={3}>
-              <BiographyStats title={fakeDb.genderBiography.title} dataChart={getValue[0]} />
+              <BiographyStats title={'Jenis Kelamin Penonton'} dataChart={getValue[0]} />
             </Grid>
             <Grid item md={3}>
-              <BiographyStats title={fakeDb.countryBiography.title} dataChart={getValue[2]} />
+              <BiographyStats title={'Negara Penonton'} dataChart={getValue[2]} />
             </Grid>
             <Grid item md={3}>
               <BiographyStats title={'Rentang Umur Penonton'} dataChart={getValue[1]} />

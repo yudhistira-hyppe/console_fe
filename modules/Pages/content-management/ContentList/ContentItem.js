@@ -12,6 +12,7 @@ import CmtMediaObject from '../../../../@coremat/CmtMediaObject';
 import { STREAM_URL } from '../../../../authentication/auth-provider/config';
 import CmtImage from '../../../../@coremat/CmtImage';
 import { RemoveRedEye, Delete } from '@material-ui/icons';
+import { useAuth } from 'authentication';
 
 const useStyles = makeStyles((theme) => ({
   tableRowRoot: {
@@ -68,6 +69,7 @@ function getBgColor(status) {
 const ContentItem = ({ row }) => {
   const classes = useStyles();
   const label = { inputProps: { 'aria-label': 'Switch Monetize' } };
+  const { authUser } = useAuth();
   const actions = [
     {
       icon: <Delete />,
@@ -78,24 +80,50 @@ const ContentItem = ({ row }) => {
       label: 'Hapus',
     },
   ];
+
+  const getMediaUri = () => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    // const mediaURI = item.avatar.mediaEndpoint;
+    const mediaURI = '/thumb/' + row?._id;
+
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
+
+  const formatDate = () => {
+    return new Date(row?.createdAt?.split(' ')[0]).toLocaleString('en-us', {
+      month: 'short',
+      year: 'numeric',
+      day: 'numeric',
+    });
+  };
+
   return (
     <TableRow className={classes.tableRowRoot}>
       <TableCell className={classes.tableCellRoot}>
         <div className="flex flex-row align-items-center align-content-center">
-          <CmtImage alt={row.name} src={row.contentImage} />
-          <div className="ml-1">{row.contentName}</div>
+          {/* <CmtImage alt={row?.description} src={getMediaUri()} /> */}
+          <div
+            style={{
+              width: '100px',
+              height: '100px',
+              backgroundImage: `url('${getMediaUri()}')`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+            }}></div>
+          <div className="ml-1">{row?.description}</div>
         </div>
       </TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.type}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row.postType}</TableCell>
       <TableCell className={classes.tableCellRoot}>
-        {row.date}
+        {formatDate()}
         <div>{row.time}</div>
       </TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.contentId}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row.postID}</TableCell>
       <TableCell className={classes.tableCellRoot}>{row.views}</TableCell>
       <TableCell className={classes.tableCellRoot}>{row.likes}</TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.share}</TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.certNumber}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row.shares}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row.postID}</TableCell>
       <TableCell className={classes.tableCellRoot}>
         <Switch {...label} defaultChecked color={'primary'} />
       </TableCell>
