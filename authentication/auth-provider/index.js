@@ -5,7 +5,7 @@ import { premiumSubscribe, premiumConfirm } from './AuthApi';
 import { authApi } from 'api/user';
 
 export const useProvideAuth = () => {
-  const { useLoginMutation,useLogoutMutation } = authApi;
+  const { useLoginMutation, useLogoutMutation } = authApi;
   const [login] = useLoginMutation();
   const [logout] = useLogoutMutation();
   const [authUser, setAuthUser] = useState(null);
@@ -70,6 +70,28 @@ export const useProvideAuth = () => {
   const removeAuth = () => {
     localStorage.removeItem('user');
     setAuthUser(null);
+  };
+
+  const consoleLogin = (user) => {
+    fetchStart();
+    login(user)
+      .unwrap()
+      .then((result) => {
+        if (result.data.roles.includes('ROLE_SYSADMIN')) {
+          fetchSuccess();
+          saveAuth(result.data);
+        } else {
+          fetchError('Akun yang digunakan tidak memiliki akses!');
+        }
+      })
+      .catch((error) => {
+        if (error.data.messages.info.includes('Invalid credentials')) {
+          fetchError('Email dan Password tidak sesuai!');
+        } else {
+          fetchError(error.data.messages.info.join(' '));
+        }
+        removeAuth();
+      });
   };
 
   const userLogin = (user) => {
@@ -201,6 +223,7 @@ export const useProvideAuth = () => {
     setError,
     setAuthUser,
     getAuthUser,
+    consoleLogin,
     userLogin,
     userSignup,
     userSignOut,
