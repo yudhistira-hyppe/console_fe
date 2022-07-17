@@ -1,7 +1,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
-import SecurePage from 'authentication/auth-page-wrappers/SecurePage';
+import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
 const ConsolePengumumanPenggunaComponent = dynamic(
   () => import('modules/Pages/console/help-center/pengumuman/pilih-pengguna'),
@@ -11,9 +11,9 @@ const ConsolePengumumanPenggunaComponent = dynamic(
 );
 
 const ConsolePengumumanPenggunaPage = () => (
-  <SecurePage>
+  <SecureConsolePage>
     <ConsolePengumumanPenggunaComponent />
-  </SecurePage>
+  </SecureConsolePage>
 );
 
 export default ConsolePengumumanPenggunaPage;

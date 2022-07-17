@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import { Slide } from '@material-ui/core';
@@ -10,33 +11,42 @@ function SlideTransition(props) {
   return <Slide {...props} direction="left" />;
 }
 
-// eslint-disable-next-line react/prop-types
 export const NotificationLoader = ({ loading, error, message }) => {
+  const [open, setOpen] = useState(true);
+  const [type, setType] = useState('');
+
+  useEffect(() => {
+    if (error) {
+      setType('error');
+    }
+    if (message) {
+      setType('success');
+    }
+  }, [error, message]);
+
   return (
     <React.Fragment>
       {loading && <PageLoader />}
       {
         <Snackbar
-          open={Boolean(error)}
+          open={open}
+          autoHideDuration={3000}
+          onClose={() => setOpen(false)}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           TransitionComponent={SlideTransition}>
-          <Alert variant="filled" severity="error">
-            {error}
-          </Alert>
-        </Snackbar>
-      }
-      {
-        <Snackbar
-          open={Boolean(message)}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          TransitionComponent={SlideTransition}>
-          <Alert variant="filled" severity="success">
-            {message}
+          <Alert variant="filled" severity={type}>
+            {type === 'error' ? error : message}
           </Alert>
         </Snackbar>
       }
     </React.Fragment>
   );
+};
+
+NotificationLoader.propTypes = {
+  loading: PropTypes.bool,
+  error: PropTypes.string,
+  message: PropTypes.string,
 };
 
 const ContentLoader = () => {
