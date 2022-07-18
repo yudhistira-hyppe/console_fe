@@ -12,6 +12,11 @@ import MonetizeTabs from './MonetizeTabs';
 import { useUserContentMonetizeQuery } from 'api/user/content/management';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
+import TextField from '@mui/material/TextField';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { auth } from 'helpers/firebaseHelper';
 
 const useStyles = makeStyles((theme) => ({
   scrollbarRoot: {
@@ -28,54 +33,97 @@ const Montetize = ({}) => {
   const { authUser } = useAuth();
   const classes = useStyles();
   const [tabValue, setTabValue] = useState('monetize_content');
-  console.log('tabValue:', tabValue);
+  const [typePost, setTypePost] = useState(null);
+  const [payloadContent, setPayloadContent] = useState(null);
+  const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
 
-  const [payload, setPayload] = useState();
+  useEffect(() => {
+    switch (tabValue) {
+      case 'monetize_content':
+        // why the code like this? code didnt handle empty value
+        if (typePost) {
+          setPayloadContent({
+            email: authUser?.email,
+            buy: false,
+            monetize: true,
+            lastmonetize: false,
+            postType: typePost,
+            skip: 0,
+            limit: 10,
+          });
+        }
+
+        if (!typePost) {
+          setPayloadContent({
+            email: authUser?.email,
+            buy: false,
+            monetize: true,
+            lastmonetize: false,
+            startdate: filterByDate,
+            enddate: filterByDate,
+            skip: 0,
+            limit: 10,
+          });
+        }
+        return payloadContent;
+      case 'buy_content':
+        // why the code like this? code didnt handle empty value
+        if (typePost) {
+          setPayloadContent({
+            email: authUser?.email,
+            buy: true,
+            monetize: false,
+            lastmonetize: false,
+            postType: typePost,
+            skip: 0,
+            limit: 10,
+          });
+        }
+
+        if (!typePost && !filterByDate) {
+          setPayloadContent({
+            email: authUser?.email,
+            buy: true,
+            monetize: false,
+            lastmonetize: false,
+            startdate: filterByDate,
+            enddate: filterByDate,
+            skip: 0,
+            limit: 10,
+          });
+        }
+      default:
+        console.log(`masuk default`);
+    }
+  }, [tabValue, typePost, filterByDate]);
+
+  const convertDate = (str) => {
+    let date = new Date(str),
+      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+      day = ('0' + date.getDate()).slice(-2);
+    const res = [date.getFullYear(), mnth, day].join('-');
+    setFilterByDate(res);
+  };
+
+  const handleChange = (event) => {
+    setTypePost(event.target.value);
+  };
 
   const onChangeTab = (value) => {
     setTabValue(value);
   };
+
+  const { data: contentMonetize } = useUserContentMonetizeQuery(payloadContent);
 
   const payloadLastContent = {
     email: authUser.email,
     buy: false,
     monetize: false,
     lastmonetize: true,
-    // postType: 'diary',
     skip: 0,
     limit: 10,
   };
   const { data: lastContentMonetize } = useUserContentMonetizeQuery(payloadLastContent);
-
-  const { data: contentMonetize } = useUserContentMonetizeQuery(payload);
-  console.log('contentMonetize:', contentMonetize);
-
-  useEffect(() => {
-    switch (tabValue) {
-      case 'monetize_content':
-        return setPayload({
-          email: authUser.email,
-          buy: false,
-          monetize: true,
-          lastmonetize: false,
-          // postType: 'diary',
-          skip: 0,
-          limit: 10,
-        });
-      case 'buy_content':
-        return setPayload({
-          email: authUser.email,
-          buy: true,
-          monetize: false,
-          lastmonetize: false,
-          // postType: 'diary',
-          skip: 0,
-          limit: 10,
-        });
-      default:
-        console.log(`masuk default`);
-    }
-  }, [tabValue]);
 
   const formatDate = () => {
     return new Date(lastContentMonetize?.data[0]?.createdAt.split(' ')[0]).toLocaleString('en-us', {
@@ -97,23 +145,33 @@ const Montetize = ({}) => {
       <PageHeader
         heading={'Monetisasi'}
         children={
-          <div className="flex flex-row-reverse col-4 align-items-center">
-            <FormControl size={'small'} className="mr-2 mt-2" variant={'outlined'} fullWidth>
-              <InputLabel id="fitur-select-label">Semua Fitur</InputLabel>
-              <Select labelId="fitur-select-label" id="fitur-simple-select" label="Semua Fitur">
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+          <div className="flex flex-row col-5 align-items-center" style={{ marginTop: '2%' }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Tipe Konten</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={typePost}
+                label="tipe_konten"
+                onChange={handleChange}>
+                <MenuItem value={'story'}>Story</MenuItem>
+                <MenuItem value={'vid'}>Vid</MenuItem>
+                <MenuItem value={'diary'}>Diary</MenuItem>
+                <MenuItem value={'pict'}>Pict</MenuItem>
               </Select>
             </FormControl>
-            <FormControl size={'small'} className="mr-2 mt-2" variant={'outlined'} fullWidth>
-              <InputLabel id="content-select-label">Kontent di post</InputLabel>
-              <Select labelId="content-select-label" id="fitur-simple-select" label="Kontent di post">
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                autoCompleted="off"
+                size="small"
+                label="Semua Waktu"
+                value={filterByDate}
+                onChange={(filterByDate) => {
+                  convertDate(filterByDate);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </div>
         }
       />
