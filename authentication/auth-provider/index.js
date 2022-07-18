@@ -69,15 +69,35 @@ export const useProvideAuth = () => {
 
   const removeAuth = () => {
     localStorage.removeItem('user');
+    document.cookie.split(';').forEach((c) => {
+      document.cookie = c.replace(/^ +/, '').replace(/=.*/, `=; expires=${new Date().toUTCString()}; SameSite=None; Secure`);
+    });
     setAuthUser(null);
   };
 
-  const consoleLogin = (user) => {
+  const createCookie = (keyAndValueCookies) => {
+    const date = new Date();
+    Object.keys(keyAndValueCookies).forEach((key) => {
+      let tempDate = new Date();
+      tempDate.setTime(date.getTime() + keyAndValueCookies[key]['expirationHour'] * 60 * 60 * 1000);
+      document.cookie = `${key}=${
+        keyAndValueCookies[key]['value']
+      }; expires=${tempDate.toUTCString()}; SameSite=None; Secure`;
+    });
+  };
+
+  const consoleLogin = (user, isSetCookie) => {
     fetchStart();
     login(user)
       .unwrap()
       .then((result) => {
         if (result.data.roles.includes('ROLE_SYSADMIN')) {
+          if (isSetCookie) {
+            createCookie({
+              token: { value: result.data.token, expirationHour: 0.25 },
+              refreshToken: { value: result.data.refreshToken, expirationHour: 144 },
+            });
+          }
           fetchSuccess();
           saveAuth(result.data);
         } else {
