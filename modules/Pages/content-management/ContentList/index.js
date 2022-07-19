@@ -71,7 +71,7 @@ const ContentList = () => {
     },
     {
       name: 'arsip',
-      title: 'Arsip',
+      title: 'Story',
     },
   ]);
 
@@ -128,7 +128,6 @@ const ContentList = () => {
       skip: 0,
       limit: 10,
     };
-    console.log(state.includes('ownership ') ? true : false);
     setPayloads(payload);
 
     if (state.length === 0 || state.length === 4) {
@@ -137,7 +136,6 @@ const ContentList = () => {
   }, [state]);
 
   const { data: contentGroup } = useUserContentsGroupQuery(payloads);
-  console.log('contentGroup:', contentGroup);
 
   // useEffect(() => {
   //   for (let i = 0; i < state.length; i++) {

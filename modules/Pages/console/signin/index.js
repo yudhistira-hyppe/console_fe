@@ -67,6 +67,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [deviceId, setDeviceId] = useState(uuidv4());
+  const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
 
   useEffect(() => {
@@ -94,14 +95,17 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   };
 
   const onSubmit = () => {
-    consoleLogin({
-      email,
-      password,
-      location,
-      deviceId:
-        'dw-ckEuZFESeqnWjzzz9UE:APA91bF2xMw67hdbbMgC2fXNXfo9BfLPmZZBVMFEDGMLStVdJFgfvjLlsqnMViLMhKx5aeY_25CoMqD3PnY-xvt-xHsE0F44WpnvLDvS8L0QNzRQzYmueyyFWdAyTHeyHnEl7RaLQOIa',
-      devicetype: 'WEB',
-    });
+    consoleLogin(
+      {
+        email,
+        password,
+        location,
+        deviceId:
+          'dw-ckEuZFESeqnWjzzz9UE:APA91bF2xMw67hdbbMgC2fXNXfo9BfLPmZZBVMFEDGMLStVdJFgfvjLlsqnMViLMhKx5aeY_25CoMqD3PnY-xvt-xHsE0F44WpnvLDvS8L0QNzRQzYmueyyFWdAyTHeyHnEl7RaLQOIa',
+        devicetype: 'WEB',
+      },
+      isRememberMeChecked,
+    );
   };
 
   return (
@@ -150,16 +154,9 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
               <FormControlLabel
                 className={classes.formcontrolLabelRoot}
-                control={<Checkbox name="checkedA" />}
+                control={<Checkbox checked={isRememberMeChecked} onChange={(_, value) => setIsRememberMeChecked(value)} />}
                 label="Remember me"
               />
-              <Box component="p" fontSize={{ xs: 12, sm: 16 }}>
-                <Link href="/forgot-password">
-                  <a>
-                    <IntlMessages id="appModule.forgotPassword" />
-                  </a>
-                </Link>
-              </Box>
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
               <Button onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">

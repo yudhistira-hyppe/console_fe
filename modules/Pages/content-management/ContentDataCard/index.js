@@ -128,6 +128,7 @@ const ContentDataCard = ({ title, contentTitle, views, likes, date, contentType,
                         pathname: '/contents/details',
                         query: {
                           postId: postId,
+                          title: title,
                         },
                       })
                     }
