@@ -208,7 +208,7 @@ const ContentList = () => {
       </CmtCard>
       <div className="mt-6 flex flex-row justify-content-center">
         {/* <Pagination page={page} count={nPage} onChange={handleChange} /> */}
-        <Pagination page={1} count={10} />
+        <Pagination color="secondary" page={1} count={10} />
       </div>
     </div>
   );

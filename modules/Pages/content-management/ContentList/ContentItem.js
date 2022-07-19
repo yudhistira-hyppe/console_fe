@@ -3,7 +3,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import clsx from 'clsx';
 import { alpha, makeStyles } from '@material-ui/core/styles';
-import { IconButton, Switch, Tooltip } from '@material-ui/core';
+import { IconButton, Switch, Tooltip, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CmtDropdownMenu from '../../../../@coremat/CmtDropdownMenu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -13,6 +13,7 @@ import { STREAM_URL } from '../../../../authentication/auth-provider/config';
 import CmtImage from '../../../../@coremat/CmtImage';
 import { RemoveRedEye, Delete } from '@material-ui/icons';
 import { useAuth } from 'authentication';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   tableRowRoot: {
@@ -68,16 +69,17 @@ function getBgColor(status) {
 
 const ContentItem = ({ row }) => {
   const classes = useStyles();
+  const router = useRouter();
   const label = { inputProps: { 'aria-label': 'Switch Monetize' } };
   const { authUser } = useAuth();
   const actions = [
     {
       icon: <Delete />,
-      label: 'Lihat Detail',
+      label: <Typography onClick={() => router.push(`/contents/details?postId=${row._id}`)}>Lihat Detail</Typography>,
     },
     {
       icon: <RemoveRedEye />,
-      label: 'Hapus',
+      label: <Typography>Hapus</Typography>,
     },
   ];
 
