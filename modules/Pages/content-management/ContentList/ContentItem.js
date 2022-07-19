@@ -89,14 +89,6 @@ const ContentItem = ({ row }) => {
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
 
-  const formatDate = () => {
-    return new Date(row?.createdAt?.split(' ')[0]).toLocaleString('en-us', {
-      month: 'short',
-      year: 'numeric',
-      day: 'numeric',
-    });
-  };
-
   return (
     <TableRow className={classes.tableRowRoot}>
       <TableCell className={classes.tableCellRoot}>
@@ -116,7 +108,7 @@ const ContentItem = ({ row }) => {
       </TableCell>
       <TableCell className={classes.tableCellRoot}>{row.postType}</TableCell>
       <TableCell className={classes.tableCellRoot}>
-        {formatDate()}
+        {row?.createdAt}
         <div>{row.time}</div>
       </TableCell>
       <TableCell className={classes.tableCellRoot}>{row.postID}</TableCell>
