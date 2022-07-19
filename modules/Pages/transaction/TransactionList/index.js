@@ -92,16 +92,16 @@ const TransactionList = () => {
     setMenu(event.label);
     switch (event.value) {
       case getTodayDate(): {
-        setPayload({ ...payload, startdate: dateFilter(0) });
+        setPayload({ ...payload, enddate: dateFilter(0), startdate: dateFilter(0) });
         return setTableData(accountBalanceHistory);
       }
       case getYesterdayDate(): {
         // startdate: dateFilter(40) should be startdate:datefilter(1) please change it when be ready.
-        setPayload({ ...payload, startdate: dateFilter(40) });
+        setPayload({ ...payload, enddate: dateFilter(0), startdate: dateFilter(1) });
         return setTableData(accountBalanceHistory);
       }
       case 'this_week': {
-        setPayload({ ...payload, startdate: dateFilter(7) });
+        setPayload({ ...payload, enddate: dateFilter(0), startdate: dateFilter(7) });
         return setTableData(accountBalanceHistory);
       }
       default:
