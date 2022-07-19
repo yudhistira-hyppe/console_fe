@@ -106,18 +106,18 @@ const ContentItem = ({ row }) => {
           <div className="ml-1">{row?.description}</div>
         </div>
       </TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.postType}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row?.postType}</TableCell>
       <TableCell className={classes.tableCellRoot}>
         {row?.createdAt}
-        <div>{row.time}</div>
+        <div>{row?.time}</div>
       </TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.postID}</TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.views}</TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.likes}</TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.shares}</TableCell>
-      <TableCell className={classes.tableCellRoot}>{row.postID}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row?.postID}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row?.views}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row?.likes}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row?.shares}</TableCell>
+      <TableCell className={classes.tableCellRoot}>{row?.postID}</TableCell>
       <TableCell className={classes.tableCellRoot}>
-        <Switch {...label} defaultChecked color={'primary'} />
+        <Switch {...label} checked={row?.monetize} disableRipple={false} color={'primary'} />
       </TableCell>
       <TableCell>
         <Box display="flex" alignItems="center" justifyContent="flex-end">
