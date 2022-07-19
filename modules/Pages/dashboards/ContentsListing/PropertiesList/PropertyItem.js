@@ -148,19 +148,19 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
   const getContent = () => (
     <Box component="p" display="flex" flexDirection="row" mb={4} fontSize={12}>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight ? item.insight.likes : 0}
+        {item ? item.likes : 0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Likes`}
         </Box>
       </Box>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight ? item.insight.comments : 0}
+        {item ? item.comments : 0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Comments`}
         </Box>
       </Box>
       <Box component="span" mr={{ xs: 3, md: 4 }}>
-        {item.insight ? item.insight.views : 0}
+        {item ? item.views : 0}
         <Box component="span" color="text.secondary" mr={1}>
           {` Views`}
         </Box>

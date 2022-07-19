@@ -132,7 +132,7 @@ const ProfileStatstics = () => {
             <div className={classes.infoLabel}>This Week</div>
             <div className="flex flex-row">
               <div className={classes.balanceLabel}>{insightVisited?.totalnow}</div>
-              <div className="ml-1">
+              {/* <div className="ml-1">
                 {Number(insightVisited?.value) > 0 ? (
                   <span className={classes.precentageLabel} style={{ color: 'green' }}>
                     {insightVisited?.value}
@@ -145,7 +145,7 @@ const ProfileStatstics = () => {
               </div>
               <div className="ml-1">
                 <ExpandMore style={{ fontSize: '20px' }} />
-              </div>
+              </div> */}
             </div>
           </div>
         </CmtCardContent>
