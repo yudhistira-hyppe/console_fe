@@ -15,7 +15,7 @@ const MonetizeList = ({ tableData }) => {
         </TableHead>
         <TableBody>
           {tableData?.map((row, index) => (
-            <MonetizeItem row={row} key={index} />
+            <MonetizeItem row={row} key={index} onClicked={() => row} />
           ))}
         </TableBody>
       </Table>

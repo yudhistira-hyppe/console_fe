@@ -33,26 +33,27 @@ const Montetize = ({}) => {
   const { authUser } = useAuth();
   const classes = useStyles();
   const [tabValue, setTabValue] = useState('monetize_content');
-  const [typePost, setTypePost] = useState(null);
+  const [typePost, setTypePost] = useState('');
   const [payloadContent, setPayloadContent] = useState(null);
   const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
 
   useEffect(() => {
     switch (tabValue) {
       case 'monetize_content':
-        // why the code like this? code didnt handle empty value
+        // why the code like this? be didnt handle empty value
         if (typePost) {
           setPayloadContent({
             email: authUser?.email,
             buy: false,
             monetize: true,
             lastmonetize: false,
+            startdate: filterByDate,
+            enddate: filterByDate,
             postType: typePost,
             skip: 0,
             limit: 10,
           });
         }
-
         if (!typePost) {
           setPayloadContent({
             email: authUser?.email,
@@ -69,18 +70,22 @@ const Montetize = ({}) => {
       case 'buy_content':
         // why the code like this? code didnt handle empty value
         if (typePost) {
+          console.log('masuk type post');
           setPayloadContent({
             email: authUser?.email,
             buy: true,
             monetize: false,
             lastmonetize: false,
+            startdate: filterByDate,
+            enddate: filterByDate,
             postType: typePost,
             skip: 0,
             limit: 10,
           });
         }
 
-        if (!typePost && !filterByDate) {
+        if (typePost === '') {
+          console.log('masuk type post ===');
           setPayloadContent({
             email: authUser?.email,
             buy: true,
@@ -91,9 +96,10 @@ const Montetize = ({}) => {
             skip: 0,
             limit: 10,
           });
+          return payloadContent;
         }
       default:
-        console.log(`masuk default`);
+        console.log('masuk default');
     }
   }, [tabValue, typePost, filterByDate]);
 
