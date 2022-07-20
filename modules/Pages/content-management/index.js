@@ -43,6 +43,8 @@ const Content = ({}) => {
 
   return (
     <>
+      {/* tab content is depends on value */}
+      {/*NOTED: if this getting bigger need to refactor  */}
       <TabContext value={value}>
         <TabList
           onChange={handleChange}
@@ -81,6 +83,7 @@ const Content = ({}) => {
           />
         </TabList>
 
+        {/* values contents depens on the top  */}
         <TabPanel value="1">
           <ContentManagement />
         </TabPanel>
