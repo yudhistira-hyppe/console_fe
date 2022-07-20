@@ -52,7 +52,7 @@ const Details = () => {
       <GridContainer>
         <Grid item md={6}>
           <DetailsCard
-            title={`${router.query.title}`}
+            title={router.query.title === undefined ? '' : router.query.title}
             contentTitle={`${contentDetails?.data[0]?.description}`}
             likes={contentDetails?.data[0]?.likes}
             comments={contentDetails?.data[0]?.comments}
