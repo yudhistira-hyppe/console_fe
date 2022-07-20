@@ -15,6 +15,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import { Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useUserContentsGroupQuery } from 'api/user/content/management';
+import { useAuth } from 'authentication';
 
 const actions = [
   {
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ContentList = () => {
   // const { contentList } = fakeDb;
+  const { authUser } = useAuth();
   const router = useRouter();
   const numberPerPage = 5;
   const [nPage, setnPage] = useState(0);
@@ -76,9 +78,6 @@ const ContentList = () => {
   ]);
 
   const [state, setState] = useState(['dipost']);
-  console.log('state:', state.length);
-
-  // const aish = ['ownership', 'dijual', 'dibeli', 'arsip'];
 
   const clickedButton = (name) => {
     if (name === 'dipost') return setState(['dipost']);
@@ -117,7 +116,7 @@ const ContentList = () => {
 
   useEffect(() => {
     const payload = {
-      email: 'freeman27@getnada.com',
+      email: authUser.email,
       ownership: state.includes('ownership') ? true : false,
       monetesisasi: state.includes('dibeli') ? true : false,
       archived: state.includes('arsip') ? true : false,
@@ -209,7 +208,7 @@ const ContentList = () => {
       </CmtCard>
       <div className="mt-6 flex flex-row justify-content-center">
         {/* <Pagination page={page} count={nPage} onChange={handleChange} /> */}
-        <Pagination page={1} count={10} />
+        <Pagination color="secondary" page={1} count={10} />
       </div>
     </div>
   );

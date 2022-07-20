@@ -89,7 +89,7 @@ const Balances = ({ balance, precentage, trend }) => {
           </div>
           <div className="mt-8">
             <Button variant="text" onClick={() => router.push('/wallet')} className="min-w-0 p-0 mt-2">
-              <div className={classes.labelLink}>GO TO WALLET</div>
+              <div className={classes.labelLink}>GO TO Transaction</div>
             </Button>
           </div>
         </CmtCardContent>

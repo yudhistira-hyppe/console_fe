@@ -42,7 +42,9 @@ const ContentManagement = () => {
   };
 
   return (
-    <div>
+    <>
+      {/* this component have a loading */}
+      {/* got data from be like this, need to define it one by one */}
       {contentManagement?.data ? (
         <GridContainer>
           <Grid item md={4}>
@@ -149,7 +151,7 @@ const ContentManagement = () => {
       ) : (
         <SpinnerLoading style={{ margin: '17% 0 17% 0' }} />
       )}
-    </div>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const contentManagementAPI = createApi({
   reducerPath: 'contents-management',
   baseQuery: customBaseQueryWithHandleReauth,
+  tagTypes: ['monetizeContent'],
   endpoints: (build) => ({
     userContentsManagement: build.query({
       query: (email) => ({
@@ -37,12 +38,23 @@ export const contentManagementAPI = createApi({
         body: params,
       }),
     }),
+    // here
     userContentMonetize: build.query({
       query: (params) => ({
         url: `/getusercontents/management/monetize`,
         method: 'POST',
         body: params,
       }),
+      providesTags: ['monetizeContent'],
+    }),
+    // why the path folder is messed up? because i need this endpoint at the same reducert path to refetch data
+    postUpdatePrice: build.mutation({
+      query: ({ postID, ...patch }) => ({
+        url: `/posts/update/${postID}`,
+        method: 'PUT',
+        body: patch,
+      }),
+      invalidatesTags: ['monetizeContent'],
     }),
   }),
 });
@@ -53,4 +65,5 @@ export const {
   useUserContentsAnalyticQuery,
   useUserContentsFollowerQuery,
   useUserContentMonetizeQuery,
+  usePostUpdatePriceMutation,
 } = contentManagementAPI;
