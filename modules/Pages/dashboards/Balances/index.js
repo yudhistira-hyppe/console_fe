@@ -15,6 +15,7 @@ import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
 import numberWithCommas from '../../../Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { TrendingDown, TrendingUp } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   infoLabel: {
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Balances = ({ balance, precentage, trend }) => {
+  const router = useRouter();
   const classes = useStyles();
   return (
     <div style={{ height: '250px' }} className="flex-auto">
@@ -88,8 +90,8 @@ const Balances = ({ balance, precentage, trend }) => {
             <div className={classes.infoLabel}>Overall Balance</div>
           </div>
           <div className="mt-8">
-            <Button variant="text" onClick={() => router.push('/wallet')} className="min-w-0 p-0 mt-2">
-              <div className={classes.labelLink}>GO TO Transaction</div>
+            <Button variant="text" onClick={() => router.push('/transaction')} className="min-w-0 p-0 mt-2">
+              <div className={classes.labelLink}>GO TO TRANSACTION</div>
             </Button>
           </div>
         </CmtCardContent>
