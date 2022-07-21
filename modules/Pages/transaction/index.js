@@ -17,6 +17,7 @@ import { useAccountBalanceQuery, useAccountBalanceHistoryQuery } from 'api/user/
 import { getFormattedDate } from '@jumbo/utils/dateHelper';
 import { useUpgradeUserMutation } from 'api/user/auth';
 import { useRouter } from 'next/router';
+import { formatCurrency } from 'helpers/stringHelper';
 
 const useStyles = makeStyles((theme) => ({
   infoLabel: {
@@ -127,7 +128,7 @@ const Balance = ({ balance, precentage, trend }) => {
               <div className={classes.balanceLabel}>
                 {/* there's a issues use this function */}
                 {/* Rp {numberWithCommas(balance)} */}
-                Rp {balance}
+                Rp {formatCurrency(balance)}
               </div>
               <div className="ml-1">
                 <span className={classes.precentageLabel}>{precentage}%</span>
@@ -159,7 +160,7 @@ const TotalWithdraw = ({ total }) => {
               <div className={classes.balanceLabel}>
                 {/* there's a issues use this function */}
                 {/* Rp {numberWithCommas(total)} */}
-                Rp {total}
+                Rp {formatCurrency(total)}
               </div>
             </div>
             <div className="mt-2">

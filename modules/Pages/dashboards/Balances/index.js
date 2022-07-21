@@ -16,6 +16,7 @@ import numberWithCommas from '../../../Components/CommonComponent/NumberWithComm
 import { TrendingDown, TrendingUp } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
 import { useRouter } from 'next/router';
+import { formatCurrency } from 'helpers/stringHelper';
 
 const useStyles = makeStyles((theme) => ({
   infoLabel: {
@@ -80,7 +81,7 @@ const Balances = ({ balance, precentage, trend }) => {
               <div className={classes.balanceLabel}>
                 {/* should use this but got an error */}
                 {/* Rp {numberWithCommas(balance)} */}
-                Rp {balance}
+                Rp {formatCurrency(balance)}
               </div>
               <div className="ml-1">
                 <span className={classes.precentageLabel}>{precentage}%</span>
