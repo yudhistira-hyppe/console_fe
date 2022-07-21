@@ -10,6 +10,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CmtAvatar from '../../../../@coremat/CmtAvatar';
 import CmtMediaObject from '../../../../@coremat/CmtMediaObject';
 import { STREAM_URL } from '../../../../authentication/auth-provider/config';
+import { formatCurrency } from 'helpers/stringHelper';
 
 const useStyles = makeStyles((theme) => ({
   tableRowRoot: {
@@ -79,7 +80,7 @@ const TransactionItem = ({ row }) => {
       <TableCell
         className={classes.tableCellRoot}
         style={row.status == 'sent' ? { color: '#E00930' } : { color: '#5D9405' }}>
-        {row.amount}
+        {formatCurrency(row.amount)}
       </TableCell>
       <TableCell className={clsx(classes.tableCellRoot, 'success')}>
         <Box className={classes.badgeRoot} component="span" bgcolor={getBgColor(row.status)}>

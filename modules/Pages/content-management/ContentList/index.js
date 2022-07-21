@@ -16,6 +16,9 @@ import { Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useUserContentsGroupQuery } from 'api/user/content/management';
 import { useAuth } from 'authentication';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const actions = [
   {
@@ -45,16 +48,43 @@ const useStyles = makeStyles((theme) => ({
 
 const ContentList = () => {
   // const { contentList } = fakeDb;
+  const [count, setCount] = useState(20); // for example we have 20 records
+  const [size, setSize] = useState(10); // there are 7 records on each page
+
+  // number of pages
+  const [countPages, setCountPages] = useState(Math.ceil(count / size));
+
+  //show records on page 1:
+  const [page, setPage] = useState(1); // display 1nd setPage
+
+  const from = (page - 1) * size;
+  const to = Math.min(from + size - 1, count);
+
+  console.log(`we have ${count} records, ${size} per page`);
+  console.log('number of pages', countPages);
+  console.log(`on page ${page} records from ${from} to ${to}`);
+
+  const classes = useStyles();
   const { authUser } = useAuth();
   const router = useRouter();
-  const numberPerPage = 5;
-  const [nPage, setnPage] = useState(0);
-  // const [tableData, setTableData] = useState(contentList);
-  const [page, setPage] = useState(1);
-  const [payloads, setPayloads] = useState();
-  const classes = useStyles();
+  const [typePost, setTypePost] = useState('');
+  const [keyBtn, setKeyBtn] = useState(['dipost']);
+  // this keyBtn set today date
+  const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
+  const [payloads, setPayloads] = useState({
+    email: authUser.email,
+    ownership: keyBtn.includes('ownership') ? true : false,
+    monetesisasi: keyBtn.includes('dibeli') ? true : false,
+    archived: keyBtn.includes('arsip') ? true : false,
+    buy: keyBtn.includes('dijual') ? true : false,
+    startdate: filterByDate,
+    enddate: filterByDate,
+    // postType: typePost,
+    skip: from,
+    limit: to,
+  });
 
-  const [btnLooping, setBtnLooping] = useState([
+  const btnData = [
     {
       name: 'dipost',
       title: 'Konten Dipost',
@@ -75,84 +105,86 @@ const ContentList = () => {
       name: 'arsip',
       title: 'Story',
     },
-  ]);
-
-  const [state, setState] = useState(['dipost']);
+  ];
 
   const clickedButton = (name) => {
-    if (name === 'dipost') return setState(['dipost']);
+    if (name === 'dipost') {
+      setKeyBtn(['dipost']);
+    }
 
     if (name !== 'dipost') {
-      if (state.includes('dipost')) {
-        setState((prev) => {
+      if (keyBtn.includes('dipost')) {
+        setKeyBtn((prev) => {
           const removedipost = prev.filter((e) => e !== 'dipost');
-          // console.log('removedipost:', removedipost);
           return [...removedipost];
         });
       }
-      setState((prev) => [...prev, name]);
+      setKeyBtn((prev) => [...prev, name]);
     }
 
-    if (state.includes(name)) {
-      setState((prev) => {
+    if (keyBtn.includes(name)) {
+      setKeyBtn((prev) => {
         const findAndRemoveMatchValue = prev.filter((e) => e !== name);
         return [...findAndRemoveMatchValue];
       });
     }
   };
 
-  // useEffect(() => {
-  //   var quotient = Math.floor(contentList.length / numberPerPage);
-  //   var remainder = contentList.length % numberPerPage;
-  //   if (remainder > 0) quotient++;
-  //   setnPage(quotient);
-  //   setTableData(contentList.slice((page - 1) * numberPerPage, page * numberPerPage));
-  // }, [contentList]);
-
-  // const handleChange = (event, value) => {
-  //   setTableData(contentList.slice((value - 1) * numberPerPage, value * numberPerPage));
-  //   setPage(value);
-  // };
-
   useEffect(() => {
-    const payload = {
-      email: authUser.email,
-      ownership: state.includes('ownership') ? true : false,
-      monetesisasi: state.includes('dibeli') ? true : false,
-      archived: state.includes('arsip') ? true : false,
-      buy: state.includes('dijual') ? true : false,
-      // startdate: '2022-01-11',
-      // enddate: '2022-01-11',
-      // postType: 'diary',
-      skip: 0,
-      limit: 10,
-    };
-    setPayloads(payload);
-
-    if (state.length === 0 || state.length === 4) {
-      setState(['dipost']);
+    if (typePost) {
+      setPayloads({
+        ...payloads,
+        postType: typePost,
+      });
     }
-  }, [state]);
+
+    if (!typePost) {
+      setPayloads({
+        email: authUser.email,
+        ownership: keyBtn.includes('ownership') ? true : false,
+        monetesisasi: keyBtn.includes('dibeli') ? true : false,
+        archived: keyBtn.includes('arsip') ? true : false,
+        buy: keyBtn.includes('dijual') ? true : false,
+        startdate: filterByDate,
+        enddate: filterByDate,
+        skip: from,
+        limit: to,
+      });
+    }
+
+    if (typePost === 'all') {
+      setPayloads({
+        email: authUser.email,
+        ownership: keyBtn.includes('ownership') ? true : false,
+        monetesisasi: keyBtn.includes('dibeli') ? true : false,
+        archived: keyBtn.includes('arsip') ? true : false,
+        buy: keyBtn.includes('dijual') ? true : false,
+        startdate: filterByDate,
+        enddate: filterByDate,
+        // postType: typePost,
+        skip: from,
+        limit: to,
+      });
+    }
+
+    if (keyBtn.length === 0 || keyBtn.length === 4) {
+      setKeyBtn(['dipost']);
+    }
+  }, [keyBtn, typePost, filterByDate, page, count]);
 
   const { data: contentGroup } = useUserContentsGroupQuery(payloads);
 
-  // useEffect(() => {
-  //   for (let i = 0; i < state.length; i++) {
-  //     switch (state[i]) {
-  //       case 'dipost':
-  //         return console.log('dipost om');
+  const handleChangeTypePost = (event) => {
+    setTypePost(event.target.value);
+  };
 
-  //       case 'ownership':
-  //         return console.log('ownership om');
-
-  //       case 'dijual':
-  //         return console.log('dijual om');
-
-  //       default:
-  //         return console.log('masuk ke default');
-  //     }
-  //   }
-  // }, [state]);
+  const convertDate = (str) => {
+    let date = new Date(str),
+      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+      day = ('0' + date.getDate()).slice(-2);
+    const res = [date.getFullYear(), mnth, day].join('-');
+    setFilterByDate(res);
+  };
 
   return (
     <div>
@@ -160,7 +192,7 @@ const ContentList = () => {
       <div className="flex flex-row w-full mt-3">
         <div className="flex flex-row col-8 align-items-center">
           <Stack direction="row" spacing={1}>
-            {btnLooping?.map((btn) => {
+            {btnData?.map((btn) => {
               return (
                 <Button
                   name={`${btn.name}`}
@@ -168,7 +200,7 @@ const ContentList = () => {
                   size="small"
                   className={classes.btnFilter}
                   style={
-                    state.includes(btn.name)
+                    keyBtn.includes(btn.name)
                       ? { backgroundColor: ' rgba(171, 34, 175, 0.12)', color: 'rgba(171, 34, 175, 1)' }
                       : null
                   }
@@ -180,22 +212,36 @@ const ContentList = () => {
           </Stack>
         </div>
 
-        <div className="flex flex-row-reverse col-4 align-items-center">
-          <FormControl size={'small'} className="mr-2 mt-2" variant={'outlined'} fullWidth>
-            <InputLabel id="fitur-select-label">Semua Fitur</InputLabel>
-            <Select labelId="fitur-select-label" id="fitur-simple-select" label="Semua Fitur">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+        <div className="flex flex-row col-4 align-items-center">
+          <FormControl size={'small'} className="mr-2" variant={'outlined'} fullWidth>
+            <InputLabel id="demo-simple-select-label">Tipe Konten</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={typePost}
+              label="tipe_konten"
+              onChange={handleChangeTypePost}>
+              {/* waiting for be to get payload all */}
+              <MenuItem value={'all'}>All</MenuItem>
+              <MenuItem value={'story'}>Story</MenuItem>
+              <MenuItem value={'vid'}>Vid</MenuItem>
+              <MenuItem value={'diary'}>Diary</MenuItem>
+              <MenuItem value={'pict'}>Pict</MenuItem>
             </Select>
           </FormControl>
-          <FormControl size={'small'} className="mr-2 mt-2" variant={'outlined'} fullWidth>
-            <InputLabel id="content-select-label"> Waktu Post</InputLabel>
-            <Select labelId="content-select-label" id="fitur-simple-select" label="di post">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
+          <FormControl size={'small'} className="mr-2" variant={'outlined'} fullWidth>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                autoCompleted="off"
+                size="small"
+                label="Semua Waktu"
+                value={filterByDate}
+                onChange={(filterByDate) => {
+                  convertDate(filterByDate);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </FormControl>
         </div>
       </div>
@@ -207,8 +253,7 @@ const ContentList = () => {
         </CmtCardContent>
       </CmtCard>
       <div className="mt-6 flex flex-row justify-content-center">
-        {/* <Pagination page={page} count={nPage} onChange={handleChange} /> */}
-        <Pagination color="secondary" page={1} count={10} />
+        <Pagination page={page} onChange={(e, value) => setPage(value)} count={countPages} />
       </div>
     </div>
   );
