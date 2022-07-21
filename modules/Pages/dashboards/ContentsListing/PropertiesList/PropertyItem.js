@@ -168,16 +168,16 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
     </Box>
   );
 
-  const getFooter = () => (
-    <React.Fragment>
-      <Typography component="div" variant="h6" className={classes.priceRoot}>
-        {`item.price`}
-      </Typography>
-      <Box component="span" fontSize={12} color="text.secondary">
-        {`item.pricePerSqFt`}
-      </Box>
-    </React.Fragment>
-  );
+  // const getFooter = () => (
+  //   <React.Fragment>
+  //     <Typography component="div" variant="h6" className={classes.priceRoot}>
+  //       {`item.price`}
+  //     </Typography>
+  //     <Box component="span" fontSize={12} color="text.secondary">
+  //       {`item.pricePerSqFt`}
+  //     </Box>
+  //   </React.Fragment>
+  // );
 
   return (
     <CmtMediaObject
@@ -206,7 +206,7 @@ const PropertyItem = ({ authUser, item, onPropertyClick }) => {
       avatarPos="center"
       title={getTitle()}
       content={getContent(item)}
-      footerComponent={item.monetize ? getFooter() : null}
+      // footerComponent={item.monetize ? getFooter() : null}
       footerComponentProps={{ className: classes.footerComponentRoot }}>
       <Box fontSize={12} color="text.disabled" display="flex" flexDirection="row" alignItems="center" mb={4}>
         <Box display="flex" flexDirection="row" alignItems="center" mr={4}>
