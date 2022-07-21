@@ -10,7 +10,10 @@ import CmtAvatar from '../../../../../../@coremat/CmtAvatar';
 import { getDateElements } from '../../../../../utils/dateHelper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { alpha } from '@material-ui/core/styles';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import { useAuth } from 'authentication';
 
+// NOTED : DONT REMOVE THE CODE BELOW IT MAYBE USE AT THE FUTURE
 const useStyles = makeStyles((theme) => ({
   feedItemRoot: {
     padding: '10px 0',
@@ -35,131 +38,121 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const icons = {
-  POSTING: <MessageIcon style={{ color: '#836AFF' }} />,
-  SHARED_POST: <ShareIcon style={{ color: '#0795F4' }} />,
-  INVITATION: <EmailIcon style={{ color: '#00C4B4' }} />,
-  BIRTHDAY: <CakeIcon style={{ color: '#EF933C' }} />,
-};
+// const icons = {
+//   COMMENT: <MessageIcon style={{ color: '#836AFF' }} />,
+//   FOLLOWER: <ShareIcon style={{ color: '#0795F4' }} />,
+//   FOLLOWING: <EmailIcon style={{ color: '#00C4B4' }} />,
+//   REACTION: <CakeIcon style={{ color: '#EF933C' }} />,
+// };
 
-const getPostContent = (item, classes) => (
+const getComment = (item, classes) => (
   <Typography component="div" variant="h5" className={classes.titleRoot}>
     <Box component="span" color="primary.main">
       {/* {item.user.name} */}
-      {item.title}
+      {item?.title}
     </Box>
     <Box component="span" ml={1}>
-      has recently posted an
+      has recently comment
     </Box>
     <Box component="span" ml={1}>
       {/* {item.metaData.post.type} */}
-      {item.eventType}
+      {item?.eventType}
     </Box>
   </Typography>
 );
+// NOTED : DONT REMOVE THE CODE BELOW IT MAYBE USE AT THE FUTURE
 
-const getSharedContent = (item, classes) => (
+const getFollowing = (item, classes) => (
   <Typography component="div" variant="h5" className={classes.titleRoot}>
     <Box component="span" color="primary.main">
-      {/* {item.user.name} */}
-      {item.emai}
+      {item?.senderOrReceiverInfo?.fullName}
     </Box>
     <Box component="span" ml={1}>
-      has shared
+      mengikuti anda
     </Box>
-    <Box component="span" ml={1} color="primary.main">
-      {`${item.metaData.post.owner.name}'s`}
-      owner name
+    {/* <Box component="span" ml={1} color="primary.main">
+      taslim halim
     </Box>
     <Box component="span" ml={1}>
       post.
+    </Box> */}
+  </Typography>
+);
+
+const getLike = (item, classes) => (
+  <Typography component="div" variant="h5" className={classes.titleRoot}>
+    <Box component="span" color="primary.main">
+      {item?.title}
+    </Box>
+    <Box component="span" ml={1}>
+      {item?.body || item?.bodyId}
     </Box>
   </Typography>
 );
 
-// const getBirthdayContent = (item, classes) => (
-//   <Typography component="div" variant="h5" className={classes.titleRoot}>
-//     <Box component="span" color="blue">
-//       {item.user.name}
-//     </Box>
-//     <Box component="span" ml={1}>
-//       has birthday today.
-//     </Box>
-//   </Typography>
-// );
+const getFollower = (item, classes) => (
+  <Typography component="div" variant="h5" className={classes.titleRoot}>
+    <Box component="span" color="primary.main">
+      {item.title}
+    </Box>
+    {/* <Box component="span" ml={1}>
+      telah mengikuti kamu
+    </Box> */}
+    <Box component="span" ml={1}>
+      meminta untuk mengikuti anda
+    </Box>
+  </Typography>
+);
 
-// const getInvitationContent = (item, classes) => (
-//   <Typography component="div" variant="h5" className={classes.titleRoot}>
-//     <Box component="span" color="blue">
-//       {item.metaData.user.name}
-//     </Box>
-//     <Box component="span" ml={1}>
-//       has sent you a group invitation for
-//     </Box>
-//     <Box component="span" color="blue" ml={1}>
-//       {item.metaData.group.name}
-//     </Box>
-//   </Typography>
-// );
+// NOTED : DONT REMOVE THE CODE BELOW IT MAYBE USE AT THE FUTURE
 
 const NotificationItem = ({ item }) => {
-  // console.log('item:', item);
+  const { authUser } = useAuth();
+  console.log('item notifs:', item);
   const classes = useStyles();
-
-  // before i rewrite start
-  // const getTitle = (item, classes) => {
-  //   switch (item.type) {
-  //     case 'POSTING':
-  //       return getPostContent(item, classes);
-  //     case 'SHARED_POST':
-  //       return getSharedContent(item, classes);
-  //     case 'INVITATION':
-  //       return getInvitationContent(item, classes);
-  //     case 'BIRTHDAY':
-  //       return getBirthdayContent(item, classes);
-  //     default:
-  //       return '';
-  //   }
-  // };
-  // before i rewrite end
 
   const getTitle = (item, classes) => {
     switch (item.eventType) {
       case 'COMMENT':
         // return <div>comment</div>;
-        return getPostContent(item, classes);
+        return getComment(item, classes);
       case 'FOLLOWING':
         // return <div>FOLLOWING</div>;
-        return getSharedContent(item, classes);
-      // case 'FOLLOWER':
-      //   // return <div>FOLLOWER</div>;
-      //   return getInvitationContent(item, classes);
-      // case 'LIKE':
-      //   // return <div>LIKE</div>;
-      //   return getBirthdayContent(item, classes);
+        return getFollowing(item, classes);
+      case 'FOLLOWER':
+        // return <div>FOLLOWER</div>;
+        return getFollower(item, classes);
+      case 'LIKE':
+        return getLike(item, classes);
       default:
         return '';
     }
   };
 
-  // const getSubTitle = () => (
-  //   <Box display="flex" alignItems="center" fontSize={12} color="text.disabled">
-  //     <Box fontSize={16} clone>
-  //       {icons[item.type]}
-  //     </Box>
-  //     <Box ml={2}>{getDateElements(item.date).time}</Box>
-  //   </Box>
-  // );
+  const getSubTitle = (item, classes) => (
+    // <Box display="flex" alignItems="flex-end" border="1px solid black" fontSize={12} color="text.disabled">
+    <Box textAlign="right" fontSize={12} color="text.disabled">
+      {/* <Box fontSize={16}>{item?.bodyId}</Box> */}
+      <Box ml={2}>{getDateElements(item?.createdAt).time}</Box>
+    </Box>
+  );
+
+  // NOTED : DONT REMOVE THE CODE BELOW IT MAYBE USE AT THE FUTURE
+  const getMediaUri = (path) => {
+    console.log('path:', path);
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const mediaURI = path;
+
+    return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
 
   return (
     <Box className={classes.feedItemRoot}>
       <CmtMediaObject
         avatarPos="center"
-        // avatar={<CmtAvatar size={40} src={item.user.profile_pic} alt={item.user.name} />}
-        // title={getTitle(item, classes)}
-        title={'ini title'}
-        // subTitle={getSubTitle()}
-        subTitle={'(data udh kelooping tinggal tunggu API)'}
+        avatar={<CmtAvatar size={40} src={getMediaUri(item?.senderOrReceiverInfo?.avatar?.mediaEndpoint)} alt={'icon'} />}
+        title={getTitle(item, classes)}
+        subTitle={getSubTitle(item, classes)}
       />
     </Box>
   );
