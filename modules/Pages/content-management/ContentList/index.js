@@ -48,21 +48,21 @@ const useStyles = makeStyles((theme) => ({
 
 const ContentList = () => {
   // const { contentList } = fakeDb;
-  const [count, setCount] = useState(20); // for example we have 20 records
-  const [size, setSize] = useState(10); // there are 7 records on each page
+  // const [count, setCount] = useState(20); // for example we have 20 records
+  // const [size, setSize] = useState(10); // there are 7 records on each page
 
-  // number of pages
-  const [countPages, setCountPages] = useState(Math.ceil(count / size));
+  // // number of pages
+  // const [countPages, setCountPages] = useState(Math.ceil(count / size));
 
   //show records on page 1:
-  const [page, setPage] = useState(1); // display 1nd setPage
+  // const [page, setPage] = useState(1); // display 1nd setPage
 
-  const from = (page - 1) * size;
-  const to = Math.min(from + size - 1, count);
+  // const from = (page - 1) * size;
+  // const to = Math.min(from + size - 1, count);
 
-  console.log(`we have ${count} records, ${size} per page`);
-  console.log('number of pages', countPages);
-  console.log(`on page ${page} records from ${from} to ${to}`);
+  // console.log(`we have ${count} records, ${size} per page`);
+  // console.log('number of pages', countPages);
+  // console.log(`on page ${page} records from ${from} to ${to}`);
 
   const classes = useStyles();
   const { authUser } = useAuth();
@@ -71,6 +71,26 @@ const ContentList = () => {
   const [keyBtn, setKeyBtn] = useState(['dipost']);
   // this keyBtn set today date
   const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
+  // ------------------------------------
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [skip, setSkip] = useState(0);
+  const [countPages, setCountPages] = useState(Number);
+  console.log('page:', page);
+  console.log('skip:', skip);
+  console.log('limit:', limit);
+
+  const getSkipAndLimit = (e, value) => {
+    setLimit(value * 10);
+    setSkip(value * 10 - 10);
+    setPage(value);
+  };
+
+  useEffect(() => {
+    setCountPages(Math.ceil(contentGroup?.totalFilter / 10));
+  });
+  // ------------------------------------
+
   const [payloads, setPayloads] = useState({
     email: authUser.email,
     ownership: keyBtn.includes('ownership') ? true : false,
@@ -80,8 +100,8 @@ const ContentList = () => {
     startdate: filterByDate,
     enddate: filterByDate,
     // postType: typePost,
-    skip: from,
-    limit: to,
+    skip: skip,
+    limit: limit,
   });
 
   const btnData = [
@@ -132,6 +152,8 @@ const ContentList = () => {
 
   useEffect(() => {
     if (typePost) {
+      setLimit(10);
+      setSkip(0);
       setPayloads({
         ...payloads,
         postType: typePost,
@@ -139,6 +161,8 @@ const ContentList = () => {
     }
 
     if (!typePost) {
+      setLimit(10);
+      setSkip(0);
       setPayloads({
         email: authUser.email,
         ownership: keyBtn.includes('ownership') ? true : false,
@@ -147,12 +171,14 @@ const ContentList = () => {
         buy: keyBtn.includes('dijual') ? true : false,
         startdate: filterByDate,
         enddate: filterByDate,
-        skip: from,
-        limit: to,
+        skip: skip,
+        limit: limit,
       });
     }
 
     if (typePost === 'all') {
+      setLimit(10);
+      setSkip(0);
       setPayloads({
         email: authUser.email,
         ownership: keyBtn.includes('ownership') ? true : false,
@@ -162,15 +188,15 @@ const ContentList = () => {
         startdate: filterByDate,
         enddate: filterByDate,
         // postType: typePost,
-        skip: from,
-        limit: to,
+        skip: skip,
+        limit: limit,
       });
     }
 
     if (keyBtn.length === 0 || keyBtn.length === 4) {
       setKeyBtn(['dipost']);
     }
-  }, [keyBtn, typePost, filterByDate, page, count]);
+  }, [keyBtn, typePost, filterByDate, skip, limit]);
 
   const { data: contentGroup } = useUserContentsGroupQuery(payloads);
 
@@ -253,7 +279,7 @@ const ContentList = () => {
         </CmtCardContent>
       </CmtCard>
       <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={(e, value) => setPage(value)} count={countPages} />
+        <Pagination page={page} onChange={getSkipAndLimit} count={countPages} />
       </div>
     </div>
   );
