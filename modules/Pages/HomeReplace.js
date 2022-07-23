@@ -128,7 +128,7 @@ const Home = () => {
             <Stack direction="row" spacing={5} justifyContent="flex-end">
               <Button>About</Button>
               <Button>Features</Button>
-              <Button variant="outlined" className={classes.btnLogin} onClick={() => router.push('/signin')}>
+              <Button variant="outlined" className={classes.btnLogin} onClick={() => router.push({ pathname: '/signin', query: router.query })}>
                 Login
               </Button>
             </Stack>
