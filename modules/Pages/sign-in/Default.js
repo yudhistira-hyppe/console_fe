@@ -1,6 +1,5 @@
-//MODIFIED HYPPE
 import React from 'react';
-import SignIn from '../../Components/Auth/SignIn';
+import SignIn from '../../Components/Auth/SignInWrapper';
 
 const DefaultSignin = () => {
   return <SignIn />;
