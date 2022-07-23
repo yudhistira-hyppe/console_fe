@@ -16,11 +16,11 @@ const SecurePage = ({ children }) => {
   useEffect(() => {
     if (!isLoading) {
       if (!authUser && router.pathname !== '/') {
-        router.push({ pathname: '/signin', query: { redirect: router.pathname } });
+        router.push({ pathname: '/home', query: { redirect: router.pathname } });
         return;
       }
       if (!authUser && router.pathname === '/') {
-        router.push('/signin');
+        router.push('/home');
         return;
       }
       // if (authUser && !authUser.roles.includes('ROLE_PREMIUM') && PREMIUM_ROUTES.includes(router.pathname)) {
