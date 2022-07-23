@@ -3,10 +3,13 @@ import { SOCKET_IO_URL } from './config';
 import { io } from 'socket.io-client';
 import { premiumSubscribe, premiumConfirm } from './AuthApi';
 import { authApi } from 'api/user';
+import { auth as firebaseAuth } from 'helpers/firebaseHelper';
+import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 
 export const useProvideAuth = () => {
-  const { useLoginMutation, useLogoutMutation } = authApi;
+  const { useLoginMutation, useLoginWithSocmedMutation, useLogoutMutation } = authApi;
   const [login] = useLoginMutation();
+  const [loginWithSocmed] = useLoginWithSocmedMutation();
   const [logout] = useLogoutMutation();
   const [authUser, setAuthUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
@@ -114,7 +117,45 @@ export const useProvideAuth = () => {
       });
   };
 
-  const userLogin = (user) => {
+  const getResultLoginWithGoogle = async () => {
+    let resultLoginWithGoogle;
+    await getRedirectResult(firebaseAuth)
+      .then((result) => {
+        if (result) {
+          resultLoginWithGoogle = result;
+        }
+      })
+      .catch(() => fetchError('Terjadi kesalahan pada sistem, silahkan coba lagi.'));
+    return resultLoginWithGoogle;
+  };
+
+  const userLoginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    fetchStart();
+    await signInWithRedirect(firebaseAuth, provider).catch(() =>
+      fetchError('Terjadi kesalahan pada sistem, silahkan coba lagi.'),
+    );
+  };
+
+  const userLoginWithSocmed = (user) => {
+    fetchStart();
+    loginWithSocmed(user)
+      .unwrap()
+      .then((result) => {
+        createCookie({
+          token: { value: result.data.token, expirationHour: 0.25 },
+          refreshToken: { value: result.data.refreshToken, expirationHour: 144 },
+        });
+        fetchSuccess();
+        saveAuth(result.data);
+      })
+      .catch((error) => {
+        fetchError(error.message);
+        removeAuth();
+      });
+  };
+
+  const userLoginWithEmail = (user) => {
     fetchStart();
     login(user)
       .unwrap()
@@ -244,7 +285,10 @@ export const useProvideAuth = () => {
     setAuthUser,
     getAuthUser,
     consoleLogin,
-    userLogin,
+    getResultLoginWithGoogle,
+    userLoginWithGoogle,
+    userLoginWithSocmed,
+    userLoginWithEmail,
     userSignup,
     userSignOut,
     userPremiumSubscribe,

@@ -12,6 +12,13 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    loginWithSocmed: build.mutation({
+      query: (data) => ({
+        url: `/sign/socmed`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
     refreshToken: build.mutation({
       query: (data) => ({
         url: `/user/refreshtoken`,
@@ -36,4 +43,10 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useRefreshTokenMutation, useLogoutMutation, useUpgradeUserMutation } = authApi;
+export const {
+  useLoginMutation,
+  useLoginWithSocmedMutation,
+  useRefreshTokenMutation,
+  useLogoutMutation,
+  useUpgradeUserMutation,
+} = authApi;

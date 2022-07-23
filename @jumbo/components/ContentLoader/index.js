@@ -12,33 +12,33 @@ function SlideTransition(props) {
 }
 
 export const NotificationLoader = ({ loading, error, message }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [type, setType] = useState('');
 
   useEffect(() => {
     if (error) {
       setType('error');
+      setOpen(true);
     }
     if (message) {
       setType('success');
+      setOpen(true);
     }
   }, [error, message]);
 
   return (
     <React.Fragment>
       {loading && <PageLoader />}
-      {
-        <Snackbar
-          open={open}
-          autoHideDuration={3000}
-          onClose={() => setOpen(false)}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          TransitionComponent={SlideTransition}>
-          <Alert variant="filled" severity={type}>
-            {type === 'error' ? error : message}
-          </Alert>
-        </Snackbar>
-      }
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        TransitionComponent={SlideTransition}>
+        <Alert variant="filled" severity={type}>
+          {type === 'error' ? error : message}
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 };

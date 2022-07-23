@@ -1,29 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { Box } from '@material-ui/core';
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from 'next/link';
-import AuthWrapper from './AuthWrapper';
-import CmtImage from '@coremat/CmtImage';
-import IntlMessages from '@jumbo/utils/IntlMessages';
-import { NotificationLoader } from '@jumbo/components/ContentLoader';
-import { MODE } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
+import { alpha, makeStyles } from '@material-ui/core/styles';
+import { Box, Typography } from '@material-ui/core';
 import Logo from '@jumbo/components/AppLayout/partials/Logo';
-import { firebaseCloudMessaging, auth } from 'helpers/firebaseHelper';
-import { GoogleAuthProvider } from 'firebase/auth';
-import { signInWithPopup } from 'firebase/auth';
-import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
   authThumb: {
-    backgroundColor: alpha(theme.palette.primary.main, 0.12),
+    backgroundColor: alpha('#8B8B8B', 0.12),
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -31,6 +17,22 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: '50%',
       order: 2,
+    },
+    '& img': {
+      maxHeight: '367px',
+    },
+  },
+  authThumbText: {
+    textAlign: 'center',
+    color: '#353535',
+    '& .title': {
+      fontSize: '16px',
+    },
+    '& img': {
+      margin: '2px 0 4px 0',
+    },
+    '& .hashtag': {
+      fontSize: '14px',
     },
   },
   authContent: {
@@ -46,164 +48,104 @@ const useStyles = makeStyles((theme) => ({
   },
   titleRoot: {
     marginBottom: 14,
-    color: theme.palette.text.primary,
+    color: '#3F3F3F',
   },
-  textFieldRoot: {
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: alpha(theme.palette.common.dark, 0.12),
+  descRoot: {
+    marginBottom: 24,
+    color: 'rgba(63, 63, 63, 0.6)',
+  },
+  button: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '2px solid #EDEDED',
+    borderRadius: '4px',
+    backgroundColor: '#FFF',
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
+    '& img': {
+      height: '48px',
+      padding: '12px',
+    },
+    '& p': {
+      width: '100%',
+      height: '48px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderLeft: '2px solid #EDEDED',
+      color: '#737373',
+      fontSize: '16px',
     },
   },
-  formcontrolLabelRoot: {
-    '& .MuiFormControlLabel-label': {
-      [theme.breakpoints.down('xs')]: {
-        fontSize: 12,
-      },
+  divider: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'relative',
+    borderTop: '1px solid #C1C1C1',
+    margin: '24px 0',
+    '& p': {
+      backgroundColor: '#FFF',
+      position: 'absolute',
+      fontSize: '16px',
+      height: '24px',
+      padding: '0 24px',
+      top: '-12.5px',
     },
   },
 }));
 
-const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
+const SignIn = ({ variant = 'default', onHandleClickSignInWithEmail }) => {
   const classes = useStyles({ variant });
-  const { isLoading, error, userLogin, renderSocialMediaLogin } = useAuth();
-  const [location, setLocation] = useState({ latitude: '0', longitude: '0' });
-  // const [email, setEmail] = useState(MODE === 'DEV' ? 'freeman27@getnada.com' : '');
-  const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState(MODE === 'DEV' ? 'freeman27' : '');
-  const [password, setPassword] = useState('');
-  const [deviceId, setDeviceId] = useState(uuidv4());
-  console.log('deviceId:', deviceId);
-  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
+  const { userLoginWithGoogle } = useAuth();
 
-  useEffect(() => {
-    getCurrentUserLocation();
-    generateFCMToken();
-  }, []);
-
-  const generateFCMToken = () => {
-    Notification.requestPermission(() => {
-      setIsLoginDisabled(true);
-      firebaseCloudMessaging
-        .getFCMToken()
-        .then((token) => {
-          setDeviceId(token);
-        })
-        .catch(() => {})
-        .finally(() => setIsLoginDisabled(false));
-    });
-  };
-
-  const getCurrentUserLocation = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-    });
-  };
-
-  const onSubmit = () => {
-    userLogin({
-      email,
-      password,
-      location,
-      deviceId:
-        'dw-ckEuZFESeqnWjzzz9UE:APA91bF2xMw67hdbbMgC2fXNXfo9BfLPmZZBVMFEDGMLStVdJFgfvjLlsqnMViLMhKx5aeY_25CoMqD3PnY-xvt-xHsE0F44WpnvLDvS8L0QNzRQzYmueyyFWdAyTHeyHnEl7RaLQOIa',
-      devicetype: 'WEB',
-    });
-  };
-
-  function signInWithGoogle() {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
-  }
   return (
-    <AuthWrapper variant={wrapperVariant}>
-      {variant === 'default' ? (
-        <Box className={classes.authThumb}>
-          <CmtImage src="/images/auth/login-img.png" />
-        </Box>
-      ) : null}
+    <>
       <Box className={classes.authContent}>
         <Box mb={7}>
           <Logo />
         </Box>
         <Typography component="div" variant="h1" className={classes.titleRoot}>
-          Login
+          Selamat Datang Di Hyppe Business
         </Typography>
-        <div
-          onClick={
-            signInWithGoogle
-            // .then((user) => {
-            //   handleRedirectToOrBack();
-            //   console.log(user);
-            // })
-            // .catch((e) => console.log(e.message))
-          }>
-          testing login with google
+        <Typography component="div" variant="h4" className={classes.descRoot}>
+          Mulai kembangkan bisnismu dan buat kontenmu dilihat banyak orang
+        </Typography>
+        <button className={classes.button} onClick={userLoginWithGoogle}>
+          <img src="/images/icons/google.svg" alt="Masuk dengan akun Google" />
+          <p>Masuk dengan akun Google</p>
+        </button>
+        <div className={classes.divider}>
+          <p>Atau Masuk Dengan</p>
         </div>
-        <form>
-          <Box mb={2}>
-            <TextField
-              label={<IntlMessages id="appModule.email" />}
-              fullWidth
-              onChange={(event) => setEmail(event.target.value)}
-              defaultValue={email}
-              margin="normal"
-              variant="outlined"
-              className={classes.textFieldRoot}
-            />
-          </Box>
-          <Box mb={2}>
-            <TextField
-              type="password"
-              label={<IntlMessages id="appModule.password" />}
-              fullWidth
-              onChange={(event) => setPassword(event.target.value)}
-              defaultValue={password}
-              margin="normal"
-              variant="outlined"
-              className={classes.textFieldRoot}
-            />
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
-            <FormControlLabel
-              className={classes.formcontrolLabelRoot}
-              control={<Checkbox name="checkedA" />}
-              label="Remember me"
-            />
-            <Box component="p" fontSize={{ xs: 12, sm: 16 }}>
-              <Link href="/forgot-password">
-                <a>
-                  <IntlMessages id="appModule.forgotPassword" />
-                </a>
-              </Link>
-            </Box>
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
-            <Button onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">
-              <IntlMessages id="appModule.signIn" />
-            </Button>
-            {/* <Box component="p" fontSize={{ xs: 12, sm: 16 }}>
-              <Link href="/premium-subscribe">
-                <a>
-                  <IntlMessages id="subscribe.premium.title" />
-                </a>
-              </Link>
-            </Box> */}
-          </Box>
-        </form>
-        {renderSocialMediaLogin()}
-        <NotificationLoader loading={isLoading} error={error} />
+        <button className={classes.button} onClick={onHandleClickSignInWithEmail}>
+          <img src="/images/icons/user.svg" alt="Masuk dengan alamat Email" />
+          <p>Masuk dengan alamat Email lainnya</p>
+        </button>
       </Box>
-    </AuthWrapper>
+      <Box className={classes.authThumb}>
+        <div className={classes.authThumbText}>
+          <p className="title">From</p>
+          <img src="/images/hyppe-logo-with-text.svg" alt="Logo Hyppe" />
+          <p className="desc">#MonetizeYourIdeas</p>
+        </div>
+        <img src="/images/auth/signin.svg" alt="Masuk dengan alamat email" />
+      </Box>
+    </>
   );
 };
 
 SignIn.propTypes = {
   variant: PropTypes.string,
-  wrapperVariant: PropTypes.string,
+  onHandleClickSignInWithEmail: PropTypes.func,
 };
 
 SignIn.defaultProps = {
   variant: 'default',
-  wrapperVariant: 'default',
 };
 
 export default SignIn;
