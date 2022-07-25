@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PageHeader } from '../../../../@jumbo/components/PageComponents';
-import { FormControl, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
+import { alpha, makeStyles } from '@material-ui/core/styles';
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
 import DetailsCard from '../details/DetailsCard';
@@ -26,6 +26,17 @@ const useStyles = makeStyles((theme) => ({
       border: '0 none',
     },
   },
+  btnRoot: {
+    backgroundColor: theme.palette.lightBtn.bgColor,
+    color: theme.palette.lightBtn.textColor,
+    fontWeight: theme.typography.fontWeightBold,
+    letterSpacing: 1.25,
+    padding: '3px 10px',
+    '&:hover, &:focus': {
+      backgroundColor: alpha(theme.palette.lightBtn.bgColor, 0.8),
+      color: theme.palette.lightBtn.textColor,
+    },
+  },
 }));
 
 const Montetize = ({}) => {
@@ -34,6 +45,7 @@ const Montetize = ({}) => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState('monetize_content');
   const [typePost, setTypePost] = useState('all');
+  const [limit, setLimit] = useState(10);
   const [payloadContent, setPayloadContent] = useState({
     email: authUser?.email,
     buy: false,
@@ -42,8 +54,9 @@ const Montetize = ({}) => {
     startdate: filterByDate,
     enddate: filterByDate,
     skip: 0,
-    limit: 10,
+    limit: limit,
   });
+  console.log('limit:', limit);
   const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
 
   useEffect(() => {
@@ -60,7 +73,7 @@ const Montetize = ({}) => {
             enddate: filterByDate,
             postType: typePost,
             skip: 0,
-            limit: 10,
+            limit: limit,
           });
         }
         if (typePost === 'all') {
@@ -72,7 +85,7 @@ const Montetize = ({}) => {
             startdate: filterByDate,
             enddate: filterByDate,
             skip: 0,
-            limit: 10,
+            limit: limit,
           });
         }
         return payloadContent;
@@ -89,7 +102,7 @@ const Montetize = ({}) => {
             enddate: filterByDate,
             postType: typePost,
             skip: 0,
-            limit: 10,
+            limit: limit,
           });
         }
 
@@ -103,14 +116,14 @@ const Montetize = ({}) => {
             startdate: filterByDate,
             enddate: filterByDate,
             skip: 0,
-            limit: 10,
+            limit: limit,
           });
           return payloadContent;
         }
       default:
         console.log('masuk default');
     }
-  }, [tabValue, typePost, filterByDate]);
+  }, [tabValue, typePost, filterByDate, limit]);
 
   const convertDate = (str) => {
     let date = new Date(str),
@@ -155,6 +168,10 @@ const Montetize = ({}) => {
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
 
+  const handleLoadMore = () => {
+    setLimit(limit + 10);
+  };
+
   return (
     <div>
       <PageHeader
@@ -196,6 +213,13 @@ const Montetize = ({}) => {
           <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
           <PerfectScrollbar className={classes.scrollbarRoot}>
             <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
+            {contentMonetize.length > 10 && (
+              <center>
+                <Button onClick={handleLoadMore} className={classes.btnRoot}>
+                  Load More data
+                </Button>
+              </center>
+            )}
           </PerfectScrollbar>
         </CmtCardContent>
       </CmtCard>
