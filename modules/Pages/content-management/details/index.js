@@ -50,7 +50,7 @@ const Details = () => {
     <div>
       <PageHeader heading={'Detail Content'} />
       <GridContainer>
-        <Grid item md={6}>
+        <Grid item md={6} xs={12}>
           <DetailsCard
             title={router.query.title === undefined ? '' : router.query.title}
             contentTitle={`${contentDetails?.data[0]?.description}`}
@@ -64,13 +64,13 @@ const Details = () => {
             image={getMediaUri()}
           />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={6} xs={12}>
           <Statistics data={contentDetails?.data[0]} />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={6} xs={12}>
           <Comments query={router.query.postId} />
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={3} xs={12}>
           <Discover
             precentage={98}
             isNumber={true}
@@ -80,11 +80,11 @@ const Details = () => {
             isInceased={false}
           />
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={3} xs={12}>
           <Discover
             isNumber={false}
             precentage={'2 jam'}
-            number={`${contentTime?.hours}h ${contentTime?.minutes}m ${contentTime?.days}d`}
+            number={`${contentTime?.hours}h ${contentTime?.minutes}m ${contentTime?.days}`}
             title={'Total Waktu Tayang'}
             subtitle={'Rata-Rata'}
           />
@@ -92,16 +92,16 @@ const Details = () => {
         </Grid>
         {contentEvent ? (
           <>
-            <Grid item md={3}>
+            <Grid item md={3} xs={12}>
               <BiographyStats title={'Jenis Kelamin Penonton'} dataChart={getValue[0]} />
             </Grid>
-            <Grid item md={3}>
+            <Grid item md={3} xs={12}>
               <BiographyStats title={'Negara Penonton'} dataChart={getValue[2]} />
             </Grid>
-            <Grid item md={3}>
+            <Grid item md={3} xs={12}>
               <BiographyStats title={'Rentang Umur Penonton'} dataChart={getValue[1]} />
             </Grid>
-            <Grid item md={3}>
+            <Grid item md={3} xs={12}>
               <BiographyStats title={fakeDb.viewsBiography.title} dataChart={fakeDb.viewsBiography.data} />
             </Grid>
           </>
