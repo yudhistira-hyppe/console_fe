@@ -213,7 +213,7 @@ const Montetize = ({}) => {
           <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
           <PerfectScrollbar className={classes.scrollbarRoot}>
             <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
-            {contentMonetize.length > 10 && (
+            {contentMonetize?.length > 10 && (
               <center>
                 <Button onClick={handleLoadMore} className={classes.btnRoot}>
                   Load More data
