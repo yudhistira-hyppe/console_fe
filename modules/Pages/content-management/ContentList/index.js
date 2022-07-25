@@ -47,23 +47,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ContentList = () => {
-  // const { contentList } = fakeDb;
-  // const [count, setCount] = useState(20); // for example we have 20 records
-  // const [size, setSize] = useState(10); // there are 7 records on each page
-
-  // // number of pages
-  // const [countPages, setCountPages] = useState(Math.ceil(count / size));
-
-  //show records on page 1:
-  // const [page, setPage] = useState(1); // display 1nd setPage
-
-  // const from = (page - 1) * size;
-  // const to = Math.min(from + size - 1, count);
-
-  // console.log(`we have ${count} records, ${size} per page`);
-  // console.log('number of pages', countPages);
-  // console.log(`on page ${page} records from ${from} to ${to}`);
-
   const classes = useStyles();
   const { authUser } = useAuth();
   const router = useRouter();
@@ -241,7 +224,7 @@ const ContentList = () => {
 
         <Grid xs={5} md={4}>
           <Stack direction={{ xs: 'column', sm: 'row', md: 'row', lg: 'row' }} spacing={2}>
-            <FormControl size={'small'} variant={'outlined'} fullWidth>
+            <FormControl size={'small'} fullWidth>
               <InputLabel id="demo-simple-select-label">Tipe Konten</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -256,7 +239,7 @@ const ContentList = () => {
                 <MenuItem value={'pict'}>Pict</MenuItem>
               </Select>
             </FormControl>
-            <FormControl size={'small'} variant={'outlined'} fullWidth>
+            <FormControl size={'small'} fullWidth>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   autoCompleted="off"

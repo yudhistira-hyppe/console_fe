@@ -14,9 +14,10 @@ import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { auth } from 'helpers/firebaseHelper';
+import { Stack } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   scrollbarRoot: {
@@ -44,7 +45,7 @@ const Montetize = ({}) => {
   const { authUser } = useAuth();
   const classes = useStyles();
   const [tabValue, setTabValue] = useState('monetize_content');
-  const [typePost, setTypePost] = useState('all');
+  const [typePost, setTypePost] = useState('');
   const [limit, setLimit] = useState(10);
   const [payloadContent, setPayloadContent] = useState({
     email: authUser?.email,
@@ -133,7 +134,7 @@ const Montetize = ({}) => {
     setFilterByDate(res);
   };
 
-  const handleChange = (event) => {
+  const handleChangeTypePost = (event) => {
     setTypePost(event.target.value);
   };
 
@@ -173,26 +174,26 @@ const Montetize = ({}) => {
   };
 
   return (
-    <div>
-      <PageHeader
-        heading={'Monetisasi'}
-        children={
-          <div className="flex flex-row col-5 align-items-center" style={{ marginTop: '2%' }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Tipe Konten</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={typePost}
-                label="tipe_konten"
-                onChange={handleChange}>
-                <MenuItem value={'all'}>All</MenuItem>
-                <MenuItem value={'story'}>Story</MenuItem>
-                <MenuItem value={'vid'}>Vid</MenuItem>
-                <MenuItem value={'diary'}>Diary</MenuItem>
-                <MenuItem value={'pict'}>Pict</MenuItem>
-              </Select>
-            </FormControl>
+    <>
+      <PageHeader heading={'Monetisasi'} />
+      <Grid container direction="row" justifyContent="flex-end" alignItems="flex-start">
+        <Stack direction="row" justifyContent="flex-end" alignItems="flex-start" spacing={2}>
+          <FormControl size={'small'} fullWidth>
+            <InputLabel id="demo-simple-select-label">Tipe Konten</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={typePost}
+              label="tipe_konten"
+              onChange={handleChangeTypePost}>
+              <MenuItem value={'all'}>All</MenuItem>
+              <MenuItem value={'story'}>Story</MenuItem>
+              <MenuItem value={'vid'}>Vid</MenuItem>
+              <MenuItem value={'diary'}>Diary</MenuItem>
+              <MenuItem value={'pict'}>Pict</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size={'small'} fullWidth>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 autoCompleted="off"
@@ -205,25 +206,30 @@ const Montetize = ({}) => {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-          </div>
-        }
-      />
-      <CmtCard>
-        <CmtCardContent>
-          <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
-          <PerfectScrollbar className={classes.scrollbarRoot}>
-            <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
-            {contentMonetize?.length > 10 && (
-              <center>
-                <Button onClick={handleLoadMore} className={classes.btnRoot}>
-                  Load More data
-                </Button>
-              </center>
-            )}
-          </PerfectScrollbar>
-        </CmtCardContent>
-      </CmtCard>
-      <div className="mt-6 col-6 p-0">
+          </FormControl>
+        </Stack>
+      </Grid>
+      {/* // -------- */}
+
+      <div style={{ margin: '0.7rem 0 ' }}>
+        <CmtCard>
+          <CmtCardContent>
+            <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
+            <PerfectScrollbar className={classes.scrollbarRoot}>
+              <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
+              {contentMonetize?.length > 10 && (
+                <center>
+                  <Button onClick={handleLoadMore} className={classes.btnRoot}>
+                    Load More data
+                  </Button>
+                </center>
+              )}
+            </PerfectScrollbar>
+          </CmtCardContent>
+        </CmtCard>
+      </div>
+
+      <Grid xs={12} sm={6} md={6} lg={6}>
         <DetailsCard
           title={lastContentMonetize?.data[0]?.title}
           contentTitle={lastContentMonetize?.data[0]?.description}
@@ -236,8 +242,8 @@ const Montetize = ({}) => {
           contentType={lastContentMonetize?.data[0]?.postType}
           image={getMediaUri()}
         />
-      </div>
-    </div>
+      </Grid>
+    </>
   );
 };
 
