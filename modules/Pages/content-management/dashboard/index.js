@@ -1,6 +1,6 @@
 import GridContainer from '@jumbo/components/GridContainer';
 import { Grid } from '@material-ui/core';
-import SpinnerLoading from 'components/common/spinner';
+import SpinnerLoading from 'components/common/loading/spinner';
 import { useState, useEffect } from 'react';
 import ContentDataCard from '../ContentDataCard';
 import { useAuth } from 'authentication';

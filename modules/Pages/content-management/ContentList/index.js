@@ -71,6 +71,7 @@ const ContentList = () => {
   const [keyBtn, setKeyBtn] = useState(['dipost']);
   // this keyBtn set today date
   const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
+
   // ------------------------------------
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -89,6 +90,11 @@ const ContentList = () => {
   useEffect(() => {
     setCountPages(Math.ceil(contentGroup?.totalFilter / 10));
   });
+
+  useEffect(() => {
+    setLimit(10);
+    setSkip(0);
+  }, [typePost, filterByDate, keyBtn]);
   // ------------------------------------
 
   const [payloads, setPayloads] = useState({
@@ -152,8 +158,6 @@ const ContentList = () => {
 
   useEffect(() => {
     if (typePost) {
-      setLimit(10);
-      setSkip(0);
       setPayloads({
         ...payloads,
         postType: typePost,
@@ -161,8 +165,6 @@ const ContentList = () => {
     }
 
     if (!typePost) {
-      setLimit(10);
-      setSkip(0);
       setPayloads({
         email: authUser.email,
         ownership: keyBtn.includes('ownership') ? true : false,
@@ -177,8 +179,6 @@ const ContentList = () => {
     }
 
     if (typePost === 'all') {
-      setLimit(10);
-      setSkip(0);
       setPayloads({
         email: authUser.email,
         ownership: keyBtn.includes('ownership') ? true : false,
@@ -196,7 +196,7 @@ const ContentList = () => {
     if (keyBtn.length === 0 || keyBtn.length === 4) {
       setKeyBtn(['dipost']);
     }
-  }, [keyBtn, typePost, filterByDate, skip, limit]);
+  }, [keyBtn, typePost, filterByDate, skip, limit, page]);
 
   const { data: contentGroup } = useUserContentsGroupQuery(payloads);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import SpinnerLoading from 'components/common/spinner';
+import SpinnerLoading from 'components/common/loading/spinner';
 import useStyles from '../index.style';
 import ListTableView from './ListTableView';
 import EmptyContactResult from './EmptyContactResult';

@@ -14,7 +14,7 @@ import { fakeDb } from '../../../FakeDb/fake-db';
 import { useUserContentsAnalyticQuery, useUserContentsFollowerQuery } from 'api/user/content/management';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
-import SpinnerLoading from 'components/common/spinner';
+import SpinnerLoading from 'components/common/loading/spinner';
 import { useUserContentEventQuery } from 'api/user/content';
 
 const useStyles = makeStyles((theme) => ({
