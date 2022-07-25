@@ -62,7 +62,7 @@ export const {
   useUserContentsLatestQuery,
   useUserContentsPopularQuery,
   useUserContentsMonetizeQuery,
-  useUserContentEventQuery,
+  ,
   useUserContentTimeQuery,
   useUserContentDetailsQuery,
 } = contentAPI;
