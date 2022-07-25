@@ -37,7 +37,7 @@ const Discover = ({ title, number, isNumber, precentage, isInceased, subtitle })
           <div style={{ color: '#FFBC20', fontWeight: 'bold', textAlign: 'center' }}>Minggu ini</div>
         </Box>
       </div>
-      <CmtCardContent className="h-full w-full">
+      <CmtCardContent className="h-full w-full" style={{ minHeight: '12rem' }}>
         <div className="h-full w-full flex flex-row justify-content-center align-items-center">
           <Stats number={number} isNumber={isNumber} precentage={precentage} isIncreased={isInceased} subTitle={subtitle} />
         </div>
