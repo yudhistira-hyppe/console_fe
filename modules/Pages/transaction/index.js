@@ -77,22 +77,22 @@ const Transcation = ({}) => {
     <div>
       <PageHeader heading={'Transaction'} />
       <GridContainer>
-        <Grid item md={4}>
+        <Grid item md={4} xs={12}>
           <Balance balance={accountBalanceData?.data?.totalsaldo} precentage={23} trend={false} />
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={4} xs={12}>
           <TotalWithdraw total={accountBalanceData?.data?.totalpenarikan} />
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={4} xs={12}>
           <TransSummary date={accountBalanceData?.data || ''} />
         </Grid>
-        <Grid item md={12}>
+        <Grid item md={12} xs={12}>
           <TransactionList />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={6} xs={12}>
           <MyVoucher />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={6} xs={12}>
           <VoucherHistory />
         </Grid>
       </GridContainer>
