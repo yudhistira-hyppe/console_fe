@@ -47,23 +47,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ContentList = () => {
-  // const { contentList } = fakeDb;
-  // const [count, setCount] = useState(20); // for example we have 20 records
-  // const [size, setSize] = useState(10); // there are 7 records on each page
-
-  // // number of pages
-  // const [countPages, setCountPages] = useState(Math.ceil(count / size));
-
-  //show records on page 1:
-  // const [page, setPage] = useState(1); // display 1nd setPage
-
-  // const from = (page - 1) * size;
-  // const to = Math.min(from + size - 1, count);
-
-  // console.log(`we have ${count} records, ${size} per page`);
-  // console.log('number of pages', countPages);
-  // console.log(`on page ${page} records from ${from} to ${to}`);
-
   const classes = useStyles();
   const { authUser } = useAuth();
   const router = useRouter();
@@ -213,11 +196,11 @@ const ContentList = () => {
   };
 
   return (
-    <div>
-      {/* <PageHeader heading={'Content'} /> */}
-      <div className="flex flex-row w-full mt-3">
-        <div className="flex flex-row col-8 align-items-center">
-          <Stack direction="row" spacing={1}>
+    <>
+      <PageHeader heading={'Content'} />
+      <Grid container direction="row" justifyContent="space-between" alignItems="flex-start">
+        <Grid xs={6} md={8}>
+          <Stack direction={{ xs: 'column', sm: 'row', md: 'row', lg: 'row' }} spacing={1}>
             {btnData?.map((btn) => {
               return (
                 <Button
@@ -236,52 +219,58 @@ const ContentList = () => {
               );
             })}
           </Stack>
-        </div>
+        </Grid>
+        {/* </div> */}
 
-        <div className="flex flex-row col-4 align-items-center">
-          <FormControl size={'small'} className="mr-2" variant={'outlined'} fullWidth>
-            <InputLabel id="demo-simple-select-label">Tipe Konten</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={typePost}
-              label="tipe_konten"
-              onChange={handleChangeTypePost}>
-              {/* waiting for be to get payload all */}
-              <MenuItem value={'all'}>All</MenuItem>
-              <MenuItem value={'story'}>Story</MenuItem>
-              <MenuItem value={'vid'}>Vid</MenuItem>
-              <MenuItem value={'diary'}>Diary</MenuItem>
-              <MenuItem value={'pict'}>Pict</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl size={'small'} className="mr-2" variant={'outlined'} fullWidth>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                autoCompleted="off"
-                size="small"
-                label="Semua Waktu"
-                value={filterByDate}
-                onChange={(filterByDate) => {
-                  convertDate(filterByDate);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </FormControl>
+        <Grid xs={5} md={4}>
+          <Stack direction={{ xs: 'column', sm: 'row', md: 'row', lg: 'row' }} spacing={2}>
+            <FormControl size={'small'} fullWidth>
+              <InputLabel id="demo-simple-select-label">Tipe Konten</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={typePost}
+                label="tipe_konten"
+                onChange={handleChangeTypePost}>
+                <MenuItem value={'all'}>All</MenuItem>
+                <MenuItem value={'story'}>Story</MenuItem>
+                <MenuItem value={'vid'}>Vid</MenuItem>
+                <MenuItem value={'diary'}>Diary</MenuItem>
+                <MenuItem value={'pict'}>Pict</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl size={'small'} fullWidth>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  autoCompleted="off"
+                  size="small"
+                  label="Semua Waktu"
+                  value={filterByDate}
+                  onChange={(filterByDate) => {
+                    convertDate(filterByDate);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </FormControl>
+          </Stack>
+        </Grid>
+      </Grid>
+
+      {/* ------------  */}
+      <div style={{ marginTop: '0.7rem' }}>
+        <CmtCard>
+          <CmtCardContent className={classes.cardContentRoot}>
+            <div>
+              <ContentTable tableData={contentGroup?.data} />
+            </div>
+          </CmtCardContent>
+        </CmtCard>
+        <div className="mt-6 flex flex-row justify-content-center">
+          <Pagination page={page} onChange={getSkipAndLimit} count={countPages} />
         </div>
       </div>
-      <CmtCard>
-        <CmtCardContent className={classes.cardContentRoot}>
-          <div>
-            <ContentTable tableData={contentGroup?.data} />
-          </div>
-        </CmtCardContent>
-      </CmtCard>
-      <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={getSkipAndLimit} count={countPages} />
-      </div>
-    </div>
+    </>
   );
 };
 

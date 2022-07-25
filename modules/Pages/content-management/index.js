@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme) => ({
   },
   tabRoot: {
     minHeight: '40px',
-    height: '40px',
-    maxWidth: '30px',
+    // height: '40px',
+    // maxWidth: '30px',
     textAlign: 'center',
     fontSize: '0.8em',
     fontWeight: '900',
-    padding: '0 -20px',
+    // padding: '0 -20px',
     letterSpacing: '2px',
     // border: '1px solid black',
   },
@@ -49,6 +49,7 @@ const Content = ({}) => {
         <TabList
           onChange={handleChange}
           aria-label="lab API tabs example"
+          variant="scrollable"
           classes={{
             root: classes.tabsRoot,
             indicator: classes.indicator,

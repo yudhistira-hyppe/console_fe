@@ -102,19 +102,19 @@ const Analytic = ({}) => {
     <div>
       <PageHeader heading={'Analitik'} />
       <GridContainer>
-        <Grid item md={3}>
+        <Grid item xs={6} md={3}>
           <DataAnalytics title={`Content Views`} count={contentAnalytic?.data[0]?.insight?.views} />
         </Grid>
-        <Grid item md={3}>
+        <Grid item xs={6} md={3}>
           <DataAnalytics title={'Profile Visit'} count={contentAnalytic?.data[0]?.visit} />
         </Grid>
-        <Grid item md={3}>
+        <Grid item xs={6} md={3}>
           <DataAnalytics title={'Likes'} count={contentAnalytic?.data[0]?.insight?.likes} />
         </Grid>
-        <Grid item md={3}>
+        <Grid item xs={6} md={3}>
           <DataAnalytics title={'Share'} count={contentAnalytic?.data[0]?.insight?.shares} />
         </Grid>
-        <Grid item md={6}>
+        <Grid item xs={12} md={6}>
           <DetailsCard
             contentTitle={contentAnalytic?.data[0]?.description}
             likes={contentAnalytic?.data[0]?.likes}
@@ -127,22 +127,22 @@ const Analytic = ({}) => {
             image={getMediaUri()}
           />
         </Grid>
-        <Grid item md={6}>
+        <Grid item xs={12} md={6}>
           <FollowerChart contentFollowers={contentFollowers} />
         </Grid>
 
         {contentEvent ? (
           <>
-            <Grid item md={3}>
+            <Grid item xs={12} md={3}>
               <BiographyStats title={'Jenis Kelamin Penonton'} dataChart={getValue[0]} />
             </Grid>
-            <Grid item md={3}>
+            <Grid item xs={12} md={3}>
               <BiographyStats title={'Negara Penonton'} dataChart={getValue[2]} />
             </Grid>
-            <Grid item md={3}>
+            <Grid item xs={12} md={3}>
               <BiographyStats title={'Rentang Umur Penonton'} dataChart={getValue[1]} />
             </Grid>
-            <Grid item md={3}>
+            <Grid item xs={12} md={3}>
               <BiographyStats title={fakeDb.viewsBiography.title} dataChart={fakeDb.viewsBiography.data} />
             </Grid>
           </>
@@ -151,18 +151,6 @@ const Analytic = ({}) => {
             <SpinnerLoading />
           </div>
         )}
-        {/* <Grid item md={3}>
-          <BiographyStats title={fakeDb.genderBiography.title} dataChart={fakeDb.genderBiography.data} />
-        </Grid>
-        <Grid item md={3}>
-          <BiographyStats title={fakeDb.countryBiography.title} dataChart={fakeDb.countryBiography.data} />
-        </Grid>
-        <Grid item md={3}>
-          <BiographyStats title={fakeDb.ageBiography.title} dataChart={fakeDb.ageBiography.data} />
-        </Grid>
-        <Grid item md={3}>
-          <BiographyStats title={fakeDb.viewsBiography.title} dataChart={fakeDb.viewsBiography.data} />
-        </Grid> */}
       </GridContainer>
     </div>
   );

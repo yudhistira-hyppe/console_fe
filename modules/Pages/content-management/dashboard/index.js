@@ -47,7 +47,7 @@ const ContentManagement = () => {
       {/* got data from be like this, need to define it one by one */}
       {contentManagement?.data ? (
         <GridContainer>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             <ContentDataCard
               image={
                 mainData?.popular?.postID === undefined
@@ -63,7 +63,7 @@ const ContentManagement = () => {
               postId={mainData?.popular?.postID}
             />
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             <ContentDataCard
               image={
                 mainData?.popular?.postID === undefined
@@ -79,7 +79,7 @@ const ContentManagement = () => {
               postId={mainData?.mostlikes?.postID}
             />
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             <ContentDataCard
               image={
                 mainData?.mostshares?.postID === undefined
@@ -95,7 +95,7 @@ const ContentManagement = () => {
               postId={mainData?.mostshares?.postID}
             />
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             <ContentDataCard
               image={
                 mainData?.latestpost?.postID === undefined
@@ -111,7 +111,7 @@ const ContentManagement = () => {
               postId={mainData?.latestpost?.postID}
             />
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             {/* <RegionViews regions={mainData?.recentlyregion} /> */}
             <ContentDataCard
               image={
@@ -128,7 +128,7 @@ const ContentManagement = () => {
               postId={mainData?.moderate?.postID}
             />
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             <ContentDataCard
               image={
                 mainData?.traffic?.postID === undefined
@@ -144,7 +144,7 @@ const ContentManagement = () => {
               postId={mainData?.traffic?.postID}
             />
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             <RegionViews regions={mainData?.recentlyregion} />
           </Grid>
         </GridContainer>
