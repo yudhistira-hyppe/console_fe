@@ -33,8 +33,17 @@ const Montetize = ({}) => {
   const { authUser } = useAuth();
   const classes = useStyles();
   const [tabValue, setTabValue] = useState('monetize_content');
-  const [typePost, setTypePost] = useState('');
-  const [payloadContent, setPayloadContent] = useState(null);
+  const [typePost, setTypePost] = useState('all');
+  const [payloadContent, setPayloadContent] = useState({
+    email: authUser?.email,
+    buy: false,
+    monetize: true,
+    lastmonetize: false,
+    startdate: filterByDate,
+    enddate: filterByDate,
+    skip: 0,
+    limit: 10,
+  });
   const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
 
   useEffect(() => {
@@ -54,7 +63,7 @@ const Montetize = ({}) => {
             limit: 10,
           });
         }
-        if (!typePost) {
+        if (typePost === 'all') {
           setPayloadContent({
             email: authUser?.email,
             buy: false,
@@ -84,7 +93,7 @@ const Montetize = ({}) => {
           });
         }
 
-        if (typePost === '') {
+        if (typePost === 'all') {
           console.log('masuk type post ===');
           setPayloadContent({
             email: authUser?.email,
@@ -160,6 +169,7 @@ const Montetize = ({}) => {
                 value={typePost}
                 label="tipe_konten"
                 onChange={handleChange}>
+                <MenuItem value={'all'}>All</MenuItem>
                 <MenuItem value={'story'}>Story</MenuItem>
                 <MenuItem value={'vid'}>Vid</MenuItem>
                 <MenuItem value={'diary'}>Diary</MenuItem>

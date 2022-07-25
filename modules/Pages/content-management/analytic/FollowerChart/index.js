@@ -5,6 +5,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { ArrowUpward } from '@material-ui/icons';
 import CustomAreaChart from '../../../dashboards/CustomAreaChart';
 import { fakeDb } from '../../../../FakeDb/fake-db';
+import WriterLoading from 'components/common/loading/writerLoading';
 
 const useStyles = makeStyles((theme) => ({
   titleLbl: {
@@ -36,27 +37,35 @@ const FollowerChart = ({ contentFollowers }) => {
   const { adsStatistics } = fakeDb;
 
   return (
-    <CmtCard className="h-full">
-      <CmtCardContent>
-        <div className="flex flex-row justify-content-between">
-          <div className={classes.titleLbl}>Pengikut</div>
-          <div className={classes.infoLblFollower}>
-            Total Pengikut
-            <span className="ml-1" style={{ fontWeight: 'bold', color: 'black' }}>
-              {contentFollowers?.totalallfollower}
-            </span>
-          </div>
-        </div>
-        <div className="mt-4"></div>
-        {/* <div className="mt-6">
+    <>
+      {contentFollowers ? (
+        <>
+          <CmtCard className="h-full">
+            <CmtCardContent>
+              <div className="flex flex-row justify-content-between">
+                <div className={classes.titleLbl}>Pengikut</div>
+                <div className={classes.infoLblFollower}>
+                  Total Pengikut
+                  <span className="ml-1" style={{ fontWeight: 'bold', color: 'black' }}>
+                    {contentFollowers?.totalallfollower}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-4"></div>
+              {/* <div className="mt-6">
           <div className={classes.titleLbl} style={{ color: '#8DCD03', fontSize: 18 }}>
-            37 % <ArrowUpward style={{ fontSize: 16 }} />
+          37 % <ArrowUpward style={{ fontSize: 16 }} />
           </div>
           <div className={classes.infoLbl}>Minggu ini</div>
         </div> */}
-      </CmtCardContent>
-      <CustomAreaChart chartData={contentFollowers?.datafollower} />
-    </CmtCard>
+            </CmtCardContent>
+            <CustomAreaChart chartData={contentFollowers?.datafollower} />
+          </CmtCard>
+        </>
+      ) : (
+        <WriterLoading />
+      )}
+    </>
   );
 };
 

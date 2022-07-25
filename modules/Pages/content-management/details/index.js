@@ -13,7 +13,7 @@ import { useAuth } from 'authentication';
 import { useUserContentEventQuery } from 'api/user/content';
 import { useRouter } from 'next/router';
 import { useUserContentTimeQuery, useUserContentDetailsQuery } from 'api/user/content';
-import SpinnerLoading from 'components/common/spinner';
+import SpinnerLoading from 'components/common/loading/spinner';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const Details = () => {

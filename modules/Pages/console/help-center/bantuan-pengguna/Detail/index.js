@@ -16,7 +16,7 @@ import CKEditor from 'react-ckeditor-component';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import SendIcon from '@material-ui/icons/Send';
 import CmtAvatar from '@coremat/CmtAvatar';
-import SpinnerLoading from 'components/common/spinner';
+import SpinnerLoading from 'components/common/loading/spinner';
 import useStyles from '../index.style';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
