@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
     // top: '0px',
     // maxWidth: '70px',
     // marginLeft: '4%',
+    // color: 'blue !important',
+    backgroundColor: 'rgb(170, 34, 175)',
+    // border: '2px solid black',
   },
   tabsRoot: {
     // minHeight: tabHeight,

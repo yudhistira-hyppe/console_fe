@@ -91,7 +91,7 @@ const Member = ({ item }) => {
 
   const getFooter = () => (
     <Box position="relative">
-      <Stack spacing={1} direction="row">
+      <Stack spacing={1} direction={{ xs: 'column', sm: 'row', md: 'row' }}>
         <Button size="small" variant="outlined" style={{ background: '#F2E7FE', color: '#AB22AF', border: 'none' }}>
           Member
         </Button>

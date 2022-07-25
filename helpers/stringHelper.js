@@ -23,7 +23,7 @@ export const getMediaUri = (item) => {
 
 export const formatCurrency = (price) => {
   let indonesianCurrency = Intl.NumberFormat('id-ID');
-  let formatted = indonesianCurrency.format(price);
+  let formatted = indonesianCurrency?.format(price);
   return formatted;
 };
 

@@ -38,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
     height: 340,
   },
   badgeRoot: {
-    color: theme.palette.common.white,
+    // color: theme.palette.common.white,
+    backgroundColor: 'rgba(252, 202, 70, 0.2)',
+    color: 'rgba(255, 188, 32, 1)',
     borderRadius: 30,
     fontSize: 12,
     padding: '2px 10px',
