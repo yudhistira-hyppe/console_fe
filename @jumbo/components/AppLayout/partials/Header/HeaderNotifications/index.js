@@ -81,7 +81,12 @@ const HeaderNotifications = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  const { data: dataNotification } = useLatestNotificationQuery(authUser.email);
+  const payload = {
+    email: authUser.email,
+    skip: 0,
+    limit: 10,
+  };
+  const { data: dataNotification } = useLatestNotificationQuery(payload);
 
   return (
     <Box pr={2}>

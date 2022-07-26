@@ -6,12 +6,10 @@ export const notificationAPI = createApi({
   baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
     latestNotification: build.query({
-      query: (email) => ({
+      query: (payload) => ({
         url: `/notifications/latest`,
         method: 'POST',
-        body: {
-          email,
-        },
+        body: payload,
       }),
     }),
   }),
