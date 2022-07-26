@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   voucherContainer: {
     margin: '0 10px 10px 10px',
     padding: '20px',
-    height: '108px',
+    minHeight: '108px',
     border: '1px solid rgba(0, 0, 0, 0.08)',
     borderRadius: 4,
   },
@@ -86,7 +86,7 @@ const Voucher = ({ title, subTitle, expDate, voucherCode }) => {
       <div className="mt-4 flex flex-row justify-content-between align-items-center">
         <div className={clsx(classes.voucherSubtitle, classes.expLabelSize)}>Tanggal Kadaluarsa : {expDate}</div>
         <div className={clsx(classes.voucherSubtitle, classes.expLabelSize)}>
-          {voucherCode}{' '}
+          {voucherCode}
           <span>
             <FileCopy className={clsx(classes.voucherSubtitle, classes.expLabelSize)} />
           </span>
