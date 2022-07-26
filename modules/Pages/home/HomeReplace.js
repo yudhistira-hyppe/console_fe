@@ -196,7 +196,7 @@ const Home = () => {
             </Stack>
           ) : (
             // this will trigger component Menu
-            <div onClick={handleSidebarMenu}>masuk mobile view</div>
+            <div onClick={handleSidebarMenu}>click me</div>
           )}
         </Grid>
 
