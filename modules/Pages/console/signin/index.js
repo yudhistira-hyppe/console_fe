@@ -8,7 +8,6 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from 'next/link';
 import AuthWrapper from 'modules/Components/Auth/AuthWrapper';
 import CmtImage from '@coremat/CmtImage';
 import IntlMessages from '@jumbo/utils/IntlMessages';
@@ -62,46 +61,62 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const classes = useStyles({ variant });
-  const { isLoading, error, consoleLogin } = useAuth();
-  const [location, setLocation] = useState({ latitude: '0', longitude: '0' });
+  const { isLoading, error, consoleLoginWithEmail } = useAuth();
+  const [location, setLocation] = useState();
+  const [deviceId, setDeviceId] = useState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [deviceId, setDeviceId] = useState(uuidv4());
   const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
-  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
+  const [isLoginDisabled, setIsLoginDisabled] = useState(true);
 
-  useEffect(() => {
+  useEffect(async () => {
     getCurrentUserLocation();
-    generateFCMToken();
+    await generateFCMToken();
   }, []);
 
-  const generateFCMToken = () => {
-    Notification.requestPermission(() => {
+  useEffect(() => {
+    if (location && deviceId && email && password) {
+      setIsLoginDisabled(false);
+    } else {
       setIsLoginDisabled(true);
-      firebaseCloudMessaging
-        .getFCMToken()
-        .then((token) => {
-          setDeviceId(token);
-        })
-        .catch(() => {})
-        .finally(() => setIsLoginDisabled(false));
-    });
+    }
+  }, [location, deviceId, email, password]);
+
+  const generateFCMToken = async () => {
+    await Notification.requestPermission()
+      .then(async () => {
+        await firebaseCloudMessaging
+          .getFCMToken()
+          .then((token) => {
+            setDeviceId(token);
+          })
+          .catch(() => {
+            setDeviceId(uuidv4());
+          });
+      })
+      .catch(() => {
+        setDeviceId(uuidv4());
+      });
   };
 
   const getCurrentUserLocation = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+      },
+      () => {
+        setLocation({ latitude: '0', longitude: '0' });
+      },
+    );
   };
 
   const onSubmit = () => {
-    consoleLogin(
+    consoleLoginWithEmail(
       {
         email,
         password,
         location,
-        deviceId:
-          'dw-ckEuZFESeqnWjzzz9UE:APA91bF2xMw67hdbbMgC2fXNXfo9BfLPmZZBVMFEDGMLStVdJFgfvjLlsqnMViLMhKx5aeY_25CoMqD3PnY-xvt-xHsE0F44WpnvLDvS8L0QNzRQzYmueyyFWdAyTHeyHnEl7RaLQOIa',
+        deviceId,
         devicetype: 'WEB',
       },
       isRememberMeChecked,

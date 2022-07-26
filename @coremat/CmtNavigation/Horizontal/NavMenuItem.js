@@ -67,7 +67,7 @@ const NavMenuItem = (props) => {
   // ];
   // const [upgradeUser, { isSuccess, isLoading, isError }] = useUpgradeUserMutation();
   // const handleUpgradePremium = (e) => {
-  //   if (!authUser.roles.includes('ROLE_PREMIUM')) {
+  //   if (!authUser.user.roles.includes('ROLE_PREMIUM')) {
   //     if (PREMIUM_ROUTES.includes(link)) {
   //       e.preventDefault();
   //       Swal.fire({

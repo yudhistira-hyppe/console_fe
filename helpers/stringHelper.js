@@ -15,7 +15,7 @@ export const getFileExtension = (filename) => {
 
 export const getMediaUri = (item) => {
   const { authUser } = useAuth();
-  const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email;
+  const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.user.email;
   const mediaUri = item.mediaType === 'video' ? item.mediaThumbEndpoint : item.mediaEndpoint;
   const httpUri = STREAM_URL + mediaUri + authToken;
   return httpUri;

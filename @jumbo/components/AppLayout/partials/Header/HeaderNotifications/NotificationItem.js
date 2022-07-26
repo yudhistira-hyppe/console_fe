@@ -140,7 +140,7 @@ const NotificationItem = ({ item }) => {
   // NOTED : DONT REMOVE THE CODE BELOW IT MAYBE USE AT THE FUTURE
   const getMediaUri = (path) => {
     console.log('path:', path);
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = path;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;

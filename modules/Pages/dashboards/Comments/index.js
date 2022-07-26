@@ -43,7 +43,7 @@ const Comments = () => {
 
   const { authUser } = useAuth();
 
-  const { data: dataComment } = useUserGetNewCommentQuery(authUser.email);
+  const { data: dataComment } = useUserGetNewCommentQuery(authUser.user.email);
   console.log('dataComment2:', dataComment);
   return (
     <CmtCard className={classes.cardRoot}>

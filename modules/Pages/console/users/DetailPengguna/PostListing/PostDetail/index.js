@@ -108,7 +108,7 @@ const PostDetail = ({ selectedContent, showContentList }) => {
       videojs.Vhs.xhr.beforeRequest = (options) => {
         options.headers = options.headers || {};
         options.headers['x-auth-token'] = authUser.token;
-        options.headers['x-auth-user'] = authUser.email;
+        options.headers['x-auth-user'] = authUser.user.email;
         options.headers['post-id'] = selectedContent.postID;
         return options;
       };

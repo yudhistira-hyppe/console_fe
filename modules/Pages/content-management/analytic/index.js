@@ -68,10 +68,10 @@ const DataAnalytics = ({ title, count, increase, isUp }) => {
 const Analytic = ({}) => {
   const { authUser } = useAuth();
 
-  const { data: contentAnalytic } = useUserContentsAnalyticQuery(authUser.email);
+  const { data: contentAnalytic } = useUserContentsAnalyticQuery(authUser.user.email);
 
   const payloadFollower = {
-    email: authUser.email,
+    email: authUser.user.email,
     year: new Date().getFullYear(),
   };
   const { data: contentFollowers } = useUserContentsFollowerQuery(payloadFollower);
@@ -85,7 +85,7 @@ const Analytic = ({}) => {
   };
 
   const getMediaUri = () => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = '/thumb/' + contentAnalytic?.data[0]?._id;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;

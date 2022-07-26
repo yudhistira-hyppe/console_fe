@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
 const ProfileBasic = () => {
   const classes = useStyles();
   const { authUser } = useAuth();
-  const { data: dataProfile } = useGetProfileByUserEmailQuery(authUser.email);
+  const { data: dataProfile } = useGetProfileByUserEmailQuery(authUser.user.email);
   return (
     <>
       <GridContainer>

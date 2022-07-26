@@ -90,6 +90,7 @@ const SignInWithEmail = ({ variant = 'default', location, deviceId, onHandleClic
   const [password, setPassword] = useState('');
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isLoginDisabled, setIsLoginDisabled] = useState(true);
+  const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
 
   useEffect(() => {
     if (email && password) {
@@ -100,13 +101,16 @@ const SignInWithEmail = ({ variant = 'default', location, deviceId, onHandleClic
   }, [email, password]);
 
   const onSubmit = () => {
-    userLoginWithEmail({
-      email,
-      password,
-      location,
-      deviceId,
-      devicetype: 'WEB',
-    });
+    userLoginWithEmail(
+      {
+        email,
+        password,
+        location,
+        deviceId,
+        devicetype: 'WEB',
+      },
+      isRememberMeChecked,
+    );
   };
 
   return (
@@ -162,7 +166,7 @@ const SignInWithEmail = ({ variant = 'default', location, deviceId, onHandleClic
           <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
             <FormControlLabel
               className={classes.formcontrolLabelRoot}
-              control={<Checkbox name="checkedA" />}
+              control={<Checkbox checked={isRememberMeChecked} onChange={(_, value) => setIsRememberMeChecked(value)} />}
               label="Remember me"
             />
             {/* <Box component="p" fontSize={{ xs: 12, sm: 16 }}>

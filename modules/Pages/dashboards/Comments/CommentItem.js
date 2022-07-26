@@ -88,7 +88,7 @@ const CommentItem = ({ item }) => {
   // }, [isSuccess]);
   // const doneCommend = () => {
   // const bodyPayload = {
-  // email: authUser.email,
+  // email: authUser.user.email,
   // status: false,
   // };
   // console.log('isError:', isError);
@@ -146,7 +146,7 @@ const CommentItem = ({ item }) => {
   );
 
   const getMediaUri = () => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = item.avatar.mediaEndpoint;
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };

@@ -58,7 +58,7 @@ const Insight = ({ title, number, diff, isIncreased }) => {
 const UserInfo = () => {
   const { authUser } = useAuth();
 
-  const { data: dataInsight } = useUserGetInsightQuery(authUser.email);
+  const { data: dataInsight } = useUserGetInsightQuery(authUser.user.email);
 
   const classes = useStyles();
   return (

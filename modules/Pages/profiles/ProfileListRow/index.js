@@ -44,7 +44,7 @@ const ProfileListRow = ({ row, isSelected, onRowClick, onProfileView }) => {
   const isItemSelected = isSelected(row.profileID);
   const profileActions = getProfileActions(row);
   const avatar = row.avatar
-    ? SOCKET_IO_URL + row.avatar.mediaEndpoint + '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email
+    ? SOCKET_IO_URL + row.avatar.mediaEndpoint + '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.user.email
     : '';
 
   return (
