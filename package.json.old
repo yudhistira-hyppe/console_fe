@@ -14,9 +14,7 @@
     "@material-ui/styles": "^4.11.4",
     "@mui/material": "^5.8.3",
     "@mui/x-data-grid": "^5.12.1",
-    "@mui/x-date-pickers": "^5.0.0-beta.1",
     "@reduxjs/toolkit": "^1.8.2",
-    "animate.css": "^4.1.1",
     "async-mutex": "^0.3.2",
     "autosuggest-highlight": "^3.1.1",
     "axios": "^0.19.2",
@@ -27,7 +25,6 @@
     "clsx": "latest",
     "cross-env": "^7.0.3",
     "cross-fetch": "^3.0.5",
-    "date-fns": "^2.29.1",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "emoji-picker-react": "^3.2.1",
@@ -39,7 +36,7 @@
     "jss-rtl": "^0.3.0",
     "material-table": "^1.68.1",
     "material-ui-popup-state": "^1.6.1",
-    "moment": "^2.29.4",
+    "moment": "^2.27.0",
     "next": "^10.2.3",
     "next-http-proxy-middleware": "^1.2.2",
     "next-redux-wrapper": "^6.0.2",
@@ -104,7 +101,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --fix .",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest",
+    "export": "next export",
+    "pm2": "pm2 start pm2.json"
   },
   "devDependencies": {
     "@types/node": "^14.6.0",
