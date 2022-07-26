@@ -66,7 +66,7 @@ const Transcation = ({}) => {
   const { authUser } = useAuth();
 
   const payloadBalance = {
-    email: authUser.email,
+    email: authUser.user.email,
     // this should be dynamic but be doesnt know the pattern yet.
     startdate: '2022-06-08',
     enddate: '2022-06-09',
@@ -108,7 +108,7 @@ const Balance = ({ balance, precentage, trend }) => {
   const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
 
   const userPremiumCheck = () => {
-    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'CECK' }).then((res) => {
+    upgradeUser({ email: authUser.user.email, roles: 'ROLE_PREMIUM', status: 'CECK' }).then((res) => {
       if (res?.data?.status_user === null) {
         router.push('/premium-activation');
       } else if (res?.data?.status_user === 'ON_PROGRESS') {

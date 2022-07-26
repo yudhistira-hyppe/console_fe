@@ -33,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
 const PremiumDashboard = () => {
   // const classes = useStyles();
   const { authUser, isLoadingUser } = useAuth();
-  const welcomeNote = 'Welcome ' + authUser.fullName;
+  const welcomeNote = 'Welcome ' + authUser.user.fullName;
 
-  const { data: dataBalance } = useGetAccountBalanceQuery(authUser.email);
+  const { data: dataBalance } = useGetAccountBalanceQuery(authUser.user.email);
   // console.log('dataBalance:', dataBalance?.data[0]?.totalsaldo)
 
   return (

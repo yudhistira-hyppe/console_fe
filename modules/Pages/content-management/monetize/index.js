@@ -43,7 +43,7 @@ const Montetize = ({}) => {
         // why the code like this? be didnt handle empty value
         if (typePost) {
           setPayloadContent({
-            email: authUser?.email,
+            email: authUser?.user?.email,
             buy: false,
             monetize: true,
             lastmonetize: false,
@@ -56,7 +56,7 @@ const Montetize = ({}) => {
         }
         if (!typePost) {
           setPayloadContent({
-            email: authUser?.email,
+            email: authUser?.user?.email,
             buy: false,
             monetize: true,
             lastmonetize: false,
@@ -72,7 +72,7 @@ const Montetize = ({}) => {
         if (typePost) {
           console.log('masuk type post');
           setPayloadContent({
-            email: authUser?.email,
+            email: authUser?.user?.email,
             buy: true,
             monetize: false,
             lastmonetize: false,
@@ -87,7 +87,7 @@ const Montetize = ({}) => {
         if (typePost === '') {
           console.log('masuk type post ===');
           setPayloadContent({
-            email: authUser?.email,
+            email: authUser?.user?.email,
             buy: true,
             monetize: false,
             lastmonetize: false,
@@ -122,7 +122,7 @@ const Montetize = ({}) => {
   const { data: contentMonetize } = useUserContentMonetizeQuery(payloadContent);
 
   const payloadLastContent = {
-    email: authUser.email,
+    email: authUser.user.email,
     buy: false,
     monetize: false,
     lastmonetize: true,
@@ -140,7 +140,7 @@ const Montetize = ({}) => {
   };
 
   const getMediaUri = () => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = '/thumb/' + lastContentMonetize?.data[0]?.postID;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;

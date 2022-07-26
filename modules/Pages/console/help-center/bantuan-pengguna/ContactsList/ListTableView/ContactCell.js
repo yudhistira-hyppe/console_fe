@@ -17,7 +17,7 @@ const ContactCell = ({ item, onClickTicket, onClickDeleteTicket }) => {
   const { authUser } = useAuth();
 
   const getMediaUri = (mediaEndpoint) => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
     return `${STREAM_URL}${mediaEndpoint}${authToken}`;
   };

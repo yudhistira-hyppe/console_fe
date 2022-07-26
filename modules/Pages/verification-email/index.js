@@ -12,7 +12,7 @@ const VerificationEmail = () => {
 
   const resendEmail = (e) => {
     e.preventDefault();
-    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'ON_PROGRESS' });
+    upgradeUser({ email: authUser.user.email, roles: 'ROLE_PREMIUM', status: 'ON_PROGRESS' });
   };
 
   return (

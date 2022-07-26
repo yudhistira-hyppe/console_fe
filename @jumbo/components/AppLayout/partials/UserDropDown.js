@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import CmtDropdownMenu from '../../../../@coremat/CmtDropdownMenu';
 import CmtAvatar from '../../../../@coremat/CmtAvatar';
@@ -8,9 +8,6 @@ import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useAuth } from '../../../../authentication';
 import { useRouter } from 'next/router';
-import { firebaseCloudMessaging } from 'helpers/firebaseHelper';
-import { v4 as uuidv4 } from 'uuid';
-import ConsoleMonetizeComponent from 'modules/Pages/console/monetize';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const useStyles = makeStyles((theme) => ({
@@ -49,37 +46,21 @@ const actionsList = [
 
 const UserDropDown = () => {
   const classes = useStyles();
-  const { userSignOut, authUser } = useAuth();
+  const { authUser, userSignOut } = useAuth();
   const router = useRouter();
-  const [deviceId, setDeviceId] = useState(uuidv4());
 
   const getMediaUri = () => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
-    const mediaURI = authUser?.avatar?.mediaEndpoint;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const mediaURI = authUser?.user?.avatar?.mediaEndpoint;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
 
-  const generateFCMToken = () => {
-    Notification.requestPermission(() => {
-      firebaseCloudMessaging
-        .getFCMToken()
-        .then((token) => {
-          setDeviceId(token);
-        })
-        .catch(() => {});
-    });
-  };
-
-  useEffect(() => {
-    generateFCMToken();
-  }, []);
-
   const onItemClick = (item) => {
     if (item.label === 'Logout') {
       userSignOut({
-        email: authUser.email,
-        deviceId: deviceId,
+        email: authUser.user.email,
+        deviceId: authUser.user.deviceId,
       });
     }
     if (item.label === 'Account') {
