@@ -2,16 +2,20 @@ import Router from 'next/router';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { Mutex } from 'async-mutex';
 import { authApi } from 'api/user';
+import { createCookies, deleteAllCookies, getAllCookies } from 'helpers/cookiesHelper';
 
 const mutex = new Mutex();
 
 export const customBaseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   prepareHeaders: (headers, { endpoint }) => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const cookies = getAllCookies();
 
-    if (user && user.token && endpoint !== 'login') {
-      headers.set('x-auth-token', user.token);
+    if (cookies && cookies.token && endpoint !== 'login') {
+      headers.set('x-auth-token', cookies.token);
+    }
+    if (cookies && cookies.user.email && endpoint === 'logout') {
+      headers.set('x-auth-user', cookies.user.email);
     }
 
     return headers;
@@ -21,7 +25,7 @@ export const customBaseQuery = fetchBaseQuery({
 export const customBaseQueryWithHandleReauth = async (args, api, extraOptions) => {
   await mutex.waitForUnlock();
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const cookies = getAllCookies();
   let result = await customBaseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
@@ -31,25 +35,26 @@ export const customBaseQueryWithHandleReauth = async (args, api, extraOptions) =
       try {
         const refreshResult = await api.dispatch(
           authApi.endpoints.refreshToken.initiate({
-            email: user.email,
-            refreshToken: user.refreshToken,
+            email: cookies.user.email,
+            refreshToken: cookies.refreshToken,
           }),
         );
 
         if (refreshResult.data) {
-          localStorage.setItem(
-            'user',
-            JSON.stringify({
-              ...user,
-              token: refreshResult.data.data.token,
-              refreshToken: refreshResult.data.data.refreshToken,
-            }),
-          );
+          const keyAndValueCookies = {
+            token: { value: refreshResult.data.token, expirationHour: 144 },
+            refreshToken: { value: refreshResult.data.refreshToken, expirationHour: 144 },
+            user: {
+              value: cookies.user,
+              expirationHour: 144,
+            },
+          };
+          createCookies(keyAndValueCookies);
 
           result = await customBaseQuery(args, api, extraOptions);
         } else {
           Router.push('/signin');
-          localStorage.removeItem('user');
+          deleteAllCookies();
         }
       } finally {
         release();
