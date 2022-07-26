@@ -1,11 +1,8 @@
-import CmtVertical from '@coremat/CmtNavigation/Vertical';
-import { sidebarNavs } from '@jumbo/components/AppLayout/partials/menus';
-import GridContainer from '@jumbo/components/GridContainer';
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import { Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import SideBar from '@jumbo/components/AppLayout/partials/SideBar';
+import 'animate.css';
 
 const useStyles = makeStyles((theme) => ({
   btnLogin: {
@@ -82,21 +79,6 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
   },
-
-  tes2: {
-    [theme.breakpoints.down('xs')]: {
-      border: '1px solid black',
-      // display: 'block !important',
-      background: 'green !important',
-    },
-  },
-  tes: {
-    [theme.breakpoints.down('xs')]: {
-      display: 'inline-block !important',
-      background: 'green !important',
-      // display: 'flex',
-    },
-  },
 }));
 
 const Home = () => {
@@ -105,6 +87,7 @@ const Home = () => {
 
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
+  const [isMenu, setIsMenu] = useState(false);
 
   const updateDimensions = () => {
     setWidth(window.innerWidth);
@@ -116,9 +99,85 @@ const Home = () => {
     return () => window.removeEventListener('resize', updateDimensions);
   }, [width, height]);
 
+  const handleSidebarMenu = () => {
+    setIsMenu(!isMenu);
+  };
+
+  const navLink = [
+    {
+      title: 'About',
+      link: 'about',
+    },
+    {
+      title: 'Features',
+      link: 'features',
+    },
+    {
+      title: 'Login',
+      link: 'signin',
+    },
+  ];
+
+  const handleNavigate = (path) => {
+    router.push(`/${path}`);
+  };
+
+  const Menu = () => {
+    return (
+      <div
+        className={
+          isMenu
+            ? `animate__animated animate__fadeInLeft animate__faster`
+            : `animate__animated animate__fadeInLeft animate__faster`
+        }
+        style={{
+          position: 'absolute',
+          width: '60%',
+          height: '100vh',
+          background: 'rgb(255, 255, 255)',
+        }}>
+        <div style={{ margin: '0 5px' }}>
+          {navLink.map((nav) => {
+            return (
+              <div
+                onClick={() => handleNavigate(nav.link)}
+                style={
+                  nav.title === 'Login'
+                    ? {
+                        background: '#AB22AF',
+                        borderRadius: '5.1504px',
+                        color: '#FDFDFD',
+                        margin: '1rem 0',
+                      }
+                    : {
+                        borderRadius: '5.1504px',
+                        color: 'grey',
+                        margin: '1rem 0',
+                      }
+                }>
+                <span style={{ marginLeft: '10px', fontSize: '1rem' }}>{nav.title}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
   return (
     <>
-      <Grid container className={classes.bgColor}>
+      {isMenu && <Menu />}
+
+      <Grid
+        container
+        className={classes.bgColor}
+        onClick={() => (isMenu ? setIsMenu(false) : null)}
+        style={
+          isMenu
+            ? {
+                overflow: 'hidden',
+              }
+            : { overflow: 'visible' }
+        }>
         <Grid item lg={6} xs={6} className={classes.containerGap}>
           <img src="/images/logo.png" />
         </Grid>
@@ -128,17 +187,21 @@ const Home = () => {
             <Stack direction="row" spacing={5} justifyContent="flex-end">
               <Button>About</Button>
               <Button>Features</Button>
-              <Button variant="outlined" className={classes.btnLogin} onClick={() => router.push({ pathname: '/signin', query: router.query })}>
+              <Button
+                variant="outlined"
+                className={classes.btnLogin}
+                onClick={() => router.push({ pathname: '/signin', query: router.query })}>
                 Login
               </Button>
             </Stack>
           ) : (
-            // <SideBar />
-            <div>masuk mobile view</div>
+            // this will trigger component Menu
+            <div onClick={handleSidebarMenu}>masuk mobile view</div>
           )}
         </Grid>
 
         <Grid item lg={12} xs={12} md={12}>
+          {/* this menu shown when trigged */}
           <center>
             <img src="/images/man-on-hill.svg" />
             <Typography variant="h1" component="div" gutterBottom className={classes.welcomeAtHyppeText}>
@@ -150,12 +213,7 @@ const Home = () => {
           </center>
         </Grid>
 
-        {/* <Grid item lg={12} xs={12} md={12} className={classes.section2}> */}
         <Grid item lg={12} xs={12} md={12} className={classes.section2}>
-          {/* <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.tes}>
-            <Box sx={{ width: 500, backgroundColor: 'red', height: 500 }} className={classes.tes2}></Box>
-            <Box sx={{ width: 500, backgroundColor: 'yellow', height: 500 }} className={classes.tes3}></Box>
-          </Stack> */}
           {/* --------------- */}
           <Stack
             direction="row"
