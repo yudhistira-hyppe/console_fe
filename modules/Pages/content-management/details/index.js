@@ -10,9 +10,8 @@ import Discover from './Discover';
 import BiographyStats from './BiographyStats';
 import { fakeDb } from '../../../FakeDb/fake-db';
 import { useAuth } from 'authentication';
-import { useUserContentEventQuery } from 'api/user/content';
 import { useRouter } from 'next/router';
-import { useUserContentTimeQuery, useUserContentDetailsQuery } from 'api/user/content';
+import { useUserContentTimeQuery, useUserContentDetailsQuery, useUserContentEventQuery } from 'api/user/content';
 import SpinnerLoading from 'components/common/loading/spinner';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 

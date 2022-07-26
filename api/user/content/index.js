@@ -64,4 +64,5 @@ export const {
   useUserContentsMonetizeQuery,
   useUserContentTimeQuery,
   useUserContentDetailsQuery,
+  useUserContentEventQuery,
 } = contentAPI;
