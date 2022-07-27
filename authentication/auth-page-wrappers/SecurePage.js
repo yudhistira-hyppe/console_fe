@@ -23,7 +23,7 @@ const SecurePage = ({ children }) => {
         router.push('/home');
         return;
       }
-      // if (authUser && !authUser.roles.includes('ROLE_PREMIUM') && PREMIUM_ROUTES.includes(router.pathname)) {
+      // if (authUser && !authUser.user.roles.includes('ROLE_PREMIUM') && PREMIUM_ROUTES.includes(router.pathname)) {
       //   router.push('/premium-activation');
       //   return;
       // }

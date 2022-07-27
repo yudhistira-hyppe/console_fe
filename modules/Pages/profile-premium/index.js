@@ -92,7 +92,7 @@ const dataTesting = [
 const ProfileBasic = () => {
   const classes = useStyles();
   const { authUser } = useAuth();
-  const { data: ProfileBasic } = useGetProfileByUserEmailQuery(authUser.email);
+  const { data: ProfileBasic } = useGetProfileByUserEmailQuery(authUser.user.email);
   return (
     <>
       <GridContainer>

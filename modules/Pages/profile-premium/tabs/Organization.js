@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 const Organization = () => {
   const router = useRouter();
   const { authUser } = useAuth();
-  console.log('authUser', authUser.roles);
+  console.log('authUser', authUser.user.roles);
   const classes = useStyles();
 
   const renderData = [
@@ -120,7 +120,7 @@ const Organization = () => {
           color="primary"
           style={{ marginTop: '20px' }}
           onClick={() =>
-            authUser.roles.includes('ROLE_PREMIUM') ? alert('akun sudah premium') : router.push('/premium-activation')
+            authUser.user.roles.includes('ROLE_PREMIUM') ? alert('akun sudah premium') : router.push('/premium-activation')
           }>
           ACTIVATE
         </Button>

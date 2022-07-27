@@ -109,8 +109,8 @@ const ProfileDetails = () => {
   const router = useRouter();
   const { authUser, isLoadingUser } = useAuth();
   const classes = useStyles();
-  const avatar = authUser.avatar
-    ? STREAM_URL + authUser.avatar.mediaEndpoint + '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email
+  const avatar = authUser.user.avatar
+    ? STREAM_URL + authUser.user.avatar.mediaEndpoint + '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.user.email
     : '';
 
   return (
@@ -120,18 +120,18 @@ const ProfileDetails = () => {
           <CmtImage src="/images/dashboard/badge.svg" alt="Badge" />
         </div>
         <CmtObjectSummary
-          avatar={<CmtAvatar className={classes.avatarRoot} size={56} src={avatar} alt={authUser.email} />}
-          title={authUser.fullName}
+          avatar={<CmtAvatar className={classes.avatarRoot} size={56} src={avatar} alt={authUser.user.email} />}
+          title={authUser.user.fullName}
           badge={<div style={{ backgroundColor: '#21C0E8' }}></div>}
           titleProps={{ style: { color: 'black' } }}
-          subTitle={authUser.institution ? authUser.institution : 'General Manager'}
+          subTitle={authUser.user.institution ? authUser.user.institution : 'General Manager'}
           subTitleProps={{ style: { color: 'black' } }}
           avatarProps={{ variant: 'circle' }}
           align="vertical"
         />
         <Button
           variant="text"
-          onClick={() => router.push(authUser.roles.includes('ROLE_PREMIUM') ? '/profile-premium' : '/profile-basic')}
+          onClick={() => router.push(authUser.user.roles.includes('ROLE_PREMIUM') ? '/profile-premium' : '/profile-basic')}
           className="min-w-0 p-0 mt-2">
           <div className={classes.labelLink}>View Profile</div>
         </Button>

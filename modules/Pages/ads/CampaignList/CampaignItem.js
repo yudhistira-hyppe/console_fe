@@ -73,7 +73,7 @@ function getBgColor(status) {
 const CampaignItem = ({authUser, row }) => {
     const classes = useStyles();
     const getMediaUri = () => {
-        const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.email;
+        const authToken = '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.user.email;
         const httpUri = STREAM_URL + row.ImageUri + authToken;
         return httpUri;
     };

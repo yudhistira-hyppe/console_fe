@@ -84,7 +84,7 @@ const ContentItem = ({ row }) => {
   ];
 
   const getMediaUri = () => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     // const mediaURI = item.avatar.mediaEndpoint;
     const mediaURI = '/thumb/' + row?._id;
 

@@ -12,7 +12,7 @@ const ContentManagement = () => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([]);
 
-  const { data: contentManagement } = useUserContentsManagementQuery(authUser.email);
+  const { data: contentManagement } = useUserContentsManagementQuery(authUser.user.email);
 
   const val = Object?.values(contentManagement?.data || {});
 
@@ -27,7 +27,7 @@ const ContentManagement = () => {
 
   // {{MH_HOST_STREAM}}/thumb/fb96a169-70c9-4530-b9eb-6050863e2b41?x-auth-token={{MH_TOKEN}}&x-auth-user={{MH_HDR_USER}}
   const getMediaUri = (url) => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = '/thumb/' + url;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;

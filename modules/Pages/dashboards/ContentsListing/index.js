@@ -68,25 +68,25 @@ const ContentsListing = () => {
 
   // mas dedy said let it work properly and refactor it later
   const bodyPayloadContentAll = {
-    email: authUser.email,
+    email: authUser.user.email,
     limit: limitContentAll,
     skip: skip,
   };
 
   const bodyPayloadContentPopular = {
-    email: authUser.email,
+    email: authUser.user.email,
     limit: limitContentPopular,
     skip: skip,
   };
 
   const bodyPayloadContentLatest = {
-    email: authUser.email,
+    email: authUser.user.email,
     limit: limitContentLatest,
     skip: skip,
   };
 
   const bodyPayloadContentMonetize = {
-    email: authUser.email,
+    email: authUser.user.email,
     limit: limitContentMonetize,
     skip: skip,
   };

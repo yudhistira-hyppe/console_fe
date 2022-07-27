@@ -81,7 +81,7 @@ const ContentList = () => {
   // ------------------------------------
 
   const [payloads, setPayloads] = useState({
-    email: authUser.email,
+    email: authUser.user.email,
     ownership: keyBtn.includes('ownership') ? true : false,
     monetesisasi: keyBtn.includes('dibeli') ? true : false,
     archived: keyBtn.includes('arsip') ? true : false,
@@ -149,7 +149,7 @@ const ContentList = () => {
 
     if (!typePost) {
       setPayloads({
-        email: authUser.email,
+        email: authUser.user.email,
         ownership: keyBtn.includes('ownership') ? true : false,
         monetesisasi: keyBtn.includes('dibeli') ? true : false,
         archived: keyBtn.includes('arsip') ? true : false,
@@ -163,7 +163,7 @@ const ContentList = () => {
 
     if (typePost === 'all') {
       setPayloads({
-        email: authUser.email,
+        email: authUser.user.email,
         ownership: keyBtn.includes('ownership') ? true : false,
         monetesisasi: keyBtn.includes('dibeli') ? true : false,
         archived: keyBtn.includes('arsip') ? true : false,

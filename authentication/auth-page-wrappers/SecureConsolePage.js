@@ -23,7 +23,7 @@ const SecureConsolePage = ({ children }) => {
       }
       if (
         authUser &&
-        authUser.roles.includes('ROLE_SYSADMIN') &&
+        authUser.user.roles.includes('ROLE_SYSADMIN') &&
         router.pathname.includes('/signin') &&
         router.query.redirect &&
         router.query.redirect.includes('/console')
@@ -33,7 +33,7 @@ const SecureConsolePage = ({ children }) => {
       }
       if (
         authUser &&
-        authUser.roles.includes('ROLE_SYSADMIN') &&
+        authUser.user.roles.includes('ROLE_SYSADMIN') &&
         router.pathname.includes('/signin') &&
         !router.query.redirect
       ) {
