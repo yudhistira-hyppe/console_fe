@@ -28,7 +28,13 @@ const useStyles = makeStyles((theme) => ({
 const LatestNotification = () => {
   const { authUser } = useAuth();
 
-  const { data: latestNotification } = useLatestNotificationQuery(authUser.user.email);
+  const payload = {
+    email: authUser.email,
+    skip: 0,
+    limit: 10,
+  };
+  const { data: latestNotification } = useLatestNotificationQuery(payload);
+
 
   const classes = useStyles();
   // const { userActivities } = intranet;
