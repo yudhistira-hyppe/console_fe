@@ -13,6 +13,7 @@ import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography';
 import { useAuth } from '../../../../../../authentication';
 import { useLatestNotificationQuery } from 'api/user/notification';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -65,6 +66,7 @@ const headerNotifications = [];
 const HeaderNotifications = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const router = useRouter();
   const [counter, setCounter] = React.useState(5);
   const theme = useTheme();
   const { authUser, isLoadingUser } = useAuth();
@@ -87,6 +89,11 @@ const HeaderNotifications = () => {
     limit: 10,
   };
   const { data: dataNotification } = useLatestNotificationQuery(payload);
+
+  const handleHeaderDropDown = (objBtn) => {
+    console.log('objBtn:', objBtn);
+    if (objBtn.label === 'More Detail') return router.push('/notification');
+  };
 
   return (
     <Box pr={2}>
@@ -121,6 +128,7 @@ const HeaderNotifications = () => {
             title="Notifications"
             actionsPos="top-corner"
             actions={actions}
+            actionHandler={handleHeaderDropDown}
             separator={{
               color: theme.palette.borderColor.dark,
               borderWidth: 1,
