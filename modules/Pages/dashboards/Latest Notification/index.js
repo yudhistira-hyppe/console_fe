@@ -35,6 +35,7 @@ const LatestNotification = () => {
   };
   const { data: latestNotification } = useLatestNotificationQuery(payload);
 
+
   const classes = useStyles();
   // const { userActivities } = intranet;
 

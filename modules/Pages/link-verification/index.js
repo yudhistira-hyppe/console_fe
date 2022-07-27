@@ -9,7 +9,7 @@ const LinkVerification = () => {
   const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
 
   useEffect(() => {
-    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'FINISH' }).then((res) => {
+    upgradeUser({ email: authUser.user.email, roles: 'ROLE_PREMIUM', status: 'FINISH' }).then((res) => {
       if (res?.data?.status_user === 'FINISH') {
         localStorage.removeItem('user');
 

@@ -90,7 +90,7 @@ const MonetizeItem = ({ row, onClicked }) => {
   const label = { inputProps: { 'aria-label': 'Switch Monetize' } };
 
   const getMediaUri = () => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = '/thumb/' + row?.postID;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;

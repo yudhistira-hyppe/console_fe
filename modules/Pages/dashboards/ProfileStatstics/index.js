@@ -117,7 +117,7 @@ const ProfileStatstics = () => {
   const todayDate = new Date().toISOString().slice(0, 10);
 
   const payload = {
-    email: authUser.email,
+    email: authUser.user.email,
     date: todayDate,
   };
 

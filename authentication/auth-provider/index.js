@@ -1,50 +1,20 @@
 import { useState } from 'react';
-import { SOCKET_IO_URL } from './config';
-import { io } from 'socket.io-client';
 import { premiumSubscribe, premiumConfirm } from './AuthApi';
 import { authApi } from 'api/user';
 import { auth as firebaseAuth } from 'helpers/firebaseHelper';
 import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { createCookies, deleteAllCookies, getAllCookies } from 'helpers/cookiesHelper';
 
 export const useProvideAuth = () => {
+  // Start rewritten code
   const { useLoginMutation, useLoginWithSocmedMutation, useLogoutMutation } = authApi;
   const [login] = useLoginMutation();
   const [loginWithSocmed] = useLoginWithSocmedMutation();
   const [logout] = useLogoutMutation();
-  const [authUser, setAuthUser] = useState(null);
+  const [authUser, setAuthUser] = useState();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const clientWs = io(SOCKET_IO_URL, {
-    transports: ['websocket'],
-    reconnect: true,
-    autoConnect: false,
-    reconnectionDelay: 10000,
-    withCredentials: true,
-    rejectUnauthorized: true,
-  });
-
-  const fetchClientWs = (user) => {
-    console.log(clientWs);
-    clientWs.auth = { 'x-auth-token': user.token, 'x-auth-user': user.email };
-
-    clientWs.on('connect', function (socket) {
-      console.log(socket);
-      console.log('Connected!');
-    });
-
-    clientWs.on('disconnect', function (socket) {
-      console.log('disconnect!');
-    });
-
-    clientWs.on('event_notif', function (data) {
-      console.log(data);
-    });
-
-    clientWs.connect();
-  };
-
-  // Start rewritten code
   const fetchStart = () => {
     setLoading(true);
     setError('');
@@ -60,60 +30,39 @@ export const useProvideAuth = () => {
     setError(error);
   };
 
-  const loadAuth = () => {
-    const appsAuth = JSON.parse(localStorage.getItem('user'));
-    return appsAuth;
-  };
-
-  const saveAuth = (data) => {
-    localStorage.setItem('user', JSON.stringify(data));
-    setAuthUser(data);
+  const saveAuth = () => {
+    setAuthUser(getAllCookies());
   };
 
   const removeAuth = () => {
-    localStorage.removeItem('user');
-    document.cookie.split(';').forEach((c) => {
-      document.cookie = c.replace(/^ +/, '').replace(/=.*/, `=; expires=${new Date().toUTCString()}; SameSite=None; Secure`);
-    });
+    deleteAllCookies();
     setAuthUser(null);
   };
 
-  const createCookie = (keyAndValueCookies) => {
-    const date = new Date();
-    Object.keys(keyAndValueCookies).forEach((key) => {
-      let tempDate = new Date();
-      tempDate.setTime(date.getTime() + keyAndValueCookies[key]['expirationHour'] * 60 * 60 * 1000);
-      document.cookie = `${key}=${
-        keyAndValueCookies[key]['value']
-      }; expires=${tempDate.toUTCString()}; SameSite=None; Secure`;
-    });
+  const getAuthUser = () => {
+    try {
+      fetchStart();
+      setAuthUser(getAllCookies());
+      fetchSuccess();
+    } catch (error) {
+      fetchError(error.message);
+    }
   };
 
-  const consoleLogin = (user, isSetCookie) => {
+  const consoleLoginWithEmail = (user, isRememberUser) => {
     fetchStart();
     login(user)
       .unwrap()
       .then((result) => {
         if (result.data.roles.includes('ROLE_SYSADMIN')) {
-          if (isSetCookie) {
-            createCookie({
-              token: { value: result.data.token, expirationHour: 0.25 },
-              refreshToken: { value: result.data.refreshToken, expirationHour: 144 },
-            });
-          }
-          fetchSuccess();
-          saveAuth(result.data);
+          onHandleSuccessLogin(user, result, isRememberUser);
         } else {
           fetchError('Akun yang digunakan tidak memiliki akses!');
         }
       })
       .catch((error) => {
-        if (error.data.messages.info.includes('Invalid credentials')) {
-          fetchError('Email dan Password tidak sesuai!');
-        } else {
-          fetchError(error.data.messages.info.join(' '));
-        }
         removeAuth();
+        fetchError(error.data.messages.info.join(' '));
       });
   };
 
@@ -142,38 +91,60 @@ export const useProvideAuth = () => {
     loginWithSocmed(user)
       .unwrap()
       .then((result) => {
-        createCookie({
-          token: { value: result.data.token, expirationHour: 0.25 },
-          refreshToken: { value: result.data.refreshToken, expirationHour: 144 },
-        });
-        fetchSuccess();
-        saveAuth(result.data);
+        onHandleSuccessLogin(user, result, true);
       })
       .catch((error) => {
-        fetchError(error.message);
         removeAuth();
+        fetchError(error.data.messages.info.join(' '));
       });
   };
 
-  const userLoginWithEmail = (user) => {
+  const userLoginWithEmail = (user, isRememberUser) => {
     fetchStart();
     login(user)
       .unwrap()
       .then((result) => {
-        fetchSuccess();
-        saveAuth(result.data);
+        onHandleSuccessLogin(user, result, isRememberUser);
       })
       .catch((error) => {
-        fetchError(error.message);
         removeAuth();
+        fetchError(error.data.messages.info.join(' '));
       });
   };
 
   const userSignOut = (user) => {
-    // sementara gini dulu be belum siap
-    // fetchStart();
-    removeAuth();
-    // logout(user)
+    fetchStart();
+    logout(user)
+      .unwrap()
+      .then(() => {
+        removeAuth();
+        fetchSuccess();
+      })
+      .catch((error) => {
+        fetchError(error.data.messages.info.join(' '));
+      });
+  };
+
+  const onHandleSuccessLogin = (user, { data }, isRememberUser) => {
+    const expirationHour = isRememberUser ? 144 : 24;
+    const keyAndValueCookies = {
+      token: { value: data.token, expirationHour: expirationHour },
+      refreshToken: { value: data.refreshToken, expirationHour: expirationHour },
+      user: {
+        value: {
+          email: data.email,
+          fullName: data.fullName,
+          roles: data.roles,
+          avatar: data.avatar,
+          institution: data.institution,
+          deviceId: user.deviceId,
+        },
+        expirationHour: expirationHour,
+      },
+    };
+    createCookies(keyAndValueCookies);
+    saveAuth();
+    fetchSuccess();
   };
   // End rewritten code
 
@@ -213,8 +184,7 @@ export const useProvideAuth = () => {
     premiumConfirm(user)
       .then(({ data }) => {
         if (data && data.response_code == 202) {
-          saveAuth(data.data);
-          fetchClientWs(data.data);
+          // saveAuth(data.data);
           fetchSuccess();
           if (callbackFun) callbackFun();
         } else {
@@ -253,30 +223,6 @@ export const useProvideAuth = () => {
 
   const renderSocialMediaLogin = () => null;
 
-  // const userSignOut = (callbackFun) => {
-  //   try {
-  //     fetchStart();
-  //     logout()
-  //     setTimeout(() => {
-  //       fetchSuccess();
-  //       removeAuth();
-  //       if (callbackFun) callbackFun();
-  //     }, 300);
-  //   } catch (error) {
-  //     fetchError(error.message);
-  //   }
-  // };
-
-  const getAuthUser = () => {
-    try {
-      fetchStart();
-      setAuthUser(loadAuth());
-      fetchSuccess();
-    } catch (error) {
-      fetchError(error.message);
-    }
-  };
-
   return {
     isLoading,
     authUser,
@@ -284,7 +230,7 @@ export const useProvideAuth = () => {
     setError,
     setAuthUser,
     getAuthUser,
-    consoleLogin,
+    consoleLoginWithEmail,
     getResultLoginWithGoogle,
     userLoginWithGoogle,
     userLoginWithSocmed,

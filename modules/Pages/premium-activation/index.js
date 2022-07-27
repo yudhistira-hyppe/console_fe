@@ -12,7 +12,7 @@ const PremiumActivation = () => {
   const [upgradeUser, { isSuccess }] = useUpgradeUserMutation();
 
   const handleUpgradePremium = () => {
-    upgradeUser({ email: authUser.email, roles: 'ROLE_PREMIUM', status: 'ON_PROGRESS' }).then((res) => {
+    upgradeUser({ email: authUser.user.email, roles: 'ROLE_PREMIUM', status: 'ON_PROGRESS' }).then((res) => {
       console.log('res:', res?.data?.status_user);
       if (res?.data?.status_user === 'ON_PROGRESS') {
         router.push('/verification-email');

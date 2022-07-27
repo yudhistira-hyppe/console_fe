@@ -113,7 +113,7 @@ const Member = ({ item }) => {
 
   const getMediaUri = () => {
     return 'image';
-    //    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.email}`;
+    //    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     //    const mediaURI = item.avatar.mediaEndpoint;
     //    return `${STREAM_URL}${mediaURI}${authToken}`;
   };
