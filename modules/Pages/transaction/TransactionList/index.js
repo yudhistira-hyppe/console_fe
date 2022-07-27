@@ -77,7 +77,7 @@ const TransactionList = () => {
 
   const [payload, setPayload] = useState({
     email: authUser.user.email,
-    enddate: '2022-06-09',
+    enddate: dateFilter(0),
     // you just need to minus startdate when filtering use 'dateFilter(minusDay)'
     startdate: dateFilter(0),
     skip: 0,
