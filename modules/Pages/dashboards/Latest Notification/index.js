@@ -29,12 +29,11 @@ const LatestNotification = () => {
   const { authUser } = useAuth();
 
   const payload = {
-    email: authUser.email,
+    email: authUser?.user?.email,
     skip: 0,
     limit: 10,
   };
   const { data: latestNotification } = useLatestNotificationQuery(payload);
-
 
   const classes = useStyles();
   // const { userActivities } = intranet;
