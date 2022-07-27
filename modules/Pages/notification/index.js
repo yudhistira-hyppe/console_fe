@@ -35,21 +35,21 @@ const Notification = () => {
   const [skip, setSkip] = useState(0);
   const [page, setPage] = useState(1);
   const [payload, setPayload] = useState({
-    email: authUser.email,
-    skip: 0,
+    email: authUser?.user?.email,
+    skip: skip,
     limit: 10,
   });
 
+  // console.log('authUser.email:', authUser?.user?.email);
   const { data: Notification } = useLatestNotificationQuery(payload);
-  console.log('Notification:', Notification?.totalAllrows);
 
   useEffect(() => {
     setPayload({
-      email: authUser.email,
+      email: authUser?.user?.email,
       skip: skip,
       limit: 10,
     });
-  }, [page, skip]);
+  }, [skip, page]);
 
   const handlePageChange = (e, val) => {
     setSkip(val * 10 - 10);
@@ -57,15 +57,6 @@ const Notification = () => {
   };
 
   const getDate = (prevDate) => {
-    // const createdAtDate = prevDate;
-    // console.log('createdAtDate:', typeof createdAtDate);
-    // const today = moment().format('yy/MM/DD HH:MM:SS');
-    // console.log('today:', typeof today);
-    // const result = today - createdAtDate;
-    // console.log('result:', result);
-    // var a = moment([2007, 0, 29]);
-    // var b = moment([2007, 0, 28]);
-    // console.log('aaa', a.diff(b));
     const diffDate = moment(prevDate).fromNow();
     return diffDate === 'a month ago' ? '1 month ago' : diffDate;
   };
@@ -132,7 +123,11 @@ const Notification = () => {
         </PerfectScrollbar>
       </CmtCard>
       <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={handlePageChange} count={Math.ceil(Notification?.totalAllrows / 10)} />
+        <Pagination
+          page={page}
+          onChange={(e, value) => handlePageChange(e, value)}
+          count={Math.ceil(Notification?.totalAllrows / 10)}
+        />
       </div>
     </>
   );
