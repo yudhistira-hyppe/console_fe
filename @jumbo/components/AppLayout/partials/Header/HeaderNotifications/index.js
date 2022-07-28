@@ -83,9 +83,8 @@ const HeaderNotifications = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-
   const payload = {
-    email: authUser.email,
+    email: authUser?.user?.email,
     skip: 0,
     limit: 10,
   };
@@ -95,7 +94,6 @@ const HeaderNotifications = () => {
     console.log('objBtn:', objBtn);
     if (objBtn.label === 'More Detail') return router.push('/notification');
   };
-
 
   return (
     <Box pr={2}>
