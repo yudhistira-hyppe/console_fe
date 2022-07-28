@@ -93,9 +93,9 @@ const VoucherHistory = () => {
         </Box>
       </CmtCardHeader>
       <CmtCardContent className={classes.cardContentRoot}>
-        <PerfectScrollbar className={classes.scrollbarRoot}>
-          <VoucherTable tableData={tableData} />
-        </PerfectScrollbar>
+        {/* <PerfectScrollbar className={classes.scrollbarRoot}> */}
+        <VoucherTable tableData={tableData} />
+        {/* </PerfectScrollbar> */}
       </CmtCardContent>
     </CmtCard>
   );

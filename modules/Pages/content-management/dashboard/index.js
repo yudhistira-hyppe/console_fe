@@ -1,5 +1,5 @@
 import GridContainer from '@jumbo/components/GridContainer';
-import { Grid } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import SpinnerLoading from 'components/common/loading/spinner';
 import { useState, useEffect } from 'react';
 import ContentDataCard from '../ContentDataCard';
@@ -8,9 +8,21 @@ import RegionViews from '../RegionViews';
 import { useUserContentsManagementQuery } from 'api/user/content/management';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 
+const useStyles = makeStyles({
+  root: {
+    // background: 'linear-gradient(45deg, #9013FE 15%, #50E3C2 90%)',
+    minWidth: '100%',
+    minHeight: '50vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+});
+
 const ContentManagement = () => {
   const { authUser, isLoadingUser } = useAuth();
   const [mainData, setMainData] = useState([]);
+  const classes = useStyles();
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.user.email);
 
@@ -149,7 +161,9 @@ const ContentManagement = () => {
           </Grid>
         </GridContainer>
       ) : (
-        <SpinnerLoading style={{ margin: '17% 0 17% 0' }} />
+        <Grid className={classes.root} spacing={0} alignItems="center" justify="center">
+          <SpinnerLoading />
+        </Grid>
       )}
     </>
   );

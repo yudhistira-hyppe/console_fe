@@ -30,6 +30,7 @@ const actions = [
 const useStyles = makeStyles((theme) => ({
   cardContentRoot: {
     padding: '0 !important',
+    height: '40vh',
   },
   titleRoot: {
     letterSpacing: 0.15,
@@ -130,9 +131,11 @@ const TransactionList = () => {
         </Box>
       </CmtCardHeader>
       <CmtCardContent className={classes.cardContentRoot}>
-        <PerfectScrollbar className={classes.scrollbarRoot}>
-          <TransactionTable tableData={tableData} />
-        </PerfectScrollbar>
+        {/* scroll bar causing bug when scrolling horisontally view mobile */}
+        {/* <PerfectScrollbar className={classes.scrollbarRoot}> */}
+        <TransactionTable tableData={tableData} />
+        {tableData.length === 0 && <center>data kosong</center>}
+        {/* </PerfectScrollbar> */}
       </CmtCardContent>
     </CmtCard>
   );
