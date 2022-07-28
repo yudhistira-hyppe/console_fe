@@ -64,8 +64,8 @@ const ContentList = () => {
   console.log('skip:', skip);
   console.log('limit:', limit);
 
-  const getSkipAndLimit = (e, value) => {
-    setSkip(value * 10);
+  const handlePagination = (e, value) => {
+    setSkip(value * 10 - 10);
     setPage(value);
   };
 
@@ -266,7 +266,7 @@ const ContentList = () => {
           </CmtCardContent>
         </CmtCard>
         <div className="mt-6 flex flex-row justify-content-center">
-          <Pagination page={page} onChange={getSkipAndLimit} count={countPages} />
+          <Pagination page={page} onChange={handlePagination} count={countPages} />
         </div>
       </div>
     </>

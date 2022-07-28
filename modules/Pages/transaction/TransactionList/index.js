@@ -134,7 +134,7 @@ const TransactionList = () => {
         {/* scroll bar causing bug when scrolling horisontally view mobile */}
         {/* <PerfectScrollbar className={classes.scrollbarRoot}> */}
         <TransactionTable tableData={tableData} />
-        {tableData.length === 0 && <center>data kosong</center>}
+        {tableData?.length === 0 && <center>data kosong</center>}
         {/* </PerfectScrollbar> */}
       </CmtCardContent>
     </CmtCard>
