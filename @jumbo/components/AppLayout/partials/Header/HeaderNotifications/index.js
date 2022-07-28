@@ -77,6 +77,7 @@ const HeaderNotifications = () => {
   };
 
   const onClosePopOver = () => {
+    // alert('clicked');
     setAnchorEl(null);
   };
 
@@ -91,8 +92,10 @@ const HeaderNotifications = () => {
   const { data: dataNotification } = useLatestNotificationQuery(payload);
 
   const handleHeaderDropDown = (objBtn) => {
-    console.log('objBtn:', objBtn);
-    if (objBtn.label === 'More Detail') return router.push('/notification');
+    if (objBtn.label === 'More Detail') {
+      router.push('/notification');
+    }
+    return setAnchorEl(null);
   };
 
   return (
