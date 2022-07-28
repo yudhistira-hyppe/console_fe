@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { auth } from 'helpers/firebaseHelper';
 import { Pagination, Stack } from '@mui/material';
+import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 
 const useStyles = makeStyles((theme) => ({
   scrollbarRoot: {
@@ -47,8 +48,10 @@ const Montetize = ({}) => {
   const [tabValue, setTabValue] = useState('monetize_content');
   const [page, setPage] = useState(1);
   const [typePost, setTypePost] = useState('all');
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [skip, setSkip] = useState(0);
+  const [countPage, setCountPage] = useState(Number);
+  const [isLoadingPagination, setIsLoadingPagination] = useState(false);
   const [payloadContent, setPayloadContent] = useState({
     email: authUser?.email,
     buy: false,
@@ -59,8 +62,15 @@ const Montetize = ({}) => {
     skip: skip,
     limit: limit,
   });
-  console.log('limit:', limit);
   const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
+  useEffect(() => {
+    const loadingPagination = setTimeout(() => {
+      setIsLoadingPagination(true);
+    }, '1000');
+    if (loadingPagination) {
+      setIsLoadingPagination(false);
+    }
+  }, [skip, typePost, filterByDate, payloadContent]);
 
   useEffect(() => {
     switch (tabValue) {
@@ -145,7 +155,11 @@ const Montetize = ({}) => {
   };
 
   const { data: contentMonetize } = useUserContentMonetizeQuery(payloadContent);
+  // console.log('contentMonetize:', Math.ceil(contentMonetize?.totalFilter / 10));
 
+  useEffect(() => {
+    setCountPage(Math.ceil(contentMonetize?.totalFilter / 10));
+  });
   // this is fix request, doesnt need to do anything here
   const payloadLastContent = {
     email: authUser.user.email,
@@ -173,7 +187,7 @@ const Montetize = ({}) => {
   };
 
   const handlePagination = (e, value) => {
-    setSkip(value);
+    setSkip(value * 10 - 10);
     setPage(value);
   };
 
@@ -217,15 +231,15 @@ const Montetize = ({}) => {
 
       <div style={{ margin: '0.7rem 0 ' }}>
         <CmtCard>
-          <CmtCardContent>
+          <CmtCardContent style={{ minHeight: '50vh' }}>
             <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
-            <PerfectScrollbar className={classes.scrollbarRoot}>
-              <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
-            </PerfectScrollbar>
+            {/* <PerfectScrollbar className={classes.scrollbarRoot}> */}
+            {isLoadingPagination ? <MonetizeList tableData={contentMonetize?.data}></MonetizeList> : <TableDataSpinner />}
+            {/* </PerfectScrollbar> */}
           </CmtCardContent>
         </CmtCard>
         <div className="mt-6 flex flex-row justify-content-center">
-          <Pagination page={page} onChange={handlePagination} count={3} />
+          <Pagination page={page} onChange={handlePagination} count={countPage} />
         </div>
       </div>
 
