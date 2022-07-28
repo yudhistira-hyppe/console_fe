@@ -17,7 +17,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { auth } from 'helpers/firebaseHelper';
-import { Stack } from '@mui/material';
+import { Pagination, Stack } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   scrollbarRoot: {
@@ -45,8 +45,10 @@ const Montetize = ({}) => {
   const { authUser } = useAuth();
   const classes = useStyles();
   const [tabValue, setTabValue] = useState('monetize_content');
-  const [typePost, setTypePost] = useState('');
-  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const [typePost, setTypePost] = useState('all');
+  const [limit, setLimit] = useState(1);
+  const [skip, setSkip] = useState(0);
   const [payloadContent, setPayloadContent] = useState({
     email: authUser?.email,
     buy: false,
@@ -54,7 +56,7 @@ const Montetize = ({}) => {
     lastmonetize: false,
     startdate: filterByDate,
     enddate: filterByDate,
-    skip: 0,
+    skip: skip,
     limit: limit,
   });
   console.log('limit:', limit);
@@ -73,7 +75,7 @@ const Montetize = ({}) => {
             startdate: filterByDate,
             enddate: filterByDate,
             postType: typePost,
-            skip: 0,
+            skip: skip,
             limit: limit,
           });
         }
@@ -85,7 +87,7 @@ const Montetize = ({}) => {
             lastmonetize: false,
             startdate: filterByDate,
             enddate: filterByDate,
-            skip: 0,
+            skip: skip,
             limit: limit,
           });
         }
@@ -102,7 +104,7 @@ const Montetize = ({}) => {
             startdate: filterByDate,
             enddate: filterByDate,
             postType: typePost,
-            skip: 0,
+            skip: skip,
             limit: limit,
           });
         }
@@ -116,7 +118,7 @@ const Montetize = ({}) => {
             lastmonetize: false,
             startdate: filterByDate,
             enddate: filterByDate,
-            skip: 0,
+            skip: skip,
             limit: limit,
           });
           return payloadContent;
@@ -124,7 +126,7 @@ const Montetize = ({}) => {
       default:
         console.log('masuk default');
     }
-  }, [tabValue, typePost, filterByDate, limit]);
+  }, [tabValue, typePost, filterByDate, skip, page]);
 
   const convertDate = (str) => {
     let date = new Date(str),
@@ -144,6 +146,7 @@ const Montetize = ({}) => {
 
   const { data: contentMonetize } = useUserContentMonetizeQuery(payloadContent);
 
+  // this is fix request, doesnt need to do anything here
   const payloadLastContent = {
     email: authUser.user.email,
     buy: false,
@@ -169,8 +172,9 @@ const Montetize = ({}) => {
     return `${STREAM_URL}${mediaURI}${authToken}`;
   };
 
-  const handleLoadMore = () => {
-    setLimit(limit + 10);
+  const handlePagination = (e, value) => {
+    setSkip(value);
+    setPage(value);
   };
 
   return (
@@ -217,19 +221,15 @@ const Montetize = ({}) => {
             <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
             <PerfectScrollbar className={classes.scrollbarRoot}>
               <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
-              {contentMonetize?.length > 10 && (
-                <center>
-                  <Button onClick={handleLoadMore} className={classes.btnRoot}>
-                    Load More data
-                  </Button>
-                </center>
-              )}
             </PerfectScrollbar>
           </CmtCardContent>
         </CmtCard>
+        <div className="mt-6 flex flex-row justify-content-center">
+          <Pagination page={page} onChange={handlePagination} count={3} />
+        </div>
       </div>
 
-      <Grid xs={12} sm={6} md={6} lg={6}>
+      <Grid xs={12} sm={6} md={6} lg={6} style={{ marginTop: '5%' }}>
         <DetailsCard
           title={lastContentMonetize?.data[0]?.title}
           contentTitle={lastContentMonetize?.data[0]?.description}
