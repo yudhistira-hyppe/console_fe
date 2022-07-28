@@ -65,8 +65,7 @@ const ContentList = () => {
   console.log('limit:', limit);
 
   const getSkipAndLimit = (e, value) => {
-    setLimit(value * 10);
-    setSkip(value * 10 - 10);
+    setSkip(value * 10);
     setPage(value);
   };
 
