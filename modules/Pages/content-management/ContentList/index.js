@@ -19,6 +19,7 @@ import { useAuth } from 'authentication';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 
 const actions = [
   {
@@ -38,6 +39,7 @@ const actions = [
 const useStyles = makeStyles((theme) => ({
   cardContentRoot: {
     padding: '0 !important',
+    minHeight: '50vh',
   },
   btnFilter: {
     fontSize: '10px',
@@ -60,6 +62,9 @@ const ContentList = () => {
   const [limit, setLimit] = useState(10);
   const [skip, setSkip] = useState(0);
   const [countPages, setCountPages] = useState(Number);
+  const [isLoadingPagination, setIsLoadingPagination] = useState(false);
+  // const [mainData, setMainData] = useState();
+  // console.log('mainData:', mainData);
   console.log('page:', page);
   console.log('skip:', skip);
   console.log('limit:', limit);
@@ -178,6 +183,14 @@ const ContentList = () => {
     if (keyBtn.length === 0 || keyBtn.length === 4) {
       setKeyBtn(['dipost']);
     }
+
+    // this act like loading but still static
+    const loadingPagination = setTimeout(() => {
+      setIsLoadingPagination(true);
+    }, '1000');
+    if (loadingPagination) {
+      setIsLoadingPagination(false);
+    }
   }, [keyBtn, typePost, filterByDate, skip, limit, page]);
 
   const { data: contentGroup } = useUserContentsGroupQuery(payloads);
@@ -260,8 +273,15 @@ const ContentList = () => {
       <div style={{ marginTop: '0.7rem' }}>
         <CmtCard>
           <CmtCardContent className={classes.cardContentRoot}>
+            {/* // this act like loading but still static */}
             <div>
-              <ContentTable tableData={contentGroup?.data} />
+              {isLoadingPagination ? (
+                <ContentTable tableData={contentGroup?.data} />
+              ) : (
+                <>
+                  <TableDataSpinner />
+                </>
+              )}
             </div>
           </CmtCardContent>
         </CmtCard>
