@@ -13,42 +13,42 @@ export const sidebarNavs = [
     type: 'item',
     link: '/contents',
   },
-  // {
-  //   name: 'Ads Center',
-  //   type: 'collapse',
-  //   children: [
-  //     {
-  //       name: 'Ads Center',
-  //       type: 'item',
-  //       link: '/ads',
-  //     },
-  //     {
-  //       name: 'Ads Guideline',
-  //       type: 'item',
-  //       link: '/adsGuideline',
-  //     },
-  //     {
-  //       name: 'About Hyppe Ads',
-  //       type: 'item',
-  //       link: '/aboutAds',
-  //     },
-  //     {
-  //       name: 'Ads Detail',
-  //       type: 'item',
-  //       link: '/ads/details',
-  //     },
-  //     {
-  //       name: 'Create Ads',
-  //       type: 'item',
-  //       link: '/ads/create',
-  //     },
-  //     {
-  //       name: 'Buy Voucher',
-  //       type: 'item',
-  //       link: '/voucher/buy',
-  //     },
-  //   ],
-  // },
+  {
+    name: 'Ads Center',
+    type: 'collapse',
+    children: [
+      {
+        name: 'Ads Center',
+        type: 'item',
+        link: '/ads',
+      },
+      {
+        name: 'Ads Guideline',
+        type: 'item',
+        link: '/adsGuideline',
+      },
+      {
+        name: 'About Hyppe Ads',
+        type: 'item',
+        link: '/aboutAds',
+      },
+      {
+        name: 'Ads Detail',
+        type: 'item',
+        link: '/ads/details',
+      },
+      {
+        name: 'Create Ads',
+        type: 'item',
+        link: '/ads/create',
+      },
+      {
+        name: 'Buy Voucher',
+        type: 'item',
+        link: '/voucher/buy',
+      },
+    ],
+  },
   {
     name: 'Transaction',
     type: 'item',
@@ -67,42 +67,42 @@ export const horizontalDefaultNavs = [
     type: 'item',
     link: '/contents',
   },
-  // {
-  //   name: 'Ads Center',
-  //   type: 'collapse',
-  //   children: [
-  //     {
-  //       name: 'Ads Center',
-  //       type: 'item',
-  //       link: '/ads',
-  //     },
-  //     {
-  //       name: 'Ads Guideline',
-  //       type: 'item',
-  //       link: '/adsGuideline',
-  //     },
-  //     {
-  //       name: 'About Hyppe Ads',
-  //       type: 'item',
-  //       link: '/aboutAds',
-  //     },
-  //     {
-  //       name: 'Ads Detail',
-  //       type: 'item',
-  //       link: '/ads/details',
-  //     },
-  //     {
-  //       name: 'Create Ads',
-  //       type: 'item',
-  //       link: '/ads/create',
-  //     },
-  //     {
-  //       name: 'Buy Voucher',
-  //       type: 'item',
-  //       link: '/voucher/buy',
-  //     },
-  //   ],
-  // },
+  {
+    name: 'Ads Center',
+    type: 'collapse',
+    children: [
+      {
+        name: 'Ads Center',
+        type: 'item',
+        link: '/ads',
+      },
+      {
+        name: 'Ads Guideline',
+        type: 'item',
+        link: '/adsGuideline',
+      },
+      {
+        name: 'About Hyppe Ads',
+        type: 'item',
+        link: '/aboutAds',
+      },
+      {
+        name: 'Ads Detail',
+        type: 'item',
+        link: '/ads/details',
+      },
+      {
+        name: 'Create Ads',
+        type: 'item',
+        link: '/ads/create',
+      },
+      {
+        name: 'Buy Voucher',
+        type: 'item',
+        link: '/voucher/buy',
+      },
+    ],
+  },
   {
     name: 'Transaction',
     type: 'item',
