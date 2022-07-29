@@ -1,17 +1,22 @@
+// react
 import React from 'react';
-import { Box, Button } from '@material-ui/core';
+
+// material ui
+import { Box } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+
+// template components
 import CmtCard from '../../../../@coremat/CmtCard';
-import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
-import clsx from 'clsx';
-import { Area, AreaChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
-import { fakeDb } from '../../../FakeDb/fake-db';
-import { Typography } from '@material-ui/core';
-import TrendingDownIcon from '@material-ui/icons/TrendingDown';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
-import { ExpandMore } from '@material-ui/icons';
+
+// fake db
+import { fakeDb } from '../../../FakeDb/fake-db';
+
+// third party libraries
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+
+// request
 import { useUserGetInsightViewQuery } from 'api/user/insight';
-import { clearConfigCache } from 'prettier';
 import { useAuth } from 'authentication';
 
 const useStyles = makeStyles((theme) => ({
@@ -110,9 +115,7 @@ const DataChart = ({ chartData }) => {
 const ProfileStatstics = () => {
   const classes = useStyles();
   const { adsStatistics } = fakeDb;
-  const { authUser, isLoadingUser } = useAuth();
-
-  // console.log('adsStatistics:', adsStatistics);
+  const { authUser } = useAuth();
 
   const todayDate = new Date().toISOString().slice(0, 10);
 
