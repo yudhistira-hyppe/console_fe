@@ -1,21 +1,35 @@
+// react
 import React from 'react';
+
+// template components
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import clsx from 'clsx';
-import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons';
 import { PageHeader } from '../../../../@jumbo/components/PageComponents';
 import GridContainer from '../../../../@jumbo/components/GridContainer';
-import { Grid } from '@material-ui/core';
+
+// partials components
 import DetailsCard from '../details/DetailsCard';
 import FollowerChart from './FollowerChart';
 import BiographyStats from '../details/BiographyStats';
-import { fakeDb } from '../../../FakeDb/fake-db';
+
+// material ui
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Grid } from '@material-ui/core';
+
+// third parties libraries
+import clsx from 'clsx';
+
+// global components
+import SpinnerLoading from 'components/common/loading/spinner';
+
+// request
 import { useUserContentsAnalyticQuery, useUserContentsFollowerQuery } from 'api/user/content/management';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
-import SpinnerLoading from 'components/common/loading/spinner';
 import { useUserContentEventQuery } from 'api/user/content';
+
+// fake db
+import { fakeDb } from '../../../FakeDb/fake-db';
 
 const useStyles = makeStyles((theme) => ({
   titleLbl: {
@@ -77,6 +91,7 @@ const Analytic = ({}) => {
   const { data: contentFollowers } = useUserContentsFollowerQuery(payloadFollower);
 
   const formatDate = (date) => {
+    // yy/mm/dd hh/mm/ss  =>  will be Jul 20, 2022
     return new Date(date?.split(' ')[0]).toLocaleString('en-us', {
       month: 'short',
       year: 'numeric',
@@ -131,6 +146,7 @@ const Analytic = ({}) => {
           <FollowerChart contentFollowers={contentFollowers} />
         </Grid>
 
+        {/* here has loading */}
         {contentEvent ? (
           <>
             <Grid item xs={12} md={3}>
