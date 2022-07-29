@@ -1,42 +1,32 @@
-//MODIFIED HYPPE
+// react
 import React from 'react';
+
+// material ui
 import { Grid } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+
+// template components
 import GridContainer from '../../../@jumbo/components/GridContainer';
 import PageContainer from '../../../@jumbo/components/PageComponents/layouts/PageContainer';
-import { useAuth } from '../../../authentication';
+
+// components partials
 import AdsStatstics from './AdsStatstics';
 import ProfileStatstics from './ProfileStatstics';
 import Balances from './Balances';
 import ProfileDetails from './ProfileDetails';
 import ContentsListing from './ContentsListing';
-import { Comment } from '@material-ui/icons';
 import Comments from './Comments';
 import LatestNotification from './Latest Notification';
 import UserInfo from './ProfileDetails/UserInfo';
-import { FixedSizeGrid } from 'react-window';
+
+// request
+import { useAuth } from '../../../authentication';
 import { useGetAccountBalanceQuery } from 'api/user/user';
 
-const useStyles = makeStyles((theme) => ({
-  orderLg2: {
-    [theme.breakpoints.up('lg')]: {
-      order: 2,
-    },
-  },
-  orderLg1: {
-    [theme.breakpoints.up('lg')]: {
-      order: 1,
-    },
-  },
-}));
-
 const PremiumDashboard = () => {
-  // const classes = useStyles();
-  const { authUser, isLoadingUser } = useAuth();
+  const { authUser } = useAuth();
   const welcomeNote = 'Welcome ' + authUser.user.fullName;
 
   const { data: dataBalance } = useGetAccountBalanceQuery(authUser.user.email);
-  // console.log('dataBalance:', dataBalance?.data[0]?.totalsaldo)
 
   return (
     <PageContainer heading={welcomeNote}>
