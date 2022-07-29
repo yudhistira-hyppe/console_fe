@@ -1,34 +1,24 @@
+// react and nextJS
 import React from 'react';
-import CmtAdvCard from '../../../../@coremat/CmtAdvCard';
-import CmtAdvCardContent from '../../../../@coremat/CmtAdvCard/CmtAdvCardContent';
-import CmtCardMedia from '../../../../@coremat/CmtCard/CmtCardMedia';
+import { useRouter } from 'next/router';
+
+// template components
 import CmtObjectSummary from '../../../../@coremat/CmtObjectSummary';
 import CmtAvatar from '../../../../@coremat/CmtAvatar';
 import CmtImage from '../../../../@coremat/CmtImage';
-import UserInfo from './UserInfo';
+import CmtCard from '../../../../@coremat/CmtCard';
+
+// material ui
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import SendIcon from '@material-ui/icons/Send';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CmtProgressBar from '../../../../@coremat/CmtProgressBar';
+import { Button } from '@material-ui/core';
+
+// request
 import { useAuth } from '../../../../authentication';
 import { STREAM_URL } from '../../../../authentication/auth-provider/config';
-import CmtCard from '../../../../@coremat/CmtCard';
-import { Button } from '@material-ui/core';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
 
-const actions = [
-  {
-    label: 'View Profile',
-  },
-  {
-    label: 'Send Message',
-  },
-  {
-    label: 'Add to Favorite',
-  },
-];
+// third party libraries
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   actionMenu: {
@@ -110,7 +100,12 @@ const ProfileDetails = () => {
   const { authUser, isLoadingUser } = useAuth();
   const classes = useStyles();
   const avatar = authUser.user.avatar
-    ? STREAM_URL + authUser.user.avatar.mediaEndpoint + '?x-auth-token=' + authUser.token + '&x-auth-user=' + authUser.user.email
+    ? STREAM_URL +
+      authUser.user.avatar.mediaEndpoint +
+      '?x-auth-token=' +
+      authUser.token +
+      '&x-auth-user=' +
+      authUser.user.email
     : '';
 
   return (
