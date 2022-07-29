@@ -1,15 +1,24 @@
+// react
 import React from 'react';
+
+// template components
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
+
+// partials components
 import NotificationData from './NotificationData';
-import { intranet } from '../../../FakeDb/intranet';
-import { timeFromNow } from '../../../../@jumbo/utils/dateHelper';
+
+// third party libraries
 import PerfectScrollbar from 'react-perfect-scrollbar';
+
+// material ui
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+// request
 import { useAuth } from 'authentication';
 import { useLatestNotificationQuery } from 'api/user/notification';
+
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
     position: 'relative',
@@ -36,7 +45,6 @@ const LatestNotification = () => {
   const { data: latestNotification } = useLatestNotificationQuery(payload);
 
   const classes = useStyles();
-  // const { userActivities } = intranet;
 
   const lastActivityDate = latestNotification?.data[0]?.createdAt.split(' ')[0];
   const todayDate = new Date().toISOString().slice(0, 10);
@@ -47,9 +55,6 @@ const LatestNotification = () => {
   const diffTime = Math.abs(today - lastActivity);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  // console.log(diffTime + ' milliseconds');
-  // console.log(diffDays + ' days');
-
   return (
     <CmtCard className={classes.cardRoot}>
       <CmtCardHeader
@@ -58,7 +63,6 @@ const LatestNotification = () => {
       />
       <CmtCardContent>
         <PerfectScrollbar className={classes.scrollbarRoot}>
-          {/* <NotificationData data={userActivities} /> */}
           <NotificationData data={latestNotification?.data} />
         </PerfectScrollbar>
       </CmtCardContent>
