@@ -1,10 +1,21 @@
-import GridContainer from '@jumbo/components/GridContainer';
-import { Grid, makeStyles } from '@material-ui/core';
-import SpinnerLoading from 'components/common/loading/spinner';
+// react
 import { useState, useEffect } from 'react';
+
+// template components
+import GridContainer from '@jumbo/components/GridContainer';
+
+// material ui
+import { Grid, makeStyles } from '@material-ui/core';
+
+// global components
+import SpinnerLoading from 'components/common/loading/spinner';
+
+// partials component
 import ContentDataCard from '../ContentDataCard';
-import { useAuth } from 'authentication';
 import RegionViews from '../RegionViews';
+
+// request
+import { useAuth } from 'authentication';
 import { useUserContentsManagementQuery } from 'api/user/content/management';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 
@@ -20,9 +31,9 @@ const useStyles = makeStyles({
 });
 
 const ContentManagement = () => {
-  const { authUser, isLoadingUser } = useAuth();
-  const [mainData, setMainData] = useState([]);
   const classes = useStyles();
+  const { authUser } = useAuth();
+  const [mainData, setMainData] = useState([]);
 
   const { data: contentManagement } = useUserContentsManagementQuery(authUser.user.email);
 
@@ -37,7 +48,6 @@ const ContentManagement = () => {
     getMediaUri();
   }, [contentManagement]);
 
-  // {{MH_HOST_STREAM}}/thumb/fb96a169-70c9-4530-b9eb-6050863e2b41?x-auth-token={{MH_TOKEN}}&x-auth-user={{MH_HDR_USER}}
   const getMediaUri = (url) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = '/thumb/' + url;
@@ -124,7 +134,6 @@ const ContentManagement = () => {
             />
           </Grid>
           <Grid item md={4} xs={12}>
-            {/* <RegionViews regions={mainData?.recentlyregion} /> */}
             <ContentDataCard
               image={
                 mainData?.traffic?.postID === undefined
