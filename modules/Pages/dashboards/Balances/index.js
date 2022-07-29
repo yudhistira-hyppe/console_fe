@@ -1,21 +1,21 @@
+// react
 import React from 'react';
 
+// material ui
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
-import PortfolioDetails from './PortfolioDetails';
-
-import CmtAdvCard from '../../../../@coremat/CmtAdvCard';
-import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
-import CmtAdvCardContent from '../../../../@coremat/CmtAdvCard/CmtAdvCardContent';
-
-import { fakeDb } from '../../../FakeDb/fake-db';
-import ActionButtons from './ActionButtons';
+// components template
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
-import numberWithCommas from '../../../Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+
+// material ui
 import { TrendingDown, TrendingUp } from '@material-ui/icons';
 import { Button } from '@material-ui/core';
+
+// next js
 import { useRouter } from 'next/router';
+
+// helpers
 import { formatCurrency } from 'helpers/stringHelper';
 
 const useStyles = makeStyles((theme) => ({
@@ -78,11 +78,7 @@ const Balances = ({ balance, precentage, trend }) => {
           <div className={classes.headTitle}>Balance</div>
           <div className="mt-8">
             <div className="flex flex-row">
-              <div className={classes.balanceLabel}>
-                {/* should use this but got an error */}
-                {/* Rp {numberWithCommas(balance)} */}
-                Rp {formatCurrency(balance)}
-              </div>
+              <div className={classes.balanceLabel}>Rp {formatCurrency(balance)}</div>
               <div className="ml-1">
                 <span className={classes.precentageLabel}>{precentage}%</span>
               </div>
