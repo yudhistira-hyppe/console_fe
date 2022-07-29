@@ -3,14 +3,17 @@ import React from 'react';
 
 // material ui
 import { Box } from '@material-ui/core';
-import CmtCard from '../../../../@coremat/CmtCard';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import CmtCard from '../../../../@coremat/CmtCard';
 
 // components template
+import clsx from 'clsx';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
 
-// third party library
-import clsx from 'clsx';
+// fake db
+import { fakeDb } from '../../../FakeDb/fake-db';
+
+// third party libraries
 import { Area, AreaChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
 const useStyles = makeStyles((theme) => ({
@@ -79,6 +82,7 @@ const DataChart = ({ chartData }) => {
 
 const AdsStatstics = () => {
   const classes = useStyles();
+  const { adsStatistics } = fakeDb;
 
   return (
     <div style={{ height: '250px' }} className="flex-auto">
