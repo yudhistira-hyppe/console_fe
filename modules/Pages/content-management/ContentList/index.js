@@ -279,7 +279,7 @@ const ContentList = () => {
                 <ContentTable tableData={contentGroup?.data} />
               ) : (
                 <>
-                  <TableDataSpinner />
+                  <TableDataSpinner center />
                 </>
               )}
             </div>

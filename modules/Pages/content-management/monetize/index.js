@@ -234,7 +234,11 @@ const Montetize = ({}) => {
           <CmtCardContent style={{ minHeight: '50vh' }}>
             <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
             {/* <PerfectScrollbar className={classes.scrollbarRoot}> */}
-            {isLoadingPagination ? <MonetizeList tableData={contentMonetize?.data}></MonetizeList> : <TableDataSpinner />}
+            {isLoadingPagination ? (
+              <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
+            ) : (
+              <TableDataSpinner center />
+            )}
             {/* </PerfectScrollbar> */}
           </CmtCardContent>
         </CmtCard>

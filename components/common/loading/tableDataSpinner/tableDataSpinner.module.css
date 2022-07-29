@@ -1,10 +1,5 @@
-/* .container {
-    border:1px solid black;
-    height:50vh;
-    position: relative;
-    text-align: center;
-} */
-.wrapper {
+
+.center {
     position: absolute !important;
     text-align: center;
     top: 50%;
