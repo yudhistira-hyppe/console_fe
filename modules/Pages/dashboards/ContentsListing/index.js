@@ -1,15 +1,12 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+// react
 import React, { useEffect, useState } from 'react';
-//import { propertiesList } from '../../../../@fake-db';
+
+// partials component
 import PropertyDetail from './PropertyDetail';
 import PropertiesList from './PropertiesList';
-import Collapse from '@material-ui/core/Collapse';
 
-//Redux
+// request
 import { useAuth } from '../../../../authentication';
-import { useDispatch, useSelector } from 'react-redux';
-// import { getContents } from '../../../../redux/actions/Contents';
-import { useDebounce } from '../../../../@jumbo/utils/commonHelper';
 import {
   useUserContentsAllQuery,
   useUserContentsLatestQuery,
@@ -17,9 +14,10 @@ import {
   useUserContentsMonetizeQuery,
 } from 'api/user/content';
 
-// -----
+// material UI
 import { Box, Button } from '@material-ui/core';
 import { alpha, makeStyles } from '@material-ui/core/styles';
+import Collapse from '@material-ui/core/Collapse';
 
 const useStyles = makeStyles((theme) => ({
   btnRoot: {
@@ -37,36 +35,18 @@ const useStyles = makeStyles((theme) => ({
 
 const ContentsListing = () => {
   const { authUser } = useAuth();
-  const { contents } = useSelector(({ contentsReducer }) => contentsReducer);
-  const [contentsFetched, setContentsFetched] = useState(false);
-  const [isFilterApplied, setFilterApplied] = useState(false);
-  const [filterOptions, setFilterOptions] = React.useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selectedContent, setSelectedContent] = useState(null);
 
-  //const [page, setPage] = useState(1);
-  const [categoryData, setCategoryData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedContent, setSelectedContent] = useState(null);
   const [searchText, setSearchText] = useState('');
   const [tabValue, setTabValue] = useState('');
-
   const [showContent, setShowContent] = useState([]);
-
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
   const [limitContentAll, setLimitContentAll] = useState(10);
   const [limitContentLatest, setLimitContentLatest] = useState(10);
   const [limitContentPopular, setLimitContentPopular] = useState(10);
   const [limitContentMonetize, setLimitContentMonetize] = useState(10);
-  // const [limit, setLimit] = useState(10);
-
   const [skip, setSkip] = useState(0);
-  // console.log('limit:', limit);
 
-  // change here for payload data
-
-  // mas dedy said let it work properly and refactor it later
   const bodyPayloadContentAll = {
     email: authUser.user.email,
     limit: limitContentAll,
@@ -91,31 +71,18 @@ const ContentsListing = () => {
     skip: skip,
   };
 
+  // payload for each content
   const { data: contentAll } = useUserContentsAllQuery(bodyPayloadContentAll);
   const { data: contentLatest } = useUserContentsLatestQuery(bodyPayloadContentLatest);
   const { data: contentPopular } = useUserContentsPopularQuery(bodyPayloadContentPopular);
   const { data: contentMonetize } = useUserContentsMonetizeQuery(bodyPayloadContentMonetize);
 
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(
-  //     getContents(authUser, filterOptions, debouncedSearchTerm, () => {
-  //       setFilterApplied(!!filterOptions.length || !!debouncedSearchTerm);
-  //       setContentsFetched(true);
-  //     }),
-  //   );
-  // }, [dispatch, filterOptions, debouncedSearchTerm]);
-
+  // default shown data
   useEffect(() => {
     setShowContent(contentAll?.data);
   }, [contentAll]);
 
-  // const handlePageChange = () => {
-  //   setRowsPerPage(5);
-  //   setPage(page + 1);
-  // };
-
+  // tabs change data inside depends his nameTab
   const contentChange = (nameTab) => {
     switch (nameTab) {
       case 'latest':
@@ -141,10 +108,7 @@ const ContentsListing = () => {
   const onChangeTab = (value) => {
     setTabValue(value);
     contentChange(value);
-
     setSearchText('');
-    setPage(0);
-    setRowsPerPage(page * 5);
   };
 
   const handleSearchTextChange = (e) => {
@@ -154,116 +118,27 @@ const ContentsListing = () => {
   const handleContentClick = (content) => setSelectedContent(content);
   const showContentList = () => setSelectedContent(null);
 
-  // dont remove this
-
-  /*useEffect(() => {
-    setCategoryData(
-      tabValue
-        ? propertiesList.filter((item) => item.category === tabValue).slice(0, page * 5)
-        : propertiesList.slice(0, page * 5),
-    );
-  }, [tabValue, page]);
-
-  const handlePageChange = () => {
-    setPage(page + 1);
-  };
-
-  const onChangeTab = (value) => {
-    setSearchText('');
-    setPage(1);
-    setTabValue(value);
-  };
-
-  const handleSearchTextChange = (e) => {
-    setSearchText(e.target.value);
-  };
-
-  const getFilteredData = () => {
-    if (searchText) {
-      return categoryData.filter((item) => item.title.toLowerCase().includes(searchText.toLowerCase()));
-    } else return categoryData;
-  };
-
-  const handlePropertyClick = (property) => setSelectedProperty(property);
-
-  const showPropertyList = () => setSelectedProperty(null);
-
-  const data = getFilteredData();*/
-
-  // code below is for refactoring. next termin we running out of time (deadline almost here),
-  // mas dedy said let it work properly and refactor it later
-
   const LoadMore = () => {
-    const classes = useStyles();
-
     switch (tabValue) {
       case 'latest':
         setShowContent(contentLatest?.data);
-        // return ( <LoadMoreComponent clicked={() => setLimitContentAll(limitContentAll + 10)} />)
-        return (
-          <Box p={6} textAlign="center">
-            <Button
-              className={classes.btnRoot}
-              // eslint-disable-next-line react/jsx-no-duplicate-props
-              onClick={() => setLimitContentLatest(limitContentLatest + 10)}>
-              Load More
-            </Button>
-          </Box>
-        );
+        return <LoadMoreComponent clicked={() => setLimitContentLatest(limitContentLatest + 10)} />;
       case 'popular':
         setShowContent(contentPopular?.data);
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-        return (
-          <Box p={6} textAlign="center">
-            <Button
-              className={classes.btnRoot}
-              // eslint-disable-next-line react/jsx-no-duplicate-props
-              onClick={() => setLimitContentPopular(limitContentPopular + 10)}>
-              Load More
-            </Button>
-          </Box>
-        );
+        return <LoadMoreComponent clicked={() => setLimitContentPopular(limitContentPopular + 10)} />;
       case 'monetize':
-        return (
-          <Box p={6} textAlign="center">
-            <Button
-              className={classes.btnRoot}
-              // eslint-disable-next-line react/jsx-no-duplicate-props
-              onClick={() => setLimitContentMonetize(limitContentMonetize + 10)}>
-              Load More
-            </Button>
-          </Box>
-        );
+        return <LoadMoreComponent clicked={() => setLimitContentMonetize(limitContentMonetize + 10)} />;
       default:
         setShowContent(contentAll?.data);
-        return (
-          <Box p={6} textAlign="center">
-            <Button
-              className={classes.btnRoot}
-              // eslint-disable-next-line react/jsx-no-duplicate-props
-              onClick={() => setLimitContentAll(limitContentAll + 10)}>
-              Load More
-            </Button>
-          </Box>
-        );
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-      // return <div onClick={() => setLimitContentAll(limitContentAll + 10)}>all</div>;
+        return <LoadMoreComponent clicked={() => setLimitContentAll(limitContentAll + 10)} />;
     }
   };
 
-  // i had try this but got limited looping react
-
   const LoadMoreComponent = ({ clicked }) => {
-    console.log('clicked:', clicked);
-    console.log('props:');
     const classes = useStyles();
-
     return (
       <Box p={6} textAlign="center">
-        <Button
-          className={classes.btnRoot}
-          // eslint-disable-next-line react/jsx-no-duplicate-props
-          onClick={clicked}>
+        <Button className={classes.btnRoot} onClick={clicked}>
           Load More
         </Button>
       </Box>
@@ -286,23 +161,9 @@ const ContentsListing = () => {
           data={showContent}
           searchText={searchText}
           handleSearchTextChange={handleSearchTextChange}
-          // handlePageChange={handlePageChange}
-          handleLoadMore={showContent?.length > 0 ? <LoadMore /> : ''}
+          handleLoadMore={showContent?.length > 0 && <LoadMore />}
         />
       </Collapse>
-      {/*{selectedProperty ? (
-        <PropertyDetail selectedProperty={selectedProperty} showPropertyList={showPropertyList} />
-      ) : (
-        <PropertiesList
-          onPropertyClick={handlePropertyClick}
-          tabValue={tabValue}
-          onChangeTab={onChangeTab}
-          data={data}
-          searchText={searchText}
-          handleSearchTextChange={handleSearchTextChange}
-          handlePageChange={handlePageChange}
-        />
-      )}*/}
     </React.Fragment>
   );
 };
