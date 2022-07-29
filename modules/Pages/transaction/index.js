@@ -1,22 +1,33 @@
+// react and nextJS
 import React from 'react';
+import { useRouter } from 'next/router';
+
+// template components
 import { PageHeader } from '../../../@jumbo/components/PageComponents';
 import CmtCard from '../../../@coremat/CmtCard';
-import CmtCardHeader from '../../../@coremat/CmtCard/CmtCardHeader';
 import CmtCardContent from '../../../@coremat/CmtCard/CmtCardContent';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import numberWithCommas from '../../Components/CommonComponent/NumberWithCommas/NumberWithCommas';
-import { TrendingDown, TrendingUp } from '@material-ui/icons';
-import { Button, Grid } from '@material-ui/core';
-import TransactionList from './TransactionList';
-import clsx from 'clsx';
 import GridContainer from '../../../@jumbo/components/GridContainer';
+import { getFormattedDate } from '@jumbo/utils/dateHelper';
+
+// partials components
+import TransactionList from './TransactionList';
 import MyVoucher from './MyVoucher/MyVoucher';
 import VoucherHistory from './VoucherHistory';
+
+// material ui
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import { TrendingDown, TrendingUp } from '@material-ui/icons';
+import { Button, Grid } from '@material-ui/core';
+
+// third parties components
+import clsx from 'clsx';
+
+// request
 import { useAuth } from '../../../authentication';
-import { useAccountBalanceQuery, useAccountBalanceHistoryQuery } from 'api/user/accountBalances';
-import { getFormattedDate } from '@jumbo/utils/dateHelper';
+import { useAccountBalanceQuery } from 'api/user/accountBalances';
 import { useUpgradeUserMutation } from 'api/user/auth';
-import { useRouter } from 'next/router';
+
+// helpers
 import { formatCurrency } from 'helpers/stringHelper';
 
 const useStyles = makeStyles((theme) => ({
@@ -125,11 +136,7 @@ const Balance = ({ balance, precentage, trend }) => {
           <div className={classes.headTitle}>Balance</div>
           <div className="mt-7">
             <div className="flex flex-row">
-              <div className={classes.balanceLabel}>
-                {/* there's a issues use this function */}
-                {/* Rp {numberWithCommas(balance)} */}
-                Rp {formatCurrency(balance)}
-              </div>
+              <div className={classes.balanceLabel}>Rp {formatCurrency(balance)}</div>
               <div className="ml-1">
                 <span className={classes.precentageLabel}>{precentage}%</span>
               </div>
