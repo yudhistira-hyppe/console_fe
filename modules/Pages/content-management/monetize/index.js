@@ -1,23 +1,34 @@
+// react
 import React, { useEffect, useState } from 'react';
+
+// tempalte components
 import { PageHeader } from '../../../../@jumbo/components/PageComponents';
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
-import { alpha, makeStyles } from '@material-ui/core/styles';
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
+
+// partials components
 import DetailsCard from '../details/DetailsCard';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import MonetizeList from './MonetizeList/MonetizeList';
-import { fakeDb } from '../../../FakeDb/fake-db';
 import MonetizeTabs from './MonetizeTabs';
-import { useUserContentMonetizeQuery } from 'api/user/content/management';
-import { useAuth } from 'authentication';
-import { STREAM_URL } from 'authentication/auth-provider/config';
+
+// material ui
+import { FormControl, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { alpha, makeStyles } from '@material-ui/core/styles';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { auth } from 'helpers/firebaseHelper';
 import { Pagination, Stack } from '@mui/material';
+
+// fake db
+import { fakeDb } from '../../../FakeDb/fake-db';
+
+// request
+import { useUserContentMonetizeQuery } from 'api/user/content/management';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+
+// global components
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 
 const useStyles = makeStyles((theme) => ({
@@ -64,6 +75,7 @@ const Montetize = ({}) => {
   });
   const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
   useEffect(() => {
+    // this loading still static it should be dynamic
     const loadingPagination = setTimeout(() => {
       setIsLoadingPagination(true);
     }, '1000');
@@ -155,11 +167,11 @@ const Montetize = ({}) => {
   };
 
   const { data: contentMonetize } = useUserContentMonetizeQuery(payloadContent);
-  // console.log('contentMonetize:', Math.ceil(contentMonetize?.totalFilter / 10));
 
   useEffect(() => {
     setCountPage(Math.ceil(contentMonetize?.totalFilter / 10));
   });
+
   // this is fix request, doesnt need to do anything here
   const payloadLastContent = {
     email: authUser.user.email,
@@ -227,19 +239,16 @@ const Montetize = ({}) => {
           </FormControl>
         </Stack>
       </Grid>
-      {/* // -------- */}
 
       <div style={{ margin: '0.7rem 0 ' }}>
         <CmtCard>
           <CmtCardContent style={{ minHeight: '50vh' }}>
             <MonetizeTabs tabValue={tabValue} onChangeTab={onChangeTab} />
-            {/* <PerfectScrollbar className={classes.scrollbarRoot}> */}
             {isLoadingPagination ? (
               <MonetizeList tableData={contentMonetize?.data}></MonetizeList>
             ) : (
               <TableDataSpinner center />
             )}
-            {/* </PerfectScrollbar> */}
           </CmtCardContent>
         </CmtCard>
         <div className="mt-6 flex flex-row justify-content-center">
