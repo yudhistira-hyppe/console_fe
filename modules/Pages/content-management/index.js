@@ -1,105 +1,64 @@
-/* eslint-disable react/jsx-key */
+// react
 import React, { useState } from 'react';
+
+// material ui
 import { makeStyles, Tab } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
-import Analytic from './analytic';
-import Monetize from './monetize';
-import ContentList from './ContentList';
-import ContentManagement from './dashboard';
+
+// partials components
+// note: register your component here to add new tabs
+import { Tabs, TabPanelsComponents } from './tabsComponents';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
-    // if you want to get it at the top
-    // top: '0px',
-    // maxWidth: '70px',
-    // marginLeft: '4%',
-    // color: 'blue !important',
     backgroundColor: 'rgb(170, 34, 175)',
-    // border: '2px solid black',
-  },
-  tabsRoot: {
-    // minHeight: tabHeight,
-    // height: tabHeight,
-    // border: '1px solid black',
   },
   tabRoot: {
     minHeight: '40px',
-    // height: '40px',
-    // maxWidth: '30px',
     textAlign: 'center',
     fontSize: '0.8em',
     fontWeight: '900',
-    // padding: '0 -20px',
     letterSpacing: '2px',
-    // border: '1px solid black',
   },
 }));
 
 const Content = ({}) => {
-  const [value, setValue] = useState('1');
+  // default value tabs
+  const [value, setValue] = useState('dashboard');
+  const classes = useStyles();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const classes = useStyles();
-
   return (
     <>
-      {/* tab content is depends on value */}
-      {/*NOTED: if this getting bigger need to refactor  */}
+      {/* dont do anything with the code below */}
+      {/* if you want add new components please open TabsComponents (which imported at the top) */}
       <TabContext value={value}>
         <TabList
           onChange={handleChange}
           aria-label="lab API tabs example"
           variant="scrollable"
           classes={{
-            root: classes.tabsRoot,
             indicator: classes.indicator,
           }}>
-          <Tab
-            label="Dashboard"
-            value="1"
-            classes={{
-              root: classes.tabRoot,
-            }}
-          />
-          <Tab
-            label="Konten"
-            value="2"
-            classes={{
-              root: classes.tabRoot,
-            }}
-          />
-          <Tab
-            label="Analytic"
-            value="3"
-            classes={{
-              root: classes.tabRoot,
-            }}
-          />
-          <Tab
-            label="Monetize"
-            value="4"
-            classes={{
-              root: classes.tabRoot,
-            }}
-          />
+          {Tabs.map((tab) => {
+            return (
+              <Tab
+                label={tab.label}
+                value={tab.value}
+                classes={{
+                  root: classes.tabRoot,
+                }}
+              />
+            );
+          })}
         </TabList>
 
-        {/* values contents depens on the top  */}
-        <TabPanel value="1">
-          <ContentManagement />
-        </TabPanel>
-        <TabPanel value="2">
-          <ContentList />
-        </TabPanel>
-        <TabPanel value="3">
-          <Analytic />
-        </TabPanel>
-        <TabPanel value="4">
-          <Monetize />
-        </TabPanel>
+        {TabPanelsComponents.map((panel) => {
+          return <TabPanel value={panel.value}>{panel.component}</TabPanel>;
+        })}
       </TabContext>
     </>
   );
