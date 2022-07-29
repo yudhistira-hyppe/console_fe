@@ -1,14 +1,20 @@
+// react
 import React from 'react';
-import Box from '@material-ui/core/Box';
+
+// material ui
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { fakeDb } from '../../../FakeDb/fake-db';
+import { ArrowForwardIos, TrendingDown, TrendingUp } from '@material-ui/icons';
+
+// template components
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
-import clsx from 'clsx';
-import { ArrowForwardIos, ArrowRight, ArrowRightAltOutlined, TrendingDown, TrendingUp } from '@material-ui/icons';
-import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
+
+// request
 import { useAuth } from 'authentication';
 import { useUserGetInsightQuery } from 'api/user/insight';
+
+// third party libraries
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   headTitle: {
