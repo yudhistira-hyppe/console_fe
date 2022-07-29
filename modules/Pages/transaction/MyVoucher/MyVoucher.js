@@ -97,11 +97,11 @@ const Voucher = ({ title, subTitle, expDate, voucherCode }) => {
 };
 
 const MyVoucher = ({}) => {
-  const [menu, setMenu] = useState('Semua Voucher');
-  const { myVoucher } = fakeDb;
   const classes = useStyles();
+  const { myVoucher } = fakeDb;
+  const [menu, setMenu] = useState('Semua Voucher');
   return (
-    <CmtCard>
+    <CmtCard style={{ minHeight: '72vh' }}>
       <CmtCardHeader
         className="pt-4"
         title={'Voucher Saya'}
