@@ -1,25 +1,32 @@
+// react and nextJS
 import React, { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/router';
+
+// template components
 import CmtCard from '../../../../@coremat/CmtCard';
 import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
-import { fakeDb } from '../../../FakeDb/fake-db';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { getTodayDate, getYesterdayDate } from '../../../../@jumbo/utils/dateHelper';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Box from '@material-ui/core/Box';
-import { Button, FormControl, Grid, Select, InputLabel, MenuItem, TablePagination } from '@material-ui/core';
 import { PageHeader } from '../../../../@jumbo/components/PageComponents';
+
+// material ui
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Button, FormControl, Grid, Select, InputLabel, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import IntlMessages from '../../../../@jumbo/utils/IntlMessages';
-import ContentTable from './ContentTable';
 import Pagination from '@material-ui/lab/Pagination';
 import { Stack } from '@mui/material';
-import { useRouter } from 'next/router';
-import { useUserContentsGroupQuery } from 'api/user/content/management';
-import { useAuth } from 'authentication';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+// global components
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
+
+// partials components
+import ContentTable from './ContentTable';
+
+// request
+import { useUserContentsGroupQuery } from 'api/user/content/management';
+import { useAuth } from 'authentication';
 
 const actions = [
   {
@@ -51,25 +58,22 @@ const useStyles = makeStyles((theme) => ({
 const ContentList = () => {
   const classes = useStyles();
   const { authUser } = useAuth();
-  const router = useRouter();
   const [typePost, setTypePost] = useState('');
+  // keyBtn is main of the action dynamic button filter
+  // example : if array contains ['dipost','ownership] the background active and it will request payloads
   const [keyBtn, setKeyBtn] = useState(['dipost']);
-  // this keyBtn set today date
-  const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
 
-  // ------------------------------------
+  // default is todaydate
+  const [filterByDate, setFilterByDate] = useState(new Date().toISOString().slice(0, 10));
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [skip, setSkip] = useState(0);
   const [countPages, setCountPages] = useState(Number);
   const [isLoadingPagination, setIsLoadingPagination] = useState(false);
-  // const [mainData, setMainData] = useState();
-  // console.log('mainData:', mainData);
-  console.log('page:', page);
-  console.log('skip:', skip);
-  console.log('limit:', limit);
 
   const handlePagination = (e, value) => {
+    // example : at page 5. value is = 5
+    // so it will be 5 * 10 - 10
     setSkip(value * 10 - 10);
     setPage(value);
   };
@@ -78,11 +82,11 @@ const ContentList = () => {
     setCountPages(Math.ceil(contentGroup?.totalFilter / 10));
   });
 
+  // refresh limit and skip
   useEffect(() => {
     setLimit(10);
     setSkip(0);
   }, [typePost, filterByDate, keyBtn]);
-  // ------------------------------------
 
   const [payloads, setPayloads] = useState({
     email: authUser.user.email,
@@ -120,7 +124,7 @@ const ContentList = () => {
     },
   ];
 
-  const clickedButton = (name) => {
+  const clickedButtonFilter = (name) => {
     if (name === 'dipost') {
       setKeyBtn(['dipost']);
     }
@@ -225,7 +229,7 @@ const ContentList = () => {
                       ? { backgroundColor: ' rgba(171, 34, 175, 0.12)', color: 'rgba(171, 34, 175, 1)' }
                       : null
                   }
-                  onClick={() => clickedButton(btn.name)}>
+                  onClick={() => clickedButtonFilter(btn.name)}>
                   {btn.title}
                 </Button>
               );
