@@ -1,14 +1,23 @@
+// react
 import React from 'react';
-import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
-import Chip from '@material-ui/core/Chip';
-import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import CmtCard from '../../../../@coremat/CmtCard';
+
+// material ui
 import { alpha, makeStyles } from '@material-ui/core/styles';
+// import Chip from '@material-ui/core/Chip';
+
+// template components
+import CmtCardHeader from '../../../../@coremat/CmtCard/CmtCardHeader';
+import CmtCardContent from '../../../../@coremat/CmtCard/CmtCardContent';
+import CmtCard from '../../../../@coremat/CmtCard';
 import CmtList from '../../../../@coremat/CmtList';
-// import { news } from '../../../FakeDb/news';
+
+// third party libraries
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
+// partials components
 import CommentItem from './CommentItem';
 
+// request
 import { useAuth } from 'authentication';
 import { useUserGetNewCommentQuery } from 'api/user/comment';
 
@@ -39,12 +48,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Comments = () => {
   const classes = useStyles();
-  // const { comments } = news;
-
   const { authUser } = useAuth();
 
   const { data: dataComment } = useUserGetNewCommentQuery(authUser.user.email);
-  console.log('dataComment2:', dataComment);
   return (
     <CmtCard className={classes.cardRoot}>
       <CmtCardHeader title="New Comment">
