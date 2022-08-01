@@ -3,15 +3,19 @@ import Head from 'next/head';
 import { Box, Grid } from '@material-ui/core';
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import ActiveUsersCard from './ActiveUsersCard';
-import StatusKepemilikanCard from './StatusKepemilikanCard';
-import ActivitySize from './ActivitySize';
+// import ActiveUsersCard from './ActiveUsersCard';
+import StatusKepemilikanCard from './trashPreviousDesign/StatusKepemilikanCard';
+import ActivitySize from './trashPreviousDesign/ActivitySize';
 import CmtImage from '@coremat/CmtImage';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';
 import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
 import moment from 'moment';
+import UserActive from './UserActive/UserACtiveGraphhh';
+import Instalasi from './Instalasi';
+import Pendapatan from './Pendapatan';
+import Voucher from './Voucher/VoucherGraphhh';
 
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
@@ -52,8 +56,30 @@ const ConsoleDashboardComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Dashboard</title>
       </Head>
-      <PageContainer heading="Beranda">
+
+      {/* // start change */}
+      <PageContainer>
         <GridContainer>
+          {/* i just recoginze, if you want to make the components reusable 
+          you need to change (fill and id in linearGradient is unique) to trigger effect color */}
+          {/* i'll be refactor the components to reusable. i'll be back asap! */}
+          <Grid item xs={12} sm={6} md={3}>
+            <UserActive title="Pengguna Aktif" secondaryTitle="Bulan ini" amount="10.254" />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Instalasi title="Instalasi" secondaryTitle="Bulan ini" amount="33.7555" />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Pendapatan title="Pendapatan" secondaryTitle="Bulan ini" amount="30.000.000" />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Voucher title="Voucher" secondaryTitle="Bulan ini" amount="222.355" />
+          </Grid>
+        </GridContainer>
+
+        {/* end change */}
+
+        {/* <GridContainer>
           <Grid item xs={12} sm={5} md={5}>
             <Box display="flex" alignItems="center" className={classes.boxAlert}>
               <CmtImage src={'/images/icons/warning_sign.png'} alt="warning" />
@@ -63,10 +89,9 @@ const ConsoleDashboardComponent = () => {
               <CmtImage src={'/images/icons/icon_link.png'} alt="link" />
             </Box>
           </Grid>
-        </GridContainer>
+        </GridContainer> */}
         <GridContainer>
-          <Grid item xs={12} sm={6} md={4}>
-            <ActiveUsersCard
+          {/* <ActiveUsersCard
               dataGraph={activeUsersSevenDay}
               xAxisKeyGraph="date"
               lineKeyGraph="user_activity_count"
@@ -74,9 +99,9 @@ const ConsoleDashboardComponent = () => {
               title="Pengguna Aktif 7 Hari"
               color="#0062FF"
               background={['#E2EEFF -18.96%', '#FFFFFF 108.17%']}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+            /> */}
+
+          {/* <Grid item xs={12} sm={6} md={4}>
             <ActiveUsersCard
               dataGraph={activeUsersThirtyDay}
               xAxisKeyGraph="date"
@@ -98,6 +123,7 @@ const ConsoleDashboardComponent = () => {
               background={['#FFF2E2 -18.96%', '#FFFFFF 108.17%']}
             />
           </Grid>
+           */}
           <Grid item xs={12} sm={12} md={12}>
             <ActivitySize data={usersActivityHyppeSevenDay} />
           </Grid>
