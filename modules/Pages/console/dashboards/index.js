@@ -4,7 +4,7 @@ import { Box, Grid } from '@material-ui/core';
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 // import ActiveUsersCard from './ActiveUsersCard';
-import StatusKepemilikanCard from './trashPreviousDesign/StatusKepemilikanCard';
+import StatusKepemilikan from './StatusKepemilikan';
 import ActivitySize from './trashPreviousDesign/ActivitySize';
 import CmtImage from '@coremat/CmtImage';
 import Typography from '@material-ui/core/Typography';
@@ -128,7 +128,7 @@ const ConsoleDashboardComponent = () => {
             <ActivitySize data={usersActivityHyppeSevenDay} />
           </Grid>
           <Grid item xs={12} sm={3} md={3}>
-            <StatusKepemilikanCard data={usersMonetizeOneYear} />
+            <StatusKepemilikan data={usersMonetizeOneYear} />
           </Grid>
         </GridContainer>
       </PageContainer>

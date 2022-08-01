@@ -7,6 +7,7 @@ const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
 const ActivitySizeGraph = (props) => {
   const { data: dataActivity } = props;
+  console.log('dataActivity:', dataActivity);
 
   const getLabels = (data) => {
     let newDaysList = [];
@@ -14,8 +15,10 @@ const ActivitySizeGraph = (props) => {
       const day = new Date().getDay();
       const tempDays = [...days];
       const lala = tempDays.splice(day, 7 - (day - 1));
+      console.log('lala:', lala);
       newDaysList = [...lala, ...tempDays];
     }
+    console.log('newDaysList:', newDaysList);
     return newDaysList;
   };
 
