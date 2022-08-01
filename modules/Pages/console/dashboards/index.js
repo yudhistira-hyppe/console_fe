@@ -124,10 +124,10 @@ const ConsoleDashboardComponent = () => {
             />
           </Grid>
            */}
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12} sm={9} md={9}>
             <ActivitySize data={usersActivityHyppeSevenDay} />
           </Grid>
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12} sm={3} md={3}>
             <StatusKepemilikanCard data={usersMonetizeOneYear} />
           </Grid>
         </GridContainer>

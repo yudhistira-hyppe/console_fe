@@ -44,23 +44,23 @@ const useStyles = makeStyles((theme) => ({
 const measuredActivityTitle = [
   {
     label: 'HyppeStory',
-    bgColor: '#D7F5B1',
-    color: '#8DCD03',
+    bgColor: 'rgba(35, 173, 192, 1)',
+    // color: '#8DCD03',
   },
   {
     label: 'HyppeVid',
-    bgColor: '#FFDE99',
-    color: '#FF8C00',
+    bgColor: 'rgba(61, 76, 155, 1)',
+    // color: '#FF8C00',
   },
   {
     label: 'HyppeDiary',
-    bgColor: '#9BE7FD',
-    color: '#0795F4',
+    bgColor: 'rgba(142, 73, 240, 1)',
+    // color: '#0795F4',
   },
   {
     label: 'HyppePic',
-    bgColor: '#F2E7FE',
-    color: '#7F39FB',
+    bgColor: 'rgba(255, 140, 0, 1)',
+    // color: '#7F39FB',
   },
 ];
 
@@ -75,7 +75,7 @@ const ActivitySize = (props) => {
           variant: 'h4',
           component: 'div',
         }}
-        title="Ukuran Aktifitas"
+        title="Aktifitas"
       />
       <CmtAdvCardContent className={classes.cardContentRoot}>
         <CmtList

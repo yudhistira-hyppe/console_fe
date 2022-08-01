@@ -13,8 +13,8 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 40,
-    width: 40,
+    height: 10,
+    width: 10,
     borderRadius: '50%',
     cursor: 'pointer',
     marginRight: 15,
@@ -27,7 +27,7 @@ const ActivitySizeItem = ({ item }) => {
   return (
     <Box className={classes.root}>
       <Box bgcolor={item.bgColor} color={item.color} className={classes.avatar} />
-      <Box fontSize={16} fontWeight={700} color="text.primary">
+      <Box fontSize={14} fontWeight={700} color="text.primary">
         {item.label}
       </Box>
     </Box>
