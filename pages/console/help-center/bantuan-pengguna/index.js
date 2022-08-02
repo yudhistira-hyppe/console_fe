@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const ConsoleBantuanPenggunaComponent = dynamic(() => import('modules/Pages/console/help-center'), {
+const ConsoleBantuanPenggunaComponent = dynamic(() => import('modules/Pages/console/help-center/bantuan-pengguna'), {
   loading: () => <PageLoader />,
 });
 
