@@ -13,6 +13,9 @@ import PortfolioDetails from './CardWithIndicator/PortofolioDetails';
 // import CardMenuHelpCenterComponent from './CardMenuHelpCenterComponent';
 import CardWithIndicator from './CardWithIndicator';
 import { Stack } from '@mui/material';
+import CardWithContent from './AccountReport';
+import ContentReport from './ContentReport';
+import AdsReport from './adsReport';
 const iconHelp = '/images/icons/icon_help.png';
 const iconWrench = '/images/icons/icon_wrench.png';
 const iconFaq = '/images/icons/icon_faq.png';
@@ -50,7 +53,19 @@ const ConsoleHelpCenterComponent = () => {
         <Grid item xs={12} md={4} sm={4}>
           <CardWithIndicator headTitle="Laporan Iklan" TypeProblem="Iklan Dilaporkan" numberOfProblem={3} />
         </Grid>
+
+        {/* --------- card section 2 (without indicator) --------------------*/}
+        <Grid item xs={12} md={4} sm={4}>
+          <CardWithContent />
+        </Grid>
+        <Grid item xs={12} md={4} sm={4}>
+          <ContentReport />
+        </Grid>
+        <Grid item xs={12} md={4} sm={4}>
+          <AdsReport />
+        </Grid>
       </GridContainer>
+
       {/* // start rewrite UI */}
       {/* <GridContainer>
           <Grid item xs={12} sm={4} md={3}>
