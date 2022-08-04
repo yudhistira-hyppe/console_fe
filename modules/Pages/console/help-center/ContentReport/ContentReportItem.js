@@ -6,7 +6,7 @@ import CmtAvatar from '@coremat/CmtAvatar';
 // import { timeFromNow } from '../../../../@jumbo/utils/dateHelper';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
-import { Fab } from '@material-ui/core';
+import { Fab, Typography } from '@material-ui/core';
 import { useUserGetNewCommentQuery, useUserUpdateCommentMutation } from 'api/user/comment';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
@@ -76,16 +76,22 @@ const CommentItem = ({ item }) => {
     return (
       <Box color="text.primary">
         {/* <Box component="span" color="primary.main"> */}
-        <Box component="div">Viral Bentrok Antar Gank</Box>
-        <Box component="div" fontSize={13} mt={5}>
-          Alasan : Kekerasan tidak baik buat hati dan jiwa
+        <Box component="div">
+          <Typography component="span" variant="h6">
+            Viral Bentrok Antar Gank
+          </Typography>
+        </Box>
+        <Box component="div" fontSize={13} mt={1}>
+          <Typography component="span" variant="h7">
+            Alasan : Kekerasan tidak baik buat hati dan jiwa
+          </Typography>
         </Box>
       </Box>
     );
   };
 
   const getFooter = () => (
-    <Box position="relative" mt={2}>
+    <Box position="relative" mt={1}>
       <Box fontSize={12} color="text.disabled">
         {formatDate(item)}
       </Box>

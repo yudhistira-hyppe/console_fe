@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Card = ({ headTitle, TypeProblem, numberOfProblem }) => {
+const Card = ({ headTitle, TypeProblem, numberOfProblem, pathIconLeft, iconLabelLeft, iconLabelRight }) => {
+  console.log('iconLabelLeft:', iconLabelLeft);
   const classes = useStyles();
   const wallets = [
     { label: 'Baru', value: 74, rate: 8.75, color: '#89CB00' },
@@ -23,9 +24,31 @@ const Card = ({ headTitle, TypeProblem, numberOfProblem }) => {
 
   const Title = () => {
     return (
-      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0}>
-        <Typography>{headTitle}</Typography>
-        <Typography style={{ fontSize: '0.8rem', border: '1px solid black', padding: '1px 5px', borderRadius: '3px' }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}>
+          {pathIconLeft && <img src={pathIconLeft} alt="icon" />}{' '}
+          <Typography variant="h4" component="span" style={{ marginLeft: '7px' }}>
+            {headTitle}
+          </Typography>
+          {iconLabelRight && <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />}
+        </div>
+        {/* <Typography variant="h3" component="div">
+          {pathIconLeft && <img src={pathIconLeft} alt="icon" />} {headTitle}
+          {iconLabelRight && <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />}
+        </Typography> */}
+        <Typography
+          component="div"
+          style={{
+            fontSize: '0.7rem',
+            border: '1px solid black',
+            padding: '1px 3px',
+            borderRadius: '3px',
+          }}>
           Bulan ini
         </Typography>
       </Stack>

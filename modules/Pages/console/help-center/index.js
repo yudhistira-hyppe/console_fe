@@ -13,7 +13,7 @@ import PortfolioDetails from './CardWithIndicator/PortofolioDetails';
 // import CardMenuHelpCenterComponent from './CardMenuHelpCenterComponent';
 import CardWithIndicator from './CardWithIndicator';
 import { Stack } from '@mui/material';
-import CardWithContent from './AccountReport';
+import AccountReport from './AccountReport';
 import ContentReport from './ContentReport';
 import AdsReport from './adsReport';
 const iconHelp = '/images/icons/icon_help.png';
@@ -38,25 +38,45 @@ const ConsoleHelpCenterComponent = () => {
 
       <GridContainer>
         <Grid item xs={12} md={6} sm={6}>
-          <CardWithIndicator headTitle="Bantuan untuk Pengguna" TypeProblem="Total Masalah" numberOfProblem={70} />
+          <CardWithIndicator
+            headTitle="Bantuan untuk Pengguna"
+            TypeProblem="Total Masalah"
+            numberOfProblem={70}
+            iconLabelRight
+          />
         </Grid>
         <Grid item xs={12} md={6} sm={6}>
-          <CardWithIndicator headTitle="Keluhan Pengguna" TypeProblem="Total Masalah" numberOfProblem={230} />
+          <CardWithIndicator headTitle="Keluhan Pengguna" TypeProblem="Total Masalah" numberOfProblem={230} iconLabelRight />
         </Grid>
 
         <Grid item xs={12} md={4} sm={4}>
-          <CardWithIndicator headTitle="Laporan Akun" TypeProblem="Akun Dilaporkan" numberOfProblem={10} />
+          <CardWithIndicator
+            headTitle="Laporan Akun"
+            TypeProblem="Akun Dilaporkan"
+            numberOfProblem={10}
+            pathIconLeft={'/images/icons/account-circle.svg'}
+          />
         </Grid>
         <Grid item xs={12} md={4} sm={4}>
-          <CardWithIndicator headTitle="Laporan Konten" TypeProblem="Konten Dilaporkan" numberOfProblem={200} />
+          <CardWithIndicator
+            headTitle="Laporan Konten"
+            TypeProblem="Konten Dilaporkan"
+            numberOfProblem={200}
+            pathIconLeft={'/images/icons/img-empty.svg'}
+          />
         </Grid>
         <Grid item xs={12} md={4} sm={4}>
-          <CardWithIndicator headTitle="Laporan Iklan" TypeProblem="Iklan Dilaporkan" numberOfProblem={3} />
+          <CardWithIndicator
+            headTitle="Laporan Iklan"
+            TypeProblem="Iklan Dilaporkan"
+            numberOfProblem={3}
+            pathIconLeft={'/images/icons/ads-icon.svg'}
+          />
         </Grid>
 
         {/* --------- card section 2 (without indicator) --------------------*/}
         <Grid item xs={12} md={4} sm={4}>
-          <CardWithContent />
+          <AccountReport />
         </Grid>
         <Grid item xs={12} md={4} sm={4}>
           <ContentReport />

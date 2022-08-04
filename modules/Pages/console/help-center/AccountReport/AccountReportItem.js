@@ -3,11 +3,6 @@ import CmtMediaObject from '@coremat/CmtMediaObject';
 import Box from '@material-ui/core/Box';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import CmtAvatar from '@coremat/CmtAvatar';
-// import { timeFromNow } from '../../../../@jumbo/utils/dateHelper';
-import DoneIcon from '@material-ui/icons/Done';
-import ClearIcon from '@material-ui/icons/Clear';
-import { Fab } from '@material-ui/core';
-import { useUserGetNewCommentQuery, useUserUpdateCommentMutation } from 'api/user/comment';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import moment from 'moment';
@@ -61,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CommentItem = ({ item }) => {
+const AccountReportItem = ({ item }) => {
   const classes = useStyles();
   const { authUser } = useAuth();
 
@@ -119,4 +114,4 @@ const CommentItem = ({ item }) => {
     </Box>
   );
 };
-export default CommentItem;
+export default AccountReportItem;
