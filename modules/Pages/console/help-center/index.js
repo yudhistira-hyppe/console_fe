@@ -16,10 +16,6 @@ import { Stack } from '@mui/material';
 import AccountReport from './AccountReport';
 import ContentReport from './ContentReport';
 import AdsReport from './adsReport';
-const iconHelp = '/images/icons/icon_help.png';
-const iconWrench = '/images/icons/icon_wrench.png';
-const iconFaq = '/images/icons/icon_faq.png';
-const iconStar = '/images/icons/icon_star.png';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },

@@ -45,13 +45,6 @@ const useStyles = makeStyles((theme) => ({
   indicator: {
     backgroundColor: 'rgb(170, 34, 175)',
   },
-  tabRoot: {
-    minHeight: '40px',
-    textAlign: 'center',
-    fontSize: '0.8em',
-    fontWeight: '900',
-    letterSpacing: '2px',
-  },
 }));
 
 const ConsoleEngagementComponent = () => {
@@ -94,6 +87,16 @@ const ConsoleEngagementComponent = () => {
     );
   };
 
+  const LabelTab = ({ label }) => {
+    return (
+      <>
+        <Typography variant="h6" component={'div'} style={{ letterSpacing: '3px' }}>
+          {label}
+        </Typography>
+      </>
+    );
+  };
+
   return (
     <>
       <Head>
@@ -104,23 +107,22 @@ const ConsoleEngagementComponent = () => {
           onChange={handleChange}
           aria-label="lab API tabs example"
           variant="scrollable"
-          // classes={{
-          //   indicator: classes.indicator,
-          // }}
-        >
+          classes={{
+            indicator: classes.indicator,
+          }}>
           <Tab
-            label={'Metrik'}
-            value={'metrik'}
-            // classes={{
-            //   root: classes.tabRoot,
-            // }}
+            label={<LabelTab label="Metrik" />}
+            value="metrik"
+            classes={{
+              root: classes.tabRoot,
+            }}
           />
           <Tab
-            label={'Trend'}
-            value={'trend'}
-            // classes={{
-            //   root: classes.tabRoot,
-            // }}
+            label={<LabelTab label="Trend" />}
+            value="trend"
+            classes={{
+              root: classes.tabRoot,
+            }}
           />
         </TabList>
         <TabPanel value="metrik">
