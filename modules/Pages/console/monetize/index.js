@@ -8,7 +8,7 @@ import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import CardInfoSaldoComponent from './CardInfoSaldo';
 import CardMenuMonetizeComponent from './CardMenuMonetize';
-const iconVideo = '/images/icons/icon_video.png';
+const iconVideo = '/images/nurse.svg';
 const iconContent = '/images/icons/icon_content.png';
 const iconVoucher = '/images/icons/icon_voucher.png';
 
@@ -46,28 +46,28 @@ const ConsoleMonetizeComponent = () => {
           <Grid item xs={12} sm={6} md={4}>
             <CardMenuMonetizeComponent
               // clickedElement={() => router.push('/console/monetize/pendaftaran_konten')}
-              icon={iconVideo}
+              icon={'/images/nurse.svg'}
               title="Pendaftaran Konten"
-              subtitle="0 Pendaftaran Baru"
-              backgroundColor="#8E49F0"
+              // subtitle="0 Pendaftaran Baru"
+              // backgroundColor="#8E49F0"
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <CardMenuMonetizeComponent
               // clickedElement={() => router.push('/console/monetize/konten')}
-              icon={iconContent}
+              icon={'/images/earn-money.svg'}
               title="Konten"
-              subtitle="0 Konten Baru"
-              backgroundColor="#5AB9FE"
+              subtitle="496 Konten Baru"
+              // backgroundColor="#5AB9FE"
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <CardMenuMonetizeComponent
               // clickedElement={() => router.push('/console/monetize/voucher')}
-              icon={iconVoucher}
+              icon={'/images/online-reservation.svg'}
               title="Voucher Campaign"
-              subtitle="0 Permintaan Voucher"
-              backgroundColor="#C076FB"
+              subtitle="422 Pengguna Melakukan Permintaan Voucher"
+              // backgroundColor="#C076FB"
             />
           </Grid>
         </GridContainer>

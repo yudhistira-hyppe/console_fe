@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: 10,
     cursor: 'pointer',
-    color: '#FFFFFF',
+    color: 'black',
     '& .MuiTypography-h4': {
       fontSize: 18,
     },
@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 14,
     },
   },
-  imageIcon: {
-    height: 32,
-    paddingRight: 10,
-  },
+  // imageIcon: {
+  //   // height: 'auto',
+  //   paddingRight: '90px',
+  // },
 }));
 
 const CardMenuMonetizeComponent = ({ icon, title, subtitle, backgroundColor, clickedElement }) => {
@@ -30,8 +30,17 @@ const CardMenuMonetizeComponent = ({ icon, title, subtitle, backgroundColor, cli
       <CmtAdvCard backgroundColor={backgroundColor} className={classes.root}>
         <CmtAdvCardContent>
           <Box display="flex" onClick={clickedElement}>
-            <img className={classes.imageIcon} src={icon} />
-            <Box>
+            <span
+              style={{
+                width: '180px',
+                height: '115px',
+                backgroundImage: `url('${icon}')`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+              }}></span>
+            {/* <img className={classes.imageIcon} src={icon} /> */}
+            <Box ml={5} mt={5}>
               <Typography component="div" variant="h4">
                 {title}
               </Typography>
