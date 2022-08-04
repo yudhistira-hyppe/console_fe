@@ -7,7 +7,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import { Stack } from '@mui/material';
 import GridContainer from '@jumbo/components/GridContainer';
 import { Grid, makeStyles, Box, Typography, alpha } from '@material-ui/core';
-import VisitorChart from './Graph';
+import VisitorChart from './graph';
 import CmtAvatar from '@coremat/CmtAvatar';
 import { intranet } from './fakeData';
 
