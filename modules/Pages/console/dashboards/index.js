@@ -16,7 +16,7 @@ import ActivitySize from './trashPreviousDesign/ActivitySize';
 import UserActive from './UserActive';
 import Instalasi from './Instalasi';
 import Pendapatan from './Pendapatan';
-import Voucher from './Voucher/VoucherGraphhh';
+import Voucher from './Voucher';
 
 // request
 import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';

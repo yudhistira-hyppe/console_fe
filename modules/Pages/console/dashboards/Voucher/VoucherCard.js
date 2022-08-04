@@ -1,14 +1,36 @@
+// react
 import React from 'react';
 
+// material ui
 import Box from '@material-ui/core/Box';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Stack } from '@mui/material';
+import { makeStyles, Typography } from '@material-ui/core';
 
+// template components
 import CmtCard from '@coremat/CmtCard';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
-import useStyles from './Style';
-import { Stack } from '@mui/material';
-import { Typography } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  cardHeaderRoot: {
+    paddingTop: 16,
+    paddingBottom: 16,
+  },
+
+  titleRoot: {
+    fontSize: 12,
+    marginBottom: 2,
+    color: theme.palette.text.secondary,
+    fontWeight: theme.typography.fontWeightBold,
+  },
+
+  iconRoot: {
+    fontSize: 14,
+    display: 'block',
+    marginTop: 4,
+  },
+}));
 
 const userActiveCard = ({ title, amount, progress, children, secondaryTitle }) => {
   const classes = useStyles();
@@ -32,7 +54,7 @@ const userActiveCard = ({ title, amount, progress, children, secondaryTitle }) =
   const TitleComp = () => {
     return (
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-        <Typography variant="h6" component="p">
+        <Typography variant="h4" component="div">
           {title}
         </Typography>
         <Typography
