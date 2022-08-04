@@ -1,13 +1,13 @@
 import React from 'react';
 
-import GraphCard from './PendapatanCard';
-import Graph from './PendapataGraph';
+import PendapatanCard from './PendapatanCard';
+import PendapatanGraph from './PendapataGraph';
 
 const Pendapatan = ({ title, secondaryTitle, amount }) => {
   return (
-    <GraphCard title={title} secondaryTitle={secondaryTitle} amount={amount}>
-      <Graph />
-    </GraphCard>
+    <PendapatanCard title={title} secondaryTitle={secondaryTitle} amount={amount}>
+      <PendapatanGraph />
+    </PendapatanCard>
   );
 };
 

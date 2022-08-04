@@ -35,7 +35,14 @@ const userActiveCard = ({ title, amount, progress, children, secondaryTitle }) =
         <Typography variant="h6" component="p">
           {title}
         </Typography>
-        <Typography style={{ fontSize: '0.8rem', border: '1px solid black', padding: '1px 5px', borderRadius: '3px' }}>
+        <Typography
+          component="div"
+          style={{
+            fontSize: '0.7rem',
+            border: '1px solid black',
+            padding: '1px 3px',
+            borderRadius: '3px',
+          }}>
           {secondaryTitle}
         </Typography>
       </Stack>

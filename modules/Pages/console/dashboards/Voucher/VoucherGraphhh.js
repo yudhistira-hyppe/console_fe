@@ -1,13 +1,13 @@
 import React from 'react';
 
-import GraphCard from './VoucherCard';
-import Graph from './VoucherGraph';
+import VoucherCard from './VoucherCard';
+import VoucherGraph from './VoucherGraph';
 
 const UserACtiveGraphhh = ({ title, secondaryTitle, amount }) => {
   return (
-    <GraphCard title={title} secondaryTitle={secondaryTitle} amount={amount}>
-      <Graph />
-    </GraphCard>
+    <VoucherCard title={title} secondaryTitle={secondaryTitle} amount={amount}>
+      <VoucherGraph />
+    </VoucherCard>
   );
 };
 

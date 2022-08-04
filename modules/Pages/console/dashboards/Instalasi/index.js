@@ -1,14 +1,14 @@
 import React from 'react';
 
-import InstalasiCard from './instalasi_card';
-import Graph from './graph';
+import InstalasiCard from './instalasiCard';
+import InstalasiGraph from './instalasiGraph';
 
-const GraphSmall = ({ title, secondaryTitle, amount }) => {
+const Installasi = ({ title, secondaryTitle, amount }) => {
   return (
     <InstalasiCard title={title} secondaryTitle={secondaryTitle} amount={amount}>
-      <Graph />
+      <InstalasiGraph />
     </InstalasiCard>
   );
 };
 
-export default GraphSmall;
+export default Installasi;

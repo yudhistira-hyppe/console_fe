@@ -1,21 +1,29 @@
+// react and nextJS
 import React from 'react';
 import Head from 'next/head';
+
+// material ui
 import { Box, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+// template components
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-// import ActiveUsersCard from './ActiveUsersCard';
+
+// partials components
 import StatusKepemilikan from './StatusKepemilikan';
 import ActivitySize from './trashPreviousDesign/ActivitySize';
-import CmtImage from '@coremat/CmtImage';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';
-import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
-import moment from 'moment';
-import UserActive from './UserActive/UserACtiveGraphhh';
+import UserActive from './UserActive';
 import Instalasi from './Instalasi';
 import Pendapatan from './Pendapatan';
 import Voucher from './Voucher/VoucherGraphhh';
+
+// request
+import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';
+import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
+
+// third party modules
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
@@ -37,19 +45,19 @@ const ConsoleDashboardComponent = () => {
   const classes = useStyles();
   const currentYear = new Date().getFullYear();
   const formattedTodayDate = moment(new Date()).format('YYYY-MM-DD');
-  const { data: activeUsersSevenDay } = useGetUserActivityBeforeTodayQuery(6);
-  const { data: activeUsersThirtyDay } = useGetUserActivityBeforeTodayQuery(29);
-  const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
+  // const { data: activeUsersSevenDay } = useGetUserActivityBeforeTodayQuery(6);
+  // const { data: activeUsersThirtyDay } = useGetUserActivityBeforeTodayQuery(29);
+  // const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
   const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery(formattedTodayDate);
   const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
 
-  const countTotal = (data, key) => {
-    let result = 0;
-    if (data) {
-      result = data.reduce((total, value) => total + value[key], 0);
-    }
-    return result;
-  };
+  // const countTotal = (data, key) => {
+  //   let result = 0;
+  //   if (data) {
+  //     result = data.reduce((total, value) => total + value[key], 0);
+  //   }
+  //   return result;
+  // };
 
   return (
     <>
