@@ -131,23 +131,38 @@ export const consoleNav = [
     link: '/console/help-center',
   },
   {
-    name: 'Database Akun Pengguna',
+    name: 'Pusat Iklan',
+    type: 'item',
+    link: '/console/ads-center',
+  },
+  {
+    name: 'Database',
     type: 'item',
     link: '/console/users',
   },
   {
-    name: 'Engagement Pengguna',
+    name: 'Engagement',
     type: 'item',
     link: '/console/user-engagement',
   },
   {
-    name: 'Monetize',
+    name: 'Monetisasi',
     type: 'item',
     link: '/console/monetize',
   },
   {
-    name: 'Pusat Iklan',
+    name: 'Pengumuman',
     type: 'item',
-    link: '/console/ads-center',
+    link: '/console/pengumuman',
+  },
+  {
+    name: 'Pedoman',
+    type: 'item',
+    link: '/console/pedoman',
+  },
+  {
+    name: 'Anggota',
+    type: 'item',
+    link: '/console/anggota',
   },
 ];
