@@ -1,5 +1,16 @@
 import React from 'react';
-import { Box, makeStyles, Modal, StylesProvider, Switch, TextField, Typography } from '@material-ui/core';
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  makeStyles,
+  Modal,
+  Slide,
+  StylesProvider,
+  Switch,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import { Button, Pagination, Stack } from '@mui/material';
 import { useState } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
@@ -57,8 +68,10 @@ const PenggunaComp = () => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
 
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleCloseModal = () => setOpenModal(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
   const TabelHeadLabel = ({ label }) => {
     return <Typography> {label}</Typography>;
@@ -71,19 +84,6 @@ const PenggunaComp = () => {
   };
   const handleClose = (e, v, t) => {
     setAnchorEl(null);
-  };
-
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    // boxShadow: 24,
-    borderRadius: '7px',
-    p: 7,
   };
 
   return (
@@ -175,7 +175,7 @@ const PenggunaComp = () => {
                         key={option}
                         onClick={() => {
                           if (option.title === 'Hapus') {
-                            setOpenModal(true);
+                            setOpenDialog(true);
                           } else {
                             router.push('console/anggota/edit');
                           }
@@ -186,50 +186,6 @@ const PenggunaComp = () => {
                         </Box>
                       </MenuItem>
                     ))}
-                    {/* modal start */}
-                    <Modal
-                      open={openModal}
-                      onClose={handleCloseModal}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description">
-                      <Box sx={style}>
-                        <center>
-                          <Typography id="modal-modal-title" variant="h3" component="div">
-                            Hapus Anggota
-                          </Typography>
-                        </center>
-                        <Box mt={3} textAlign="center">
-                          Kamu akan menghapus anggota untuk Hyppe Console
-                        </Box>
-                        <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                          <Button
-                            style={{
-                              // background: 'rgb(170, 34, 175)',
-                              color: 'rgba(0, 0, 0, 0.6)',
-                              border: 'none',
-                              padding: '5px 10px',
-                              marginTop: '10px',
-                              fontWeight: 'bold',
-                            }}
-                            onClick={() => setOpenModal(false)}>
-                            BATAL
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            style={{
-                              background: 'rgb(170, 34, 175)',
-                              color: '#FFFFFF',
-                              border: 'none',
-                              padding: '5px 10px',
-                              borderRadius: '5px',
-                              marginTop: '10px',
-                            }}>
-                            KONFIRMASI
-                          </Button>
-                        </Stack>
-                      </Box>
-                    </Modal>
-                    {/* modal end */}
                   </Menu>
                 </TableCell>
               </TableRow>
@@ -237,6 +193,55 @@ const PenggunaComp = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* // this is only appear when openDialog true. start */}
+      {openDialog && (
+        <Dialog
+          open={openDialog}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={() => setOpenDialog(false)}
+          aria-describedby="alert-dialog-slide-description">
+          <DialogContent>
+            <Box p={4}>
+              <center>
+                <Typography id="modal-modal-title" variant="h3" component="div">
+                  Hapus Jabatan
+                </Typography>
+              </center>
+              <Box mt={3} textAlign="center">
+                Kamu akan menghapus Jabatan untuk Hyppe Console
+              </Box>
+              <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} style={{ marginTop: '15px' }}>
+                <Button
+                  style={{
+                    // background: 'rgb(170, 34, 175)',
+                    color: 'rgba(0, 0, 0, 0.6)',
+                    border: 'none',
+                    padding: '5px 10px',
+                    marginTop: '10px',
+                    fontWeight: 'bold',
+                  }}
+                  onClick={() => setOpenDialog(false)}>
+                  BATAL
+                </Button>
+                <Button
+                  variant="outlined"
+                  style={{
+                    background: 'rgb(170, 34, 175)',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    padding: '5px 10px',
+                    borderRadius: '5px',
+                    marginTop: '10px',
+                  }}>
+                  KONFIRMASI
+                </Button>
+              </Stack>
+            </Box>
+          </DialogContent>
+        </Dialog>
+      )}
+      {/* // this is only appear when openDialog true end */}
 
       <div className="mt-6 flex flex-row justify-content-center">
         <Pagination page={page} onChange={(e, value) => setPage(value)} count={10} />
