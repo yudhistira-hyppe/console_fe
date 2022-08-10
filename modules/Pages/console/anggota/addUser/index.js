@@ -46,12 +46,7 @@ const Add = () => {
   ];
 
   const handleChangeSelect = (event) => {
-    setForm((prev) => {
-      return {
-        ...prev,
-        jabatan: event.target.value,
-      };
-    });
+    setJabatan(event.target.value);
   };
 
   const handleInput = (e) => {
@@ -85,12 +80,12 @@ const Add = () => {
         </Grid>
 
         <Grid item sx={12} md={12} sm={12}>
-          <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+          <Stack direction="column" justifyContent="center" alignItems="center" spacing={2} style={{ marginTop: '10px' }}>
             {inputs.map((input) => {
               return (
                 <>
                   {input.item === 'select' ? (
-                    <Box sx={{ width: 1000 }}>
+                    <Box sx={{ width: '100%' }}>
                       <FormControl fullWidth style={{ background: 'white' }} size="small">
                         <InputLabel id="demo-simple-select-label">Jabatan</InputLabel>
                         <Select
@@ -107,7 +102,7 @@ const Add = () => {
                       <div style={{ margin: '2px 0 0 10px', color: 'rgba(0, 0, 0, 0.3)' }}>{input.example}</div>
                     </Box>
                   ) : (
-                    <Box sx={{ width: 1000 }}>
+                    <Box sx={{ width: '100%' }}>
                       <TextField
                         fullWidth
                         autoComplete="off"
@@ -126,7 +121,7 @@ const Add = () => {
             })}
           </Stack>
 
-          <Stack justifyContent="center" alignItems="center">
+          <Stack direction="row" justifyContent="flex-end" alignItems="center">
             <Box mt={3}>
               <Button
                 variant="outlined"
