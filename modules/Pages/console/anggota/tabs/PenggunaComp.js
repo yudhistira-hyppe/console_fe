@@ -32,6 +32,8 @@ import Menu from '@mui/material/Menu';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import { useGetAnggotaQuery } from 'api/console/getUserHyppe';
+import SpinnerLoading from 'components/common/loading/spinner';
+import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -68,7 +70,7 @@ const PenggunaComp = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const open = Boolean(anchorEl);
-  const { data: dataAnggota } = useGetAnggotaQuery(payload);
+  const { data: dataAnggota, isLoading } = useGetAnggotaQuery(payload);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -168,6 +170,7 @@ const PenggunaComp = () => {
             TAMBAH
           </Typography>
         </Box>
+        {/* {isLoading ? <TableDataSpinner /> : 'sudah selesai loading'} */}
       </Stack>
       <TableContainer component={Paper} style={{ marginTop: '10px' }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Dialog,
@@ -39,18 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// data still static
-function createData(name, calories, fat, carbs) {
-  return { name, calories, fat, carbs };
-}
-
-// data still static
-const rows = [
-  createData('Customer Care / Head'),
-  createData('Customer Care / Manager'),
-  createData('Product Analyst / Head'),
-];
-
 const options = [
   {
     title: 'Ubah',
@@ -69,13 +57,13 @@ const PenggunaComp = () => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [countPages, setCountPages] = useState(Number);
   const [payload, setPayload] = useState({
     skip: 0,
     limit: 10,
     search: search,
   });
   const [id, setId] = useState('');
-  console.log('payload:', payload);
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -91,15 +79,20 @@ const PenggunaComp = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = (e, v, t) => {
     setAnchorEl(null);
   };
+
   const onEnterSearch = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      setPage(1);
       setPayload((prev) => {
         return {
           ...prev,
+          skip: 0,
+          limit: 10,
           search: search,
         };
       });
@@ -109,11 +102,19 @@ const PenggunaComp = () => {
     setPayload((prev) => {
       return {
         ...prev,
+        skip: 0,
+        limit: 10,
         search: search,
       };
     });
   };
   const { data: dataPosition } = useGetGroupQuery(payload);
+
+  const count = dataPosition?.totalRow / 10;
+  useEffect(() => {
+    setCountPages(Math.ceil(count));
+  });
+
   const [deleteGroup, { isError, isSuccess }] = useDeleteGroupMutation();
 
   const handleDeleteGroup = () => {
@@ -294,7 +295,7 @@ const PenggunaComp = () => {
       {/* // this is only appear when openDialog true end */}
 
       <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={handlePagination} count={10} />
+        <Pagination page={page} onChange={handlePagination} count={countPages} />
       </div>
     </>
   );
