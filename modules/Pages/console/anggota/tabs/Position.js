@@ -28,6 +28,7 @@ import Menu from '@mui/material/Menu';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
+import { useGetGroupQuery } from 'api/console/group';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -67,6 +68,13 @@ const PenggunaComp = () => {
   const router = useRouter();
   const classes = useStyles();
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [payload, setPayload] = useState({
+    skip: 0,
+    limit: 10,
+    search: search,
+  });
+  console.log('payload:', payload);
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -85,6 +93,36 @@ const PenggunaComp = () => {
   const handleClose = (e, v, t) => {
     setAnchorEl(null);
   };
+  const onEnterSearch = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setPayload((prev) => {
+        return {
+          ...prev,
+          search: search,
+        };
+      });
+    }
+  };
+  const handleSearchIcon = () => {
+    setPayload((prev) => {
+      return {
+        ...prev,
+        search: search,
+      };
+    });
+  };
+  const { data: dataPosition } = useGetGroupQuery(payload);
+
+  const handlePagination = (e, value) => {
+    setPage(value);
+    setPayload((prev) => {
+      return {
+        ...prev,
+        skip: (value - 1) * 10,
+      };
+    });
+  };
 
   return (
     <>
@@ -94,12 +132,14 @@ const PenggunaComp = () => {
             fullWidth
             size="small"
             variant="outlined"
-            label="Cari Jabatan"
+            label="Cari nama / email"
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyPress={onEnterSearch}
             InputProps={{
               endAdornment: (
                 // <InputAdornment>
                 <IconButton>
-                  <SearchIcon />
+                  <SearchIcon onClick={handleSearchIcon} />
                 </IconButton>
                 // </InputAdornment>
               ),
@@ -139,10 +179,10 @@ const PenggunaComp = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {dataPosition?.data?.map((row) => (
               <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row.nameGroup}
                 </TableCell>
                 <TableCell align="right">
                   {/* // here */}
@@ -244,7 +284,7 @@ const PenggunaComp = () => {
       {/* // this is only appear when openDialog true end */}
 
       <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={(e, value) => setPage(value)} count={10} />
+        <Pagination page={page} onChange={handlePagination} count={10} />
       </div>
     </>
   );

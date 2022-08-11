@@ -8,7 +8,7 @@ import monetizeReducers from './monetizeReducers';
 import helpCenterReducers from './helpCenterReducers';
 import Campaign from './Campaign';
 import { authApi, userApi } from 'api/user';
-import { dashboardApi, engagementApi, faqAndInfoApi, announcementApi, ticketApi, getUserHyppe } from 'api/console';
+import { dashboardApi, engagementApi, faqAndInfoApi, announcementApi, ticketApi, getUserHyppe, group } from 'api/console';
 import { contentAPI } from 'api/user/content';
 import { notificationAPI } from 'api/user/notification';
 import { commentAPI } from 'api/user/comment';
@@ -40,4 +40,5 @@ export default combineReducers({
   [accountBalancesAPI.reducerPath]: accountBalancesAPI.reducer,
   [userFriendAPI.reducerPath]: userFriendAPI.reducer,
   [getUserHyppe.reducerPath]: getUserHyppe.reducer,
+  [group.reducerPath]: group.reducer,
 });

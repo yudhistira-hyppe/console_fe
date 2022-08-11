@@ -59,15 +59,12 @@ const PenggunaComp = () => {
   const router = useRouter();
   const classes = useStyles();
   const [page, setPage] = useState(1);
-  const [skip, setSkip] = useState(0);
   const [payload, setPayload] = useState({
-    skip: skip,
+    skip: 0,
     limit: 10,
   });
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
-  console.log('page:', page);
-  console.log('skip:', skip);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -79,7 +76,12 @@ const PenggunaComp = () => {
 
   const handlePagination = (e, value) => {
     setPage(value);
-    setSkip(value * 10);
+    setPayload((prev) => {
+      return {
+        ...prev,
+        skip: (value - 1) * 10,
+      };
+    });
   };
 
   const onEnterSearch = (event) => {
