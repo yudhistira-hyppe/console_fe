@@ -28,7 +28,7 @@ import Menu from '@mui/material/Menu';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
-import { useGetGroupQuery } from 'api/console/group';
+import { useGetGroupQuery, useDeleteGroupMutation } from 'api/console/group';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -74,6 +74,7 @@ const PenggunaComp = () => {
     limit: 10,
     search: search,
   });
+  const [id, setId] = useState('');
   console.log('payload:', payload);
 
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -113,6 +114,12 @@ const PenggunaComp = () => {
     });
   };
   const { data: dataPosition } = useGetGroupQuery(payload);
+  const [deleteGroup, { isError, isSuccess }] = useDeleteGroupMutation();
+
+  const handleDeleteGroup = () => {
+    deleteGroup(id);
+    setOpenDialog(false);
+  };
 
   const handlePagination = (e, value) => {
     setPage(value);
@@ -182,6 +189,7 @@ const PenggunaComp = () => {
             {dataPosition?.data?.map((row) => (
               <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
+                  {console.log('row:', row?._id)}
                   {row.nameGroup}
                 </TableCell>
                 <TableCell align="right">
@@ -214,6 +222,7 @@ const PenggunaComp = () => {
                       <MenuItem
                         key={option}
                         onClick={() => {
+                          setId(row?._id);
                           if (option.title === 'Hapus') {
                             setOpenDialog(true);
                           } else {
@@ -273,7 +282,8 @@ const PenggunaComp = () => {
                     padding: '5px 10px',
                     borderRadius: '5px',
                     marginTop: '10px',
-                  }}>
+                  }}
+                  onClick={handleDeleteGroup}>
                   KONFIRMASI
                 </Button>
               </Stack>
