@@ -1,11 +1,11 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import { Box, Button, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Dialog, DialogContent, TextField, Typography } from '@material-ui/core';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Grid, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Grid, Slide, Stack } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ConsoleHelpCenterComponent from '../../help-center';
 
@@ -18,7 +18,12 @@ const Add = () => {
   });
   const [allFilled, setAllFilled] = useState(false);
 
-  console.log('form:', form);
+  // dialog
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
   const router = useRouter();
   const breadcrumbs = [
     { label: 'Anggota', link: '/console/anggota' },
@@ -144,9 +149,63 @@ const Add = () => {
               <Button
                 variant="outlined"
                 style={allFilled ? { background: '#AB22AF', color: '#FFFFFF' } : null}
-                disabled={!allFilled}>
+                disabled={!allFilled}
+                onClick={() => setOpenDialog(true)}>
                 Tambah
               </Button>
+              {openDialog && (
+                <Dialog
+                  open={openDialog}
+                  TransitionComponent={Transition}
+                  keepMounted
+                  onClose={() => setOpenDialog(false)}
+                  aria-describedby="alert-dialog-slide-description">
+                  <DialogContent>
+                    <Box p={4}>
+                      <center>
+                        <Typography id="modal-modal-title" variant="h3" component="div">
+                          Tambah Anggota
+                        </Typography>
+                      </center>
+                      <Box mt={3} textAlign="center">
+                        Kamu akan menambah Anggota untuk Hyppe Console
+                      </Box>
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={2}
+                        style={{ marginTop: '15px' }}>
+                        <Button
+                          style={{
+                            // background: 'rgb(170, 34, 175)',
+                            color: 'rgba(0, 0, 0, 0.6)',
+                            border: 'none',
+                            padding: '5px 10px',
+                            marginTop: '10px',
+                            fontWeight: 'bold',
+                          }}
+                          onClick={() => setOpenDialog(false)}>
+                          BATAL
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          style={{
+                            background: 'rgb(170, 34, 175)',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            padding: '5px 10px',
+                            borderRadius: '5px',
+                            marginTop: '10px',
+                          }}>
+                          KONFIRMASI
+                        </Button>
+                      </Stack>
+                    </Box>
+                  </DialogContent>
+                </Dialog>
+              )}
+              {/* // this is only appear when openDialog true end */}
             </Box>
           </Stack>
         </Grid>

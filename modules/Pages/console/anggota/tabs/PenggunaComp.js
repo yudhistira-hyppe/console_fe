@@ -70,6 +70,8 @@ const PenggunaComp = () => {
   const router = useRouter();
   const classes = useStyles();
   const [page, setPage] = useState(1);
+
+  // dialog
   const [openDialog, setOpenDialog] = React.useState(false);
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
