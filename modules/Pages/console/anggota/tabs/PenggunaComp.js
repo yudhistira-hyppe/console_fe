@@ -63,16 +63,25 @@ const PenggunaComp = () => {
     skip: 0,
     limit: 10,
   });
+  const [countPages, setCountPages] = useState(Number);
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const open = Boolean(anchorEl);
+  const { data: dataAnggota } = useGetAnggotaQuery(payload);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const count = dataAnggota?.totalRow / 10;
+
+  useEffect(() => {
+    setCountPages(Math.ceil(count));
+  });
 
   const handlePagination = (e, value) => {
     setPage(value);
@@ -87,9 +96,12 @@ const PenggunaComp = () => {
   const onEnterSearch = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      setPage(1);
       setPayload((prev) => {
         return {
           ...prev,
+          skip: 0,
+          limit: 10,
           search: search,
         };
       });
@@ -97,9 +109,12 @@ const PenggunaComp = () => {
   };
 
   const handleSearchIcon = () => {
+    setPage(1);
     setPayload((prev) => {
       return {
         ...prev,
+        skip: 0,
+        limit: 10,
         search: search,
       };
     });
@@ -118,7 +133,6 @@ const PenggunaComp = () => {
       </Typography>
     );
   };
-  const { data: dataAnggota } = useGetAnggotaQuery(payload);
 
   return (
     <>
@@ -285,7 +299,7 @@ const PenggunaComp = () => {
       {/* // this is only appear when openDialog true end */}
 
       <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={handlePagination} count={10} />
+        <Pagination page={page} onChange={handlePagination} count={countPages} />
       </div>
     </>
   );
