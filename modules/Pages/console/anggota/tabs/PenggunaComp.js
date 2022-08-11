@@ -198,9 +198,9 @@ const PenggunaComp = () => {
                   {row.username}
                 </TableCell>
                 <TableCell align="left">{row.email}</TableCell>
-                <TableCell align="left">{row.fat}</TableCell>
+                <TableCell align="left">{row.group ? row.group : 'kosong'}</TableCell>
                 <TableCell align="right">
-                  <Switch checked={row.carbs} />
+                  <Switch checked={row.status} />
                 </TableCell>
                 <TableCell align="left">
                   {/* // here */}
