@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Dialog,
@@ -31,6 +31,7 @@ import Menu from '@mui/material/Menu';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
+import { useGetAnggotaQuery } from 'api/console/getUserHyppe';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -40,18 +41,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-// data still static
-function createData(name, calories, fat, carbs) {
-  return { name, calories, fat, carbs };
-}
-
-// data still static
-const rows = [
-  createData('Paramita', 'paramita@hyppe.id', 'Customer / Staff', false, ''),
-  createData('Abraham', 'Abraham@hyppe.id', 'Customer / Manager', true, ''),
-  createData('mangUcupSans', 'mangUcupSans@hyppe.id', 'Programmer', true, ''),
-];
 
 const options = [
   {
@@ -70,6 +59,49 @@ const PenggunaComp = () => {
   const router = useRouter();
   const classes = useStyles();
   const [page, setPage] = useState(1);
+  const [skip, setSkip] = useState(0);
+  const [payload, setPayload] = useState({
+    skip: skip,
+    limit: 10,
+  });
+  const [search, setSearch] = useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  console.log('page:', page);
+  console.log('skip:', skip);
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handlePagination = (e, value) => {
+    setPage(value);
+    setSkip(value * 10);
+  };
+
+  const onEnterSearch = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setPayload((prev) => {
+        return {
+          ...prev,
+          search: search,
+        };
+      });
+    }
+  };
+
+  const handleSearchIcon = () => {
+    setPayload((prev) => {
+      return {
+        ...prev,
+        search: search,
+      };
+    });
+  };
 
   // dialog
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -84,15 +116,7 @@ const PenggunaComp = () => {
       </Typography>
     );
   };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = (e, v, t) => {
-    setAnchorEl(null);
-  };
+  const { data: dataAnggota } = useGetAnggotaQuery(payload);
 
   return (
     <>
@@ -103,11 +127,13 @@ const PenggunaComp = () => {
             size="small"
             variant="outlined"
             label="Cari nama / email"
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyPress={onEnterSearch}
             InputProps={{
               endAdornment: (
                 // <InputAdornment>
                 <IconButton>
-                  <SearchIcon />
+                  <SearchIcon onClick={handleSearchIcon} />
                 </IconButton>
                 // </InputAdornment>
               ),
@@ -147,12 +173,12 @@ const PenggunaComp = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {dataAnggota?.data?.map((row) => (
               <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row.username}
                 </TableCell>
-                <TableCell align="left">{row.calories}</TableCell>
+                <TableCell align="left">{row.email}</TableCell>
                 <TableCell align="left">{row.fat}</TableCell>
                 <TableCell align="right">
                   <Switch checked={row.carbs} />
@@ -257,7 +283,7 @@ const PenggunaComp = () => {
       {/* // this is only appear when openDialog true end */}
 
       <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={(e, value) => setPage(value)} count={10} />
+        <Pagination page={page} onChange={handlePagination} count={10} />
       </div>
     </>
   );
