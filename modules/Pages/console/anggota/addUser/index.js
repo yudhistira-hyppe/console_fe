@@ -5,17 +5,19 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Grid, Stack } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import ConsoleHelpCenterComponent from '../../help-center';
 
 const Add = () => {
-  const [Jabatan, setJabatan] = useState('');
   const [form, setForm] = useState({
-    nameUser: '',
-    fullName: '',
+    namaPengguna: '',
+    namaLengkap: '',
     jabatan: '',
     email: '',
   });
+  const [allFilled, setAllFilled] = useState(false);
+
   console.log('form:', form);
   const router = useRouter();
   const breadcrumbs = [
@@ -26,38 +28,52 @@ const Add = () => {
     {
       placeholder: 'Nama Pengguna',
       example: 'contoh: Bayu_Permana',
+      name: 'namaPengguna',
       item: 'input',
     },
     {
       placeholder: 'Nama Lengkap',
       example: 'contoh: Bayu Permana',
+      name: 'namaLengkap',
       item: 'input',
     },
     {
       placeholder: 'Jabatan',
       example: 'Pilih jabatan yang sesuai',
+      name: 'jabatan',
       item: 'select',
     },
     {
       placeholder: 'Email',
       example: 'contoh: bayu_permana@gmail.com',
+      name: 'email',
       item: 'input',
     },
   ];
 
-  const handleChangeSelect = (event) => {
-    setJabatan(event.target.value);
+  const handleInput = (e) => {
+    const target = e.target;
+    //  const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = target.value;
+    const name = target.name;
+
+    setForm((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   };
 
-  const handleInput = (e) => {
-    console.log('e:', e);
-    // setForm((prev) => {
-    //   return {
-    //     ...prev,
-    //     jabatan: event.target.value,
-    //   };
-    // });
-  };
+  useEffect(() => {
+    // check if all inputs are has been filled
+    const checked = Object.values(form);
+    if (checked.every((val) => val !== '')) {
+      setAllFilled(true);
+    } else {
+      setAllFilled(false);
+    }
+  }, [form]);
 
   return (
     <>
@@ -91,12 +107,13 @@ const Add = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          value={Jabatan}
+                          value={form.jabatan}
                           label="Jabatan"
-                          onChange={handleChangeSelect}>
-                          <MenuItem value={'direktur'}>Direktur</MenuItem>
-                          <MenuItem value={'it'}>IT</MenuItem>
-                          <MenuItem value={'project manager'}>Project Manager</MenuItem>
+                          name={input.name}
+                          onChange={handleInput}>
+                          <MenuItem value="direktur">Direktur</MenuItem>
+                          <MenuItem value="it">IT</MenuItem>
+                          <MenuItem value="project manager">Project Manager</MenuItem>
                         </Select>
                       </FormControl>
                       <div style={{ margin: '2px 0 0 10px', color: 'rgba(0, 0, 0, 0.3)' }}>{input.example}</div>
@@ -112,6 +129,7 @@ const Add = () => {
                         label={input.placeholder}
                         variant="outlined"
                         onChange={handleInput}
+                        name={input.name}
                       />
                       <div style={{ margin: '2px 0 0 10px', color: 'rgba(0, 0, 0, 0.3)' }}>{input.example}</div>
                     </Box>
@@ -125,7 +143,8 @@ const Add = () => {
             <Box mt={3}>
               <Button
                 variant="outlined"
-                style={{ background: 'rgba(0, 0, 0, 0.12)', color: 'rgba(0, 0, 0, 0.38),border:"none' }}>
+                style={allFilled ? { background: '#AB22AF', color: '#FFFFFF' } : null}
+                disabled={!allFilled}>
                 Tambah
               </Button>
             </Box>
