@@ -31,7 +31,7 @@ import Menu from '@mui/material/Menu';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
-import { useGetAnggotaQuery } from 'api/console/getUserHyppe';
+import { useGetAnggotaQuery, useDeleteAnggotaMutation } from 'api/console/getUserHyppe';
 import SpinnerLoading from 'components/common/loading/spinner';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 
@@ -48,10 +48,12 @@ const options = [
   {
     title: 'Ubah',
     icon: <img src="/images/icons/edit.svg" alt="icon edit" />,
+    value: 'ubah',
   },
   {
     title: 'Hapus',
     icon: <img src="/images/icons/trash.svg" alt="icon edit" />,
+    value: 'hapus',
   },
 ];
 
@@ -69,14 +71,16 @@ const PenggunaComp = () => {
   const [search, setSearch] = useState('');
   const [searchByEmail, setSearchByEmail] = useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [userSelectedEmail, setUserSelectedEmail] = useState('');
 
   const open = Boolean(anchorEl);
   const { data: dataAnggota, isLoading } = useGetAnggotaQuery(payload);
 
-  const handleClick = (event) => {
+  const handeOpenMenu = (event, row) => {
+    setUserSelectedEmail(row.email);
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
   };
 
@@ -139,6 +143,15 @@ const PenggunaComp = () => {
     );
   };
 
+  const [deleteAnggota, {}] = useDeleteAnggotaMutation();
+
+  const handleSelectedAction = (e, row) => {
+    const { myValue } = e.currentTarget.dataset;
+    if (myValue === 'hapus') setOpenDialog(true);
+    if (myValue === 'ubah') router.push('/console/profile-console');
+    setAnchorEl(null);
+  };
+
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
@@ -198,14 +211,15 @@ const PenggunaComp = () => {
                   <Switch checked={row.status} />
                 </TableCell>
                 <TableCell align="left">
-                  {/* // here */}
+                  {/* why i selected email when open icon? */}
+                  {/* i face problem when set the data payload (try it dude its weirdd) */}
                   <IconButton
                     aria-label="more"
                     id="long-button"
                     aria-controls={open ? 'long-menu' : undefined}
                     aria-expanded={open ? 'true' : undefined}
                     aria-haspopup="true"
-                    onClick={handleClick}>
+                    onClick={(e) => handeOpenMenu(e, row)}>
                     {/* <MoreVertIcon /> */}
                     <img src="/images/icons/triple-dot.svg" />
                   </IconButton>
@@ -216,7 +230,7 @@ const PenggunaComp = () => {
                     }}
                     anchorEl={anchorEl}
                     open={open}
-                    onClose={handleClose}
+                    onClose={handleCloseMenu}
                     PaperProps={{
                       style: {
                         maxHeight: ITEM_HEIGHT * 4.5,
@@ -226,12 +240,7 @@ const PenggunaComp = () => {
                       },
                     }}>
                     {options.map((option) => (
-                      <MenuItem
-                        key={option}
-                        onClick={() => {
-                          if (option.title === 'Hapus') setOpenDialog(true);
-                          if (option.title === 'Ubah') router.push('/console/profile-console');
-                        }}>
+                      <MenuItem key={option} onClick={(e) => handleSelectedAction(e, row)} data-my-value={option.value}>
                         <Box display="flex">
                           {option.icon}
                           <span style={{ marginLeft: '7px' }}>{option.title}</span>
@@ -245,6 +254,7 @@ const PenggunaComp = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
       {/* // this is only appear when openDialog true. start */}
       {openDialog && (
         <Dialog
@@ -257,11 +267,12 @@ const PenggunaComp = () => {
             <Box p={4}>
               <center>
                 <Typography id="modal-modal-title" variant="h3" component="div">
-                  Hapus Anggota
+                  Hapus jabatan
                 </Typography>
               </center>
               <Box mt={3} textAlign="center">
-                Kamu akan menghapus anggota untuk Hyppe Console
+                Kamu akan menghapus jabatan untuk email <br />
+                <span style={{ color: 'rgb(170, 34, 175)' }}>{userSelectedEmail}</span>
               </Box>
               <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} style={{ marginTop: '15px' }}>
                 <Button
@@ -285,6 +296,10 @@ const PenggunaComp = () => {
                     padding: '5px 10px',
                     borderRadius: '5px',
                     marginTop: '10px',
+                  }}
+                  onClick={() => {
+                    deleteAnggota(userSelectedEmail);
+                    setOpenDialog(false);
                   }}>
                   KONFIRMASI
                 </Button>

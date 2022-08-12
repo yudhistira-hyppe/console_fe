@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
 import { Box, Checkbox, Divider, FormControlLabel, TextField, Typography } from '@material-ui/core';
-import { RenderTree, data } from './position-data';
+import { RenderTree, data } from './tes-data.js';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
@@ -72,7 +72,7 @@ export default function RecursiveTreeView() {
 
   function getOnChange(checked, nodes) {
     //gets all freshly selected or unselected nodes
-    const allNode = getChildById(data, nodes.id);
+    const allNode = getChildById(data.data, nodes.id);
     //combines newly selected nodes with existing selection
     //or filters out newly deselected nodes from existing selection
     let array = checked ? [...selected, ...allNode] : selected.filter((value) => !allNode.includes(value));
@@ -138,7 +138,7 @@ export default function RecursiveTreeView() {
         defaultCollapseIcon={<img src="/images/icons/minus-checkbox.svg" />}
         // defaultExpanded={['0', '2', '15']}
         defaultExpandIcon={<img src="/images/icons/plus-checkbox.svg" />}>
-        {RenderTreeWithCheckboxes(data)}
+        {RenderTreeWithCheckboxes(data.data)}
       </TreeView>
       <Divider />
 
