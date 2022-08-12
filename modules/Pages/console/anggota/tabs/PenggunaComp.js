@@ -221,17 +221,16 @@ const PenggunaComp = () => {
                       style: {
                         maxHeight: ITEM_HEIGHT * 4.5,
                         width: '20ch',
+                        boxShadow: 'none',
+                        border: '1px solid black',
                       },
                     }}>
                     {options.map((option) => (
                       <MenuItem
                         key={option}
                         onClick={() => {
-                          if (option.title === 'Hapus') {
-                            setOpenDialog(true);
-                          } else {
-                            router.push('console/anggota/edit');
-                          }
+                          if (option.title === 'Hapus') setOpenDialog(true);
+                          if (option.title === 'Ubah') router.push('/console/profile-console');
                         }}>
                         <Box display="flex">
                           {option.icon}
