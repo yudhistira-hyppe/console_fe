@@ -67,6 +67,7 @@ const PenggunaComp = () => {
   });
   const [countPages, setCountPages] = useState(Number);
   const [search, setSearch] = useState('');
+  const [searchByEmail, setSearchByEmail] = useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const open = Boolean(anchorEl);
@@ -105,6 +106,7 @@ const PenggunaComp = () => {
           skip: 0,
           limit: 10,
           search: search,
+          searchemail: searchByEmail,
         };
       });
     }
@@ -118,6 +120,7 @@ const PenggunaComp = () => {
         skip: 0,
         limit: 10,
         search: search,
+        searchemail: searchByEmail,
       };
     });
   };
@@ -145,7 +148,10 @@ const PenggunaComp = () => {
             size="small"
             variant="outlined"
             label="Cari nama / email"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearchByEmail(e.target.value);
+              setSearch(e.target.value);
+            }}
             onKeyPress={onEnterSearch}
             InputProps={{
               endAdornment: (
@@ -158,18 +164,7 @@ const PenggunaComp = () => {
             }}
           />
         </Box>
-        <Box
-          mt={5}
-          display="flex"
-          wordWrap="nowrap"
-          textAlign="center"
-          className={classes.addUser}
-          onClick={() => router.push('/console/anggota/add-user')}>
-          <img src="/images/icons/plus-icon.svg" alt="icon" />
-          <Typography component="div" variant="h6">
-            TAMBAH
-          </Typography>
-        </Box>
+
         {/* {isLoading ? <TableDataSpinner /> : 'sudah selesai loading'} */}
       </Stack>
       <TableContainer component={Paper} style={{ marginTop: '10px' }}>
