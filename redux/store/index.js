@@ -12,7 +12,16 @@ import {
   notificationAPI,
   contentManagementAPI,
 } from 'api/user';
-import { dashboardApi, engagementApi, faqAndInfoApi, announcementApi, ticketApi, getUserHyppe, group } from 'api/console';
+import {
+  dashboardApi,
+  engagementApi,
+  faqAndInfoApi,
+  announcementApi,
+  ticketApi,
+  getUserHyppe,
+  group,
+  moduleAPI,
+} from 'api/console';
 
 const initStore = () => {
   const store = configureStore({
@@ -35,6 +44,7 @@ const initStore = () => {
         userFriendAPI.middleware,
         getUserHyppe.middleware,
         group.middleware,
+        moduleAPI.middleware,
       ]),
   });
   return store;

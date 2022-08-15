@@ -1,13 +1,15 @@
 import React from 'react';
-import TreeView from '@mui/lab/TreeView';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem';
-import { Button, Checkbox, Divider, FormControlLabel, makeStyles, Box, Typography, TextField } from '@material-ui/core';
-import { useGetModuleQuery } from 'api/console/module';
-import { Stack } from '@mui/system';
+import TreeView from '@material-ui/lab/TreeView';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import TreeItem from '@material-ui/lab/TreeItem';
+import { Box, Checkbox, Divider, FormControlLabel, TextField, Typography } from '@material-ui/core';
+import { RenderTree, data } from './tes-data.json';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
+import { useGetModuleQuery } from 'api/console/module';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -22,21 +24,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RichObjectTreeView = () => {
-  const [selected, setSelected] = React.useState([]);
-  console.log('selected:', selected);
-  const { data: tesData } = useGetModuleQuery();
-  const router = useRouter();
-  const data = {
-    id: '0',
-    name: 'Berikan Semua Akses',
-    children: tesData?.data,
-  };
+const breadcrumbs = [
+  { label: 'Anggota', link: '/console/anggota' },
+  { label: 'Bantuan Pengguna', isActive: true },
+];
 
-  const breadcrumbs = [
-    { label: 'Anggota', link: '/console/anggota' },
-    { label: 'Bantuan Pengguna', isActive: true },
-  ];
+export default function RecursiveTreeView() {
+  const router = useRouter();
+  const [selected, setSelected] = React.useState([]);
+  // console.log('selected:', selected);
+
+  const { data: tesData, isLoading } = useGetModuleQuery();
+  console.log('tesData:', tesData);
+  console.log('data:', data);
 
   //node is always the root "Parent"
   //id is id of node clicked
@@ -76,7 +76,7 @@ const RichObjectTreeView = () => {
     return getAllChild(getNodeById(node, id));
   }
 
-  const getOnChange = (checked, nodes) => {
+  function getOnChange(checked, nodes) {
     //gets all freshly selected or unselected nodes
     const allNode = getChildById(data, nodes.id);
     //combines newly selected nodes with existing selection
@@ -84,30 +84,32 @@ const RichObjectTreeView = () => {
     let array = checked ? [...selected, ...allNode] : selected.filter((value) => !allNode.includes(value));
 
     setSelected(array);
-  };
+  }
 
-  const LabelChild = ({ nodes }) => {
+  const RenderTreeWithCheckboxes = (nodes) => {
     const classes = useStyles();
     return (
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={selected.some((item) => item === nodes.id)}
-            onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
-            className={classes.checkbox}
-          />
-        }
-        label={<>{nodes.name}</>}
+      <TreeItem
         key={nodes.id}
-      />
+        nodeId={nodes.id}
+        label={
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={selected.some((item) => item === nodes.id)}
+                onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
+                //onClick={(e) => e.stopPropagation()}
+                className={classes.checkbox}
+              />
+            }
+            label={<>{nodes.name}</>}
+            key={nodes.id}
+          />
+        }>
+        {Array.isArray(nodes.children) ? nodes.children.map((node) => RenderTreeWithCheckboxes(node)) : null}
+      </TreeItem>
     );
   };
-
-  const renderTree = (nodes) => (
-    <TreeItem key={nodes.id} nodeId={nodes.id} label={<LabelChild nodes={nodes} />}>
-      {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
-    </TreeItem>
-  );
 
   return (
     <>
@@ -139,12 +141,65 @@ const RichObjectTreeView = () => {
       </Stack>
       <TreeView
         style={{ marginTop: '20px' }}
-        aria-label="rich object"
         defaultCollapseIcon={<img src="/images/icons/minus-checkbox.svg" />}
-        defaultExpandIcon={<img src="/images/icons/plus-checkbox.svg" />}
-        defaultExpanded={['root']}
-        sx={{ height: 110, flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }}>
-        {renderTree(data)}
+        defaultExpandIcon={<img src="/images/icons/plus-checkbox.svg" />}>
+        {RenderTreeWithCheckboxes({
+          id: 1,
+          name: 'Berikan semua akses',
+          children: [
+            {
+              id: 4224,
+              name: 'Module User',
+              children: [
+                {
+                  id: 5252,
+                  name: 'createAcces',
+                },
+                {
+                  id: 4,
+                  name: 'updateAcces',
+                },
+                {
+                  id: 5,
+                  name: 'deleteAcces',
+                },
+                {
+                  id: 6,
+                  name: 'viewAcces',
+                },
+              ],
+            },
+          ],
+        })}
+
+        {/* {RenderTreeWithCheckboxes({
+          id: 232,
+          name: 'berikan semua aksesssss',
+          children: [
+            {
+              id: '62e9f2ac8c330000dd004225',
+              name: 'Module User',
+              children: [
+                {
+                  id: 1,
+                  name: 'createAcces',
+                },
+                {
+                  id: 2,
+                  name: 'updateAcces',
+                },
+                {
+                  id: 3,
+                  name: 'deleteAcces',
+                },
+                {
+                  id: 4,
+                  name: 'viewAcces',
+                },
+              ],
+            },
+          ],
+        })} */}
       </TreeView>
       <Divider />
 
@@ -157,6 +212,4 @@ const RichObjectTreeView = () => {
       </Box>
     </>
   );
-};
-
-export default RichObjectTreeView;
+}
