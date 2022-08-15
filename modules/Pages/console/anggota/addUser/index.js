@@ -7,7 +7,6 @@ import Select from '@mui/material/Select';
 import { Grid, Slide, Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import ConsoleHelpCenterComponent from '../../help-center';
 
 const Add = () => {
   const [form, setForm] = useState({

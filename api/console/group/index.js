@@ -20,7 +20,16 @@ export const group = createApi({
       }),
       invalidatesTags: ['group'],
     }),
+    updateGroupUser: build.mutation({
+      query: (payload) => ({
+        url: `/group/user`,
+        method: 'POST',
+        body: payload,
+      }),
+      // for refetch
+      // invalidatesTags: ['group'],
+    }),
   }),
 });
 
-export const { useGetGroupQuery, useDeleteGroupMutation } = group;
+export const { useGetGroupQuery, useDeleteGroupMutation, useUpdateGroupUserMutation } = group;

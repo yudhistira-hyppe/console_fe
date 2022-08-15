@@ -72,12 +72,14 @@ const PenggunaComp = () => {
   const [searchByEmail, setSearchByEmail] = useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userSelectedEmail, setUserSelectedEmail] = useState('');
+  const [jabatan, setJabatan] = useState('');
 
   const open = Boolean(anchorEl);
   const { data: dataAnggota, isLoading } = useGetAnggotaQuery(payload);
 
   const handeOpenMenu = (event, row) => {
     setUserSelectedEmail(row.email);
+    setJabatan(row.group);
     setAnchorEl(event.currentTarget);
   };
   const handleCloseMenu = () => {
@@ -148,7 +150,7 @@ const PenggunaComp = () => {
   const handleSelectedAction = (e, row) => {
     const { myValue } = e.currentTarget.dataset;
     if (myValue === 'hapus') setOpenDialog(true);
-    if (myValue === 'ubah') router.push('/console/profile-console');
+    if (myValue === 'ubah') router.push(`/console/profile-console?email=${userSelectedEmail}`);
     setAnchorEl(null);
   };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import {
   Avatar,
@@ -10,6 +10,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  TextField,
   Typography,
 } from '@material-ui/core';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
@@ -23,6 +24,8 @@ import LocalPhoneIcon from '@material-ui/icons/LocalPhone';
 import CalenderIcon from 'public/images/icons/calenderIcon';
 import { Select, Slide, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
+import router from 'next/router';
+import { useUpdateGroupUserMutation } from 'api/console/group';
 
 const useStyles = makeStyles((theme) => ({
   iconView: {
@@ -56,13 +59,27 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Contact = ({ dataUser }) => {
+const Contact = ({ dataUser, dataPosition, query }) => {
+  console.log('dataUser:', dataUser);
+  // console.log('dataPosition:', dataPosition);
+  // console.log('dataUser:', dataUser && Object.keys(dataUser?.data[0].group).length === 0 ? 'kosong' : 'ada isi');
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [age, setAge] = React.useState('');
+  const [open, setOpen] = useState(false);
+  const [jabatan, setJabatan] = useState('');
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const [payload, setPayload] = useState({
+    email: router.query.email,
+    groupId: jabatan,
+  });
+
+  const handleChangePosition = (event) => {
+    setJabatan(event.target.value);
+    setPayload((prev) => {
+      return {
+        ...prev,
+        groupId: event.target.value,
+      };
+    });
   };
 
   const handleClickOpen = () => {
@@ -73,12 +90,21 @@ const Contact = ({ dataUser }) => {
     setOpen(false);
   };
 
+  const [updateGroupUser, {}] = useUpdateGroupUserMutation();
+
+  const handleUpdateGroup = () => {
+    updateGroupUser(payload);
+    setOpen(false);
+  };
+
   return (
     <>
       <CmtCard style={{ minHeight: '55vh' }}>
         <CmtCardHeader title="Jabatan" />
         <CmtCardContent>
-          <Typography variant="h3">Senior Pertukangan</Typography>
+          <Typography variant="h3">
+            {dataUser && Object.keys(dataUser?.data[0].group).length === 0 ? 'kosong' : 'ada isi'}
+          </Typography>
           <small onClick={handleClickOpen} className={classes.ubahJabatan}>
             Ubah
           </small>
@@ -89,7 +115,9 @@ const Contact = ({ dataUser }) => {
             TransitionComponent={Transition}
             keepMounted
             onClose={handleClose}
-            aria-describedby="alert-dialog-slide-description">
+            aria-describedby="alert-dialog-slide-description"
+            // sx={{ maxWidth: 400 }}
+          >
             <DialogContent>
               <Box p={4}>
                 <center>
@@ -98,19 +126,31 @@ const Contact = ({ dataUser }) => {
                   </Typography>
                 </center>
                 <Box mt={9} textAlign="center">
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                  <TextField
+                    fullWIdth
+                    id="outlined-select-currency"
+                    select
+                    label="Select"
+                    value={jabatan}
+                    onChange={handleChangePosition}
+                    helperText="Pilih Jabatan">
+                    {dataPosition?.data.map((position) => (
+                      <MenuItem value={position?._id}>{position?.nameGroup}</MenuItem>
+                    ))}
+                  </TextField>
+                  {/* <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">SelectJabatan</InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={age}
+                      value={jabatan}
                       label="Age"
-                      onChange={handleChange}>
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
+                      onChange={handleChangePosition}>
+                      {dataPosition?.data.map((position) => {
+                        return <MenuItem value={position._id}>{position.nameGroup}</MenuItem>;
+                      })}
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                 </Box>
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} style={{ marginTop: '45px' }}>
                   <Button
@@ -134,7 +174,8 @@ const Contact = ({ dataUser }) => {
                       padding: '5px 10px',
                       borderRadius: '5px',
                       marginTop: '10px',
-                    }}>
+                    }}
+                    onClick={handleUpdateGroup}>
                     KONFIRMASI
                   </Button>
                 </Stack>

@@ -6,6 +6,9 @@ import About from './About';
 import Header from './Header';
 import { useAuth } from 'authentication';
 import { useGetProfileByUserEmailQuery } from 'api/user/user';
+import { useGetGroupQuery } from 'api/console/group';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles(() => ({
   pageFull: {
@@ -27,8 +30,16 @@ const useStyles = makeStyles(() => ({
 
 const ProfileBasic = () => {
   const classes = useStyles();
+  const router = useRouter();
+  const [payload, setPayload] = useState({
+    skip: 0,
+    limit: 10,
+  });
   const { authUser } = useAuth();
   const { data: dataProfile } = useGetProfileByUserEmailQuery(authUser.user.email);
+
+  const { data: dataPosition } = useGetGroupQuery(payload);
+
   return (
     <>
       <GridContainer>
@@ -41,7 +52,7 @@ const ProfileBasic = () => {
         <Grid item xs={12} lg={4} className={classes.profileSidebar}>
           <Box mb={6}>
             {/* <Contact userDetail={userDetail} /> */}
-            <Contact dataUser={dataProfile} />
+            <Contact dataUser={dataProfile} dataPosition={dataPosition} query={router.query} />
           </Box>
           <Box mb={6}>{/* <Friends friends={userDetail.friends} /> */}</Box>
           <Box mb={6}>{/* <UserPhotos /> */}</Box>
