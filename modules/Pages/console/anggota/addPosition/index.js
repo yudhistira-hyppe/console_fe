@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TreeView from '@mui/lab/TreeView';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -19,6 +19,7 @@ import { Stack } from '@mui/system';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
 import { useGetAnggotaQuery } from 'api/console/getUserHyppe';
+import { useGetGroupQuery } from 'api/console/group';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -36,11 +37,14 @@ const useStyles = makeStyles((theme) => ({
 const RichObjectTreeView = () => {
   const [selected, setSelected] = React.useState([]);
   console.log('selected:', selected);
+  // const [payloadCreateGroupModule,setPayloadCreateGroupModule] = useState({
+
+  // })
   const { data: tesData } = useGetModuleQuery();
   const router = useRouter();
   const data = {
     id: '0',
-    name: 'Berikan Semua Akses',
+    name: 'root',
     children: tesData?.data,
   };
 
@@ -90,6 +94,7 @@ const RichObjectTreeView = () => {
   const getOnChange = (checked, nodes) => {
     //gets all freshly selected or unselected nodes
     const allNode = getChildById(data, nodes.id);
+    console.log('allNode:', allNode);
     //combines newly selected nodes with existing selection
     //or filters out newly deselected nodes from existing selection
     let array = checked ? [...selected, ...allNode] : selected.filter((value) => !allNode.includes(value));
@@ -100,17 +105,24 @@ const RichObjectTreeView = () => {
   const LabelChild = ({ nodes }) => {
     const classes = useStyles();
     return (
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={selected.some((item) => item === nodes.id)}
-            onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
-            className={classes.checkbox}
+      <>
+        {nodes.name === 'root' ? (
+          // prevent root treeView without checkbox
+          'Buka Module'
+        ) : (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={selected.some((item) => item === nodes.id)}
+                onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
+                className={classes.checkbox}
+              />
+            }
+            label={<>{nodes.name}</>}
+            key={nodes.id}
           />
-        }
-        label={<>{nodes.name}</>}
-        key={nodes.id}
-      />
+        )}
+      </>
     );
   };
 
@@ -120,38 +132,19 @@ const RichObjectTreeView = () => {
     </TreeItem>
   );
 
-  const currencies = [
-    {
-      value: 'USD',
-      label: '$',
-    },
-    {
-      value: 'EUR',
-      label: '€',
-    },
-    {
-      value: 'BTC',
-      label: '฿',
-    },
-    {
-      value: 'JPY',
-      label: '¥',
-    },
-  ];
-
-  const [userSelect, setUserSelect] = React.useState('');
+  const [userNameGroup, setUserNameGroup] = React.useState('');
+  console.log('userNameGroup:', userNameGroup);
 
   const handleChange = (event) => {
-    setUserSelect(event.target.value);
+    setUserNameGroup(event.target.value);
   };
 
-  const payload = {
+  const payloadUserGroup = {
     skip: 0,
     limit: 100,
   };
 
-  const { data: userHyppe } = useGetAnggotaQuery(payload);
-  console.log('userHyppe:', userHyppe);
+  const { data: userGroup } = useGetGroupQuery(payloadUserGroup);
 
   return (
     <>
@@ -173,12 +166,12 @@ const RichObjectTreeView = () => {
             id="outlined-select-currency"
             select
             label="Select"
-            value={userSelect}
+            value={userNameGroup}
             onChange={handleChange}
             helperText="Please select user">
-            {userHyppe?.data?.map((item) => (
+            {userGroup?.data?.map((item) => (
               <MenuItem key={item?._id} value={item?._id}>
-                {item?.email}
+                {item?.nameGroup}
               </MenuItem>
             ))}
           </TextField>
