@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const AddPositionAnggotaModule = dynamic(() => import('modules/Pages/console/anggota/addPosition'), {
+const AddPositionAnggotaModule = dynamic(() => import('modules/Pages/console/anggota/position/add'), {
   loading: () => <PageLoader />,
 });
 
