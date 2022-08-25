@@ -21,7 +21,6 @@ export const divisiAPI = createApi({
       }),
       invalidatesTags: ['divisi'],
     }),
-
     createDivisi: build.mutation({
       query: (payload) => ({
         url: `/division/create`,
@@ -30,7 +29,27 @@ export const divisiAPI = createApi({
       }),
       invalidatesTags: ['divisi'],
     }),
+    getSingleDivisi: build.query({
+      query: (id) => ({
+        url: `/division/${id}`,
+        method: 'GET',
+      }),
+      invalidatesTags: ['divisi'],
+    }),
+    updateDivisi: build.mutation({
+      query: (payload) => ({
+        url: `/division/update`,
+        method: 'POST',
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useGetDivisiQuery, useDeleteDivisiMutation, useCreateDivisiMutation } = divisiAPI;
+export const {
+  useGetDivisiQuery,
+  useDeleteDivisiMutation,
+  useCreateDivisiMutation,
+  useGetSingleDivisiQuery,
+  useUpdateDivisiMutation,
+} = divisiAPI;

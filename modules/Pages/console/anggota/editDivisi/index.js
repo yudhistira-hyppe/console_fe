@@ -2,34 +2,41 @@ import React, { useEffect, useState } from 'react';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { TextField, Typography } from '@material-ui/core';
 import { Box, Button, Stack } from '@mui/material';
-import { useCreateDivisiMutation } from 'api/console/divisi';
+import { useGetSingleDivisiQuery, useUpdateDivisiMutation } from 'api/console/divisi';
 import { useRouter } from 'next/router';
 
 const addDivisi = () => {
   const router = useRouter();
-  const [data, setData] = useState({
-    nameDivision: '',
-    desc: '',
-  });
-  console.log('data:', data);
 
   const breadcrumbs = [
     { label: 'Anggota', link: '/console/anggota' },
     { label: 'Bantuan Pengguna', isActive: true },
   ];
 
-  const [createDivisi, { isSuccess }] = useCreateDivisiMutation();
+  const { data: detailDivisi } = useGetSingleDivisiQuery(router.query.id);
+  const [nameDivisi, setNameDivisi] = useState(detailDivisi?.nameDivision);
+  const [desc, setDesc] = useState(detailDivisi?.desc);
+  const [updateDivisi, { isSuccess }] = useUpdateDivisiMutation();
 
-  const addDivisi = async () => {
-    createDivisi(data);
-  };
+  useEffect(() => {
+    setNameDivisi(detailDivisi?.nameDivision);
+    setDesc(detailDivisi?.desc);
+  }, detailDivisi);
 
   useEffect(() => {
     if (isSuccess) {
-      window.location.href = '/console/anggota?tab=divisi';
+      router.push('/console/anggota?tab=divisi');
     }
   }, [isSuccess]);
 
+  const handleUpdateDivisi = () => {
+    const payload = {
+      _id: router.query.id,
+      nameDivision: nameDivisi,
+      desc: desc,
+    };
+    updateDivisi(payload);
+  };
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
@@ -55,14 +62,8 @@ const addDivisi = () => {
           label="Name Division"
           size="small"
           variant="outlined"
-          onChange={(e) =>
-            setData((prev) => {
-              return {
-                ...prev,
-                nameDivision: e.target.value,
-              };
-            })
-          }
+          value={nameDivisi}
+          onChange={(e) => setNameDivisi(e.target.value)}
         />
         <TextField
           style={{ marginTop: '10px' }}
@@ -71,18 +72,11 @@ const addDivisi = () => {
           label="Description"
           size="small"
           variant="outlined"
-          onChange={(e) =>
-            setData((prev) => {
-              return {
-                ...prev,
-                desc: e.target.value,
-              };
-            })
-          }
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
         />
         <Box sx={{ width: 100 }} mt={3}>
           <Button
-            onClick={addDivisi}
             variant="outlined"
             style={{
               background: '#AB22AF',
@@ -91,7 +85,8 @@ const addDivisi = () => {
               borderRadius: '2px',
               border: 'none',
               letterSpacing: '2px',
-            }}>
+            }}
+            onClick={handleUpdateDivisi}>
             Tambah
           </Button>
         </Box>
