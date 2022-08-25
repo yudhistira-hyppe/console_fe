@@ -56,6 +56,9 @@ const addDivisi = () => {
       </Typography>
       <Box sx={{ width: 500 }} mt={2}>
         <TextField
+          InputLabelProps={{
+            shrink: true,
+          }}
           style={{ marginTop: '10px' }}
           id="outlined-basic"
           fullWidth
@@ -67,6 +70,9 @@ const addDivisi = () => {
         />
         <TextField
           style={{ marginTop: '10px' }}
+          InputLabelProps={{
+            shrink: true,
+          }}
           id="outlined-basic"
           fullWidth
           label="Description"

@@ -229,18 +229,18 @@ const RichObjectTreeView = () => {
     setSelectDivisi(event.target.value);
   };
 
-  const payloadUserGroup = {
-    skip: 0,
-    limit: 100,
-  };
-
   const [createGroup, { isSuccess }] = useCreateModuleMutation();
 
   const handleCreate = () => {
     createGroup(dataselected);
   };
 
-  const { data: divisionSelectData } = useGetDivisiQuery();
+  const payloadDivisi = {
+    skip: 0,
+    limit: 100,
+  };
+
+  const { data: divisionSelectData } = useGetDivisiQuery(payloadDivisi);
 
   const [btnAdd, setBtnAdd] = React.useState(false);
 
@@ -259,8 +259,6 @@ const RichObjectTreeView = () => {
     setNameGroup(getSingleGroup?.data[0]?.nameGroup);
     setdataselected(getSingleGroup?.data[0]?.data);
   }, [getSingleGroup]);
-
-  console.log('getSingleGroup:', getSingleGroup);
 
   return (
     <>
