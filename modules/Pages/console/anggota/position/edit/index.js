@@ -41,6 +41,7 @@ const RichObjectTreeView = () => {
   const router = useRouter();
   const [selected, setSelected] = React.useState([]);
   const [dataselected, setdataselected] = React.useState([]);
+  console.log('dataselected:', dataselected);
   const [selectDivisi, setSelectDivisi] = React.useState('');
   const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
@@ -52,7 +53,7 @@ const RichObjectTreeView = () => {
   const [openDialog, setOpenDialog] = React.useState(false);
   // dialog
 
-  const data = {
+  const dataTreeViews = {
     id: '0',
     name: 'root',
     children: getModule?.data.map((item) => {
@@ -118,7 +119,7 @@ const RichObjectTreeView = () => {
 
   const getOnChange = (checked, nodes) => {
     //gets all freshly selected or unselected nodes
-    const allNode = getChildById(data, nodes.id);
+    const allNode = getChildById(dataTreeViews, nodes.id);
     //combines newly selected nodes with existing selection
     //or filters out newly deselected nodes from existing selection
     let array = checked ? _.union(selected, allNode) : selected.filter((value) => !allNode.includes(value));
@@ -154,33 +155,29 @@ const RichObjectTreeView = () => {
         }
       }
     }
-    // var result = array_child.reduce(function (r, a) {
-    //     r[a.module] = r[a.module] || [];
-    //     r[a.module].push(a);
-    //     return [r];
-    // }, Object.create(null));
+
     const grouped = _.mapValues(_.groupBy(array_child, 'module'), (clist) => clist.map((car) => _.omit(car, 'module')));
     const resultData = Object.entries(grouped).map((item) => {
-      const data = {};
-      data.module = item[0];
+      const dataModule = {};
+      dataModule.module = item[0];
       for (let o = 0; o < item[1].length; o++) {
         if (item[1][o].createAcces != undefined) {
-          data.createAcces = item[1][o].createAcces;
+          dataModule.createAcces = item[1][o].createAcces;
         }
         if (item[1][o].deleteAcces != undefined) {
-          data.deleteAcces = item[1][o].deleteAcces;
+          dataModule.deleteAcces = item[1][o].deleteAcces;
         }
         if (item[1][o].updateAcces != undefined) {
-          data.updateAcces = item[1][o].updateAcces;
+          dataModule.updateAcces = item[1][o].updateAcces;
         }
         if (item[1][o].viewAcces != undefined) {
-          data.viewAcces = item[1][o].viewAcces;
+          dataModule.viewAcces = item[1][o].viewAcces;
         }
         if (item[1][o].viewAcces != undefined) {
-          data.desc = 'test group';
+          dataModule.desc = 'test group';
         }
       }
-      return data;
+      return dataModule;
     });
 
     const finalObject = {
@@ -254,10 +251,45 @@ const RichObjectTreeView = () => {
 
   const { data: getSingleGroup } = useGetSingleGroupQuery(router.query.id);
 
+  // function testing() {
+  //   const temp = getSingleGroup?.data[0]?.data;
+  //   const clone = Object.fromEntries(
+  //     Object.entries(temp).map(([o_key, o_val]) => {
+  //       if (o_key === key) return [newKey, o_val];
+  //       return [o_key, o_val + 'ss'];
+  //     }),
+  //   );
+  //   console.log('temp:', temp);
+  //   console.log('clone:', clone);
+  // }
+
   useEffect(() => {
+    // testing();
     setSelectDivisi(getSingleGroup?.data[0]?.divisionId);
     setNameGroup(getSingleGroup?.data[0]?.nameGroup);
-    setdataselected(getSingleGroup?.data[0]?.data);
+    // setdataselected({
+    //   nameGroup: 'waterfall ',
+    //   divisionId: '6306ff687ce3291c7d989858',
+    //   desc: 'test group',
+    //   module: [
+    //     {
+    //       module: '62e9f2ac8c330000dd004225',
+    //       createAcces: true,
+    //       updateAcces: true,
+    //       deleteAcces: true,
+    //       viewAcces: true,
+    //       desc: 'test group',
+    //     },
+    //     {
+    //       module: '62fa15e9a2b35d59a206ea2e',
+    //       createAcces: true,
+    //       updateAcces: true,
+    //       deleteAcces: true,
+    //       viewAcces: true,
+    //       desc: 'test group',
+    //     },
+    //   ],
+    // });
   }, [getSingleGroup]);
 
   return (
@@ -308,13 +340,14 @@ const RichObjectTreeView = () => {
         </Box>
       </Stack>
       <TreeView
+        // it will expanded if you put teh id of node below
+        defaultExpanded={['0']}
         style={{ marginTop: '20px' }}
         aria-label="rich object"
         defaultCollapseIcon={<img src="/images/icons/minus-checkbox.svg" />}
         defaultExpandIcon={<img src="/images/icons/plus-checkbox.svg" />}
-        defaultExpanded={['root']}
         sx={{ height: 110, flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }}>
-        {renderTree(data)}
+        {renderTree(dataTreeViews)}
       </TreeView>
       <Divider />
 

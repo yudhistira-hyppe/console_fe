@@ -41,6 +41,7 @@ const RichObjectTreeView = () => {
   const router = useRouter();
   const [selected, setSelected] = React.useState([]);
   const [dataselected, setdataselected] = React.useState([]);
+  console.log('dataselected:', dataselected);
   const [selectDivisi, setSelectDivisi] = React.useState('');
   const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
