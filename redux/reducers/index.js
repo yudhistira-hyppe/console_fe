@@ -17,6 +17,7 @@ import {
   getUserHyppe,
   group,
   moduleAPI,
+  divisiAPI,
 } from 'api/console';
 import { contentAPI } from 'api/user/content';
 import { notificationAPI } from 'api/user/notification';
@@ -51,4 +52,5 @@ export default combineReducers({
   [getUserHyppe.reducerPath]: getUserHyppe.reducer,
   [group.reducerPath]: group.reducer,
   [moduleAPI.reducerPath]: moduleAPI.reducer,
+  [divisiAPI.reducerPath]: divisiAPI.reducer,
 });

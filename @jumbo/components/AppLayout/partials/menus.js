@@ -11,7 +11,7 @@ export const sidebarNavs = [
   {
     name: 'Content Management',
     type: 'item',
-    link: '/contents',
+    link: '/content-management',
   },
   {
     name: 'Ads Center',
@@ -163,6 +163,7 @@ export const consoleNav = [
   {
     name: 'Anggota',
     type: 'item',
-    link: '/console/anggota',
+    // this is default for tab
+    link: '/console/anggota?tab=pengguna',
   },
 ];

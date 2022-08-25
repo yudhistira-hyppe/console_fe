@@ -22,7 +22,7 @@ import { Stack } from '@mui/system';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
 import { useGetDivisiQuery } from 'api/console/divisi';
-import { useGetGroupQuery } from 'api/console/group';
+import { useGetGroupQuery, useGetSingleGroupQuery } from 'api/console/group';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -229,17 +229,18 @@ const RichObjectTreeView = () => {
     setSelectDivisi(event.target.value);
   };
 
+  const payloadUserGroup = {
+    skip: 0,
+    limit: 100,
+  };
+
   const [createGroup, { isSuccess }] = useCreateModuleMutation();
 
   const handleCreate = () => {
     createGroup(dataselected);
   };
 
-  const payloadDivisi = {
-    skip: 0,
-    limit: 100,
-  };
-  const { data: divisionSelectData } = useGetDivisiQuery(payloadDivisi);
+  const { data: divisionSelectData } = useGetDivisiQuery();
 
   const [btnAdd, setBtnAdd] = React.useState(false);
 
@@ -250,6 +251,16 @@ const RichObjectTreeView = () => {
       setBtnAdd(true);
     }
   }, [dataselected, selectDivisi, nameGroup]);
+
+  const { data: getSingleGroup } = useGetSingleGroupQuery(router.query.id);
+
+  useEffect(() => {
+    setSelectDivisi(getSingleGroup?.data[0]?.divisionId);
+    setNameGroup(getSingleGroup?.data[0]?.nameGroup);
+    setdataselected(getSingleGroup?.data[0]?.data);
+  }, [getSingleGroup]);
+
+  console.log('getSingleGroup:', getSingleGroup);
 
   return (
     <>
@@ -287,9 +298,10 @@ const RichObjectTreeView = () => {
             style={{ marginTop: '10px' }}
             id="outlined-basic"
             fullWidth
-            label="Nama Jabatan"
+            label="Nama Group"
             size="small"
             variant="outlined"
+            value={nameGroup}
             onChange={(e) => setNameGroup(e.target.value)}
           />
         </Box>

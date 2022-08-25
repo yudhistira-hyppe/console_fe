@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { makeStyles, Typography } from '@material-ui/core';
 import Tab from '@mui/material/Tab';
-import PenggunaComp from './tabs/PenggunaComp';
-import Group from './tabs/Position';
+import PenggunaComp from './tabComponent/PenggunaComp';
+import Position from './tabComponent/Position';
+import Divisi from './tabComponent/divisi';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -13,10 +15,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Anggota = () => {
   const classes = useStyles();
-  const [value, setValue] = useState('pengguna');
+  const router = useRouter();
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    router.push(`${router.pathname}?tab=${newValue}`);
   };
 
   const LabelTab = ({ label }) => {
@@ -39,9 +41,29 @@ const Anggota = () => {
       </>
     );
   };
+
+  // add component here
+  const Tabs = [
+    {
+      label: 'Pengguna',
+      value: 'pengguna',
+      component: <PenggunaComp />,
+    },
+    {
+      label: 'Jabatan',
+      value: 'jabatan',
+      component: <Position />,
+    },
+    {
+      label: 'Divisi',
+      value: 'divisi',
+      component: <Divisi />,
+    },
+  ];
+
   return (
     <>
-      <TabContext value={value}>
+      <TabContext value={router.query.tab}>
         <TabList
           onChange={handleChange}
           aria-label="lab API tabs example"
@@ -49,28 +71,26 @@ const Anggota = () => {
           classes={{
             indicator: classes.indicator,
           }}>
-          <Tab
-            label={<LabelTab label="Pengguna" />}
-            value="pengguna"
-            classes={{
-              root: classes.tabRoot,
-            }}
-          />
-          <Tab
-            label={<LabelTab label="Jabatan" />}
-            value="jabatan"
-            classes={{
-              root: classes.tabRoot,
-            }}
-          />
+          {Tabs.map((tab) => {
+            return (
+              <Tab
+                label={<LabelTab label={tab.label} />}
+                value={tab.value}
+                classes={{
+                  root: classes.tabRoot,
+                }}
+              />
+            );
+          })}
         </TabList>
         <div style={{ marginTop: '10px' }}>
-          <TabPanel value="pengguna">
-            <PenggunaComp />
-          </TabPanel>
-          <TabPanel value="jabatan">
-            <Group />
-          </TabPanel>
+          {Tabs.map((comp) => {
+            return (
+              <>
+                <TabPanel value={comp.value}>{comp.component}</TabPanel>
+              </>
+            );
+          })}
         </div>
       </TabContext>
     </>

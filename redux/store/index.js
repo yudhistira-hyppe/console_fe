@@ -21,6 +21,7 @@ import {
   getUserHyppe,
   group,
   moduleAPI,
+  divisiAPI,
 } from 'api/console';
 
 const initStore = () => {
@@ -45,6 +46,7 @@ const initStore = () => {
         getUserHyppe.middleware,
         group.middleware,
         moduleAPI.middleware,
+        divisiAPI.middleware,
       ]),
   });
   return store;

@@ -15,6 +15,12 @@ export const getUserHyppe = createApi({
       }),
       providesTags: ['userHyppe'],
     }),
+    getDetailAnggota: build.query({
+      query: ({ skip, limit, groupId }) => ({
+        url: `/getuserhyppe?skip=${skip}&limit=${limit}&groupId=${groupId}`,
+        method: 'GET',
+      }),
+    }),
     deleteAnggota: build.mutation({
       query: (email) => ({
         url: `/group/user?email=${email}`,
@@ -22,7 +28,16 @@ export const getUserHyppe = createApi({
       }),
       invalidatesTags: ['userHyppe'],
     }),
+    updateStatusGroupUser: build.mutation({
+      query: (payload) => ({
+        url: `/group/statususer`,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['userHyppe'],
+    }),
   }),
 });
 
-export const { useGetAnggotaQuery, useDeleteAnggotaMutation } = getUserHyppe;
+export const { useGetAnggotaQuery, useGetDetailAnggotaQuery, useDeleteAnggotaMutation, useUpdateStatusGroupUserMutation } =
+  getUserHyppe;

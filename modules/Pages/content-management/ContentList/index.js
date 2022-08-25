@@ -73,7 +73,7 @@ const ContentList = () => {
 
   const handlePagination = (e, value) => {
     // example : at page 5. value is = 5
-    // so it will be 5 * 10 - 10
+    // so it will be 5 * 10 - 10 = 40
     setSkip(value * 10 - 10);
     setPage(value);
   };
@@ -154,7 +154,7 @@ const ContentList = () => {
         postType: typePost,
       });
     }
-
+    // be didnt handle empty payload thats why i need to check each condition
     if (!typePost) {
       setPayloads({
         email: authUser.user.email,
@@ -169,6 +169,7 @@ const ContentList = () => {
       });
     }
 
+    // be didnt handle empty payload thats why i need to check each condition
     if (typePost === 'all') {
       setPayloads({
         email: authUser.user.email,

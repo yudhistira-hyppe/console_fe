@@ -11,7 +11,14 @@ export const moduleAPI = createApi({
         method: 'GET',
       }),
     }),
+    createModule: build.mutation({
+      query: (data) => ({
+        url: `/groupmodule/groupcreate`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetModuleQuery } = moduleAPI;
+export const { useGetModuleQuery, useCreateModuleMutation } = moduleAPI;

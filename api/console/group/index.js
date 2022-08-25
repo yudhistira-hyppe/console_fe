@@ -29,7 +29,13 @@ export const group = createApi({
       // for refetch
       // invalidatesTags: ['group'],
     }),
+    getSingleGroup: build.query({
+      query: (id) => ({
+        url: `/group/${id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetGroupQuery, useDeleteGroupMutation, useUpdateGroupUserMutation } = group;
+export const { useGetGroupQuery, useDeleteGroupMutation, useUpdateGroupUserMutation, useGetSingleGroupQuery } = group;

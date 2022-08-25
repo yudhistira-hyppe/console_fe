@@ -61,4 +61,4 @@ If you get this warning, please make sure that you configure `getInitialProps` i
           fill="url(#color2)"
           fillOpacity={1}
         />
-  </AreaChart>*/}# ConsoleDashboardHyppe
+  </AreaChart>*/}
