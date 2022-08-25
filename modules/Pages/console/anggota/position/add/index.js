@@ -229,11 +229,16 @@ const RichObjectTreeView = () => {
     setSelectDivisi(event.target.value);
   };
 
-  const [createGroup, { isSuccess }] = useCreateModuleMutation();
+  const [createGroup, { isSuccess, isError }] = useCreateModuleMutation();
 
   const handleCreate = () => {
     createGroup(dataselected);
   };
+
+  useEffect(() => {
+    if (isSuccess) router.push('/console/anggota?tab=jabatan');
+    if (isError) alert('error bang');
+  }, [isSuccess, isError]);
 
   const payloadDivisi = {
     skip: 0,
