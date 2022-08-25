@@ -199,7 +199,7 @@ const Position = () => {
                 <TableCell component="th" scope="row" align="left">
                   {row.nameDivision}
                 </TableCell>
-                <TableCell align="left">{row.desc === '' ? 'kosong' : ''}</TableCell>
+                <TableCell align="left">{row.desc === '' ? 'kosong' : row.desc}</TableCell>
                 <TableCell align="right">
                   <IconButton
                     aria-label="more"
