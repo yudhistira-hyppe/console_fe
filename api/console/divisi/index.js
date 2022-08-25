@@ -28,8 +28,8 @@ export const divisiAPI = createApi({
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['divisi'],
     }),
-    invalidatesTags: ['divisi'],
   }),
 });
 

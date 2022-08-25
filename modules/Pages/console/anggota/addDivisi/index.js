@@ -26,7 +26,7 @@ const addDivisi = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      window.location.href = '/console/anggota?tab=divisi';
+      router.push('/console/anggota?tab=divisi');
     }
   }, [isSuccess]);
 
