@@ -117,12 +117,12 @@ const RichObjectTreeView = () => {
     return getAllChild(getNodeById(node, id));
   }
 
-  const getOnChange = (checked, nodes) => {
+  const getOnChangeTreeView = (checked, nodes) => {
     //gets all freshly selected or unselected nodes
-    const allNode = getChildById(dataTreeViews, nodes.id);
+    const allNode = getChildById(dataTreeViews, nodes?.id);
     //combines newly selected nodes with existing selection
     //or filters out newly deselected nodes from existing selection
-    let array = checked ? _.union(selected, allNode) : selected.filter((value) => !allNode.includes(value));
+    let array = allNode && checked ? _.union(selected, allNode) : selected.filter((value) => !allNode.includes(value));
 
     const array_modul = [];
     const array_child = [];
@@ -184,11 +184,31 @@ const RichObjectTreeView = () => {
       nameGroup: nameGroup,
       divisionId: selectDivisi,
       desc: 'test group',
-      module: resultData,
+      // module: resultData,
+      module: [
+        {
+          module: '62e9f2ac8c330000dd004225',
+          createAcces: true,
+          updateAcces: true,
+          deleteAcces: true,
+          viewAcces: true,
+          desc: 'test group',
+        },
+        {
+          module: '62fa15e9a2b35d59a206ea2e',
+          createAcces: true,
+          updateAcces: true,
+          deleteAcces: true,
+          viewAcces: true,
+          desc: 'test group',
+        },
+      ],
     };
 
     setSelected(array);
-    setdataselected(finalObject);
+    if (nameGroup && selectDivisi) {
+      setdataselected(finalObject);
+    }
   };
 
   const LabelChild = ({ nodes }) => {
@@ -204,7 +224,7 @@ const RichObjectTreeView = () => {
               <Checkbox
                 //checked={selected.some((item) => item === nodes.id)}
                 checked={selected.some((item) => item === nodes.id)}
-                onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
+                onChange={(event) => getOnChangeTreeView(event.currentTarget.checked, nodes)}
                 className={classes.checkbox}
               />
             }
@@ -265,6 +285,7 @@ const RichObjectTreeView = () => {
 
   useEffect(() => {
     // testing();
+    getOnChangeTreeView();
     setSelectDivisi(getSingleGroup?.data[0]?.divisionId);
     setNameGroup(getSingleGroup?.data[0]?.nameGroup);
     // setdataselected({
@@ -291,6 +312,10 @@ const RichObjectTreeView = () => {
     //   ],
     // });
   }, [getSingleGroup]);
+
+  useEffect(() => {
+    getOnChangeTreeView();
+  }, [selectDivisi, nameGroup]);
 
   return (
     <>
