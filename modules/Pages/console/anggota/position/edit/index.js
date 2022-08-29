@@ -262,7 +262,6 @@ const RichObjectTreeView = () => {
   const { data: getSingleGroup } = useGetSingleGroupQuery(router.query.id);
 
   useEffect(() => {
-    getOnChangeTreeView();
     setSelectDivisi(getSingleGroup?.data[0]?.divisionId);
     setNameGroup(getSingleGroup?.data[0]?.nameGroup);
 
@@ -284,10 +283,6 @@ const RichObjectTreeView = () => {
     }
     setSelected(array_existing);
   }, [getSingleGroup]);
-
-  useEffect(() => {
-    getOnChangeTreeView();
-  }, [selectDivisi, nameGroup]);
 
   return (
     <>
