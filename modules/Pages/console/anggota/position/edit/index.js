@@ -228,12 +228,18 @@ const RichObjectTreeView = () => {
     setSelectDivisi(event.target.value);
   };
 
-  const [updateModule, { isSuccess }] = useUpdateModuleMutation();
+  const [updateModule, { isSuccess, isError }] = useUpdateModuleMutation();
+  console.log('isError:', isError);
+  console.log('isSuccess:', isSuccess);
+
+  useEffect(() => {
+    if (isSuccess) window.location.href = '/console/anggota?tab=jabatan';
+    if (isError) alert('error bang');
+  }, [isSuccess, isError]);
 
   const handleUpdateModule = () => {
-    // createGroup(dataselected);
     updateModule(dataselected);
-    console.log('dataselected:', dataselected);
+    setOpenDialog(false);
   };
 
   const payloadDivisi = {
@@ -395,7 +401,6 @@ const RichObjectTreeView = () => {
                   }}
                   onClick={() => {
                     handleUpdateModule();
-                    setOpenDialog(false);
                   }}>
                   KONFIRMASI
                 </Button>
