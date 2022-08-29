@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const DetailJabatan = dynamic(() => import('modules/Pages/console/anggota/detailJabatan'), {
+const DetailPosition = dynamic(() => import('modules/Pages/console/anggota/detail-position'), {
   loading: () => <PageLoader />,
 });
 
-const DetailJabatanPage = () => (
+const DetailPositionPage = () => (
   <SecureConsolePage>
-    <DetailJabatan />
+    <DetailPosition />
   </SecureConsolePage>
 );
 
-export default DetailJabatanPage;
+export default DetailPositionPage;

@@ -148,7 +148,7 @@ const Position = () => {
             fullWidth
             size="small"
             variant="outlined"
-            label="Cari nama / email"
+            label="Cari Jabatan"
             onChange={(e) => setSearch(e.target.value)}
             onKeyPress={onEnterSearch}
             InputProps={{

@@ -22,7 +22,7 @@ import { Stack } from '@mui/system';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
 import { useGetDivisiQuery } from 'api/console/divisi';
-import { useGetGroupQuery, useGetSingleGroupQuery } from 'api/console/group';
+import { useGetGroupQuery } from 'api/console/group';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -41,6 +41,7 @@ const RichObjectTreeView = () => {
   const router = useRouter();
   const [selected, setSelected] = React.useState([]);
   const [dataselected, setdataselected] = React.useState([]);
+  console.log('dataselected:', dataselected);
   const [selectDivisi, setSelectDivisi] = React.useState('');
   const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
@@ -229,17 +230,21 @@ const RichObjectTreeView = () => {
     setSelectDivisi(event.target.value);
   };
 
-  const [createGroup, { isSuccess }] = useCreateModuleMutation();
+  const [createGroup, { isSuccess, isError }] = useCreateModuleMutation();
 
   const handleCreate = () => {
     createGroup(dataselected);
   };
 
+  useEffect(() => {
+    if (isSuccess) router.push('/console/anggota?tab=jabatan');
+    if (isError) alert('error bang');
+  }, [isSuccess, isError]);
+
   const payloadDivisi = {
     skip: 0,
     limit: 100,
   };
-
   const { data: divisionSelectData } = useGetDivisiQuery(payloadDivisi);
 
   const [btnAdd, setBtnAdd] = React.useState(false);
@@ -251,14 +256,6 @@ const RichObjectTreeView = () => {
       setBtnAdd(true);
     }
   }, [dataselected, selectDivisi, nameGroup]);
-
-  const { data: getSingleGroup } = useGetSingleGroupQuery(router.query.id);
-
-  useEffect(() => {
-    setSelectDivisi(getSingleGroup?.data[0]?.divisionId);
-    setNameGroup(getSingleGroup?.data[0]?.nameGroup);
-    setdataselected(getSingleGroup?.data[0]?.data);
-  }, [getSingleGroup]);
 
   return (
     <>
@@ -296,10 +293,9 @@ const RichObjectTreeView = () => {
             style={{ marginTop: '10px' }}
             id="outlined-basic"
             fullWidth
-            label="Nama Group"
+            label="Nama Jabatan"
             size="small"
             variant="outlined"
-            value={nameGroup}
             onChange={(e) => setNameGroup(e.target.value)}
           />
         </Box>
