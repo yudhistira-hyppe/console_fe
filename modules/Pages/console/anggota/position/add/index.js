@@ -237,7 +237,7 @@ const RichObjectTreeView = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) router.push('/console/anggota?tab=jabatan');
+    if (isSuccess) window.location.href = '/console/anggota?tab=jabatan';
     if (isError) alert('error bang');
   }, [isSuccess, isError]);
 

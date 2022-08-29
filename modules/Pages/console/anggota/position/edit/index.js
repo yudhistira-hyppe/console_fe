@@ -17,7 +17,7 @@ import {
   DialogContent,
   Slide,
 } from '@material-ui/core';
-import { useGetModuleQuery, useCreateModuleMutation } from 'api/console/module';
+import { useGetModuleQuery, useCreateModuleMutation, useUpdateModuleMutation } from 'api/console/module';
 import { Stack } from '@mui/system';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
@@ -41,7 +41,6 @@ const RichObjectTreeView = () => {
   const router = useRouter();
   const [selected, setSelected] = React.useState([]);
   const [dataselected, setdataselected] = React.useState([]);
-  console.log('dataselected:', dataselected);
   const [selectDivisi, setSelectDivisi] = React.useState('');
   const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
@@ -181,28 +180,11 @@ const RichObjectTreeView = () => {
     });
 
     const finalObject = {
+      _id: router.query.id,
       nameGroup: nameGroup,
       divisionId: selectDivisi,
       desc: 'test group',
-      // module: resultData,
-      module: [
-        {
-          module: '62e9f2ac8c330000dd004225',
-          createAcces: true,
-          updateAcces: true,
-          deleteAcces: true,
-          viewAcces: true,
-          desc: 'test group',
-        },
-        {
-          module: '62fa15e9a2b35d59a206ea2e',
-          createAcces: true,
-          updateAcces: true,
-          deleteAcces: true,
-          viewAcces: true,
-          desc: 'test group',
-        },
-      ],
+      module: resultData,
     };
 
     setSelected(array);
@@ -246,10 +228,18 @@ const RichObjectTreeView = () => {
     setSelectDivisi(event.target.value);
   };
 
-  const [createGroup, { isSuccess }] = useCreateModuleMutation();
+  const [updateModule, { isSuccess, isError }] = useUpdateModuleMutation();
+  console.log('isError:', isError);
+  console.log('isSuccess:', isSuccess);
 
-  const handleCreate = () => {
-    createGroup(dataselected);
+  useEffect(() => {
+    if (isSuccess) window.location.href = '/console/anggota?tab=jabatan';
+    if (isError) alert('error bang');
+  }, [isSuccess, isError]);
+
+  const handleUpdateModule = () => {
+    updateModule(dataselected);
+    setOpenDialog(false);
   };
 
   const payloadDivisi = {
@@ -271,51 +261,28 @@ const RichObjectTreeView = () => {
 
   const { data: getSingleGroup } = useGetSingleGroupQuery(router.query.id);
 
-  // function testing() {
-  //   const temp = getSingleGroup?.data[0]?.data;
-  //   const clone = Object.fromEntries(
-  //     Object.entries(temp).map(([o_key, o_val]) => {
-  //       if (o_key === key) return [newKey, o_val];
-  //       return [o_key, o_val + 'ss'];
-  //     }),
-  //   );
-  //   console.log('temp:', temp);
-  //   console.log('clone:', clone);
-  // }
-
   useEffect(() => {
-    // testing();
-    getOnChangeTreeView();
     setSelectDivisi(getSingleGroup?.data[0]?.divisionId);
     setNameGroup(getSingleGroup?.data[0]?.nameGroup);
-    // setdataselected({
-    //   nameGroup: 'waterfall ',
-    //   divisionId: '6306ff687ce3291c7d989858',
-    //   desc: 'test group',
-    //   module: [
-    //     {
-    //       module: '62e9f2ac8c330000dd004225',
-    //       createAcces: true,
-    //       updateAcces: true,
-    //       deleteAcces: true,
-    //       viewAcces: true,
-    //       desc: 'test group',
-    //     },
-    //     {
-    //       module: '62fa15e9a2b35d59a206ea2e',
-    //       createAcces: true,
-    //       updateAcces: true,
-    //       deleteAcces: true,
-    //       viewAcces: true,
-    //       desc: 'test group',
-    //     },
-    //   ],
-    // });
-  }, [getSingleGroup]);
 
-  useEffect(() => {
-    getOnChangeTreeView();
-  }, [selectDivisi, nameGroup]);
+    let array_existing = [];
+    for (let i = 0; i < getSingleGroup?.data[0]?.data.length; i++) {
+      array_existing.push(getSingleGroup?.data[0]?.data[i].id);
+      if (getSingleGroup?.data[0]?.data[i].createAcces != undefined) {
+        array_existing.push(getSingleGroup?.data[0]?.data[i].id + '-1');
+      }
+      if (getSingleGroup?.data[0]?.data[i].updateAcces != undefined) {
+        array_existing.push(getSingleGroup?.data[0]?.data[i].id + '-2');
+      }
+      if (getSingleGroup?.data[0]?.data[i].deleteAcces != undefined) {
+        array_existing.push(getSingleGroup?.data[0]?.data[i].id + '-3');
+      }
+      if (getSingleGroup?.data[0]?.data[i].viewAcces != undefined) {
+        array_existing.push(getSingleGroup?.data[0]?.data[i].id + '-4');
+      }
+    }
+    setSelected(array_existing);
+  }, [getSingleGroup]);
 
   return (
     <>
@@ -428,8 +395,7 @@ const RichObjectTreeView = () => {
                     marginTop: '10px',
                   }}
                   onClick={() => {
-                    handleCreate();
-                    setOpenDialog(false);
+                    handleUpdateModule();
                   }}>
                   KONFIRMASI
                 </Button>
