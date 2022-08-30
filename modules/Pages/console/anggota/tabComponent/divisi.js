@@ -171,7 +171,7 @@ const Position = () => {
           wordWrap="nowrap"
           textAlign="center"
           className={classes.addUser}
-          onClick={() => router.push('/console/anggota/add-divisi')}>
+          onClick={() => router.push('/anggota/add-divisi')}>
           <img src="/images/icons/plus-icon.svg" alt="icon" />
           <Typography component="div" variant="h6">
             TAMBAH

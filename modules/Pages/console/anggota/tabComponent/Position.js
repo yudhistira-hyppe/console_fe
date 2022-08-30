@@ -168,7 +168,7 @@ const Position = () => {
           wordWrap="nowrap"
           textAlign="center"
           className={classes.addUser}
-          onClick={() => router.push('/console/anggota/add-position')}>
+          onClick={() => router.push('/anggota/add-position')}>
           <img src="/images/icons/plus-icon.svg" alt="icon" />
           <Typography component="div" variant="h6">
             TAMBAH

@@ -233,7 +233,7 @@ const RichObjectTreeView = () => {
   console.log('isSuccess:', isSuccess);
 
   useEffect(() => {
-    if (isSuccess) window.location.href = '/console/anggota?tab=jabatan';
+    if (isSuccess) window.location.href = '/anggota?tab=jabatan';
     if (isError) alert('error bang');
   }, [isSuccess, isError]);
 
@@ -287,7 +287,7 @@ const RichObjectTreeView = () => {
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-        <Box display="flex" style={{ cursor: 'pointer' }} onClick={() => router.push('/console/anggota?tab=jabatan')}>
+        <Box display="flex" style={{ cursor: 'pointer' }} onClick={() => router.push('/anggota?tab=jabatan')}>
           <img src="/images/icons/arrow-left.svg" />
           <Typography variant="h4" component="div">
             Kembali

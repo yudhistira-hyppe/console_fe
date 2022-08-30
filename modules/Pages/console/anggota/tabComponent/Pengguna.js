@@ -145,7 +145,7 @@ const PenggunaComp = () => {
   const handleSelectedAction = (e, row) => {
     const { myValue } = e.currentTarget.dataset;
     // if (myValue === 'hapus') setOpenDialog(true);
-    if (myValue === 'ubah') router.push(`/console/profile-console?email=${userSelectedEmail}`);
+    if (myValue === 'ubah') router.push(`/profile-console?email=${userSelectedEmail}`);
     setAnchorEl(null);
   };
 
