@@ -64,7 +64,7 @@ const Anggota = () => {
 
   return (
     <>
-      <TabContext value={router.query.tab}>
+      <TabContext value={router.query.tab === undefined ? 'pengguna' : router.query.tab}>
         <TabList
           onChange={handleChange}
           aria-label="lab API tabs example"

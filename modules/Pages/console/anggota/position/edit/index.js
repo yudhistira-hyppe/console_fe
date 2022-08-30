@@ -349,7 +349,7 @@ const RichObjectTreeView = () => {
           variant="outlined"
           disabled={btnAdd}
           style={btnAdd ? null : { background: '#AB22AF', color: '#FFFFFF', border: 'none' }}>
-          Tambah
+          Ubah
         </Button>
       </Box>
 
@@ -364,7 +364,7 @@ const RichObjectTreeView = () => {
             <Box p={4}>
               <center>
                 <Typography id="modal-modal-title" variant="h3" component="div">
-                  Tambah Jabatan?
+                  Ubah Jabatan?
                 </Typography>
               </center>
               <Box mt={3} textAlign="center">

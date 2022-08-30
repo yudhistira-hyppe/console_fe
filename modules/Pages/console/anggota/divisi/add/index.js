@@ -11,7 +11,8 @@ const addDivisi = () => {
     nameDivision: '',
     desc: '',
   });
-  console.log('data:', data);
+  const [isBtnDisabled, setIsBtnDisabled] = useState(false);
+  console.log('isBtnDisabled:', isBtnDisabled);
 
   const breadcrumbs = [
     { label: 'Anggota', link: '/console/anggota' },
@@ -26,9 +27,16 @@ const addDivisi = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push('/console/anggota?tab=divisi');
+      window.location.href = '/console/anggota?tab=divisi';
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (!data.nameDivision) setIsBtnDisabled(true);
+    else {
+      setIsBtnDisabled(false);
+    }
+  }, [data.nameDivision]);
 
   return (
     <>
@@ -83,15 +91,20 @@ const addDivisi = () => {
         <Box sx={{ width: 100 }} mt={3}>
           <Button
             onClick={addDivisi}
+            disabled={isBtnDisabled}
             variant="outlined"
-            style={{
-              background: '#AB22AF',
-              padding: '3px 7px',
-              color: '#FFFFFF',
-              borderRadius: '2px',
-              border: 'none',
-              letterSpacing: '2px',
-            }}>
+            style={
+              isBtnDisabled
+                ? null
+                : {
+                    background: '#AB22AF',
+                    padding: '3px 7px',
+                    color: '#FFFFFF',
+                    borderRadius: '2px',
+                    border: 'none',
+                    letterSpacing: '2px',
+                  }
+            }>
             Tambah
           </Button>
         </Box>
