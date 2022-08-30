@@ -16,7 +16,8 @@ const Logo = ({ color, ...props }) => {
       <Hidden xsDown>
         <Link href="/">
           <a>
-            <CmtImage src={router.pathname.includes('/console')?logoUrlConsole:logoUrl} alt="logo" />
+            {/* <CmtImage src={router.pathname.includes('/console') ? logoUrlConsole : logoUrl} alt="logo" /> */}
+            <CmtImage src={router.pathname.includes('/') ? logoUrlConsole : logoUrl} alt="logo" />
           </a>
         </Link>
       </Hidden>

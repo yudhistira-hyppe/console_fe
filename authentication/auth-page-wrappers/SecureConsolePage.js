@@ -14,11 +14,13 @@ const SecureConsolePage = ({ children }) => {
   useEffect(() => {
     if (!isLoading) {
       if (!authUser && !router.pathname.includes('/signin') && router.pathname !== '/') {
-        router.push({ pathname: '/console/signin', query: { redirect: router.pathname } });
+        // router.push({ pathname: '/console/signin', query: { redirect: router.pathname } });
+        router.push({ pathname: '/signin', query: { redirect: router.pathname } });
         return;
       }
       if (!authUser && !router.pathname.includes('/signin') && router.pathname === '/') {
-        router.push('/console/signin');
+        // router.push('/console/signin');
+        router.push('/signin');
         return;
       }
       if (
@@ -26,7 +28,8 @@ const SecureConsolePage = ({ children }) => {
         authUser.user.roles.includes('ROLE_SYSADMIN') &&
         router.pathname.includes('/signin') &&
         router.query.redirect &&
-        router.query.redirect.includes('/console')
+        // router.query.redirect.includes('/console')
+        router.query.redirect.includes('/')
       ) {
         router.push(router.query.redirect);
         return;
@@ -37,7 +40,8 @@ const SecureConsolePage = ({ children }) => {
         router.pathname.includes('/signin') &&
         !router.query.redirect
       ) {
-        router.push('/console');
+        // router.push('/console');
+        router.push('/');
         return;
       }
       setIsRenderChildren(true);

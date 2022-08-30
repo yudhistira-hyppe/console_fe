@@ -45,7 +45,8 @@ const HorizontalDefault = ({ className, children }) => {
           </CmtHeaderTop>
           <Hidden mdDown>
             <CmtHeaderMain bgcolor="primary.main" color="white">
-              <CmtHorizontal menuItems={router.pathname.includes('/console')?consoleNav:horizontalDefaultNavs} />
+              {/* <CmtHorizontal menuItems={router.pathname.includes('/console') ? consoleNav : horizontalDefaultNavs} /> */}
+              <CmtHorizontal menuItems={router.pathname.includes('/') ? consoleNav : horizontalDefaultNavs} />
             </CmtHeaderMain>
           </Hidden>
         </CmtHeader>
