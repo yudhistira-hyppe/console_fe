@@ -29,7 +29,7 @@ const DetailJabatan = () => {
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-        <Box display="flex" style={{ cursor: 'pointer' }} onClick={() => router.push(`/console/anggota?tab=jabatan`)}>
+        <Box display="flex" style={{ cursor: 'pointer' }} onClick={() => router.push(`/anggota?tab=jabatan`)}>
           <img src="/images/icons/arrow-left.svg" />
           <Typography variant="h4" component="div">
             Kembali
