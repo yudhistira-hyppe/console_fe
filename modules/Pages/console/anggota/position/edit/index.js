@@ -233,7 +233,7 @@ const RichObjectTreeView = () => {
   console.log('isSuccess:', isSuccess);
 
   useEffect(() => {
-    if (isSuccess) window.location.href = '/anggota?tab=jabatan';
+    if (isSuccess) window.location.href = `/anggota?tab=jabatan&edited=${isSuccess}`;
     if (isError) alert('error bang');
   }, [isSuccess, isError]);
 
