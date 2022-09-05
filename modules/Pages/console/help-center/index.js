@@ -34,12 +34,7 @@ const ConsoleHelpCenterComponent = () => {
 
       <GridContainer>
         <Grid item xs={12} md={6} sm={6}>
-          <CardWithIndicator
-            headTitle="Bantuan untuk Pengguna"
-            TypeProblem="Total Masalah"
-            numberOfProblem={70}
-            iconLabelRight
-          />
+          <CardWithIndicator headTitle="Bantuan Pengguna" TypeProblem="Total Masalah" numberOfProblem={70} iconLabelRight />
         </Grid>
         <Grid item xs={12} md={6} sm={6}>
           <CardWithIndicator headTitle="Keluhan Pengguna" TypeProblem="Total Masalah" numberOfProblem={230} iconLabelRight />

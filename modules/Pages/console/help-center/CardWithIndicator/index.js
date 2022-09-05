@@ -49,7 +49,7 @@ const Card = ({ headTitle, TypeProblem, numberOfProblem, pathIconLeft, iconLabel
             padding: '1px 3px',
             borderRadius: '3px',
           }}>
-          Bulan ini
+          Semua
         </Typography>
       </Stack>
     );
