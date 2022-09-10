@@ -13,8 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Card = ({ headTitle, TypeProblem, numberOfProblem, pathIconLeft, iconLabelLeft, iconLabelRight }) => {
-  console.log('iconLabelLeft:', iconLabelLeft);
+const Card = ({ headTitle, TypeProblem, numberOfProblem, pathIconLeft, iconLabelLeft, iconLabelRight, onClick, data }) => {
   const classes = useStyles();
   const wallets = [
     { label: 'Baru', value: 74, rate: 8.75, color: '#89CB00' },
@@ -45,9 +44,10 @@ const Card = ({ headTitle, TypeProblem, numberOfProblem, pathIconLeft, iconLabel
           component="div"
           style={{
             fontSize: '0.7rem',
-            border: '1px solid black',
-            padding: '1px 3px',
-            borderRadius: '3px',
+            // border: '1px solid black',
+            padding: '1px 18px',
+            borderRadius: '4px',
+            backgroundColor: '#F2F2F2',
           }}>
           Semua
         </Typography>
@@ -73,11 +73,11 @@ const Card = ({ headTitle, TypeProblem, numberOfProblem, pathIconLeft, iconLabel
             component: 'p',
             className: classes.subTitle,
           }}
-          extraContent={<ActionButtons />}
+          extraContent={<ActionButtons onClick={onClick} />}
           reverseDir>
           <PortfolioDetails
             // title={'Portfolio Distribution'}
-            data={wallets}
+            data={data}
           />
         </CmtAdvCardContent>
       </CmtAdvCard>

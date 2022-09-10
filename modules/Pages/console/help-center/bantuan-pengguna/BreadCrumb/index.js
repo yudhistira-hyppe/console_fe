@@ -22,7 +22,7 @@ export default function CustomSeparator({ breadcrumbs }) {
             );
           } else {
             return (
-              <Link underline="hover" key={i} color="inherit" href={el.link} onClick={handleClick}>
+              <Link underline="hover" key={i} color="inherit" href={el.link}>
                 {el.label}
               </Link>
             );

@@ -20,6 +20,7 @@ import AccountReportItem from './AccountReportItem';
 // request
 import { useAuth } from 'authentication';
 import { useUserGetNewCommentQuery } from 'api/user/comment';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -53,7 +54,15 @@ const AccountReport = () => {
   const { data: dataComment } = useUserGetNewCommentQuery(authUser.user.email);
   return (
     <CmtCard className={classes.cardRoot}>
-      <CmtCardHeader title="Pelaporan Akun Terahkir">
+      <CmtCardHeader
+        title={
+          <div>
+            <Typography variant="h4" component="span" style={{ marginLeft: '7px' }}>
+              Pelaporan Akun Terakhir
+            </Typography>
+            <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />
+          </div>
+        }>
         {/* please dont remove code below! this check/notif for readed and unreaded notification  */}
         {/* <Chip className={classes.chipRoot} label="23 New" color="primary" size="small" /> */}
       </CmtCardHeader>

@@ -16,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActionButtons = () => {
+const ActionButtons = ({ onClick }) => {
   const classes = useStyles();
 
   return (
     <Box mt={{ xs: 6, md: 8, xl: 10 }}>
       <Box mb={{ xs: 4, md: 6 }} display="flex" flexDirection="row" flexWrap="wrap">
         <div className={clsx('mr-2', 'mb-2')}>
-          <Button className={classes.button} variant="contained" color="rgba(171, 34, 175, 1)">
+          <Button className={classes.button} variant="contained" color="rgba(171, 34, 175, 1)" onClick={onClick}>
             Lihat
           </Button>
         </div>

@@ -7,6 +7,7 @@ import Nav from './BreadCrumb';
 import { Stack } from '@mui/material';
 import { Box, Link, Typography } from '@material-ui/core';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
+import { useRouter } from 'next/router';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -16,10 +17,16 @@ const breadcrumbs = [
 
 const ConsoleBantuanPenggunaComponent = () => {
   const [value, setValue] = useState(null);
-  const [order, setOrder] = useState('DESC');
+  const [order, setOrder] = useState('desc');
+  const router = useRouter();
 
   const onChangeOrderHandler = (val) => {
     setOrder(val);
+  };
+
+  const onBackHandler = (e) => {
+    e.preventDefault();
+    router.push('/console/help-center');
   };
 
   return (
@@ -30,7 +37,7 @@ const ConsoleBantuanPenggunaComponent = () => {
 
       <Stack direction={'column'} spacing={2} mb={3}>
         <Nav breadcrumbs={breadcrumbs} />
-        <Link href="/" style={{ cursore: 'pointer' }}>
+        <Link href="/" onClick={onBackHandler} style={{ cursore: 'pointer' }}>
           <Stack direction={'row'}>
             <Stack direction={'column'} justifyContent={'center'}>
               <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
