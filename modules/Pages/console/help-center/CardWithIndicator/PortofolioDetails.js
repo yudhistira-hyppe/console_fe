@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
 const PortfolioDetails = ({ data }) => {
   const classes = useStyles();
   return (
-    <Box width={1}>
+    <Box width={1} style={{ zIndex: -1 }}>
       {/* {title && (
         <Typography component="div" variant="h6" className={classes.titleRoot}>
           {title}

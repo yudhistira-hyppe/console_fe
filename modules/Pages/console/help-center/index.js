@@ -1,18 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import GridContainer from '@jumbo/components/GridContainer';
-import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import CmtAdvCard from '@coremat/CmtAdvCard';
-import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
-import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
-import OverallBalance from './CardWithIndicator/OverAllBalances';
-import ActionButtons from './CardWithIndicator/ActionButtons';
-import PortfolioDetails from './CardWithIndicator/PortofolioDetails';
-// import CardMenuHelpCenterComponent from './CardMenuHelpCenterComponent';
+import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer'; // import CardMenuHelpCenterComponent from './CardMenuHelpCenterComponent';
 import CardWithIndicator from './CardWithIndicator';
-import { Stack } from '@mui/material';
 import AccountReport from './AccountReport';
 import ContentReport from './ContentReport';
 import AdsReport from './adsReport';
@@ -58,6 +50,68 @@ const dataLaporanIklan = [
 
 const ConsoleHelpCenterComponent = () => {
   const router = useRouter();
+  const [bantuanPenggunaStatus, setBantuanPenggunaStatus] = useState('Semua');
+  const [premiumAkunStatus, setpremiumAkunStatus] = useState('Semua');
+  const [laporanAkunStatus, setlaporanAkunStatus] = useState('Semua');
+  const [laporanKontenStatus, setlaporanKontenStatus] = useState('Semua');
+  const [laporanIklanStatus, setlaporanIklanStatus] = useState('Semua');
+  const [fetchingList, setFetchingList] = useState({
+    bantuanPengguna: true,
+    premiumAkun: true,
+    laporanAkun: true,
+    laporanKonten: true,
+    laporanIklan: true,
+    listPelaporanAkun: true,
+    listPelaporanIklan: true,
+    listPelaporanKonten: true,
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFetchingList({
+        bantuanPengguna: false,
+        premiumAkun: false,
+        laporanAkun: false,
+        laporanKonten: false,
+        laporanIklan: false,
+        listPelaporanAkun: false,
+        listPelaporanIklan: false,
+        listPelaporanKonten: false,
+      });
+    }, 5000);
+  }, []);
+
+  const onStatusChangeHandler = (type, data) => {
+    switch (type.toLowerCase()) {
+      case 'bantuan pengguna':
+        if (data) {
+          setBantuanPenggunaStatus(data);
+        }
+        break;
+      case 'upgrade premium':
+        if (data) {
+          setpremiumAkunStatus(data);
+        }
+        break;
+      case 'laporan akun':
+        if (data) {
+          setlaporanAkunStatus(data);
+        }
+        break;
+      case 'laporan konten':
+        if (data) {
+          setlaporanKontenStatus(data);
+        }
+        break;
+      case 'laporan iklan':
+        if (data) {
+          setlaporanIklanStatus(data);
+        }
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <>
@@ -75,6 +129,9 @@ const ConsoleHelpCenterComponent = () => {
             iconLabelRight
             data={dataBantuanPengguna}
             onClick={() => router.push('/console/help-center/bantuan-pengguna')}
+            status={bantuanPenggunaStatus}
+            setStatusList={(val) => onStatusChangeHandler('bantuan pengguna', val)}
+            isFetching={fetchingList.bantuanPengguna}
           />
         </Grid>
         <Grid item xs={12} md={6} sm={6}>
@@ -84,7 +141,10 @@ const ConsoleHelpCenterComponent = () => {
             numberOfProblem={70}
             iconLabelRight
             data={dataPermohonanPremium}
+            status={premiumAkunStatus}
             onClick={() => router.push('/console/help-center/keluhan-pengguna')}
+            setStatusList={(val) => onStatusChangeHandler('upgrade premium', val)}
+            isFetching={fetchingList.premiumAkun}
           />
         </Grid>
 
@@ -96,6 +156,9 @@ const ConsoleHelpCenterComponent = () => {
             data={dataLaporanAkun}
             pathIconLeft={'/images/icons/account-circle.svg'}
             onClick={() => router.push('/console/help-center/pelaporan-akun')}
+            status={laporanAkunStatus}
+            setStatusList={(val) => onStatusChangeHandler('laporan akun', val)}
+            isFetching={fetchingList.laporanAkun}
           />
         </Grid>
         <Grid item xs={12} md={4} sm={4}>
@@ -104,8 +167,11 @@ const ConsoleHelpCenterComponent = () => {
             TypeProblem="Konten Dilaporkan"
             numberOfProblem={200}
             data={dataLaporanKonten}
+            status={laporanKontenStatus}
             pathIconLeft={'/images/icons/img-empty.svg'}
             onClick={() => router.push('/console/help-center/pelaporan-konten')}
+            setStatusList={(val) => onStatusChangeHandler('laporan kontent', val)}
+            isFetching={fetchingList.laporanKonten}
           />
         </Grid>
         <Grid item xs={12} md={4} sm={4}>
@@ -114,20 +180,23 @@ const ConsoleHelpCenterComponent = () => {
             TypeProblem="Iklan Dilaporkan"
             numberOfProblem={25}
             data={dataLaporanIklan}
+            status={laporanIklanStatus}
             pathIconLeft={'/images/icons/ads-icon.svg'}
             onClick={() => router.push('/console/help-center/pelaporan-iklan')}
+            setStatusList={(val) => onStatusChangeHandler('laporan iklan', val)}
+            isFetching={fetchingList.laporanIklan}
           />
         </Grid>
 
         {/* --------- card section 2 (without indicator) --------------------*/}
         <Grid item xs={12} md={4} sm={4}>
-          <AccountReport />
+          <AccountReport isFetching={fetchingList.listPelaporanAkun} />
         </Grid>
         <Grid item xs={12} md={4} sm={4}>
-          <ContentReport />
+          <ContentReport isFetching={fetchingList.listPelaporanKonten} />
         </Grid>
         <Grid item xs={12} md={4} sm={4}>
-          <AdsReport />
+          <AdsReport isFetching={fetchingList.listPelaporanIklan} />
         </Grid>
       </GridContainer>
 

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NavMenuItem = (props) => {
   const { authUser } = useAuth();
-  const { name, icon, link, handleClick } = props;
+  const { name, icon, link, handleClick, children } = props;
   const classes = useStyles();
   const router = useRouter();
 
@@ -108,7 +108,7 @@ const NavMenuItem = (props) => {
           className={clsx(
             classes.navMenuLink,
             {
-              active: link === router.pathname,
+              active: link === router.pathname || children?.includes(router.pathname),
             },
             'Cmt-nav-menu-link',
           )}>

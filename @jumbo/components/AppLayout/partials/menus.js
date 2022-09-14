@@ -129,6 +129,18 @@ export const consoleNav = [
     name: 'Pusat Bantuan',
     type: 'item',
     link: '/console/help-center',
+    children: [
+      '/console/help-center/bantuan-pengguna',
+      '/console/help-center/bantuan-pengguna/detail',
+      '/console/help-center/keluhan-pengguna',
+      '/console/help-center/keluhan-pengguna/detail',
+      '/console/help-center/pelaporan-akun',
+      '/console/help-center/pelaporan-akun/detail',
+      '/console/help-center/pelaporan-iklan',
+      '/console/help-center/pelaporan-iklan/detail',
+      '/console/help-center/pelaporan-konten',
+      '/console/help-center/pelaporan-konten/detail',
+    ],
   },
   {
     name: 'Pusat Iklan',

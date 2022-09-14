@@ -23,6 +23,9 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import CheckCircleIcon from '@material-ui/icons/CheckCircleRounded';
 import Image from 'next/image';
 import CardMedia from '@material-ui/core/CardMedia';
+import ModalConfirmation from '../Modal';
+import DeleteModal from '../Modal/DeleteModal';
+import ViewModal from '../Modal/ViewModal';
 
 const wallets = [
   { label: 'Mempromosikan Kekerasan Ekstrim Dan Terorisme', value: 25, rate: 5, color: '#E31D41' },
@@ -38,12 +41,98 @@ const breadcrumbs = [
   { label: 'Rincian Konten', isActive: true },
 ];
 
+const akunPelapor = [
+  {
+    name: 'Hamdani',
+    email: 'hamdani@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:29 WIB',
+    alasan: 'Akun ini mempromosikan kekerasan ekstrim dan terorisme',
+  },
+  {
+    name: 'Bernardo',
+    email: 'bernardo@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:49 WIB',
+    alasan: 'Akun ini berisikan konten dewasa',
+  },
+  {
+    name: 'Anna',
+    email: 'anna999@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:27 WIB',
+    alasan: 'Akun ini berisikan konten dewasa',
+  },
+  {
+    name: 'Michael',
+    email: 'Michael@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:21 WIB',
+    alasan: 'Akun ini melanggar EULA',
+  },
+  {
+    name: 'Clara',
+    email: 'claraasik99@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:51 WIB',
+    alasan: 'Akun ini melanggar EULA',
+  },
+  {
+    name: 'OliviaRosalina',
+    email: 'oliviarosalina@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:26 WIB',
+    alasan: 'Keamanan anak dibawah umur',
+  },
+  {
+    name: 'DeDeaDeasy',
+    email: 'deasyc@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:30 WIB',
+    alasan: 'Keamanan anak dibawah umur',
+  },
+  { name: 'Rene', email: 'irene@gmail.com', tanggal_pelaporan: '22/08/05-13:56 WIB', alasan: 'Keamanan anak dibawah umur' },
+  {
+    name: 'Keisya',
+    email: 'keisyairvi@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:47 WIB',
+    alasan: 'Akun ini berisikan konten dewasa',
+  },
+  {
+    name: 'Jonathan',
+    email: 'jonathan@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:15 WIB',
+    alasan: 'Akun ini memposting ujaran kebencian atau perilaku berbahaya',
+  },
+];
+
+const laporan = [
+  { total: 20, status: null },
+  { total: 384, status: 'Tidak Ditangguhkan' },
+  { total: 40, status: 'Ditangguhkan' },
+  { total: 40, status: 'Ditangguhkan' },
+];
+
 const DetailKeluhanPengguna = () => {
   const router = useRouter();
+  const [showModal, setShowModal] = React.useState({
+    show: false,
+    type: null,
+    modalType: null,
+  });
 
   const onBackHandler = (e) => {
     e.preventDefault();
     router.push('/console/help-center');
+  };
+
+  const showModalHandler = (data) => {
+    setShowModal({
+      show: true,
+      type: data.type,
+      modalType: data.modalType,
+    });
+  };
+
+  const onCloseModal = () => {
+    setShowModal({
+      show: false,
+      type: null,
+      modalType: null,
+    });
   };
 
   return (
@@ -86,7 +175,11 @@ const DetailKeluhanPengguna = () => {
                   <Stack direction={'column'} justifyContent={'space-between'} flex={1}>
                     <Stack spacing={1}>
                       <Typography variant="h2">20</Typography>
-                      <Typography variant="body2" color="primary">
+                      <Typography
+                        variant="body2"
+                        color="primary"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => showModalHandler({ modalType: 'view' })}>
                         Total Laporan
                       </Typography>
                     </Stack>
@@ -111,17 +204,23 @@ const DetailKeluhanPengguna = () => {
           <Card style={{ padding: '42px 25px', flex: 1 }}>
             <Stack spacing={4}>
               <Stack spacing={2}>
-                <Button variant="outlined" color="primary">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}>
                   Tidak Ditangguhkan
                 </Button>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}>
                   Ditangguhkan
                 </Button>
               </Stack>
 
               <Stack direction={'column'} spacing={1} mt={5}>
                 <Typography>
-                  Ingin dihapus? <Link style={{ fontWeight: 'bold', cursor: 'pointer' }}>klik disini</Link>
+                  Ingin dihapus? <Link style={{ fontWeight: 'bold', cursor: 'pointer', textDecorationLine: 'none' }} onClick={() => showModalHandler({ modalType: 'delete' })}>klik disini</Link>
                 </Typography>
 
                 <Paper
@@ -299,6 +398,14 @@ const DetailKeluhanPengguna = () => {
             </Paper>
           </div>
         </Stack>
+
+        <ModalConfirmation
+          showModal={showModal.show && showModal.modalType === 'confirmation'}
+          type={showModal.type}
+          onClose={onCloseModal}
+        />
+        <DeleteModal showModal={showModal.show && showModal.modalType === 'delete'} onClose={onCloseModal} />
+        <ViewModal data={akunPelapor} showModal={showModal.show && showModal.modalType === 'view'} onClose={onCloseModal} />
       </PageContainer>
     </>
   );

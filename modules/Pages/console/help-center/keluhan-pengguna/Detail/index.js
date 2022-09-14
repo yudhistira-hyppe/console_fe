@@ -6,7 +6,6 @@ import { Stack } from '@mui/material';
 import {
   alpha,
   Avatar,
-  Box,
   Button,
   Card,
   CardContent,
@@ -16,7 +15,6 @@ import {
   InputBase,
   InputLabel,
   Link,
-  TextField,
   Typography,
 } from '@material-ui/core';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
@@ -30,6 +28,7 @@ import WCIcon from '@material-ui/icons/Wc';
 import PhoneIcon from '@material-ui/icons/PhoneIphone';
 import HouseIcon from '@material-ui/icons/LocationCity';
 import { styled } from '@material-ui/styles';
+import ModalConfirmation from '../Modal';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -40,10 +39,32 @@ const breadcrumbs = [
 
 const DetailKeluhanPengguna = () => {
   const router = useRouter();
+  const [modal, setModal] = React.useState({
+    show: false,
+    type: 'approve',
+  });
 
   const onBackHandler = (e) => {
     e.preventDefault();
     router.push('/console/help-center');
+  };
+
+  const modalOpenHandler = (type) => {
+    setModal({
+      show: true,
+      type,
+    });
+  };
+
+  const onConfirmHandler = () => {
+    onCloseHandler();
+  };
+
+  const onCloseHandler = () => {
+    setModal({
+      show: false,
+      type: null,
+    });
   };
 
   const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -339,17 +360,22 @@ const DetailKeluhanPengguna = () => {
 
               <Stack>
                 <div>
-                    <img />
+                  <img />
                 </div>
               </Stack>
 
               <Stack direction={'row'} spacing={1} justifyContent={'center'}>
-                <Button disabled variant="contained">Setujui</Button>
-                <Button variant="outlined">Tolak</Button>
+                <Button disabled variant="contained" onClick={() => modalOpenHandler('approve')}>
+                  Setujui
+                </Button>
+                <Button variant="outlined" onClick={() => modalOpenHandler('denied')}>
+                  Tolak
+                </Button>
               </Stack>
             </CardContent>
           </Card>
         </Stack>
+        <ModalConfirmation type={modal.type} showModal={modal.show} onConfirm={onConfirmHandler} onClose={onCloseHandler} />
       </PageContainer>
     </>
   );
