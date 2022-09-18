@@ -1,76 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import Head from 'next/head';
-// import { useRouter } from 'next/router';
-import { Grid } from '@material-ui/core';
-import { useGetAccountBalanceQuery } from 'api/user/user';
-import { formatCurrency } from 'helpers/stringHelper';
-import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import CardInfoSaldoComponent from './CardInfoSaldo';
-import CardMenuMonetizeComponent from './CardMenuMonetize';
-const iconVideo = '/images/nurse.svg';
-const iconContent = '/images/icons/icon_content.png';
-const iconVoucher = '/images/icons/icon_voucher.png';
-
-const breadcrumbs = [
-  { label: 'Home', link: '/console' },
-  { label: 'Monetize', isActive: true },
-];
+import Head from 'next/head';
+import React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import MonetizeDashboard from './Dashboard';
+import MonetizeVoucher from './voucher';
+import { Stack } from '@mui/system';
+import { Button } from '@material-ui/core';
+import { TabContext, TabPanel } from '@material-ui/lab';
 
 const ConsoleMonetizeComponent = () => {
-  // const router = useRouter();
-  const { data: accountBalance } = useGetAccountBalanceQuery({});
-  const [totalBalance, setTotalBalance] = useState('');
-  const [totalWithdrawal, setTotalWithdrawal] = useState('');
+  const [value, setValue] = React.useState(2);
 
-  useEffect(() => {
-    if (accountBalance) {
-      setTotalBalance(`Rp ${formatCurrency(accountBalance.data[0].totalsaldo)}`);
-      setTotalWithdrawal(`Rp ${formatCurrency(accountBalance.data[0].totalpenarikan)}`);
-    }
-  }, [accountBalance]);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Monetize</title>
       </Head>
-      <PageContainer heading="Monetize" breadcrumbs={breadcrumbs}>
-        <GridContainer>
-          <Grid item xs={12} sm={6} md={6}>
-            <CardInfoSaldoComponent saldo={totalBalance} title="Total Saldo Hyppe" backgroundColor="#FFFFFF" />
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <CardInfoSaldoComponent saldo={totalWithdrawal} title="Total Penarikan Saldo Hyppe" backgroundColor="#FFFFFF" />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardMenuMonetizeComponent
-              // clickedElement={() => router.push('/console/monetize/pendaftaran_konten')}
-              icon={'/images/nurse.svg'}
-              title="Pendaftaran Konten"
-              // subtitle="0 Pendaftaran Baru"
-              // backgroundColor="#8E49F0"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardMenuMonetizeComponent
-              // clickedElement={() => router.push('/console/monetize/konten')}
-              icon={'/images/earn-money.svg'}
-              title="Konten"
-              subtitle="496 Konten Baru"
-              // backgroundColor="#5AB9FE"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <CardMenuMonetizeComponent
-              // clickedElement={() => router.push('/console/monetize/voucher')}
-              icon={'/images/online-reservation.svg'}
-              title="Voucher Campaign"
-              subtitle="422 Pengguna Melakukan Permintaan Voucher"
-              // backgroundColor="#C076FB"
-            />
-          </Grid>
-        </GridContainer>
+      <PageContainer>
+        <TabContext value={value}>
+          <Stack direction={'row'} justifyContent={'space-between'}>
+            <div>
+              <Tabs className="mb-5" value={value} onChange={handleChange} aria-label="disabled tabs example">
+                <Tab label="Dashboard" value="0" />
+                <Tab label="Voucher" value="1" />
+                <Tab label="Kepemilikan" value="2" />
+                <Tab label="Jual-Beli Konten" value="3" />
+              </Tabs>
+            </div>
+            <Stack direction={'column'} justifyContent={'center'}>
+              <div>
+                <Button variant="contained" color="primary">
+                  Kelola voucher
+                </Button>
+              </div>
+            </Stack>
+          </Stack>
+          <TabPanel value="0">
+            <MonetizeDashboard />
+          </TabPanel>
+          <TabPanel value="1">
+            <MonetizeVoucher />
+          </TabPanel>
+        </TabContext>
       </PageContainer>
     </>
   );

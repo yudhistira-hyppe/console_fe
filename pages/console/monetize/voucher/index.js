@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const ConsoleVoucherComponent = dynamic(() => import('modules/Pages/console/monetize/voucher'), {
+const ConsoleKelolaVoucherComponent = dynamic(() => import('modules/Pages/console/monetize/Voucher/Kelola-Voucher'), {
   loading: () => <PageLoader />,
 });
 
-const ConsoleVoucherPage = () => (
+const ConsoleKelolaVoucherPage = () => (
   <SecureConsolePage>
-    <ConsoleVoucherComponent />
+    <ConsoleKelolaVoucherComponent />
   </SecureConsolePage>
 );
 
-export default ConsoleVoucherPage;
+export default ConsoleKelolaVoucherPage;
