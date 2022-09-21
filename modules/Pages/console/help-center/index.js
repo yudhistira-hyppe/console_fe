@@ -78,7 +78,7 @@ const ConsoleHelpCenterComponent = () => {
         listPelaporanIklan: false,
         listPelaporanKonten: false,
       });
-    }, 5000);
+    }, 1000);
   }, []);
 
   const onStatusChangeHandler = (type, data) => {

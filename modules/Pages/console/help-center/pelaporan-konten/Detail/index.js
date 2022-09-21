@@ -16,6 +16,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import ModalConfirmation from '../Modal';
 import DeleteModal from '../Modal/DeleteModal';
 import ViewModal from '../Modal/ViewModal';
+import { GraphIndicator } from '../../components';
 
 const wallets = [
   { label: 'Mempromosikan Kekerasan Ekstrim Dan Terorisme', value: 25, rate: 5, color: '#E31D41' },
@@ -27,7 +28,7 @@ const wallets = [
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
   { label: 'Help Center', link: '/console/help-center' },
-  { label: 'Pelaporan Konten', link: '/console/pelaporan-akun' },
+  { label: 'Pelaporan Konten', link: '/console/help-center/pelaporan-akun' },
   { label: 'Rincian Konten', isActive: true },
 ];
 
@@ -99,7 +100,7 @@ const DetailKeluhanPengguna = () => {
 
   const onBackHandler = (e) => {
     e.preventDefault();
-    router.push('/console/help-center');
+    router.push('/console/help-center/pelaporan-akun');
   };
 
   const showModalHandler = (data) => {
@@ -179,7 +180,8 @@ const DetailKeluhanPengguna = () => {
                   </Stack>
 
                   <Stack flex={3}>
-                    <PortfolioDetails data={wallets} />
+                    <GraphIndicator data={wallets} />
+                    {/* <PortfolioDetails data={wallets} /> */}
                   </Stack>
                 </Stack>
               </Stack>

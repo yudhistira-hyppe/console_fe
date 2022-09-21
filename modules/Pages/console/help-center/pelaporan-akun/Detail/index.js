@@ -27,6 +27,9 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
+import CmtList from '@coremat/CmtList';
+import ProgressIndicator from '../../CardWithIndicator/ProgressIndicator';
+import { GraphIndicator } from '../../components';
 
 const wallets = [
   { label: 'Mempromosikan Kekerasan Ekstrim Dan Terorisme', value: 25, rate: 5, color: '#E31D41' },
@@ -125,7 +128,7 @@ const DetailKeluhanPengguna = () => {
   };
 
   const onBackHandler = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     router.push('/console/help-center');
   };
 
@@ -188,7 +191,9 @@ const DetailKeluhanPengguna = () => {
               </Stack>
 
               <Stack>
-                <PortfolioDetails data={wallets} />
+                <GraphIndicator data={wallets} />
+                {/* <CmtList data={wallets} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} /> */}
+                {/* <PortfolioDetails data={wallets} /> */}
               </Stack>
             </Stack>
           </Card>

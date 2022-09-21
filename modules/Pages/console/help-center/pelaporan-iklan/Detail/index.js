@@ -4,28 +4,18 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import Breadcrumbs from '../../bantuan-pengguna/BreadCrumb';
 import { Stack } from '@mui/material';
 
-import { Avatar, Button, Card, CardContent, CardHeader, Chip, Divider, Link, Paper, Typography } from '@material-ui/core';
+import { Avatar, Button, Card, CardContent, Divider, Link, Paper, Typography } from '@material-ui/core';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
-import { ToggleButton } from '@material-ui/lab';
-import CmtList from '@coremat/CmtList';
-import PortfolioDetails from '../../CardWithIndicator/PortofolioDetails';
 import EmailIcon from '@material-ui/icons/EmailOutlined';
 import CalendarIcon from '@material-ui/icons/CalendarTodayOutlined';
 import UserIcon from '@material-ui/icons/PersonOutlined';
-import LocationIcon from '@material-ui/icons/LocationOn';
-import CakeIcon from '@material-ui/icons/Cake';
-import WCIcon from '@material-ui/icons/Wc';
-import PhoneIcon from '@material-ui/icons/PhoneIphone';
-import HouseIcon from '@material-ui/icons/LocationCity';
 import CircledUserIcon from '@material-ui/icons/AccountCircleRounded';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import CheckCircleIcon from '@material-ui/icons/CheckCircleRounded';
-import Image from 'next/image';
 import CardMedia from '@material-ui/core/CardMedia';
 import ModalConfirmation from '../Modal';
 import DeleteModal from '../Modal/DeleteModal';
 import ViewModal from '../Modal/ViewModal';
+import { GraphIndicator } from '../../components';
 
 const wallets = [
   { label: 'Mempromosikan Kekerasan Ekstrim Dan Terorisme', value: 25, rate: 5, color: '#E31D41' },
@@ -37,7 +27,7 @@ const wallets = [
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
   { label: 'Help Center', link: '/console/help-center' },
-  { label: 'Pelaporan Iklan', link: '/console/pelaporan-akun' },
+  { label: 'Pelaporan Iklan', link: '/console/help-center/pelaporan-akun' },
   { label: 'Rincian Konten', isActive: true },
 ];
 
@@ -194,7 +184,7 @@ const DetailKeluhanPengguna = () => {
                   </Stack>
 
                   <Stack flex={3}>
-                    <PortfolioDetails data={wallets} />
+                    <GraphIndicator data={wallets} />
                   </Stack>
                 </Stack>
               </Stack>
