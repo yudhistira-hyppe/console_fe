@@ -55,7 +55,7 @@ const CardChartComponent = ({ dataChart, title, amount, colorGradient, colorStop
         <Area
           dataKey={dataKey}
           type="monotone"
-          strokeWidth={2}
+          strokeWidth={3}
           stackId="2"
           stroke={colorStop1}
           fill={`url(#${colorGradient})`}

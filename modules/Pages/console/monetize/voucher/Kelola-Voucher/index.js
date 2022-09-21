@@ -88,7 +88,10 @@ const KelolaVoucherComponent = () => {
                   <Typography fontWeight="bold">Daftar Voucher</Typography>
                 </Stack>
                 <div>
-                  <Button variant="contained" color="primary">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => router.push('/console/monetize/voucher/create')}>
                     Buat Voucher
                   </Button>
                 </div>
@@ -148,7 +151,11 @@ const KelolaVoucherComponent = () => {
                       <Switch onClick={onChangeStatusHandler} checked={status} />
                     </TableCell>
                     <TableCell align="left">
-                      <EditIcon htmlColor="#DADADA" style={{ cursor: 'pointer' }} />
+                      <EditIcon
+                        htmlColor="#DADADA"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => router.push('/console/monetize/voucher/1')}
+                      />
                     </TableCell>
                   </TableRow>
                 </TableBody>

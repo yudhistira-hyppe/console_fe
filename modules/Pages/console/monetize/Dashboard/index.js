@@ -125,9 +125,9 @@ const MonetizeDashboardComponent = () => {
             title={'Jual Beli Konten'}
             amount={'Rp 16.500.000'}
             dataChart={ripple}
-            colorGradient={'color18'}
-            colorStop1={'rgba(229, 157, 30, 1)'}
-            colorStop2={'rgba(217, 217, 217, 0)'}
+            colorGradient={'color16'}
+            colorStop1={'rgba(215, 41, 52, 1)'}
+            colorStop2={'rgba(244, 229, 246, 0)'}
             dataKey={'price'}
             status={jualBeliKontenStatus}
             setStatusList={(val) => changeStatusHandler(val, 'jualBeliKonten')}
@@ -138,9 +138,9 @@ const MonetizeDashboardComponent = () => {
             title={'Pendaftaran Kepemilikan'}
             amount={'Rp 16.500.000'}
             dataChart={ripple}
-            colorGradient={'color18'}
-            colorStop1={'rgba(229, 157, 30, 1)'}
-            colorStop2={'rgba(217, 217, 217, 0)'}
+            colorGradient={'color12'}
+            colorStop1={'rgba(180, 87, 246, 1)'}
+            colorStop2={'rgba(244, 229, 246, 0)'}
             dataKey={'price'}
             status={pendapatanKepemilikanStatus}
             setStatusList={(val) => changeStatusHandler(val, 'pendapatanKepemilikan')}

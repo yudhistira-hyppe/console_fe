@@ -20,10 +20,6 @@ import { useRouter } from 'next/router';
 import Pagination from '@mui/material/Pagination';
 
 const TableSection = ({ onOrderChange, order, total, page, rows }) => {
-  const router = useRouter();
-  const onSelectData = () => {
-    router.push('/console/help-center/bantuan-pengguna/detail');
-  };
   return (
     <Stack flex={1}>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
@@ -68,7 +64,7 @@ const TableSection = ({ onOrderChange, order, total, page, rows }) => {
           </TableHead>
 
           <TableBody>
-            <TableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={onSelectData}>
+            <TableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
                 <Typography variant="body1" style={{ fontSize: '12px' }}>
                   004/22/08/22

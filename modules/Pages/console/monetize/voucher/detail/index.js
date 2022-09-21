@@ -3,7 +3,6 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import {
   Card,
   FormControl,
-  Input,
   InputLabel,
   FormHelperText,
   FormControlLabel,
@@ -12,6 +11,8 @@ import {
   Button,
   Link,
   Typography,
+  makeStyles,
+  Divider,
 } from '@material-ui/core';
 import React from 'react';
 import { Grid } from '@material-ui/core';
@@ -19,26 +20,50 @@ import { alpha, styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import { FormLabel } from '@mui/material';
 import Ckeditor from 'react-ckeditor-component/lib/ckeditor';
 import { Stack } from '@mui/system';
 import Head from 'next/head';
 import Breadcrumbs from 'modules/Pages/console/help-center/bantuan-pengguna/BreadCrumb';
 import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
+import { ModalCreateVoucher } from '../../components';
 
-const breadcrumbs = [
-  { label: 'Home', link: '/console' },
-  { label: 'Monetisasi', link: '/console/monetize' },
-  { label: 'Voucher', link: '/console/monetize/voucher' },
-  { label: 'Buat Voucher', isActive: true },
-];
+const useStyles = makeStyles((theme) => ({
+  inputLabel: {
+    color: '#151B26',
+    fontWeight: 'bold',
+  },
+  requiredMark: {
+    color: 'red',
+  },
+  optionalText: {
+    color: 'rgba(115, 115, 115, 1)',
+    fontSize: '14px',
+  },
+}));
 
-const VoucherFormComponent = () => {
+const VoucherFormComponent = ({ data }) => {
+  const breadcrumbs = [
+    { label: 'Home', link: '/console' },
+    { label: 'Monetisasi', link: '/console/monetize' },
+    { label: 'Voucher', link: '/console/monetize/voucher' },
+    { label: data ? 'Ubah Voucher' : 'Buat Voucher', isActive: true },
+  ];
+  const [val, setVal] = React.useState({
+    name: null,
+    kode: null,
+    kredit: null,
+    bonus: null,
+    stok: null,
+    exp: null,
+    sdk: null,
+  });
+  const [showModal, setShowModal] = React.useState(false);
   const router = useRouter();
+  const classes = useStyles();
   const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
-      marginTop: theme.spacing(3),
+      marginTop: theme.spacing(7),
     },
     '& .MuiInputBase-input': {
       borderRadius: 4,
@@ -68,10 +93,41 @@ const VoucherFormComponent = () => {
     },
   }));
 
-  const onBackHandler = () => {
-    router.push('/console/help-center/bantuan-pengguna');
+  const onExpChange = (event) => {
+    setVal({
+      ...val,
+      exp: event.target.value,
+    });
   };
 
+  const onInputChange = (event) => {
+    event.preventDefault();
+    setVal({
+      ...val,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const onCkeditorChange = (event) => {
+    const newContent = event.editor.getData();
+    setVal({
+      ...val,
+      sdk: newContent,
+    });
+  };
+
+  const onBackHandler = () => {
+    router.push('/console/monetize/voucher');
+  };
+
+  const onConfirm = () => {
+    setShowModal(false);
+  };
+
+  const onCancel = () => {
+    setShowModal(false);
+  }
+ 
   return (
     <>
       <Head>
@@ -95,71 +151,135 @@ const VoucherFormComponent = () => {
       </Stack>
 
       <PageContainer>
-        <Card style={{ padding: 25 }}>
-          <GridContainer style={{ marginBottom: '1em' }}>
+        <Card style={{ padding: 25, paddingTop: 0 }}>
+          <GridContainer>
             <Grid item xs={12} md={6} sm={6}>
               <FormControl variant="standard" style={{ width: '100%' }}>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Nama Voucher
+                <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
+                  Nama Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput placeholder="Tulis Nama Voucher" id="bootstrap-input" />
+                <BootstrapInput
+                  name="name"
+                  placeholder="Tulis Nama Voucher"
+                  id="bootstrap-input"
+                  value={val?.name}
+                  onChange={onInputChange}
+                  readOnly={data}
+                  disabled={data}
+                />
               </FormControl>
             </Grid>
             <Grid item xs={12} md={6} sm={6}>
               <FormControl variant="standard" style={{ width: '100%' }}>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Kode Voucher
+                <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
+                  Kode Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput placeholder="Tulis Kode Voucher" id="bootstrap-input" />
+                <BootstrapInput
+                  name="voucher"
+                  placeholder="Tulis Kode Voucher"
+                  id="bootstrap-input"
+                  value={val?.kode}
+                  onChange={onInputChange}
+                  readOnly={data}
+                  disabled={data}
+                />
                 <FormHelperText>Penamaan kode voucher disarankan lebih dari 5 karakter</FormHelperText>
               </FormControl>
             </Grid>
           </GridContainer>
 
-          <GridContainer style={{ marginBottom: '1em' }}>
+          <GridContainer>
             <Grid item xs={12} md={6} sm={6}>
               <FormControl variant="standard" style={{ width: '100%' }}>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Jumlah Kredit
+                <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
+                  Jumlah Kredit<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput placeholder="Tulis Jumlah Kredit" id="bootstrap-input" />
+                <BootstrapInput
+                  name="kredit"
+                  placeholder="Tulis Jumlah Kredit"
+                  id="bootstrap-input"
+                  value={val?.kredit}
+                  onChange={onInputChange}
+                />
                 <FormHelperText>1 kredit = Rp 1.500,-</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12} md={6} sm={6}>
               <FormControl variant="standard" style={{ width: '100%' }}>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Jumlah Bonus Kredit
+                <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
+                  Jumlah Bonus Kredit<span className={classes.optionalText}>{` (Jika ada)`}</span>
                 </InputLabel>
-                <BootstrapInput placeholder="Tulis Jumlah Bonus" id="bootstrap-input" />
+                <BootstrapInput
+                  name="bonus"
+                  placeholder="Tulis Jumlah Bonus"
+                  id="bootstrap-input"
+                  value={val?.bonus}
+                  onChange={onInputChange}
+                />
                 <FormHelperText>1 kredit = Rp 0,-</FormHelperText>
               </FormControl>
             </Grid>
           </GridContainer>
 
-          <GridContainer style={{ marginBottom: '1em' }}>
+          <GridContainer>
             <Grid item xs={12} md={6} sm={6}>
               <FormControl variant="standard" style={{ width: '100%' }}>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Jumlah Stok Voucher
+                <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
+                  Jumlah Stok Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput placeholder="Tulis Jumlah Voucher" id="bootstrap-input" />
+                <BootstrapInput
+                  name="stok"
+                  placeholder="Tulis Jumlah Voucher"
+                  id="bootstrap-input"
+                  value={val?.stock}
+                  onChange={onInputChange}
+                />
                 <FormHelperText>Jumlah voucher dapat disesuaikan dengan kebutuhan</FormHelperText>
               </FormControl>
             </Grid>
           </GridContainer>
 
           <GridContainer style={{ marginBottom: '1em' }}>
-            <Grid item xs={12} md={6} sm={6}>
+            <Grid item xs={12} md={8} sm={8}>
               <FormControl variant="standard" style={{ width: '100%' }}>
-                <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
-                <RadioGroup row>
-                  <FormControlLabel control={<Radio />} label={'30 Hari'} />
-                  <FormControlLabel control={<Radio />} label={'60 Hari'} />
-                  <FormControlLabel control={<Radio />} label={'90 Hari'} />
+                <div className="mb-2">
+                  <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
+                    Masa Berlaku Voucher<span className={classes.requiredMark}>*</span>
+                  </InputLabel>
+                </div>
+                <RadioGroup row className="mt-8">
                   <FormControlLabel
+                    onChange={onExpChange}
+                    checked={val?.exp === '30'}
+                    value="30"
                     control={<Radio />}
-                    label={<BootstrapInput placeholder="Masukkan Jumlah Hari" id="bootstrap-input" />}
+                    label={'30 Hari'}
+                  />
+                  <FormControlLabel
+                    onChange={onExpChange}
+                    checked={val?.exp === '60'}
+                    value="60"
+                    control={<Radio />}
+                    label={'60 Hari'}
+                  />
+                  <FormControlLabel
+                    onChange={onExpChange}
+                    checked={val?.exp === '90'}
+                    value="90"
+                    control={<Radio />}
+                    label={'90 Hari'}
+                  />
+                  <FormControlLabel
+                    onChange={onExpChange}
+                    value="other"
+                    control={<Radio />}
+                    label={
+                      <BootstrapInput
+                        placeholder="Masukkan Jumlah Hari"
+                        id="bootstrap-input"
+                        disabled={val?.exp !== 'other'}
+                      />
+                    }
                   />
                 </RadioGroup>
               </FormControl>
@@ -168,9 +288,21 @@ const VoucherFormComponent = () => {
         </Card>
 
         <Card style={{ marginTop: '2em' }}>
-          <CardHeader title={'Syarat Dan Ketentuan'} />
+          <CardHeader
+            title={
+              <Stack spacing={2}>
+                <Typography style={{ fontWeight: 'bold', fontSize: 'large' }}>
+                  Syarat dan Ketentuan<span className={classes.requiredMark}>*</span>
+                </Typography>
+                <Divider />
+              </Stack>
+            }
+          />
           <CardContent>
             <Ckeditor
+              events={{
+                change: onCkeditorChange,
+              }}
               config={{
                 toolbarLocation: 'bottom',
                 toolbarGroups: [
@@ -195,15 +327,20 @@ const VoucherFormComponent = () => {
 
         <Stack direction="row" mt={3} spacing={3}>
           <div>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              // disabled={!val?.name || !val?.kode || !val?.kredit || !val?.stok || !val?.exp || (!val?.sdk && !data)}>
+              onClick={() => setShowModal(true)}>
               Simpan
             </Button>
           </div>
           <div>
-            <Button>Batal</Button>
+            <Button onClick={() => setShowModal(false)}>Batal</Button>
           </div>
         </Stack>
       </PageContainer>
+      <ModalCreateVoucher showModal={showModal} onConfirm={onConfirm} onCancel={onCancel} />
     </>
   );
 };
