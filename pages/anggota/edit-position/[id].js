@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const ConsoleDashboardComponent = dynamic(() => import('modules/Pages/console/dashboards'), {
+const EditPositionAnggotaModule = dynamic(() => import('modules/Pages/console/anggota/position/edit'), {
   loading: () => <PageLoader />,
 });
 
-const ConsoleDashboardPage = () => (
+const ConsoleEditAnggotaPage = () => (
   <SecureConsolePage>
-    <ConsoleDashboardComponent />
+    <EditPositionAnggotaModule />
   </SecureConsolePage>
 );
 
-export default ConsoleDashboardPage;
+export default ConsoleEditAnggotaPage;

@@ -1,6 +1,20 @@
 import React, { useEffect } from 'react';
-import { Box, Dialog, DialogContent, makeStyles, Slide, Snackbar, TextField, Typography } from '@material-ui/core';
-import { Alert, Button, Pagination, Stack } from '@mui/material';
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  makeStyles,
+  Modal,
+  Slide,
+  StylesProvider,
+  Switch,
+  TextField,
+  Typography,
+} from '@material-ui/core';
+import { Button, Pagination, Stack } from '@mui/material';
 import { useState } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from '@mui/material/Table';
@@ -17,8 +31,7 @@ import Menu from '@mui/material/Menu';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
-import { useGetGroupQuery, useDeleteGroupMutation } from 'api/console/group';
-import Link from 'next/link';
+import { useGetAnggotaQuery, useDeleteAnggotaMutation, useUpdateStatusGroupUserMutation } from 'api/console/getUserHyppe';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,48 +47,86 @@ const options = [
   {
     title: 'Ubah',
     icon: <img src="/images/icons/edit.svg" alt="icon edit" />,
-  },
-  {
-    title: 'Hapus',
-    icon: <img src="/images/icons/trash.svg" alt="icon edit" />,
+    value: 'ubah',
   },
 ];
 
 const ITEM_HEIGHT = 48;
 
-const Position = () => {
+const PenggunaComp = () => {
   const router = useRouter();
-
   const classes = useStyles();
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [countPages, setCountPages] = useState(Number);
   const [payload, setPayload] = useState({
     skip: 0,
     limit: 10,
-    search: search,
   });
-  const [id, setId] = useState('');
-  console.log('id:', id);
+  const [countPages, setCountPages] = useState(Number);
+  const [search, setSearch] = useState('');
+  const [searchByEmail, setSearchByEmail] = useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [userSelectedEmail, setUserSelectedEmail] = useState('');
+  const [jabatan, setJabatan] = useState('');
 
-  /////// notif
-  const [state, setState] = React.useState({
-    openNotif: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
+  const open = Boolean(anchorEl);
+  const { data: dataAnggota, isFetching } = useGetAnggotaQuery(payload);
+  console.log('isFetching:', isFetching);
 
-  const { vertical, horizontal, openNotif } = state;
-
-  const handleClick = (newState) => () => {
-    setState({ openNotif: true, ...newState });
+  const handeOpenMenu = (event, row) => {
+    setUserSelectedEmail(row.email);
+    setJabatan(row.group);
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
   };
 
-  const handleCloseNotif = () => {
-    setState({ ...state, openNotif: false });
-  };
-  /////// notif
+  const count = dataAnggota?.totalRow / 10;
 
+  useEffect(() => {
+    setCountPages(Math.ceil(count));
+  });
+
+  const handlePagination = (e, value) => {
+    setPage(value);
+    setPayload((prev) => {
+      return {
+        ...prev,
+        skip: (value - 1) * 10,
+      };
+    });
+  };
+
+  const onEnterSearch = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setPage(1);
+      setPayload((prev) => {
+        return {
+          ...prev,
+          skip: 0,
+          limit: 10,
+          search: search,
+          searchemail: searchByEmail,
+        };
+      });
+    }
+  };
+
+  const handleSearchIcon = () => {
+    setPage(1);
+    setPayload((prev) => {
+      return {
+        ...prev,
+        skip: 0,
+        limit: 10,
+        search: search,
+        searchemail: searchByEmail,
+      };
+    });
+  };
+
+  // dialog
   const [openDialog, setOpenDialog] = React.useState(false);
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -89,80 +140,23 @@ const Position = () => {
     );
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [deleteAnggota, {}] = useDeleteAnggotaMutation();
 
-  const handleClickThreeDotMenu = (event, row) => {
-    setAnchorEl(event.currentTarget);
-    setId(row._id);
-  };
-
-  const handleClose = (e, v, t) => {
+  const handleSelectedAction = (e, row) => {
+    const { myValue } = e.currentTarget.dataset;
+    // if (myValue === 'hapus') setOpenDialog(true);
+    if (myValue === 'ubah') router.push(`/profile-console?email=${userSelectedEmail}`);
     setAnchorEl(null);
   };
 
-  const onEnterSearch = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      setPage(1);
-      setPayload((prev) => {
-        return {
-          ...prev,
-          skip: 0,
-          limit: 10,
-          search: search,
-        };
-      });
-    }
+  const [updateStatus, { isSuccess }] = useUpdateStatusGroupUserMutation();
+  const handleChangeStatus = (row) => {
+    const payload = {
+      email: row?.email,
+      status: !row?.status,
+    };
+    updateStatus(payload);
   };
-  const handleSearchIcon = () => {
-    setPayload((prev) => {
-      return {
-        ...prev,
-        skip: 0,
-        limit: 10,
-        search: search,
-      };
-    });
-  };
-  const { data: dataPosition, isFetching } = useGetGroupQuery(payload);
-
-  const count = dataPosition?.totalRow / 10;
-  useEffect(() => {
-    setCountPages(Math.ceil(count));
-  });
-
-  const [deleteGroup, { isError, isSuccess }] = useDeleteGroupMutation();
-
-  const handleDeleteGroup = () => {
-    deleteGroup(id);
-    setOpenDialog(false);
-  };
-
-  const handlePagination = (e, value) => {
-    setPage(value);
-    setPayload((prev) => {
-      return {
-        ...prev,
-        skip: (value - 1) * 10,
-      };
-    });
-  };
-
-  const handleMenuTable = (option) => {
-    if (option.title === 'Hapus') {
-      setOpenDialog(true);
-    }
-    if (option.title === 'Ubah') {
-      router.push(`${router.pathname}/edit-position/${id}`);
-    }
-  };
-
-  useEffect(() => {
-    if (router.query.created || router.query.edited) {
-      setState({ openNotif: true, vertical: 'top', horizontal: 'center' });
-    }
-  }, [router.query.created, router.query.edited]);
 
   return (
     <>
@@ -172,8 +166,11 @@ const Position = () => {
             fullWidth
             size="small"
             variant="outlined"
-            label="Cari Jabatan"
-            onChange={(e) => setSearch(e.target.value)}
+            label="Cari nama / email"
+            onChange={(e) => {
+              setSearchByEmail(e.target.value);
+              setSearch(e.target.value);
+            }}
             onKeyPress={onEnterSearch}
             InputProps={{
               endAdornment: (
@@ -186,86 +183,86 @@ const Position = () => {
             }}
           />
         </Box>
-        <Box
-          mt={5}
-          display="flex"
-          wordWrap="nowrap"
-          textAlign="center"
-          className={classes.addUser}
-          onClick={() => router.push('/anggota/add-position')}>
-          <img src="/images/icons/plus-icon.svg" alt="icon" />
-          <Typography component="div" variant="h6">
-            TAMBAH
-          </Typography>
-        </Box>
-      </Stack>
 
+        {/* {isLoading ? <TableDataSpinner /> : 'sudah selesai loading'} */}
+      </Stack>
       <TableContainer component={Paper} style={{ marginTop: '10px', minHeight: '400px' }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell align="left">
-                <TabelHeadLabel label="Jabatan" />
+                <TabelHeadLabel label="Nama" />
               </TableCell>
               <TableCell align="left">
-                <TabelHeadLabel label="Description" />
+                <TabelHeadLabel label="Email" />
               </TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell align="left">
+                <TabelHeadLabel label="Jabatan" />
+              </TableCell>
+              <TableCell align="right">
+                <TabelHeadLabel label="Status" />
+              </TableCell>
+              <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {isFetching && <TableDataSpinner center />}
 
-            {dataPosition?.data?.map((row) => (
+            {dataAnggota?.data?.map((row) => (
               <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" align="left">
-                  <Link href={`${router.pathname}/detail-position/${row._id}`}>
-                    <a>{row.nameGroup}</a>
-                  </Link>
+                <TableCell component="th" scope="row">
+                  {row.username}
                 </TableCell>
-                <TableCell align="left">{row.desc}</TableCell>
+                <TableCell align="left">{row.email}</TableCell>
+                <TableCell align="left">{row.group ? row.group : 'kosong'}</TableCell>
                 <TableCell align="right">
+                  <Switch checked={row.status} onClick={() => handleChangeStatus(row)} />
+                </TableCell>
+                <TableCell align="left">
+                  {/* why i selected email when open icon? */}
+                  {/* i face problem when set the data payload (try it dude its weirdd) */}
                   <IconButton
                     aria-label="more"
                     id="long-button"
                     aria-controls={open ? 'long-menu' : undefined}
                     aria-expanded={open ? 'true' : undefined}
                     aria-haspopup="true"
-                    onClick={(e) => handleClickThreeDotMenu(e, row)}>
+                    onClick={(e) => handeOpenMenu(e, row)}>
                     {/* <MoreVertIcon /> */}
                     <img src="/images/icons/triple-dot.svg" />
                   </IconButton>
+                  <Menu
+                    id="long-menu"
+                    MenuListProps={{
+                      'aria-labelledby': 'long-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleCloseMenu}
+                    PaperProps={{
+                      style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                        width: '20ch',
+                        boxShadow: 'none',
+                        border: '1px solid rgba(224, 224, 224, 1)',
+                      },
+                    }}>
+                    {options.map((option) => (
+                      <MenuItem key={option} onClick={(e) => handleSelectedAction(e, row)} data-my-value={option.value}>
+                        <Box display="flex">
+                          {option.icon}
+                          <span style={{ marginLeft: '7px' }}>{option.title}</span>
+                        </Box>
+                      </MenuItem>
+                    ))}
+                  </Menu>
                 </TableCell>
               </TableRow>
             ))}
-            <Menu
-              id="long-menu"
-              MenuListProps={{
-                'aria-labelledby': 'long-button',
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              PaperProps={{
-                style: {
-                  maxHeight: ITEM_HEIGHT * 4.5,
-                  width: '20ch',
-                  boxShadow: 'none',
-                  border: '1px solid rgba(224, 224, 224, 1)',
-                },
-              }}>
-              {options.map((option) => (
-                <MenuItem key={option} onClick={() => handleMenuTable(option)}>
-                  <Box display="flex">
-                    {option.icon}
-                    <span style={{ marginLeft: '7px' }}>{option.title}</span>
-                  </Box>
-                </MenuItem>
-              ))}
-            </Menu>
           </TableBody>
         </Table>
       </TableContainer>
+
       {/* // this is only appear when openDialog true. start */}
       {openDialog && (
         <Dialog
@@ -278,11 +275,12 @@ const Position = () => {
             <Box p={4}>
               <center>
                 <Typography id="modal-modal-title" variant="h3" component="div">
-                  Hapus Jabatan
+                  Hapus jabatan
                 </Typography>
               </center>
               <Box mt={3} textAlign="center">
-                Kamu akan menghapus Jabatan untuk Hyppe Console
+                Kamu akan menghapus jabatan untuk email <br />
+                <span style={{ color: 'rgb(170, 34, 175)' }}>{userSelectedEmail}</span>
               </Box>
               <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} style={{ marginTop: '15px' }}>
                 <Button
@@ -307,7 +305,10 @@ const Position = () => {
                     borderRadius: '5px',
                     marginTop: '10px',
                   }}
-                  onClick={handleDeleteGroup}>
+                  onClick={() => {
+                    deleteAnggota(userSelectedEmail);
+                    setOpenDialog(false);
+                  }}>
                   KONFIRMASI
                 </Button>
               </Stack>
@@ -317,17 +318,6 @@ const Position = () => {
       )}
       {/* // this is only appear when openDialog true end */}
 
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={openNotif}
-        onClose={handleCloseNotif}
-        key={vertical + horizontal}>
-        <Alert severity="success">
-          {router.query.created && 'Berhasil membuat data'}
-          {router.query.edited && 'Berhasil edit data'}
-        </Alert>
-      </Snackbar>
-
       <div className="mt-6 flex flex-row justify-content-center">
         <Pagination page={page} onChange={handlePagination} count={countPages} />
       </div>
@@ -335,4 +325,4 @@ const Position = () => {
   );
 };
 
-export default Position;
+export default PenggunaComp;
