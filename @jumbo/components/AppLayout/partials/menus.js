@@ -122,7 +122,8 @@ export const consoleNav = [
   {
     name: 'Beranda',
     type: 'item',
-    link: '/console/',
+    // link: '/console/',
+    link: '/',
     icon: <Home />,
   },
   {
@@ -145,37 +146,44 @@ export const consoleNav = [
   {
     name: 'Pusat Iklan',
     type: 'item',
-    link: '/console/ads-center',
+    // link: '/console/ads-center',
+    link: '/ads-center',
   },
   {
     name: 'Database',
     type: 'item',
-    link: '/console/users',
+    // link: '/console/users',
+    link: '/users',
   },
   {
     name: 'Engagement',
     type: 'item',
-    link: '/console/user-engagement',
+    // link: '/console/user-engagement',
+    link: '/user-engagement',
   },
   {
     name: 'Monetisasi',
     type: 'item',
+    // link: '/monetize',
     link: '/console/monetize',
   },
   {
     name: 'Pengumuman',
     type: 'item',
-    link: '/console/pengumuman',
+    // link: '/console/pengumuman',
+    link: '/pengumuman',
   },
   {
     name: 'Pedoman',
     type: 'item',
-    link: '/console/pedoman',
+    link: '/pedoman',
+    // link: '/console/pedoman',
   },
   {
     name: 'Anggota',
     type: 'item',
     // this is default for tab
-    link: '/console/anggota?tab=pengguna',
+    // link: '/console/anggota?tab=pengguna',
+    link: '/anggota?tab=pengguna',
   },
 ];

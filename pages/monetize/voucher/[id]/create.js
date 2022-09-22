@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const ConsoleDashboardComponent = dynamic(() => import('modules/Pages/console/dashboards'), {
+const ConsoleVoucherCreateComponent = dynamic(() => import('modules/Pages/console/monetize/Voucher/Detail'), {
   loading: () => <PageLoader />,
 });
 
-const ConsoleDashboardPage = () => (
+const ConsoleVoucherCreatePage = () => (
   <SecureConsolePage>
-    <ConsoleDashboardComponent />
+    <ConsoleVoucherCreateComponent />
   </SecureConsolePage>
 );
 
-export default ConsoleDashboardPage;
+export default ConsoleVoucherCreatePage;

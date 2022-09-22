@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { makeStyles, Typography } from '@material-ui/core';
 import Tab from '@mui/material/Tab';
-import PenggunaComp from './tabComponent/PenggunaComp';
+import PenggunaComp from './tabComponent/Pengguna';
 import Position from './tabComponent/Position';
 import Divisi from './tabComponent/divisi';
 import { useRouter } from 'next/router';
@@ -43,6 +43,7 @@ const Anggota = () => {
   };
 
   // add component here
+  // note: just change here to add new Tab && component
   const Tabs = [
     {
       label: 'Pengguna',
@@ -63,7 +64,7 @@ const Anggota = () => {
 
   return (
     <>
-      <TabContext value={router.query.tab}>
+      <TabContext value={router.query.tab === undefined ? 'pengguna' : router.query.tab}>
         <TabList
           onChange={handleChange}
           aria-label="lab API tabs example"
