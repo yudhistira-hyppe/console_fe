@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Box } from '@material-ui/core';
 import Head from 'next/head';
-import useStyles from './index.style';
-import clsx from 'clsx';
-import Sidebar from './Sidebar';
-import ContactsList from './ContactsList';
-import Detail from './Detail';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import { useDeleteTicketMutation, useGetListTicketByFiltersQuery } from 'api/console/helpCenter/ticket';
+import SearchSection from './SearchSection';
+import TableSection from './TableSection';
+import Nav from './BreadCrumb';
+import { Stack } from '@mui/material';
+import { Box, Link, Typography } from '@material-ui/core';
+import BackIconNav from '@material-ui/icons/ArrowBackIos';
+import { useRouter } from 'next/router';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -16,54 +16,17 @@ const breadcrumbs = [
 ];
 
 const ConsoleBantuanPenggunaComponent = () => {
-  const classes = useStyles();
-  const [detailTicketId, setDetailTicketId] = useState({});
-  const [showDetail, setShowDetail] = useState(false);
-  const [filters, setFilters] = useState({
-    tipe: 'helping',
-    page: 0,
-    limit: 5,
-  });
-  const { data, isFetching } = useGetListTicketByFiltersQuery(filters);
-  const [deleteTicket] = useDeleteTicketMutation();
+  const [value, setValue] = useState(null);
+  const [order, setOrder] = useState('desc');
+  const router = useRouter();
 
-  const onFolderOrLabelChange = (type, value) => {
-    setShowDetail(false);
-    switch (type) {
-      case 'folder':
-        setFilters((current) => {
-          const filtered = { ...current };
-          delete filtered['status'];
-          return filtered;
-        });
-        break;
-      case 'label':
-        setFilters({ ...filters, status: value });
-        break;
-      default:
-        break;
-    }
+  const onChangeOrderHandler = (val) => {
+    setOrder(val);
   };
 
-  const onPageChange = (page) => {
-    setFilters({ ...filters, page: page * filters.limit });
-  };
-
-  const onPageSizeChange = (pageSize) => {
-    setFilters({ ...filters, page: 0, limit: pageSize });
-  };
-
-  const onClickTicket = (ticketId) => {
-    setShowDetail(true);
-    setDetailTicketId(ticketId);
-  };
-
-  const onCloseDetail = () => {
-    setShowDetail(false);
-  };
-
-  const onClickDeleteTicket = (ticketId) => {
-    deleteTicket(ticketId);
+  const onBackHandler = (e) => {
+    e.preventDefault();
+    router.push('/console/help-center');
   };
 
   return (
@@ -71,25 +34,28 @@ const ConsoleBantuanPenggunaComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Bantuan Pengguna</title>
       </Head>
-      <PageContainer heading="Bantuan Pengguna" breadcrumbs={breadcrumbs}>
-        <Box className={classes.inBuildAppCard}>
-          <Box className={clsx(classes.inBuildAppContainer, '')}>
-            <Sidebar filters={filters} onFolderOrLabelChange={onFolderOrLabelChange} />
-            {!showDetail ? (
-              <ContactsList
-                data={data}
-                isFetching={isFetching}
-                filters={filters}
-                onPageChange={onPageChange}
-                onPageSizeChange={onPageSizeChange}
-                onClickTicket={onClickTicket}
-                onClickDeleteTicket={onClickDeleteTicket}
-              />
-            ) : (
-              <Detail ticketId={detailTicketId} onCloseDetail={onCloseDetail} />
-            )}
-          </Box>
-        </Box>
+
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Nav breadcrumbs={breadcrumbs} />
+        <Link href="/" onClick={onBackHandler} style={{ cursore: 'pointer' }}>
+          <Stack direction={'row'}>
+            <Stack direction={'column'} justifyContent={'center'}>
+              <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+            </Stack>
+            <Stack>
+              <Typography variant="h1" style={{ color: 'black' }}>
+                Kembali
+              </Typography>
+            </Stack>
+          </Stack>
+        </Link>
+      </Stack>
+
+      <PageContainer heading="">
+        <Stack direction={'row'} spacing={3}>
+          <SearchSection value={value} setValue={setValue} />
+          <TableSection order={order} onOrderChange={onChangeOrderHandler} total={100} page={1} rows={10} />
+        </Stack>
       </PageContainer>
     </>
   );

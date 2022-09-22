@@ -20,6 +20,9 @@ import ContentReportItem from './ContentReportItem';
 // request
 import { useAuth } from 'authentication';
 import { useUserGetNewCommentQuery } from 'api/user/comment';
+import { Typography } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+import { Stack } from '@mui/system';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -46,25 +49,51 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContentReport = () => {
+const dummySkeleton = [1, 2, 3];
+
+const ContentReport = ({ isFetching }) => {
   const classes = useStyles();
   const { authUser } = useAuth();
 
   const { data: dataComment } = useUserGetNewCommentQuery(authUser.user.email);
   return (
     <CmtCard className={classes.cardRoot}>
-      <CmtCardHeader title="Pelaporan Konten Terahkir">
+      <CmtCardHeader
+        title={
+          <div>
+            <Typography variant="h4" component="span" style={{ marginLeft: '7px' }}>
+              Pelaporan Konten Terakhir
+            </Typography>
+            <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />
+          </div>
+        }>
         {/* please dont remove code below! this check/notif for readed and unreaded notification  */}
         {/* <Chip className={classes.chipRoot} label="23 New" color="primary" size="small" /> */}
       </CmtCardHeader>
       <CmtCardContent>
-        <PerfectScrollbar className={classes.scrollbarRoot}>
-          {dataComment?.data?.length > 0 ? (
-            <CmtList data={dataComment?.data} renderRow={(item, index) => <ContentReportItem key={index} item={item} />} />
-          ) : (
-            <center>you have no report</center>
-          )}
-        </PerfectScrollbar>
+        {isFetching ? (
+          <div>
+            {dummySkeleton.map((el, i) => (
+              <Stack key={i} px={3} direction={'row'} width={'100%'} spacing={2}>
+                <Skeleton height={'9em'} width={'7em'} style={{ marginTop: '0px' }} />
+                <Stack direction={'column'} justifyContent={'center'}>
+                  <Skeleton width={'12em'} />
+                  <Skeleton width={'12em'} />
+                  <Skeleton width={'12em'} />
+                  <Skeleton width={'12em'} />
+                </Stack>
+              </Stack>
+            ))}
+          </div>
+        ) : (
+          <PerfectScrollbar className={classes.scrollbarRoot}>
+            {dataComment?.data?.length > 0 ? (
+              <CmtList data={dataComment?.data} renderRow={(item, index) => <ContentReportItem key={index} item={item} />} />
+            ) : (
+              <center>you have no report</center>
+            )}
+          </PerfectScrollbar>
+        )}
       </CmtCardContent>
     </CmtCard>
   );
