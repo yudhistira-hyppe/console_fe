@@ -1,0 +1,141 @@
+import React from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Checkbox from '@mui/material/Checkbox';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import TextField from '@mui/material/TextField';
+import useStyles from '../../../help-center/bantuan-pengguna/index.style';
+import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
+import { Stack } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+
+const SearchSection = () => {
+  const classes = useStyles();
+  const [week, setWeek] = React.useState(null);
+  const [value, setValue] = React.useState([null, null]);
+  function getWeeksAfter(date, amount) {
+    return date && amount ? date.add(amount, 'week') : undefined;
+  }
+
+  return (
+    <>
+      <Box className={classes.inBuildAppCard} p={5}>
+        <Accordion elevation={0} defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: '0px' }}>
+            <Stack direction={'column'} spacing={1} mb={3}>
+              <div>
+                <Chip
+                  clickable
+                  onClick={() => {
+                    setWeek(1), setValue([null, null]);
+                  }}
+                  label="7 Hari"
+                  size="small"
+                  variant={week == 1 ? 'default' : 'outlined'}
+                />
+              </div>
+              <div>
+                <Chip
+                  label="14 Hari"
+                  clickable
+                  onClick={() => {
+                    setWeek(2), setValue([null, null]);
+                  }}
+                  size="small"
+                  variant={week === 2 ? 'default' : 'outlined'}
+                />
+              </div>
+              <div>
+                <Chip
+                  label="1 Bulan"
+                  clickable
+                  onClick={() => {
+                    setWeek(4), setValue([null, null]);
+                  }}
+                  size="small"
+                  variant={week === 4 ? 'default' : 'outlined'}
+                />
+              </div>
+              <div>
+                <Chip
+                  label="3 Bulan"
+                  clickable
+                  onClick={() => {
+                    setWeek(12), setValue([null, null]);
+                  }}
+                  size="small"
+                  variant={week === 12 ? 'default' : 'outlined'}
+                />
+              </div>
+            </Stack>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
+              <DateRangePicker
+                value={value}
+                maxDate={getWeeksAfter(value[0], week)}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(startProps, endProps) => (
+                  <>
+                    <Stack direction={'row'} spacing={1}>
+                      <TextField {...startProps} />
+                      <TextField {...endProps} />
+                    </Stack>
+                  </>
+                )}
+              />
+            </LocalizationProvider>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Status Voucher</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup>
+              <FormControlLabel label={'Digunakan'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'Kadaluarsa'} control={<Checkbox defaultChecked={false} />} />
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Masa Berlaku</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup>
+              <FormControlLabel label={'> 30 Hari'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'30-60 Hari'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'61-90 Hari'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'90 Hari <'} control={<Checkbox defaultChecked={false} />} />
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Status Pembayaran</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: '0px' }}>
+            <FormGroup>
+              <FormControlLabel label={'Menuggu'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'Lunas'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'Gagal'} control={<Checkbox defaultChecked={false} />} />
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+    </>
+  );
+};
+
+export default SearchSection;

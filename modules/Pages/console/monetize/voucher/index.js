@@ -1,30 +1,19 @@
-import React from 'react';
-import Head from 'next/head';
-import { Grid } from '@material-ui/core';
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import VoucherPengguna from './VoucherPengguna';
-import FilterTableAkunPengguna from '../../users/FilterTableAkunPengguna';
+import { Grid } from '@material-ui/core';
+import React from 'react';
+import { SearchSection, TableSection } from '../components';
 
-const breadcrumbs = [
-  { label: 'Home', link: '/console' },
-  { label: 'Monetize', link: '/console/monetize' },
-  { label: 'Campaign Voucher', isActive: true },
-];
-
-const ConsoleVoucherComponent = () => {
+const MonetizeVoucherComponent = () => {
   return (
     <>
-      <Head>
-        <title key="title">Hyppe-Console :: Campaign Voucher</title>
-      </Head>
-      <PageContainer heading="Campaign Voucher" breadcrumbs={breadcrumbs}>
+      <PageContainer>
         <GridContainer>
-          <Grid item xs={12} md={12} xl={12}>
-            <FilterTableAkunPengguna />
+          <Grid item xs={12} md={3} sm={3}>
+            <SearchSection />
           </Grid>
-          <Grid item xs={12} md={12} xl={12}>
-            <VoucherPengguna />
+          <Grid item xs={12} md={9} sm={9}>
+            <TableSection />
           </Grid>
         </GridContainer>
       </PageContainer>
@@ -32,4 +21,4 @@ const ConsoleVoucherComponent = () => {
   );
 };
 
-export default ConsoleVoucherComponent;
+export default MonetizeVoucherComponent;
