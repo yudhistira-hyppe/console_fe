@@ -22,6 +22,7 @@ import {
   group,
   moduleAPI,
   divisiAPI,
+  voucherApi
 } from 'api/console';
 
 const initStore = () => {
@@ -47,6 +48,7 @@ const initStore = () => {
         group.middleware,
         moduleAPI.middleware,
         divisiAPI.middleware,
+        voucherApi.middleware
       ]),
   });
   return store;

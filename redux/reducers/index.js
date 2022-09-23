@@ -26,6 +26,7 @@ import { insightAPI } from 'api/user/insight';
 import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 import { userFriendAPI } from 'api/user/friend';
+import { voucherApi } from 'api/console/monetize';
 
 export default combineReducers({
   common: Common,
@@ -49,6 +50,7 @@ export default combineReducers({
   [contentManagementAPI.reducerPath]: contentManagementAPI.reducer,
   [accountBalancesAPI.reducerPath]: accountBalancesAPI.reducer,
   [userFriendAPI.reducerPath]: userFriendAPI.reducer,
+  [voucherApi.reducerPath]: voucherApi.reducer,
   [getUserHyppe.reducerPath]: getUserHyppe.reducer,
   [group.reducerPath]: group.reducer,
   [moduleAPI.reducerPath]: moduleAPI.reducer,

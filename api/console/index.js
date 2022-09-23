@@ -5,5 +5,6 @@ import { getUserHyppe } from './getUserHyppe';
 import { group } from './group';
 import { moduleAPI } from './module';
 import { divisiAPI } from './divisi';
+import { voucherApi } from './monetize';
 
-export { dashboardApi, engagementApi, faqAndInfoApi, announcementApi, ticketApi, getUserHyppe, group, moduleAPI, divisiAPI };
+export { dashboardApi, engagementApi, faqAndInfoApi, announcementApi, ticketApi, getUserHyppe, group, moduleAPI, divisiAPI, voucherApi };
