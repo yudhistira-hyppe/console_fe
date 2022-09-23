@@ -22,6 +22,8 @@ import BreadCrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
+import { useGetVouchersQuery, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
+import moment from 'moment';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -32,21 +34,24 @@ const breadcrumbs = [
 const KelolaVoucherComponent = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [modalType, setModalType] = React.useState(null);
-  const [status, setStatus] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState({});
+  const [updateVoucher] = useUpdateVoucherMutation();
   const router = useRouter();
+  const { data: listVouchers, refetch } = useGetVouchersQuery();
 
-  const onChangeStatusHandler = (e) => {
-    if (e.target.checked) {
-      setShowModal(true);
-      setModalType('on');
-    } else {
-      setShowModal(true);
-      setModalType('off');
-    }
+  const onChangeStatusHandler = (item) => {
+    setShowModal(true);
+    item?.isActive ? setModalType('off') : setModalType('on');
+    setSelectedItem(item);
   };
 
   const onConfirmModalHandler = () => {
-    setStatus((prev) => !prev);
+    const data = {
+      isActive: !selectedItem.isActive,
+    };
+
+    updateVoucher({ id: selectedItem._id, data });
+    setTimeout(() => refetch(), 200);
     onCancelModalHandler();
   };
 
@@ -55,29 +60,25 @@ const KelolaVoucherComponent = () => {
     setModalType(null);
   };
 
-  const onBackHandler = (e) => {
-    e.preventDefault();
-    router.push('/console/monetize');
-  };
-
   return (
     <>
       <Head>
         <title key="title">HYYPE MONETIZE</title>
       </Head>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <Link href="/" onClick={onBackHandler} style={{ cursore: 'pointer', textDecorationLine: 'none' }}>
-        <Stack direction={'row'} mt={1} mb={3}>
-          <Stack direction={'column'} justifyContent={'center'}>
-            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
-          </Stack>
-          <Stack>
-            <Typography variant="h1" style={{ color: 'black' }}>
-              Kembali
-            </Typography>
-          </Stack>
+      <Stack
+        direction={'row'}
+        mt={1}
+        mb={3}
+        onClick={() => router.push('/monetize')}
+        style={{ width: 'fit-content', cursor: 'pointer' }}>
+        <Stack direction={'column'} justifyContent={'center'}>
+          <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
         </Stack>
-      </Link>
+        <Typography variant="h1" style={{ color: 'black' }}>
+          Kembali
+        </Typography>
+      </Stack>
 
       <PageContainer>
         <Card>
@@ -115,49 +116,53 @@ const KelolaVoucherComponent = () => {
                 </TableHead>
 
                 <TableBody>
-                  <TableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        VOUCHER HYYPE ASIX
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        22/07/22-13:20 WIB
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1">1.000 Kredit</Typography>
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        + Bonus 100 Kredit
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        1.000 Voucher
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        200 Voucher
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        Rp 1.500.000
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Switch onClick={onChangeStatusHandler} checked={status} />
-                    </TableCell>
-                    <TableCell align="left">
-                      <EditIcon
-                        htmlColor="#DADADA"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => router.push('/console/monetize/voucher/1')}
-                      />
-                    </TableCell>
-                  </TableRow>
+                  {listVouchers?.map((item, key) => (
+                    <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {item?.nameAds}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {moment(item?.createdAt).format('lll')}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1">{item?.creditValue} Kredit</Typography>
+                        {item?.creditPromo && (
+                          <Typography variant="body1" style={{ fontSize: '12px' }}>
+                            + Bonus {item?.creditPromo} Kredit
+                          </Typography>
+                        )}
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {item?.qty} Voucher
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {item?.totalUsed} Voucher
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          Rp {item?.amount}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Switch onClick={() => onChangeStatusHandler(item)} checked={item?.isActive} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <EditIcon
+                          htmlColor="#DADADA"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => router.push(`/monetize/voucher/${item?._id}`)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
