@@ -103,7 +103,7 @@
     "videojs-hls-quality-selector": "^1.1.4"
   },
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--openssl-legacy-provider' node server.js",
+    "dev": "cross-env node server.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --fix .",
