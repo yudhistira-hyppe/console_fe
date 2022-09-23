@@ -330,18 +330,14 @@ const VoucherFormComponent = ({ data }) => {
         </Card>
 
         <Stack direction="row" mt={3} spacing={3}>
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              // disabled={!val?.name || !val?.kode || !val?.kredit || !val?.stok || !val?.exp || (!val?.sdk && !data)}>
-              onClick={() => setShowModal(true)}>
-              Simpan
-            </Button>
-          </div>
-          <div>
-            <Button onClick={() => setShowModal(false)}>Batal</Button>
-          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            // disabled={!val?.name || !val?.kode || !val?.kredit || !val?.stok || !val?.exp || (!val?.sdk && !data)}>
+            onClick={() => setShowModal(true)}>
+            Simpan
+          </Button>
+          <Button onClick={() => router.back()}>Batal</Button>
         </Stack>
       </PageContainer>
       <ModalCreateVoucher showModal={showModal} onConfirm={onConfirm} onCancel={onCancel} />
