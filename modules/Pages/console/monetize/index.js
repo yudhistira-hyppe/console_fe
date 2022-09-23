@@ -44,7 +44,7 @@ const ConsoleMonetizeComponent = () => {
             {value == '1' && (
               <Stack direction={'column'} justifyContent={'center'}>
                 <div>
-                  <Button variant="contained" color="primary" onClick={() => router.push('/console/monetize/voucher') }>
+                  <Button variant="contained" color="primary" onClick={() => router.push('/monetize/voucher') }>
                     Kelola voucher
                   </Button>
                 </div>
