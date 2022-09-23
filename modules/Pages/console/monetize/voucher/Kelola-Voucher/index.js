@@ -37,7 +37,7 @@ const KelolaVoucherComponent = () => {
   const [selectedItem, setSelectedItem] = React.useState({});
   const [updateVoucher] = useUpdateVoucherMutation();
   const router = useRouter();
-  const { data: listVouchers, refetch } = useGetVouchersQuery();
+  const { data: listVouchers, refetch } = useGetVouchersQuery({ skip: 0, limit: 10 });
 
   const onChangeStatusHandler = (item) => {
     setShowModal(true);
@@ -51,7 +51,7 @@ const KelolaVoucherComponent = () => {
     };
 
     updateVoucher({ id: selectedItem._id, data });
-    setTimeout(() => refetch(), 200);
+    setTimeout(() => refetch(), 500);
     onCancelModalHandler();
   };
 
@@ -116,7 +116,7 @@ const KelolaVoucherComponent = () => {
                 </TableHead>
 
                 <TableBody>
-                  {listVouchers?.map((item, key) => (
+                  {listVouchers?.data?.map((item, key) => (
                     <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
                         <Typography variant="body1" style={{ fontSize: '12px' }}>
