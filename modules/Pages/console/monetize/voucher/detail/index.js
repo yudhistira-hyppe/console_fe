@@ -16,8 +16,7 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import { alpha, styled } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
+import { alpha } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Ckeditor from 'react-ckeditor-component/lib/ckeditor';
@@ -27,6 +26,7 @@ import Breadcrumbs from 'modules/Pages/console/help-center/bantuan-pengguna/Brea
 import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { ModalCreateVoucher } from '../../components';
+import { useCreateVoucherMutation, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
 
 const useStyles = makeStyles((theme) => ({
   inputLabel: {
@@ -40,6 +40,33 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgba(115, 115, 115, 1)',
     fontSize: '14px',
   },
+  inputForm: {
+    marginTop: 56,
+    borderRadius: 4,
+    position: 'relative',
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    width: '80%',
+    padding: '10px 12px',
+    transition: theme.transitions.create(['border-color', 'background-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+      borderColor: theme.palette.primary.main,
+    },
+  },
 }));
 
 const VoucherFormComponent = ({ data }) => {
@@ -50,84 +77,57 @@ const VoucherFormComponent = ({ data }) => {
     { label: data ? 'Ubah Voucher' : 'Buat Voucher', isActive: true },
   ];
   const [val, setVal] = React.useState({
-    name: null,
-    kode: null,
-    kredit: null,
-    bonus: null,
-    stok: null,
-    exp: null,
-    sdk: null,
+    nameAds: data?.nameAds || '',
+    codeVoucher: data?.codeVoucher || '',
+    creditValue: data?.creditValue || '',
+    creditPromo: data?.creditPromo || '',
+    qty: data?.qty || '',
+    expiredDay: data?.expiredDay?.toString() || '',
+    amount: data?.amount || 0,
+    description: data?.description || '',
   });
   const [showModal, setShowModal] = React.useState(false);
+  const [addVoucher] = useCreateVoucherMutation();
+  const [updateVoucher] = useUpdateVoucherMutation();
   const router = useRouter();
   const classes = useStyles();
-  const BootstrapInput = styled(InputBase)(({ theme }) => ({
-    'label + &': {
-      marginTop: theme.spacing(7),
-    },
-    '& .MuiInputBase-input': {
-      borderRadius: 4,
-      position: 'relative',
-      border: '1px solid #ced4da',
-      fontSize: 16,
-      width: '80%',
-      padding: '10px 12px',
-      transition: theme.transitions.create(['border-color', 'background-color', 'box-shadow']),
-      // Use the system font instead of the default Roboto font.
-      fontFamily: [
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
-      '&:focus': {
-        boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-        borderColor: theme.palette.primary.main,
-      },
-    },
-  }));
 
   const onExpChange = (event) => {
-    setVal({
-      ...val,
-      exp: event.target.value,
+    setVal((prevVal) => {
+      return { ...prevVal, expiredDay: event.target.value };
     });
   };
 
   const onInputChange = (event) => {
     event.preventDefault();
-    setVal({
-      ...val,
-      [event.target.name]: event.target.value,
+    setVal((prevVal) => {
+      return { ...prevVal, [event.target.name]: event.target.value };
     });
   };
 
   const onCkeditorChange = (event) => {
     const newContent = event.editor.getData();
-    setVal({
-      ...val,
-      sdk: newContent,
+    setVal((prevVal) => {
+      return { ...prevVal, description: newContent };
     });
   };
 
-  const onBackHandler = () => {
-    router.push('/console/monetize/voucher');
-  };
-
   const onConfirm = () => {
+    const bodyData = {
+      ...val,
+      amount: val.creditValue * 1500,
+      isActive: true,
+    };
+
+    data ? updateVoucher({ id: data?._id, data: { ...val, isActive: data.isActive } }) : addVoucher(bodyData);
+    router.push('/monetize/voucher');
     setShowModal(false);
   };
 
   const onCancel = () => {
     setShowModal(false);
-  }
- 
+  };
+
   return (
     <>
       <Head>
@@ -135,19 +135,18 @@ const VoucherFormComponent = ({ data }) => {
       </Head>
 
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <Stack mb={3} mt={1}>
-        <Link href="/" onClick={onBackHandler} style={{ cursore: 'pointer' }}>
-          <Stack direction={'row'}>
-            <Stack direction={'column'} justifyContent={'center'}>
-              <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
-            </Stack>
-            <Stack>
-              <Typography variant="h1" style={{ color: 'black' }}>
-                Kembali
-              </Typography>
-            </Stack>
-          </Stack>
-        </Link>
+      <Stack
+        direction={'row'}
+        mt={1}
+        mb={3}
+        onClick={() => router.push('/monetize/voucher')}
+        style={{ width: 'fit-content', cursor: 'pointer' }}>
+        <Stack direction={'column'} justifyContent={'center'}>
+          <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+        </Stack>
+        <Typography variant="h1" style={{ color: 'black' }}>
+          Kembali
+        </Typography>
       </Stack>
 
       <PageContainer>
@@ -158,14 +157,13 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Nama Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput
-                  name="name"
+                <input
+                  name="nameAds"
                   placeholder="Tulis Nama Voucher"
                   id="bootstrap-input"
-                  value={val?.name}
+                  className={classes.inputForm}
+                  value={val?.nameAds}
                   onChange={onInputChange}
-                  readOnly={data}
-                  disabled={data}
                 />
               </FormControl>
             </Grid>
@@ -174,14 +172,13 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Kode Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput
-                  name="voucher"
+                <input
+                  name="codeVoucher"
                   placeholder="Tulis Kode Voucher"
                   id="bootstrap-input"
-                  value={val?.kode}
+                  className={classes.inputForm}
+                  value={val?.codeVoucher}
                   onChange={onInputChange}
-                  readOnly={data}
-                  disabled={data}
                 />
                 <FormHelperText>Penamaan kode voucher disarankan lebih dari 5 karakter</FormHelperText>
               </FormControl>
@@ -194,14 +191,16 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Jumlah Kredit<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput
-                  name="kredit"
+                <input
+                  name="creditValue"
+                  type="number"
                   placeholder="Tulis Jumlah Kredit"
                   id="bootstrap-input"
-                  value={val?.kredit}
+                  className={classes.inputForm}
+                  value={val?.creditValue}
                   onChange={onInputChange}
                 />
-                <FormHelperText>1 kredit = Rp 1.500,-</FormHelperText>
+                <FormHelperText>1 kredit = Rp 1.500,-. Harga voucher = Rp {val?.creditValue * 1500} </FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12} md={6} sm={6}>
@@ -209,11 +208,13 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Jumlah Bonus Kredit<span className={classes.optionalText}>{` (Jika ada)`}</span>
                 </InputLabel>
-                <BootstrapInput
-                  name="bonus"
+                <input
+                  name="creditPromo"
+                  type="number"
                   placeholder="Tulis Jumlah Bonus"
                   id="bootstrap-input"
-                  value={val?.bonus}
+                  className={classes.inputForm}
+                  value={val?.creditPromo}
                   onChange={onInputChange}
                 />
                 <FormHelperText>1 kredit = Rp 0,-</FormHelperText>
@@ -227,11 +228,13 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Jumlah Stok Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <BootstrapInput
-                  name="stok"
+                <input
+                  name="qty"
+                  type="number"
                   placeholder="Tulis Jumlah Voucher"
                   id="bootstrap-input"
-                  value={val?.stock}
+                  className={classes.inputForm}
+                  value={val?.qty}
                   onChange={onInputChange}
                 />
                 <FormHelperText>Jumlah voucher dapat disesuaikan dengan kebutuhan</FormHelperText>
@@ -250,21 +253,21 @@ const VoucherFormComponent = ({ data }) => {
                 <RadioGroup row className="mt-8">
                   <FormControlLabel
                     onChange={onExpChange}
-                    checked={val?.exp === '30'}
+                    checked={val?.expiredDay === '30'}
                     value="30"
                     control={<Radio />}
                     label={'30 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
-                    checked={val?.exp === '60'}
+                    checked={val?.expiredDay === '60'}
                     value="60"
                     control={<Radio />}
                     label={'60 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
-                    checked={val?.exp === '90'}
+                    checked={val?.expiredDay === '90'}
                     value="90"
                     control={<Radio />}
                     label={'90 Hari'}
@@ -274,10 +277,10 @@ const VoucherFormComponent = ({ data }) => {
                     value="other"
                     control={<Radio />}
                     label={
-                      <BootstrapInput
+                      <input
                         placeholder="Masukkan Jumlah Hari"
                         id="bootstrap-input"
-                        disabled={val?.exp !== 'other'}
+                        disabled={val?.expiredDay !== 'other'}
                       />
                     }
                   />
@@ -300,6 +303,7 @@ const VoucherFormComponent = ({ data }) => {
           />
           <CardContent>
             <Ckeditor
+              content={val?.description}
               events={{
                 change: onCkeditorChange,
               }}
