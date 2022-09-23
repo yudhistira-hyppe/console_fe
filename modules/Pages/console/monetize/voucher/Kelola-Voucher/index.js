@@ -24,6 +24,7 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
 import { useGetVouchersQuery, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
 import moment from 'moment';
+import { Pagination } from '@mui/material';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -36,8 +37,9 @@ const KelolaVoucherComponent = () => {
   const [modalType, setModalType] = React.useState(null);
   const [selectedItem, setSelectedItem] = React.useState({});
   const [updateVoucher] = useUpdateVoucherMutation();
+  const [params, setParams] = React.useState({ page: 0, limit: 5 });
   const router = useRouter();
-  const { data: listVouchers, refetch } = useGetVouchersQuery({ skip: 0, limit: 10 });
+  const { data: listVouchers, refetch } = useGetVouchersQuery(params);
 
   const onChangeStatusHandler = (item) => {
     setShowModal(true);
@@ -58,6 +60,13 @@ const KelolaVoucherComponent = () => {
   const onCancelModalHandler = () => {
     setShowModal(false);
     setModalType(null);
+  };
+
+  const handlePageChange = (e, value) => {
+    setParams((prevVal) => {
+      return { ...prevVal, page: value - 1 };
+    });
+    refetch();
   };
 
   return (
@@ -168,6 +177,11 @@ const KelolaVoucherComponent = () => {
             </TableContainer>
           </CardContent>
         </Card>
+        {listVouchers && (
+          <Stack alignItems={'center'} mt={2}>
+            <Pagination count={Math.round(listVouchers?.totalpage)} onChange={handlePageChange} size={'small'} />
+          </Stack>
+        )}
       </PageContainer>
       <ModalChangeStatusConfirmation
         showModal={showModal && modalType}
