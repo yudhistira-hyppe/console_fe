@@ -1,6 +1,6 @@
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints';
 import { Fonts } from '../@jumbo/constants/ThemeOptions';
-import  {hyppePrimary,hyppeSecond}  from './default';
+import { hyppePrimary, hyppeSecond } from './default';
 
 const breakpoints = createBreakpoints({
   values: {
@@ -81,7 +81,7 @@ const defaultTheme = {
     danger: 'orange',
   },
   typography: {
-    fontFamily: Fonts.PRIMARY,
+    fontFamily: Fonts.LATO,
     fontWeightExtraLight: 200,
     fontWeightLight: 300,
     fontWeightRegular: 400,

@@ -23,12 +23,14 @@ import {
   moduleAPI,
   divisiAPI,
 } from 'api/console';
+import { utilsApi } from 'api/utils';
 
 const initStore = () => {
   const store = configureStore({
     reducer: reducers,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat([
+        utilsApi.middleware,
         authApi.middleware,
         userApi.middleware,
         dashboardApi.middleware,
