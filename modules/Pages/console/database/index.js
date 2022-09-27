@@ -28,7 +28,7 @@ const ConsoleDatabaseComponent = (props) => {
         <TabPanel className={classes.tabPanel} value="account">
           <DatabaseAccountComponent />
         </TabPanel>
-        <TabPanel className={classes.tabPanel} value="content">
+        <TabPanel className={classes.tabPanel} value="content" disabled>
           Konten
         </TabPanel>
       </TabContext>
