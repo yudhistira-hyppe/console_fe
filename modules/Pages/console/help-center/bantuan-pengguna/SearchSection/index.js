@@ -27,7 +27,7 @@ const SearchSection = ({ handleChange }) => {
 
   return (
     <>
-      <Box className={classes.inBuildAppCard} p={5} style={{ maxWidth: 250 }}>
+      <Box className={classes.inBuildAppCard} p={5} style={{ width: 250 }}>
         <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Pencarian Tiket</Typography>
