@@ -16,6 +16,7 @@
     "@mui/material": "^5.9.3",
     "@mui/x-data-grid": "^5.12.1",
     "@mui/x-date-pickers": "^5.0.0-beta.1",
+    "@mui/x-date-pickers-pro": "^5.0.1",
     "@reduxjs/toolkit": "^1.8.2",
     "animate.css": "^4.1.1",
     "async-mutex": "^0.3.2",

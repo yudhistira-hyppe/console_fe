@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Box, Dialog, DialogContent, makeStyles, Slide, TextField, Typography } from '@material-ui/core';
-import { Button, Pagination, Stack } from '@mui/material';
+import { Box, Dialog, DialogContent, makeStyles, Slide, Snackbar, TextField, Typography } from '@material-ui/core';
+import { Alert, Button, Pagination, Stack } from '@mui/material';
 import { useState } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from '@mui/material/Table';
@@ -57,6 +57,24 @@ const Position = () => {
   });
   const [id, setId] = useState('');
   console.log('id:', id);
+
+  /////// notif
+  const [state, setState] = React.useState({
+    openNotif: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+
+  const { vertical, horizontal, openNotif } = state;
+
+  const handleClick = (newState) => () => {
+    setState({ openNotif: true, ...newState });
+  };
+
+  const handleCloseNotif = () => {
+    setState({ ...state, openNotif: false });
+  };
+  /////// notif
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -140,6 +158,12 @@ const Position = () => {
     }
   };
 
+  useEffect(() => {
+    if (router.query.created || router.query.edited) {
+      setState({ openNotif: true, vertical: 'top', horizontal: 'center' });
+    }
+  }, [router.query.created, router.query.edited]);
+
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
@@ -148,7 +172,7 @@ const Position = () => {
             fullWidth
             size="small"
             variant="outlined"
-            label="Cari nama / email"
+            label="Cari Jabatan"
             onChange={(e) => setSearch(e.target.value)}
             onKeyPress={onEnterSearch}
             InputProps={{
@@ -168,7 +192,7 @@ const Position = () => {
           wordWrap="nowrap"
           textAlign="center"
           className={classes.addUser}
-          onClick={() => router.push('/console/anggota/add-position')}>
+          onClick={() => router.push('/anggota/add-position')}>
           <img src="/images/icons/plus-icon.svg" alt="icon" />
           <Typography component="div" variant="h6">
             TAMBAH
@@ -292,6 +316,17 @@ const Position = () => {
         </Dialog>
       )}
       {/* // this is only appear when openDialog true end */}
+
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={openNotif}
+        onClose={handleCloseNotif}
+        key={vertical + horizontal}>
+        <Alert severity="success">
+          {router.query.created && 'Berhasil membuat data'}
+          {router.query.edited && 'Berhasil edit data'}
+        </Alert>
+      </Snackbar>
 
       <div className="mt-6 flex flex-row justify-content-center">
         <Pagination page={page} onChange={handlePagination} count={countPages} />

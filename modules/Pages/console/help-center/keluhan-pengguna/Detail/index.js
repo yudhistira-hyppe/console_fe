@@ -6,18 +6,16 @@ import { Stack } from '@mui/material';
 import {
   alpha,
   Avatar,
-  Box,
   Button,
   Card,
   CardContent,
   CardHeader,
   Divider,
-  FormControl,
   InputBase,
   InputLabel,
   Link,
-  TextField,
   Typography,
+  Select,
 } from '@material-ui/core';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
@@ -30,20 +28,48 @@ import WCIcon from '@material-ui/icons/Wc';
 import PhoneIcon from '@material-ui/icons/PhoneIphone';
 import HouseIcon from '@material-ui/icons/LocationCity';
 import { styled } from '@material-ui/styles';
+import ModalConfirmation from '../Modal';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
   { label: 'Help Center', link: '/console/help-center' },
-  { label: 'Keluhan Pengguna', link: '/console/keluhan-pengguna' },
+  { label: 'Keluhan Pengguna', link: '/console/help-center/keluhan-pengguna' },
   { label: 'Rincian Akun', isActive: true },
 ];
 
 const DetailKeluhanPengguna = () => {
   const router = useRouter();
+  const [modal, setModal] = React.useState({
+    show: false,
+    type: 'approve',
+  });
 
   const onBackHandler = (e) => {
     e.preventDefault();
-    router.push('/console/help-center');
+    router.push('/console/help-center/keluhan-pengguna  ');
+  };
+
+  const modalOpenHandler = (type) => {
+    setModal({
+      show: true,
+      type,
+    });
+  };
+
+  const onConfirmHandler = () => {
+    onCloseHandler();
+  };
+
+  const onCloseHandler = () => {
+    setModal({
+      show: false,
+      type: null,
+    });
   };
 
   const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -76,6 +102,42 @@ const DetailKeluhanPengguna = () => {
         boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
         borderColor: theme.palette.primary.main,
       },
+    },
+  }));
+
+  const SelectModified = styled(
+    Select,
+    InputBase,
+  )(({ theme }) => ({
+    'label + &': {
+      marginTop: theme.spacing(5),
+    },
+    '& .MuiSelect-root': {
+      border: 'none',
+    },
+    '& .MuiInput-underline': {
+      borderBottom: 'none',
+    },
+    '&:before': {
+      borderBottom: 'none',
+    },
+    '&:after': {
+      borderBottom: 'none',
+    },
+    '&:hover:not(.Mui-disabled):before': {
+      borderBottom: 'none',
+    },
+    '& .MuiSelect-select': {
+      border: '1px solid #ced4da',
+      borderRadius: 4,
+      transition: theme.transitions.create(['border-color', 'background-color', 'box-shadow']),
+      padding: '10px 12px',
+      width: '13em',
+    },
+    '& .MuiSelect-select:focus': {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+      borderColor: theme.palette.primary.main,
+      backgroundColor: 'transparent',
     },
   }));
 
@@ -315,18 +377,26 @@ const DetailKeluhanPengguna = () => {
                   <BootstrapInput id="nama" />
                 </FormControl>
 
-                <FormControl variant="standard">
+                <FormControl>
                   <InputLabel shrink htmlFor="nama">
                     Jenis Kelamin
                   </InputLabel>
-                  <BootstrapInput id="nama" />
+                  {/* <FormControl sx={{ mt: 1, pb: 0, width: 'auto' }} size="small"> */}
+                  <SelectModified displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+                    <MenuItem value={'M'}>Laki-laki</MenuItem>
+                    <MenuItem value={'F'}>Perempuan</MenuItem>
+                  </SelectModified>
+                  {/* </FormControl> */}
                 </FormControl>
 
                 <FormControl variant="standard">
                   <InputLabel shrink htmlFor="nama">
                     Tanggal Lahir
                   </InputLabel>
-                  <BootstrapInput id="nama" />
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <MobileDatePicker value={null} renderInput={(params) => <BootstrapInput {...params} />} />
+                  </LocalizationProvider>
+                  {/* <BootstrapInput id="nama" /> */}
                 </FormControl>
 
                 <FormControl variant="standard">
@@ -337,19 +407,33 @@ const DetailKeluhanPengguna = () => {
                 </FormControl>
               </Stack>
 
-              <Stack>
-                <div>
-                    <img />
-                </div>
+              <Stack mt={3} spacing={2}>
+                <Typography style={{ fontWeight: 'bold' }}>Dokumen 1</Typography>
+                <Stack direction={'row'} spacing={1}>
+                  <div style={{ width: '15em', objectFit: 'contain', overflow: 'hidden' }} >
+                    <img src="/images/ktp.png" alt="ktp.png" />
+                  </div>
+                  <div style={{ width: '15em', objectFit: 'contain', overflow: 'hidden' }} >
+                    <img src="/images/pas_photo.png" alt="pas_photo.png" />
+                  </div>
+                  <div style={{ width: '15em', objectFit: 'contain', overflow: 'hidden' }} >
+                    <img src="/images/kk.png" alt="kk.png" />
+                  </div>
+                </Stack>
               </Stack>
 
-              <Stack direction={'row'} spacing={1} justifyContent={'center'}>
-                <Button disabled variant="contained">Setujui</Button>
-                <Button variant="outlined">Tolak</Button>
+              <Stack direction={'row'} spacing={1} justifyContent={'center'} mt={5}>
+                <Button disabled variant="contained" onClick={() => modalOpenHandler('approve')}>
+                  Setujui
+                </Button>
+                <Button variant="outlined" onClick={() => modalOpenHandler('denied')}>
+                  Tolak
+                </Button>
               </Stack>
             </CardContent>
           </Card>
         </Stack>
+        <ModalConfirmation type={modal.type} showModal={modal.show} onConfirm={onConfirmHandler} onClose={onCloseHandler} />
       </PageContainer>
     </>
   );

@@ -67,7 +67,7 @@ const CmtAdvCardContent = ({
               sm={alignCenter ? 12 : columnSizes[1] === 0 ? 0 : 6}
               md={alignCenter ? 12 : columnSizes[1]}
               className={blockSecond}>
-              <Box width={1}>{children}</Box>
+              <Box>{children}</Box>
             </Grid>
           )}
         </Grid>

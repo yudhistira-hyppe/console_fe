@@ -2,13 +2,11 @@ import React from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Breadcrumbs from '../../bantuan-pengguna/BreadCrumb';
-import { Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 
 import { Avatar, Button, Card, CardContent, CardHeader, Chip, Divider, Link, Paper, Typography } from '@material-ui/core';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
-import { ToggleButton } from '@material-ui/lab';
-import CmtList from '@coremat/CmtList';
 import PortfolioDetails from '../../CardWithIndicator/PortofolioDetails';
 import EmailIcon from '@material-ui/icons/EmailOutlined';
 import CalendarIcon from '@material-ui/icons/CalendarTodayOutlined';
@@ -21,7 +19,17 @@ import HouseIcon from '@material-ui/icons/LocationCity';
 import CircledUserIcon from '@material-ui/icons/AccountCircleRounded';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import CheckCircleIcon from '@material-ui/icons/CheckCircleRounded';
-import Image from 'next/image';
+import ModalConfirmation from '../Modal';
+import DeleteModal from '../Modal/DeleteModal';
+import ViewModal from '../Modal/ViewModal';
+import GetChipColor from 'helpers/getChipColor';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import CmtList from '@coremat/CmtList';
+import ProgressIndicator from '../../CardWithIndicator/ProgressIndicator';
+import { GraphIndicator } from '../../components';
 
 const wallets = [
   { label: 'Mempromosikan Kekerasan Ekstrim Dan Terorisme', value: 25, rate: 5, color: '#E31D41' },
@@ -37,12 +45,105 @@ const breadcrumbs = [
   { label: 'Rincian Akun', isActive: true },
 ];
 
+const akunPelapor = [
+  {
+    name: 'Hamdani',
+    email: 'hamdani@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:29 WIB',
+    alasan: 'Akun ini mempromosikan kekerasan ekstrim dan terorisme',
+  },
+  {
+    name: 'Bernardo',
+    email: 'bernardo@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:49 WIB',
+    alasan: 'Akun ini berisikan konten dewasa',
+  },
+  {
+    name: 'Anna',
+    email: 'anna999@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:27 WIB',
+    alasan: 'Akun ini berisikan konten dewasa',
+  },
+  {
+    name: 'Michael',
+    email: 'Michael@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:21 WIB',
+    alasan: 'Akun ini melanggar EULA',
+  },
+  {
+    name: 'Clara',
+    email: 'claraasik99@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:51 WIB',
+    alasan: 'Akun ini melanggar EULA',
+  },
+  {
+    name: 'OliviaRosalina',
+    email: 'oliviarosalina@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:26 WIB',
+    alasan: 'Keamanan anak dibawah umur',
+  },
+  {
+    name: 'DeDeaDeasy',
+    email: 'deasyc@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:30 WIB',
+    alasan: 'Keamanan anak dibawah umur',
+  },
+  { name: 'Rene', email: 'irene@gmail.com', tanggal_pelaporan: '22/08/05-13:56 WIB', alasan: 'Keamanan anak dibawah umur' },
+  {
+    name: 'Keisya',
+    email: 'keisyairvi@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:47 WIB',
+    alasan: 'Akun ini berisikan konten dewasa',
+  },
+  {
+    name: 'Jonathan',
+    email: 'jonathan@gmail.com',
+    tanggal_pelaporan: '22/08/05-13:15 WIB',
+    alasan: 'Akun ini memposting ujaran kebencian atau perilaku berbahaya',
+  },
+];
+
+const laporan = [
+  { total: 20, status: null },
+  { total: 384, status: 'Tidak Ditangguhkan' },
+  { total: 40, status: 'Ditangguhkan' },
+  { total: 40, status: 'Ditangguhkan' },
+];
+
 const DetailKeluhanPengguna = () => {
   const router = useRouter();
+  const [showModal, setShowModal] = React.useState({
+    show: false,
+    type: '',
+    modalType: '',
+  });
+  const [tabSection, setTabSection] = React.useState('0');
+
+  const showModalHandler = (data) => {
+    setShowModal({
+      show: true,
+      type: data.type,
+      modalType: data.modalType,
+    });
+  };
 
   const onBackHandler = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     router.push('/console/help-center');
+  };
+
+  const onConfirmModal = () => {};
+
+  const onCloseModal = () => {
+    setShowModal({
+      show: false,
+      type: null,
+      modalType: null,
+    });
+  };
+
+  const handleTabSectionChange = (event, newValue) => {
+    setTabSection(newValue);
   };
 
   return (
@@ -90,7 +191,9 @@ const DetailKeluhanPengguna = () => {
               </Stack>
 
               <Stack>
-                <PortfolioDetails data={wallets} />
+                <GraphIndicator data={wallets} />
+                {/* <CmtList data={wallets} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} /> */}
+                {/* <PortfolioDetails data={wallets} /> */}
               </Stack>
             </Stack>
           </Card>
@@ -98,17 +201,28 @@ const DetailKeluhanPengguna = () => {
           <Card style={{ padding: '42px 25px', flex: 1 }}>
             <Stack spacing={4}>
               <Stack spacing={2}>
-                <Button variant="outlined" color="primary">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}>
                   Tidak Ditangguhkan
                 </Button>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}>
                   Ditangguhkan
                 </Button>
               </Stack>
 
               <Stack direction={'column'} spacing={1} mt={5}>
                 <Typography>
-                  Ingin dihapus? <Link style={{ fontWeight: 'bold', cursor: 'pointer' }}>klik disini</Link>
+                  Ingin dihapus?{' '}
+                  <Link
+                    style={{ fontWeight: 'bold', cursor: 'pointer' }}
+                    onClick={() => showModalHandler({ type: '', modalType: 'delete' })}>
+                    klik disini
+                  </Link>
                 </Typography>
 
                 <Paper
@@ -125,23 +239,47 @@ const DetailKeluhanPengguna = () => {
           <Card style={{ flex: 1 }}>
             <CardHeader title={<Typography variant="h3">Riwayat Laporan</Typography>} />
             <CardContent>
-              <Stack direction={'row'} spacing={2}>
-                <Link color="textSecondary">
+              <Grid container py={1}>
+                <Grid item xs={5}>
                   <Typography variant="caption">Total Laporan</Typography>
-                </Link>
-                <Link color="textSecondary">
+                </Grid>
+                <Grid item xs={7}>
                   <Typography variant="caption">Tindakan</Typography>
-                </Link>
-              </Stack>
-            </CardContent>
-            <Divider />
-            <CardContent>
-              <Stack direction={'row'} spacing={1}>
-                <Typography variant="subtitle2">20</Typography>
-                <Typography variant="subtitle2" color="primary">
-                  Laporan
-                </Typography>
-              </Stack>
+                </Grid>
+              </Grid>
+              <Divider />
+              <Grid container>
+                {laporan.map((el, i) => (
+                  <Grid container key={i} py={2} borderBottom={'solid rgba(33, 33, 33, 0.08) 2px'}>
+                    <Grid item xs={5}>
+                      <Stack direction={'row'} spacing={1} alignItems={'center'} height={'100%'}>
+                        <Typography variant="subtitle2">{el.total}</Typography>
+                        <Typography
+                          variant="subtitle2"
+                          color="primary"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => showModalHandler({ modalType: 'view', type: '' })}>
+                          laporan
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={7}>
+                      {el.status ? (
+                        <Chip
+                          label={
+                            <Typography fontWeight="bold" variant="subtitle2">
+                              {el.status}
+                            </Typography>
+                          }
+                          style={GetChipColor(el.status)}
+                        />
+                      ) : (
+                        '-'
+                      )}
+                    </Grid>
+                  </Grid>
+                ))}
+              </Grid>
             </CardContent>
           </Card>
         </Stack>
@@ -456,117 +594,145 @@ const DetailKeluhanPengguna = () => {
 
           <Stack flex={1} spacing={3}>
             <Paper>
-              <Stack direction={'row'} padding={2}>
-                <Stack justifyContent={'center'} alignItems={'flex-start'} flex={0.7}>
-                  <Typography variant="h4">Post Pengguna</Typography>
-                </Stack>
-                <Stack direction={'row'} flex={2}>
-                  <Button>All</Button>
-                  <Button>HYPPEVID</Button>
-                  <Button>HYPPEDIARY</Button>
-                  <Button>HYPPEDIARY</Button>
-                </Stack>
-              </Stack>
-              <Divider />
-              <Stack padding={2} spacing={2}>
-                <Stack direction={'row'} spacing={2}>
-                  <Stack flex={1} style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                    <img src="https://material-ui.com/static/images/avatar/2.jpg" style={{ objectFit: 'cover' }} />
+              <TabContext value={tabSection}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <Stack direction={'row'}>
+                    <Stack justifyContent={'center'} alignItems={'flex-start'} flex={0.5} paddingLeft={2}>
+                      <Typography variant="h4">Post Pengguna</Typography>
+                    </Stack>
+                    <TabList
+                      onChange={handleTabSectionChange}
+                      aria-label="basic tabs example"
+                      TabIndicatorProps={{ style: { backgroundColor: '#AB22AF', color: '#AB22AF', fontWeight: 'bold' } }}
+                      textColor="secondary">
+                      <Tab label="All" value="0" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
+                      <Tab label="HYYPEVID" value="1" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
+                      <Tab label="HYYPEPICT" value="2" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
+                      <Tab label="HYYPEDIARY" value="3" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
+                    </TabList>
                   </Stack>
+                </Box>
 
-                  <Stack flex={2} spacing={1}>
-                    <div>
-                      <Button disabled variant="contained" color="secondary">
-                        HyppeVid
-                      </Button>
-                    </div>
-                    <Typography>
-                      Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi kesukaan saya
-                    </Typography>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Dilihat</Typography>
+                <TabPanel value="0">
+                  <Stack padding={2} spacing={2}>
+                    <Stack direction={'row'} spacing={2}>
+                      <Stack flex={1} style={{ borderRadius: '10px', overflow: 'hidden' }}>
+                        <img src="https://material-ui.com/static/images/avatar/2.jpg" style={{ objectFit: 'cover' }} />
                       </Stack>
-                      <Divider orientation="vertical" />
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Disukai</Typography>
-                      </Stack>
-                      <Divider orientation="vertical" />
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Komentar</Typography>
-                      </Stack>
-                      <Divider orientation="vertical" />
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Dibagikan</Typography>
-                      </Stack>
-                    </Stack>
-                  </Stack>
 
-                  <Stack direction={'column'} justifyContent={'center'}>
-                    <Stack direction={'row'} spacing={1}>
-                      <Typography variant="body2">Terdaftar:</Typography>
-                      <Typography variant="body2">Ya</Typography>
-                    </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <Typography variant="body2">Dijual:</Typography>
-                      <Typography variant="body2">Tidak</Typography>
-                    </Stack>
-                  </Stack>
-                </Stack>
+                      <Stack flex={2} spacing={1}>
+                        <div>
+                          <Button disabled variant="contained" color="secondary">
+                            HyppeVid
+                          </Button>
+                        </div>
+                        <Typography>
+                          Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi kesukaan
+                          saya
+                        </Typography>
+                        <Stack direction={'row'} spacing={1}>
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Dilihat</Typography>
+                          </Stack>
+                          <Divider orientation="vertical" />
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Disukai</Typography>
+                          </Stack>
+                          <Divider orientation="vertical" />
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Komentar</Typography>
+                          </Stack>
+                          <Divider orientation="vertical" />
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Dibagikan</Typography>
+                          </Stack>
+                        </Stack>
+                      </Stack>
 
-                <Stack direction={'row'} spacing={2}>
-                  <Stack flex={1} style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                    <img src="https://material-ui.com/static/images/avatar/2.jpg" style={{ objectFit: 'cover' }} />
-                  </Stack>
+                      <Stack direction={'column'} justifyContent={'center'}>
+                        <Stack direction={'row'} spacing={1}>
+                          <Typography variant="body2">Terdaftar:</Typography>
+                          <Typography variant="body2">Ya</Typography>
+                        </Stack>
+                        <Stack direction={'row'} spacing={1}>
+                          <Typography variant="body2">Dijual:</Typography>
+                          <Typography variant="body2">Tidak</Typography>
+                        </Stack>
+                      </Stack>
+                    </Stack>
 
-                  <Stack flex={2} spacing={1}>
-                    <div>
-                      <Button disabled variant="contained" color="secondary">
-                        HyppeVid
-                      </Button>
-                    </div>
-                    <Typography>
-                      Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi kesukaan saya
-                    </Typography>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Dilihat</Typography>
+                    <Stack direction={'row'} spacing={2}>
+                      <Stack flex={1} style={{ borderRadius: '10px', overflow: 'hidden' }}>
+                        <img src="https://material-ui.com/static/images/avatar/2.jpg" style={{ objectFit: 'cover' }} />
                       </Stack>
-                      <Divider orientation="vertical" />
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Disukai</Typography>
-                      </Stack>
-                      <Divider orientation="vertical" />
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Komentar</Typography>
-                      </Stack>
-                      <Divider orientation="vertical" />
-                      <Stack spacing={1} direction="row">
-                        <Typography variant="subtitle2">233</Typography>
-                        <Typography variant="body2">Dibagikan</Typography>
-                      </Stack>
-                    </Stack>
-                  </Stack>
 
-                  <Stack direction={'column'} justifyContent={'center'}>
-                    <Stack direction={'row'} spacing={1}>
-                      <Typography variant="body2">Terdaftar:</Typography>
-                      <Typography variant="body2">Ya</Typography>
-                    </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <Typography variant="body2">Dijual:</Typography>
-                      <Typography variant="body2">Tidak</Typography>
+                      <Stack flex={2} spacing={1}>
+                        <div>
+                          <Button disabled variant="contained" color="secondary">
+                            HyppeVid
+                          </Button>
+                        </div>
+                        <Typography>
+                          Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi kesukaan
+                          saya
+                        </Typography>
+                        <Stack direction={'row'} spacing={1}>
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Dilihat</Typography>
+                          </Stack>
+                          <Divider orientation="vertical" />
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Disukai</Typography>
+                          </Stack>
+                          <Divider orientation="vertical" />
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Komentar</Typography>
+                          </Stack>
+                          <Divider orientation="vertical" />
+                          <Stack spacing={1} direction="row">
+                            <Typography variant="subtitle2">233</Typography>
+                            <Typography variant="body2">Dibagikan</Typography>
+                          </Stack>
+                        </Stack>
+                      </Stack>
+
+                      <Stack direction={'column'} justifyContent={'center'}>
+                        <Stack direction={'row'} spacing={1}>
+                          <Typography variant="body2">Terdaftar:</Typography>
+                          <Typography variant="body2">Ya</Typography>
+                        </Stack>
+                        <Stack direction={'row'} spacing={1}>
+                          <Typography variant="body2">Dijual:</Typography>
+                          <Typography variant="body2">Tidak</Typography>
+                        </Stack>
+                      </Stack>
                     </Stack>
                   </Stack>
-                </Stack>
-              </Stack>
+                </TabPanel>
+
+                <TabPanel value="1">
+                  <Stack justifyContent={'center'} direction={'row'}>
+                    <Typography>NO DATA</Typography>
+                  </Stack>
+                </TabPanel>
+                <TabPanel value="2">
+                  <Stack justifyContent={'center'} direction={'row'}>
+                    <Typography>NO DATA</Typography>
+                  </Stack>
+                </TabPanel>
+                <TabPanel value="3">
+                  <Stack justifyContent={'center'} direction={'row'}>
+                    <Typography>NO DATA</Typography>
+                  </Stack>
+                </TabPanel>
+              </TabContext>
             </Paper>
 
             <Paper>
@@ -636,6 +802,19 @@ const DetailKeluhanPengguna = () => {
             </Paper>
           </Stack>
         </Stack>
+
+        <ModalConfirmation
+          showModal={showModal.show && showModal.modalType === 'confirmation'}
+          type={showModal.type}
+          onClose={onCloseModal}
+          onConfirm={onConfirmModal}
+        />
+        <DeleteModal
+          showModal={showModal.show && showModal.modalType === 'delete'}
+          onClose={onCloseModal}
+          onConfirm={onConfirmModal}
+        />
+        <ViewModal showModal={showModal.show && showModal.modalType === 'view'} data={akunPelapor} onClose={onCloseModal} />
       </PageContainer>
     </>
   );

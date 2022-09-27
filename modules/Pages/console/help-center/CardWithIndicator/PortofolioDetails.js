@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Box, Typography } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -18,9 +18,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const PortfolioDetails = ({ data }) => {
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   const classes = useStyles();
   return (
-    <Box width={1}>
+    <Box width={1} style={{ zIndex: -1 }}>
       {/* {title && (
         <Typography component="div" variant="h6" className={classes.titleRoot}>
           {title}
