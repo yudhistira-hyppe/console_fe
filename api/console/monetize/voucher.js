@@ -7,10 +7,10 @@ export const voucherApi = createApi({
   tagTypes: ['Voucher'],
   endpoints: (build) => ({
     getVouchers: build.query({
-      query: (data) => ({
+      query: (params) => ({
         url: `/vouchers/list`,
         method: 'POST',
-        body: data || {},
+        body: params,
       }),
       providesTags: ['Voucher'],
     }),
@@ -18,6 +18,22 @@ export const voucherApi = createApi({
       query: (id) => ({
         url: `/vouchers/${id}`,
         method: 'GET',
+      }),
+      providesTags: ['Voucher'],
+    }),
+    getTransactionVouchers: build.query({
+      query: (params) => ({
+        url: '/transactions/historys/voucher',
+        method: 'POST',
+        body: params,
+      }),
+      providesTags: ['Voucher'],
+    }),
+    getDetailTransactionVouchers: build.query({
+      query: (data) => ({
+        url: '/transactions/historys/voucher/detail',
+        method: 'POST',
+        body: data,
       }),
       providesTags: ['Voucher'],
     }),
@@ -40,5 +56,11 @@ export const voucherApi = createApi({
   }),
 });
 
-export const { useGetVouchersQuery, useGetVoucherByIDQuery, useCreateVoucherMutation, useUpdateVoucherMutation } =
-  voucherApi;
+export const {
+  useGetVouchersQuery,
+  useGetVoucherByIDQuery,
+  useGetTransactionVouchersQuery,
+  useGetDetailTransactionVouchersQuery,
+  useCreateVoucherMutation,
+  useUpdateVoucherMutation,
+} = voucherApi;
