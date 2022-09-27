@@ -138,7 +138,7 @@ export const consoleNav = [
   {
     name: 'Database',
     type: 'item',
-    link: '/console/users',
+    link: '/console/database',
   },
   {
     name: 'Engagement',
