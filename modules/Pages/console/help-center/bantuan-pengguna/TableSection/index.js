@@ -12,23 +12,20 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { Stack } from '@mui/material';
+import { Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import { useRouter } from 'next/router';
+import moment from 'moment';
 
-const TableSection = ({ onOrderChange, order, total, page, rows }) => {
-  const router = useRouter();
-  const onSelectData = () => {
-    router.push('/console/help-center/bantuan-pengguna/detail');
-  };
+const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => {
   return (
     <Stack flex={1}>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
         <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
           <Typography>
-            Menampilkan {total} hasil ({page}-{rows} dari {total})
+            Menampilkan {listTickets?.totalrow} hasil ({listTickets?.page + 1}-{listTickets?.totalrow} dari{' '}
+            {listTickets?.totalallrow})
           </Typography>
         </Box>
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
@@ -38,13 +35,9 @@ const TableSection = ({ onOrderChange, order, total, page, rows }) => {
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
               value={order}
-              onChange={onOrderChange}
-              displayEmpty
+              onChange={handleOrder}
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: '#FFFFFF' }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
               <MenuItem value={'all'}>Semua</MenuItem>
               <MenuItem value={'desc'}>Terbaru</MenuItem>
               <MenuItem value={'asc'}>Terlama</MenuItem>
@@ -58,57 +51,85 @@ const TableSection = ({ onOrderChange, order, total, page, rows }) => {
           <TableHead>
             <TableRow>
               <TableCell>Nomor Tiket</TableCell>
-              <TableCell align="left">Tanggal Masuk Tiket</TableCell>
-              <TableCell align="left">Sumber</TableCell>
-              <TableCell align="left">Kategori</TableCell>
+              <TableCell align="left" style={{ maxWidth: 100 }}>
+                Sumber
+              </TableCell>
+              <TableCell align="left" style={{ maxWidth: 100 }}>
+                Kategori
+              </TableCell>
               <TableCell align="left">Level</TableCell>
               <TableCell align="left">Status</TableCell>
-              <TableCell align="left">Penerima Tugas </TableCell>
+              {/* <TableCell align="left">Petugas</TableCell> */}
+              <TableCell align="left">Tanggal Dibuat</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            <TableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={onSelectData}>
-              <TableCell component="th" scope="row">
-                <Typography variant="body1" style={{ fontSize: '12px' }}>
-                  004/22/08/22
-                </Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="body1" style={{ fontSize: '12px' }}>
-                  22/07/22-13:20 WIB
-                </Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="body1" style={{ fontSize: '12px' }}>
-                  Formulir
-                </Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="body1" style={{ fontSize: '12px' }}>
-                  Akun & Verifikasi
-                </Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="body1" style={{ fontSize: '12px' }}>
-                  4
-                </Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Chip label="Baru" color="red" style={{ backgroundColor: '#E6094B1A', color: 'red' }} />
-              </TableCell>
-              <TableCell align="left">
-                <Stack direction={'row'} spacing={1}>
-                  <Avatar src="https://material-ui.com/static/images/avatar/1.jpg" />
-                  <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-                    <Typography variant="h5">Rizal</Typography>
-                  </Box>
-                </Stack>
-              </TableCell>
-            </TableRow>
+            {listTickets?.data?.length >= 1 ? (
+              listTickets?.data?.map((item, key) => (
+                <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row">
+                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      {item?.nomortiket}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left" style={{ maxWidth: 100 }}>
+                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      {item?.sourceName || '-'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left" style={{ maxWidth: 100 }}>
+                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      {item?.nameCategory || '-'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      {item?.nameLevel || '-'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    {item?.status === 'onprogress' && (
+                      <Chip
+                        label="Dalam Proses"
+                        style={{ backgroundColor: 'rgba(255, 140, 0, 0.15)', color: '#FF8C00D9' }}
+                      />
+                    )}
+                    {item?.status === 'close' && (
+                      <Chip label="Selesai" style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9' }} />
+                    )}
+                    {item?.status === 'new' && <Chip label="Baru" style={{ backgroundColor: '#E6094B1A', color: 'red' }} />}
+                  </TableCell>
+                  {/* <TableCell align="left">
+                    <Stack direction={'row'} spacing={1}>
+                      <Avatar src="https://material-ui.com/static/images/avatar/1.jpg" />
+                      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+                        <Typography variant="h5">Rizal</Typography>
+                      </Box>
+                    </Stack>
+                  </TableCell> */}
+                  <TableCell align="left">
+                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      {moment(item?.datetime).format('lll')}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  Tidak ada data.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      {listTickets && (
+        <Stack alignItems={'center'} mt={2}>
+          <Pagination count={listTickets?.totalpage} size={'small'} onChange={handlePageChange} />
+        </Stack>
+      )}
     </Stack>
   );
 };
