@@ -18,11 +18,12 @@ import {
   faqAndInfoApi,
   announcementApi,
   ticketApi,
+  bantuanPenggunaApi,
   getUserHyppe,
   group,
   moduleAPI,
   divisiAPI,
-  voucherApi
+  voucherApi,
 } from 'api/console';
 
 const initStore = () => {
@@ -37,6 +38,7 @@ const initStore = () => {
         faqAndInfoApi.middleware,
         announcementApi.middleware,
         ticketApi.middleware,
+        bantuanPenggunaApi.middleware,
         contentAPI.middleware,
         notificationAPI.middleware,
         commentAPI.middleware,
@@ -48,7 +50,7 @@ const initStore = () => {
         group.middleware,
         moduleAPI.middleware,
         divisiAPI.middleware,
-        voucherApi.middleware
+        voucherApi.middleware,
       ]),
   });
   return store;
