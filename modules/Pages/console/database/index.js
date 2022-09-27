@@ -23,7 +23,7 @@ const ConsoleDatabaseComponent = (props) => {
       <TabContext value={queryTab}>
         <TabList onChange={onTabChange} textColor="secondary" indicatorColor="secondary">
           <Tab className={classes.tab} label="Akun" value="account" />
-          <Tab className={classes.tab} label="Konten" value="content" />
+          <Tab className={classes.tab} label="Konten" value="content" disabled />
         </TabList>
         <TabPanel className={classes.tabPanel} value="account">
           <DatabaseAccountComponent />
