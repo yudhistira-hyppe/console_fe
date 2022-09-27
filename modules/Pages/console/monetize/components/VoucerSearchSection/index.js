@@ -12,7 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 
-const SearchSection = () => {
+const SearchSection = ({ handleChange }) => {
   const classes = useStyles();
   const [week, setWeek] = React.useState(null);
   const [value, setValue] = React.useState([null, null]);
@@ -33,6 +33,7 @@ const SearchSection = () => {
                 <Chip
                   clickable
                   onClick={() => {
+                    handleChange('transaction_date', 7);
                     setWeek(1), setValue([null, null]);
                   }}
                   label="7 Hari"
@@ -45,6 +46,7 @@ const SearchSection = () => {
                   label="14 Hari"
                   clickable
                   onClick={() => {
+                    handleChange('transaction_date', 14);
                     setWeek(2), setValue([null, null]);
                   }}
                   size="small"
@@ -56,6 +58,7 @@ const SearchSection = () => {
                   label="1 Bulan"
                   clickable
                   onClick={() => {
+                    handleChange('transaction_date', 30);
                     setWeek(4), setValue([null, null]);
                   }}
                   size="small"
@@ -67,6 +70,7 @@ const SearchSection = () => {
                   label="3 Bulan"
                   clickable
                   onClick={() => {
+                    handleChange('transaction_date', 90);
                     setWeek(12), setValue([null, null]);
                   }}
                   size="small"
@@ -80,6 +84,7 @@ const SearchSection = () => {
                 value={value}
                 maxDate={getWeeksAfter(value[0], week)}
                 onChange={(newValue) => {
+                  handleChange('transaction_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
                   setValue(newValue);
                 }}
                 renderInput={(startProps, endProps) => (
@@ -127,9 +132,18 @@ const SearchSection = () => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
             <FormGroup>
-              <FormControlLabel label={'Menuggu'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel label={'Lunas'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel label={'Gagal'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel
+                label={'Menuggu'}
+                control={<Checkbox defaultChecked={false} onChange={() => handleChange('status_payment', 'WAITING_PAYMENT')} />}
+              />
+              <FormControlLabel
+                label={'Lunas'}
+                control={<Checkbox defaultChecked={false} onChange={() => handleChange('status_payment', 'Success')} />}
+              />
+              <FormControlLabel
+                label={'Gagal'}
+                control={<Checkbox defaultChecked={false} onChange={() => handleChange('status_payment', 'Cancel')} />}
+              />
             </FormGroup>
           </AccordionDetails>
         </Accordion>
