@@ -412,12 +412,7 @@ const DetailBantuanPengguna = () => {
                           id="composition-menu"
                           aria-labelledby="composition-button"
                           onKeyDown={handleListKeyDown}>
-                          {showModal.type !== 'Baru' && (
-                            <MenuItem id="Baru" onClick={handleClose}>
-                              Baru
-                            </MenuItem>
-                          )}
-                          {showModal.type !== 'Dalam Proses' && (
+                          {showModal.type === 'Baru' && (
                             <MenuItem id="Dalam Proses" onClick={handleClose}>
                               Dalam Proses
                             </MenuItem>
