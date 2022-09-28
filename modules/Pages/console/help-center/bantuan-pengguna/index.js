@@ -12,8 +12,8 @@ import { useGetListTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna'
 import moment from 'moment';
 
 const breadcrumbs = [
-  { label: 'Home', link: '/console' },
-  { label: 'Help Center', link: '/console/help-center' },
+  { label: 'Home', link: '/' },
+  { label: 'Help Center', link: '/help-center' },
   { label: 'Bantuan Pengguna', isActive: true },
 ];
 
@@ -27,7 +27,7 @@ const ConsoleBantuanPenggunaComponent = () => {
     startdate: '',
     enddate: '',
     page: 0,
-    limit: 5,
+    limit: 10,
   });
   const router = useRouter();
 
@@ -75,19 +75,19 @@ const ConsoleBantuanPenggunaComponent = () => {
             ? filter.status.filter((item) => item !== value)
             : [...filter.status, value],
         };
-      } else if(kind === "search") {
+      } else if (kind === 'search') {
         return {
-          ...prevVal, 
-          search: value
-        }
-      } else if(kind === "sumber") {
+          ...prevVal,
+          search: value,
+        };
+      } else if (kind === 'sumber') {
         return {
           ...prevVal,
           sumber: filter.sumber.find((item) => item === value)
             ? filter.sumber.filter((item) => item !== value)
             : [...filter.sumber, value],
         };
-      } else if(kind === "category") {
+      } else if (kind === 'category') {
         return {
           ...prevVal,
           kategori: filter.kategori.find((item) => item === value)
@@ -112,20 +112,21 @@ const ConsoleBantuanPenggunaComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Bantuan Pengguna</title>
       </Head>
-
-      <Nav breadcrumbs={breadcrumbs} />
-      <Stack
-        direction={'row'}
-        mt={1}
-        mb={3}
-        onClick={() => router.push('/help-center')}
-        style={{ width: 'fit-content', cursor: 'pointer' }}>
-        <Stack direction={'column'} justifyContent={'center'}>
-          <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Nav breadcrumbs={breadcrumbs} />
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/help-center')}
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+          </Stack>
+          <Typography variant="h1" style={{ color: 'black' }}>
+            Kembali
+          </Typography>
         </Stack>
-        <Typography variant="h1" style={{ color: 'black' }}>
-          Kembali
-        </Typography>
       </Stack>
 
       <PageContainer heading="">

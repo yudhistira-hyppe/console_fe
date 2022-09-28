@@ -20,11 +20,13 @@ import moment from 'moment';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import ModalProfilePenerima from '../Modal/ModalProfilePenerima';
+import { useRouter } from 'next/router';
 
 const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => {
   const [isModal, setModal] = React.useState(false);
   const [selectedEmail, setSelectedEmail] = React.useState('');
   const { authUser } = useAuth();
+  const router = useRouter();
 
   const getMediaUri = (urlEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -77,7 +79,7 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                 <TableCell align="left" style={{ maxWidth: 100 }}>
                   Sumber
                 </TableCell>
-                <TableCell align="left" style={{ maxWidth: 100 }}>
+                <TableCell align="left" style={{ width: 125 }}>
                   Kategori
                 </TableCell>
                 <TableCell align="left" style={{ maxWidth: 60 }}>
@@ -86,7 +88,7 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                 <TableCell align="left" style={{ maxWidth: 140 }}>
                   Status
                 </TableCell>
-                <TableCell align="left" style={{ maxWidth: 80 }}>
+                <TableCell align="left" style={{ maxWidth: 50 }}>
                   Penerima
                 </TableCell>
                 <TableCell align="right">Dibuat</TableCell>
@@ -96,8 +98,13 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
             <TableBody>
               {listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, key) => (
-                  <TableRow hover key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">
+                  <TableRow
+                    hover
+                    key={key}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    onClick={() => router.push(`/console/help-center/bantuan-pengguna/detail/${item?._id}`)}
+                    style={{ cursor: 'pointer' }}>
+                    <TableCell component="th" scope="row" style={{ maxWidth: 180 }}>
                       <Typography variant="body1" style={{ fontSize: '12px' }}>
                         {item?.nomortiket}
                       </Typography>
@@ -107,7 +114,7 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                         {item?.sourceName || '-'}
                       </Typography>
                     </TableCell>
-                    <TableCell align="left" style={{ maxWidth: 100 }}>
+                    <TableCell align="left" style={{ width: 125 }}>
                       <Typography variant="body1" style={{ fontSize: '12px' }}>
                         {item?.nameCategory || '-'}
                       </Typography>
@@ -131,15 +138,19 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                         <Chip label="Baru" style={{ backgroundColor: '#E6094B1A', color: 'red' }} />
                       )}
                     </TableCell>
-                    <TableCell align="center" style={{ maxWidth: 80, display: 'flex', justifyContent: 'end' }}>
-                      <Avatar
-                        src={getMediaUri(item?.avatar?.mediaEndpoint)}
-                        onClick={() => {
-                          setSelectedEmail(item?.penerima);
-                          setModal(!isModal);
-                        }}
-                        style={{ cursor: 'pointer' }}
-                      />
+                    <TableCell align="center" style={{ display: 'flex', justifyContent: 'center' }}>
+                      {item?.penerima ? (
+                        <Avatar
+                          src={getMediaUri(item?.avatar?.mediaEndpoint)}
+                          onClick={() => {
+                            setSelectedEmail(item?.penerima);
+                            setModal(!isModal);
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      ) : (
+                        <Avatar />
+                      )}
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body1" style={{ fontSize: '12px' }}>
