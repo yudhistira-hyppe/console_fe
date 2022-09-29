@@ -1,3 +1,4 @@
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { Box, Button, Modal } from '@material-ui/core';
 import { Avatar, Divider, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -20,7 +21,7 @@ const style = {
 };
 
 const ModalProfilePenerima = ({ showModal, email, onCancel }) => {
-  const { data: profile } = showModal ? useGetProfileByUserEmailQuery(email) : {};
+  const { data: profile, isLoading } = showModal ? useGetProfileByUserEmailQuery(email) : {};
   const { authUser } = useAuth();
 
   const getMediaUri = () => {
@@ -32,44 +33,48 @@ const ModalProfilePenerima = ({ showModal, email, onCancel }) => {
 
   return (
     <Modal open={showModal}>
-      <Box sx={style}>
-        <Stack direction="row" justifyContent="center">
-          <Avatar alt="avatar profile penerima" src={getMediaUri()} sx={{ width: 250, height: 250 }} />
-        </Stack>
-        <Stack direction="column" spacing={1} my={3}>
-          <Typography color="#666666">Nama Lengkap : {profile?.data[0]?.fullName}</Typography>
-          <Typography color="#666666">Alamat Email&nbsp;&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.email}</Typography>
-          <Typography color="#666666">
-            Jenis Kelamin&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.gender === 'MALE' ? 'Laki - Laki' : 'Perempuan'}
-          </Typography>
-          <Typography color="#666666">
-            Ketertarikan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.interest?.join(', ')}
-          </Typography>
-        </Stack>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          spacing={2}
-          divider={<Divider orientation="vertical" flexItem />}>
-          <Stack direction="column" alignItems="center" width={150}>
-            <Typography fontWeight="bold">POST</Typography>
-            <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+      {isLoading ? (
+        <PageLoader />
+      ) : (
+        <Box sx={style}>
+          <Stack direction="row" justifyContent="center">
+            <Avatar alt="avatar profile penerima" src={getMediaUri()} sx={{ width: 250, height: 250 }} />
           </Stack>
-          <Stack direction="column" alignItems="center" width={150}>
-            <Typography fontWeight="bold">FOLLOWERS</Typography>
-            <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+          <Stack direction="column" spacing={1} my={3}>
+            <Typography color="#666666">Nama Lengkap : {profile?.data[0]?.fullName}</Typography>
+            <Typography color="#666666">Alamat Email&nbsp;&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.email}</Typography>
+            <Typography color="#666666">
+              Jenis Kelamin&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.gender === 'MALE' ? 'Laki - Laki' : 'Perempuan'}
+            </Typography>
+            <Typography color="#666666">
+              Ketertarikan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.interest?.join(', ')}
+            </Typography>
           </Stack>
-          <Stack direction="column" alignItems="center" width={150}>
-            <Typography fontWeight="bold">FOLLOWING</Typography>
-            <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            spacing={2}
+            divider={<Divider orientation="vertical" flexItem />}>
+            <Stack direction="column" alignItems="center" width={150}>
+              <Typography fontWeight="bold">POST</Typography>
+              <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+            </Stack>
+            <Stack direction="column" alignItems="center" width={150}>
+              <Typography fontWeight="bold">FOLLOWERS</Typography>
+              <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+            </Stack>
+            <Stack direction="column" alignItems="center" width={150}>
+              <Typography fontWeight="bold">FOLLOWING</Typography>
+              <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+            </Stack>
           </Stack>
-        </Stack>
-        <Stack direction="row" justifyContent="center" mt={4}>
-          <Button variant="contained" color="primary" onClick={onCancel}>
-            Tutup
-          </Button>
-        </Stack>
-      </Box>
+          <Stack direction="row" justifyContent="center" mt={4}>
+            <Button variant="contained" color="primary" onClick={onCancel}>
+              Tutup
+            </Button>
+          </Stack>
+        </Box>
+      )}
     </Modal>
   );
 };
