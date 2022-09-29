@@ -1,6 +1,6 @@
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { SearchSection, TableSection } from '../components';
 import { useGetTransactionVouchersQuery } from 'api/console/monetize/voucher';
@@ -30,7 +30,7 @@ const MonetizeVoucherComponent = () => {
     return params;
   };
 
-  const { data: listVouchers } = useGetTransactionVouchersQuery(getParams());
+  const { data: listVouchers, isLoading: loadingVoucher } = useGetTransactionVouchersQuery(getParams());
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
@@ -81,12 +81,16 @@ const MonetizeVoucherComponent = () => {
             <SearchSection handleChange={handleSearchChange} />
           </Grid>
           <Grid item xs={12} md={9} sm={9}>
-            <TableSection
-              handleOrder={onOrderChange}
-              handlePageChange={handlePageChange}
-              listVouchers={listVouchers}
-              order={filter.order}
-            />
+            {loadingVoucher ? (
+              <Typography>loading...</Typography>
+            ) : (
+              <TableSection
+                handleOrder={onOrderChange}
+                handlePageChange={handlePageChange}
+                listVouchers={listVouchers}
+                order={filter.order}
+              />
+            )}
           </Grid>
         </GridContainer>
       </PageContainer>
