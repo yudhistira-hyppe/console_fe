@@ -8,9 +8,8 @@ import TextField from '@mui/material/TextField';
 import useStyles from '../../bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
 import { Stack } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateRangePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
-
 
 const SearchSection = () => {
   const classes = useStyles();
@@ -92,7 +91,7 @@ const SearchSection = () => {
         </Accordion>
 
         <Accordion elevation={0} defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px'}}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Akun Pemohon</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
@@ -101,7 +100,7 @@ const SearchSection = () => {
         </Accordion>
 
         <Accordion elevation={0} defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px'}}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
