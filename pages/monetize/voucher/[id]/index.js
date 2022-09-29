@@ -5,7 +5,7 @@ import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePa
 import { useGetVoucherByIDQuery } from 'api/console/monetize/voucher';
 import { useRouter } from 'next/router';
 
-const ConsoleVoucherDetailComponent = dynamic(() => import('modules/Pages/console/monetize/Voucher/Detail'), {
+const ConsoleVoucherDetailComponent = dynamic(() => import('modules/Pages/console/monetize/voucher/detail'), {
   loading: () => <PageLoader />,
 });
 
