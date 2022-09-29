@@ -10,6 +10,7 @@ import { Button } from '@material-ui/core';
 import { TabContext, TabPanel } from '@material-ui/lab';
 import MonetizeKepemilikanComponent from './Kepemilikan';
 import { useRouter } from 'next/router';
+import MonetizeJualBeliComponent from './jual-beli';
 
 const ConsoleMonetizeComponent = () => {
   const [value, setValue] = React.useState('0');
@@ -44,7 +45,7 @@ const ConsoleMonetizeComponent = () => {
             {value == '1' && (
               <Stack direction={'column'} justifyContent={'center'}>
                 <div>
-                  <Button variant="contained" color="primary" onClick={() => router.push('/monetize/voucher') }>
+                  <Button variant="contained" color="primary" onClick={() => router.push('/monetize/voucher')}>
                     Kelola voucher
                   </Button>
                 </div>
@@ -61,7 +62,7 @@ const ConsoleMonetizeComponent = () => {
             <MonetizeKepemilikanComponent />
           </TabPanel>
           <TabPanel value="3">
-            <MonetizeKepemilikanComponent />
+            <MonetizeJualBeliComponent />
           </TabPanel>
         </TabContext>
       </PageContainer>
