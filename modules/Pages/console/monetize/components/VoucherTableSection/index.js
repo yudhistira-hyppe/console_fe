@@ -23,6 +23,14 @@ const TableSection = ({ listVouchers, order, handleOrder, handlePageChange }) =>
   const [isDetail, setDetail] = React.useState(false);
   const [selectedID, setSelectedID] = React.useState({});
 
+  const dataList =
+    listVouchers &&
+    [...listVouchers?.data].sort(function (a, b) {
+      return order === 'desc'
+        ? new Date(b.timestamp) - new Date(a.timestamp)
+        : new Date(a.timestamp) - new Date(b.timestamp);
+    });
+
   return (
     <>
       <ModalDetailTransaction id={selectedID} showModal={isDetail} onCancel={() => setDetail(!isDetail)} />
@@ -44,7 +52,6 @@ const TableSection = ({ listVouchers, order, handleOrder, handlePageChange }) =>
                 value={order}
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: '#FFFFFF' }}>
-                <MenuItem value="all">Semua</MenuItem>
                 <MenuItem value="desc">Terbaru</MenuItem>
                 <MenuItem value="asc">Terlama</MenuItem>
               </Select>
@@ -66,7 +73,7 @@ const TableSection = ({ listVouchers, order, handleOrder, handlePageChange }) =>
 
             <TableBody>
               {listVouchers ? (
-                listVouchers.data?.map((item, key) => (
+                dataList?.map((item, key) => (
                   <TableRow
                     key={key}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

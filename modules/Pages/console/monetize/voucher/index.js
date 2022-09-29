@@ -21,7 +21,6 @@ const MonetizeVoucherComponent = () => {
   const getParams = () => {
     let params = {};
     Object.assign(params, { page: filter.page, limit: filter.limit });
-    filter.order !== '' && Object.assign(params, { order: filter.order });
     filter.statusVoucher !== '' && Object.assign(params, { statusVoucher: filter.statusVoucher });
     filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
     filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
