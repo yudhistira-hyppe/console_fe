@@ -9,7 +9,7 @@ import useStyles from '../index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
 import { Stack } from '@mui/material';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { debounce } from 'lodash';
 import {
