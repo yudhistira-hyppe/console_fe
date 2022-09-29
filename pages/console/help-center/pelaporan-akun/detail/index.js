@@ -4,7 +4,7 @@ import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
 const ConsoleDetailPelaporanAkunComponent = dynamic(
-  () => import('modules/Pages/console/help-center/pelaporan-akun/detail'),
+  () => import('modules/Pages/console/help-center/pelaporan-akun/Detail'),
   {
     loading: () => <PageLoader />,
   },
