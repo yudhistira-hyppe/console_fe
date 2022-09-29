@@ -28,6 +28,13 @@ export const bantuanPenggunaApi = createApi({
       }),
       providesTags: ['TicketList'],
     }),
+    getLevelTickets: build.query({
+      query: () => ({
+        url: '/leveltickets/all',
+        method: 'GET',
+      }),
+      providesTags: ['TicketList'],
+    }),
     getDetailTicket: build.query({
       query: (params) => ({
         url: '/usertickets/comment',
@@ -67,6 +74,7 @@ export const {
   useGetListTicketsQuery,
   useGetSumberTicketsQuery,
   useGetCategoryTicketsQuery,
+  useGetLevelTicketsQuery,
   useGetDetailTicketQuery,
   useUpdateDetailTicketMutation,
   useReplyTicketMutation,
