@@ -19,6 +19,7 @@ import {
   moduleAPI,
   divisiAPI,
 } from 'api/console';
+import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
 import { notificationAPI } from 'api/user/notification';
 import { commentAPI } from 'api/user/comment';
@@ -37,6 +38,7 @@ export default combineReducers({
   monetizeReducers,
   helpCenterReducers,
   campaignReducer: Campaign,
+  [utilsApi.reducerPath]: utilsApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,

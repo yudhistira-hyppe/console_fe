@@ -16,6 +16,7 @@ export const SIDEBAR_TYPE = {
 };
 export const Fonts = {
   PRIMARY: 'Normal',
+  LATO: 'Lato',
 };
 
 export const THEME_TYPES = {

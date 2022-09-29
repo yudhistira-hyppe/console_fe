@@ -1,5 +1,6 @@
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
+import moment from 'moment';
 
 function isStringMatch(str, tester) {
   const reg = new RegExp('^/api/' + tester + '/', 's');
@@ -50,8 +51,24 @@ export const formatDateTimeString = (date) => {
   let result = date;
   const formattedDate = new Date(date);
   if (!Number.isNaN(formattedDate.getTime())) {
-    result = formattedDate.toLocaleString('id');
+    result = moment(formattedDate).locale('id').startOf('hour').fromNow().replace(' yang ', ' ');
   }
+  return result;
+};
+
+export const formatRoles = (roles) => {
+  const result = roles
+    .map((role) => {
+      switch (role) {
+        case 'ROLE_USER':
+          return 'Basic';
+        case 'ROLE_PREMIUM':
+          return 'Premium';
+        default:
+          return role;
+      }
+    })
+    .join(', ');
   return result;
 };
 
