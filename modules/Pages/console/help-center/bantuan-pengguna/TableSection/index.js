@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Box,
   Typography,
@@ -21,12 +21,30 @@ import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import ModalProfilePenerima from '../Modal/ModalProfilePenerima';
 import { useRouter } from 'next/router';
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  ticketHover: {
+    maxWidth: 180,
+    '&:hover': {
+      '& p': {
+        fontSize: 12,
+        color: '#AB22AF',
+        textDecoration: 'underline',
+      },
+    },
+    '& p': {
+      fontSize: 12,
+    },
+  },
+}));
 
 const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => {
   const [isModal, setModal] = React.useState(false);
   const [selectedEmail, setSelectedEmail] = React.useState('');
   const { authUser } = useAuth();
   const router = useRouter();
+  const classes = useStyles();
 
   const getMediaUri = (urlEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -102,12 +120,13 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                     hover
                     key={key}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    onClick={() => router.push(`/console/help-center/bantuan-pengguna/detail/${item?._id}`)}
                     style={{ cursor: 'pointer' }}>
-                    <TableCell component="th" scope="row" style={{ maxWidth: 180 }}>
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        {item?.nomortiket}
-                      </Typography>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      className={classes.ticketHover}
+                      onClick={() => router.push(`/console/help-center/bantuan-pengguna/detail/${item?._id}`)}>
+                      <Typography variant="body1">{item?.nomortiket}</Typography>
                     </TableCell>
                     <TableCell align="left" style={{ maxWidth: 100 }}>
                       <Typography variant="body1" style={{ fontSize: '12px' }}>

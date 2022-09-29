@@ -10,6 +10,7 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna';
 import moment from 'moment';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -24,6 +25,7 @@ const ConsoleBantuanPenggunaComponent = () => {
     status: [],
     sumber: [],
     kategori: [],
+    level: [],
     startdate: '',
     enddate: '',
     page: 0,
@@ -41,11 +43,12 @@ const ConsoleBantuanPenggunaComponent = () => {
     filter.status.length >= 1 && Object.assign(params, { status: filter.status });
     filter.sumber.length >= 1 && Object.assign(params, { sumber: filter.sumber });
     filter.kategori.length >= 1 && Object.assign(params, { kategori: filter.kategori });
+    filter.level.length >= 1 && Object.assign(params, { level: filter.level });
 
     return params;
   };
 
-  const { data: listTickets } = useGetListTicketsQuery(getParams());
+  const { data: listTickets, isLoading: loadingTicket } = useGetListTicketsQuery(getParams());
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
@@ -94,6 +97,13 @@ const ConsoleBantuanPenggunaComponent = () => {
             ? filter.kategori.filter((item) => item !== value)
             : [...filter.kategori, value],
         };
+      } else if (kind === 'level') {
+        return {
+          ...prevVal,
+          level: filter.level.find((item) => item === value)
+            ? filter.level.filter((item) => item !== value)
+            : [...filter.level, value],
+        };
       }
     });
   };
@@ -132,12 +142,16 @@ const ConsoleBantuanPenggunaComponent = () => {
       <PageContainer heading="">
         <Stack direction={'row'} spacing={3}>
           <SearchSection handleChange={handleSearchChange} />
-          <TableSection
-            order={filter.order}
-            handleOrder={onOrderChange}
-            handlePageChange={handlePageChange}
-            listTickets={listTickets}
-          />
+          {loadingTicket ? (
+            <Typography>loading...</Typography>
+          ) : (
+            <TableSection
+              order={filter.order}
+              handleOrder={onOrderChange}
+              handlePageChange={handlePageChange}
+              listTickets={listTickets}
+            />
+          )}
         </Stack>
       </PageContainer>
     </>

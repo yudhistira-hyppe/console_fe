@@ -12,7 +12,11 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { debounce } from 'lodash';
-import { useGetCategoryTicketsQuery, useGetSumberTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna';
+import {
+  useGetCategoryTicketsQuery,
+  useGetLevelTicketsQuery,
+  useGetSumberTicketsQuery,
+} from 'api/console/helpCenter/bantuan-pengguna';
 
 const SearchSection = ({ handleChange }) => {
   const classes = useStyles();
@@ -21,8 +25,9 @@ const SearchSection = ({ handleChange }) => {
   function getWeeksAfter(date, amount) {
     return date && amount ? date.add(amount, 'week') : undefined;
   }
-  const { data: listSumber } = useGetSumberTicketsQuery();
-  const { data: listCategory } = useGetCategoryTicketsQuery();
+  const { data: listSumber, isLoading: loadingSumber } = useGetSumberTicketsQuery();
+  const { data: listCategory, isLoading: loadingCategory } = useGetCategoryTicketsQuery();
+  const { data: listLevel, isLoading: loadingLevel } = useGetLevelTicketsQuery();
   const handleSearch = debounce((query) => handleChange('search', query), 500);
 
   return (
@@ -120,13 +125,17 @@ const SearchSection = ({ handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup>
-              {listSumber?.data?.map((item, key) => (
-                <FormControlLabel
-                  key={key}
-                  label={item?.sourceName}
-                  control={<Checkbox defaultChecked={false} onClick={() => handleChange('sumber', item?._id)} />}
-                />
-              ))}
+              {loadingSumber ? (
+                <Typography>loading...</Typography>
+              ) : (
+                listSumber?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.sourceName}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('sumber', item?._id)} />}
+                  />
+                ))
+              )}
             </FormGroup>
           </AccordionDetails>
         </Accordion>
@@ -137,13 +146,38 @@ const SearchSection = ({ handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup>
-              {listCategory?.data?.map((item, key) => (
-                <FormControlLabel
-                  key={key}
-                  label={item?.nameCategory}
-                  control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
-                />
-              ))}
+              {loadingCategory ? (
+                <Typography>loading...</Typography>
+              ) : (
+                listCategory?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.nameCategory}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
+                  />
+                ))
+              )}
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Level</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup>
+              {loadingLevel ? (
+                <Typography>loading...</Typography>
+              ) : (
+                listLevel?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={`${item?.nameLevel} - ${item?.descLevel}`}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('level', item?._id)} />}
+                  />
+                ))
+              )}
             </FormGroup>
           </AccordionDetails>
         </Accordion>
