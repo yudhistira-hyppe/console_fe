@@ -98,12 +98,12 @@ const ModalDetailTransaction = ({ id, showModal, onCancel }) => {
                         </TableCell>
                         <TableCell align="left">
                           <Typography variant="body1" style={{ fontSize: '12px' }}>
-                            {item?.totalUsed} Voucher
+                            {item?.qty} Voucher
                           </Typography>
                         </TableCell>
                         <TableCell align="left">
                           <Typography variant="body1" style={{ fontSize: '12px' }}>
-                            Rp {item?.amount}
+                            Rp {item?.amount * item?.qty}
                           </Typography>
                         </TableCell>
                         <TableCell align="left">
