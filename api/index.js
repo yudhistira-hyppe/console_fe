@@ -13,8 +13,6 @@ export const customBaseQuery = fetchBaseQuery({
 
     if (cookies && cookies.token && endpoint !== 'login') {
       headers.set('x-auth-token', cookies.token);
-    }
-    if (cookies && cookies.user.email && endpoint === 'logout') {
       headers.set('x-auth-user', cookies.user.email);
     }
 
