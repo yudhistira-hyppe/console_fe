@@ -9,8 +9,7 @@ import useStyles from '../../bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
 import { Stack } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { DateRangePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
 
 
 const SearchSection = () => {
