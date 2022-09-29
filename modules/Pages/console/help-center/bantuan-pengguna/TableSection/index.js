@@ -46,6 +46,12 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
   const router = useRouter();
   const classes = useStyles();
 
+  const dataList =
+    listTickets &&
+    [...listTickets?.data].sort(function (a, b) {
+      return order === 'desc' ? new Date(b.datetime) - new Date(a.datetime) : new Date(a.datetime) - new Date(b.datetime);
+    });
+
   const getMediaUri = (urlEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = urlEndpoint;
@@ -81,7 +87,6 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                 onChange={handleOrder}
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: '#FFFFFF' }}>
-                <MenuItem value={'all'}>Semua</MenuItem>
                 <MenuItem value={'desc'}>Terbaru</MenuItem>
                 <MenuItem value={'asc'}>Terlama</MenuItem>
               </Select>
@@ -106,7 +111,7 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                 <TableCell align="left" style={{ maxWidth: 140 }}>
                   Status
                 </TableCell>
-                <TableCell align="left" style={{ maxWidth: 50 }}>
+                <TableCell align="left" style={{ width: 70 }}>
                   Penerima
                 </TableCell>
                 <TableCell align="right">Dibuat</TableCell>
@@ -114,8 +119,8 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
             </TableHead>
 
             <TableBody>
-              {listTickets?.data?.length >= 1 ? (
-                listTickets?.data?.map((item, key) => (
+              {dataList?.length >= 1 ? (
+                dataList?.map((item, key) => (
                   <TableRow
                     hover
                     key={key}

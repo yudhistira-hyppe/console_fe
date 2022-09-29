@@ -10,7 +10,6 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna';
 import moment from 'moment';
-import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -36,7 +35,6 @@ const ConsoleBantuanPenggunaComponent = () => {
   const getParams = () => {
     let params = {};
     Object.assign(params, { page: filter.page, limit: filter.limit });
-    filter.order !== '' && Object.assign(params, { order: filter.order });
     filter.search !== '' && Object.assign(params, { search: filter.search });
     filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
     filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
