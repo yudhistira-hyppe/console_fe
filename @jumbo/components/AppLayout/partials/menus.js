@@ -122,14 +122,13 @@ export const consoleNav = [
   {
     name: 'Beranda',
     type: 'item',
-    // link: '/console/',
     link: '/',
     icon: <Home />,
   },
   {
     name: 'Pusat Bantuan',
     type: 'item',
-    link: '/console/help-center',
+    link: '/help-center',
     children: [
       '/console/help-center/bantuan-pengguna',
       '/console/help-center/bantuan-pengguna/detail',
@@ -164,8 +163,7 @@ export const consoleNav = [
   {
     name: 'Monetisasi',
     type: 'item',
-    // link: '/monetize',
-    link: '/console/monetize',
+    link: '/monetize',
   },
   {
     name: 'Pengumuman',
