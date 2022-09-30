@@ -28,7 +28,7 @@ const SearchSection = ({ handleChange }) => {
   const { data: listSumber, isLoading: loadingSumber } = useGetSumberTicketsQuery();
   const { data: listCategory, isLoading: loadingCategory } = useGetCategoryTicketsQuery();
   const { data: listLevel, isLoading: loadingLevel } = useGetLevelTicketsQuery();
-  const handleSearch = debounce((query) => handleChange('search', query), 500);
+  const handleSearch = debounce((e) => handleChange(e.target.name, e.target.value), 500);
 
   return (
     <>
@@ -39,9 +39,10 @@ const SearchSection = ({ handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
             <TextField
+              name="search"
               style={{ width: '100%' }}
               placeholder="Cari No. Tiket / Judul Permasalahan"
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => handleSearch(e)}
             />
           </AccordionDetails>
         </Accordion>
@@ -204,12 +205,17 @@ const SearchSection = ({ handleChange }) => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion elevation={0}>
+        <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Penerima Tugas</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
-            <TextField style={{ width: '100%' }} placeholder="Pilih Anggota" />
+            <TextField
+              name="penerima"
+              style={{ width: '100%' }}
+              placeholder="Pilih Anggota"
+              onChange={(e) => handleSearch(e)}
+            />
           </AccordionDetails>
         </Accordion>
       </Box>

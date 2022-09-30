@@ -46,12 +46,6 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets 
   const router = useRouter();
   const classes = useStyles();
 
-  const dataList =
-    listTickets &&
-    [...listTickets?.data].sort(function (a, b) {
-      return order === 'desc' ? new Date(b.datetime) - new Date(a.datetime) : new Date(a.datetime) - new Date(b.datetime);
-    });
-
   const getMediaUri = (urlEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = urlEndpoint;
@@ -87,8 +81,8 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets 
                 onChange={handleOrder}
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: '#FFFFFF' }}>
-                <MenuItem value={-1}>Terbaru</MenuItem>
-                <MenuItem value={1}>Terlama</MenuItem>
+                <MenuItem value={'true'}>Terbaru</MenuItem>
+                <MenuItem value={'false'}>Terlama</MenuItem>
               </Select>
             </FormControl>
           </Stack>
@@ -119,8 +113,8 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets 
             </TableHead>
 
             <TableBody>
-              {dataList?.length >= 1 ? (
-                dataList?.map((item, key) => (
+              {listTickets?.data?.length >= 1 ? (
+                listTickets?.data?.map((item, key) => (
                   <TableRow
                     hover
                     key={key}
