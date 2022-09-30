@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => {
+const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets }) => {
   const [isModal, setModal] = React.useState(false);
   const [selectedEmail, setSelectedEmail] = React.useState('');
   const { authUser } = useAuth();
@@ -87,8 +87,8 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
                 onChange={handleOrder}
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: '#FFFFFF' }}>
-                <MenuItem value={'desc'}>Terbaru</MenuItem>
-                <MenuItem value={'asc'}>Terlama</MenuItem>
+                <MenuItem value={-1}>Terbaru</MenuItem>
+                <MenuItem value={1}>Terlama</MenuItem>
               </Select>
             </FormControl>
           </Stack>
@@ -195,7 +195,7 @@ const TableSection = ({ order, handleOrder, handlePageChange, listTickets }) => 
         </TableContainer>
         {listTickets && (
           <Stack alignItems={'center'} mt={2}>
-            <Pagination count={listTickets?.totalpage} size={'small'} onChange={handlePageChange} />
+            <Pagination page={page} count={listTickets?.totalpage} size={'small'} onChange={handlePageChange} />
           </Stack>
         )}
       </Stack>

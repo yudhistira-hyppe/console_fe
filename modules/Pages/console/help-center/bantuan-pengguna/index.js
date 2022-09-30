@@ -19,7 +19,7 @@ const breadcrumbs = [
 
 const ConsoleBantuanPenggunaComponent = () => {
   const [filter, setFilter] = useState({
-    order: 'desc',
+    order: -1,
     search: '',
     status: [],
     sumber: [],
@@ -35,6 +35,7 @@ const ConsoleBantuanPenggunaComponent = () => {
   const getParams = () => {
     let params = {};
     Object.assign(params, { page: filter.page, limit: filter.limit });
+    filter.order !== '' && Object.assign(params, { order: filter.order });
     filter.search !== '' && Object.assign(params, { search: filter.search });
     filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
     filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
@@ -53,6 +54,7 @@ const ConsoleBantuanPenggunaComponent = () => {
       return {
         ...prevVal,
         order: e.target.value,
+        page: 0
       };
     });
   };
@@ -145,6 +147,7 @@ const ConsoleBantuanPenggunaComponent = () => {
           ) : (
             <TableSection
               order={filter.order}
+              page={filter.page + 1}
               handleOrder={onOrderChange}
               handlePageChange={handlePageChange}
               listTickets={listTickets}
