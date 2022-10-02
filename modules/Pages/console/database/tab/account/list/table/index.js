@@ -21,7 +21,7 @@ import useStyles from './index.style';
 
 const columnsHeader = ['Nama', 'Jenis Akun', 'Jenis Kelamin ', 'Umur', 'Lokasi', 'Minat', 'Terakhir Aktif'];
 
-const DatabaseAccountListTableComponent = (props) => {
+const DatabaseTabAccountListTableComponent = (props) => {
   const classes = useStyles();
   const { userResults, isFetching, isFiltersChange, onPagePayloadChange } = props;
   const { authUser } = useAuth();
@@ -148,11 +148,11 @@ const DatabaseAccountListTableComponent = (props) => {
   );
 };
 
-DatabaseAccountListTableComponent.propTypes = {
+DatabaseTabAccountListTableComponent.propTypes = {
   userResults: PropTypes.object,
   isFetching: PropTypes.bool,
   isFiltersChange: PropTypes.bool,
   onPagePayloadChange: PropTypes.func,
 };
 
-export default DatabaseAccountListTableComponent;
+export default DatabaseTabAccountListTableComponent;

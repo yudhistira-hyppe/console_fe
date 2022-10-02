@@ -1,24 +1,25 @@
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, AccordionDetails, AccordionSummary, Divider } from '@mui/material';
 import { Box, Typography } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
-import DatabaseAccountFilterItemComponent from './item';
+import DatabaseTabAccountFilterItemComponent from './item';
 import useStyles from './index.style';
 
-const DatabaseAccountFilterComponent = (props) => {
+const DatabaseTabAccountFilterComponent = (props) => {
   const classes = useStyles();
   const { configFilters, filters, onChange } = props;
 
   return (
     <Box className={classes.card}>
       {Object.keys(configFilters).map((key) => (
-        <>
-          <Accordion className={classes.accordion} key={key} elevation={0} disableGutters>
+        <Fragment key={key}>
+          <Accordion className={classes.accordion} elevation={0} disableGutters>
             <AccordionSummary className={classes.accordionSummary} expandIcon={<ExpandMore />}>
               <Typography className={classes.filterHeader}>{configFilters[key].label}</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.accordionDetails}>
-              <DatabaseAccountFilterItemComponent
+              <DatabaseTabAccountFilterItemComponent
                 configKey={key}
                 configItem={configFilters[key]}
                 filters={filters}
@@ -27,16 +28,16 @@ const DatabaseAccountFilterComponent = (props) => {
             </AccordionDetails>
           </Accordion>
           <Divider className={classes.divider} />
-        </>
+        </Fragment>
       ))}
     </Box>
   );
 };
 
-DatabaseAccountFilterComponent.propTypes = {
+DatabaseTabAccountFilterComponent.propTypes = {
   configFilters: PropTypes.object,
   filters: PropTypes.object,
   onChange: PropTypes.func,
 };
 
-export default DatabaseAccountFilterComponent;
+export default DatabaseTabAccountFilterComponent;
