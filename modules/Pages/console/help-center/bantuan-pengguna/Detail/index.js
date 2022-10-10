@@ -1,24 +1,8 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import {
-  Avatar,
-  Button,
-  Card,
-  Chip,
-  Divider,
-  Grow,
-  Link,
-  Paper,
-  Popper,
-  TextareaAutosize,
-  Typography,
-} from '@material-ui/core';
-import MoreIcon from '@material-ui/icons/MoreHoriz';
+import { Avatar, Button, Card, Chip, Divider, Grow, Paper, Popper, TextareaAutosize, Typography } from '@material-ui/core';
 import React, { useRef, useState, useEffect } from 'react';
-import { Stack } from '@mui/material';
-import Ckeditor from 'react-ckeditor-component/lib/ckeditor';
+import { Select, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import Breadcrumbs from '../BreadCrumb/index';
 import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
@@ -29,7 +13,6 @@ import GetChipColor from 'helpers/getChipColor';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import { FolderShared, KeyboardArrowDown } from '@material-ui/icons';
-import DownloadIcon from '@material-ui/icons/CloudDownload';
 import {
   useGetDetailTicketQuery,
   useGetLogHistoryDetailTicketQuery,
@@ -40,6 +23,8 @@ import moment from 'moment';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
+import { LoadingButton } from '@mui/lab';
+import SpinnerLoading from 'components/common/loading/spinner';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -82,6 +67,7 @@ const DetailBantuanPengguna = () => {
     children2: null,
   });
   const [filter, setFilter] = useState({ id: router?.query?.id, type: 'chat' });
+  const [loadingReply, setLoadingReply] = useState(false);
   const classes = useStyles();
   const { data: ticketData, isLoading, refetch } = useGetDetailTicketQuery(filter);
   const { data: logHistory } = useGetLogHistoryDetailTicketQuery({ iduserticket: router?.query?.id });
@@ -183,12 +169,13 @@ const DetailBantuanPengguna = () => {
 
   const handleChangeTab = (value) => {
     setTab(value);
-    setFilter((prevVal) => {
-      return {
-        ...prevVal,
-        type: value,
-      };
-    });
+    value !== 'history' &&
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          type: value,
+        };
+      });
     setBody({ text: '', file: [] });
   };
 
@@ -204,6 +191,7 @@ const DetailBantuanPengguna = () => {
   };
 
   const handleReplyTicket = () => {
+    setLoadingReply(true);
     let data = new FormData();
     data.append('IdUserticket', ticketData?.data[0]?._id);
     data.append('type', tab);
@@ -211,9 +199,11 @@ const DetailBantuanPengguna = () => {
     data.append('body', body.text);
     body.file?.length >= 1 && Array.from(body.file).map((item) => data.append('supportFile', item));
 
-    replyTicket(data);
-    setBody({ text: '', file: [] });
-    refetch();
+    replyTicket(data).then(() => {
+      setLoadingReply(false);
+      setBody({ text: '', file: [] });
+      refetch();
+    });
   };
 
   return (
@@ -234,7 +224,7 @@ const DetailBantuanPengguna = () => {
           </Typography>
         </Stack>
       </Stack>
-      {isLoading ? (
+      {isLoading || (loadingReply && !ticketData?.data[0]?.penerima) ? (
         <PageLoader />
       ) : (
         <PageContainer>
@@ -290,38 +280,45 @@ const DetailBantuanPengguna = () => {
                 </Button>
               </Stack>
               <PerfectScrollbar className={classes.scrollbarRoot}>
-                {ticketData?.data[0]?.detail?.length >= 1 ? (
+                {tab !== 'history' && ticketData?.data[0]?.detail?.length >= 1 ? (
                   <Stack direction="column" spacing={3}>
-                    {ticketData?.data[0]?.detail?.map((item, key) => (
-                      <Stack key={key} direction="row" spacing={2}>
-                        <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
-                        <Stack direction="column" spacing={1} width="100%">
-                          <Typography>
-                            {item?.fullName} -{' '}
-                            <Typography variant="caption">{moment(item?.datetime).format('lll')}</Typography>
-                          </Typography>
-                          <Typography>{item?.body}</Typography>
-                          {item?.fsSourceUri?.length >= 1 ? (
-                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                              {item?.fsSourceUri?.map((item, key) => (
-                                <Chip
-                                  key={key}
-                                  label="Filename.zip"
-                                  avatar={<FolderShared />}
-                                  style={{ marginRight: '1em' }}
-                                />
-                              ))}
-                            </div>
-                          ) : (
-                            <Stack direction={'column'} justifyContent={'center'}>
-                              <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
-                                Tidak ada lampiran.
-                              </Typography>
-                            </Stack>
-                          )}
+                    {ticketData?.data[0]?.detail?.map((item, key) =>
+                      item?.type === tab ? (
+                        <Stack key={key} direction="row" spacing={2}>
+                          <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
+                          <Stack direction="column" spacing={1} width="100%">
+                            <Typography>
+                              {item?.fullName} -{' '}
+                              <Typography variant="caption">{moment(item?.datetime).format('lll')}</Typography>
+                            </Typography>
+                            <Typography>{item?.body}</Typography>
+                            {item?.fsSourceUri?.length >= 1 ? (
+                              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                {item?.fsSourceUri?.map((item, key) => (
+                                  <Chip
+                                    key={key}
+                                    label="Filename.zip"
+                                    avatar={<FolderShared />}
+                                    style={{ marginRight: '1em' }}
+                                  />
+                                ))}
+                              </div>
+                            ) : (
+                              <Stack direction={'column'} justifyContent={'center'}>
+                                <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
+                                  Tidak ada lampiran.
+                                </Typography>
+                              </Stack>
+                            )}
+                          </Stack>
                         </Stack>
-                      </Stack>
-                    ))}
+                      ) : (
+                        <Typography variant="subtitle2" style={{ color: '#666666' }}>
+                          {tab === 'chat' && 'Jadi yang pertama untuk mengirim pesan.'}
+                          {tab === 'comment' && 'Jadi yang pertama untuk berkomentar.'}
+                        </Typography>
+                      ),
+                    )}
                   </Stack>
                 ) : (
                   <Typography variant="subtitle2" style={{ color: '#666666' }}>
@@ -374,9 +371,14 @@ const DetailBantuanPengguna = () => {
                         <Typography>{body.file?.length} file dilampirkan</Typography>
                       </Stack>
                       <Stack direction="row" spacing={2}>
-                        <Button variant="contained" color="primary" onClick={handleReplyTicket} disabled={body === ''}>
+                        <LoadingButton
+                          loading={loadingReply}
+                          variant="contained"
+                          color="secondary"
+                          onClick={handleReplyTicket}
+                          disabled={body === ''}>
                           Kirim
-                        </Button>
+                        </LoadingButton>
                         <Button onClick={() => setBody({ text: '', file: [] })}>Batal</Button>
                       </Stack>
                     </Stack>
@@ -440,11 +442,100 @@ const DetailBantuanPengguna = () => {
               </Stack>
               <Stack direction={'row'} spacing={2} mt={2}>
                 <div style={{ flex: 2 }}>
+                  <Typography variant="body2">Sumber</Typography>
+                </div>
+                <div style={{ flex: 3 }}>
+                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
+                    {ticketData?.data[0]?.sourceName || '-'}
+                  </Typography>
+                </div>
+              </Stack>
+              <Stack direction={'row'} spacing={2} mt={2}>
+                <div style={{ flex: 2 }}>
+                  <Typography variant="body2">Pengirim</Typography>
+                </div>
+                <div style={{ flex: 3 }}>
+                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
+                    {ticketData?.data[0]?.pengirim || '-'}
+                  </Typography>
+                </div>
+              </Stack>
+              {ticketData?.data[0]?.penerima ? (
+                <Stack direction={'row'} alignItems="center" spacing={2} mt={2}>
+                  <div style={{ flex: 2 }}>
+                    <Typography variant="body2">Ditangani Oleh</Typography>
+                  </div>
+                  <div style={{ flex: 3 }}>
+                    <Chip label={ticketData?.data[0]?.penerima || '-'} size="small" style={{ color: '#666666' }} />
+                  </div>
+                </Stack>
+              ) : (
+                <>
+                  <Stack direction={'row'} alignItems="center" spacing={2} mt={2}>
+                    <div style={{ flex: 2 }}>
+                      <Typography variant="body2">Divisi Pendukung</Typography>
+                    </div>
+                    <div style={{ flex: 3 }}>
+                      <Select
+                        value=""
+                        size="small"
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        style={{ width: '100%', height: 35 }}>
+                        <MenuItem value={''}>Tidak ada</MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </div>
+                  </Stack>
+                  <Stack direction={'row'} alignItems="center" spacing={2} mt={2}>
+                    <div style={{ flex: 2 }}>
+                      <Typography variant="body2">Penerima Tugas</Typography>
+                    </div>
+                    <div style={{ flex: 3 }}>
+                      <Select
+                        value=""
+                        size="small"
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        style={{ width: '100%', height: 35 }}>
+                        <MenuItem value={''}>Tidak ada</MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </div>
+                  </Stack>
+                </>
+              )}
+              <Stack direction={'row'} spacing={2} mt={2}>
+                <div style={{ flex: 2 }}>
                   <Typography variant="body2">Waktu Masuk</Typography>
                 </div>
                 <div style={{ flex: 3 }}>
                   <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
                     {moment(ticketData?.data[0]?.datetime).format('lll')}
+                  </Typography>
+                </div>
+              </Stack>
+              <Stack direction={'row'} spacing={2} mt={2}>
+                <div style={{ flex: 2 }}>
+                  <Typography variant="body2">Sistem Operasi</Typography>
+                </div>
+                <div style={{ flex: 3 }}>
+                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
+                    {ticketData?.data[0]?.OS || '-'}
+                  </Typography>
+                </div>
+              </Stack>
+              <Stack direction={'row'} spacing={2} mt={2}>
+                <div style={{ flex: 2 }}>
+                  <Typography variant="body2">Versi Aplikasi</Typography>
+                </div>
+                <div style={{ flex: 3 }}>
+                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
+                    {ticketData?.data[0]?.version || '-'}
                   </Typography>
                 </div>
               </Stack>
@@ -460,51 +551,11 @@ const DetailBantuanPengguna = () => {
               </Stack>
               <Stack direction={'row'} spacing={2} mt={2}>
                 <div style={{ flex: 2 }}>
-                  <Typography variant="body2">Sumber</Typography>
-                </div>
-                <div style={{ flex: 3 }}>
-                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
-                    {ticketData?.data[0]?.sourceName || '-'}
-                  </Typography>
-                </div>
-              </Stack>
-              <Stack direction={'row'} spacing={2} mt={2}>
-                <div style={{ flex: 2 }}>
                   <Typography variant="body2">Level</Typography>
                 </div>
                 <div style={{ flex: 3 }}>
                   <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
                     {ticketData?.data[0]?.nameLevel || '-'}
-                  </Typography>
-                </div>
-              </Stack>
-              <Stack direction={'row'} spacing={2} mt={2}>
-                <div style={{ flex: 2 }}>
-                  <Typography variant="body2">Pengirim</Typography>
-                </div>
-                <div style={{ flex: 3 }}>
-                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
-                    {ticketData?.data[0]?.pengirim || '-'}
-                  </Typography>
-                </div>
-              </Stack>
-              <Stack direction={'row'} spacing={2} mt={2}>
-                <div style={{ flex: 2 }}>
-                  <Typography variant="body2">Penerima</Typography>
-                </div>
-                <div style={{ flex: 3 }}>
-                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
-                    {ticketData?.data[0]?.penerima || '-'}
-                  </Typography>
-                </div>
-              </Stack>
-              <Stack direction={'row'} spacing={2} mt={2}>
-                <div style={{ flex: 2 }}>
-                  <Typography variant="body2">Sistem Operasi</Typography>
-                </div>
-                <div style={{ flex: 3 }}>
-                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
-                    {logHistory?.data[0]?.tiketdata?.OS || '-'}
                   </Typography>
                 </div>
               </Stack>
