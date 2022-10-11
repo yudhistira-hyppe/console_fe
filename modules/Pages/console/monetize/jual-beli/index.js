@@ -2,10 +2,10 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import React from 'react';
 import GridContainer from '@jumbo/components/GridContainer';
 import { Grid } from '@material-ui/core';
-import SearchSection from '../components/KepemilikianSearchSection';
-import TableSection from '../components/KepemilikanTableSection';
+import TableSection from '../components/JualBeliTableSection';
+import SearchSection from '../components/JualBeliSearchSection';
 
-const MonetizeKepemilikanComponent = () => {
+const MonetizeJualBeliComponent = () => {
   return (
     <>
       <PageContainer>
@@ -22,4 +22,4 @@ const MonetizeKepemilikanComponent = () => {
   );
 };
 
-export default MonetizeKepemilikanComponent;
+export default MonetizeJualBeliComponent;

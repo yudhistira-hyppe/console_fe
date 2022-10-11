@@ -10,7 +10,6 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna';
 import moment from 'moment';
-import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -20,7 +19,8 @@ const breadcrumbs = [
 
 const ConsoleBantuanPenggunaComponent = () => {
   const [filter, setFilter] = useState({
-    order: 'desc',
+    descending: 'true',
+    assignto: '',
     search: '',
     status: [],
     sumber: [],
@@ -35,9 +35,13 @@ const ConsoleBantuanPenggunaComponent = () => {
 
   const getParams = () => {
     let params = {};
-    Object.assign(params, { page: filter.page, limit: filter.limit });
-    filter.order !== '' && Object.assign(params, { order: filter.order });
+    Object.assign(params, {
+      page: filter.page,
+      limit: filter.limit,
+      descending: filter.descending === 'true' ? true : false,
+    });
     filter.search !== '' && Object.assign(params, { search: filter.search });
+    filter.assignto !== '' && Object.assign(params, { assignto: filter.assignto });
     filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
     filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
     filter.status.length >= 1 && Object.assign(params, { status: filter.status });
@@ -54,7 +58,8 @@ const ConsoleBantuanPenggunaComponent = () => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        order: e.target.value,
+        descending: e.target.value,
+        page: 0,
       };
     });
   };
@@ -82,6 +87,11 @@ const ConsoleBantuanPenggunaComponent = () => {
         return {
           ...prevVal,
           search: value,
+        };
+      } else if (kind === 'penerima') {
+        return {
+          ...prevVal,
+          assignto: value,
         };
       } else if (kind === 'sumber') {
         return {
@@ -117,6 +127,8 @@ const ConsoleBantuanPenggunaComponent = () => {
     });
   };
 
+  console.log(listTickets);
+
   return (
     <>
       <Head>
@@ -146,7 +158,8 @@ const ConsoleBantuanPenggunaComponent = () => {
             <Typography>loading...</Typography>
           ) : (
             <TableSection
-              order={filter.order}
+              order={filter.descending}
+              page={filter.page + 1}
               handleOrder={onOrderChange}
               handlePageChange={handlePageChange}
               listTickets={listTickets}
