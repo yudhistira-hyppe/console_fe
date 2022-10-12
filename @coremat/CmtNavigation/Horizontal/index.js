@@ -10,8 +10,9 @@ const useStyles = makeStyles(() => ({
   horizontalNavMenu: {
     position: 'relative',
     display: 'flex',
-    marginLeft: -14,
-    marginRight: -14,
+    height: 46,
+    alignItems: 'center',
+    gap: 20,
   },
 }));
 

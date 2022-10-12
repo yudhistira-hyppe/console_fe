@@ -145,19 +145,16 @@ export const consoleNav = [
   {
     name: 'Pusat Iklan',
     type: 'item',
-    // link: '/console/ads-center',
     link: '/ads-center',
   },
   {
     name: 'Database',
     type: 'item',
-    // link: '/console/database',
-    link: '/database',
+    link: '/console/database',
   },
   {
     name: 'Engagement',
     type: 'item',
-    // link: '/console/user-engagement',
     link: '/user-engagement',
   },
   {
