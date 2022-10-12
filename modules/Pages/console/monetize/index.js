@@ -28,20 +28,63 @@ const ConsoleMonetizeComponent = () => {
       <PageContainer>
         <TabContext value={value}>
           <Stack direction={'row'} justifyContent={'space-between'}>
-            <div>
-              <Tabs
-                className="mb-5"
-                value={value}
-                onChange={handleChange}
-                aria-label="disabled tabs example"
-                indicatorColor="secondary"
-                textColor="secondary">
-                <Tab label="Dashboard" value="0" style={{ padding: '0px', marginRight: '2em', fontWeight: 'bold' }} />
-                <Tab label="Voucher" value="1" style={{ padding: '0px', marginRight: '2em', fontWeight: 'bold' }} />
-                <Tab label="Kepemilikan" value="2" style={{ padding: '0px', marginRight: '2em', fontWeight: 'bold' }} />
-                <Tab label="Jual-Beli Konten" value="3" style={{ padding: '0px', marginRight: '2em', fontWeight: 'bold' }} />
-              </Tabs>
-            </div>
+            <Tabs
+              className="mb-5"
+              value={value}
+              onChange={handleChange}
+              variant="scrollable"
+              aria-label="disabled scrollable auto tabs"
+              indicatorColor="secondary"
+              textColor="secondary">
+              <Tab
+                label="Dashboard"
+                value="0"
+                style={{
+                  padding: '0px',
+                  marginRight: '1.5em',
+                  fontWeight: 'bold',
+                  fontFamily: 'Lato',
+                  fontSize: 16,
+                  textTransform: 'initial',
+                }}
+              />
+              <Tab
+                label="Voucher"
+                value="1"
+                style={{
+                  padding: '0px',
+                  marginRight: '1.5em',
+                  fontWeight: 'bold',
+                  fontFamily: 'Lato',
+                  fontSize: 16,
+                  textTransform: 'initial',
+                }}
+              />
+              <Tab
+                label="Kepemilikan"
+                value="2"
+                style={{
+                  padding: '0px',
+                  marginRight: '1.5em',
+                  fontWeight: 'bold',
+                  fontFamily: 'Lato',
+                  fontSize: 16,
+                  textTransform: 'initial',
+                }}
+              />
+              <Tab
+                label="Jual-Beli Konten"
+                value="3"
+                style={{
+                  padding: '0px',
+                  marginRight: '1.5em',
+                  fontWeight: 'bold',
+                  fontFamily: 'Lato',
+                  fontSize: 16,
+                  textTransform: 'initial',
+                }}
+              />
+            </Tabs>
             {value == '1' && (
               <Stack direction={'column'} justifyContent={'center'}>
                 <div>
@@ -52,16 +95,16 @@ const ConsoleMonetizeComponent = () => {
               </Stack>
             )}
           </Stack>
-          <TabPanel value="0">
+          <TabPanel style={{ padding: 0 }} value="0">
             <MonetizeDashboard />
           </TabPanel>
-          <TabPanel value="1">
+          <TabPanel style={{ padding: 0 }} value="1">
             <MonetizeVoucher />
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel style={{ padding: 0 }} value="2">
             <MonetizeKepemilikanComponent />
           </TabPanel>
-          <TabPanel value="3">
+          <TabPanel style={{ padding: 0 }} value="3">
             <MonetizeJualBeliComponent />
           </TabPanel>
         </TabContext>

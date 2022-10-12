@@ -68,7 +68,7 @@ const MonetizeVoucherComponent = () => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value,
+        page: value - 1,
       };
     });
   };
