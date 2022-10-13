@@ -38,8 +38,8 @@ const TableSection = ({ listVouchers, order, handleOrder, handlePageChange }) =>
         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
           <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
             <Typography>
-              Menampilkan {listVouchers?.total} hasil ({listVouchers?.page + 1} - {listVouchers?.total} dari{' '}
-              {listVouchers?.totalallrow})
+              Menampilkan {listVouchers?.total} hasil ({listVouchers?.page * 10 + 1} -{' '}
+              {listVouchers?.total * (listVouchers?.page + 1)} dari {listVouchers?.totalallrow})
             </Typography>
           </Box>
           <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
@@ -128,7 +128,7 @@ const TableSection = ({ listVouchers, order, handleOrder, handlePageChange }) =>
         </TableContainer>
         {listVouchers && (
           <Stack alignItems={'center'} mt={2}>
-            <Pagination count={listVouchers?.totalPage} size={'small'} onChange={handlePageChange} />
+            <Pagination count={Number(listVouchers?.totalpage) + 1} size={'small'} onChange={handlePageChange} />
           </Stack>
         )}
       </Stack>

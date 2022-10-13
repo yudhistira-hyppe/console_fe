@@ -10,30 +10,21 @@ const useStyles = makeStyles((theme) => ({
   navMenuLink: {
     display: 'flex',
     alignItems: 'center',
-    padding: '10px 10px 10px 20px',
     color: '#FFFFFF',
+    fontFamily: 'Lato',
+    opacity: 0.4,
+    height: '100%',
+    transition: 'all .2s ease-in',
     '&:hover, &:focus': {
-      color: theme.palette.horizontalNav.textDarkColor,
-      backgroundColor: theme.palette.horizontalNav.menuHoverBgColor,
-      '& .Cmt-icon-root': {
-        color: theme.palette.horizontalNav.textDarkColor,
-      },
+      opacity: 0.8,
     },
     '&.active': {
-      color: theme.palette.horizontalNav.textActiveColor,
-      backgroundColor: theme.palette.horizontalNav.menuActiveBgColor,
-      '& .Cmt-icon-root': {
-        color: theme.palette.horizontalNav.textActiveColor,
-      },
-      '&:hover, &:focus': {
-        '& .Cmt-icon-root': {
-          color: theme.palette.horizontalNav.textActiveColor,
-        },
-      },
+      opacity: 1,
+      fontWeight: 'bold',
     },
   },
   iconRoot: {
-    marginRight: 16,
+    margin: '0 12px 0 10px',
     fontSize: 20,
   },
 }));
@@ -44,15 +35,15 @@ const NavMenuItem = (props) => {
   const classes = useStyles();
   const router = useRouter();
 
-  const renderIcon = () => {
-    if (icon && isValidElement(icon)) {
-      return cloneElement(icon, {
-        className: clsx(classes.iconRoot, 'Cmt-icon-root'),
-      });
-    }
+  // const renderIcon = () => {
+  //   if (icon && isValidElement(icon)) {
+  //     return cloneElement(icon, {
+  //       className: clsx(classes.iconRoot, 'Cmt-icon-root'),
+  //     });
+  //   }
 
-    return null;
-  };
+  //   return null;
+  // };
 
   // please dont remove the code
 
@@ -101,7 +92,7 @@ const NavMenuItem = (props) => {
   // };
 
   return (
-    <List component="div" disablePadding onClick={handleClick}>
+    <List component="div" disablePadding onClick={handleClick} style={{ height: '100%' }}>
       <Link href={link}>
         <a
           // onClick={handleUpgradePremium}
@@ -112,8 +103,6 @@ const NavMenuItem = (props) => {
             },
             'Cmt-nav-menu-link',
           )}>
-          {/* Display an icon if any */}
-          {renderIcon()}
           <span className={clsx(classes.navText, 'Cmt-nav-text')}>{name}</span>
         </a>
       </Link>

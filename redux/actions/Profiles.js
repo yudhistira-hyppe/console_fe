@@ -1,6 +1,7 @@
 import { fetchError, fetchStart, fetchSuccess } from './Common';
 import { obtainProfiles } from '../../authentication/auth-provider/AuthApi';
 import { GET_PROFILES, DEACTIVATE_PROFILE } from '../../modules/Constants/ActionTypes';
+import { READ_NOTIFICATION, SET_NOTIFICATION } from '../reducers/Profiles';
 
 export const getProfiles = (authUser, filterOptions = [], searchTerm = '', callbackFun) => {
   return (dispatch) => {
@@ -18,5 +19,17 @@ export const getProfiles = (authUser, filterOptions = [], searchTerm = '', callb
       .catch((error) => {
         dispatch(fetchError('There was something issue in responding server'));
       });
+  };
+};
+
+export const setNotification = (data) => {
+  return (dispatch) => {
+    dispatch({ type: SET_NOTIFICATION, payload: data });
+  };
+};
+
+export const readNotification = () => {
+  return (dispatch) => {
+    dispatch({ type: READ_NOTIFICATION });
   };
 };

@@ -10,12 +10,32 @@ import NotificationItem from './NotificationItem';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import clsx from 'clsx';
 import Badge from '@material-ui/core/Badge';
-import Typography from '@material-ui/core/Typography';
 import { useAuth } from '../../../../../../authentication';
-import { useLatestNotificationQuery } from 'api/user/notification';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import CmtMediaObject from '@coremat/CmtMediaObject';
+import { Stack, Typography } from '@mui/material';
+import { readNotification } from 'redux/actions/Profiles';
 
 const useStyles = makeStyles((theme) => ({
+  feedItemRoot: {
+    padding: '0 10px 10px',
+    position: 'relative',
+    flexDirection: 'column',
+    gap: 5,
+    borderBottom: `1px solid ${alpha(theme.palette.common.dark, 0.065)}`,
+    '& .Cmt-media-object': {
+      alignItems: 'center',
+    },
+    '& .Cmt-media-image': {
+      alignSelf: 'flex-start',
+      width: 56,
+    },
+    '& .Cmt-media-body': {
+      width: 'calc(100% - 56px)',
+      flex: 'inherit',
+    },
+  },
   cardRoot: {
     '& .Cmt-header-root': {
       paddingTop: 4,
@@ -44,6 +64,9 @@ const useStyles = makeStyles((theme) => ({
   scrollbarRoot: {
     height: 300,
     padding: 16,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
   },
   popoverRoot: {
     '& .MuiPopover-paper': {
@@ -61,19 +84,22 @@ const actions = [
   },
 ];
 
-const headerNotifications = [];
-
 const HeaderNotifications = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const router = useRouter();
-  const [counter, setCounter] = React.useState(5);
+  const [counter, setCounter] = React.useState(0);
   const theme = useTheme();
-  const { authUser, isLoadingUser } = useAuth();
+  const notification = useSelector(({ profilesReducer }) => profilesReducer.notification);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    setCounter(notification?.unread);
+  }, [notification]);
 
   const onOpenPopOver = (event) => {
     setAnchorEl(event.currentTarget);
-    setCounter(0);
+    dispatch(readNotification());
   };
 
   const onClosePopOver = () => {
@@ -83,13 +109,6 @@ const HeaderNotifications = () => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
-  const payload = {
-    email: authUser?.user?.email,
-    skip: 0,
-    limit: 10,
-  };
-  const { data: dataNotification } = useLatestNotificationQuery(payload);
 
   const handleHeaderDropDown = (objBtn) => {
     if (objBtn.label === 'More Detail') {
@@ -139,7 +158,7 @@ const HeaderNotifications = () => {
             }}
           />
           <CmtCardContent>
-            {dataNotification?.data?.length > 0 ? (
+            {/* {dataNotification?.data?.length > 0 ? (
               <>
                 <PerfectScrollbar className={classes.scrollbarRoot}>
                   <CmtList
@@ -148,6 +167,26 @@ const HeaderNotifications = () => {
                   />
                 </PerfectScrollbar>
               </>
+            ) : (
+              <Box p={6}>
+                <Typography variant="body2">No notifications found</Typography>
+              </Box>
+            )} */}
+            {notification?.data?.length >= 1 ? (
+              <PerfectScrollbar className={classes.scrollbarRoot}>
+                {/* <CmtList
+                  data={notification?.data}
+                  renderRow={(item, index) => <NotificationItem key={index} item={item} />}
+                /> */}
+                {notification?.data?.map((item, key) => (
+                  <Stack key={key} className={classes.feedItemRoot}>
+                    <Typography fontSize={12} fontFamily="Lato" color="rgba(0, 0, 0, 0.38)">
+                      {item?.created_at}
+                    </Typography>
+                    <CmtMediaObject title={item?.notification?.title} subTitle={item?.notification?.body} />
+                  </Stack>
+                ))}
+              </PerfectScrollbar>
             ) : (
               <Box p={6}>
                 <Typography variant="body2">No notifications found</Typography>

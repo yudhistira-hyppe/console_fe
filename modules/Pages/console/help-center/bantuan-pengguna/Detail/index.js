@@ -1,7 +1,7 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Avatar, Button, Card, Chip, Divider, Grow, Paper, Popper, TextareaAutosize, Typography } from '@material-ui/core';
 import React, { useRef, useState, useEffect } from 'react';
-import { Select, Stack } from '@mui/material';
+import { Box, Select, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Breadcrumbs from '../BreadCrumb/index';
 import { useRouter } from 'next/router';
@@ -16,6 +16,7 @@ import { FolderShared, KeyboardArrowDown } from '@material-ui/icons';
 import {
   useGetDetailTicketQuery,
   useGetLogHistoryDetailTicketQuery,
+  useGetUserDivisiQuery,
   useReplyTicketMutation,
   useUpdateDetailTicketMutation,
 } from 'api/console/helpCenter/bantuan-pengguna';
@@ -25,6 +26,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { LoadingButton } from '@mui/lab';
 import SpinnerLoading from 'components/common/loading/spinner';
+import { useGetDivisiQuery } from 'api/console/divisi';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -35,10 +37,8 @@ const breadcrumbs = [
 
 const useStyles = makeStyles((theme) => ({
   scrollbarRoot: {
-    height: 500,
-    padding: '',
-    scrollbarWidth: 'none',
-    '-ms-overflow-style': 'none',
+    display: 'flex',
+    flexDirection: 'column',
   },
   textArea: {
     resize: 'none',
@@ -67,10 +67,17 @@ const DetailBantuanPengguna = () => {
     children2: null,
   });
   const [filter, setFilter] = useState({ id: router?.query?.id, type: 'chat' });
-  const [loadingReply, setLoadingReply] = useState(false);
+  const [loading, setLoading] = useState({
+    reply: false,
+    update: false,
+  });
+  const [divisiID, setDivisiID] = useState('');
+  const [userAssign, setUserAssign] = useState('');
   const classes = useStyles();
   const { data: ticketData, isLoading, refetch } = useGetDetailTicketQuery(filter);
   const { data: logHistory } = useGetLogHistoryDetailTicketQuery({ iduserticket: router?.query?.id });
+  const { data: listDivisi } = useGetDivisiQuery({ skip: 0, limit: 10 });
+  const { data: userDivisi } = useGetUserDivisiQuery({ divisionId: divisiID || '' }) || [];
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [replyTicket] = useReplyTicketMutation();
   const { authUser } = useAuth();
@@ -190,8 +197,22 @@ const DetailBantuanPengguna = () => {
     });
   };
 
+  const handleUpdateTicket = () => {
+    const data = {
+      status: ticketData?.data[0]?.status,
+      assignTo: userAssign,
+    };
+
+    setLoading({ ...loading, update: true });
+    setDivisiID('');
+    setUserAssign('');
+    updateTicket({ id: ticketData?.data[0]?._id, data }).then(() => {
+      setLoading({ ...loading, update: false });
+    });
+  };
+
   const handleReplyTicket = () => {
-    setLoadingReply(true);
+    setLoading({ reply: true });
     let data = new FormData();
     data.append('IdUserticket', ticketData?.data[0]?._id);
     data.append('type', tab);
@@ -200,7 +221,7 @@ const DetailBantuanPengguna = () => {
     body.file?.length >= 1 && Array.from(body.file).map((item) => data.append('supportFile', item));
 
     replyTicket(data).then(() => {
-      setLoadingReply(false);
+      setLoading({ reply: false });
       setBody({ text: '', file: [] });
       refetch();
     });
@@ -224,12 +245,12 @@ const DetailBantuanPengguna = () => {
           </Typography>
         </Stack>
       </Stack>
-      {isLoading || (loadingReply && !ticketData?.data[0]?.penerima) ? (
+      {isLoading || (loading.reply && !ticketData?.data[0]?.penerima) ? (
         <PageLoader />
       ) : (
         <PageContainer>
-          <Stack direction={'row'} spacing={2}>
-            <div style={{ flex: 2 }}>
+          <Stack direction="row" spacing={6}>
+            <div style={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <Stack direction={'column'} spacing={2}>
                 <Typography variant="h1">{ticketData?.data[0]?.subject}</Typography>
                 <Typography variant="subtitle2">{ticketData?.data[0]?.body}</Typography>
@@ -280,10 +301,10 @@ const DetailBantuanPengguna = () => {
                 </Button>
               </Stack>
               <PerfectScrollbar className={classes.scrollbarRoot}>
-                {tab !== 'history' && ticketData?.data[0]?.detail?.length >= 1 ? (
-                  <Stack direction="column" spacing={3}>
-                    {ticketData?.data[0]?.detail?.map((item, key) =>
-                      item?.type === tab ? (
+                <Box height={tab !== 'history' ? 250 : 420} overflow="auto">
+                  {tab !== 'history' && ticketData?.data[0]?.detail?.length >= 1 ? (
+                    <Stack direction="column" spacing={3}>
+                      {ticketData?.data[0]?.detail?.map((item, key) => (
                         <Stack key={key} direction="row" spacing={2}>
                           <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                           <Stack direction="column" spacing={1} width="100%">
@@ -312,42 +333,37 @@ const DetailBantuanPengguna = () => {
                             )}
                           </Stack>
                         </Stack>
-                      ) : (
-                        <Typography variant="subtitle2" style={{ color: '#666666' }}>
-                          {tab === 'chat' && 'Jadi yang pertama untuk mengirim pesan.'}
-                          {tab === 'comment' && 'Jadi yang pertama untuk berkomentar.'}
-                        </Typography>
-                      ),
-                    )}
-                  </Stack>
-                ) : (
-                  <Typography variant="subtitle2" style={{ color: '#666666' }}>
-                    {tab === 'chat' && 'Jadi yang pertama untuk mengirim pesan.'}
-                    {tab === 'comment' && 'Jadi yang pertama untuk berkomentar.'}
-                  </Typography>
-                )}
-                {tab === 'history' ? (
-                  logHistory?.data?.length >= 1 ? (
-                    <Stack direction="column" spacing={3}>
-                      {logHistory.data.map((item, key) => (
-                        <Stack key={key} direction="row" spacing={2}>
-                          <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
-                          <Stack direction="column" spacing={1} width="100%">
-                            <Typography>
-                              {item?.fullName} -{' '}
-                              <Typography variant="caption">{moment(item?.datetime).format('lll')}</Typography>
-                            </Typography>
-                            <Typography>{item?.remark}</Typography>
-                          </Stack>
-                        </Stack>
                       ))}
                     </Stack>
                   ) : (
                     <Typography variant="subtitle2" style={{ color: '#666666' }}>
-                      Log Riwayat Kosong.
+                      {tab === 'chat' && 'Jadi yang pertama untuk mengirim pesan.'}
+                      {tab === 'comment' && 'Jadi yang pertama untuk berkomentar.'}
                     </Typography>
-                  )
-                ) : null}
+                  )}
+                  {tab === 'history' ? (
+                    logHistory?.data?.length >= 1 ? (
+                      <Stack direction="column" spacing={3}>
+                        {logHistory.data.map((item, key) => (
+                          <Stack key={key} direction="row" spacing={2}>
+                            <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
+                            <Stack direction="column" spacing={1} width="100%">
+                              <Typography>
+                                {item?.fullName} -{' '}
+                                <Typography variant="caption">{moment(item?.datetime).format('lll')}</Typography>
+                              </Typography>
+                              <Typography>{item?.remark}</Typography>
+                            </Stack>
+                          </Stack>
+                        ))}
+                      </Stack>
+                    ) : (
+                      <Typography variant="subtitle2" style={{ color: '#666666' }}>
+                        Log Riwayat Kosong.
+                      </Typography>
+                    )
+                  ) : null}
+                </Box>
                 {tab !== 'history' && (
                   <Stack mt={3}>
                     <TextareaAutosize
@@ -358,7 +374,7 @@ const DetailBantuanPengguna = () => {
                       onChange={(e) => setBody({ ...body, text: e.target.value })}
                       value={body.text}
                     />
-                    <Stack direction="row" justifyContent="space-between" mt={2} mb={4}>
+                    <Stack direction="row" justifyContent="space-between" mt={2}>
                       <Stack direction="row" alignItems="center" spacing={2}>
                         <Button
                           variant="contained"
@@ -372,11 +388,11 @@ const DetailBantuanPengguna = () => {
                       </Stack>
                       <Stack direction="row" spacing={2}>
                         <LoadingButton
-                          loading={loadingReply}
+                          loading={loading.reply}
                           variant="contained"
                           color="secondary"
                           onClick={handleReplyTicket}
-                          disabled={body === ''}>
+                          disabled={body.text === ''}>
                           Kirim
                         </LoadingButton>
                         <Button onClick={() => setBody({ text: '', file: [] })}>Batal</Button>
@@ -460,13 +476,13 @@ const DetailBantuanPengguna = () => {
                   </Typography>
                 </div>
               </Stack>
-              {ticketData?.data[0]?.penerima ? (
+              {ticketData?.data[0]?.asignTo ? (
                 <Stack direction={'row'} alignItems="center" spacing={2} mt={2}>
                   <div style={{ flex: 2 }}>
                     <Typography variant="body2">Ditangani Oleh</Typography>
                   </div>
                   <div style={{ flex: 3 }}>
-                    <Chip label={ticketData?.data[0]?.penerima || '-'} size="small" style={{ color: '#666666' }} />
+                    <Chip label={ticketData?.data[0]?.asignTo || '-'} size="small" style={{ color: '#666666' }} />
                   </div>
                 </Stack>
               ) : (
@@ -477,15 +493,21 @@ const DetailBantuanPengguna = () => {
                     </div>
                     <div style={{ flex: 3 }}>
                       <Select
-                        value=""
                         size="small"
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
-                        style={{ width: '100%', height: 35 }}>
-                        <MenuItem value={''}>Tidak ada</MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        style={{ width: '100%', height: 35 }}
+                        value={divisiID}
+                        onChange={(e) => {
+                          setDivisiID(e.target.value);
+                          setUserAssign('');
+                        }}>
+                        <MenuItem value="">Pilih Divisi</MenuItem>
+                        {listDivisi?.data?.map((item, key) => (
+                          <MenuItem key={key} value={item?._id}>
+                            {item?.nameDivision}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </div>
                   </Stack>
@@ -495,15 +517,33 @@ const DetailBantuanPengguna = () => {
                     </div>
                     <div style={{ flex: 3 }}>
                       <Select
-                        value=""
+                        value={userAssign}
                         size="small"
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
-                        style={{ width: '100%', height: 35 }}>
-                        <MenuItem value={''}>Tidak ada</MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        style={{ width: '100%', height: 35 }}
+                        disabled={divisiID === ''}
+                        onChange={(e) => setUserAssign(e.target.value)}>
+                        {divisiID !== '' && userDivisi?.data?.length > 1 && (
+                          <MenuItem value={''} disabled>
+                            Pilih User
+                          </MenuItem>
+                        )}
+                        {divisiID === '' ? (
+                          <MenuItem value={''} disabled>
+                            ---
+                          </MenuItem>
+                        ) : userDivisi?.data?.length > 1 ? (
+                          userDivisi?.data?.map((item, key) => (
+                            <MenuItem key={key} value={item?.user[0]?._id}>
+                              {item?.user[0]?.fullName || '-'}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem value={''} disabled>
+                            Tidak ada data
+                          </MenuItem>
+                        )}
                       </Select>
                     </div>
                   </Stack>
@@ -559,11 +599,17 @@ const DetailBantuanPengguna = () => {
                   </Typography>
                 </div>
               </Stack>
-              {/* <Stack mt={3}>
-              <Button variant="contained" color="primary" fullWidth>
-                Submit
-              </Button>
-            </Stack> */}
+              <Stack mt={3}>
+                <LoadingButton
+                  loading={loading.update}
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  disabled={userAssign === ''}
+                  onClick={() => handleUpdateTicket()}>
+                  Submit
+                </LoadingButton>
+              </Stack>
             </Card>
           </Stack>
           <ModalChangeStatus
