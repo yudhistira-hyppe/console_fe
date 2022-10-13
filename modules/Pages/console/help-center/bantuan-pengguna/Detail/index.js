@@ -199,6 +199,7 @@ const DetailBantuanPengguna = () => {
 
   const handleUpdateTicket = () => {
     const data = {
+      status: ticketData?.data[0]?.status,
       assignTo: userAssign,
     };
 
