@@ -41,10 +41,10 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, done,
               <img src="/images/success.png" alt="success.png" />
               <center>
                 <Typography variant="h5" fontWeight="bold">
-                  Masalah Telah Selesai
+                  Selesaikan Masalah ?
                 </Typography>
                 <Typography color="#666666" mt={1}>
-                  Kamu telah menyelesaikan masalah ini
+                  Kamu akan menyelesaikan masalah ini.
                 </Typography>
               </center>
             </div>
