@@ -1,12 +1,14 @@
 import React from 'react';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
-import { Card, Grid, Box } from '@material-ui/core';
+import { Card, Grid } from '@material-ui/core';
 import { Typography, Stack } from '@mui/material';
 import { GraphIndicator } from '../../help-center/components';
+import { ButtonPopper, BulletsText } from '../components';
+import { makeStyles } from '@material-ui/styles';
 
 const data = [
-    { name: 'Laki-laki', value: 400, color: '#AB22AF' },
-    { name: 'Perempuan', value: 400, color: '#23036A' },
+    { name: 'Wanita', value: 400, color: '#AB22AF' },
+    { name: 'Laki-laki', value: 400, color: '#23036A' },
     { name: 'Tidak Diketahui', value: 200, color: '#0795F4' },
 ];
 
@@ -19,20 +21,42 @@ const wallets = [
     { label: 'Lainnya', value: 15, rate: 1850, color: '#5D9405' },
 ];
 
-const AdsDemographyComponent = () => {
+const useStyles = makeStyles((theme) => ({
+  mainContainer: {
+    height: '100%',
+    padding: '1em'
+  },
+  borderRightBox: {
+    borderRight: 'solid 0.9px rgba(0, 0, 0, 0.12)', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    justifyContent: 'center'
+  },
+  bullets: {
+    width: '0.6em', height: '0.6em', borderRadius: '100px'
+  }
+}));
+
+const AdsDemographyComponent = ({ status, setStatus }) => {
+  const classes = useStyles();
     return (
-        <Card style={{ padding: '1em' }}>
-          <Stack>
+        <Card className={classes.mainContainer}>
+          <Stack direction="row" justifyContent="space-between">
             <Typography
                 fontFamily="Lato"
                 fontWeight="bold"
             >
                 Demografis
             </Typography>
+
+            <ButtonPopper 
+             status={status}
+             setStatus={setStatus}
+            />
           </Stack>
 
           <Grid container>
-            <Grid item sm={12} md={12} lg={8} xl={8} style={{ borderRight: 'solid 0.9px rgba(0, 0, 0, 0.12)', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+            <Grid item sm={12} md={12} lg={8} xl={8} className={classes.borderRightBox}>
                 <Grid container>
                   <Grid item sm={12} md={12} lg={6} xl={6}>
                     {
@@ -80,47 +104,18 @@ const AdsDemographyComponent = () => {
               </PieChart>
 
               <Stack direction="row" justifyContent={'center'} spacing={2} mt={3}>
-                <Stack direction="row">
-                  <Stack direction="column" justifyContent="center" className='mr-1'>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '100px', backgroundColor: "#AB22AF"}} />
-                  </Stack>
-                  <Stack direction="column" justifyContent="center">
-                    <Typography
-                    fontFamily="Lato"
-                    variant="caption"
-                    >
-                        Wanita
-                    </Typography>
-                  </Stack>
-                </Stack>
-
-                <Stack direction="row">
-                  <Stack direction="column" justifyContent="center" className='mr-1'>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '100px', backgroundColor: "#23036A"}} />
-                  </Stack>
-                  <Stack direction="column" justifyContent="center">
-                    <Typography
-                    fontFamily="Lato"
-                    variant="caption"
-                    >
-                        Laki-laki
-                    </Typography>
-                  </Stack>
-                </Stack>
-
-                <Stack direction="row">
-                  <Stack direction="column" justifyContent="center" className='mr-1'>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '100px', backgroundColor: "#0795F4"}} />
-                  </Stack>
-                  <Stack direction="column" justifyContent="center">
-                    <Typography
-                    fontFamily="Lato"
-                    variant="caption"
-                    >
-                        Tidak Diketahui
-                    </Typography>
-                  </Stack>
-                </Stack>
+                {
+                  Array.isArray(data) &&
+                  data.map((el, idx) => {
+                    return (
+                      <BulletsText 
+                        key={idx}
+                        title={el.name}
+                        color={el.color}
+                      />
+                    )
+                  })
+                }
               </Stack>
             </Grid>
           </Grid>

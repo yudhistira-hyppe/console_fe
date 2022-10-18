@@ -128,7 +128,9 @@ const AdsCenterTableSection = ({ order, page, handleOrder, handlePageChange, lis
                     hover
                     key={key}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    style={{ cursor: 'pointer' }}>
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => router.push('/ads-center/detail')}
+                  >
                     <TableCell
                       component="th"
                       scope="row"

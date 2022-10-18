@@ -139,6 +139,41 @@ const listAds = {
   ]
 }
 
+const data = [
+  {
+    Impresi: 2400,
+    CTA: 4000,
+    color: {
+      Impresi: '#AB22AF',
+      CTA: '#455DD8',
+    }
+  },
+  {
+    Impresi: 1398,
+    CTA: 3000,
+  },
+  {
+    Impresi: 9800,
+    CTA: 2000,
+  },
+  {
+    Impresi: 3908,
+    CTA: 2780,
+  },
+  {
+    Impresi: 4800,
+    CTA: 1890,
+  },
+  {
+    Impresi: 3800,
+    CTA: 2390,
+  },
+  {
+    Impresi: 4300,
+    CTA: 3490,
+  },
+];
+
 const ConsoleAdsCenterComponent = () => {
   const [filter, setFilter] = React.useState({
     descending: 'true',
@@ -151,6 +186,8 @@ const ConsoleAdsCenterComponent = () => {
     page: 0,
     limit: 10,
   });
+  const [status, setStatus] = React.useState('Semua');
+  const [demographyStatus, setDemographyStatus] = React.useState('Semua');
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
@@ -246,19 +283,36 @@ const ConsoleAdsCenterComponent = () => {
         }
       })
     }
-  }
+  };
+
+  const onChangeStatusHandler = (value) => {
+    if (value){
+      setStatus(value)
+    }
+  };
+
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Pusat Iklan</title>
       </Head>
-      <PageContainer heading="Pusat Iklan" breadcrumbs={breadcrumbs}>
+      <PageContainer className="mt-3">
         <GridContainer>
           <Grid item xs={12} md={12} lg={4} xl={4}>
-            <AdsPerformaceComponents />
+            <AdsPerformaceComponents 
+              status={status}
+              setStatusList={onChangeStatusHandler}
+              data={data}
+              title={'Performa Iklan'}
+              totalData={1000}
+              description={'Total Iklan'}
+            />
           </Grid>
           <Grid item xs={12} md={12} lg={8} xl={8}>
-            <AdsDemographyComponent />
+            <AdsDemographyComponent 
+              status={demographyStatus}
+              setStatus={setDemographyStatus}
+            />
           </Grid>
         </GridContainer>
 

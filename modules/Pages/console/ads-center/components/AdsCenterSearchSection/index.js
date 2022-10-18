@@ -98,25 +98,6 @@ const SearchSection = ({ handleChange, filter }) => {
                 variant={week === 12 ? 'default' : 'outlined'}
               />
             </Stack>
-
-            <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-              <DateRangePicker
-                value={value}
-                maxDate={getWeeksAfter(value[0], week)}
-                onChange={(newValue) => {
-                  handleChange('ticket_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
-                  setValue(newValue);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <Stack direction={'row'} spacing={1}>
-                      <TextField {...startProps} />
-                      <TextField {...endProps} />
-                    </Stack>
-                  </>
-                )}
-              />
-            </LocalizationProvider>
           </AccordionDetails>
         </Accordion>
 
