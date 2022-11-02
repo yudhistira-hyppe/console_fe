@@ -29,14 +29,6 @@ const MainApp = (props) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-  }, []);
-
-  useEffect(() => {
-    Notification.requestPermission().then(() => {
-      const message = getMessaging(firebaseApp);
-      onMessage(message, (payload) => dispatch(setNotification(payload)));
-    });
-
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('../firebase-messaging-sw.js')
@@ -47,6 +39,13 @@ const MainApp = (props) => {
           console.log('Service worker registration failed, error:', err);
         });
     }
+  }, []);
+
+  useEffect(() => {
+    Notification.requestPermission().then(() => {
+      const message = getMessaging(firebaseApp);
+      onMessage(message, (payload) => dispatch(setNotification(payload)));
+    });
   });
 
   return (
