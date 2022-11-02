@@ -10,8 +10,8 @@ const handle = app.getRequestHandler();
 
 const httpsOptions = {
   // change here to ur path file location
-  key: readFileSync('C:/SSL/new/certificate.key'),
-  cert: readFileSync('C:/SSL/new/sslaja.crt'),
+  key: readFileSync('/Users/egyfazri/Documents/project/HYYPE/SSL/certificate.key'),
+  cert: readFileSync('/Users/egyfazri/Documents/project/HYYPE/SSL/sslaja.crt'),
 };
 
 app.prepare().then(() => {
