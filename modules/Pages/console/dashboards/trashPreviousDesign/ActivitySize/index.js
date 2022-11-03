@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
@@ -8,8 +8,15 @@ import Box from '@material-ui/core/Box';
 import CmtList from '@coremat/CmtList';
 import ActivitySizeItem from './ActivitySizeItem';
 import ActivitySizeGraph from './ActivitySizeGraph';
+import { MenuItem, Popover, Select, Stack } from '@mui/material';
+import { Typography } from '@material-ui/core';
+import { Error } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
+  cardHeaderRoot: {
+    paddingTop: 16,
+    paddingBottom: 16,
+  },
   cardContentRoot: {
     '& .MuiGrid-container': {
       alignItems: 'center',
@@ -35,8 +42,19 @@ const useStyles = makeStyles((theme) => ({
     '& > *:not(:last-child)': {
       marginRight: 20,
       [theme.breakpoints.up('md')]: {
-        marginRight: 40,
+        marginRight: 30,
       },
+    },
+  },
+  dateSelect: {
+    '& .MuiSelect-select': {
+      padding: '2px 10px',
+      fontSize: 12,
+    },
+    '& .MuiSvgIcon-root': {
+      width: 18,
+      height: 18,
+      top: 5,
     },
   },
 }));
@@ -64,18 +82,70 @@ const measuredActivityTitle = [
   },
 ];
 
-const ActivitySize = (props) => {
+const ActivitySize = ({ data }) => {
   const classes = useStyles();
-  const { data } = props;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const TitleComp = (
+    <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <Stack direction="row" alignItems="center" gap={1} position="relative" style={{ height: 40 }}>
+        <Typography variant="h4" component="div">
+          Aktifitas
+        </Typography>
+        <Error
+          style={{ fontSize: 14, color: '#737373' }}
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
+        />
+        <Popover
+          id="mouse-over-popover"
+          sx={{
+            pointerEvents: 'none',
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus>
+          <Box width={300} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
+            Merekam aktivitas pengguna yang menggunakan fitur aplikasi dalam kurun waktu tertentu
+          </Box>
+        </Popover>
+      </Stack>
+      <Select defaultValue={7} className={classes.dateSelect}>
+        <MenuItem value={7}>7 Hari</MenuItem>
+        <MenuItem value={14}>14 Hari</MenuItem>
+        <MenuItem value={30}>30 Hari</MenuItem>
+        <MenuItem value={90}>90 Hari</MenuItem>
+      </Select>
+    </Stack>
+  );
 
   return (
     <CmtAdvCard>
       <CmtCardHeader
+        className={classes.cardHeaderRoot}
         titleProps={{
           variant: 'h4',
           component: 'div',
         }}
-        title="Aktifitas"
+        title={TitleComp}
       />
       <CmtAdvCardContent className={classes.cardContentRoot}>
         <CmtList
