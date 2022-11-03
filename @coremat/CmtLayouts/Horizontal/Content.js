@@ -4,8 +4,7 @@ import { Box, makeStyles } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   appMainContentWrapper: {
     position: 'relative',
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingTop: 60,
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
