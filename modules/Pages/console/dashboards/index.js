@@ -14,7 +14,7 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import StatusKepemilikan from './StatusKepemilikan';
 import ActivitySize from './trashPreviousDesign/ActivitySize';
 import UserActive from './UserActive';
-import Instalasi from './Instalasi';
+import Unggahan from './Unggahan';
 import Pendapatan from './Pendapatan';
 import Voucher from './Voucher';
 
@@ -64,74 +64,22 @@ const ConsoleDashboardComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Dashboard</title>
       </Head>
-
-      {/* // start change */}
       <PageContainer>
         <GridContainer>
-          {/* i just recoginze, if you want to make the components reusable 
-          you need to change (fill and id in linearGradient is unique) to trigger effect color */}
-          {/* i'll be refactor the components to reusable. i'll be back asap! */}
           <Grid item xs={12} sm={6} md={3}>
-            <UserActive title="Pengguna Aktif" secondaryTitle="Bulan ini" amount="10.254" />
+            <UserActive title="Pengguna Aktif" secondaryTitle="Bulan ini" amount={10254} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Instalasi title="Instalasi" secondaryTitle="Bulan ini" amount="33.7555" />
+            <Unggahan title="Total Post" secondaryTitle="Bulan ini" amount={33755} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Pendapatan title="Pendapatan" secondaryTitle="Bulan ini" amount="30.000.000" />
+            <Pendapatan title="Total Pendapatan" secondaryTitle="Bulan ini" amount={30000000} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Voucher title="Voucher" secondaryTitle="Bulan ini" amount="222.355" />
+            <Voucher title="Pendapatan Voucher" secondaryTitle="Bulan ini" amount={15015000} />
           </Grid>
         </GridContainer>
-
-        {/* end change */}
-
-        {/* <GridContainer>
-          <Grid item xs={12} sm={5} md={5}>
-            <Box display="flex" alignItems="center" className={classes.boxAlert}>
-              <CmtImage src={'/images/icons/warning_sign.png'} alt="warning" />
-              <Typography component="div" variant="h5" className={classes.desc}>
-                Permintaan voucher baru telah dikonfirmasi!
-              </Typography>
-              <CmtImage src={'/images/icons/icon_link.png'} alt="link" />
-            </Box>
-          </Grid>
-        </GridContainer> */}
-        <GridContainer>
-          {/* <ActiveUsersCard
-              dataGraph={activeUsersSevenDay}
-              xAxisKeyGraph="date"
-              lineKeyGraph="user_activity_count"
-              jumlah={countTotal(activeUsersSevenDay, 'user_activity_count').toString()}
-              title="Pengguna Aktif 7 Hari"
-              color="#0062FF"
-              background={['#E2EEFF -18.96%', '#FFFFFF 108.17%']}
-            /> */}
-
-          {/* <Grid item xs={12} sm={6} md={4}>
-            <ActiveUsersCard
-              dataGraph={activeUsersThirtyDay}
-              xAxisKeyGraph="date"
-              lineKeyGraph="user_activity_count"
-              jumlah={countTotal(activeUsersThirtyDay, 'user_activity_count').toString()}
-              title="Pengguna Aktif 30 Hari"
-              color="#4200FF"
-              background={['#E2E3FF -18.96%', '#FFFFFF 108.17%']}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <ActiveUsersCard
-              dataGraph={activeUsersOneYear}
-              xAxisKeyGraph="month_name"
-              lineKeyGraph="count_user"
-              jumlah={countTotal(activeUsersOneYear, 'count_user').toString()}
-              title={`Pengguna Aktif Tahun ${new Date().getFullYear()}`}
-              color="#FFA601"
-              background={['#FFF2E2 -18.96%', '#FFFFFF 108.17%']}
-            />
-          </Grid>
-           */}
+        <GridContainer style={{ marginTop: 12 }}>
           <Grid item xs={12} sm={9} md={9}>
             <ActivitySize data={usersActivityHyppeSevenDay} />
           </Grid>
