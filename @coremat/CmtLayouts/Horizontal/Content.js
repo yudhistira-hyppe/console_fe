@@ -5,6 +5,7 @@ const useStyles = makeStyles((theme) => ({
   appMainContentWrapper: {
     position: 'relative',
     paddingTop: 60,
+    paddingBottom: 40,
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
