@@ -12,8 +12,7 @@ import { useGetListTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna'
 import moment from 'moment';
 
 const breadcrumbs = [
-  { label: 'Home', link: '/' },
-  { label: 'Help Center', link: '/help-center' },
+  { label: 'Pusat Bantuan', link: '/help-center' },
   { label: 'Bantuan Pengguna', isActive: true },
 ];
 
@@ -126,8 +125,6 @@ const ConsoleBantuanPenggunaComponent = () => {
       };
     });
   };
-
-  console.log(listTickets);
 
   return (
     <>

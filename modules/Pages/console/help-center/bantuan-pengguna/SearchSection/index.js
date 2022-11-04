@@ -128,14 +128,16 @@ const SearchSection = ({ handleChange }) => {
             <FormGroup>
               {loadingSumber ? (
                 <Typography>loading...</Typography>
-              ) : (
+              ) : listSumber?.data ? (
                 listSumber?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
-                    label={item?.sourceName}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('sumber', item?._id)} />}
+                    label={item?.nameCategory}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
                   />
                 ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
               )}
             </FormGroup>
           </AccordionDetails>
@@ -149,7 +151,7 @@ const SearchSection = ({ handleChange }) => {
             <FormGroup>
               {loadingCategory ? (
                 <Typography>loading...</Typography>
-              ) : (
+              ) : listCategory?.data ? (
                 listCategory?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
@@ -157,6 +159,8 @@ const SearchSection = ({ handleChange }) => {
                     control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
                   />
                 ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
               )}
             </FormGroup>
           </AccordionDetails>
@@ -170,14 +174,16 @@ const SearchSection = ({ handleChange }) => {
             <FormGroup>
               {loadingLevel ? (
                 <Typography>loading...</Typography>
-              ) : (
+              ) : listLevel?.data ? (
                 listLevel?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
-                    label={`${item?.nameLevel} - ${item?.descLevel}`}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('level', item?._id)} />}
+                    label={item?.nameCategory}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
                   />
                 ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
               )}
             </FormGroup>
           </AccordionDetails>
