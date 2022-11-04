@@ -1,9 +1,8 @@
+import React from 'react';
 import CmtAdvCard from '@coremat/CmtAdvCard';
 import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
-import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import { Button, CardContent, ClickAwayListener, Grow, makeStyles, Paper, Popper, Typography } from '@material-ui/core';
 import { Stack } from '@mui/material';
-import React, { useEffect, useRef } from 'react';
 import ActionButtons from './ActionButtons';
 import OverallBalance from './OverAllBalances';
 import PortfolioDetails from './PortofolioDetails';
@@ -14,6 +13,9 @@ import { Skeleton } from '@material-ui/lab';
 const useStyles = makeStyles((theme) => ({
   subTitle: {
     color: theme.palette.text.secondary,
+  },
+  cardAdvRoot: {
+    paddingTop: 0,
   },
 }));
 
@@ -31,11 +33,6 @@ const Card = ({
   isFetching,
 }) => {
   const classes = useStyles();
-  const wallets = [
-    { label: 'Baru', value: 74, rate: 8.75, color: '#89CB00' },
-    { label: 'Dalam Proses', value: 18, rate: 1.23, color: '#FF8800' },
-    { label: 'Selesai', value: 8, rate: 0.71, color: '#E31D41' },
-  ];
 
   const Title = () => {
     const [open, setOpen] = React.useState(false);
@@ -78,10 +75,6 @@ const Card = ({
           </Typography>
           {iconLabelRight && <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />}
         </div>
-        {/* <Typography variant="h3" component="div">
-          {pathIconLeft && <img src={pathIconLeft} alt="icon" />} {headTitle}
-          {iconLabelRight && <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />}
-        </Typography> */}
         <Button
           ref={anchorRef}
           variant="outlined"
@@ -160,8 +153,9 @@ const Card = ({
             component: 'p',
             className: classes.subTitle,
           }}
-          extraContent={<ActionButtons onClick={onClick} isFetching={isFetching} />}
-          reverseDir>
+          extraContent={<ActionButtons onClick={onClick} isFetching={isFetching} column={data.length} />}
+          reverseDir
+          className={classes.cardAdvRoot}>
           {!isFetching ? (
             <PortfolioDetails
               // title={'Portfolio Distribution'}
