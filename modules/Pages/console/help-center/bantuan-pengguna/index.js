@@ -51,7 +51,7 @@ const ConsoleBantuanPenggunaComponent = () => {
     return params;
   };
 
-  const { data: listTickets, isLoading: loadingTicket } = useGetListTicketsQuery(getParams());
+  const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
@@ -138,11 +138,12 @@ const ConsoleBantuanPenggunaComponent = () => {
           mt={1}
           mb={3}
           onClick={() => router.push('/help-center')}
+          gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>
-            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
           </Stack>
-          <Typography variant="h1" style={{ color: 'black' }}>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
             Kembali
           </Typography>
         </Stack>
@@ -151,17 +152,14 @@ const ConsoleBantuanPenggunaComponent = () => {
       <PageContainer heading="">
         <Stack direction={'row'} spacing={3}>
           <SearchSection handleChange={handleSearchChange} />
-          {loadingTicket ? (
-            <Typography>loading...</Typography>
-          ) : (
-            <TableSection
-              order={filter.descending}
-              page={filter.page + 1}
-              handleOrder={onOrderChange}
-              handlePageChange={handlePageChange}
-              listTickets={listTickets}
-            />
-          )}
+          <TableSection
+            order={filter.descending}
+            page={filter.page + 1}
+            handleOrder={onOrderChange}
+            handlePageChange={handlePageChange}
+            listTickets={listTickets}
+            loading={loadingTicket}
+          />
         </Stack>
       </PageContainer>
     </>
