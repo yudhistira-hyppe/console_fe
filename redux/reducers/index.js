@@ -18,6 +18,7 @@ import {
   group,
   moduleAPI,
   divisiAPI,
+  transactionAPI,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -59,4 +60,5 @@ export default combineReducers({
   [moduleAPI.reducerPath]: moduleAPI.reducer,
   [divisiAPI.reducerPath]: divisiAPI.reducer,
   [bantuanPenggunaApi.reducerPath]: bantuanPenggunaApi.reducer,
+  [transactionAPI.reducerPath]: transactionAPI.reducer,
 });
