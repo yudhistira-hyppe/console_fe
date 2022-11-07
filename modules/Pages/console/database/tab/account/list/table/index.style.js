@@ -7,6 +7,7 @@ const useStyles = makeStyles(() => ({
     },
   },
   tableRow: {
+    cursor: 'pointer',
     '& .MuiTableCell-root': {
       padding: '16px 10px',
       '&:first-of-type': {
@@ -29,6 +30,11 @@ const useStyles = makeStyles(() => ({
     '& .MuiPagination-ul': {
       justifyContent: 'center',
     },
+  },
+  textEllipsis: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 }));
 

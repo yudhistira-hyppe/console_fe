@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
-import DatabaseAccountFilterComponent from './filter';
-import DatabaseAccountListComponent from './list';
+import DatabaseTabAccountFilterComponent from './filter';
+import DatabaseTabAccountListComponent from './list';
 import { useGetAllInterestQuery } from 'api/utils';
 
 const defaultFilters = {
@@ -97,7 +97,7 @@ const defaultFilters = {
   },
 };
 
-const DatabaseAccountComponent = () => {
+const DatabaseTabAccountComponent = () => {
   const [configFilters, setConfigFilters] = useState(defaultFilters);
   const [filters, setFilters] = useState({});
   const { data: interests } = useGetAllInterestQuery({
@@ -163,10 +163,10 @@ const DatabaseAccountComponent = () => {
 
   return (
     <Stack direction={'row'} spacing={3}>
-      <DatabaseAccountFilterComponent configFilters={configFilters} filters={filters} onChange={onChangeFilters} />
-      <DatabaseAccountListComponent configFilters={configFilters} filters={filters} onDeleteFilters={onDeleteFilters} />
+      <DatabaseTabAccountFilterComponent configFilters={configFilters} filters={filters} onChange={onChangeFilters} />
+      <DatabaseTabAccountListComponent configFilters={configFilters} filters={filters} onDeleteFilters={onDeleteFilters} />
     </Stack>
   );
 };
 
-export default DatabaseAccountComponent;
+export default DatabaseTabAccountComponent;
