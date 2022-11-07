@@ -6,6 +6,7 @@ import { group } from './group';
 import { moduleAPI } from './module';
 import { divisiAPI } from './divisi';
 import { voucherApi } from './monetize';
+import { transactionAPI } from './transaction';
 
 export {
   dashboardApi,
@@ -19,4 +20,5 @@ export {
   moduleAPI,
   divisiAPI,
   voucherApi,
+  transactionAPI,
 };
