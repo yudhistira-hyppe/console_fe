@@ -13,7 +13,7 @@ const DatabaseTabComponent = (props) => {
   const { tab } = props;
 
   const onTabChange = (_, selectedTab) => {
-    router.replace({ pathname: `/database/${selectedTab}` });
+    router.replace(`/database/${selectedTab}`);
   };
 
   return (

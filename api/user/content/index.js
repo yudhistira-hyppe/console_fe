@@ -59,6 +59,7 @@ export const contentAPI = createApi({
 
 export const {
   useUserContentsAllQuery,
+  useLazyUserContentsAllQuery,
   useUserContentsLatestQuery,
   useUserContentsPopularQuery,
   useUserContentsMonetizeQuery,

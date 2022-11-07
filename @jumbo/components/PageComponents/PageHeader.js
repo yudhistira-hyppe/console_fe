@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
       flexDirection: 'row',
     },
+    marginTop: '20px',
   },
   titleRoot: {
     [theme.breakpoints.down('xs')]: {

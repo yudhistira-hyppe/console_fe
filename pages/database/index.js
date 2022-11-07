@@ -5,7 +5,7 @@ const DatabasePage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace({ pathname: '/database/account' });
+    router.replace('/database/account');
   }, []);
 
   return null;

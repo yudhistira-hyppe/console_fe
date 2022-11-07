@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import {
   TableContainer,
   Table,
@@ -12,6 +13,7 @@ import {
   Stack,
   Chip,
   Pagination,
+  Box,
 } from '@mui/material';
 import CmtAvatar from '@coremat/CmtAvatar';
 import { useAuth } from 'authentication';
@@ -23,6 +25,7 @@ const columnsHeader = ['Nama', 'Jenis Akun', 'Jenis Kelamin ', 'Umur', 'Lokasi',
 
 const DatabaseTabAccountListTableComponent = (props) => {
   const classes = useStyles();
+  const router = useRouter();
   const { userResults, isFetching, isFiltersChange, onPagePayloadChange } = props;
   const { authUser } = useAuth();
   const [rows, setRows] = useState([]);
@@ -79,6 +82,10 @@ const DatabaseTabAccountListTableComponent = (props) => {
     onPagePayloadChange(page);
   };
 
+  const onRowClick = (userEmail) => {
+    router.push(`/database/account/${userEmail}`);
+  };
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -99,19 +106,19 @@ const DatabaseTabAccountListTableComponent = (props) => {
               </TableRow>
             ) : rows.length > 0 ? (
               rows.map((row) => (
-                <TableRow className={classes.tableRow} key={row.id}>
+                <TableRow className={classes.tableRow} key={row.id} hover onClick={() => onRowClick(row.user.email)}>
                   <TableCell>
-                    <Stack direction="row" spacing={1.5}>
+                    <Stack direction="row" spacing={1.5} maxWidth="212px" overflow="hidden">
                       <CmtAvatar
                         src={getMediaUri(row.user.avatar.mediaEndpoint)}
                         alt={row.user.fullName}
                         size={40}
                         color="random"
                       />
-                      <div>
-                        <div>{row.user.fullName}</div>
-                        <div>{row.user.email}</div>
-                      </div>
+                      <Box overflow="hidden">
+                        <div className={classes.textEllipsis}>{row.user.fullName}</div>
+                        <div className={classes.textEllipsis}>{row.user.email}</div>
+                      </Box>
                     </Stack>
                   </TableCell>
                   <TableCell>{row.role}</TableCell>
