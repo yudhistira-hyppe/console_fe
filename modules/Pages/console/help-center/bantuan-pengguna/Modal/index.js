@@ -17,7 +17,7 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalChangeStatus({ showModal, onClose, onConfirm, type, children1, children2 }) {
+export default function ModalChangeStatus({ showModal, onClose, onConfirm, done, children1, children2 }) {
   return (
     <div>
       <Modal
@@ -26,7 +26,7 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
-          {type === 'Dalam Proses' || type === 'Baru' ? (
+          {!done ? (
             <center>
               <Typography variant="h5" fontWeight="bold">
                 Status Masalah
@@ -36,40 +36,25 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
                 Kamu akan mengubah status masalah dari {children1} menjadi {children2}
               </Typography>
             </center>
-          ) : type === 'Selesai' ? (
+          ) : (
             <div>
               <img src="/images/success.png" alt="success.png" />
               <center>
                 <Typography variant="h5" fontWeight="bold">
-                  Masalah Telah Selesai
+                  Selesaikan Masalah ?
                 </Typography>
                 <Typography color="#666666" mt={1}>
-                  Kamu telah menyelesaikan masalah ini
+                  Kamu akan menyelesaikan masalah ini.
                 </Typography>
               </center>
             </div>
-          ) : type === 'Tidak Selesai' ? (
-            <div>
-              <img src="/images/failure.png" alt="success.png" />
-              <center>
-                <Typography variant="h5" fontWeight="bold">
-                  Masalah Gagal Diselesaikan
-                </Typography>
-                <Typography color="#666666" mt={1}>
-                  Kamu telah gagal menyelesaikan masalah ini
-                </Typography>
-              </center>
-            </div>
-          ) : null}
-
-          {type && (
-            <Stack direction={'row'} mt={5} justifyContent={'space-evenly'}>
-              <Button variant="contained" color="primary" onClick={onConfirm}>
-                Konfirmasi
-              </Button>
-              <Button onClick={onClose}>Batal</Button>
-            </Stack>
           )}
+          <Stack direction={'row'} mt={5} justifyContent={'space-evenly'}>
+            <Button variant="contained" color="primary" onClick={onConfirm}>
+              Konfirmasi
+            </Button>
+            <Button onClick={onClose}>Batal</Button>
+          </Stack>
         </Box>
       </Modal>
     </div>

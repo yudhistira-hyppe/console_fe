@@ -67,7 +67,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
-  const [isLoginDisabled, setIsLoginDisabled] = useState(true);
+  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
 
   useEffect(async () => {
     getCurrentUserLocation();

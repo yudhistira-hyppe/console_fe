@@ -128,7 +128,7 @@ const ConsoleHelpCenterComponent = () => {
             numberOfProblem={70}
             iconLabelRight
             data={dataBantuanPengguna}
-            onClick={() => router.push('/console/help-center/bantuan-pengguna')}
+            onClick={() => router.push('/help-center/bantuan-pengguna')}
             status={bantuanPenggunaStatus}
             setStatusList={(val) => onStatusChangeHandler('bantuan pengguna', val)}
             isFetching={fetchingList.bantuanPengguna}

@@ -122,14 +122,13 @@ export const consoleNav = [
   {
     name: 'Beranda',
     type: 'item',
-    // link: '/console/',
     link: '/',
     icon: <Home />,
   },
   {
     name: 'Pusat Bantuan',
     type: 'item',
-    link: '/console/help-center',
+    link: '/help-center',
     children: [
       '/console/help-center/bantuan-pengguna',
       '/console/help-center/bantuan-pengguna/detail',
@@ -146,26 +145,22 @@ export const consoleNav = [
   {
     name: 'Pusat Iklan',
     type: 'item',
-    // link: '/console/ads-center',
     link: '/ads-center',
   },
   {
     name: 'Database',
     type: 'item',
-    // link: '/console/database',
-    link: '/database',
+    link: '/console/database',
   },
   {
     name: 'Engagement',
     type: 'item',
-    // link: '/console/user-engagement',
     link: '/user-engagement',
   },
   {
     name: 'Monetisasi',
     type: 'item',
-    // link: '/monetize',
-    link: '/console/monetize',
+    link: '/monetize',
   },
   {
     name: 'Pengumuman',

@@ -1,5 +1,5 @@
 import firebase from 'firebase/compat/app';
-import { getMessaging, getToken } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -13,16 +13,25 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const firebaseApp = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
 
 const firebaseCloudMessaging = {
-  getFCMToken: async () => {
+  getFCMToken: () => {
     const messaging = getMessaging(firebaseApp);
-    const fcmToken = await getToken(messaging, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY });
+    const fcmToken = getToken(messaging, { vapidKey: messaging?.vapidKey })
+      .then((currentToken) => {
+        if (currentToken) {
+          return currentToken;
+        } else {
+          console.log('No registration token available. Request permission to generate one.');
+        }
+      })
+      .catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+      });
     return fcmToken;
   },
 };
 
-const auth = getAuth(firebaseApp);
-
-export { firebaseCloudMessaging, auth };
+export { firebaseCloudMessaging, auth, firebaseApp };

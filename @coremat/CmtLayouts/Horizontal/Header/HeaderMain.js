@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       boxSizing: 'border-box',
       [theme.breakpoints.up('md')]: {
-        width: 900,
+        width: 1024,
       },
       [theme.breakpoints.up('lg')]: {
-        width: 1100,
+        width: 1280,
       },
       [theme.breakpoints.up('xl')]: {
         width: 1400,
