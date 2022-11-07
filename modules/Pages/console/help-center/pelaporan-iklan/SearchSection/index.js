@@ -12,7 +12,6 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 
-
 const SearchSection = () => {
   const classes = useStyles();
   const [week, setWeek] = React.useState(null);
@@ -23,13 +22,13 @@ const SearchSection = () => {
 
   return (
     <>
-      <Box className={classes.inBuildAppCard} p={5} maxWidth={'25%'}>
+      <Box className={classes.inBuildAppCard} p={5} pt={2} style={{ width: 270 }}>
         <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
+            <Typography style={{ fontSize: '13px' }}>Tanggal Pelaporan</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
-            <Stack direction={'column'} spacing={1} mb={3}>
+            <Stack direction={'column'} gap="12px" mb={3}>
               <Chip
                 clickable
                 onClick={() => {
@@ -37,7 +36,7 @@ const SearchSection = () => {
                 }}
                 label="7 Hari"
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week == 1 ? 'default' : 'outlined'}
               />
               <Chip
@@ -47,7 +46,7 @@ const SearchSection = () => {
                   setWeek(2), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 2 ? 'default' : 'outlined'}
               />
               <Chip
@@ -57,7 +56,7 @@ const SearchSection = () => {
                   setWeek(4), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 4 ? 'default' : 'outlined'}
               />
               <Chip
@@ -67,7 +66,7 @@ const SearchSection = () => {
                   setWeek(12), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 12 ? 'default' : 'outlined'}
               />
             </Stack>
@@ -82,8 +81,8 @@ const SearchSection = () => {
                 renderInput={(startProps, endProps) => (
                   <>
                     <Stack direction={'row'} spacing={1}>
-                      <TextField {...startProps} />
-                      <TextField {...endProps} />
+                      <TextField size="small" autoComplete="off" {...startProps} />
+                      <TextField size="small" autoComplete="off" {...endProps} />
                     </Stack>
                   </>
                 )}
@@ -93,7 +92,7 @@ const SearchSection = () => {
         </Accordion>
 
         <Accordion elevation={0} defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', margin: 0 }}>
             <Typography style={{ fontSize: '13px' }}>Akun Pelapor</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
@@ -103,7 +102,7 @@ const SearchSection = () => {
 
         <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Konten Dilaporkan</Typography>
+            <Typography style={{ fontSize: '13px' }}>Akun Dilaporkan</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <TextField style={{ width: '100%' }} placeholder="Cari" />
@@ -114,13 +113,13 @@ const SearchSection = () => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Jumlah Pelaporan</Typography>
           </AccordionSummary>
-          <AccordionDetails style={{ padding: '10 0' }}>
+          <AccordionDetails style={{ padding: 0 }}>
             <FormGroup>
               <FormControlLabel label={'1-50'} control={<Checkbox defaultChecked={false} />} />
               <FormControlLabel label={'51-100'} control={<Checkbox defaultChecked={false} />} />
               <FormControlLabel label={'101-150'} control={<Checkbox defaultChecked={false} />} />
               <FormControlLabel label={'151-200'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel label={'200 > '} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'> 200'} control={<Checkbox defaultChecked={false} />} />
             </FormGroup>
           </AccordionDetails>
         </Accordion>
@@ -129,7 +128,7 @@ const SearchSection = () => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
-          <AccordionDetails style={{ padding: '10 0' }}>
+          <AccordionDetails style={{ padding: 0 }}>
             <FormGroup>
               <FormControlLabel label={'Baru'} control={<Checkbox defaultChecked={false} />} />
               <FormControlLabel label={'Ditangguhkan'} control={<Checkbox defaultChecked={false} />} />
@@ -143,18 +142,15 @@ const SearchSection = () => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Alasan Pelaporan</Typography>
           </AccordionSummary>
-          <AccordionDetails style={{ padding: '10 0' }}>
+          <AccordionDetails style={{ padding: 0 }}>
             <FormGroup>
-              <FormControlLabel label={'Menyesatkan atau Scam'} control={<Checkbox defaultChecked={false} />} />
               <FormControlLabel
-                label={'Konten yang melanggar, Berbahaya, Atau Mengandung Kekerasan'}
+                label={'Bendera dan simbol kelompok ekstremis'}
                 control={<Checkbox defaultChecked={false} />}
               />
-              <FormControlLabel label={'Konten Seksual Yang Tidak Pantas'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel
-                label={'Dukungan Ilegal Atau Yang Tidak Semestinya'}
-                control={<Checkbox defaultChecked={false} />}
-              />
+              <FormControlLabel label={'Senjata dan benda tajam'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'Konten tidak pantas'} control={<Checkbox defaultChecked={false} />} />
+              <FormControlLabel label={'Aksi tidak pantas'} control={<Checkbox defaultChecked={false} />} />
             </FormGroup>
           </AccordionDetails>
         </Accordion>

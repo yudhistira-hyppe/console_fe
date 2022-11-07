@@ -2,57 +2,77 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
-import { Link, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import TableSection from './TableSection';
 import SearchSection from './SearchSection';
+import { useGetListTicketsQuery } from 'api/console/helpCenter/iklan';
+
+const breadcrumbs = [
+  { label: 'Pusat Bantuan', link: '/help-center' },
+  { label: 'Pelaporan Iklan', isActive: true },
+];
 
 const ConsolePelaporanIklanComponent = () => {
-  const breadcrumbs = [
-    { label: 'Home', link: '/console' },
-    { label: 'Help Center', link: '/console/help-center' },
-    { label: 'Pelaporan Iklan', isActive: true },
-  ];
+  const [filter, setFilter] = useState({
+    type: 'ads',
+    page: 0,
+    limit: 10,
+    descending: 'false',
+  });
   const router = useRouter();
-  const [value, setValue] = useState(null);
-  const [order, setOrder] = useState('DESC');
 
-  const onBackHandler = (e) => {
-    e.preventDefault();
-    router.push('/console/help-center');
+  const getParams = () => {
+    let params = {};
+    Object.assign(params, {
+      page: filter.page,
+      limit: filter.limit,
+      descending: filter.descending === 'true' ? true : false,
+      type: filter.type,
+    });
+    // filter.search !== '' && Object.assign(params, { search: filter.search });
+    // filter.assignto !== '' && Object.assign(params, { assignto: filter.assignto });
+    // filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
+    // filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
+    // filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    // filter.sumber.length >= 1 && Object.assign(params, { sumber: filter.sumber });
+    // filter.kategori.length >= 1 && Object.assign(params, { kategori: filter.kategori });
+    // filter.level.length >= 1 && Object.assign(params, { level: filter.level });
+
+    return params;
   };
 
-  const onChangeOrderHandler = (val) => {
-    setOrder(val);
-  };
+  const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Keluhan Pengguna</title>
       </Head>
-
       <Stack direction={'column'} spacing={2} mb={3}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
-        <Link href="/" onClick={onBackHandler} style={{ cursore: 'pointer' }}>
-          <Stack direction={'row'}>
-            <Stack direction={'column'} justifyContent={'center'}>
-              <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
-            </Stack>
-            <Stack>
-              <Typography variant="h1" style={{ color: 'black' }}>
-                Kembali
-              </Typography>
-            </Stack>
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/help-center')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
           </Stack>
-        </Link>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
+            Kembali
+          </Typography>
+        </Stack>
       </Stack>
+
       <PageContainer heading="">
         <Stack direction={'row'} spacing={3}>
           <SearchSection />
-          <TableSection order={order} total={100} page={1} rows={10} onOrderChange={onChangeOrderHandler} />
+          <TableSection order={filter.descending} page={filter.page + 1} loading={loadingTicket} listTickets={listTickets} />
         </Stack>
       </PageContainer>
     </>
