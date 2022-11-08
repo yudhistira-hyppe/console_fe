@@ -50,7 +50,7 @@ const TransactionComponent = (props) => {
       .then((res) => {
         setPayload({ ...payload, skip: payload.skip + 10 });
         setBalance(res.totalsaldo[0]);
-        const formattedTransactions = res.data
+        const formattedTransactions = res.fData
           .filter((data) => {
             if ((data.type.toLowerCase() === 'sell' || data.type.toLowerCase() === 'buy') && data.status !== 'Success') {
               return false;
@@ -64,7 +64,7 @@ const TransactionComponent = (props) => {
           });
         setTransactions([...transactions, ...formattedTransactions]);
         setIsFetching(false);
-        setShowLoadMoreBtn(res.data.length === payload.limit);
+        setShowLoadMoreBtn(res.fData.length === payload.limit);
       })
       .catch(() => {
         setIsFetching(false);
