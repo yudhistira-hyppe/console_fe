@@ -12,6 +12,7 @@ import UserInfo from './user-info';
 import Interest from './interest';
 import UserPost from './user-post';
 import Transaction from './transaction';
+import AdsCampaign from './ads-campaign';
 import { useGetProfileByUserEmailQuery, useGetUserBasicsQuery } from 'api/user/user';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
@@ -122,6 +123,11 @@ const DatabaseDetailAccountComponent = (props) => {
             <Grid container gap={3}>
               <Grid item xs={12} md={7}>
                 <Transaction email={accountDetail.email} />
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12}>
+                <AdsCampaign email={accountDetail.email} />
               </Grid>
             </Grid>
           </Stack>

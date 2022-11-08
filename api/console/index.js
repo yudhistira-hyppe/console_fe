@@ -5,7 +5,7 @@ import { getUserHyppe } from './getUserHyppe';
 import { group } from './group';
 import { moduleAPI } from './module';
 import { divisiAPI } from './divisi';
-import { voucherApi } from './monetize';
+import { voucherApi, adAPI } from './monetize';
 import { transactionAPI } from './transaction';
 
 export {
@@ -20,5 +20,6 @@ export {
   moduleAPI,
   divisiAPI,
   voucherApi,
+  adAPI,
   transactionAPI,
 };
