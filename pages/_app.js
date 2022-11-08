@@ -39,7 +39,7 @@ const MainApp = (props) => {
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('../firebase-messaging-sw.js')
+        .register('/firebase-messaging-sw.js')
         .then(function (registration) {
           console.log('Registration successful, scope is:', registration.scope);
         })
@@ -47,7 +47,7 @@ const MainApp = (props) => {
           console.log('Service worker registration failed, error:', err);
         });
     }
-  });
+  }, []);
 
   return (
     <React.Fragment>
