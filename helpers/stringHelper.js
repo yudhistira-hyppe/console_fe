@@ -145,3 +145,16 @@ export const capitalizeEachWord = (string) => {
     .map((word) => capitalizeWord(word))
     .join(' ');
 };
+
+export const formatTransactionStatus = (status) => {
+  switch (status.toLowerCase()) {
+    case 'success':
+      return 'Berhasil';
+    case 'cancel':
+      return 'Batal';
+    case 'waiting_payment':
+      return 'Menunggu Pembayaran';
+    default:
+      return status;
+  }
+};

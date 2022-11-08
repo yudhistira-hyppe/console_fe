@@ -166,82 +166,93 @@ const UserPost = (props) => {
           <TabPanel key={key} value={key}>
             <PerfectScrollbar>
               <Stack maxHeight={544} gap={2} alignItems="center">
-                {posts[key].map((post, index) => (
-                  <Stack key={index} width="100%" direction={'row'} spacing={2}>
-                    <img
-                      className={classes.postImage}
-                      src={getPostImage(post)}
-                      alt={post.title}
-                      onError={onErrorPostImage}
-                    />
-                    <Stack flex={1} gap={1}>
-                      <Box
-                        width="fit-content"
-                        padding="6px 8px"
-                        borderRadius="4px"
-                        color="text.secondary"
-                        bgcolor="rgba(33, 33, 33, 0.08)">
-                        <Typography variant="h6">{formatPostType(post.postType)}</Typography>
-                      </Box>
-                      <Typography className={classes.postDescription}>{post.description}</Typography>
-                      <Stack direction={'row'} spacing={1}>
-                        <Box fontSize={12} lineHeight="16px">
-                          {`${post.views || 0} `}
-                          <Box component="span" color="text.disabled">
-                            Dilihat
-                          </Box>
+                {posts[key].length > 0 &&
+                  posts[key].map((post, index) => (
+                    <Stack key={index} width="100%" direction={'row'} spacing={2}>
+                      <img
+                        className={classes.postImage}
+                        src={getPostImage(post)}
+                        alt={post.title}
+                        onError={onErrorPostImage}
+                      />
+                      <Stack flex={1} gap={1}>
+                        <Box
+                          width="fit-content"
+                          padding="6px 8px"
+                          borderRadius="4px"
+                          color="text.secondary"
+                          bgcolor="rgba(33, 33, 33, 0.08)">
+                          <Typography variant="h6">{formatPostType(post.postType)}</Typography>
                         </Box>
-                        <Divider orientation="vertical" />
-                        <Box fontSize={12} lineHeight="16px">
-                          {`${post.likes || 0} `}
-                          <Box component="span" color="text.disabled">
-                            Disukai
+                        <Typography className={classes.postDescription}>{post.description}</Typography>
+                        <Stack direction={'row'} spacing={1}>
+                          <Box fontSize={12} lineHeight="16px">
+                            {`${post.views || 0} `}
+                            <Box component="span" color="text.disabled">
+                              Dilihat
+                            </Box>
                           </Box>
-                        </Box>
-                        <Divider orientation="vertical" />
-                        <Box fontSize={12} lineHeight="16px">
-                          {`${post.comments || 0} `}
-                          <Box component="span" color="text.disabled">
-                            Komentar
+                          <Divider orientation="vertical" />
+                          <Box fontSize={12} lineHeight="16px">
+                            {`${post.likes || 0} `}
+                            <Box component="span" color="text.disabled">
+                              Disukai
+                            </Box>
                           </Box>
-                        </Box>
-                        <Divider orientation="vertical" />
-                        <Box fontSize={12} lineHeight="16px">
-                          {`${post.shares || 0} `}
-                          <Box component="span" color="text.disabled">
-                            Dibagikan
+                          <Divider orientation="vertical" />
+                          <Box fontSize={12} lineHeight="16px">
+                            {`${post.comments || 0} `}
+                            <Box component="span" color="text.disabled">
+                              Komentar
+                            </Box>
                           </Box>
+                          <Divider orientation="vertical" />
+                          <Box fontSize={12} lineHeight="16px">
+                            {`${post.shares || 0} `}
+                            <Box component="span" color="text.disabled">
+                              Dibagikan
+                            </Box>
+                          </Box>
+                        </Stack>
+                        <Box fontSize={12} lineHeight="16px" color="text.disabled">
+                          {moment(post.createdAt).locale('id').format('MMM DD, YYYY')}
                         </Box>
                       </Stack>
-                      <Box fontSize={12} lineHeight="16px" color="text.disabled">
-                        {moment(post.createdAt).locale('id').format('MMM DD, YYYY')}
-                      </Box>
+                      <Stack gap={0.5} justifyContent={'center'}>
+                        <Box fontSize={12} lineHeight="16px">
+                          <Box component="span" color="text.disabled">
+                            Terdaftar:
+                          </Box>{' '}
+                          -
+                        </Box>
+                        <Box fontSize={12} lineHeight="16px">
+                          <Box component="span" color="text.disabled">
+                            Dijual:
+                          </Box>{' '}
+                          -
+                        </Box>
+                      </Stack>
                     </Stack>
-                    <Stack gap={0.5} justifyContent={'center'}>
-                      <Box fontSize={12} lineHeight="16px">
-                        <Box component="span" color="text.disabled">
-                          Terdaftar:
-                        </Box>{' '}
-                        -
-                      </Box>
-                      <Box fontSize={12} lineHeight="16px">
-                        <Box component="span" color="text.disabled">
-                          Dijual:
-                        </Box>{' '}
-                        -
-                      </Box>
-                    </Stack>
-                  </Stack>
-                ))}
-                {isFetching[key] && (
-                  <Stack alignItems="center">
-                    <CircularProgress color="secondary" />
+                  ))}
+                {!isFetching[key] && posts[key].length === 0 && (
+                  <Stack alignItems="center" gap={2}>
+                    <img src="/images/icons/empty-posts.svg" alt="Empty Post" />
+                    <Typography>
+                      {key === 'all'
+                        ? 'Pengguna belum memiliki kiriman apapun'
+                        : `Pengguna belum memiliki kiriman ${formatPostType(key)}`}
+                    </Typography>
                   </Stack>
                 )}
                 {!isFetching[key] && showLoadMoreBtn[key] && (
                   <Button variant="contained" color="secondary" onClick={() => getPost(key)}>
                     Muat lebih banyak
                   </Button>
+                )}
+                {isFetching[key] && (
+                  <Stack alignItems="center">
+                    <CircularProgress color="secondary" />
+                  </Stack>
                 )}
               </Stack>
             </PerfectScrollbar>

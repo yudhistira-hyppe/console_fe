@@ -72,48 +72,58 @@ const AdsCampaign = (props) => {
       <Stack padding="24px">
         <PerfectScrollbar>
           <Stack maxHeight={408} gap={2} alignItems="center">
-            {adsCampaign.map((adCampaign) => (
-              <Stack key={adCampaign._id} width="100%" direction={'row'} spacing={2}>
-                <img
-                  className={classes.adCampaignImage}
-                  src={adCampaign.media.VideoList[0].CoverURL}
-                  alt={adCampaign.name}
-                  onError={onErrorPostImage}
-                />
-                <Stack flex={1} gap={1}>
-                  <Typography className={classes.adCampaignDescription}>{adCampaign.name}</Typography>
-                  <Box fontSize={12} lineHeight="16px">
-                    <Box component="span" color="text.disabled">
-                      Tanggal Mulai
+            {adsCampaign.length > 0 &&
+              adsCampaign.map((adCampaign) => (
+                <Stack key={adCampaign._id} width="100%" direction={'row'} spacing={2}>
+                  <img
+                    className={classes.adCampaignImage}
+                    src={adCampaign.media.VideoList[0].CoverURL}
+                    alt={adCampaign.name}
+                    onError={onErrorPostImage}
+                  />
+                  <Stack flex={1} gap={1}>
+                    <Typography className={classes.adCampaignDescription}>{adCampaign.name}</Typography>
+                    <Box fontSize={12} lineHeight="16px">
+                      <Box component="span" color="text.disabled">
+                        Tanggal Mulai
+                      </Box>
+                      {` ${moment(adCampaign.timestamp).locale('id').format('DD/MM/YYYY - HH:mm')}`}
                     </Box>
-                    {` ${moment(adCampaign.timestamp).locale('id').format('DD/MM/YYYY - HH:mm')}`}
-                  </Box>
+                  </Stack>
+                  <Stack gap={0.5}>
+                    <Box fontSize={12} lineHeight="16px">
+                      <Box component="span" color="text.disabled">
+                        Rencana Tayang
+                      </Box>{' '}
+                      -
+                    </Box>
+                    <Box fontSize={12} lineHeight="16px">
+                      <Box component="span" color="text.disabled">
+                        Penempatan
+                      </Box>{' '}
+                      -
+                    </Box>
+                  </Stack>
                 </Stack>
-                <Stack gap={0.5}>
-                  <Box fontSize={12} lineHeight="16px">
-                    <Box component="span" color="text.disabled">
-                      Rencana Tayang
-                    </Box>{' '}
-                    -
-                  </Box>
-                  <Box fontSize={12} lineHeight="16px">
-                    <Box component="span" color="text.disabled">
-                      Penempatan
-                    </Box>{' '}
-                    -
-                  </Box>
-                </Stack>
-              </Stack>
-            ))}
-            {isFetching && (
+              ))}
+            {!isFetching && adsCampaign.length === 0 && (
               <Stack alignItems="center">
-                <CircularProgress color="secondary" />
+                <Typography>
+                  {payload.search
+                    ? `Kampanye iklan dengan kata kunci "${payload.search}" tidak ditemukan`
+                    : 'Pengguna belum memiliki kampanye iklan'}
+                </Typography>
               </Stack>
             )}
             {!isFetching && showLoadMoreBtn && (
               <Button variant="contained" color="secondary" onClick={() => getAdsCampaign()}>
                 Muat lebih banyak
               </Button>
+            )}
+            {isFetching && (
+              <Stack alignItems="center">
+                <CircularProgress color="secondary" />
+              </Stack>
             )}
           </Stack>
         </PerfectScrollbar>
