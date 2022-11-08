@@ -54,21 +54,6 @@ const UserInfoComponent = (props) => {
           <Grid item xs={12} sm={4}>
             <Stack direction="row" spacing={2}>
               <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
-                <LocationOn />
-              </SvgIcon>
-              <Box>
-                <Typography className={classes.userInfoLabel} variant="caption">
-                  Tempat Lahir
-                </Typography>
-                <Typography className={classes.userInfoContent} variant="h4">
-                  -
-                </Typography>
-              </Box>
-            </Stack>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Stack direction="row" spacing={2}>
-              <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
                 <Cake />
               </SvgIcon>
               <Box>
@@ -120,7 +105,7 @@ const UserInfoComponent = (props) => {
                 <Typography className={classes.userInfoLabel} variant="caption">
                   Lokasi
                 </Typography>
-                <Typography variant="h4">
+                <Typography className={classes.userInfoContent} variant="h4">
                   {formattedLocation(accountDetail.city, accountDetail.area, accountDetail.country)}
                 </Typography>
               </Box>
