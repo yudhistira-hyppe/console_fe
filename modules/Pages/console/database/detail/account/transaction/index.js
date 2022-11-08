@@ -17,7 +17,7 @@ import { Typography } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLazyAllTransactionQuery } from 'api/console/transaction';
 import moment from 'moment';
-import { formatCurrency } from 'helpers/stringHelper';
+import { formatCurrency, formatTransactionStatus } from 'helpers/stringHelper';
 import useStyles from './index.style';
 
 const TransactionComponent = (props) => {
@@ -50,18 +50,11 @@ const TransactionComponent = (props) => {
       .then((res) => {
         setPayload({ ...payload, skip: payload.skip + 10 });
         setBalance(res.totalsaldo[0]);
-        const formattedTransactions = res.fData
-          .filter((data) => {
-            if ((data.type.toLowerCase() === 'sell' || data.type.toLowerCase() === 'buy') && data.status !== 'Success') {
-              return false;
-            }
-            return true;
-          })
-          .map((filteredData) => {
-            return {
-              ...formattedTransaction(filteredData),
-            };
-          });
+        const formattedTransactions = res.fData.map((filteredData) => {
+          return {
+            ...formattedTransaction(filteredData),
+          };
+        });
         setTransactions([...transactions, ...formattedTransactions]);
         setIsFetching(false);
         setShowLoadMoreBtn(res.fData.length === payload.limit);
@@ -82,6 +75,7 @@ const TransactionComponent = (props) => {
         formatted = {
           ...formatted,
           desc: transaction.description,
+          status: formatTransactionStatus('success'),
         };
         if (transaction.debet) {
           formatted = {
@@ -104,6 +98,7 @@ const TransactionComponent = (props) => {
           type: 'Pengeluaran',
           amount: transaction.totalamount || 0,
           desc: 'Pembelian Konten',
+          status: formatTransactionStatus(transaction.status),
         };
         break;
       case 'sell':
@@ -112,6 +107,7 @@ const TransactionComponent = (props) => {
           type: 'Pendapatan',
           amount: transaction.amount || 0,
           desc: 'Penjualan Konten',
+          status: formatTransactionStatus(transaction.status),
         };
         break;
       case 'withdrawal':
@@ -120,6 +116,7 @@ const TransactionComponent = (props) => {
           type: 'Penarikan',
           amount: transaction.amount || 0,
           desc: 'Penarikan',
+          status: formatTransactionStatus('success'),
         };
         break;
       default:
@@ -140,42 +137,54 @@ const TransactionComponent = (props) => {
         </Stack>
         <TableContainer component={Paper}>
           <PerfectScrollbar>
-            {isFetching ? (
-              <Stack alignItems="center" padding="24px">
-                <CircularProgress color="secondary" />
-              </Stack>
-            ) : (
-              <Stack maxHeight={270}>
-                <Table stickyHeader>
-                  <TableHead>
-                    <TableRow className={classes.tableRow}>
-                      <TableCell>Waktu</TableCell>
-                      <TableCell>Jenis</TableCell>
-                      <TableCell>Nominal</TableCell>
-                      <TableCell>Keterangan</TableCell>
+            <Stack maxHeight={270}>
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow className={classes.tableRow}>
+                    <TableCell>Waktu</TableCell>
+                    <TableCell>Jenis</TableCell>
+                    <TableCell>Nominal</TableCell>
+                    <TableCell>Keterangan</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {transactions.length > 0 &&
+                    transactions.map((transaction) => (
+                      <TableRow className={classes.tableRow} key={transaction.id}>
+                        <TableCell>{transaction.date}</TableCell>
+                        <TableCell>{transaction.type}</TableCell>
+                        <TableCell>Rp {formatCurrency(transaction.amount)}</TableCell>
+                        <TableCell>{transaction.desc}</TableCell>
+                        <TableCell>{transaction.status}</TableCell>
+                      </TableRow>
+                    ))}
+                  {!isFetching && transactions.length == 0 && (
+                    <TableRow className={classes.tableRowCustomPadding}>
+                      <TableCell colSpan="100%" align="center">
+                        Pengguna belum memiliki transaksi apapun
+                      </TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {transactions.length > 0 &&
-                      transactions.map((transaction) => (
-                        <TableRow className={classes.tableRow} key={transaction.id}>
-                          <TableCell>{transaction.date}</TableCell>
-                          <TableCell>{transaction.type}</TableCell>
-                          <TableCell>Rp {formatCurrency(transaction.amount)}</TableCell>
-                          <TableCell>{transaction.desc}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-                {showLoadMoreBtn && (
-                  <Stack alignItems="center" padding="16px">
-                    <Button variant="contained" color="secondary" onClick={() => getTransactions()}>
-                      Muat lebih banyak
-                    </Button>
-                  </Stack>
-                )}
-              </Stack>
-            )}
+                  )}
+                  {!isFetching && showLoadMoreBtn && (
+                    <TableRow className={classes.tableRowCustomPadding}>
+                      <TableCell colSpan="100%" align="center">
+                        <Button variant="contained" color="secondary" onClick={() => getTransactions()}>
+                          Muat lebih banyak
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  {isFetching && (
+                    <TableRow className={classes.tableRowCustomPadding}>
+                      <TableCell colSpan="100%" align="center">
+                        <CircularProgress color="secondary" />
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </Stack>
           </PerfectScrollbar>
         </TableContainer>
       </Stack>
