@@ -28,7 +28,7 @@ import { insightAPI } from 'api/user/insight';
 import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 import { userFriendAPI } from 'api/user/friend';
-import { voucherApi } from 'api/console/monetize';
+import { voucherApi, adAPI } from 'api/console/monetize';
 import { bantuanPenggunaApi } from 'api/console/helpCenter';
 
 export default combineReducers({
@@ -61,4 +61,5 @@ export default combineReducers({
   [divisiAPI.reducerPath]: divisiAPI.reducer,
   [bantuanPenggunaApi.reducerPath]: bantuanPenggunaApi.reducer,
   [transactionAPI.reducerPath]: transactionAPI.reducer,
+  [adAPI.reducerPath]: adAPI.reducer,
 });
