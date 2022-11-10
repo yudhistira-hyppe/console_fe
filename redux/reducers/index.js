@@ -31,7 +31,6 @@ import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 import { userFriendAPI } from 'api/user/friend';
 import { voucherApi, adAPI } from 'api/console/monetize';
-import { bantuanPenggunaApi } from 'api/console/helpCenter';
 
 export default combineReducers({
   common: Common,

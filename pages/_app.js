@@ -40,7 +40,6 @@ const MainApp = (props) => {
         });
     }
   }, []);
-<<<<<<< HEAD
 
   useEffect(() => {
     Notification.requestPermission().then(() => {
@@ -48,8 +47,6 @@ const MainApp = (props) => {
       onMessage(message, (payload) => dispatch(setNotification(payload)));
     });
   });
-=======
->>>>>>> 44bc581bdbed27caa15730fe2f481c2743366445
 
   return (
     <React.Fragment>
