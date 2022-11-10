@@ -21,6 +21,7 @@ import {
   bantuanPenggunaApi,
   iklanApi,
   transactionAPI,
+  kontenApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -62,6 +63,7 @@ export default combineReducers({
   [divisiAPI.reducerPath]: divisiAPI.reducer,
   [bantuanPenggunaApi.reducerPath]: bantuanPenggunaApi.reducer,
   [iklanApi.reducerPath]: iklanApi.reducer,
+  [kontenApi.reducerPath]: kontenApi.reducer,
   [transactionAPI.reducerPath]: transactionAPI.reducer,
   [adAPI.reducerPath]: adAPI.reducer,
 });

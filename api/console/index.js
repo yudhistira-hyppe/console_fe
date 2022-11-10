@@ -1,6 +1,6 @@
 import { dashboardApi } from './dashboard';
 import { engagementApi } from './engagement';
-import { faqAndInfoApi, announcementApi, ticketApi, bantuanPenggunaApi, iklanApi } from './helpCenter';
+import { faqAndInfoApi, announcementApi, ticketApi, bantuanPenggunaApi, iklanApi, kontenApi } from './helpCenter';
 import { getUserHyppe } from './getUserHyppe';
 import { group } from './group';
 import { moduleAPI } from './module';
@@ -16,6 +16,7 @@ export {
   ticketApi,
   bantuanPenggunaApi,
   iklanApi,
+  kontenApi,
   getUserHyppe,
   group,
   moduleAPI,
