@@ -13,8 +13,7 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 
-
-const SearchSection = () => {
+const SearchSection = ({ handleChange }) => {
   const classes = useStyles();
   const [week, setWeek] = React.useState(null);
   const [value, setValue] = React.useState([null, null]);
@@ -24,7 +23,7 @@ const SearchSection = () => {
 
   return (
     <>
-      <Box className={classes.inBuildAppCard} p={5} maxWidth={'25%'}>
+      <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
         <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
@@ -34,41 +33,45 @@ const SearchSection = () => {
               <Chip
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 7);
                   setWeek(1), setValue([null, null]);
                 }}
                 label="7 Hari"
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week == 1 ? 'default' : 'outlined'}
               />
               <Chip
                 label="14 Hari"
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 14);
                   setWeek(2), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 2 ? 'default' : 'outlined'}
               />
               <Chip
                 label="1 Bulan"
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 30);
                   setWeek(4), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 4 ? 'default' : 'outlined'}
               />
               <Chip
                 label="3 Bulan"
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 90);
                   setWeek(12), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '30%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 12 ? 'default' : 'outlined'}
               />
             </Stack>
@@ -78,13 +81,15 @@ const SearchSection = () => {
                 value={value}
                 maxDate={getWeeksAfter(value[0], week)}
                 onChange={(newValue) => {
+                  handleChange('ticket_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
                   setValue(newValue);
+                  setWeek(null);
                 }}
                 renderInput={(startProps, endProps) => (
                   <>
                     <Stack direction={'row'} spacing={1}>
-                      <TextField {...startProps} />
-                      <TextField {...endProps} />
+                      <TextField size="small" autoComplete="off" {...startProps} />
+                      <TextField size="small" autoComplete="off" {...endProps} />
                     </Stack>
                   </>
                 )}
