@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Chip, Stack } from '@mui/material';
-import DatabaseAccountListTableComponent from './table';
+import DatabaseTabAccountListTableComponent from './table';
 import { useGetAllUserQuery } from 'api/user/user';
 
-const DatabaseAccountListComponent = (props) => {
+const DatabaseTabAccountListComponent = (props) => {
   const { configFilters, filters, onDeleteFilters } = props;
   const [isFiltersChange, setIsFiltersChanges] = useState(true);
   const [filtersWithLabel, setFiltersWithLabel] = useState([]);
@@ -106,7 +106,7 @@ const DatabaseAccountListComponent = (props) => {
           ))}
         </Stack>
       ) : null}
-      <DatabaseAccountListTableComponent
+      <DatabaseTabAccountListTableComponent
         userResults={userResults}
         isFetching={isFetching}
         isFiltersChange={isFiltersChange}
@@ -116,10 +116,10 @@ const DatabaseAccountListComponent = (props) => {
   );
 };
 
-DatabaseAccountListComponent.propTypes = {
+DatabaseTabAccountListComponent.propTypes = {
   configFilters: PropTypes.object,
   filters: PropTypes.object,
   onDeleteFilters: PropTypes.func,
 };
 
-export default DatabaseAccountListComponent;
+export default DatabaseTabAccountListComponent;

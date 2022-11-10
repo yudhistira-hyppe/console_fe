@@ -31,7 +31,7 @@ const MainApp = (props) => {
     }
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('../firebase-messaging-sw.js')
+        .register('/firebase-messaging-sw.js')
         .then(function (registration) {
           console.log('Registration successful, scope is:', registration.scope);
         })
@@ -40,6 +40,7 @@ const MainApp = (props) => {
         });
     }
   }, []);
+<<<<<<< HEAD
 
   useEffect(() => {
     Notification.requestPermission().then(() => {
@@ -47,11 +48,13 @@ const MainApp = (props) => {
       onMessage(message, (payload) => dispatch(setNotification(payload)));
     });
   });
+=======
+>>>>>>> 44bc581bdbed27caa15730fe2f481c2743366445
 
   return (
     <React.Fragment>
       <Head>
-        <title>Hyppe-Business</title>
+        <title>Hyppe-Console</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <AuthProvider>

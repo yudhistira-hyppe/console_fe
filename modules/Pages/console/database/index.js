@@ -1,43 +1,21 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Tab } from '@mui/material';
-import DatabaseAccountComponent from './account';
-import useStyles from './index.style';
+import DatabaseTabComponent from './tab';
+import DatabaseDetailComponent from './detail';
 
-const ConsoleDatabaseComponent = (props) => {
-  const classes = useStyles();
-  const router = useRouter();
-  const { queryTab } = props;
-
-  const onTabChange = (_, selectedTab) => {
-    router.replace({ query: { tab: selectedTab } });
-  };
+const DatabaseComponent = (props) => {
+  const { tab, detailId } = props;
 
   return (
-    <>
-      <Head>
-        <title key="title">Hyppe-Console :: Database</title>
-      </Head>
-      <TabContext value={queryTab}>
-        <TabList onChange={onTabChange} textColor="secondary" indicatorColor="secondary">
-          <Tab className={classes.tab} label="Akun" value="account" />
-          <Tab className={classes.tab} label="Konten" value="content" disabled />
-        </TabList>
-        <TabPanel className={classes.tabPanel} value="account">
-          <DatabaseAccountComponent />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="content">
-          Konten
-        </TabPanel>
-      </TabContext>
-    </>
+    <Fragment>
+      {detailId ? <DatabaseDetailComponent tab={tab} detailId={detailId} /> : <DatabaseTabComponent tab={tab} />}
+    </Fragment>
   );
 };
 
-ConsoleDatabaseComponent.propTypes = {
-  queryTab: PropTypes.string,
+DatabaseComponent.propTypes = {
+  tab: PropTypes.string,
+  detailId: PropTypes.string,
 };
 
-export default ConsoleDatabaseComponent;
+export default DatabaseComponent;

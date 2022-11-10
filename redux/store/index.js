@@ -24,6 +24,8 @@ import {
   moduleAPI,
   divisiAPI,
   voucherApi,
+  adAPI,
+  transactionAPI,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -53,6 +55,8 @@ const initStore = () => {
         moduleAPI.middleware,
         divisiAPI.middleware,
         voucherApi.middleware,
+        adAPI.middleware,
+        transactionAPI.middleware,
       ]),
   });
   return store;

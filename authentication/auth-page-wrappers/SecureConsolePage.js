@@ -9,27 +9,23 @@ const SecureConsolePage = ({ children }) => {
 
   useEffect(() => {
     getAuthUser();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!isLoading) {
-      if (!authUser && !router.pathname.includes('/signin') && router.pathname !== '/') {
-        // router.push({ pathname: '/console/signin', query: { redirect: router.pathname } });
-        router.push({ pathname: '/signin', query: { redirect: router.pathname } });
+      if (!authUser && !router.asPath.includes('/signin') && router.asPath === '/') {
+        router.push('/signin');
         return;
       }
-      if (!authUser && !router.pathname.includes('/signin') && router.pathname === '/') {
-        // router.push('/console/signin');
-        router.push('/signin');
+      if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
+        router.push({ pathname: '/signin', query: { redirect: router.asPath } });
         return;
       }
       if (
         authUser &&
         authUser.user.roles.includes('ROLE_SYSADMIN') &&
-        router.pathname.includes('/signin') &&
-        router.query.redirect &&
-        // router.query.redirect.includes('/console')
-        router.query.redirect.includes('/')
+        router.asPath.includes('/signin') &&
+        router.query.redirect
       ) {
         router.push(router.query.redirect);
         return;
@@ -37,10 +33,9 @@ const SecureConsolePage = ({ children }) => {
       if (
         authUser &&
         authUser.user.roles.includes('ROLE_SYSADMIN') &&
-        router.pathname.includes('/signin') &&
+        router.asPath.includes('/signin') &&
         !router.query.redirect
       ) {
-        // router.push('/console');
         router.push('/');
         return;
       }

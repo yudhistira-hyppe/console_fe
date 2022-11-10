@@ -12,6 +12,12 @@ export const userApi = createApi({
         body: data,
       }),
     }),
+    getUserBasics: build.query({
+      query: (email) => ({
+        url: `/userbasics/${email}`,
+        method: 'GET',
+      }),
+    }),
     getProfileByUserEmail: build.query({
       query: (email) => ({
         url: `/profile`,
@@ -28,7 +34,22 @@ export const userApi = createApi({
         body: data,
       }),
     }),
+    getBankAccountByUserEmail: build.query({
+      query: (email) => ({
+        url: `/userbankaccounts/byuser`,
+        method: 'POST',
+        body: {
+          email,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAllUserQuery, useGetProfileByUserEmailQuery, useGetAccountBalanceQuery } = userApi;
+export const {
+  useGetAllUserQuery,
+  useGetUserBasicsQuery,
+  useGetProfileByUserEmailQuery,
+  useGetAccountBalanceQuery,
+  useGetBankAccountByUserEmailQuery,
+} = userApi;

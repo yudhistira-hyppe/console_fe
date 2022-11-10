@@ -62,6 +62,7 @@ export const contentManagementAPI = createApi({
 export const {
   useUserContentsManagementQuery,
   useUserContentsGroupQuery,
+  useLazyUserContentsGroupQuery,
   useUserContentsAnalyticQuery,
   useUserContentsFollowerQuery,
   useUserContentMonetizeQuery,

@@ -4,7 +4,7 @@ import { FormGroup, FormControlLabel } from '@material-ui/core';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import useStyles from './index.style';
 
-const DatabaseAccountFilterItemComponent = (props) => {
+const DatabaseTabAccountFilterItemComponent = (props) => {
   const classes = useStyles();
   const { configKey, configItem, filters, onChange } = props;
 
@@ -72,11 +72,11 @@ const DatabaseAccountFilterItemComponent = (props) => {
   }
 };
 
-DatabaseAccountFilterItemComponent.propTypes = {
+DatabaseTabAccountFilterItemComponent.propTypes = {
   configKey: PropTypes.string,
   configItem: PropTypes.object,
   filters: PropTypes.object,
   onChange: PropTypes.func,
 };
 
-export default DatabaseAccountFilterItemComponent;
+export default DatabaseTabAccountFilterItemComponent;

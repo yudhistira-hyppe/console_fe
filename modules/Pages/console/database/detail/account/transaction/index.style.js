@@ -1,14 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  table: {
-    '&.MuiTable-root': {
-      minWidth: 'max-content',
-    },
-  },
   tableRow: {
     '& .MuiTableCell-root': {
-      padding: '16px 10px',
       '&:first-of-type': {
         paddingLeft: '24px',
       },
@@ -20,16 +14,14 @@ const useStyles = makeStyles(() => ({
       },
     },
   },
-  tableChip: {
-    '&.MuiChip-root': {
-      fontSize: '10px',
+  tableRowCustomPadding: {
+    '& .MuiTableCell-root': {
+      padding: '24px',
+      '&.MuiTableCell-body': {
+        color: '#00000099',
+      },
     },
-  },
-  pagination: {
-    '& .MuiPagination-ul': {
-      justifyContent: 'center',
-    },
-  },
+  }
 }));
 
 export default useStyles;

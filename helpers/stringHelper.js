@@ -1,5 +1,5 @@
-import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
 import moment from 'moment';
 
 function isStringMatch(str, tester) {
@@ -100,4 +100,61 @@ export const dateRange = (startDate, endDate, steps = 1) => {
 
 export const getMonthName = (monthNumber, typeName = 'long') => {
   return new Date(monthNumber.toString()).toLocaleString('id', { month: typeName });
+};
+
+export const formatNumber = (number) => {
+  const unitlist = ['', 'K+', 'M+', 'G+', 'T+', 'P+', 'E+'];
+  let sign = Math.sign(number);
+  let unit = 0;
+
+  while (Math.abs(number) > 1000) {
+    unit = unit + 1;
+    number = Math.floor(Math.abs(number) / 100) / 10;
+  }
+
+  return `${sign * Math.abs(number)}${unitlist[unit] || ''}`;
+};
+
+export const formatPostType = (postType) => {
+  switch (postType) {
+    case 'pict':
+      return 'HyppePict';
+    case 'vid':
+      return 'HyppeVid';
+    case 'diary':
+      return 'HyppeDiary';
+    case 'story':
+      return 'HyppeStory';
+    default:
+      return postType;
+  }
+};
+
+export const maskCharacterExceptLastN = (str, mask, n = 1) => {
+  return [...str].reduce((acc, curr, index) => (index < str.length - n ? acc + mask : acc + curr), '');
+};
+
+export const capitalizeWord = (word) => {
+  return word.toLowerCase().replace(/\w/, (firstLetter) => firstLetter.toUpperCase());
+};
+
+export const capitalizeEachWord = (string) => {
+  return string
+    .split(' ')
+    .filter((word) => word)
+    .map((word) => capitalizeWord(word))
+    .join(' ');
+};
+
+export const formatTransactionStatus = (status) => {
+  switch (status.toLowerCase()) {
+    case 'success':
+      return 'Berhasil';
+    case 'cancel':
+      return 'Batal';
+    case 'waiting_payment':
+      return 'Menunggu Pembayaran';
+    default:
+      return status;
+  }
 };
