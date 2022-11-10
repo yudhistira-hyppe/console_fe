@@ -32,13 +32,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({ onOrderChange, handlePageChange, order, page, listTickets, loading }) => {
+const TableSection = ({ handleOrder, handlePageChange, order, page, listTickets, loading }) => {
   const classes = useStyles();
   const router = useRouter();
-
-  const onSelectData = (id) => {
-    router.push('/help-center/pelaporan-iklan/detail');
-  };
 
   return (
     <Stack flex={1}>
@@ -48,8 +44,9 @@ const TableSection = ({ onOrderChange, handlePageChange, order, page, listTicket
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
           ) : (
             <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listTickets?.totalsearch} hasil ({page} - {listTickets?.totalsearch} dari{' '}
-              {listTickets?.totalsearch})
+              Menampilkan {listTickets?.total} hasil (
+              {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
+              {listTickets?.total + listTickets?.page * 10} dari {listTickets?.totalsearch})
             </Typography>
           )}
         </Box>
@@ -58,7 +55,7 @@ const TableSection = ({ onOrderChange, handlePageChange, order, page, listTicket
             <Typography style={{ fontFamily: 'Normal' }}>Urutkan berdasarkan</Typography>
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small" style={{ backgroundColor: '#FFFFFF' }}>
-            <Select value={order} onChange={onOrderChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+            <Select value={order} onChange={handleOrder} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
               <MenuItem value={'true'}>Terbaru</MenuItem>
               <MenuItem value={'false'}>Terlama</MenuItem>
             </Select>
@@ -101,11 +98,18 @@ const TableSection = ({ onOrderChange, handlePageChange, order, page, listTicket
                   key={i}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   hover
-                  onClick={onSelectData}
+                  onClick={() =>
+                    router.push({
+                      pathname: '/help-center/pelaporan-iklan/detail',
+                      query: {
+                        _id: item?.id,
+                      },
+                    })
+                  }
                   style={{ cursor: 'pointer' }}>
                   <TableCell align="left" style={{ width: 100 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.timestamp).format('DD/MM/YY-HH:mm')} WIB
+                      {moment(item?.createdAtReportLast).utc().format('DD/MM/YY-HH:mm')} WIB
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 170 }}>

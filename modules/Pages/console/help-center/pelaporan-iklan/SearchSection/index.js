@@ -12,7 +12,7 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 
-const SearchSection = () => {
+const SearchSection = ({ handleChange }) => {
   const classes = useStyles();
   const [week, setWeek] = React.useState(null);
   const [value, setValue] = React.useState([null, null]);
@@ -32,6 +32,7 @@ const SearchSection = () => {
               <Chip
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 7);
                   setWeek(1), setValue([null, null]);
                 }}
                 label="7 Hari"
@@ -43,6 +44,7 @@ const SearchSection = () => {
                 label="14 Hari"
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 14);
                   setWeek(2), setValue([null, null]);
                 }}
                 size="small"
@@ -53,6 +55,7 @@ const SearchSection = () => {
                 label="1 Bulan"
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 30);
                   setWeek(4), setValue([null, null]);
                 }}
                 size="small"
@@ -63,6 +66,7 @@ const SearchSection = () => {
                 label="3 Bulan"
                 clickable
                 onClick={() => {
+                  handleChange('ticket_date', 90);
                   setWeek(12), setValue([null, null]);
                 }}
                 size="small"
@@ -75,7 +79,9 @@ const SearchSection = () => {
               <DateRangePicker
                 value={value}
                 onChange={(newValue) => {
+                  handleChange('ticket_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
                   setValue(newValue);
+                  setWeek(null);
                 }}
                 maxDate={getWeeksAfter(value[0], week)}
                 renderInput={(startProps, endProps) => (
