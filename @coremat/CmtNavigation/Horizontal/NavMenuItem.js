@@ -34,6 +34,7 @@ const NavMenuItem = (props) => {
   const { name, icon, link, handleClick, children } = props;
   const classes = useStyles();
   const router = useRouter();
+  const path = router.pathname.split('/');
 
   // const renderIcon = () => {
   //   if (icon && isValidElement(icon)) {
@@ -99,7 +100,7 @@ const NavMenuItem = (props) => {
           className={clsx(
             classes.navMenuLink,
             {
-              active: link === router.pathname || children?.includes(router.pathname),
+              active: link === `/${path[1]}` || children?.includes(router.pathname),
             },
             'Cmt-nav-menu-link',
           )}>
