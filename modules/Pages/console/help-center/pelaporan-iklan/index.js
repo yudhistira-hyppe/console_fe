@@ -21,7 +21,7 @@ const ConsolePelaporanIklanComponent = () => {
     type: 'ads',
     page: 0,
     limit: 10,
-    descending: 'false',
+    descending: 'true',
     startdate: '',
     enddate: '',
   });

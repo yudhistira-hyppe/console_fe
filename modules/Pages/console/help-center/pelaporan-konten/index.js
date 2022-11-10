@@ -21,7 +21,7 @@ const ConsolePelaporanKontenCompoent = () => {
     type: 'content',
     page: 0,
     limit: 10,
-    descending: 'false',
+    descending: 'true',
     startdate: '',
     enddate: '',
     isBanding: '',
