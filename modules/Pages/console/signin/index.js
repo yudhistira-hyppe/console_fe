@@ -30,9 +30,25 @@ const useStyles = makeStyles((theme) => ({
       order: 2,
     },
   },
+  visualAuth: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: 20,
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '100%',
+      order: 2,
+    },
+  },
   authContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     padding: 30,
     width: '100%',
+    height: 520,
     [theme.breakpoints.up('md')]: {
       width: (props) => (props.variant === 'default' ? '50%' : '100%'),
       order: 1,
@@ -134,7 +150,12 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
           <Box className={classes.authThumb}>
             <CmtImage src="/images/auth/login-img.png" />
           </Box>
-        ) : null}
+        ) : (
+          <Box className={classes.visualAuth}>
+            <CmtImage src="/images/auth/logo-visual.png" width="35%" />
+            <CmtImage src="/images/auth/visual-login.png" width="75%" />
+          </Box>
+        )}
         <Box className={classes.authContent}>
           <Box mb={7}>
             <Logo />
@@ -147,7 +168,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
               <TextField
                 label={<IntlMessages id="appModule.email" />}
                 fullWidth
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event) => setEmail(event.target.value?.toLowerCase())}
                 defaultValue={email}
                 margin="normal"
                 variant="outlined"
@@ -175,7 +196,8 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
               <Button onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">
-                <IntlMessages id="appModule.signIn" />
+                {/* <IntlMessages id="appModule.signIn" /> */}
+                Masuk
               </Button>
             </Box>
           </form>

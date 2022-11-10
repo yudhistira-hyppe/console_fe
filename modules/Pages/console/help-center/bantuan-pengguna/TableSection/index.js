@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { Pagination, Stack } from '@mui/material';
+import { CircularProgress, Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets }) => {
+const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets, loading }) => {
   const [isModal, setModal] = React.useState(false);
   const [selectedEmail, setSelectedEmail] = React.useState('');
   const { authUser } = useAuth();
@@ -66,10 +66,14 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets 
       <Stack flex={1}>
         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
           <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
-            <Typography>
-              Menampilkan {listTickets?.totalrow} hasil ({listTickets?.page + 1}-{listTickets?.totalrow} dari{' '}
-              {listTickets?.totalallrow})
-            </Typography>
+            {loading ? (
+              <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+            ) : (
+              <Typography>
+                Menampilkan {listTickets?.totalrow} hasil ({listTickets?.page + 1}-{listTickets?.totalrow} dari{' '}
+                {listTickets?.totalallrow})
+              </Typography>
+            )}
           </Box>
           <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
             <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
@@ -113,7 +117,14 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets 
             </TableHead>
 
             <TableBody>
-              {listTickets?.data?.length >= 1 ? (
+              {loading ? (
+                <TableCell colSpan={7}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, key) => (
                   <TableRow
                     hover
@@ -178,11 +189,9 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets 
                   </TableRow>
                 ))
               ) : (
-                <TableRow>
-                  <TableCell colSpan={7} align="center">
-                    Tidak ada data.
-                  </TableCell>
-                </TableRow>
+                <TableCell colSpan={7} align="center">
+                  Tidak ada data.
+                </TableCell>
               )}
             </TableBody>
           </Table>

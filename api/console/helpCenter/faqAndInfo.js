@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQueryWithHandleReauth } from 'api';
 
 export const faqAndInfoApi = createApi({
-  reducerPath: 'console/helpCenter/faqAndInfo',
+  reducerPath: 'helpCenter/faqAndInfo',
   baseQuery: customBaseQueryWithHandleReauth,
   tagTypes: ['FaqAndInfo'],
   endpoints: (build) => ({

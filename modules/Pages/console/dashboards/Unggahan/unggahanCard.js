@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PendapatanCard = ({ title, amount, progress, children, secondaryTitle }) => {
+const InstalasiCard = ({ title, amount, progress, children, secondaryTitle }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -58,7 +58,7 @@ const PendapatanCard = ({ title, amount, progress, children, secondaryTitle }) =
 
   const headerSubTitle = (
     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <div style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10, color: '#E59D1E' }}>Rp {numberWithCommas(amount)}</div>
+      <div style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10, color: '#CB76CD' }}>{numberWithCommas(amount)}</div>
       {progress && (
         <Box ml={2} fontSize={16} color={progress?.color && null} display="flex" flexDirection="row" alignItems="center">
           <span className="mr-1">{progress?.value && null}</span>
@@ -100,8 +100,8 @@ const PendapatanCard = ({ title, amount, progress, children, secondaryTitle }) =
           }}
           onClose={handlePopoverClose}
           disableRestoreFocus>
-          <Box width={180} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
-            Pendapatan yang diterima oleh Hyppe secara keseluruhan dalam kurun waktu tertentu
+          <Box width={250} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
+            Total konten yang diposting oleh pengguna di aplikasi dalam kurun waktu tertentu
           </Box>
         </Popover>
       </Stack>
@@ -131,4 +131,4 @@ const PendapatanCard = ({ title, amount, progress, children, secondaryTitle }) =
   );
 };
 
-export default PendapatanCard;
+export default InstalasiCard;

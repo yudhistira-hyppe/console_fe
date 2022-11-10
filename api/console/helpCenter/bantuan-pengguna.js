@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQueryWithHandleReauth } from 'api';
 
 export const bantuanPenggunaApi = createApi({
-  reducerPath: 'console/helpCenter/bantuan-pengguna',
+  reducerPath: 'helpCenter/bantuan-pengguna',
   baseQuery: customBaseQueryWithHandleReauth,
   tagTypes: ['TicketList', 'Divisi'],
   endpoints: (build) => ({

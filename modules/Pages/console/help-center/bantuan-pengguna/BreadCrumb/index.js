@@ -16,14 +16,14 @@ export default function CustomSeparator({ breadcrumbs }) {
         {breadcrumbs?.map((el, i) => {
           if (el?.isActive) {
             return (
-              <Typography key={i} color="#AB22AF">
+              <Typography key={i} color="#AB22AF" style={{ fontSize: 14, fontFamily: 'Lato' }}>
                 {el.label}
               </Typography>
             );
           } else {
             return (
               <Link key={i} href={el.link}>
-                <Typography color="#666666" style={{ cursor: 'pointer' }}>
+                <Typography color="#666666" style={{ cursor: 'pointer', fontSize: 14, fontFamily: 'Lato' }}>
                   {el.label}
                 </Typography>
               </Link>

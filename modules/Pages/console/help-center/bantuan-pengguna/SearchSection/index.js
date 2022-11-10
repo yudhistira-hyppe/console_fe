@@ -32,7 +32,7 @@ const SearchSection = ({ handleChange }) => {
 
   return (
     <>
-      <Box className={classes.inBuildAppCard} p={5} style={{ width: 250 }}>
+      <Box className={classes.inBuildAppCard} p={5} pt={2} style={{ width: 270 }}>
         <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Pencarian Tiket</Typography>
@@ -52,7 +52,7 @@ const SearchSection = ({ handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
-            <Stack direction={'column'} spacing={1} mb={3}>
+            <Stack direction={'column'} gap="12px" mb={3}>
               <Chip
                 clickable
                 onClick={() => {
@@ -61,7 +61,7 @@ const SearchSection = ({ handleChange }) => {
                 }}
                 label="7 Hari"
                 size="small"
-                style={{ width: '35%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week == 1 ? 'default' : 'outlined'}
               />
               <Chip
@@ -72,7 +72,7 @@ const SearchSection = ({ handleChange }) => {
                   setWeek(2), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '35%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 2 ? 'default' : 'outlined'}
               />
               <Chip
@@ -83,7 +83,7 @@ const SearchSection = ({ handleChange }) => {
                   setWeek(4), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '35%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 4 ? 'default' : 'outlined'}
               />
               <Chip
@@ -94,7 +94,7 @@ const SearchSection = ({ handleChange }) => {
                   setWeek(12), setValue([null, null]);
                 }}
                 size="small"
-                style={{ width: '35%' }}
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
                 variant={week === 12 ? 'default' : 'outlined'}
               />
             </Stack>
@@ -110,8 +110,8 @@ const SearchSection = ({ handleChange }) => {
                 renderInput={(startProps, endProps) => (
                   <>
                     <Stack direction={'row'} spacing={1}>
-                      <TextField {...startProps} />
-                      <TextField {...endProps} />
+                      <TextField size="small" autoComplete="off" {...startProps} />
+                      <TextField size="small" autoComplete="off" {...endProps} />
                     </Stack>
                   </>
                 )}
@@ -128,14 +128,16 @@ const SearchSection = ({ handleChange }) => {
             <FormGroup>
               {loadingSumber ? (
                 <Typography>loading...</Typography>
-              ) : (
+              ) : listSumber?.data ? (
                 listSumber?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
                     label={item?.sourceName}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('sumber', item?._id)} />}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
                   />
                 ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
               )}
             </FormGroup>
           </AccordionDetails>
@@ -149,7 +151,7 @@ const SearchSection = ({ handleChange }) => {
             <FormGroup>
               {loadingCategory ? (
                 <Typography>loading...</Typography>
-              ) : (
+              ) : listCategory?.data ? (
                 listCategory?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
@@ -157,6 +159,8 @@ const SearchSection = ({ handleChange }) => {
                     control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
                   />
                 ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
               )}
             </FormGroup>
           </AccordionDetails>
@@ -170,14 +174,16 @@ const SearchSection = ({ handleChange }) => {
             <FormGroup>
               {loadingLevel ? (
                 <Typography>loading...</Typography>
-              ) : (
+              ) : listLevel?.data ? (
                 listLevel?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
-                    label={`${item?.nameLevel} - ${item?.descLevel}`}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('level', item?._id)} />}
+                    label={item?.descLevel}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
                   />
                 ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
               )}
             </FormGroup>
           </AccordionDetails>

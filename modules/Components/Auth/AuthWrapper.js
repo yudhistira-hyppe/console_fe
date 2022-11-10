@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundImage: (props) => (props.variant === 'bgColor' ? `URL(/images/auth/auth-bg-pattern.png)` : ''),
+    backgroundImage: (props) => (props.variant === 'bgColor' ? `URL(/images/auth/background-login.png)` : ''),
     backgroundPosition: (props) => (props.variant === 'bgColor' ? 'center center' : ''),
     backgroundRepeat: (props) => (props.variant === 'bgColor' ? 'no-repeat' : ''),
     backgroundSize: (props) => (props.variant === 'bgColor' ? 'cover' : ''),
@@ -26,13 +26,13 @@ const useStyles = makeStyles((theme) => ({
       zIndex: 1,
       width: '100%',
       height: '100%',
-      backgroundColor: (props) => (props.variant === 'bgColor' ? alpha(theme.palette.primary.main, 0.5) : ''),
+      backgroundColor: (props) => (props.variant === 'bgColor' ? '#910C95B2' : ''),
     },
   },
   authCard: {
     position: 'relative',
     zIndex: 3,
-    maxWidth: (props) => (props.variant === 'default' ? '850px' : '550px'),
+    maxWidth: (props) => (props.variant === 'bgColor' ? '850px' : '550px'),
     width: '100%',
     boxShadow: '0px 2px 2px rgba(0, 0, 0, 0.14), 0px 3px 1px rgba(0, 0, 0, 0.12), 0px 1px 5px rgba(0, 0, 0, 0.2)',
     borderRadius: 4,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'row',
     },
     [theme.breakpoints.up('xl')]: {
-      maxWidth: (props) => (props.variant === 'default' ? '1050px' : '750px'),
+      maxWidth: (props) => (props.variant === 'bgColor' ? '1050px' : '750px'),
     },
   },
 }));

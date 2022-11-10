@@ -9,12 +9,14 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useAuth } from '../../../../authentication';
 import { useRouter } from 'next/router';
 import { STREAM_URL } from 'authentication/auth-provider/config';
+import { Chip, Stack, Typography } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   profileRoot: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 12,
     paddingLeft: 10,
     position: 'relative',
     [theme.breakpoints.up('md')]: {
@@ -24,12 +26,20 @@ const useStyles = makeStyles((theme) => ({
       content: '""',
       position: 'absolute',
       left: 0,
-      top: 2,
       zIndex: 1,
-      height: 35,
+      height: '50%',
       width: 1,
       backgroundColor: alpha(theme.palette.common.dark, 0.15),
     },
+  },
+  chipRole: {
+    color: '#FF8C00D9 !important',
+    backgroundColor: '#FF8C0026 !important',
+    fontSize: '12px !important',
+    fontFamily: 'Lato !important',
+    fontWeight: 'bold',
+    height: '28px !important',
+    width: 'fit-content !important',
   },
 }));
 
@@ -70,6 +80,9 @@ const UserDropDown = () => {
 
   return (
     <Box className={clsx(classes.profileRoot, 'Cmt-profile-pic')}>
+      <Stack direction="row" alignItems="center">
+        <Chip label={authUser.user.roles[0] === 'ROLE_SYSADMIN' ? 'Administrator' : 'User'} className={classes.chipRole} />
+      </Stack>
       <CmtDropdownMenu
         onItemClick={onItemClick}
         TriggerComponent={<CmtAvatar size="small" src={getMediaUri()} />}

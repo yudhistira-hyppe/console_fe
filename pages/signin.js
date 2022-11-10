@@ -9,7 +9,7 @@ const SignIn = dynamic(() => import('modules/Pages/console/signin'), {
 
 const SignInPage = () => (
   <SecureConsolePage>
-    <SignIn />
+    <SignIn variant="bgColor" wrapperVariant="bgColor" />
   </SecureConsolePage>
 );
 

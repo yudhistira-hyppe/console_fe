@@ -3,7 +3,9 @@ import CmtAdvCard from '@coremat/CmtAdvCard';
 import CmtAdvCardContent from '@coremat/CmtAdvCard/CmtAdvCardContent';
 import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import React from 'react';
+import { Error } from '@material-ui/icons';
+import { MenuItem, Popover, Select, Stack } from '@mui/material';
+import React, { useState } from 'react';
 import { PieChart, Pie, Sector, Cell, Tooltip } from 'recharts';
 
 const data = [
@@ -13,6 +15,15 @@ const data = [
 const COLORS = ['rgba(225, 102, 24, 1)', 'rgba(69, 195, 229, 1)'];
 
 const useStyles = makeStyles({
+  cardAdvRoot: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  cardHeaderRoot: {
+    paddingTop: 16,
+    paddingBottom: 6,
+  },
   tooltip: {
     position: 'relative',
     borderRadius: 6,
@@ -20,12 +31,6 @@ const useStyles = makeStyles({
     backgroundColor: 'rgba(0, 0, 0, 0.38);',
     color: '#FFFFFF',
     fontSize: 14,
-  },
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginLeft: 30,
   },
   avatar: {
     display: 'flex',
@@ -41,35 +46,62 @@ const useStyles = makeStyles({
 
 const StatusKepemilikan = () => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const TitleComp = (
+    <Stack direction="row" alignItems="center" gap={1} position="relative" style={{ height: 40 }}>
+      <Typography variant="h4" component="div">
+        Status Kepemilikan
+      </Typography>
+      <Error style={{ fontSize: 14, color: '#737373' }} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose} />
+      <Popover
+        id="mouse-over-popover"
+        sx={{
+          pointerEvents: 'none',
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus>
+        <Box width={180} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
+          Merekam jumlah keseluruhan pengguna yang mendaftarkan kepemilikan konten maupun yang tidak mendaftarkan kontennya
+          dalam kurun waktu tertentu
+        </Box>
+      </Popover>
+    </Stack>
+  );
+
   return (
     <>
-      <CmtAdvCard>
+      <CmtAdvCard className={classes.cardAdvRoot}>
         <CmtCardHeader
+          className={classes.cardHeaderRoot}
           titleProps={{
             variant: 'h4',
             component: 'div',
           }}
-          title={
-            <Typography>
-              Status Kepemilikan
-              <img style={{ marginLeft: '3px' }} src="/images/icons/small-info.svg" alt="icon" />
-            </Typography>
-          }
+          title={TitleComp}
         />
-        {/* <Typography variant="h3" component="div">
-          Status Kepemilikan
-        </Typography> */}
-        <center style={{ marginTop: '-100px' }}>
-          <PieChart width={400} height={310}>
-            <Pie
-              data={data}
-              cx={120}
-              cy={200}
-              innerRadius={60}
-              outerRadius={80}
-              fill="#8884d8"
-              paddingAngle={5}
-              dataKey="value">
+        <center>
+          <PieChart width={250} height={260}>
+            <Pie data={data} innerRadius={70} outerRadius={100} fill="#8884d8" paddingAngle={5} dataKey="value">
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
@@ -83,18 +115,20 @@ const StatusKepemilikan = () => {
             />
           </PieChart>
         </center>
-        <Box className={classes.root}>
-          <Box bgcolor={COLORS[1]} className={classes.avatar} />
-          <Box fontSize={14} fontWeight={700} color="text.primary">
-            Bersetifikat
-          </Box>
-        </Box>
-        <Box className={classes.root}>
-          <Box bgcolor={COLORS[0]} className={classes.avatar} />
-          <Box fontSize={14} fontWeight={700} color="text.primary">
-            Tidak Bersetifikat
-          </Box>
-        </Box>
+        <Stack direction="column" gap="6px" ml="24px" mb="16px">
+          <Stack direction="row" alignItems="center">
+            <Box bgcolor={COLORS[1]} className={classes.avatar} />
+            <Box fontSize={14} fontWeight={700} color="text.primary">
+              Bersetifikat
+            </Box>
+          </Stack>
+          <Stack direction="row" alignItems="center">
+            <Box bgcolor={COLORS[0]} className={classes.avatar} />
+            <Box fontSize={14} fontWeight={700} color="text.primary">
+              Tidak Bersetifikat
+            </Box>
+          </Stack>
+        </Stack>
       </CmtAdvCard>
     </>
   );
