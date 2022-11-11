@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
 import { Link, Typography } from '@material-ui/core';
@@ -22,15 +22,16 @@ const ConsolePelaporanKontenCompoent = () => {
     page: 0,
     limit: 10,
     descending: 'true',
-    startdate: '',
-    enddate: '',
-    isBanding: '',
+    // startdate: '',
+    // enddate: '',
+    search: '',
+    range: '',
+    from: null,
+    to: null,
+    status: [],
+    reason: [],
   });
   const router = useRouter();
-
-  useEffect(() => {
-    router?.query?.isBanding && setFilter({ ...filter, isBanding: 'true' });
-  }, [router]);
 
   const getParams = () => {
     let params = {};
@@ -39,16 +40,14 @@ const ConsolePelaporanKontenCompoent = () => {
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
       type: filter.type,
+      isBanding: router?.query?.isBanding ? true : undefined,
     });
-    // filter.search !== '' && Object.assign(params, { search: filter.search });
-    // filter.assignto !== '' && Object.assign(params, { assignto: filter.assignto });
-    filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
-    filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
-    filter.isBanding !== '' && Object.assign(params, { isBanding: filter.isBanding });
-    // filter.status.length >= 1 && Object.assign(params, { status: filter.status });
-    // filter.sumber.length >= 1 && Object.assign(params, { sumber: filter.sumber });
-    // filter.kategori.length >= 1 && Object.assign(params, { kategori: filter.kategori });
-    // filter.level.length >= 1 && Object.assign(params, { level: filter.level });
+    filter.search !== '' && Object.assign(params, { search: filter.search });
+    filter.from && Object.assign(params, { from: filter.from });
+    filter.to && Object.assign(params, { to: filter.to });
+    // filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
+    // filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
+    filter.status.length >= 1 && Object.assign(params, { status: filter.status });
 
     return params;
   };
@@ -85,6 +84,62 @@ const ConsolePelaporanKontenCompoent = () => {
         };
       } else if (kind === 'ticket_range') {
         return { ...prevVal, startdate: value[0], enddate: value[1] };
+      } else if (kind === 'search') {
+        return { ...prevVal, search: value };
+      } else if (kind === 'range') {
+        switch (value) {
+          case '1-50':
+            return {
+              ...prevVal,
+              range: value,
+              from: 1,
+              to: 50,
+            };
+          case '51-100':
+            return {
+              ...prevVal,
+              range: value,
+              from: 51,
+              to: 100,
+            };
+          case '101-150':
+            return {
+              ...prevVal,
+              range: value,
+              from: 101,
+              to: 150,
+            };
+          case '151-200':
+            return {
+              ...prevVal,
+              range: value,
+              from: 151,
+              to: 200,
+            };
+          default:
+            return { ...prevVal };
+        }
+      } else if (kind === 'from') {
+        return { ...prevVal, from: Number(value), range: '' };
+      } else if (kind === 'to') {
+        console.log('to berubah', value);
+        return { ...prevVal, to: Number(value), range: '' };
+      } else if (kind === 'status') {
+        return {
+          ...prevVal,
+          status: filter.status.find((item) => item === value)
+            ? filter.status.filter((item) => item !== value)
+            : [...filter.status, value],
+        };
+      } else if (kind === 'reason') {
+        return {
+          ...prevVal,
+          reason: filter.reason.find((item) => item === value)
+            ? filter.reason.filter((item) => item !== value)
+            : [...filter.reason, value],
+        };
+      } else {
+        return { ...prevVal };
       }
     });
   };
@@ -114,7 +169,7 @@ const ConsolePelaporanKontenCompoent = () => {
 
       <PageContainer heading="">
         <Stack direction={'row'} spacing={3}>
-          <SearchSection handleChange={handleSearchChange} />
+          <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             order={filter.descending}
             loading={loadingTicket}
