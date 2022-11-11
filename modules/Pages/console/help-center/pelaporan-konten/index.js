@@ -48,6 +48,7 @@ const ConsolePelaporanKontenCompoent = () => {
     // filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
     // filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
     filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    filter.reason.length >= 1 && Object.assign(params, { reason: filter.reason });
 
     return params;
   };
