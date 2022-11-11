@@ -135,7 +135,7 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
                       component="th"
                       scope="row"
                       className={classes.ticketHover}
-                      onClick={() => router.push(`/console/help-center/bantuan-pengguna/detail/${item?._id}`)}>
+                      onClick={() => router.push(`/help-center/bantuan-pengguna/detail/${item?._id}`)}>
                       <Typography variant="body1">{item?.nomortiket}</Typography>
                     </TableCell>
                     <TableCell align="left" style={{ maxWidth: 100 }}>

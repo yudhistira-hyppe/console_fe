@@ -12,7 +12,7 @@ function handleClick(event) {
 export default function CustomSeparator({ breadcrumbs }) {
   return (
     <Stack spacing={2}>
-      <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+      <Breadcrumbs maxItems={2} separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
         {breadcrumbs?.map((el, i) => {
           if (el?.isActive) {
             return (
