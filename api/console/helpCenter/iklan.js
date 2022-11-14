@@ -48,6 +48,22 @@ export const iklanApi = createApi({
       }),
       invalidatesTags: ['Iklan'],
     }),
+    updateFlagingTicket: build.mutation({
+      query: (data) => ({
+        url: '/reportuser/flaging',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Iklan'],
+    }),
+    deleteTicket: build.mutation({
+      query: (data) => ({
+        url: '/reportuser/delete',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Iklan'],
+    }),
   }),
 });
 
@@ -57,4 +73,6 @@ export const {
   useGetReportUserDetailTicketQuery,
   useGetReportReasonQuery,
   useUpdateDetailTicketMutation,
+  useUpdateFlagingTicketMutation,
+  useDeleteTicketMutation,
 } = iklanApi;
