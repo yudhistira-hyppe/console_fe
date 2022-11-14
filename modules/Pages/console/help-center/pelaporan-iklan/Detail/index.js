@@ -184,6 +184,45 @@ const DetailKeluhanPengguna = () => {
     }
   };
 
+  const buttonStyle = (status) => {
+    switch (status) {
+      case 'BARU':
+        return {
+          backgroundColor: '#E6094B1A',
+          color: '#E6094BD9',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+        };
+      case 'TIDAK DITANGGUHKAN':
+        return {
+          backgroundColor: '#71A5001A',
+          color: '#71A500D9',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+        };
+      case 'DITANGGUHKAN':
+        return {
+          backgroundColor: 'rgba(103, 103, 103, 0.1)',
+          color: '#676767',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+        };
+      case 'FLAGING':
+        return {
+          backgroundColor: '#B457F61A',
+          color: '#B457F6D9',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+        };
+      default:
+        return {};
+    }
+  };
+
   return (
     <>
       <Head>
@@ -271,10 +310,14 @@ const DetailKeluhanPengguna = () => {
                     </Stack>
                   </Stack>
 
-                  <Button
-                    variant="contained"
-                    style={{ backgroundColor: '#E92A63', color: 'white', width: 'fit-content', marginTop: 'auto' }}>
-                    Baru
+                  <Button variant="contained" style={buttonStyle(detail?.data[0]?.reportStatusLast)}>
+                    {detail?.data[0]?.reportStatusLast === 'FLAGING'
+                      ? 'Ditandai Sensitif'
+                      : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
+                      ? 'Dipulihkan'
+                      : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
+                      ? 'Dihapus'
+                      : 'Baru'}
                   </Button>
                 </Stack>
               </Card>
