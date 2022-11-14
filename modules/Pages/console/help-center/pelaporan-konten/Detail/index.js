@@ -17,7 +17,11 @@ import ModalConfirmation from '../Modal';
 import DeleteModal from '../Modal/DeleteModal';
 import ViewModal from '../Modal/ViewModal';
 import { GraphIndicator } from '../../components';
-import { useGetDetailTicketQuery, useGetReportUserDetailTicketQuery } from 'api/console/helpCenter/konten';
+import {
+  useGetDetailTicketQuery,
+  useGetReportUserDetailTicketQuery,
+  useUpdateDetailTicketMutation,
+} from 'api/console/helpCenter/konten';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import GridContainer from '@jumbo/components/GridContainer';
 import { DateRange, HowToReg } from '@material-ui/icons';
@@ -97,6 +101,7 @@ const DetailKeluhanPengguna = () => {
     type: null,
     modalType: null,
   });
+  const [updateTicket] = useUpdateDetailTicketMutation();
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,
@@ -116,7 +121,23 @@ const DetailKeluhanPengguna = () => {
     });
   };
 
-  const onConfirmModal = () => {};
+  const onConfirmModal = (val) => {
+    if (showModal?.type === 'ditangguhkan' || showModal?.type === 'tidak ditangguhkan') {
+      updateTicket({
+        postID: router.query?._id,
+        type: 'content',
+        reasonId: showModal?.type === 'ditangguhkan' ? val?._id : undefined,
+        reason:
+          showModal?.type === 'ditangguhkan' ? (val?.reason === 'Lainnya' ? val?.otherReason : val?.reason) : undefined,
+        ditangguhkan: showModal?.type === 'ditangguhkan',
+      }).then(() => {
+        onCloseModal();
+        router.push('/help-center/pelaporan-konten');
+      });
+    } else {
+      alert('tandai sensitif');
+    }
+  };
 
   const onCloseModal = () => {
     setShowModal({
@@ -237,7 +258,7 @@ const DetailKeluhanPengguna = () => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Card style={{ padding: '42px 25px 32px', flex: 1 }}>
+              <Card style={{ padding: '32px 25px', flex: 1 }}>
                 <Stack spacing={3}>
                   <Stack spacing={2}>
                     <Button
@@ -252,6 +273,12 @@ const DetailKeluhanPengguna = () => {
                       onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}>
                       Tangguhkan
                     </Button>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}>
+                      Ditandai Sensitif
+                    </Button>
                   </Stack>
 
                   <Stack direction={'column'} spacing={2} mt={5}>
@@ -259,7 +286,7 @@ const DetailKeluhanPengguna = () => {
                       Ingin dihapus?{' '}
                       <Link
                         style={{ fontWeight: 'bold', cursor: 'pointer', textDecorationLine: 'none' }}
-                        onClick={() => showModalHandler({ modalType: 'delete' })}>
+                        onClick={() => showModalHandler({ type: 'delete', modalType: 'delete' })}>
                         klik disini
                       </Link>
                     </Typography>
@@ -560,7 +587,7 @@ const DetailKeluhanPengguna = () => {
                       </Typography>
                     </Stack>
                     <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-                      <Typography variant="body2">{numberWithCommas(detail?.data[0]?.saleAmount)}</Typography>
+                      <Typography variant="body2">{numberWithCommas(detail?.data[0]?.saleAmount || 0)}</Typography>
                     </Stack>
                   </Stack>
                   <Stack direction={'row'}>
