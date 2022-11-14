@@ -48,6 +48,22 @@ export const kontenApi = createApi({
       }),
       invalidatesTags: ['Konten'],
     }),
+    updateFlagingTicket: build.mutation({
+      query: (data) => ({
+        url: '/reportuser/flaging',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Konten'],
+    }),
+    deleteTicket: build.mutation({
+      query: (data) => ({
+        url: '/reportuser/delete',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Konten'],
+    }),
   }),
 });
 
@@ -57,4 +73,6 @@ export const {
   useGetReportUserDetailTicketQuery,
   useGetReportReasonQuery,
   useUpdateDetailTicketMutation,
+  useUpdateFlagingTicketMutation,
+  useDeleteTicketMutation,
 } = kontenApi;
