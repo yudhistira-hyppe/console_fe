@@ -256,7 +256,16 @@ const DetailKeluhanPengguna = () => {
                     </Stack>
 
                     <Stack flex={3}>
-                      <GraphIndicator data={detail?.dataSum} />
+                      {detail?.dataSum?.length >= 1 ? (
+                        <GraphIndicator data={detail?.dataSum} />
+                      ) : (
+                        <Stack direction="column" alignItems="center" justifyContent="center" height={200}>
+                          <Typography
+                            style={{ padding: '24px 24px 0', fontFamily: 'Lato', fontWeight: 'bold', color: '#737373' }}>
+                            Tidak ada laporan
+                          </Typography>
+                        </Stack>
+                      )}
                       {/* <PortfolioDetails data={wallets} /> */}
                     </Stack>
                   </Stack>
