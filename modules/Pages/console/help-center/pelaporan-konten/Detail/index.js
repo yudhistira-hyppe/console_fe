@@ -144,7 +144,7 @@ const DetailKeluhanPengguna = () => {
         router.push('/help-center/pelaporan-konten');
       });
     } else {
-      deleteTicket({ postID: router.query?._id, type: 'content', reason: val }).then(() => {
+      deleteTicket({ postID: router.query?._id, type: 'content', remark: val }).then(() => {
         onCloseModal();
         router.push('/help-center/pelaporan-konten');
       });
