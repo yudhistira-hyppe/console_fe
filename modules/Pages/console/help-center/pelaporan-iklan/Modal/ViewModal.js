@@ -5,27 +5,39 @@ import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@mui/material/Grid';
+import moment from 'moment';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import { useAuth } from 'authentication';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '45vw',
+  width: 900,
   bgcolor: 'background.paper',
   boxShadow: 24,
   borderRadius: '4px',
   paddingBottom: '2em',
 };
 
-export default function ViewModal({ showModal, onClose, data }) {
+export default function ViewModal({ showModal, onClose, userReports }) {
+  const { authUser } = useAuth();
+
+  const getMediaUri = (mediaUri) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+
+    return `${STREAM_URL}/profilepict/${mediaUri}${authToken}`;
+  };
+
   return (
     <div>
       <Modal
         open={showModal}
         onClose={onClose}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+        disableAutoFocus>
         <Card style={style}>
           <Stack direction={'row'} justifyContent={'space-between'} padding={3}>
             <div>
@@ -33,13 +45,11 @@ export default function ViewModal({ showModal, onClose, data }) {
                 Yang Melaporkan
               </Typography>
             </div>
-            <Stack direction={'row'} spacing={2}>
+            <Stack direction={'row'} alignItems="center" spacing={2}>
               <Typography fontSize={'large'} fontWeight={'bold'}>
-                Total Laporan: 20
+                Total Laporan: {userReports?.totalReport}
               </Typography>
-              <a onClick={onClose} style={{ cursor: 'pointer' }}>
-                <CloseIcon htmlColor="#666666" fontSize="small" />
-              </a>
+              <CloseIcon htmlColor="#666666" fontSize="small" onClick={onClose} style={{ cursor: 'pointer' }} />
               {/* <ToggleButton>x</ToggleButton> */}
             </Stack>
           </Stack>
@@ -53,20 +63,19 @@ export default function ViewModal({ showModal, onClose, data }) {
               borderBottom={'solid rgba(33, 33, 33, 0.08) 1px'}
               px={3}
               py={1}>
-              <Grid item xs={4}>
+              <Grid item xs={5}>
                 <Typography fontWeight={'bold'}>Pengguna</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography fontWeight={'bold'}>Tanggal Pelaporan</Typography>
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 <Typography fontWeight={'bold'}>Alasan Pelaporan</Typography>
               </Grid>
             </Grid>
 
-            {data?.length > 0 &&
-              data.map((el, i) => (
-                // eslint-disable-next-line react/jsx-key
+            {userReports?.data?.length > 0 &&
+              userReports?.data.map((item, i) => (
                 <Grid
                   container
                   display={'flex'}
@@ -76,26 +85,25 @@ export default function ViewModal({ showModal, onClose, data }) {
                   borderBottom={'solid rgba(33, 33, 33, 0.08) 1px'}
                   px={3}
                   py={1}
-                  mt={0.2}>
-                  <Grid item xs={4}>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <Avatar />
-                      </Stack>
+                  mt={0.2}
+                  key={i}>
+                  <Grid item xs={5}>
+                    <Stack direction={'row'} alignItems="center" spacing={2}>
+                      <Avatar src={getMediaUri(item?.avatar?.mediaUri)} />
                       <Stack>
-                        <Typography>{el.name}</Typography>
-                        <Typography variant="body2">{el.email}</Typography>
+                        <Typography style={{ fontSize: 14 }}>{item?.fullName || '-'}</Typography>
+                        <Typography style={{ fontSize: 12, color: '#00000099' }}>{item?.email || '-'}</Typography>
                       </Stack>
                     </Stack>
                   </Grid>
                   <Grid item xs={3}>
                     <Stack direction={'column'} justifyContent={'center'} height={'100%'}>
-                      <Typography>{el.tanggal_pelaporan}</Typography>
+                      <Typography>{moment(item?.createdAt)?.format('DD/MM/YY-HH:mm')} WIB</Typography>
                     </Stack>
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={4}>
                     <Stack direction={'column'} justifyContent={'center'} height={'100%'}>
-                      <Typography>{el.alasan}</Typography>
+                      <Typography>{item?.description || '-'}</Typography>
                     </Stack>
                   </Grid>
                 </Grid>
