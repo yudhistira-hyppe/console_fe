@@ -18,9 +18,11 @@ import DeleteModal from '../Modal/DeleteModal';
 import ViewModal from '../Modal/ViewModal';
 import { GraphIndicator } from '../../components';
 import {
+  useDeleteTicketMutation,
   useGetDetailTicketQuery,
   useGetReportUserDetailTicketQuery,
   useUpdateDetailTicketMutation,
+  useUpdateFlagingTicketMutation,
 } from 'api/console/helpCenter/konten';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import GridContainer from '@jumbo/components/GridContainer';
@@ -102,6 +104,8 @@ const DetailKeluhanPengguna = () => {
     modalType: null,
   });
   const [updateTicket] = useUpdateDetailTicketMutation();
+  const [flagTicket] = useUpdateFlagingTicketMutation();
+  const [deleteTicket] = useDeleteTicketMutation();
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,
@@ -134,8 +138,16 @@ const DetailKeluhanPengguna = () => {
         onCloseModal();
         router.push('/help-center/pelaporan-konten');
       });
+    } else if (showModal?.type === 'sensitif') {
+      flagTicket({ postID: router.query?._id, type: 'content' }).then(() => {
+        onCloseModal();
+        router.push('/help-center/pelaporan-konten');
+      });
     } else {
-      alert('tandai sensitif');
+      deleteTicket({ postID: router.query?._id, type: 'content', reason: val }).then(() => {
+        onCloseModal();
+        router.push('/help-center/pelaporan-konten');
+      });
     }
   };
 
