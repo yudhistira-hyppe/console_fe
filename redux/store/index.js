@@ -26,6 +26,7 @@ import {
   voucherApi,
   adAPI,
   transactionAPI,
+  kontenApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -57,6 +58,7 @@ const initStore = () => {
         voucherApi.middleware,
         adAPI.middleware,
         transactionAPI.middleware,
+        kontenApi.middleware,
       ]),
   });
   return store;
