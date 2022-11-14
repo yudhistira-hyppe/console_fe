@@ -102,7 +102,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, page, listTickets,
                     router.push({
                       pathname: '/help-center/pelaporan-iklan/detail',
                       query: {
-                        _id: item?.id,
+                        _id: item?._id,
                       },
                     })
                   }
