@@ -40,7 +40,6 @@ const ConsolePelaporanKontenCompoent = () => {
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
       type: filter.type,
-      isBanding: router?.query?.isBanding ? true : undefined,
     });
     filter.search !== '' && Object.assign(params, { search: filter.search });
     filter.from && Object.assign(params, { from: filter.from });
