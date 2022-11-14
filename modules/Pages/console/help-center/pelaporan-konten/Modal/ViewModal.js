@@ -74,7 +74,7 @@ export default function ViewModal({ showModal, onClose, userReports }) {
               </Grid>
             </Grid>
 
-            {userReports?.data?.length > 0 &&
+            {userReports?.data?.length > 0 ? (
               userReports?.data.map((item, i) => (
                 <Grid
                   container
@@ -107,7 +107,14 @@ export default function ViewModal({ showModal, onClose, userReports }) {
                     </Stack>
                   </Grid>
                 </Grid>
-              ))}
+              ))
+            ) : (
+              <Stack direction="column" alignItems="center" justifyContent="center" height={200}>
+                <Typography style={{ padding: '24px 24px 0', fontFamily: 'Lato', fontWeight: 'bold', color: '#737373' }}>
+                  Tidak ada user yang melapor
+                </Typography>
+              </Stack>
+            )}
           </div>
         </Card>
       </Modal>
