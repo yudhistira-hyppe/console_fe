@@ -46,7 +46,7 @@ export const kontenApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Konten'],
+      invalidatesTags: ['Konten', 'Detail'],
     }),
     updateFlagingTicket: build.mutation({
       query: (data) => ({
@@ -54,7 +54,7 @@ export const kontenApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Konten'],
+      invalidatesTags: ['Konten', 'Detail'],
     }),
     deleteTicket: build.mutation({
       query: (data) => ({
@@ -62,7 +62,7 @@ export const kontenApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Konten'],
+      invalidatesTags: ['Konten', 'Detail'],
     }),
   }),
 });

@@ -46,7 +46,7 @@ export const iklanApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Iklan'],
+      invalidatesTags: ['Iklan', 'Detail'],
     }),
     updateFlagingTicket: build.mutation({
       query: (data) => ({
@@ -54,7 +54,7 @@ export const iklanApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Iklan'],
+      invalidatesTags: ['Iklan', 'Detail'],
     }),
     deleteTicket: build.mutation({
       query: (data) => ({
@@ -62,7 +62,7 @@ export const iklanApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Iklan'],
+      invalidatesTags: ['Iklan', 'Detail'],
     }),
   }),
 });
