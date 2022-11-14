@@ -1,16 +1,16 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Card, Divider, FormControl, FormControlLabel, Radio, RadioGroup, TextareaAutosize } from '@material-ui/core';
+import { Button, Divider } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Stack } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '25vw',
+  width: 454,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
@@ -28,11 +28,9 @@ export default function DeleteModal({ showModal, onClose, onConfirm, type }) {
         <Box sx={style}>
           <div>
             <Stack spacing={1}>
-              <Typography fontWeight={'bold'}>Kamu Yakin Akan Menghapus Kontent Ini?</Typography>
+              <Typography fontWeight={'bold'}>Kamu Yakin Akan Menghapus Konten Ini?</Typography>
               <Divider />
-              <Card style={{ marginTop: '1em' }}>
-                <TextareaAutosize minRows={10} style={{ width: '100%', border: 'none', padding: '1em' }} />
-              </Card>
+              <TextField multiline minRows={5} placeholder="Tulis penjelasan" />
             </Stack>
           </div>
 
