@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQueryWithHandleReauth } from 'api';
 
 export const kontenApi = createApi({
-  reducerPath: 'help-center/konten',
+  reducerPath: 'helpCenter/konten',
   baseQuery: customBaseQueryWithHandleReauth,
   tagTypes: ['Konten', 'Detail', 'Util'],
   endpoints: (build) => ({
@@ -30,7 +30,31 @@ export const kontenApi = createApi({
       }),
       providesTags: ['Util'],
     }),
+    getReportReason: build.query({
+      query: () => ({
+        url: '/reportreasons/all',
+        method: 'POST',
+        body: {
+          lang: 'id',
+        },
+      }),
+      providesTags: ['Util'],
+    }),
+    updateDetailTicket: build.mutation({
+      query: (data) => ({
+        url: '/reportuser/approval',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Konten'],
+    }),
   }),
 });
 
-export const { useGetListTicketsQuery, useGetDetailTicketQuery, useGetReportUserDetailTicketQuery } = kontenApi;
+export const {
+  useGetListTicketsQuery,
+  useGetDetailTicketQuery,
+  useGetReportUserDetailTicketQuery,
+  useGetReportReasonQuery,
+  useUpdateDetailTicketMutation,
+} = kontenApi;
