@@ -152,6 +152,16 @@ const TableSection = ({ handleOrder, handlePageChange, order, page, listTickets,
                         label="Dihapus"
                         style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767', fontWeight: 700 }}
                       />
+                    ) : item?.reportStatusLast === 'FLAGING' ? (
+                      <Chip
+                        label="Ditandai Sensitif"
+                        style={{
+                          backgroundColor: '#B457F61A',
+                          color: '#B457F6D9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
+                      />
                     ) : (
                       <Chip
                         label="Tidak Ditangguhkan"
