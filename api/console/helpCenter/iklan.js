@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const iklanApi = createApi({
   reducerPath: 'help-center/iklan',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['Iklan'],
+  tagTypes: ['Iklan', 'Detail', 'Util'],
   endpoints: (build) => ({
     getListTickets: build.query({
       query: (data) => ({
@@ -14,7 +14,47 @@ export const iklanApi = createApi({
       }),
       providesTags: ['Iklan'],
     }),
+    getDetailTicket: build.query({
+      query: (data) => ({
+        url: '/reportuser/listdetail',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['Detail'],
+    }),
+    getReportUserDetailTicket: build.query({
+      query: (data) => ({
+        url: '/reportuser/listuserreport',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['Util'],
+    }),
+    getReportReason: build.query({
+      query: () => ({
+        url: '/reportreasons/all',
+        method: 'POST',
+        body: {
+          lang: 'id',
+        },
+      }),
+      providesTags: ['Util'],
+    }),
+    updateDetailTicket: build.mutation({
+      query: (data) => ({
+        url: '/reportuser/approval',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Iklan'],
+    }),
   }),
 });
 
-export const { useGetListTicketsQuery } = iklanApi;
+export const {
+  useGetListTicketsQuery,
+  useGetDetailTicketQuery,
+  useGetReportUserDetailTicketQuery,
+  useGetReportReasonQuery,
+  useUpdateDetailTicketMutation,
+} = iklanApi;
