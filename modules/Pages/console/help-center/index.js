@@ -10,16 +10,16 @@ import ContentReport from './ContentReport';
 import AdsReport from './adsReport';
 
 const sample3Data = [
-  { label: 'Baru', value: 3, rate: 4, color: '#E31D41' },
-  { label: 'Ditolak', value: 10, rate: 7, color: '#FF8800' },
-  { label: 'Disetujui', value: 86, rate: 61, color: '#8DCD03' },
+  { reason: 'Baru', persen: 3, count: 4, color: '#E31D41' },
+  { reason: 'Ditolak', persen: 10, count: 7, color: '#FF8800' },
+  { reason: 'Disetujui', persen: 86, count: 61, color: '#8DCD03' },
 ];
 
 const sample4Data = [
-  { label: 'Baru', value: 3, rate: 4, color: '#E31D41' },
-  { label: 'Dalam Proses', value: 10, rate: 7, color: '#FF8800' },
-  { label: 'Selesai', value: 86, rate: 61, color: '#8DCD03' },
-  { label: 'Tidak Selesai', value: 1, rate: 2, color: '#7C7C7C' },
+  { reason: 'Baru', persen: 3, count: 4, color: '#E31D41' },
+  { reason: 'Dalam Proses', persen: 10, count: 7, color: '#FF8800' },
+  { reason: 'Selesai', persen: 86, count: 61, color: '#8DCD03' },
+  { reason: 'Tidak Selesai', persen: 1, count: 2, color: '#7C7C7C' },
 ];
 
 const ConsoleHelpCenterComponent = () => {
