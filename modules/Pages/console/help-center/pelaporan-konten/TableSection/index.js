@@ -178,7 +178,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                     {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
                       <Chip
                         label="Dipulihkan"
-                        style={{ backgroundColor: '#FF8C0026', color: '#FF8C00', fontWeight: 'bold', fontFamily: 'Normal' }}
+                        style={{ backgroundColor: '#71A5001A', color: '#71A500D9', fontWeight: 'bold', fontFamily: 'Normal' }}
                       />
                     )}
                     {item?.reportStatusLast === 'DITANGGUHKAN' && (
@@ -192,12 +192,23 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
+                    {item?.reportStatusLast === 'FLAGING' && (
+                      <Chip
+                        label="Ditandai Sensitif"
+                        style={{
+                          backgroundColor: '#B457F61A',
+                          color: '#B457F6D9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
+                      />
+                    )}
                     {!item?.reportStatusLast && '-'}
                   </TableCell>
                   <TableCell align="left">
                     {item?.reportedStatus === 'ALL' && 'Tersedia'}
                     {item?.reportedStatus === 'OWNED' && 'Ditarik'}
-                    {item?.reportedStatus === 'BLUR' && 'Ditandai Sensitif'}
+                    {item?.reportedStatus === 'BLURRED' && 'Ditandai Sensitif'}
                     {!item?.reportedStatus && '-'}
                   </TableCell>
                 </TableRow>
