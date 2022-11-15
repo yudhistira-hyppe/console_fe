@@ -171,7 +171,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel
-                label={'Konten Sensitif'}
+                label={'Ditandai Sensitif'}
                 value="FLAGING"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
