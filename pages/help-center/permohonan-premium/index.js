@@ -7,10 +7,10 @@ const PermohonanPremium = dynamic(() => import('modules/Pages/console/help-cente
   loading: () => <PageLoader />,
 });
 
-const ConsoleBantuanPenggunaPage = () => (
+const PermohonanPremiumPage = () => (
   <SecureConsolePage>
     <PermohonanPremium />
   </SecureConsolePage>
 );
 
-export default ConsoleBantuanPenggunaPage;
+export default PermohonanPremiumPage;
