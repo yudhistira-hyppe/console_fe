@@ -143,8 +143,8 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         variant="body1"
                         style={{ fontSize: '12px', maxWidth: 180 }}
                         className={classes.textTruncate}
-                        title={item?.title}>
-                        {item?.title}
+                        title={item?.description}>
+                        {item?.description}
                       </Typography>
                     </Stack>
                   </TableCell>
@@ -178,7 +178,12 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                     {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
                       <Chip
                         label="Dipulihkan"
-                        style={{ backgroundColor: '#71A5001A', color: '#71A500D9', fontWeight: 'bold', fontFamily: 'Normal' }}
+                        style={{
+                          backgroundColor: '#71A5001A',
+                          color: '#71A500D9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
                       />
                     )}
                     {item?.reportStatusLast === 'DITANGGUHKAN' && (
