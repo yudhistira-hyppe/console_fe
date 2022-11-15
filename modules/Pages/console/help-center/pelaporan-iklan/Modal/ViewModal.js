@@ -24,10 +24,10 @@ const style = {
 export default function ViewModal({ showModal, onClose, userReports }) {
   const { authUser } = useAuth();
 
-  const getMediaUri = (mediaUri) => {
+  const getMediaEndpoint = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
-    return `${STREAM_URL}/profilepict/${mediaUri}${authToken}`;
+    return `${STREAM_URL}/profilepict/${mediaEndpoint}${authToken}`;
   };
 
   return (
@@ -89,7 +89,7 @@ export default function ViewModal({ showModal, onClose, userReports }) {
                   key={i}>
                   <Grid item xs={5}>
                     <Stack direction={'row'} alignItems="center" spacing={2}>
-                      <Avatar src={getMediaUri(item?.avatar?.mediaUri)} />
+                      <Avatar src={getMediaEndpoint(item?.avatar?.mediaEndpoint)} />
                       <Stack>
                         <Typography style={{ fontSize: 14 }}>{item?.fullName || '-'}</Typography>
                         <Typography style={{ fontSize: 12, color: '#00000099' }}>{item?.email || '-'}</Typography>
