@@ -193,6 +193,7 @@ const DetailKeluhanPengguna = () => {
           fontWeight: 'bold',
           fontFamily: 'Normal',
           width: 'fit-content',
+          marginTop: 'auto',
         };
       case 'TIDAK DITANGGUHKAN':
         return {
@@ -201,6 +202,7 @@ const DetailKeluhanPengguna = () => {
           fontWeight: 'bold',
           fontFamily: 'Normal',
           width: 'fit-content',
+          marginTop: 'auto',
         };
       case 'DITANGGUHKAN':
         return {
@@ -209,6 +211,7 @@ const DetailKeluhanPengguna = () => {
           fontWeight: 'bold',
           fontFamily: 'Normal',
           width: 'fit-content',
+          marginTop: 'auto',
         };
       case 'FLAGING':
         return {
@@ -217,6 +220,7 @@ const DetailKeluhanPengguna = () => {
           fontWeight: 'bold',
           fontFamily: 'Normal',
           width: 'fit-content',
+          marginTop: 'auto',
         };
       default:
         return {};
