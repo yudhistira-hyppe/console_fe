@@ -12,6 +12,7 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { debounce } from 'lodash';
+import { useGetReportReasonQuery } from 'api/console/helpCenter/iklan';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -22,6 +23,8 @@ const SearchSection = ({ filter, handleChange }) => {
   }
 
   const handleChangeDelay = debounce((e) => handleChange(e.target.name, e.target.value), 500);
+
+  const { data: reason, isFetching: loadingReason } = useGetReportReasonQuery();
 
   return (
     <>
@@ -132,15 +135,15 @@ const SearchSection = ({ filter, handleChange }) => {
             <Stack direction="row" spacing={1} mt={1}>
               <TextField
                 size="small"
-                value={filter.from}
+                value={filter.startreport}
                 placeholder="From"
-                onChange={(e) => handleChange('from', e.target.value)}
+                onChange={(e) => handleChange('startreport', e.target.value)}
               />
               <TextField
                 size="small"
-                value={filter.to}
+                value={filter.endreport}
                 placeholder="To"
-                onChange={(e) => handleChange('to', e.target.value)}
+                onChange={(e) => handleChange('endreport', e.target.value)}
               />
             </Stack>
           </AccordionDetails>
@@ -154,22 +157,22 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup value={filter.status} onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
                 label={'Baru'}
-                value="baru"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Ditangguhkan'}
-                value="ditangguhkan"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Tidak Ditangguhkan'}
-                value="tidak ditangguhkan"
+                value="BARU"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel
                 label={'Dihapus'}
-                value="dihapus"
+                value="DITANGGUHKAN"
+                control={<Checkbox defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'Tidak Ditangguhkan'}
+                value="TIDAK DITANGGUHKAN"
+                control={<Checkbox defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'Ditandai Sensitif'}
+                value="FLAGING"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
             </FormGroup>
@@ -181,28 +184,23 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Alasan Pelaporan</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup value={filter.reason} onChange={(e) => handleChange('reason', e.target.value)}>
-              <FormControlLabel
-                value="1"
-                label={'Bendera dan simbol kelompok ekstremis'}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-              <FormControlLabel
-                value="2"
-                label={'Senjata dan benda tajam'}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-              <FormControlLabel
-                value="3"
-                label={'Konten tidak pantas'}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-              <FormControlLabel
-                value="4"
-                label={'Aksi tidak pantas'}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-            </FormGroup>
+            {loadingReason ? (
+              <Typography>loading data...</Typography>
+            ) : (
+              <FormGroup onChange={(e) => handleChange('reason', e.target.value)}>
+                {reason?.data?.map(
+                  (item, key) =>
+                    key + 1 < reason?.data?.length && (
+                      <FormControlLabel
+                        key={key}
+                        value={item?._id}
+                        label={<Typography style={{ fontSize: 12 }}>{item?.description}</Typography>}
+                        control={<Checkbox defaultChecked={false} color="secondary" />}
+                      />
+                    ),
+                )}
+              </FormGroup>
+            )}
           </AccordionDetails>
         </Accordion>
       </Box>

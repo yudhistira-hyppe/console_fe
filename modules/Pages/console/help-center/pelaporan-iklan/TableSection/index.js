@@ -140,19 +140,40 @@ const TableSection = ({ handleOrder, handlePageChange, order, page, listTickets,
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
-                    {item?.reportStatusLast === 'BARU' ? (
-                      <Chip label="Baru" style={{ backgroundColor: '#E6094B1A', color: '#E6094BD9', fontWeight: 700 }} />
-                    ) : item?.reportStatusLast === 'DITANGGUHKAN' ? (
+                    {item?.reportStatusLast === 'BARU' && (
                       <Chip
-                        label="Ditangguhkan"
-                        style={{ backgroundColor: '#FF8C0026', color: '#FF8C00', fontWeight: 700 }}
+                        label="Baru"
+                        style={{
+                          backgroundColor: '#E6094B1A',
+                          color: '#E6094BD9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
                       />
-                    ) : item?.reportStatusLast === 'DIHAPUS' ? (
+                    )}
+                    {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
+                      <Chip
+                        label="Tidak Ditangguhkan"
+                        style={{
+                          backgroundColor: '#71A5001A',
+                          color: '#71A500D9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
+                      />
+                    )}
+                    {item?.reportStatusLast === 'DITANGGUHKAN' && (
                       <Chip
                         label="Dihapus"
-                        style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767', fontWeight: 700 }}
+                        style={{
+                          backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                          color: '#676767',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
                       />
-                    ) : item?.reportStatusLast === 'FLAGING' ? (
+                    )}
+                    {item?.reportStatusLast === 'FLAGING' && (
                       <Chip
                         label="Ditandai Sensitif"
                         style={{
@@ -161,11 +182,6 @@ const TableSection = ({ handleOrder, handlePageChange, order, page, listTickets,
                           fontWeight: 'bold',
                           fontFamily: 'Normal',
                         }}
-                      />
-                    ) : (
-                      <Chip
-                        label="Tidak Ditangguhkan"
-                        style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9', fontWeight: 700 }}
                       />
                     )}
                   </TableCell>
