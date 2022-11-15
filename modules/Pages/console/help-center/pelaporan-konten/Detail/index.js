@@ -30,6 +30,7 @@ import { DateRange, HowToReg } from '@material-ui/icons';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
+import moment from 'moment';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -287,7 +288,7 @@ const DetailKeluhanPengguna = () => {
                   <Stack direction={'row'}>
                     <Stack direction={'column'} justifyContent={'space-between'} flex={1}>
                       <Stack spacing={1}>
-                        <Typography variant="h2">{detail?.totalReport}</Typography>
+                        <Typography variant="h2">{detail?.totalReport || 0}</Typography>
                         <Typography
                           variant="body2"
                           color="primary"
@@ -479,7 +480,9 @@ const DetailKeluhanPengguna = () => {
                       <Typography variant="subtitle2" style={{ color: '#00000099' }}>
                         Waktu Pendaftaran
                       </Typography>
-                      <Typography>{detail?.data[0]?.proofpict[0]?.createdAt}</Typography>
+                      <Typography>
+                        {moment(detail?.data[0]?.proofpict[0]?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
+                      </Typography>
                     </Stack>
                   </Stack>
 

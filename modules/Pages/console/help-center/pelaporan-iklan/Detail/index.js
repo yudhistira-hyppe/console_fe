@@ -288,7 +288,7 @@ const DetailKeluhanPengguna = () => {
                   <Stack direction={'row'}>
                     <Stack direction={'column'} justifyContent={'space-between'} flex={1}>
                       <Stack spacing={1}>
-                        <Typography variant="h2">{detail?.totalReport}</Typography>
+                        <Typography variant="h2">{detail?.totalReport || 0}</Typography>
                         <Typography
                           variant="body2"
                           color="primary"
