@@ -26,8 +26,8 @@ const ConsolePelaporanKontenCompoent = () => {
     // enddate: '',
     search: '',
     range: '',
-    from: null,
-    to: null,
+    startreport: null,
+    endreport: null,
     status: [],
     reason: [],
   });
@@ -41,9 +41,9 @@ const ConsolePelaporanKontenCompoent = () => {
       descending: filter.descending === 'true' ? true : false,
       type: filter.type,
     });
-    filter.search !== '' && Object.assign(params, { search: filter.search });
-    filter.from && Object.assign(params, { from: filter.from });
-    filter.to && Object.assign(params, { to: filter.to });
+    filter.search !== '' && Object.assign(params, { key: filter.search });
+    filter.startreport && Object.assign(params, { startreport: filter.startreport });
+    filter.endreport && Object.assign(params, { endreport: filter.endreport });
     // filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
     // filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
     filter.status.length >= 1 && Object.assign(params, { status: filter.status });
@@ -92,38 +92,37 @@ const ConsolePelaporanKontenCompoent = () => {
             return {
               ...prevVal,
               range: value,
-              from: 1,
-              to: 50,
+              startreport: 1,
+              endreport: 50,
             };
           case '51-100':
             return {
               ...prevVal,
               range: value,
-              from: 51,
-              to: 100,
+              startreport: 51,
+              endreport: 100,
             };
           case '101-150':
             return {
               ...prevVal,
               range: value,
-              from: 101,
-              to: 150,
+              startreport: 101,
+              endreport: 150,
             };
           case '151-200':
             return {
               ...prevVal,
               range: value,
-              from: 151,
-              to: 200,
+              startreport: 151,
+              endreport: 200,
             };
           default:
             return { ...prevVal };
         }
-      } else if (kind === 'from') {
-        return { ...prevVal, from: Number(value), range: '' };
-      } else if (kind === 'to') {
-        console.log('to berubah', value);
-        return { ...prevVal, to: Number(value), range: '' };
+      } else if (kind === 'startreport') {
+        return { ...prevVal, startreport: Number(value), range: '' };
+      } else if (kind === 'endreport') {
+        return { ...prevVal, endreport: Number(value), range: '' };
       } else if (kind === 'status') {
         return {
           ...prevVal,
