@@ -104,7 +104,9 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                 Alasan
               </TableCell>
               <TableCell align="left">Status</TableCell>
-              <TableCell align="left">Status Konten</TableCell>
+              <TableCell align="left" style={{ minWidth: 150 }}>
+                Status Konten
+              </TableCell>
             </TableRow>
           </TableHead>
 
@@ -188,7 +190,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                     )}
                     {item?.reportStatusLast === 'DITANGGUHKAN' && (
                       <Chip
-                        label="Dihapus"
+                        label="Ditangguhkan"
                         style={{
                           backgroundColor: 'rgba(103, 103, 103, 0.1)',
                           color: '#676767',
@@ -210,7 +212,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                     )}
                     {!item?.reportStatusLast && '-'}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ minWidth: 150 }}>
                     {item?.reportedStatus === 'ALL' && 'Tersedia'}
                     {item?.reportedStatus === 'OWNED' && 'Ditarik'}
                     {item?.reportedStatus === 'BLURRED' && 'Ditandai Sensitif'}

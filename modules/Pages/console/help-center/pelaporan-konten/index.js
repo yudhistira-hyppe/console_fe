@@ -18,7 +18,6 @@ const breadcrumbs = [
 
 const ConsolePelaporanKontenCompoent = () => {
   const [filter, setFilter] = useState({
-    type: 'content',
     page: 0,
     limit: 10,
     descending: 'true',
@@ -39,7 +38,8 @@ const ConsolePelaporanKontenCompoent = () => {
       page: filter.page,
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
-      type: filter.type,
+      type: 'content',
+      jenis: 'report',
     });
     filter.search !== '' && Object.assign(params, { key: filter.search });
     filter.startreport && Object.assign(params, { startreport: filter.startreport });
@@ -81,11 +81,12 @@ const ConsolePelaporanKontenCompoent = () => {
           ...prevVal,
           startdate: dateFrom,
           enddate: dateNow,
+          page: 0,
         };
       } else if (kind === 'ticket_range') {
-        return { ...prevVal, startdate: value[0], enddate: value[1] };
+        return { ...prevVal, startdate: value[0], enddate: value[1], page: 0 };
       } else if (kind === 'search') {
-        return { ...prevVal, search: value };
+        return { ...prevVal, search: value, page: 0 };
       } else if (kind === 'range') {
         switch (value) {
           case '1-50':
@@ -94,6 +95,7 @@ const ConsolePelaporanKontenCompoent = () => {
               range: value,
               startreport: 1,
               endreport: 50,
+              page: 0,
             };
           case '51-100':
             return {
@@ -101,6 +103,7 @@ const ConsolePelaporanKontenCompoent = () => {
               range: value,
               startreport: 51,
               endreport: 100,
+              page: 0,
             };
           case '101-150':
             return {
@@ -108,6 +111,7 @@ const ConsolePelaporanKontenCompoent = () => {
               range: value,
               startreport: 101,
               endreport: 150,
+              page: 0,
             };
           case '151-200':
             return {
@@ -115,20 +119,22 @@ const ConsolePelaporanKontenCompoent = () => {
               range: value,
               startreport: 151,
               endreport: 200,
+              page: 0,
             };
           default:
             return { ...prevVal };
         }
       } else if (kind === 'startreport') {
-        return { ...prevVal, startreport: Number(value), range: '' };
+        return { ...prevVal, startreport: Number(value), range: '', page: 0 };
       } else if (kind === 'endreport') {
-        return { ...prevVal, endreport: Number(value), range: '' };
+        return { ...prevVal, endreport: Number(value), range: '', page: 0 };
       } else if (kind === 'status') {
         return {
           ...prevVal,
           status: filter.status.find((item) => item === value)
             ? filter.status.filter((item) => item !== value)
             : [...filter.status, value],
+          page: 0,
         };
       } else if (kind === 'reason') {
         return {
@@ -136,6 +142,7 @@ const ConsolePelaporanKontenCompoent = () => {
           reason: filter.reason.find((item) => item === value)
             ? filter.reason.filter((item) => item !== value)
             : [...filter.reason, value],
+          page: 0,
         };
       } else {
         return { ...prevVal };
