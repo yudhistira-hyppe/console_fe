@@ -13,7 +13,6 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { debounce } from 'lodash';
-import { useGetReportReasonQuery } from 'api/console/helpCenter/konten';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -23,8 +22,6 @@ const SearchSection = ({ filter, handleChange }) => {
     return date && amount ? date.add(amount, 'week') : undefined;
   }
   const handleChangeDelay = debounce((e) => handleChange(e.target.name, e.target.value), 500);
-
-  const { data: reason, isFetching: loadingReason } = useGetReportReasonQuery();
 
   return (
     <>
@@ -126,11 +123,6 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Dipulihkan'}
                 value="TIDAK DITANGGUHKAN"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Dalam Proses'}
-                value="PROSES"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel

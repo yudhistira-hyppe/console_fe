@@ -95,12 +95,14 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
           <TableHead>
             <TableRow>
               <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 2180 }}>
+              <TableCell align="left" style={{ maxWidth: 180 }}>
                 Pemohon Akun
               </TableCell>
-              <TableCell align="left">Status</TableCell>
+              <TableCell align="left" style={{ maxWidth: 120 }}>
+                Status
+              </TableCell>
               <TableCell align="left">Status Konten</TableCell>
-              <TableCell align="left" style={{ maxWidth: 150 }}>
+              <TableCell align="left" style={{ maxWidth: 120 }}>
                 Alasan Banding
               </TableCell>
             </TableRow>
@@ -142,18 +144,18 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          asdada
+                          {item?.username || '-'}
                         </Typography>
                         <Typography
                           variant="body1"
                           style={{ fontSize: '12px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          asdada
+                          {item?.email || '-'}
                         </Typography>
                       </Stack>
                     </Stack>
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ maxWidth: 120 }}>
                     {item?.reportStatusLast === 'BARU' && (
                       <Chip
                         label="Baru"
@@ -165,9 +167,9 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {item?.reportStatusLast === 'APPROVE' && (
+                    {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
                       <Chip
-                        label="Disetujui"
+                        label="Dipulihkan"
                         style={{
                           backgroundColor: '#71A5001A',
                           color: '#71A500D9',
@@ -176,20 +178,20 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {item?.reportStatusLast === 'DONE' && (
+                    {item?.reportStatusLast === 'FLAGING' && (
                       <Chip
-                        label="Selesai"
+                        label="Ditandai Sensitif"
                         style={{
-                          backgroundColor: '#71A5001A',
-                          color: '#71A500D9',
+                          backgroundColor: '#B457F61A',
+                          color: '#B457F6D9',
                           fontWeight: 'bold',
                           fontFamily: 'Normal',
                         }}
                       />
                     )}
-                    {item?.reportStatusLast === 'CANCELED' && (
+                    {item?.reportStatusLast === 'DITANGGUHKAN' && (
                       <Chip
-                        label="Ditolak"
+                        label="Dihapus"
                         style={{
                           backgroundColor: 'rgba(103, 103, 103, 0.1)',
                           color: '#676767',
@@ -208,7 +210,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                       {!item?.reportedStatus && '-'}
                     </Typography>
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ maxWidth: 120 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       Konten Tidak Berisi Konten Sensitif
                     </Typography>
