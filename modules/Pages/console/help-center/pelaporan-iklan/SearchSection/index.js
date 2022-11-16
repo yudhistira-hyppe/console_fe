@@ -161,7 +161,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel
-                label={'Dihapus'}
+                label={'Ditangguhkan'}
                 value="DITANGGUHKAN"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
@@ -188,17 +188,14 @@ const SearchSection = ({ filter, handleChange }) => {
               <Typography>loading data...</Typography>
             ) : (
               <FormGroup onChange={(e) => handleChange('reason', e.target.value)}>
-                {reason?.data?.map(
-                  (item, key) =>
-                    key + 1 < reason?.data?.length && (
-                      <FormControlLabel
-                        key={key}
-                        value={item?._id}
-                        label={<Typography style={{ fontSize: 12 }}>{item?.description}</Typography>}
-                        control={<Checkbox defaultChecked={false} color="secondary" />}
-                      />
-                    ),
-                )}
+                {reason?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    value={item?._id}
+                    label={<Typography style={{ fontSize: 12 }}>{item?.description}</Typography>}
+                    control={<Checkbox defaultChecked={false} color="secondary" />}
+                  />
+                ))}
               </FormGroup>
             )}
           </AccordionDetails>

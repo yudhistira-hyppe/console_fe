@@ -166,7 +166,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel
-                label={'Dihapus'}
+                label={'Ditangguhkan'}
                 value="DITANGGUHKAN"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
