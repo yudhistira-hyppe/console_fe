@@ -95,14 +95,14 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
           <TableHead>
             <TableRow>
               <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 180 }}>
+              <TableCell align="left" style={{ maxWidth: 200 }}>
                 Pemohon Akun
               </TableCell>
               <TableCell align="left" style={{ maxWidth: 120 }}>
                 Status
               </TableCell>
               <TableCell align="left">Status Konten</TableCell>
-              <TableCell align="left" style={{ maxWidth: 120 }}>
+              <TableCell align="left" style={{ maxWidth: 150 }}>
                 Alasan Banding
               </TableCell>
             </TableRow>
@@ -136,20 +136,22 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                       {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
                     </Typography>
                   </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 180 }}>
+                  <TableCell align="left" style={{ maxWidth: 200 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getImage(item)} />
-                      <Stack direction="column" gap="2px">
+                      <Stack direction="column" gap="2px" style={{ maxWidth: 180 }}>
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}>
+                          className={classes.textTruncate}
+                          title={item?.username}>
                           {item?.username || '-'}
                         </Typography>
                         <Typography
                           variant="body1"
                           style={{ fontSize: '12px', color: '#00000099' }}
-                          className={classes.textTruncate}>
+                          className={classes.textTruncate}
+                          title={item?.email}>
                           {item?.email || '-'}
                         </Typography>
                       </Stack>
@@ -210,9 +212,9 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                       {!item?.reportedStatus && '-'}
                     </Typography>
                   </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 120 }}>
+                  <TableCell align="left" style={{ maxWidth: 150 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Konten Tidak Berisi Konten Sensitif
+                      {item?.reasonLastAppeal || '-'}
                     </Typography>
                   </TableCell>
                 </TableRow>
