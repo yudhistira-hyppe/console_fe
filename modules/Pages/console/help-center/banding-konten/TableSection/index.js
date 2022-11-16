@@ -133,7 +133,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                   }>
                   <TableCell style={{ maxWidth: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
+                      {moment(item?.createdAtAppealLast).utc().format('YY/MM/DD - HH:mm')} WIB
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 200 }}>
@@ -193,7 +193,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                     )}
                     {item?.reportStatusLast === 'DITANGGUHKAN' && (
                       <Chip
-                        label="Dihapus"
+                        label="Ditangguhkan"
                         style={{
                           backgroundColor: 'rgba(103, 103, 103, 0.1)',
                           color: '#676767',
