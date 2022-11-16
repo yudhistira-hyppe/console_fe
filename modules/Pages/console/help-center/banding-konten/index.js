@@ -1,18 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Typography } from '@material-ui/core';
-import router from 'next/router';
+import { useRouter } from 'next/router';
+import SearchSection from './SearchSection';
+import TableSection from './TableSection';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
-  { label: 'Banding Konten', isActive: true },
+  { label: 'Permohonan Banding Konten', isActive: true },
 ];
 
 const BandingKontent = () => {
+  const [filter, setFilter] = useState({
+    type: 'content',
+    page: 0,
+    limit: 10,
+    descending: 'true',
+    // startdate: '',
+    // enddate: '',
+    search: '',
+    range: '',
+    from: null,
+    to: null,
+    status: [],
+    reason: [],
+  });
+  const router = useRouter();
+
+  const onOrderChange = (e, val) => {
+    setFilter((prevVal) => {
+      return {
+        ...prevVal,
+        descending: e.target.value,
+      };
+    });
+  };
+
+  const handlePageChange = (e, value) => {
+    setFilter((prevVal) => {
+      return {
+        ...prevVal,
+        page: value - 1,
+      };
+    });
+  };
+
+  const handleSearchChange = (kind, value) => {};
+
   return (
     <>
       <Head>
@@ -36,7 +74,16 @@ const BandingKontent = () => {
         </Stack>
       </Stack>
       <PageContainer heading="">
-        <Typography>Coming soon</Typography>
+        <Stack direction={'row'} spacing={3}>
+          <SearchSection filter={filter} handleChange={handleSearchChange} />
+          <TableSection
+            order={filter.descending}
+            loading={false}
+            listTickets={{ arrdata: [{}] }}
+            handlePageChange={handlePageChange}
+            handleOrder={onOrderChange}
+          />
+        </Stack>
       </PageContainer>
     </>
   );
