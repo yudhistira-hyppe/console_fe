@@ -414,7 +414,7 @@ const DetailKeluhanPengguna = () => {
                       <span style={{ color: '#00000061' }}>Dibagikan</span>
                     </Typography>
                     <Typography variant="body2" style={{ fontFamily: 'bold', fontFamily: 'Lato', color: '#00000061' }}>
-                      18/07/2022 - 13:00 WIB
+                      {detail?.data[0]?.createdAt} WIB
                     </Typography>
                   </Stack>
                 </CardContent>
@@ -685,22 +685,24 @@ const DetailKeluhanPengguna = () => {
                     {detail?.data[0]?.namapenjual && (
                       <>
                         <Typography variant="caption">
-                          Dijual oleh <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@rizal</span> seharga Rp.
-                          1.500.000 kepada
-                          <span style={{ color: '#AB22AF', fontWeight: 'bold' }}> @amanda2</span>
+                          Dijual oleh{' '}
+                          <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@{detail?.data[0]?.namapenjual}</span>{' '}
+                          seharga Rp.
+                          {numberWithCommas(detail?.data[0]?.saleAmount)} kepada
+                          <span style={{ color: '#AB22AF', fontWeight: 'bold' }}> @{detail?.data[0]?.pemiliksekarang}</span>
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
-                          12/08/22 - 13:10 WIB
+                          {moment(detail?.data[0]?.tgltransaksi).format('DD/MM/YYYY - HH:mm')} WIB
                         </Typography>
-                        <Divider style={{ margin: 'auto 0' }} />
+                        <Divider style={{ margin: '15px 0 5px' }} />
                       </>
                     )}
                     <Typography variant="caption">
                       Kepemilikan didaftarkan oleh{' '}
-                      <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@{detail?.data[0]?.pemiliksekarang}</span>
+                      <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@{detail?.data[0]?.username}</span>
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
-                      {detail?.data[0]?.createdAt} WIB
+                      {moment(detail?.data[0]?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                 </CardContent>
