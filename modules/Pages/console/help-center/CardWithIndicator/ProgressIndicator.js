@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
 import CmtProgressBar from '@coremat/CmtProgressBar';
+import { Typography } from '@mui/material';
 
 const ProgressIndicator = ({ item, ...rest }) => {
   return (
@@ -8,7 +9,10 @@ const ProgressIndicator = ({ item, ...rest }) => {
       <CmtProgressBar
         label={
           <Box display="flex" alignItems="center">
-            {`${item.reason}`} | <Box pl={1} component="span" color="text.secondary" fontSize={12}>{`${item.count}`}</Box>
+            <Typography style={{ width: 200, fontSize: 12 }} title={item.reason} fontFamily="Lato">
+              {item.reason}
+            </Typography>
+            | <Box pl={1} component="span" color="text.secondary" fontSize={12}>{`${item.count}`}</Box>
           </Box>
         }
         labelPos="top-left"
