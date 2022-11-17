@@ -16,7 +16,7 @@ const breadcrumbs = [
   { label: 'Permohonan Banding Konten', isActive: true },
 ];
 
-const BandingKontent = () => {
+const BandingKonten = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -188,4 +188,4 @@ const BandingKontent = () => {
   );
 };
 
-export default BandingKontent;
+export default BandingKonten;

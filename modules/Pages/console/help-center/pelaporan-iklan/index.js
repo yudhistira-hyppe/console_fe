@@ -16,7 +16,7 @@ const breadcrumbs = [
   { label: 'Pelaporan Iklan', isActive: true },
 ];
 
-const ConsolePelaporanIklanComponent = () => {
+const PelaporanIklan = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -182,4 +182,4 @@ const ConsolePelaporanIklanComponent = () => {
   );
 };
 
-export default ConsolePelaporanIklanComponent;
+export default PelaporanIklan;

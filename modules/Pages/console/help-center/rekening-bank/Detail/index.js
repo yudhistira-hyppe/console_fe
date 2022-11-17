@@ -44,7 +44,7 @@ const breadcrumbs = [
   { label: 'Rincian Bank', isActive: true },
 ];
 
-const DetailPermohonanPremium = () => {
+const DetailRekeningBank = () => {
   const [modal, setModal] = useState({
     approve: false,
     reject: false,
@@ -422,4 +422,4 @@ const DetailPermohonanPremium = () => {
   );
 };
 
-export default DetailPermohonanPremium;
+export default DetailRekeningBank;

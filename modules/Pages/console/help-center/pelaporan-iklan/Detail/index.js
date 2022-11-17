@@ -94,7 +94,7 @@ const akunPelapor = [
   },
 ];
 
-const DetailKeluhanPengguna = () => {
+const DetailPelaporanIklan = () => {
   const router = useRouter();
   const [showModal, setShowModal] = React.useState({
     show: false,
@@ -559,4 +559,4 @@ const DetailKeluhanPengguna = () => {
   );
 };
 
-export default DetailKeluhanPengguna;
+export default DetailPelaporanIklan;

@@ -16,7 +16,7 @@ const breadcrumbs = [
   { label: 'Pelaporan Konten', isActive: true },
 ];
 
-const ConsolePelaporanKontenCompoent = () => {
+const PelaporanKonten = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -189,4 +189,4 @@ const ConsolePelaporanKontenCompoent = () => {
   );
 };
 
-export default ConsolePelaporanKontenCompoent;
+export default PelaporanKonten;

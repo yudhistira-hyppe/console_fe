@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const ConsolePelaporanKontenComponent = dynamic(() => import('modules/Pages/console/help-center/pelaporan-konten'), {
+const PelaporanKonten = dynamic(() => import('modules/Pages/console/help-center/pelaporan-konten'), {
   loading: () => <PageLoader />,
 });
 
-const ConsolePelaporanKontenPage = () => (
+const PelaporanKontenPage = () => (
   <SecureConsolePage>
-    <ConsolePelaporanKontenComponent />
+    <PelaporanKonten />
   </SecureConsolePage>
 );
 
-export default ConsolePelaporanKontenPage;
+export default PelaporanKontenPage;

@@ -96,7 +96,7 @@ const akunPelapor = [
   },
 ];
 
-const DetailKeluhanPengguna = () => {
+const DetailPelaporanKonten = () => {
   const { authUser } = useAuth();
   const router = useRouter();
   const [showModal, setShowModal] = React.useState({
@@ -718,4 +718,4 @@ const DetailKeluhanPengguna = () => {
   );
 };
 
-export default DetailKeluhanPengguna;
+export default DetailPelaporanKonten;

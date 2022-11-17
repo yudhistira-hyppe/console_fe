@@ -14,7 +14,7 @@ const breadcrumbs = [
   { label: 'Rekening Bank', isActive: true },
 ];
 
-const PermohonanPremium = () => {
+const RekeningBank = () => {
   const [filter, setFilter] = useState({
     type: 'content',
     page: 0,
@@ -89,4 +89,4 @@ const PermohonanPremium = () => {
   );
 };
 
-export default PermohonanPremium;
+export default RekeningBank;

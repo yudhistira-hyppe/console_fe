@@ -31,7 +31,7 @@ const breadcrumbs = [
   { label: 'Rincian Iklan Banding', isActive: true },
 ];
 
-const DetailBandingKonten = () => {
+const DetailBandingIklan = () => {
   const { authUser } = useAuth();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -570,4 +570,4 @@ const DetailBandingKonten = () => {
   );
 };
 
-export default DetailBandingKonten;
+export default DetailBandingIklan;

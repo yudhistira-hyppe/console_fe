@@ -16,7 +16,7 @@ const breadcrumbs = [
   { label: 'Permohonan Iklan Moderasi', isActive: true },
 ];
 
-const ConsolePelaporanIklanComponent = () => {
+const BandingIklan = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -182,4 +182,4 @@ const ConsolePelaporanIklanComponent = () => {
   );
 };
 
-export default ConsolePelaporanIklanComponent;
+export default BandingIklan;
