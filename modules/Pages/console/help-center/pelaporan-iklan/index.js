@@ -18,7 +18,6 @@ const breadcrumbs = [
 
 const ConsolePelaporanIklanComponent = () => {
   const [filter, setFilter] = useState({
-    type: 'ads',
     page: 0,
     limit: 10,
     descending: 'true',
@@ -39,7 +38,8 @@ const ConsolePelaporanIklanComponent = () => {
       page: filter.page,
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
-      type: filter.type,
+      type: 'ads',
+      jenis: 'report',
     });
     filter.search !== '' && Object.assign(params, { key: filter.search });
     filter.startreport && Object.assign(params, { startreport: filter.startreport });

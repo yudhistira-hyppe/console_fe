@@ -126,7 +126,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, page, listTickets,
                   </TableCell>
                   <TableCell align="left" style={{ width: 120 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.tipeads || '-'}
+                      {item?.nameType || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 150 }}>
@@ -164,7 +164,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, page, listTickets,
                     )}
                     {item?.reportStatusLast === 'DITANGGUHKAN' && (
                       <Chip
-                        label="Dihapus"
+                        label="Ditangguhkan"
                         style={{
                           backgroundColor: 'rgba(103, 103, 103, 0.1)',
                           color: '#676767',
