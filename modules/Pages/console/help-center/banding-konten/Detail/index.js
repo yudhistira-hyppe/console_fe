@@ -261,7 +261,7 @@ const DetailBandingKonten = () => {
               <Typography style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 8 }}>
                 {detail?.data[0]?.reasonLastAppeal || '-'}
               </Typography>
-              <Typography style={{ fontSize: 14 }}>{detail?.data[0]?.reportedUserHandle[0]?.remark || '-'}</Typography>
+              <Typography style={{ fontSize: 14 }}>{detail?.data[0]?.reportedUserHandle?.[0]?.remark || '-'}</Typography>
 
               <Stack direction="column" mt={5}>
                 <CardMedia component="img" height="500px" image={getImage(detail?.data[0])} style={{ borderRadius: 4 }} />

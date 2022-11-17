@@ -333,19 +333,22 @@ const DetailKeluhanPengguna = () => {
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}>
+                      onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}
+                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
                       Tidak Ditangguhkan
                     </Button>
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}>
+                      onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}
+                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
                       Tangguhkan
                     </Button>
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}>
+                      onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}
+                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
                       Ditandai Sensitif
                     </Button>
                   </Stack>
