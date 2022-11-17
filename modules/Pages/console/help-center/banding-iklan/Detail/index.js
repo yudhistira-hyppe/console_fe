@@ -27,8 +27,8 @@ import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
-  { label: 'Permohonan Banding Konten', link: '/help-center/banding-konten' },
-  { label: 'Rincian Banding Konten', isActive: true },
+  { label: 'Permohonan Iklan Moderasi', link: '/help-center/banding-iklan' },
+  { label: 'Rincian Iklan Banding', isActive: true },
 ];
 
 const DetailBandingKonten = () => {
@@ -47,12 +47,12 @@ const DetailBandingKonten = () => {
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,
-    type: 'content',
+    type: 'ads',
   });
 
   const { data: userReports } = useGetReportUserDetailTicketQuery({
     postID: router.query?._id,
-    type: 'content',
+    type: 'ads',
   });
 
   const getMediaEndpoint = (mediaEndpoint) => {
@@ -62,7 +62,7 @@ const DetailBandingKonten = () => {
   };
 
   const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
+    if (item?.apsara || item?.apsaraId) {
       if (item?.media?.ImageInfo) {
         return item?.media?.ImageInfo?.[0]?.URL;
       } else {
@@ -240,7 +240,7 @@ const DetailBandingKonten = () => {
           direction={'row'}
           mt={1}
           mb={3}
-          onClick={() => router.push('/help-center/banding-konten')}
+          onClick={() => router.push('/help-center/banding-iklan')}
           gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>
@@ -267,34 +267,44 @@ const DetailBandingKonten = () => {
                 <CardMedia component="img" height="500px" image={getImage(detail?.data[0])} style={{ borderRadius: 4 }} />
                 <CardContent style={{ padding: '20px 0 0' }}>
                   <Stack direction="row" alignItems="center" spacing={2}>
-                    <Typography variant="caption">Post ID: {detail?.data[0]?._id}</Typography>
                     <Chip
-                      label={`Hyppe${detail?.data[0]?.postType}`}
+                      label={`${detail?.data[0]?.place}-Hyppe${detail?.data[0]?.type === 'video' ? 'Vid' : 'Pict'}`}
                       style={{ borderRadius: 4, fontFamily: 'Lato', fontSize: 12, color: '#00000099', fontWeight: 'bold' }}
                       size="small"
                     />
+                    <Typography variant="body2">
+                      Penggunaan Kredit: {numberWithCommas(detail?.data[0]?.totalUsedCredit)} /{' '}
+                      {numberWithCommas(detail?.data[0]?.totalCredit)}
+                    </Typography>
                   </Stack>
                   <Stack direction="column" gap="8px" mt={1}>
-                    <Typography>{detail?.data[0]?.description || '-'}</Typography>
+                    <Typography>{detail?.data[0]?.name || '-'}</Typography>
                     <Typography variant="caption" style={{ color: '#00000099' }}>
-                      {detail?.data[0]?.description || '-'}
+                      {detail?.data[0]?.name || '-'}
                     </Typography>
                     <Stack direction={'row'} spacing={1}>
-                      <Chip
-                        label="Berita"
-                        style={{ borderRadius: 4, fontFamily: 'Lato', fontSize: 12, color: '#00000099', fontWeight: 'bold' }}
-                      />
+                      {detail?.data[0]?.interest?.map((item, key) => (
+                        <Chip
+                          label={item?.interestName}
+                          key={key}
+                          style={{
+                            borderRadius: 4,
+                            fontFamily: 'Lato',
+                            fontSize: 12,
+                            color: '#00000099',
+                            fontWeight: 'bold',
+                          }}
+                        />
+                      ))}
                     </Stack>
                   </Stack>
                   <Stack direction="column" spacing={2} mt={3}>
                     <Typography style={{ fontSize: 14, fontFamily: 'Lato' }}>
-                      {detail?.data[0]?.likes} <span style={{ color: '#00000061' }}>Suka |</span> {detail?.data[0]?.comments}{' '}
-                      <span style={{ color: '#00000061' }}>Komentar |</span> {detail?.data[0]?.views}{' '}
-                      <span style={{ color: '#00000061' }}>Dilihat |</span> {detail?.data[0]?.shares}{' '}
-                      <span style={{ color: '#00000061' }}>Dibagikan</span>
+                      {detail?.data[0]?.totalView} <span style={{ color: '#00000061' }}>Dilihat |</span>{' '}
+                      {detail?.data[0]?.totalClick} <span style={{ color: '#00000061' }}>Diklik</span>
                     </Typography>
                     <Typography variant="body2" style={{ fontFamily: 'bold', fontFamily: 'Lato', color: '#00000061' }}>
-                      {detail?.data[0]?.createdAt} WIB
+                      {moment(detail?.data[0]?.timestamp).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                 </CardContent>
@@ -375,18 +385,18 @@ const DetailBandingKonten = () => {
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Diunggah Pada</Typography>
                     <Typography style={{ fontSize: 12 }}>
-                      {moment(detail?.data[0]?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
+                      {moment(detail?.data[0]?.timestamp).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Tanggal Pengajuan</Typography>
                     <Typography style={{ fontSize: 12 }}>
-                      {moment(detail?.data[0]?.createdAtAppealLast).format('DD/MM/YYYY - HH:mm')} WIB
+                      {moment(detail?.data[0]?.createdAtAppealLast).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Tipe Konten</Typography>
-                    <Typography style={{ fontSize: 12 }}>Hyppe{detail?.data[0]?.postType}</Typography>
+                    <Typography style={{ fontSize: 12 }}>{detail?.data[0]?.nameType || '-'}</Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Tipe Pelanggaran</Typography>
@@ -551,106 +561,6 @@ const DetailBandingKonten = () => {
                     </Stack>
                   </Stack>
                 </Stack>
-              </Paper>
-
-              <Paper>
-                <CardHeader title={<Typography variant="h3">{`Kepemilikan & Penjualan`}</Typography>} />
-                <CardContent style={{ paddingTop: 0, display: 'flex', flexDirection: 'column', height: '100%', gap: 8 }}>
-                  <Stack direction={'row'}>
-                    <Stack mr={1}>
-                      <Typography variant="body2" color="textSecondary">
-                        Kepemilikan:
-                      </Typography>
-                    </Stack>
-                    <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-                      <Typography variant="body2" color="primary">
-                        @{detail?.data[0]?.pemiliksekarang}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack direction={'row'}>
-                    <Stack mr={1}>
-                      <Typography variant="body2" color="textSecondary">
-                        Nomor Sertifikasi:
-                      </Typography>
-                    </Stack>
-                    <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-                      <Typography
-                        variant="body2"
-                        style={{
-                          width: 240,
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                        }}>
-                        {detail?.data[0]?.postID}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack direction={'row'}>
-                    <Stack mr={1}>
-                      <Typography variant="body2" color="textSecondary">
-                        Dijual:
-                      </Typography>
-                    </Stack>
-                    <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-                      <Typography variant="body2">{detail?.data[0]?.saleAmount > 0 ? 'Ya' : 'Tidak'}</Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack direction={'row'}>
-                    <Stack mr={1}>
-                      <Typography variant="body2" color="textSecondary">
-                        Harga:
-                      </Typography>
-                    </Stack>
-                    <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-                      <Typography variant="body2">{numberWithCommas(detail?.data[0]?.saleAmount || 0)}</Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack direction={'row'}>
-                    <Stack mr={1}>
-                      <Typography variant="body2" color="textSecondary">
-                        Terms:
-                      </Typography>
-                    </Stack>
-                    <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-                      <Typography variant="body2">
-                        {detail?.data[0]?.saleView && 'Views'} {detail?.data[0]?.saleLike && 'Likes'}
-                        {!detail?.data[0]?.saleView && !detail?.data[0]?.saleLike && '-'}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                </CardContent>
-              </Paper>
-
-              <Paper>
-                <CardHeader title={<Typography variant="h3">Riwayat</Typography>} />
-                <CardContent style={{ paddingTop: 5, height: '100%' }}>
-                  <Stack spacing={1} height="100%">
-                    {detail?.data[0]?.namapenjual && (
-                      <>
-                        <Typography variant="caption">
-                          Dijual oleh{' '}
-                          <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@{detail?.data[0]?.namapenjual}</span>{' '}
-                          seharga Rp.
-                          {numberWithCommas(detail?.data[0]?.saleAmount)} kepada
-                          <span style={{ color: '#AB22AF', fontWeight: 'bold' }}> @{detail?.data[0]?.pemiliksekarang}</span>
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          {moment(detail?.data[0]?.tgltransaksi).format('DD/MM/YYYY - HH:mm')} WIB
-                        </Typography>
-                        <Divider style={{ margin: '15px 0 5px' }} />
-                      </>
-                    )}
-                    <Typography variant="caption">
-                      Kepemilikan didaftarkan oleh{' '}
-                      <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@{detail?.data[0]?.username}</span>
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {moment(detail?.data[0]?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
-                    </Typography>
-                  </Stack>
-                </CardContent>
               </Paper>
             </Grid>
           </GridContainer>
