@@ -38,24 +38,10 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
   const { authUser } = useAuth();
   const classes = useStyles();
 
-  const getMediaUri = (mediaEndpoint) => {
+  const getImage = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
     return `${STREAM_URL}${mediaEndpoint}${authToken}`;
-  };
-
-  const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
-      if (item?.media?.ImageInfo) {
-        return item?.media?.ImageInfo?.[0]?.URL;
-      } else {
-        return item?.media?.VideoList?.[0]?.CoverURL;
-      }
-    } else if (item?.mediaEndpoint) {
-      return getMediaUri(item?.mediaEndpoint);
-    } else {
-      return '/images/dashboard/content_image.png';
-    }
   };
 
   return (
@@ -96,7 +82,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
             <TableRow>
               <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
               <TableCell align="left" style={{ maxWidth: 200 }}>
-                Pemohon Akun
+                Akun Pemohon
               </TableCell>
               <TableCell align="left" style={{ maxWidth: 120 }}>
                 Status
@@ -138,7 +124,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 200 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getImage(item)} />
+                      <Avatar src={getImage(item?.avatar?.mediaEndpoint)} />
                       <Stack direction="column" gap="2px" style={{ maxWidth: 180 }}>
                         <Typography
                           variant="body1"

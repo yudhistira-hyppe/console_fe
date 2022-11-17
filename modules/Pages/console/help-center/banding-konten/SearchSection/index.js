@@ -31,7 +31,12 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Akun Pemohonan</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <TextField name="search" style={{ width: '100%' }} placeholder="Cari" onChange={(e) => handleChangeDelay(e)} />
+            <TextField
+              name="search"
+              style={{ width: '100%' }}
+              placeholder="Cari username"
+              onChange={(e) => handleChangeDelay(e)}
+            />
           </AccordionDetails>
         </Accordion>
 
@@ -157,6 +162,21 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 value={'Lainnya'}
                 label={<Typography style={{ fontSize: 12 }}>Lainnya</Typography>}
+                control={<Checkbox defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                value={'This content doesn`t have sensitive content'}
+                label={<Typography style={{ fontSize: 12 }}>This content doesn`t have sensitive content</Typography>}
+                control={<Checkbox defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                value={'This content has additional context'}
+                label={<Typography style={{ fontSize: 12 }}>This content has additional context</Typography>}
+                control={<Checkbox defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                value={'Other'}
+                label={<Typography style={{ fontSize: 12 }}>Other</Typography>}
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
             </FormGroup>

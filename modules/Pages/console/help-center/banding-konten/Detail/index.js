@@ -294,7 +294,7 @@ const DetailBandingKonten = () => {
                       <span style={{ color: '#00000061' }}>Dibagikan</span>
                     </Typography>
                     <Typography variant="body2" style={{ fontFamily: 'bold', fontFamily: 'Lato', color: '#00000061' }}>
-                      {detail?.data[0]?.createdAt} WIB
+                      {moment(detail?.data[0]?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                 </CardContent>
@@ -375,13 +375,13 @@ const DetailBandingKonten = () => {
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Diunggah Pada</Typography>
                     <Typography style={{ fontSize: 12 }}>
-                      {moment(detail?.data[0]?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
+                      {moment(detail?.data[0]?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Tanggal Pengajuan</Typography>
                     <Typography style={{ fontSize: 12 }}>
-                      {moment(detail?.data[0]?.createdAtAppealLast).format('DD/MM/YYYY - HH:mm')} WIB
+                      {moment(detail?.data[0]?.createdAtAppealLast).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -390,7 +390,16 @@ const DetailBandingKonten = () => {
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Tipe Pelanggaran</Typography>
-                    <Typography style={{ fontSize: 12 }}>{detail?.data[0]?.reasonLastReport || '-'}</Typography>
+                    <Typography
+                      style={{
+                        fontSize: 12,
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        width: 230,
+                        overflow: 'hidden',
+                      }}>
+                      {detail?.data[0]?.reasonLastReport || '-'}
+                    </Typography>
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography style={{ color: '#737373', fontSize: 14 }}>Alasan Banding</Typography>
@@ -637,7 +646,7 @@ const DetailBandingKonten = () => {
                           <span style={{ color: '#AB22AF', fontWeight: 'bold' }}> @{detail?.data[0]?.pemiliksekarang}</span>
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
-                          {moment(detail?.data[0]?.tgltransaksi).format('DD/MM/YYYY - HH:mm')} WIB
+                          {moment(detail?.data[0]?.tgltransaksi).utc().format('DD/MM/YYYY - HH:mm')} WIB
                         </Typography>
                         <Divider style={{ margin: '15px 0 5px' }} />
                       </>
@@ -647,7 +656,7 @@ const DetailBandingKonten = () => {
                       <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@{detail?.data[0]?.username}</span>
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
-                      {moment(detail?.data[0]?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
+                      {moment(detail?.data[0]?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                 </CardContent>
