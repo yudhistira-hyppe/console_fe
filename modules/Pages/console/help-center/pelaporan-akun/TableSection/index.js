@@ -12,84 +12,79 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { Stack } from '@mui/material';
+import { CircularProgress, Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import { useRouter } from 'next/router';
-const dummyData = [
-  {
-    waktu: '22/08/05-13:29 WIB',
-    user: {
-      img: 'https://material-ui.com/static/images/avatar/1.jpg',
-      name: 'Rizal',
-      email: '',
-    },
-    jumlah_pelaporan: '50',
-    alasan: 'Mempromosikan kekerasan ekstrim dan terorisme',
-    status: 'Dihapus',
-  },
-  {
-    waktu: '22/08/05-13:49 WIB',
-    user: {
-      img: 'https://material-ui.com/static/images/avatar/4.jpg',
-      name: 'TasyaHakim',
-      email: 'tasyahakim@gmail.com',
-    },
-    jumlah_pelaporan: '50',
-    alasan: 'Berisikan konten dewasa',
-    status: 'Tidak Ditangguhkan',
-  },
-  {
-    waktu: '22/08/05-13:27 WIB',
-    user: {
-      img: 'https://material-ui.com/static/images/avatar/3.jpg',
-      name: 'Anggita',
-      email: 'anggita@gmail.com',
-    },
-    jumlah_pelaporan: '49',
-    alasan: 'Berisikan konten dewasa',
-    status: 'Baru',
-  },
-  {
-    waktu: '22/08/05-13:27 WIB',
-    user: {
-      img: 'https://material-ui.com/static/images/avatar/2.jpg',
-      name: 'RonnyA',
-      email: 'ronnya@gmail.com',
-    },
-    jumlah_pelaporan: '49',
-    alasan: 'Melanggar EULA',
-    status: 'Ditangguhkan',
-  },
-];
+import moment from 'moment';
+import { makeStyles } from '@material-ui/styles';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import router from 'next/router';
 
-const TableSection = ({ onOrderChange, order, total, page, rows }) => {
-  const router = useRouter();
-  const onSelectData = (id) => {
-    router.push('/console/help-center/pelaporan-akun/detail');
+const useStyles = makeStyles(() => ({
+  textTruncate: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    '-webkit-line-clamp': 2,
+    lineClamp: 2,
+    overflow: 'hidden',
+  },
+}));
+
+const TableSection = ({ handleOrder, handlePageChange, order, loading, listTickets }) => {
+  const { authUser } = useAuth();
+  const classes = useStyles();
+
+  const getMediaUri = (mediaEndpoint) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+
+    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+  };
+
+  const getImage = (item) => {
+    if (item?.apsara && item?.apsaraId) {
+      if (item?.media?.ImageInfo) {
+        return item?.media?.ImageInfo?.[0]?.URL;
+      } else {
+        return item?.media?.VideoList?.[0]?.CoverURL;
+      }
+    } else if (item?.mediaEndpoint) {
+      return getMediaUri(item?.mediaEndpoint);
+    } else {
+      return '/images/dashboard/content_image.png';
+    }
   };
 
   return (
     <Stack flex={1}>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
         <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
-          <Typography>
-            Menampilkan {total} hasil ({page}-{rows} dari {total})
-          </Typography>
+          {loading ? (
+            <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+          ) : (
+            <Typography style={{ fontFamily: 'Normal' }}>
+              Menampilkan {listTickets?.total} hasil (
+              {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
+              {listTickets?.total + listTickets?.page * 10} dari {listTickets?.totalsearch})
+            </Typography>
+          )}
         </Box>
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
           <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Typography>Urutkan berdasarkan</Typography>
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
-            <Select value={order} onChange={onOrderChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={'All'}>Semua</MenuItem>
-              <MenuItem value={'DESC'}>Terbaru</MenuItem>
-              <MenuItem value={'ASC'}>Terlama</MenuItem>
+            <Select
+              value={order}
+              onChange={handleOrder}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+              style={{ backgroundColor: 'white' }}>
+              <MenuItem value={'true'}>Terbaru</MenuItem>
+              <MenuItem value={'false'}>Terlama</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -99,70 +94,146 @@ const TableSection = ({ onOrderChange, order, total, page, rows }) => {
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
             <TableRow>
-              <TableCell>Waktu</TableCell>
-              <TableCell align="left">Pengguna</TableCell>
+              <TableCell style={{ maxWidth: 80 }}>Waktu</TableCell>
+              <TableCell align="left" style={{ maxWidth: 2180 }}>
+                Akun
+              </TableCell>
               <TableCell align="left">Jumlah Pelaporan</TableCell>
-              <TableCell align="left">Alasan</TableCell>
+              <TableCell align="left" style={{ maxWidth: 150 }}>
+                Alasan
+              </TableCell>
               <TableCell align="left">Status</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {dummyData?.map((el, i) => (
-              <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={onSelectData}>
-                <TableCell component="th" scope="row">
-                  <Typography variant="body1" style={{ fontSize: '12px' }}>
-                    {el.waktu}
-                  </Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Stack direction={'row'} spacing={1}>
-                    <Avatar src={el.user.img} />
-                    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        {el.user.name}
-                      </Typography>
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        {el.user.email}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="body1" style={{ fontSize: '12px' }}>
-                    {el.jumlah_pelaporan} Kali
-                  </Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="body1" style={{ fontSize: '12px' }}>
-                    {el.alasan}
-                  </Typography>
-                </TableCell>
-                <TableCell align="left">
-                  {el.status.toLocaleLowerCase() === 'baru' ? (
-                    <Chip
-                      label={el.status}
-                      style={{ backgroundColor: '#E6094B1A', color: '##E6094BD9', fontWeight: 'bold' }}
-                    />
-                  ) : el.status.toLocaleLowerCase() === 'ditangguhkan' ? (
-                    <Chip label={el.status} style={{ backgroundColor: '#FF8C0026', color: '#FF8C00', fontWeight: 'bold' }} />
-                  ) : el.status.toLocaleLowerCase() === 'dihapus' ? (
-                    <Chip
-                      label={el.status}
-                      style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767', fontWeight: 'bold' }}
-                    />
-                  ) : (
-                    <Chip
-                      label={el.status}
-                      style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500', fontWeight: 'bold' }}
-                    />
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+            {loading ? (
+              <TableCell colSpan={8}>
+                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                  <CircularProgress color="secondary" />
+                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                </Stack>
+              </TableCell>
+            ) : listTickets?.arrdata?.length >= 1 ? (
+              listTickets?.arrdata?.map((item, i) => (
+                <TableRow
+                  key={i}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  hover
+                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    router.push({
+                      pathname: '/help-center/pelaporan-akun/detail',
+                      query: {
+                        _id: item?._id,
+                      },
+                    })
+                  }>
+                  <TableCell component="th" scope="row">
+                    <Typography variant="body1" style={{ fontSize: '12px', maxWidth: 80 }}>
+                      {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Avatar src={getImage(item?.avatar?.mediaEndpoint)} />
+                      <Stack direction="column" gap="2px" style={{ maxWidth: 180 }}>
+                        <Typography
+                          variant="body1"
+                          style={{ fontSize: '14px', color: '#00000099' }}
+                          className={classes.textTruncate}
+                          title={item?.username}>
+                          {item?.username || '-'}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          style={{ fontSize: '12px', color: '#00000099' }}
+                          className={classes.textTruncate}
+                          title={item?.email}>
+                          {item?.email || '-'}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      {item?.reportedUserCount} Kali
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography variant="body1" style={{ fontSize: '12px', maxWidth: 150 }} className={classes.textTruncate}>
+                      {item?.reasonLast || '-'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    {item?.reportStatusLast === 'BARU' && (
+                      <Chip
+                        label="Baru"
+                        style={{
+                          backgroundColor: '#E6094B1A',
+                          color: '#E6094BD9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
+                      />
+                    )}
+                    {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
+                      <Chip
+                        label="Tidak Ditangguhkan"
+                        style={{
+                          backgroundColor: '#71A5001A',
+                          color: '#71A500D9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
+                      />
+                    )}
+                    {item?.reportStatusLast === 'DITANGGUHKAN' && (
+                      <Chip
+                        label="Ditangguhkan"
+                        style={{
+                          backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                          color: '#676767',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
+                      />
+                    )}
+                    {item?.reportStatusLast === 'FLAGING' && (
+                      <Chip
+                        label="Ditandai Sensitif"
+                        style={{
+                          backgroundColor: '#B457F61A',
+                          color: '#B457F6D9',
+                          fontWeight: 'bold',
+                          fontFamily: 'Normal',
+                        }}
+                      />
+                    )}
+                    {!item?.reportStatusLast && '-'}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableCell colSpan={8}>
+                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Report Konten</Typography>
+                </Stack>
+              </TableCell>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      {listTickets?.totalsearch >= 1 && (
+        <Stack alignItems="center" my={3} mr={3}>
+          <Pagination
+            count={Number(listTickets?.totalpage) || 1}
+            page={Number(listTickets?.page) + 1}
+            size="small"
+            onChange={handlePageChange}
+          />
+        </Stack>
+      )}
     </Stack>
   );
 };
