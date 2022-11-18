@@ -34,9 +34,6 @@ export const kontenApi = createApi({
       query: () => ({
         url: '/reportreasons/all',
         method: 'POST',
-        body: {
-          lang: 'id',
-        },
       }),
       providesTags: ['Util'],
     }),
