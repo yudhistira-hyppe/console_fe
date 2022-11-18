@@ -209,7 +209,7 @@ const ConsoleHelpCenterComponent = () => {
               data={sample3Data}
               status={laporanKontenStatus}
               pathIconLeft={'/images/icons/users.svg'}
-              onClick={() => router.push('/console/help-center/pelaporan-akun')}
+              onClick={() => router.push('/help-center/pelaporan-akun')}
               setStatusList={(val) => onStatusChangeHandler('laporan kontent', val)}
               isFetching={fetchingList.laporanKonten}
             />
@@ -222,7 +222,7 @@ const ConsoleHelpCenterComponent = () => {
               data={sample3Data}
               status={laporanIklanStatus}
               pathIconLeft={'/images/icons/users-banding.svg'}
-              onClick={() => router.push('/console/help-center/banding-akun')}
+              onClick={() => router.push('/help-center/banding-akun')}
               setStatusList={(val) => onStatusChangeHandler('laporan iklan', val)}
               isFetching={fetchingList.laporanIklan}
             />
