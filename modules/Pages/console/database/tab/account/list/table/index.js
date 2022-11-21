@@ -20,8 +20,9 @@ import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { formatDateTimeString, formatGender, formatRoles } from 'helpers/stringHelper';
 import useStyles from './index.style';
+import moment from 'moment';
 
-const columnsHeader = ['Nama', 'Jenis Akun', 'Jenis Kelamin ', 'Umur', 'Lokasi', 'Minat', 'Terakhir Aktif'];
+const columnsHeader = ['Nama', 'Jenis Kelamin ', 'Umur', 'Lokasi', 'Jenis Akun', 'Waktu Pendaftaran', 'Terakhir Aktif'];
 
 const DatabaseTabAccountListTableComponent = (props) => {
   const classes = useStyles();
@@ -53,6 +54,7 @@ const DatabaseTabAccountListTableComponent = (props) => {
         cities: item.cities || '-',
         interests: item.interest,
         lastActive: item.activity.payload.login_date ? formatDateTimeString(item.activity.payload.login_date) : '-',
+        createdAt: item.createdAt,
       }));
       setRows(newData);
       if (data.length > 0 && !totalfilter) {
@@ -121,21 +123,12 @@ const DatabaseTabAccountListTableComponent = (props) => {
                       </Box>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.role}</TableCell>
-                  <TableCell>{row.gender}</TableCell>
-                  <TableCell>{row.age}</TableCell>
-                  <TableCell>{row.cities}</TableCell>
-                  <TableCell>
-                    <Stack gap={0.5} direction="row" flexWrap="wrap" maxWidth="212px">
-                      {row.interests.slice(0, 3).map((interest) => (
-                        <Chip className={classes.tableChip} key={interest._id} label={interest.interestName} size="small" />
-                      ))}
-                      {row.interests.length > 3 ? (
-                        <Chip className={classes.tableChip} label={`+${row.interests.length - 3}`} size="small" />
-                      ) : null}
-                    </Stack>
-                  </TableCell>
-                  <TableCell>{row.lastActive}</TableCell>
+                  <TableCell>{row?.gender}</TableCell>
+                  <TableCell>{row?.age}</TableCell>
+                  <TableCell style={{ width: 120, textTransform: 'capitalize' }}>{row?.cities}</TableCell>
+                  <TableCell>{row?.role}</TableCell>
+                  <TableCell style={{ width: 70 }}>{moment(row?.createdAt).format('DD/MM/YY - HH:mm')} WIB</TableCell>
+                  <TableCell>{row?.lastActive}</TableCell>
                 </TableRow>
               ))
             ) : (
