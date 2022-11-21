@@ -10,6 +10,7 @@ const useStyles = makeStyles(() => ({
       fontSize: '16px',
       fontFamily: 'Lato',
       fontWeight: '700',
+      marginRight: 50,
     },
   },
   tabPanel: {
