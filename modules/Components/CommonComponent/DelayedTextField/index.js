@@ -14,7 +14,7 @@ const DelayedTextField = (props) => {
   useEffect(() => {
     let timer = 0;
     if (waitEvent && waitForInput) {
-      timer = setTimeout(() => inputProps.onChange(waitEvent), 2000);
+      timer = setTimeout(() => inputProps.onChange(waitEvent), 500);
     }
     return () => clearTimeout(timer);
   }, [waitEvent]);
