@@ -5,6 +5,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Tab } from '@mui/material';
 import DatabaseTabAccountComponent from './account';
 import DatabaseTabContentComponent from './content';
+import DatabaseTabMediaComponent from './media';
 import useStyles from './index.style';
 
 const DatabaseTabComponent = (props) => {
@@ -34,7 +35,7 @@ const DatabaseTabComponent = (props) => {
           <DatabaseTabContentComponent />
         </TabPanel>
         <TabPanel className={classes.tabPanel} value="media">
-          <DatabaseTabContentComponent />
+          <DatabaseTabMediaComponent />
         </TabPanel>
       </TabContext>
     </>
