@@ -144,14 +144,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   hover
                   style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    router.push({
-                      pathname: '/help-center/permohonan-premium/detail',
-                      query: {
-                        _id: item?._id,
-                      },
-                    })
-                  }>
+                  onClick={() => router.push(`/database/content/${item?._id}`)}>
                   <TableCell align="left">
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getImage(item)} variant="rounded" />
