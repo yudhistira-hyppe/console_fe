@@ -19,8 +19,8 @@ const DatabaseTabContentComponent = () => {
     is_sell: [],
     min_price: '',
     max_price: '',
-    createdAt: null,
-    ownedAt: null,
+    createdAt: [null, null],
+    ownedAt: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
   const router = useRouter();
@@ -71,13 +71,17 @@ const DatabaseTabContentComponent = () => {
               : [...prevVal, { parent: kind, value: 'Max Price' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
-          return prevVal.find((item) => item.parent === kind)
-            ? [...prevVal.filter((item) => item.parent !== kind)]
-            : [...prevVal, { parent: kind, value: 'Tanggal Pembuatan' }];
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pembuatan' }]
+              : [...prevVal, { parent: kind, value: 'Tanggal Pembuatan' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
         case 'ownedAt':
-          return prevVal.find((item) => item.parent === kind)
-            ? [...prevVal.filter((item) => item.parent !== kind)]
-            : [...prevVal, { parent: kind, value: 'Tanggal Pendaftaran' }];
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pendaftaran' }]
+              : [...prevVal, { parent: kind, value: 'Tanggal Pendaftaran' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]

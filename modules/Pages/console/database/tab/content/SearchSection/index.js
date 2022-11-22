@@ -7,7 +7,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../../../help-center/bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Divider, Radio, RadioGroup, Stack } from '@mui/material';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -266,13 +265,19 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-              <MobileDatePicker
-                label="Pilih Tanggal"
+              <DateRangePicker
                 value={filter.createdAt}
                 onChange={(newValue) => {
-                  handleChange('createdAt', newValue);
+                  handleChange('createdAt', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
                 }}
-                renderInput={(params) => <TextField autoComplete="off" {...params} />}
+                renderInput={(startProps, endProps) => (
+                  <>
+                    <Stack direction={'row'} spacing={1}>
+                      <TextField autoComplete="off" {...startProps} />
+                      <TextField autoComplete="off" {...endProps} />
+                    </Stack>
+                  </>
+                )}
               />
             </LocalizationProvider>
           </AccordionDetails>
@@ -285,13 +290,19 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-              <MobileDatePicker
-                label="Pilih Tanggal"
+              <DateRangePicker
                 value={filter.ownedAt}
                 onChange={(newValue) => {
-                  handleChange('ownedAt', newValue);
+                  handleChange('ownedAt', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
                 }}
-                renderInput={(params) => <TextField autoComplete="off" {...params} />}
+                renderInput={(startProps, endProps) => (
+                  <>
+                    <Stack direction={'row'} spacing={1}>
+                      <TextField autoComplete="off" {...startProps} />
+                      <TextField autoComplete="off" {...endProps} />
+                    </Stack>
+                  </>
+                )}
               />
             </LocalizationProvider>
           </AccordionDetails>

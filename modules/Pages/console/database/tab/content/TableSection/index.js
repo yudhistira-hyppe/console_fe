@@ -104,7 +104,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               ) {
                 handleDeleteFilter(item.parent, '');
               } else if (item.parent === 'createdAt' || item.parent === 'ownedAt') {
-                handleDeleteFilter(item.parent, null);
+                handleDeleteFilter(item.parent, [null, null]);
               } else {
                 handleDeleteFilter(item.parent, item.value);
               }
