@@ -16,8 +16,8 @@ const AccountInfoComponent = (props) => {
   };
 
   return (
-    <Card sx={{ height: 'fit-content' }}>
-      <Stack padding="24px" spacing={3}>
+    <Card sx={{ height: '100%' }}>
+      <Stack direction="column" justifyContent="center" padding="24px" height="100%" spacing={3}>
         <Stack direction="row" spacing={3.75}>
           <SvgIcon
             sx={{ fontSize: '40px', padding: '8px', backgroundColor: '#EAEAEA', color: '#767676', borderRadius: '4px' }}>
@@ -54,7 +54,7 @@ const AccountInfoComponent = (props) => {
             <Typography className={classes.accountInfoContent}>{formatRoles(roles)}</Typography>
           </Stack>
         </Stack>
-        <Stack direction="row" spacing={3.75}>
+        {/* <Stack direction="row" spacing={3.75}>
           <SvgIcon
             sx={{ fontSize: '40px', padding: '8px', backgroundColor: '#EAEAEA', color: '#767676', borderRadius: '4px' }}>
             <AccountCircle />
@@ -65,7 +65,7 @@ const AccountInfoComponent = (props) => {
             </Box>
             <Typography className={classes.accountInfoContent}>{fullName}</Typography>
           </Stack>
-        </Stack>
+        </Stack> */}
       </Stack>
     </Card>
   );
