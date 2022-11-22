@@ -24,68 +24,6 @@ const sample4Data = [
 
 const ConsoleHelpCenterComponent = () => {
   const router = useRouter();
-  const [bantuanPenggunaStatus, setBantuanPenggunaStatus] = useState('Semua');
-  const [premiumAkunStatus, setpremiumAkunStatus] = useState('Semua');
-  const [laporanAkunStatus, setlaporanAkunStatus] = useState('Semua');
-  const [laporanKontenStatus, setlaporanKontenStatus] = useState('Semua');
-  const [laporanIklanStatus, setlaporanIklanStatus] = useState('Semua');
-  const [fetchingList, setFetchingList] = useState({
-    bantuanPengguna: true,
-    premiumAkun: true,
-    laporanAkun: true,
-    laporanKonten: true,
-    laporanIklan: true,
-    listPelaporanAkun: true,
-    listPelaporanIklan: true,
-    listPelaporanKonten: true,
-  });
-
-  useEffect(() => {
-    setTimeout(() => {
-      setFetchingList({
-        bantuanPengguna: false,
-        premiumAkun: false,
-        laporanAkun: false,
-        laporanKonten: false,
-        laporanIklan: false,
-        listPelaporanAkun: false,
-        listPelaporanIklan: false,
-        listPelaporanKonten: false,
-      });
-    }, 1000);
-  }, []);
-
-  const onStatusChangeHandler = (type, data) => {
-    switch (type.toLowerCase()) {
-      case 'bantuan pengguna':
-        if (data) {
-          setBantuanPenggunaStatus(data);
-        }
-        break;
-      case 'upgrade premium':
-        if (data) {
-          setpremiumAkunStatus(data);
-        }
-        break;
-      case 'laporan akun':
-        if (data) {
-          setlaporanAkunStatus(data);
-        }
-        break;
-      case 'laporan konten':
-        if (data) {
-          setlaporanKontenStatus(data);
-        }
-        break;
-      case 'laporan iklan':
-        if (data) {
-          setlaporanIklanStatus(data);
-        }
-        break;
-      default:
-        break;
-    }
-  };
 
   return (
     <>
@@ -99,12 +37,11 @@ const ConsoleHelpCenterComponent = () => {
               headTitle="Bantuan Pengguna"
               TypeProblem="Total Masalah"
               numberOfProblem={70}
-              iconLabelRight
               data={sample4Data}
               onClick={() => router.push('/help-center/bantuan-pengguna')}
-              status={bantuanPenggunaStatus}
-              setStatusList={(val) => onStatusChangeHandler('bantuan pengguna', val)}
-              isFetching={fetchingList.bantuanPengguna}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -112,12 +49,11 @@ const ConsoleHelpCenterComponent = () => {
               headTitle="Permohonan Akun Premium"
               TypeProblem="Total Permohonan"
               numberOfProblem={70}
-              iconLabelRight
               data={sample4Data}
               onClick={() => router.push('/help-center/permohonan-premium')}
-              status={bantuanPenggunaStatus}
-              setStatusList={(val) => onStatusChangeHandler('bantuan pengguna', val)}
-              isFetching={fetchingList.bantuanPengguna}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -125,12 +61,11 @@ const ConsoleHelpCenterComponent = () => {
               headTitle="Rekening Bank"
               TypeProblem="Total Permohonan"
               numberOfProblem={70}
-              iconLabelRight
               data={sample4Data}
-              status={premiumAkunStatus}
               onClick={() => router.push('/help-center/rekening-bank')}
-              setStatusList={(val) => onStatusChangeHandler('upgrade premium', val)}
-              isFetching={fetchingList.premiumAkun}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
 
@@ -142,9 +77,9 @@ const ConsoleHelpCenterComponent = () => {
               data={sample4Data}
               pathIconLeft={'/images/icons/img-empty.svg'}
               onClick={() => router.push('/help-center/pelaporan-konten')}
-              status={laporanAkunStatus}
-              setStatusList={(val) => onStatusChangeHandler('laporan akun', val)}
-              isFetching={fetchingList.laporanAkun}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -153,11 +88,11 @@ const ConsoleHelpCenterComponent = () => {
               TypeProblem="Permohonan Banding"
               numberOfProblem={200}
               data={sample4Data}
-              status={laporanKontenStatus}
               pathIconLeft={'/images/icons/banding-konten.svg'}
               onClick={() => router.push('/help-center/banding-konten')}
-              setStatusList={(val) => onStatusChangeHandler('laporan kontent', val)}
-              isFetching={fetchingList.laporanKonten}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -166,11 +101,11 @@ const ConsoleHelpCenterComponent = () => {
               TypeProblem="Konten Serupa"
               numberOfProblem={25}
               data={sample4Data}
-              status={laporanIklanStatus}
               pathIconLeft={'/images/icons/banding-konten.svg'}
               onClick={() => router.push('/help-center/konten-serupa')}
-              setStatusList={(val) => onStatusChangeHandler('laporan iklan', val)}
-              isFetching={fetchingList.laporanIklan}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
 
@@ -180,11 +115,11 @@ const ConsoleHelpCenterComponent = () => {
               TypeProblem="Iklan Dilaporkan"
               numberOfProblem={200}
               data={sample3Data}
-              status={laporanKontenStatus}
               pathIconLeft={'/images/icons/ads-icon.svg'}
               onClick={() => router.push('/help-center/pelaporan-iklan')}
-              setStatusList={(val) => onStatusChangeHandler('laporan kontent', val)}
-              isFetching={fetchingList.laporanKonten}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -193,11 +128,11 @@ const ConsoleHelpCenterComponent = () => {
               TypeProblem="Permohonan Banding"
               numberOfProblem={25}
               data={sample3Data}
-              status={laporanIklanStatus}
               pathIconLeft={'/images/icons/ads-banding.svg'}
               onClick={() => router.push('/help-center/banding-iklan')}
-              setStatusList={(val) => onStatusChangeHandler('laporan iklan', val)}
-              isFetching={fetchingList.laporanIklan}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
 
@@ -207,11 +142,11 @@ const ConsoleHelpCenterComponent = () => {
               TypeProblem="Akun Dilaporkan"
               numberOfProblem={200}
               data={sample3Data}
-              status={laporanKontenStatus}
               pathIconLeft={'/images/icons/users.svg'}
               onClick={() => router.push('/help-center/pelaporan-akun')}
-              setStatusList={(val) => onStatusChangeHandler('laporan kontent', val)}
-              isFetching={fetchingList.laporanKonten}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -220,23 +155,23 @@ const ConsoleHelpCenterComponent = () => {
               TypeProblem="Permohonan"
               numberOfProblem={25}
               data={sample3Data}
-              status={laporanIklanStatus}
               pathIconLeft={'/images/icons/users-banding.svg'}
               onClick={() => router.push('/help-center/banding-akun')}
-              setStatusList={(val) => onStatusChangeHandler('laporan iklan', val)}
-              isFetching={fetchingList.laporanIklan}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={false}
             />
           </Grid>
 
           {/* --------- card section 2 (without indicator) --------------------*/}
           <Grid item xs={12} md={4} sm={4}>
-            <AccountReport isFetching={fetchingList.listPelaporanAkun} />
+            <AccountReport isFetching={false} />
           </Grid>
           <Grid item xs={12} md={4} sm={4}>
-            <ContentReport isFetching={fetchingList.listPelaporanKonten} />
+            <ContentReport />
           </Grid>
           <Grid item xs={12} md={4} sm={4}>
-            <AdsReport isFetching={fetchingList.listPelaporanIklan} />
+            <AdsReport />
           </Grid>
         </GridContainer>
       </PageContainer>
