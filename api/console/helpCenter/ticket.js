@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const ticketApi = createApi({
   reducerPath: 'helpCenter/ticket',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['TicketList', 'TicketDetail'],
+  tagTypes: ['TicketList', 'TicketDetail', 'HelpCenter'],
   endpoints: (build) => ({
     getListTicketByFilters: build.query({
       query: (data) => ({
@@ -39,6 +39,14 @@ export const ticketApi = createApi({
       }),
       invalidatesTags: ['TicketList'],
     }),
+    getCountingHelpCenter: build.query({
+      query: (data) => ({
+        url: '/reportuser/summary',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['HelpCenter'],
+    }),
   }),
 });
 
@@ -47,4 +55,5 @@ export const {
   useGetTicketByIdQuery,
   useCreateReplyTicketMutation,
   useDeleteTicketMutation,
+  useGetCountingHelpCenterQuery,
 } = ticketApi;
