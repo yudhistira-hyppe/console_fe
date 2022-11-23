@@ -395,7 +395,7 @@ const DetailBandingKonten = () => {
                         fontSize: 12,
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
-                        width: 230,
+                        maxWidth: 230,
                         overflow: 'hidden',
                       }}>
                       {detail?.data[0]?.reasonLastReport || '-'}
