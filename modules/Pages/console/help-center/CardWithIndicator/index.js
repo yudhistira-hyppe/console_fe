@@ -62,7 +62,7 @@ const Card = ({
     };
 
     return (
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+      <Stack direction="row" justifyContent="space-between" alignItems="center" height={30}>
         <div
           style={{
             display: 'flex',
@@ -75,7 +75,7 @@ const Card = ({
           </Typography>
           {iconLabelRight && <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />}
         </div>
-        <Button
+        {/* <Button
           ref={anchorRef}
           variant="outlined"
           aria-controls={open ? 'composition-menu' : undefined}
@@ -90,8 +90,8 @@ const Card = ({
             backgroundColor: '#F2F2F2',
           }}>
           {status}
-        </Button>
-        <Popper
+        </Button> */}
+        {/* <Popper
           open={open}
           anchorEl={anchorRef.current}
           role={undefined}
@@ -132,7 +132,7 @@ const Card = ({
               </Paper>
             </Grow>
           )}
-        </Popper>
+        </Popper> */}
       </Stack>
     );
   };
@@ -153,7 +153,7 @@ const Card = ({
             component: 'p',
             className: classes.subTitle,
           }}
-          extraContent={<ActionButtons onClick={onClick} isFetching={isFetching} column={data.length} />}
+          extraContent={<ActionButtons onClick={onClick} isFetching={isFetching} />}
           reverseDir
           className={classes.cardAdvRoot}>
           {!isFetching ? (

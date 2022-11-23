@@ -9,10 +9,10 @@ const ProgressIndicator = ({ item, ...rest }) => {
       <CmtProgressBar
         label={
           <Box display="flex" alignItems="center">
-            <Typography style={{ fontSize: 12, marginRight: 4 }} title={item.reason} fontFamily="Lato">
-              {item.reason}
+            <Typography style={{ fontSize: 12, marginRight: 4 }} title={item._id} fontFamily="Lato">
+              {item._id}
             </Typography>
-            | <Box pl={1} component="span" color="text.secondary" fontSize={12}>{`${item.count}`}</Box>
+            | <Box pl={1} component="span" color="text.secondary" fontSize={12}>{`${item.myCount}`}</Box>
           </Box>
         }
         labelPos="top-left"
