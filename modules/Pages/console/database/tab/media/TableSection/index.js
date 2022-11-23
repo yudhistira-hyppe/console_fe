@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { Checkbox, CircularProgress, Pagination, Stack, Switch } from '@mui/material';
+import { Button, Checkbox, CircularProgress, Pagination, Stack, Switch } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -31,6 +31,14 @@ const useStyles = makeStyles(() => ({
     '-webkit-line-clamp': 2,
     lineClamp: 2,
     overflow: 'hidden',
+  },
+  hoverCell: {
+    '&:hover': {
+      '& .MuiTypography-body1': {
+        textDecoration: 'underline',
+        color: '#AB22AF !important',
+      },
+    },
   },
 }));
 
@@ -93,7 +101,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
-              color="primary"
+              color="secondary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
@@ -117,7 +125,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
   return (
     <Stack flex={1}>
-      <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={3}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography style={{ fontWeight: 'bold' }}>Daftar Musik</Typography>
+        <Button color="secondary" variant="contained" onClick={() => router.push('/database/media/create')}>
+          Tambah Musik
+        </Button>
+      </Stack>
+
+      <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mt={6} mb={3}>
         <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
           {loading ? (
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
@@ -190,7 +205,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   style={{ cursor: 'pointer' }}>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      color="primary"
+                      color="secondary"
                       checked={selected.includes(item?.name)}
                       inputProps={{
                         'aria-labelledby': 'asd',
@@ -198,7 +213,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       onClick={(event) => handleClick(event, item?.name)}
                     />
                   </TableCell>
-                  <TableCell align="left" onClick={() => router.push(`/database/media/${item?._id}`)}>
+                  <TableCell
+                    align="left"
+                    onClick={() => router.push(`/database/media/${item?._id}`)}
+                    className={classes.hoverCell}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getImage(item)} variant="rounded" />
                       <Stack direction="column" gap="2px">
