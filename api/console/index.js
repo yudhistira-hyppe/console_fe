@@ -7,6 +7,7 @@ import { moduleAPI } from './module';
 import { divisiAPI } from './divisi';
 import { voucherApi, adAPI } from './monetize';
 import { transactionAPI } from './transaction';
+import { mediaApi } from './database';
 
 export {
   dashboardApi,
@@ -24,4 +25,5 @@ export {
   voucherApi,
   adAPI,
   transactionAPI,
+  mediaApi,
 };

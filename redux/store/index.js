@@ -28,6 +28,7 @@ import {
   transactionAPI,
   kontenApi,
   iklanApi,
+  mediaApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -61,6 +62,7 @@ const initStore = () => {
         transactionAPI.middleware,
         kontenApi.middleware,
         iklanApi.middleware,
+        mediaApi.middleware,
       ]),
   });
   return store;
