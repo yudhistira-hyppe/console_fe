@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
+import { useUpdateStatusMusicMutation } from 'api/console/database/media';
+import router from 'next/router';
 
 const style = {
   position: 'absolute',
@@ -16,7 +18,21 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalConfirmation({ showModal, status, onClose, onConfirm }) {
+export default function ModalConfirmation({ showModal, status, id, onClose }) {
+  const [updateStatus] = useUpdateStatusMusicMutation();
+
+  const handleStatus = () => {
+    const data = {
+      _id: [id],
+      status: status === 'active' ? false : true,
+    };
+
+    updateStatus(data).then(() => {
+      router.replace('/database/media');
+      onClose();
+    });
+  };
+
   return (
     <div>
       <Modal
@@ -35,7 +51,7 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
           </Stack>
 
           <Stack direction={'row'} mt={3} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
+            <Button variant="contained" color="primary" onClick={handleStatus}>
               Konfirmasi
             </Button>
             <Button onClick={onClose}>Batal</Button>

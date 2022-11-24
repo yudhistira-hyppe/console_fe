@@ -70,6 +70,7 @@ const FormMusic = (props) => {
         showModal={modal.confirmation}
         status={modal.status}
         onClose={() => setModal({ ...modal, confirmation: !modal.confirmation, status: '' })}
+        id={id}
       />
 
       <Card style={{ padding: '20px 35px 20px 20px', height: '100%' }}>
@@ -209,8 +210,14 @@ const FormMusic = (props) => {
                     variant="text"
                     color="secondary"
                     style={{ width: 'fit-content', fontWeight: 'bold' }}
-                    onClick={() => setModal({ ...modal, confirmation: !modal.confirmation, status: 'disactive' })}>
-                    Nonaktifkan
+                    onClick={() =>
+                      setModal({
+                        ...modal,
+                        confirmation: !modal.confirmation,
+                        status: data?.isActive ? 'active' : 'disactive',
+                      })
+                    }>
+                    {data?.isActive ? 'Nonaktifkan' : 'Aktifkan'}
                   </Button>
                   <Typography style={{ color: '#3f3f3f' }}>
                     Hapus Musik Ini?{' '}
