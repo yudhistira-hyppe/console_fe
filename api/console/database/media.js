@@ -41,6 +41,14 @@ export const mediaApi = createApi({
       }),
       providesTags: ['Chart'],
     }),
+    updateStatusMusic: build.mutation({
+      query: (data) => ({
+        url: '/music/active',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Media'],
+    }),
   }),
 });
 
@@ -50,4 +58,5 @@ export const {
   useGetThemeMusicQuery,
   useGetListMusicQuery,
   useGetMediaChartQuery,
+  useUpdateStatusMusicMutation,
 } = mediaApi;
