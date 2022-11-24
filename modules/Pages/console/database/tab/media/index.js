@@ -7,6 +7,7 @@ import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import GridContainer from '@jumbo/components/GridContainer';
 import CardPopular from './card-populer';
+import { useGetMediaChartQuery } from 'api/console/database/media';
 
 const DatabaseTabMediaComponent = () => {
   const [filter, setFilter] = useState({
@@ -23,6 +24,8 @@ const DatabaseTabMediaComponent = () => {
   });
   const [filterList, setFilterList] = useState([]);
   const router = useRouter();
+
+  const { data: mediaChart, isFetching: loadingChart } = useGetMediaChartQuery();
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -63,6 +66,18 @@ const DatabaseTabMediaComponent = () => {
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Dibuat' }]
               : [...prevVal, { parent: kind, value: 'Tanggal Dibuat' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'genre':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'theme':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'mood':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -78,25 +93,25 @@ const DatabaseTabMediaComponent = () => {
         case 'theme':
           return {
             ...prevVal,
-            theme: filter.theme.find((item) => item === value)
-              ? filter.theme.filter((item) => item !== value)
-              : [...filter.theme, value],
+            theme: filter.theme.find((item) => item?.name === JSON.parse(value)?.name)
+              ? filter.theme.filter((item) => item?.name !== JSON.parse(value)?.name)
+              : [...filter.theme, JSON.parse(value)],
             page: 0,
           };
         case 'genre':
           return {
             ...prevVal,
-            genre: filter.genre.find((item) => item === value)
-              ? filter.genre.filter((item) => item !== value)
-              : [...filter.genre, value],
+            genre: filter.genre.find((item) => item?.name === JSON.parse(value)?.name)
+              ? filter.genre.filter((item) => item?.name !== JSON.parse(value)?.name)
+              : [...filter.genre, JSON.parse(value)],
             page: 0,
           };
         case 'mood':
           return {
             ...prevVal,
-            mood: filter.mood.find((item) => item === value)
-              ? filter.mood.filter((item) => item !== value)
-              : [...filter.mood, value],
+            mood: filter.mood.find((item) => item?.name === JSON.parse(value)?.name)
+              ? filter.mood.filter((item) => item?.name !== JSON.parse(value)?.name)
+              : [...filter.mood, JSON.parse(value)],
             page: 0,
           };
         case 'status':
@@ -115,9 +130,6 @@ const DatabaseTabMediaComponent = () => {
     });
   };
 
-  console.log(filter);
-  console.log(filterList);
-
   return (
     <>
       <Head>
@@ -126,19 +138,51 @@ const DatabaseTabMediaComponent = () => {
       <PageContainer heading="">
         <GridContainer>
           <Grid item xs={12} sm={6}>
-            <CardPopular title="Artis Populer" description="Nama Artis" image />
+            <CardPopular
+              title="Artis Populer"
+              description="Nama Artis"
+              card="artis"
+              data={mediaChart?.data[0]?.artistPopuler}
+              loading={loadingChart}
+              image
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <CardPopular title="Musik Populer" description="Judul Lagu" image />
+            <CardPopular
+              title="Musik Populer"
+              description="Judul Lagu"
+              card="musik"
+              data={mediaChart?.data[0]?.musicPopuler}
+              loading={loadingChart}
+              image
+            />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <CardPopular title="Genre Populer" description="Genre" />
+            <CardPopular
+              title="Genre Populer"
+              description="Genre"
+              card="genre"
+              data={mediaChart?.data[0]?.genrePopuler}
+              loading={loadingChart}
+            />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <CardPopular title="Tema Populer" description="Tema" />
+            <CardPopular
+              title="Tema Populer"
+              description="Tema"
+              card="tema"
+              data={mediaChart?.data[0]?.themePopuler}
+              loading={loadingChart}
+            />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <CardPopular title="Suasana Hati Populer" description="Suasana Hati" />
+            <CardPopular
+              title="Suasana Hati Populer"
+              description="Suasana Hati"
+              card="mood"
+              data={mediaChart?.data[0]?.moodPopuler}
+              loading={loadingChart}
+            />
           </Grid>
         </GridContainer>
 
