@@ -14,7 +14,7 @@ const MediaChart = () => {
           title="Artis Populer"
           description="Nama Artis"
           card="artis"
-          data={mediaChart?.data[0]?.artistPopuler}
+          data={mediaChart?.data[0]?.artistPopuler || []}
           loading={loadingChart}
           image
         />
@@ -24,7 +24,7 @@ const MediaChart = () => {
           title="Musik Populer"
           description="Judul Lagu"
           card="musik"
-          data={mediaChart?.data[0]?.musicPopuler}
+          data={mediaChart?.data[0]?.musicPopuler || []}
           loading={loadingChart}
           image
         />
@@ -34,7 +34,7 @@ const MediaChart = () => {
           title="Genre Populer"
           description="Genre"
           card="genre"
-          data={mediaChart?.data[0]?.genrePopuler}
+          data={mediaChart?.data[0]?.genrePopuler || []}
           loading={loadingChart}
         />
       </Grid>
@@ -43,7 +43,7 @@ const MediaChart = () => {
           title="Tema Populer"
           description="Tema"
           card="tema"
-          data={mediaChart?.data[0]?.themePopuler}
+          data={mediaChart?.data[0]?.themePopuler || []}
           loading={loadingChart}
         />
       </Grid>
@@ -52,7 +52,7 @@ const MediaChart = () => {
           title="Suasana Hati Populer"
           description="Suasana Hati"
           card="mood"
-          data={mediaChart?.data[0]?.moodPopuler}
+          data={mediaChart?.data[0]?.moodPopuler || []}
           loading={loadingChart}
         />
       </Grid>
