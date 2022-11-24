@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import MediaChart from './media-chart';
+import { useGetListMusicQuery } from 'api/console/database/media';
 
 const DatabaseTabMediaComponent = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    descending: 'true',
+    order: 'desc',
     song: '',
     artist: '',
     theme: [],
@@ -21,13 +21,31 @@ const DatabaseTabMediaComponent = () => {
     createdAt: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
-  const router = useRouter();
+
+  const getParams = () => {
+    let params = [];
+    params.push(`pageNumber=${filter.page + 1}`);
+    params.push(`pageRow=${filter.limit}`);
+    params.push(`sort=${filter.order}`);
+    filter.song !== '' && params.push(`musicTitle=${filter.song}`);
+    filter.artist !== '' && params.push(`artistName=${filter.artist}`);
+    filter.theme.length >= 1 && params.push(`theme=${filter.theme.map((item) => item._id).join(',')}`);
+    filter.genre.length >= 1 && params.push(`genre=${filter.genre.map((item) => item._id).join(',')}`);
+    filter.mood.length >= 1 && params.push(`mood=${filter.mood.map((item) => item._id).join(',')}`);
+    filter.status.length >= 1 && params.push(`status=${filter.status.join(',')}`);
+    filter.createdAt[0] && params.push(`createdAtStart=${filter.createdAt[0]}`);
+    filter.createdAt[1] && params.push(`createdAtEnd=${filter.createdAt[1]}`);
+
+    return params.join('&');
+  };
+
+  const { data: listMusic, isFetching: loadingMusic } = useGetListMusicQuery(getParams());
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        descending: e.target.value,
+        order: e.target.value,
       };
     });
   };
@@ -83,9 +101,9 @@ const DatabaseTabMediaComponent = () => {
     setFilter((prevVal) => {
       switch (kind) {
         case 'song':
-          return { ...prevVal, song: value };
+          return { ...prevVal, song: value, page: 0 };
         case 'artist':
-          return { ...prevVal, artist: value };
+          return { ...prevVal, artist: value, page: 0 };
         case 'theme':
           return {
             ...prevVal,
@@ -119,7 +137,7 @@ const DatabaseTabMediaComponent = () => {
             page: 0,
           };
         case 'createdAt':
-          return { ...prevVal, createdAt: value };
+          return { ...prevVal, createdAt: value, page: 0 };
         default:
           return { ...prevVal };
       }
@@ -137,11 +155,12 @@ const DatabaseTabMediaComponent = () => {
         <Stack direction={'row'} spacing={3} mt="24px">
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
+            filter={filter}
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
-            order={filter.descending}
-            loading={false}
-            listTickets={{ arrdata: [{ name: 'Lorem 1' }, { name: 'Lorem 2' }] }}
+            order={filter.order}
+            loading={loadingMusic}
+            listMusic={listMusic}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
           />

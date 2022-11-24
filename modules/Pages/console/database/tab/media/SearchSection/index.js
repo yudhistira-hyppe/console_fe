@@ -13,6 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers-pro';
 import { debounce } from 'lodash';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
+import { useGetGenreMusicQuery, useGetMoodMusicQuery, useGetThemeMusicQuery } from 'api/console/database/media';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -22,6 +23,10 @@ const SearchSection = ({ filter, handleChange }) => {
     return date && amount ? date.add(amount, 'week') : undefined;
   }
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
+
+  const { data: genres, isFetching: loadingGenre } = useGetGenreMusicQuery();
+  const { data: themes, isFetching: loadingTheme } = useGetThemeMusicQuery();
+  const { data: moods, isFetching: loadingMood } = useGetMoodMusicQuery();
 
   return (
     <>
@@ -165,28 +170,26 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('theme', e.target.value)}>
-              <FormControlLabel
-                label={'Cinta'}
-                value="cinta"
-                control={<Checkbox defaultChecked={false} checked={filter.theme.includes('cinta')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Keluarga'}
-                value="keluarga"
-                control={<Checkbox defaultChecked={false} checked={filter.theme.includes('keluarga')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Malam Romantis'}
-                value="malam romantis"
-                control={
-                  <Checkbox defaultChecked={false} checked={filter.theme.includes('malam romantis')} color="secondary" />
-                }
-              />
-              <FormControlLabel
-                label={'Pagi Hari'}
-                value="pagi hari"
-                control={<Checkbox defaultChecked={false} checked={filter.theme.includes('pagi hari')} color="secondary" />}
-              />
+              {loadingTheme ? (
+                <Typography>Loading data...</Typography>
+              ) : themes?.data?.length >= 1 ? (
+                themes?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.name}
+                    value={JSON.stringify(item)}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        checked={filter.theme?.map((t) => t.name).includes(item?.name)}
+                        color="secondary"
+                      />
+                    }
+                  />
+                ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
+              )}
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -198,26 +201,26 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('genre', e.target.value)}>
-              <FormControlLabel
-                label={'Country'}
-                value="country"
-                control={<Checkbox defaultChecked={false} checked={filter.genre.includes('country')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'EDM'}
-                value="edm"
-                control={<Checkbox defaultChecked={false} checked={filter.genre.includes('edm')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'HipHop'}
-                value="HipHop"
-                control={<Checkbox defaultChecked={false} checked={filter.genre.includes('HipHop')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Pop'}
-                value="pop"
-                control={<Checkbox defaultChecked={false} checked={filter.genre.includes('pop')} color="secondary" />}
-              />
+              {loadingGenre ? (
+                <Typography>Loading data...</Typography>
+              ) : genres?.data?.length >= 1 ? (
+                genres?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.name}
+                    value={JSON.stringify(item)}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        checked={filter.genre?.map((t) => t.name).includes(item?.name)}
+                        color="secondary"
+                      />
+                    }
+                  />
+                ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
+              )}
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -229,26 +232,26 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('mood', e.target.value)}>
-              <FormControlLabel
-                label={'Asik'}
-                value="asik"
-                control={<Checkbox defaultChecked={false} checked={filter.mood.includes('asik')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Riang'}
-                value="riang"
-                control={<Checkbox defaultChecked={false} checked={filter.mood.includes('riang')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Sentimentil'}
-                value="sentimentil"
-                control={<Checkbox defaultChecked={false} checked={filter.mood.includes('sentimentil')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Tenang'}
-                value="tenang"
-                control={<Checkbox defaultChecked={false} checked={filter.mood.includes('tenang')} color="secondary" />}
-              />
+              {loadingMood ? (
+                <Typography>Loading data...</Typography>
+              ) : moods?.data?.length >= 1 ? (
+                moods?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.name}
+                    value={JSON.stringify(item)}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        checked={filter.mood?.map((t) => t.name).includes(item?.name)}
+                        color="secondary"
+                      />
+                    }
+                  />
+                ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
+              )}
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -262,15 +265,13 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
                 label={'Aktif'}
-                value="aktif"
-                control={<Checkbox defaultChecked={false} checked={filter.status.includes('aktif')} color="secondary" />}
+                value="true"
+                control={<Checkbox defaultChecked={false} checked={filter.status.includes('true')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Tidak Aktif'}
-                value="tidak aktif"
-                control={
-                  <Checkbox defaultChecked={false} checked={filter.status.includes('tidak aktif')} color="secondary" />
-                }
+                value="false"
+                control={<Checkbox defaultChecked={false} checked={filter.status.includes('false')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
