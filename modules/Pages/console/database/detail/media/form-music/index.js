@@ -22,7 +22,7 @@ const FormMusic = (props) => {
     name: data?.musicTitle || '',
     artist: data?.artistName || '',
     album: data?.albumName || '',
-    releasedAt: moment(data?.releaseDate) || null,
+    releasedAt: data?.releaseDate ? moment(data?.releaseDate) : null,
     genre: data?.genre || '',
     theme: data?.theme || '',
     mood: data?.mood || '',
@@ -76,7 +76,7 @@ const FormMusic = (props) => {
       <Card style={{ padding: '20px 35px 20px 20px', height: '100%' }}>
         <Stack direction={status !== 'create' ? 'row' : 'column'} gap="24px">
           <Stack direction="column" width="100%" maxWidth={status !== 'create' ? 170 : '100%'} gap="12px">
-            <UploadMedia />
+            <UploadMedia thumbnail={data?.apsaraThumnailUrl} dataMusic={data?.music?.PlayURL} status={status} />
           </Stack>
           <Stack direction={status !== 'create' ? 'column' : 'row'} flexWrap="wrap" width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>

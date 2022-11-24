@@ -50,7 +50,7 @@ const DatabaseDetailMediaComponent = (props) => {
     { label: detailId === 'create' ? 'Create Music' : 'Rincian Music', isActive: true },
   ];
 
-  const { data: detailMusic, isFetching: loadingDetail } = useGetDetailMusicQuery(detailId);
+  const { data: detailMusic, isFetching: loadingDetail } = detailId !== 'create' ? useGetDetailMusicQuery(detailId) : {};
 
   return (
     <>

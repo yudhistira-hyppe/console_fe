@@ -1,5 +1,5 @@
 import { Audiotrack } from '@material-ui/icons';
-import { Box, Typography } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
@@ -20,9 +20,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const UploadMedia = () => {
-  const [music, setMusic] = useState('');
-  const [urlMusic, setUrlMusic] = useState('');
+const UploadMedia = (props) => {
+  const { thumbnail, dataMusic, status } = props;
+  const [music, setMusic] = useState(dataMusic);
+  const [urlMusic, setUrlMusic] = useState(dataMusic);
   const classes = useStyles();
 
   useEffect(() => {
@@ -49,8 +50,14 @@ const UploadMedia = () => {
     <>
       <label htmlFor="upload">
         <Box className={classes.uploadBox}>
-          <Audiotrack style={{ fontSize: 64, color: '#DADADA' }} />
-          <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Lagu</Typography>
+          {thumbnail ? (
+            <Avatar src={thumbnail} alt="Thumbnail Music" variant="square" style={{ width: '100%', height: 'auto' }} />
+          ) : (
+            <>
+              <Audiotrack style={{ fontSize: 64, color: '#DADADA' }} />
+              <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Lagu</Typography>
+            </>
+          )}
         </Box>
         <input hidden id="upload" type="file" accept="audio/mpeg" onChange={handleUpload} />
       </label>
