@@ -54,7 +54,7 @@ export const mediaApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Media'],
+      invalidatesTags: ['Media', 'Detail'],
     }),
     updateMusic: build.mutation({
       query: (data) => ({
