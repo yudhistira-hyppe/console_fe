@@ -34,6 +34,13 @@ export const mediaApi = createApi({
       }),
       providesTags: ['Media'],
     }),
+    getDetailMusic: build.query({
+      query: (id) => ({
+        url: `/music/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Detail'],
+    }),
     getMediaChart: build.query({
       query: () => ({
         url: '/musiccard',
@@ -57,6 +64,7 @@ export const {
   useGetMoodMusicQuery,
   useGetThemeMusicQuery,
   useGetListMusicQuery,
+  useGetDetailMusicQuery,
   useGetMediaChartQuery,
   useUpdateStatusMusicMutation,
 } = mediaApi;
