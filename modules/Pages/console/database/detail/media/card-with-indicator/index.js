@@ -20,7 +20,7 @@ const CardWithIndicator = (props) => {
             </Box>
           }
           labelPos="top-left"
-          value={(item.count / 20) * 100}
+          value={(item.count / data.map((item) => item.count).reduce((a, b) => a + b, 0)) * 100}
           renderValue={(value) => {
             return `${value}%`;
           }}
