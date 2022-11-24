@@ -11,11 +11,8 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import CardWithIndicator from './card-with-indicator';
 import Interest from './interest';
 import FormMusic from './form-music';
-
-const breadcrumbs = [
-  { label: 'Database Media', link: '/database/media' },
-  { label: 'Create Media', isActive: true },
-];
+import { useGetDetailMusicQuery } from 'api/console/database/media';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const dummyData = [
   {
@@ -48,6 +45,13 @@ const dummyData = [
 const DatabaseDetailMediaComponent = (props) => {
   const { detailId } = props;
 
+  const breadcrumbs = [
+    { label: 'Database Media', link: '/database/media' },
+    { label: detailId === 'create' ? 'Create Music' : 'Rincian Music', isActive: true },
+  ];
+
+  const { data: detailMusic, isFetching: loadingDetail } = useGetDetailMusicQuery(detailId);
+
   return (
     <>
       <Head>
@@ -71,35 +75,43 @@ const DatabaseDetailMediaComponent = (props) => {
         </Stack>
       </Stack>
 
-      <GridContainer>
-        <Grid item xs={12} sm={detailId !== 'create' ? 6 : 12}>
-          <FormMusic status={detailId !== 'create' ? 'detail' : 'create'} />
-        </Grid>
-        {detailId !== 'create' && (
-          <Grid item xs={12} sm={6}>
-            <GridContainer>
-              <Grid item xs={12} sm={6}>
-                <CardWithDivider title="Dilihat" value={numberWithCommas(0)} description="Kali" />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithDivider title="Digunakan" value={numberWithCommas(0)} description="Kali" />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Jenis Kelamin Penonton" data={dummyData} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Rentang Umur Penonton" data={dummyData} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Wilayah Penonton" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Interest data={[]} />
-              </Grid>
-            </GridContainer>
+      {loadingDetail ? (
+        <PageLoader />
+      ) : (
+        <GridContainer>
+          <Grid item xs={12} sm={detailId !== 'create' ? 6 : 12}>
+            <FormMusic status={detailId !== 'create' ? 'detail' : 'create'} data={detailMusic?.data[0]} />
           </Grid>
-        )}
-      </GridContainer>
+          {detailId !== 'create' && (
+            <Grid item xs={12} sm={6}>
+              <GridContainer>
+                <Grid item xs={12} sm={6}>
+                  <CardWithDivider title="Dilihat" value={numberWithCommas(detailMusic?.data[0]?.view)} description="Kali" />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithDivider
+                    title="Digunakan"
+                    value={numberWithCommas(detailMusic?.data[0]?.used)}
+                    description="Kali"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Jenis Kelamin Penonton" data={detailMusic?.data[0]?.gender} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Rentang Umur Penonton" data={detailMusic?.data[0]?.age} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Wilayah Penonton" data={detailMusic?.data[0]?.wilayah} />
+                </Grid>
+                {/* <Grid item xs={12} sm={6}>
+                  <Interest data={[]} />
+                </Grid> */}
+              </GridContainer>
+            </Grid>
+          )}
+        </GridContainer>
+      )}
     </>
   );
 };

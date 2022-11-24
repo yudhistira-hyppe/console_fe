@@ -8,6 +8,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ModalDelete from '../Modal/ModalDelete';
 import ModalSave from '../Modal/ModalSave';
 import ModalConfirmation from '../Modal/ModalConfirmation';
+import { useGetGenreMusicQuery, useGetMoodMusicQuery, useGetThemeMusicQuery } from 'api/console/database/media';
+import moment from 'moment';
 
 const useStyles = makeStyles(() => ({
   uploadBox: {
@@ -27,17 +29,17 @@ const useStyles = makeStyles(() => ({
 }));
 
 const FormMusic = (props) => {
-  const { status } = props;
+  const { status, data } = props;
   const [music, setMusic] = useState('');
   const [urlMusic, setUrlMusic] = useState('');
   const [inputValue, setInputValue] = useState({
-    name: '',
-    artist: '',
-    album: '',
-    releasedAt: null,
-    genre: '',
-    theme: '',
-    mood: '',
+    name: data?.musicTitle || '',
+    artist: data?.artistName || '',
+    album: data?.albumName || '',
+    releasedAt: moment(data?.releaseDate) || null,
+    genre: data?.genre || '',
+    theme: data?.theme || '',
+    mood: data?.mood || '',
   });
   const [modal, setModal] = useState({
     delete: false,
@@ -46,6 +48,10 @@ const FormMusic = (props) => {
     status: '',
   });
   const classes = useStyles();
+
+  const { data: genres } = useGetGenreMusicQuery();
+  const { data: themes } = useGetThemeMusicQuery();
+  const { data: moods } = useGetMoodMusicQuery();
 
   useEffect(() => {
     setTimeout(() => {
@@ -154,12 +160,17 @@ const FormMusic = (props) => {
                 value={inputValue.genre}
                 placeholder="Pilih Genre Musik"
                 onChange={handleChangeInput}
+                color="secondary"
                 displayEmpty>
                 <MenuItem value="" disabled>
                   Pilih Genre Musik
                 </MenuItem>
-                <MenuItem value="edm">EDM</MenuItem>
-                <MenuItem value="hiphop">HipHop</MenuItem>
+                {genres?.data?.length >= 1 &&
+                  genres?.data?.map((item, key) => (
+                    <MenuItem key={key} value={item?._id}>
+                      {item?.name || '-'}
+                    </MenuItem>
+                  ))}
               </Select>
             </Stack>
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
@@ -171,12 +182,17 @@ const FormMusic = (props) => {
                 value={inputValue.theme}
                 placeholder="Pilih Tema Musik"
                 onChange={handleChangeInput}
+                color="secondary"
                 displayEmpty>
                 <MenuItem value="" disabled>
                   Pilih Tema Musik
                 </MenuItem>
-                <MenuItem value="keluarga">Keluarga</MenuItem>
-                <MenuItem value="romantis">Romantis</MenuItem>
+                {themes?.data?.length >= 1 &&
+                  themes?.data?.map((item, key) => (
+                    <MenuItem key={key} value={item?._id}>
+                      {item?.name || '-'}
+                    </MenuItem>
+                  ))}
               </Select>
             </Stack>
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
@@ -188,12 +204,17 @@ const FormMusic = (props) => {
                 value={inputValue.mood}
                 placeholder="Pilih Suasana Hati Musik"
                 onChange={handleChangeInput}
+                color="secondary"
                 displayEmpty>
                 <MenuItem value="" disabled>
                   Pilih Suasana Hati Musik
                 </MenuItem>
-                <MenuItem value="galau">Galau</MenuItem>
-                <MenuItem value="senang">Senang</MenuItem>
+                {moods?.data?.length >= 1 &&
+                  moods?.data?.map((item, key) => (
+                    <MenuItem key={key} value={item?._id}>
+                      {item?.name || '-'}
+                    </MenuItem>
+                  ))}
               </Select>
             </Stack>
             <Stack direction="row" flexWrap="wrap" columnGap="32px" rowGap="12px" width="100%">

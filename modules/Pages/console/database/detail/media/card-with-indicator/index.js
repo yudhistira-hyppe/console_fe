@@ -5,31 +5,31 @@ import { Typography } from '@material-ui/core';
 import { Box, Card, Stack } from '@mui/material';
 import ScrollBar from 'react-perfect-scrollbar';
 
-const ProgressIndicator = (props) => {
-  const { item, ...rest } = props;
-
-  return (
-    <Box width={1} {...rest}>
-      <CmtProgressBar
-        label={
-          <Box display="flex" alignItems="center">
-            {item.label}
-          </Box>
-        }
-        labelPos="top-left"
-        value={item.value}
-        renderValue={(value) => {
-          return `${value}%`;
-        }}
-        containedColor="#AB22AF"
-        onlyContained
-      />
-    </Box>
-  );
-};
-
 const CardWithIndicator = (props) => {
   const { title, data } = props;
+
+  const ProgressIndicator = (props) => {
+    const { item, ...rest } = props;
+
+    return (
+      <Box width={1} {...rest}>
+        <CmtProgressBar
+          label={
+            <Box display="flex" alignItems="center">
+              {item._id || 'Other'}
+            </Box>
+          }
+          labelPos="top-left"
+          value={(item.count / 20) * 100}
+          renderValue={(value) => {
+            return `${value}%`;
+          }}
+          containedColor="#AB22AF"
+          onlyContained
+        />
+      </Box>
+    );
+  };
 
   return (
     <Card style={{ padding: 24 }}>
