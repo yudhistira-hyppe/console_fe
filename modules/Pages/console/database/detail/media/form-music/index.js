@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, MenuItem, Select, Stack } from '@mui/material';
-import { Audiotrack, CloudUpload } from '@material-ui/icons';
+import React, { useState } from 'react';
+import { Button, Card, MenuItem, Select, Stack } from '@mui/material';
 import { TextField, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ModalDelete from '../Modal/ModalDelete';
@@ -16,28 +14,10 @@ import {
 } from 'api/console/database/media';
 import moment from 'moment';
 import router from 'next/router';
-
-const useStyles = makeStyles(() => ({
-  uploadBox: {
-    backgroundColor: '#E8E8E8A6',
-    border: '1px dashed #737373',
-    borderRadius: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    gap: 6,
-    height: 170,
-    width: '100%',
-    cursor: 'pointer',
-  },
-}));
+import UploadMedia from '../upload-media';
 
 const FormMusic = (props) => {
   const { status, data, id } = props;
-  const [music, setMusic] = useState('');
-  const [urlMusic, setUrlMusic] = useState('');
   const [inputValue, setInputValue] = useState({
     name: data?.musicTitle || '',
     artist: data?.artistName || '',
@@ -53,32 +33,11 @@ const FormMusic = (props) => {
     confirmation: false,
     status: '',
   });
-  const classes = useStyles();
 
   const { data: genres } = useGetGenreMusicQuery();
   const { data: themes } = useGetThemeMusicQuery();
   const { data: moods } = useGetMoodMusicQuery();
   const [updateMusic] = useUpdateMusicMutation();
-
-  useEffect(() => {
-    setTimeout(() => {
-      const duration = document.getElementById('musicUpload')?.duration;
-    }, 200);
-  }, [music, urlMusic]);
-
-  const handleUpload = (e) => {
-    if (e.target.files[0]?.type !== 'audio/mpeg') {
-      alert('salah format woyy 🤬');
-      return;
-    } else {
-      setMusic(e.target.files[0]);
-      const blob = new Blob(e.target.files, { type: 'audio/mpeg' });
-      const url = URL.createObjectURL(blob);
-      setUrlMusic(url);
-    }
-
-    console.log(e.target.files[0]);
-  };
 
   const handleChangeInput = (e) => {
     const value = e.target.value;
@@ -116,16 +75,7 @@ const FormMusic = (props) => {
       <Card style={{ padding: '20px 35px 20px 20px', height: '100%' }}>
         <Stack direction={status !== 'create' ? 'row' : 'column'} gap="24px">
           <Stack direction="column" width="100%" maxWidth={status !== 'create' ? 170 : '100%'} gap="12px">
-            <label htmlFor="upload">
-              <Box className={classes.uploadBox}>
-                <Audiotrack style={{ fontSize: 64, color: '#DADADA' }} />
-                <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Lagu</Typography>
-              </Box>
-              <input hidden id="upload" type="file" accept="audio/mpeg" onChange={handleUpload} />
-            </label>
-            {urlMusic && (
-              <audio id="musicUpload" controls src={urlMusic} style={{ width: status !== 'create' ? 170 : '100%' }} />
-            )}
+            <UploadMedia />
           </Stack>
           <Stack direction={status !== 'create' ? 'column' : 'row'} flexWrap="wrap" width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
