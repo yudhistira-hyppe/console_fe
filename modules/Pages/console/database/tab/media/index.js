@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
-import { Grid, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
-import GridContainer from '@jumbo/components/GridContainer';
-import CardPopular from './card-populer';
-import { useGetMediaChartQuery } from 'api/console/database/media';
+import MediaChart from './media-chart';
 
 const DatabaseTabMediaComponent = () => {
   const [filter, setFilter] = useState({
@@ -24,8 +22,6 @@ const DatabaseTabMediaComponent = () => {
   });
   const [filterList, setFilterList] = useState([]);
   const router = useRouter();
-
-  const { data: mediaChart, isFetching: loadingChart } = useGetMediaChartQuery();
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -136,55 +132,7 @@ const DatabaseTabMediaComponent = () => {
         <title key="title">Hyppe-Console :: Database Media</title>
       </Head>
       <PageContainer heading="">
-        <GridContainer>
-          <Grid item xs={12} sm={6}>
-            <CardPopular
-              title="Artis Populer"
-              description="Nama Artis"
-              card="artis"
-              data={mediaChart?.data[0]?.artistPopuler}
-              loading={loadingChart}
-              image
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <CardPopular
-              title="Musik Populer"
-              description="Judul Lagu"
-              card="musik"
-              data={mediaChart?.data[0]?.musicPopuler}
-              loading={loadingChart}
-              image
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <CardPopular
-              title="Genre Populer"
-              description="Genre"
-              card="genre"
-              data={mediaChart?.data[0]?.genrePopuler}
-              loading={loadingChart}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <CardPopular
-              title="Tema Populer"
-              description="Tema"
-              card="tema"
-              data={mediaChart?.data[0]?.themePopuler}
-              loading={loadingChart}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <CardPopular
-              title="Suasana Hati Populer"
-              description="Suasana Hati"
-              card="mood"
-              data={mediaChart?.data[0]?.moodPopuler}
-              loading={loadingChart}
-            />
-          </Grid>
-        </GridContainer>
+        <MediaChart />
 
         <Stack direction={'row'} spacing={3} mt="24px">
           <SearchSection filter={filter} handleChange={handleSearchChange} />
