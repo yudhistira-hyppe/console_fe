@@ -80,7 +80,7 @@ const DatabaseDetailMediaComponent = (props) => {
       ) : (
         <GridContainer>
           <Grid item xs={12} sm={detailId !== 'create' ? 6 : 12}>
-            <FormMusic status={detailId !== 'create' ? 'detail' : 'create'} data={detailMusic?.data[0]} />
+            <FormMusic status={detailId !== 'create' ? 'detail' : 'create'} data={detailMusic?.data[0]} id={detailId} />
           </Grid>
           {detailId !== 'create' && (
             <Grid item xs={12} sm={6}>

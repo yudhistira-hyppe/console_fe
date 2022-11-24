@@ -8,8 +8,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ModalDelete from '../Modal/ModalDelete';
 import ModalSave from '../Modal/ModalSave';
 import ModalConfirmation from '../Modal/ModalConfirmation';
-import { useGetGenreMusicQuery, useGetMoodMusicQuery, useGetThemeMusicQuery } from 'api/console/database/media';
+import {
+  useGetGenreMusicQuery,
+  useGetMoodMusicQuery,
+  useGetThemeMusicQuery,
+  useUpdateMusicMutation,
+} from 'api/console/database/media';
 import moment from 'moment';
+import router from 'next/router';
 
 const useStyles = makeStyles(() => ({
   uploadBox: {
@@ -29,7 +35,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const FormMusic = (props) => {
-  const { status, data } = props;
+  const { status, data, id } = props;
   const [music, setMusic] = useState('');
   const [urlMusic, setUrlMusic] = useState('');
   const [inputValue, setInputValue] = useState({
@@ -52,6 +58,7 @@ const FormMusic = (props) => {
   const { data: genres } = useGetGenreMusicQuery();
   const { data: themes } = useGetThemeMusicQuery();
   const { data: moods } = useGetMoodMusicQuery();
+  const [updateMusic] = useUpdateMusicMutation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -78,10 +85,28 @@ const FormMusic = (props) => {
     setInputValue({ ...inputValue, [e.target.name]: value });
   };
 
+  const handleUpdate = () => {
+    let bodyData = {
+      _id: id,
+      musicTitle: inputValue.name,
+      artistName: inputValue.artist,
+      albumName: inputValue.album,
+      releaseDate: inputValue.releasedAt,
+      genre: inputValue.genre,
+      theme: inputValue.theme,
+      mood: inputValue.mood,
+      apsaraMusic: data?.apsaraMusic,
+      apsaraThumnail: data?.apsaraThumnail,
+    };
+
+    updateMusic(bodyData).then(() => router.replace('/database/media'));
+    setModal({ ...modal, save: !modal.save });
+  };
+
   return (
     <>
       <ModalDelete showModal={modal.delete} onClose={() => setModal({ ...modal, delete: !modal.delete })} />
-      <ModalSave showModal={modal.save} onClose={() => setModal({ ...modal, save: !modal.save })} />
+      <ModalSave showModal={modal.save} onClose={() => setModal({ ...modal, save: !modal.save })} onConfirm={handleUpdate} />
       <ModalConfirmation
         showModal={modal.confirmation}
         status={modal.status}
