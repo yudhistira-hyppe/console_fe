@@ -22,7 +22,7 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
 
   const handleStatus = () => {
     const data = {
-      _id: [isSingle ? data2 : data1?.join(',')],
+      _id: isSingle ? [data2] : [...data1],
       status: status === 'active' ? true : false,
     };
 
