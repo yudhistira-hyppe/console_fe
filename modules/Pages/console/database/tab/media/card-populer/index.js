@@ -6,18 +6,6 @@ import { Info } from '@material-ui/icons';
 const CardPopular = (props) => {
   const { image = false, title, description, card, data, loading } = props;
 
-  const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
-      if (item?.media?.ImageInfo) {
-        return item?.media?.ImageInfo?.[0]?.URL;
-      } else {
-        return item?.media?.VideoList?.[0]?.CoverURL;
-      }
-    } else {
-      return '/images/dashboard/content_image.png';
-    }
-  };
-
   const dataChart = () => {
     if (!loading) {
       if (data?.length >= 5) {
@@ -57,7 +45,11 @@ const CardPopular = (props) => {
                 <Typography style={{ width: 85, fontWeight: 'bold', color: '#00000099' }}>{key + 1}</Typography>
                 <Stack direction="row" alignItems="center" gap="12px">
                   {image && (
-                    <Avatar src={getImage()} variant="rounded" style={{ width: '100%', maxWidth: 40, height: 40 }} />
+                    <Avatar
+                      src={item?._id?.apsaraThumnailUrl}
+                      variant="rounded"
+                      style={{ width: '100%', maxWidth: 40, height: 40 }}
+                    />
                   )}
                   <Typography style={{ fontSize: 14, color: '#00000099' }}>
                     {card === 'artis' && (item?._id?.artistName || '-')}

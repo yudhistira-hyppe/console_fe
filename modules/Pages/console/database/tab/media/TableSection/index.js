@@ -284,7 +284,7 @@ const TableSection = ({
                     onClick={() => router.push(`/database/media/${item?._id}`)}
                     className={classes.hoverCell}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getImage(item)} variant="rounded" />
+                      <Avatar src={item?.apsaraThumnailUrl} variant="rounded" />
                       <Stack direction="column" gap="2px">
                         <Typography
                           variant="body1"
