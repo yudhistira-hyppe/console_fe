@@ -33,6 +33,7 @@ import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 import { userFriendAPI } from 'api/user/friend';
 import { voucherApi, adAPI } from 'api/console/monetize';
+import { kycApi } from 'api/console/helpCenter';
 
 export default combineReducers({
   common: Common,
@@ -68,4 +69,5 @@ export default combineReducers({
   [transactionAPI.reducerPath]: transactionAPI.reducer,
   [adAPI.reducerPath]: adAPI.reducer,
   [mediaApi.reducerPath]: mediaApi.reducer,
+  [kycApi.reducerPath]: kycApi.reducer,
 });

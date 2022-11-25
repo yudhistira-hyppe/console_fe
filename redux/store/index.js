@@ -31,6 +31,7 @@ import {
   mediaApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
+import { kycApi } from 'api/console/helpCenter';
 
 const initStore = () => {
   const store = configureStore({
@@ -63,6 +64,7 @@ const initStore = () => {
         kontenApi.middleware,
         iklanApi.middleware,
         mediaApi.middleware,
+        kycApi.middleware,
       ]),
   });
   return store;
