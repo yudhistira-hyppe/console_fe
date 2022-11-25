@@ -7,6 +7,7 @@ import ModalDelete from '../Modal/ModalDelete';
 import ModalSave from '../Modal/ModalSave';
 import ModalConfirmation from '../Modal/ModalConfirmation';
 import {
+  useCreateMusicMutation,
   useGetGenreMusicQuery,
   useGetMoodMusicQuery,
   useGetThemeMusicQuery,
@@ -15,17 +16,21 @@ import {
 import moment from 'moment';
 import router from 'next/router';
 import UploadMedia from '../upload-media';
+import { onMediaUpload } from 'api/console/database/mediaService';
+import { onImageUpload } from 'api/console/database/imageService';
 
 const FormMusic = (props) => {
   const { status, data, id } = props;
   const [inputValue, setInputValue] = useState({
-    name: data?.musicTitle || '',
-    artist: data?.artistName || '',
-    album: data?.albumName || '',
-    releasedAt: data?.releaseDate ? moment(data?.releaseDate) : null,
+    musicTitle: data?.musicTitle || '',
+    artistName: data?.artistName || '',
+    albumName: data?.albumName || '',
+    releaseDate: data?.releaseDate ? moment(data?.releaseDate) : null,
     genre: data?.genre || '',
     theme: data?.theme || '',
     mood: data?.mood || '',
+    apsaraMusic: data?.apsaraMusic || '',
+    apsaraThumnail: data?.apsaraThumnail || '',
   });
   const [modal, setModal] = useState({
     delete: false,
@@ -38,34 +43,88 @@ const FormMusic = (props) => {
   const { data: themes } = useGetThemeMusicQuery();
   const { data: moods } = useGetMoodMusicQuery();
   const [updateMusic] = useUpdateMusicMutation();
+  const [createMusic] = useCreateMusicMutation();
 
   const handleChangeInput = (e) => {
     const value = e.target.value;
     setInputValue({ ...inputValue, [e.target.name]: value });
   };
 
-  const handleUpdate = () => {
-    let bodyData = {
-      _id: id,
-      musicTitle: inputValue.name,
-      artistName: inputValue.artist,
-      albumName: inputValue.album,
-      releaseDate: inputValue.releasedAt,
-      genre: inputValue.genre,
-      theme: inputValue.theme,
-      mood: inputValue.mood,
-      apsaraMusic: data?.apsaraMusic,
-      apsaraThumnail: data?.apsaraThumnail,
-    };
+  const handleApsaraMedia = async () => {
+    const response = await fetch('/api/apsara-upload-media');
+    const data = await response.json();
 
-    updateMusic(bodyData).then(() => router.replace('/database/media'));
+    return data;
+  };
+
+  const handleApsaraImage = async () => {
+    const response = await fetch('/api/apsara-upload-image');
+    const data = await response.json();
+
+    return data;
+  };
+
+  const handleCreate = () => {
+    let bodyData = inputValue;
+    const uploadFileMedia = new File([inputValue.apsaraMusic], inputValue.apsaraMusic?.name, { type: 'audio/mp3' });
+    const uploadFileImage = new File([inputValue.apsaraThumnail], inputValue.apsaraThumnail?.name, { type: 'image/png' });
+
+    handleApsaraMedia().then((res) => {
+      onMediaUpload(
+        res,
+        uploadFileMedia,
+        () => {
+          bodyData = { ...bodyData, apsaraMusic: res.VideoId };
+          handleApsaraImage().then((res) => {
+            onImageUpload(
+              res,
+              uploadFileImage,
+              () => {
+                bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
+                createMusic(bodyData).then(() => router.replace('/database/media'));
+              },
+              () => alert('upload thumnail ke apsara gagal'),
+            );
+          });
+        },
+        () => alert('upload media ke apsara gagal'),
+      );
+    });
+
+    setModal({ ...modal, save: !modal.save });
+  };
+
+  const handleUpdate = () => {
+    let bodyData = { ...inputValue, _id: id };
+    const uploadFileImage = new File([inputValue.apsaraThumnail], inputValue.apsaraThumnail?.name, { type: 'image/png' });
+
+    if (bodyData.apsaraThumnail !== data?.apsaraThumnail) {
+      handleApsaraImage().then((res) => {
+        onImageUpload(
+          res,
+          uploadFileImage,
+          () => {
+            bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
+            updateMusic(bodyData).then(() => router.replace('/database/media'));
+          },
+          () => alert('upload thumnail ke apsara gagal'),
+        );
+      });
+    } else {
+      updateMusic(bodyData).then(() => router.replace('/database/media'));
+    }
+
     setModal({ ...modal, save: !modal.save });
   };
 
   return (
     <>
       <ModalDelete showModal={modal.delete} onClose={() => setModal({ ...modal, delete: !modal.delete })} />
-      <ModalSave showModal={modal.save} onClose={() => setModal({ ...modal, save: !modal.save })} onConfirm={handleUpdate} />
+      <ModalSave
+        showModal={modal.save}
+        onClose={() => setModal({ ...modal, save: !modal.save })}
+        onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
+      />
       <ModalConfirmation
         showModal={modal.confirmation}
         status={modal.status}
@@ -76,7 +135,13 @@ const FormMusic = (props) => {
       <Card style={{ padding: '20px 35px 20px 20px', height: '100%' }}>
         <Stack direction={status !== 'create' ? 'row' : 'column'} gap="24px">
           <Stack direction="column" width="100%" maxWidth={status !== 'create' ? 170 : '100%'} gap="12px">
-            <UploadMedia thumbnail={data?.apsaraThumnailUrl} dataMusic={data?.music?.PlayURL} status={status} />
+            <UploadMedia
+              thumbnail={data?.apsaraThumnailUrl}
+              dataMusic={data?.music?.PlayURL}
+              status={status}
+              setInputValue={setInputValue}
+              inputValue={inputValue}
+            />
           </Stack>
           <Stack direction={status !== 'create' ? 'column' : 'row'} flexWrap="wrap" width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
@@ -84,8 +149,8 @@ const FormMusic = (props) => {
                 Judul Musik <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <TextField
-                name="name"
-                value={inputValue.name}
+                name="musicTitle"
+                value={inputValue.musicTitle}
                 variant="outlined"
                 placeholder="Tulis Judul Musik"
                 onChange={handleChangeInput}
@@ -96,8 +161,8 @@ const FormMusic = (props) => {
                 Nama Artis <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <TextField
-                name="artist"
-                value={inputValue.artist}
+                name="artistName"
+                value={inputValue.artistName}
                 variant="outlined"
                 placeholder="Tulis Nama Artis"
                 onChange={handleChangeInput}
@@ -106,8 +171,8 @@ const FormMusic = (props) => {
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
               <Typography style={{ fontWeight: 'bold' }}>Nama Album</Typography>
               <TextField
-                name="album"
-                value={inputValue.album}
+                name="albumName"
+                value={inputValue.albumName}
                 variant="outlined"
                 placeholder="Tulis Nama Album"
                 onChange={handleChangeInput}
@@ -117,9 +182,9 @@ const FormMusic = (props) => {
               <Typography style={{ fontWeight: 'bold' }}>Tanggal Liris Lagu</Typography>
               <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: '' }}>
                 <MobileDatePicker
-                  value={inputValue.releasedAt}
+                  value={inputValue.releaseDate}
                   onChange={(newValue) => {
-                    setInputValue({ ...inputValue, releasedAt: newValue });
+                    setInputValue({ ...inputValue, releaseDate: newValue });
                   }}
                   renderInput={(params) => (
                     <TextField name="releasedAt" variant="outlined" placeholder="Pilih Tanggal Liris Lagu" {...params} />
@@ -200,7 +265,13 @@ const FormMusic = (props) => {
                 style={{ width: 'fit-content', fontWeight: 'bold' }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
                 disabled={
-                  !inputValue.name || !inputValue.artist || !inputValue.genre || !inputValue.theme || !inputValue.mood
+                  !inputValue.musicTitle ||
+                  !inputValue.artistName ||
+                  !inputValue.genre ||
+                  !inputValue.theme ||
+                  !inputValue.mood ||
+                  !inputValue.apsaraMusic ||
+                  !inputValue.apsaraThumnail
                 }>
                 Simpan & Post
               </Button>
