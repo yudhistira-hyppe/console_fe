@@ -10,9 +10,9 @@ const ProgressIndicator = ({ item, ...rest }) => {
         label={
           <Box display="flex" alignItems="center">
             <Typography style={{ fontSize: 12, marginRight: 4 }} title={item._id} fontFamily="Lato">
-              {item._id}
+              {item.reason || '-'}
             </Typography>
-            | <Box pl={1} component="span" color="text.secondary" fontSize={12}>{`${item.myCount}`}</Box>
+            | <Box pl={1} component="span" color="text.secondary" fontSize={12}>{`${item.count || 0}`}</Box>
           </Box>
         }
         labelPos="top-left"
