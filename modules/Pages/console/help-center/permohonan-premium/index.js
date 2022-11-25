@@ -8,6 +8,8 @@ import { Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
+import { useGetListKYCQuery } from 'api/console/helpCenter/kyc';
+import moment from 'moment';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -16,20 +18,30 @@ const breadcrumbs = [
 
 const PermohonanPremium = () => {
   const [filter, setFilter] = useState({
-    type: 'content',
     page: 0,
     limit: 10,
     descending: 'true',
-    // startdate: '',
-    // enddate: '',
-    search: '',
-    range: '',
-    from: null,
-    to: null,
+    startdate: '',
+    enddate: '',
     status: [],
-    reason: [],
   });
   const router = useRouter();
+
+  const getParams = () => {
+    let params = {};
+    Object.assign(params, {
+      page: filter.page,
+      limit: filter.limit,
+      descending: filter.descending === 'true' ? true : false,
+    });
+    filter.search !== '' && Object.assign(params, { keys: filter.search });
+    filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
+    filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
+    filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    return params;
+  };
+
+  const { data: listTickets, isFetching: loadingTicket } = useGetListKYCQuery(getParams());
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -49,7 +61,32 @@ const PermohonanPremium = () => {
     });
   };
 
-  const handleSearchChange = (kind, value) => {};
+  const handleSearchChange = (kind, value) => {
+    setFilter((prevVal) => {
+      if (kind === 'ticket_date') {
+        const dateFrom = moment().subtract(value, 'd').format('YYYY-MM-DD');
+        const dateNow = moment().format('YYYY-MM-DD');
+        return {
+          ...prevVal,
+          startdate: dateFrom,
+          enddate: dateNow,
+        };
+      } else if (kind === 'ticket_range') {
+        return { ...prevVal, startdate: value[0], enddate: value[1] };
+      } else if (kind === 'search') {
+        return { ...prevVal, search: value };
+      } else if (kind === 'status') {
+        return {
+          ...prevVal,
+          status: filter.status.find((item) => item === value)
+            ? filter.status.filter((item) => item !== value)
+            : [...filter.status, value],
+        };
+      } else {
+        return { ...prevVal };
+      }
+    });
+  };
 
   return (
     <>
@@ -78,8 +115,8 @@ const PermohonanPremium = () => {
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             order={filter.descending}
-            loading={false}
-            listTickets={{ arrdata: [{}] }}
+            loading={loadingTicket}
+            listTickets={listTickets}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
           />

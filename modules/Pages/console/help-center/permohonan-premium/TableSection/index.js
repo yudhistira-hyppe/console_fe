@@ -44,20 +44,6 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
     return `${STREAM_URL}${mediaEndpoint}${authToken}`;
   };
 
-  const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
-      if (item?.media?.ImageInfo) {
-        return item?.media?.ImageInfo?.[0]?.URL;
-      } else {
-        return item?.media?.VideoList?.[0]?.CoverURL;
-      }
-    } else if (item?.mediaEndpoint) {
-      return getMediaUri(item?.mediaEndpoint);
-    } else {
-      return '/images/dashboard/content_image.png';
-    }
-  };
-
   return (
     <Stack flex={1}>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
@@ -66,9 +52,9 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
           ) : (
             <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listTickets?.total} hasil (
+              Menampilkan {listTickets?.totalsearch} hasil (
               {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
-              {listTickets?.total + listTickets?.page * 10} dari {listTickets?.totalsearch})
+              {listTickets?.totalrow + listTickets?.page * 10} dari {listTickets?.totalsearch})
             </Typography>
           )}
         </Box>
@@ -114,8 +100,8 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                   <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                 </Stack>
               </TableCell>
-            ) : listTickets?.arrdata?.length >= 1 ? (
-              listTickets?.arrdata?.map((item, i) => (
+            ) : listTickets?.data?.length >= 1 ? (
+              listTickets?.data?.map((item, i) => (
                 <TableRow
                   key={i}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -131,30 +117,30 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                   }>
                   <TableCell style={{ maxWidth: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
+                      {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 180 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getImage(item)} />
+                      <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                       <Stack direction="column" gap="2px">
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          asdada
+                          {item?.username || '-'}
                         </Typography>
                         <Typography
                           variant="body1"
                           style={{ fontSize: '12px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          asdada
+                          {item?.email || '-'}
                         </Typography>
                       </Stack>
                     </Stack>
                   </TableCell>
                   <TableCell align="left">
-                    {item?.reportStatusLast === 'BARU' && (
+                    {item?.status === 'BARU' && (
                       <Chip
                         label="Baru"
                         style={{
@@ -165,7 +151,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {item?.reportStatusLast === 'APPROVE' && (
+                    {item?.status === 'DISETUJUI' && (
                       <Chip
                         label="Disetujui"
                         style={{
@@ -176,18 +162,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {item?.reportStatusLast === 'DONE' && (
-                      <Chip
-                        label="Selesai"
-                        style={{
-                          backgroundColor: '#71A5001A',
-                          color: '#71A500D9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.reportStatusLast === 'CANCELED' && (
+                    {item?.status === 'DITOLAK' && (
                       <Chip
                         label="Ditolak"
                         style={{
@@ -198,16 +173,15 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {!item?.reportStatusLast && '-'}
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      1 Kali
+                      {item?.jumlahPermohonan || 0} Kali
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Kesalahan KTP
+                      {item?.tahapan || '-'}
                     </Typography>
                   </TableCell>
                 </TableRow>

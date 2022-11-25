@@ -117,22 +117,17 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
                 label={'Baru'}
-                value="baru"
+                value="BARU"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel
                 label={'Disetujui'}
-                value="disetujui"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Selesai'}
-                value="selesai"
+                value="DISETUJUI"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel
                 label={'Ditolak'}
-                value="ditolak"
+                value="DITOLAK"
                 control={<Checkbox defaultChecked={false} color="secondary" />}
               />
             </FormGroup>
