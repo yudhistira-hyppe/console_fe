@@ -8,12 +8,13 @@ import TextField from '@mui/material/TextField';
 import useStyles from '../../bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Radio, RadioGroup, Stack } from '@mui/material';
+import { Divider, Radio, RadioGroup, Stack } from '@mui/material';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { debounce } from 'lodash';
 import { useGetReportReasonQuery } from 'api/console/helpCenter/konten';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -112,16 +113,24 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionDetails>
         </Accordion> */}
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Konten Dilaporkan</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <TextField name="search" style={{ width: '100%' }} placeholder="Cari" onChange={(e) => handleChangeDelay(e)} />
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari Konten"
+              name="search"
+              filterValue={filter.search}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+            />
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Jumlah Pelaporan</Typography>
           </AccordionSummary>
@@ -133,23 +142,28 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel value="151-200" label={'151-200'} control={<Radio />} />
             </RadioGroup>
             <Stack direction="row" spacing={1} mt={1}>
-              <TextField
-                size="small"
-                value={filter.startreport}
+              <DelayedTextField
+                fullWidth
+                waitForInput={true}
                 placeholder="From"
-                onChange={(e) => handleChange('startreport', e.target.value)}
+                name="startreport"
+                filterValue={filter.rangeReport[0]}
+                onChange={(e) => handleChange(e.target.name, Number(e.target.value))}
               />
-              <TextField
-                size="small"
-                value={filter.endreport}
+              <DelayedTextField
+                fullWidth
+                waitForInput={true}
                 placeholder="To"
-                onChange={(e) => handleChange('endreport', e.target.value)}
+                name="endreport"
+                filterValue={filter.rangeReport[1]}
+                onChange={(e) => handleChange(e.target.name, Number(e.target.value))}
               />
             </Stack>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
@@ -158,28 +172,37 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Baru'}
                 value="BARU"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('BARU')} />}
               />
               <FormControlLabel
                 label={'Dipulihkan'}
                 value="TIDAK DITANGGUHKAN"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.status?.includes('TIDAK DITANGGUHKAN')}
+                  />
+                }
               />
               <FormControlLabel
                 label={'Ditangguhkan'}
                 value="DITANGGUHKAN"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DITANGGUHKAN')} />
+                }
               />
               <FormControlLabel
                 label={'Ditandai Sensitif'}
                 value="FLAGING"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('FLAGING')} />}
               />
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Alasan Pelaporan</Typography>
           </AccordionSummary>
@@ -191,9 +214,15 @@ const SearchSection = ({ filter, handleChange }) => {
                 {reason?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
-                    value={item?._id}
+                    value={JSON.stringify({ _id: item?._id, name: item?.description })}
                     label={<Typography style={{ fontSize: 12 }}>{item?.description}</Typography>}
-                    control={<Checkbox defaultChecked={false} color="secondary" />}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        checked={filter.reason.map((item) => item?.name).includes(item?.description)}
+                      />
+                    }
                   />
                 ))}
               </FormGroup>
