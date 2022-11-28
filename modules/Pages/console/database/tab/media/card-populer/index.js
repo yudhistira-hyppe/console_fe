@@ -42,8 +42,10 @@ const CardPopular = (props) => {
           ) : (
             dataChart()?.map((item, key) => (
               <Stack key={key} direction="row" alignItems="center" gap="8px">
-                <Typography style={{ width: 85, fontWeight: 'bold', color: '#00000099' }}>{key + 1}</Typography>
-                <Stack direction="row" alignItems="center" gap="12px">
+                <Typography style={{ width: '100%', maxWidth: 85, fontWeight: 'bold', color: '#00000099' }}>
+                  {key + 1}
+                </Typography>
+                <Stack direction="row" alignItems="center" gap="12px" width="100%">
                   {image && (
                     <Avatar
                       src={item?._id?.apsaraThumnailUrl}
