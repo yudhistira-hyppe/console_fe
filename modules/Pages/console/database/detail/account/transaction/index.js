@@ -49,7 +49,7 @@ const TransactionComponent = (props) => {
       .unwrap()
       .then((res) => {
         setPayload({ ...payload, skip: payload.skip + 10 });
-        setBalance(res.totalsaldo[0]);
+        setBalance(res?.totalsaldo[0]);
         const formattedTransactions = res.fData.map((filteredData) => {
           return {
             ...formattedTransaction(filteredData),
@@ -132,7 +132,7 @@ const TransactionComponent = (props) => {
         <Stack direction="row" justifyContent="space-between" padding={3}>
           <Stack direction="row" gap={3}>
             <Typography variant="h4">Saldo</Typography>
-            <Typography variant="body2">Rp {formatCurrency(balance.totalsaldo || 0)}</Typography>
+            <Typography variant="body2">Rp {formatCurrency(balance?.totalsaldo || 0)}</Typography>
           </Stack>
         </Stack>
         <TableContainer component={Paper}>

@@ -39,6 +39,7 @@ const DatabaseTabAccountFilterItemComponent = (props) => {
                     checked={isChecked}
                     value={checkbox.value}
                     name={configKey}
+                    color="secondary"
                     onChange={(event) => onChange(configItem.type, event)}
                   />
                 }
@@ -61,7 +62,7 @@ const DatabaseTabAccountFilterItemComponent = (props) => {
               label={radio.label}
               name={configKey}
               value={radio.value}
-              control={<Radio className={classes.radio} />}
+              control={<Radio className={classes.radio} color="secondary" />}
             />
           ))}
         </RadioGroup>

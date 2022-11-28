@@ -9,7 +9,7 @@ const DatabaseComponent = dynamic(() => import('modules/Pages/console/database')
   loading: () => <PageLoader />,
 });
 
-const validDatabaseTab = ['account'];
+const validDatabaseTab = ['account', 'content', 'media'];
 
 const DatabaseDynamicPage = () => {
   const { authUser } = useAuth();
@@ -23,13 +23,13 @@ const DatabaseDynamicPage = () => {
         router.replace('/database/account');
         return;
       }
-      if (!authUser) {
+      if (!authUser?.user) {
         router.push({ pathname: '/signin', query: { redirect: router.asPath } });
         return;
       }
       setDatabaseProps({ tab: slug[0], detailId: slug[1] });
     }
-  }, [slug, authUser]);
+  }, [slug]);
 
   return (
     <SecureConsolePage>

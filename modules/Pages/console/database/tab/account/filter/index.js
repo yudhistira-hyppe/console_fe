@@ -14,7 +14,7 @@ const DatabaseTabAccountFilterComponent = (props) => {
     <Box className={classes.card}>
       {Object.keys(configFilters).map((key) => (
         <Fragment key={key}>
-          <Accordion className={classes.accordion} elevation={0} disableGutters>
+          <Accordion className={classes.accordion} elevation={0} disableGutters defaultExpanded>
             <AccordionSummary className={classes.accordionSummary} expandIcon={<ExpandMore />}>
               <Typography className={classes.filterHeader}>{configFilters[key].label}</Typography>
             </AccordionSummary>

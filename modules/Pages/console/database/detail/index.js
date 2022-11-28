@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import DatabaseDetailAccountComponent from './account';
 import DatabaseDetailContentComponent from './content';
+import DatabaseDetailMediaComponent from './media';
 
 const DatabaseDetailComponent = (props) => {
   const { tab, detailId } = props;
@@ -11,7 +12,7 @@ const DatabaseDetailComponent = (props) => {
     case 'content':
       return <DatabaseDetailContentComponent detailId={detailId} />;
     default:
-      return null;
+      return <DatabaseDetailMediaComponent detailId={detailId} />;
   }
 };
 

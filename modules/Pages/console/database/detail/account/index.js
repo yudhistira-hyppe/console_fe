@@ -4,6 +4,8 @@ import Head from 'next/head';
 import { Typography, Box } from '@material-ui/core';
 import { Grid, Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
+import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
+import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import CmtAvatar from '@coremat/CmtAvatar';
 import { useRouter } from 'next/router';
 import Insight from './insight';
@@ -19,8 +21,7 @@ import { useAuth } from 'authentication';
 import { useUserListFriendQuery } from 'api/user/friend';
 
 const breadcrumbs = [
-  { label: 'Home', link: '/' },
-  { label: 'Database Akun Pengguna', link: '/database/account' },
+  { label: 'Database Akun', link: '/database/account' },
   { label: 'Rincian Akun', isActive: true },
 ];
 
@@ -74,7 +75,25 @@ const DatabaseDetailAccountComponent = (props) => {
       <Head>
         <title key="title">Hyppe-Console :: Rincian Akun</title>
       </Head>
-      <PageContainer breadcrumbs={breadcrumbs}>
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/database/account')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
+          </Stack>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
+            Kembali
+          </Typography>
+        </Stack>
+      </Stack>
+
+      <PageContainer>
         {isSuccess && (
           <Stack spacing={3}>
             <Stack
@@ -90,7 +109,7 @@ const DatabaseDetailAccountComponent = (props) => {
                   size={80}
                   color="random"
                 />
-                <Stack justifyContent="center">
+                <Stack justifyContent="center" gap="4px">
                   <Typography variant="h1">{accountDetail.username}</Typography>
                   <Box fontSize={14} color="text.secondary">
                     {accountDetail.fullName}

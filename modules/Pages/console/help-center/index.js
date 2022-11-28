@@ -1,249 +1,230 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import GridContainer from '@jumbo/components/GridContainer';
-import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer'; // import CardMenuHelpCenterComponent from './CardMenuHelpCenterComponent';
+import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import CardWithIndicator from './CardWithIndicator';
 import AccountReport from './AccountReport';
 import ContentReport from './ContentReport';
 import AdsReport from './adsReport';
+import { useGetCountingHelpCenterQuery } from 'api/console/helpCenter/ticket';
+import { Card, IconButton, Stack, TextField } from '@mui/material';
+import { DateRangePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Delete } from '@material-ui/icons';
 
-const breadcrumbs = [
-  { label: 'Home', link: '/console' },
-  { label: 'Pusat Bantuan', isActive: true },
-];
-
-const dataBantuanPengguna = [
-  { label: 'Baru', value: 3, rate: 4, color: '#E31D41' },
-  { label: 'Dalam Proses', value: 10, rate: 7, color: '#FF8800' },
-  { label: 'Selesai', value: 86, rate: 61, color: '#8DCD03' },
-  { label: 'Tidak Selesai', value: 1, rate: 2, color: '#7C7C7C' },
-];
-
-const dataPermohonanPremium = [
-  { label: 'Baru', value: 3, rate: 4, color: '#E31D41' },
-  { label: 'Ditolak', value: 10, rate: 7, color: '#FF8800' },
-  { label: 'Disetujui', value: 86, rate: 61, color: '#8DCD03' },
-];
-
-const dataLaporanAkun = [
-  { label: 'Baru', value: 10, rate: 20, color: '#E31D41' },
-  { label: 'Ditangguhkan', value: 10, rate: 10, color: '#FF8800' },
-  { label: 'Tidak Ditangguhkan', value: 15, rate: 120, color: '#8DCD03' },
-  { label: 'Dihapus', value: 5, rate: 120, color: '#7C7C7C' },
-];
-
-const dataLaporanKonten = [
-  { label: 'Baru', value: 10, rate: 20, color: '#E31D41' },
-  { label: 'Ditangguhkan', value: 10, rate: 10, color: '#FF8800' },
-  { label: 'Tidak Ditangguhkan', value: 15, rate: 120, color: '#8DCD03' },
-  { label: 'Dihapus', value: 5, rate: 120, color: '#7C7C7C' },
-];
-
-const dataLaporanIklan = [
-  { label: 'Baru', value: 25, rate: 1, color: '#E31D41' },
-  { label: 'Ditangguhkan', value: 25, rate: 1, color: '#FF8800' },
-  { label: 'Tidak Ditangguhkan', value: 25, rate: 1, color: '#8DCD03' },
-  { label: 'Dihapus', value: 25, rate: 1, color: '#7C7C7C' },
+const sample4Data = [
+  { _id: 'BARU', persen: 3, myCount: 4, warna: '#E31D41' },
+  { _id: 'DITANGGUHKAN', persen: 86, myCount: 61, warna: '#8DCD03' },
+  { _id: 'TIDAK DITANGGUHKAN', persen: 10, myCount: 7, warna: '#FF8800' },
+  { _id: 'DITANDAI SENSITIF', persen: 1, myCount: 2, warna: '#7C7C7C' },
 ];
 
 const ConsoleHelpCenterComponent = () => {
   const router = useRouter();
-  const [bantuanPenggunaStatus, setBantuanPenggunaStatus] = useState('Semua');
-  const [premiumAkunStatus, setpremiumAkunStatus] = useState('Semua');
-  const [laporanAkunStatus, setlaporanAkunStatus] = useState('Semua');
-  const [laporanKontenStatus, setlaporanKontenStatus] = useState('Semua');
-  const [laporanIklanStatus, setlaporanIklanStatus] = useState('Semua');
-  const [fetchingList, setFetchingList] = useState({
-    bantuanPengguna: true,
-    premiumAkun: true,
-    laporanAkun: true,
-    laporanKonten: true,
-    laporanIklan: true,
-    listPelaporanAkun: true,
-    listPelaporanIklan: true,
-    listPelaporanKonten: true,
+  const [filter, setFilter] = useState([null, null]);
+  const [deleteRefresh, setDeleteRefresh] = useState(false);
+
+  const { data: reportCount, isFetching } = useGetCountingHelpCenterQuery({
+    startdate: filter[0] || undefined,
+    enddate: filter[1] || undefined,
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      setFetchingList({
-        bantuanPengguna: false,
-        premiumAkun: false,
-        laporanAkun: false,
-        laporanKonten: false,
-        laporanIklan: false,
-        listPelaporanAkun: false,
-        listPelaporanIklan: false,
-        listPelaporanKonten: false,
-      });
-    }, 1000);
-  }, []);
-
-  const onStatusChangeHandler = (type, data) => {
-    switch (type.toLowerCase()) {
-      case 'bantuan pengguna':
-        if (data) {
-          setBantuanPenggunaStatus(data);
-        }
-        break;
-      case 'upgrade premium':
-        if (data) {
-          setpremiumAkunStatus(data);
-        }
-        break;
-      case 'laporan akun':
-        if (data) {
-          setlaporanAkunStatus(data);
-        }
-        break;
-      case 'laporan konten':
-        if (data) {
-          setlaporanKontenStatus(data);
-        }
-        break;
-      case 'laporan iklan':
-        if (data) {
-          setlaporanIklanStatus(data);
-        }
-        break;
-      default:
-        break;
-    }
-  };
+    setDeleteRefresh(true);
+    setTimeout(() => setDeleteRefresh(false), 50);
+  }, [reportCount]);
 
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Pusat Bantuan</title>
       </Head>
-      <PageContainer heading="Pusat Bantuan" breadcrumbs={breadcrumbs}></PageContainer>
+      <PageContainer>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4} mt="-25px">
+          <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>Bantuan Pengguna</Typography>
+          <Card style={{ padding: 10 }}>
+            <Stack direction="row" alignItems="center" gap="8px">
+              <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
+                <DateRangePicker
+                  value={filter}
+                  onChange={(newValue) => {
+                    setFilter([newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
+                  }}
+                  renderInput={(startProps, endProps) => (
+                    <>
+                      <Stack direction={'row'} spacing={1}>
+                        <TextField
+                          size="small"
+                          autoComplete="off"
+                          color="secondary"
+                          style={{ maxWidth: 150 }}
+                          {...startProps}
+                        />
+                        <TextField
+                          size="small"
+                          autoComplete="off"
+                          color="secondary"
+                          style={{ maxWidth: 150 }}
+                          {...endProps}
+                        />
+                      </Stack>
+                    </>
+                  )}
+                />
+              </LocalizationProvider>
+              <IconButton color="secondary" onClick={() => setFilter([null, null])}>
+                <Delete />
+              </IconButton>
+            </Stack>
+          </Card>
+        </Stack>
 
-      <GridContainer>
-        <Grid item xs={12} md={6} sm={6}>
-          <CardWithIndicator
-            headTitle="Bantuan Pengguna"
-            TypeProblem="Total Masalah"
-            numberOfProblem={70}
-            iconLabelRight
-            data={dataBantuanPengguna}
-            onClick={() => router.push('/help-center/bantuan-pengguna')}
-            status={bantuanPenggunaStatus}
-            setStatusList={(val) => onStatusChangeHandler('bantuan pengguna', val)}
-            isFetching={fetchingList.bantuanPengguna}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} sm={6}>
-          <CardWithIndicator
-            headTitle="Permohonan Akun Premium"
-            TypeProblem="Total Masalah"
-            numberOfProblem={70}
-            iconLabelRight
-            data={dataPermohonanPremium}
-            status={premiumAkunStatus}
-            onClick={() => router.push('/console/help-center/keluhan-pengguna')}
-            setStatusList={(val) => onStatusChangeHandler('upgrade premium', val)}
-            isFetching={fetchingList.premiumAkun}
-          />
-        </Grid>
+        <GridContainer>
+          <Grid item xs={12} sm={4}>
+            <CardWithIndicator
+              headTitle="Bantuan Pengguna"
+              TypeProblem="Total Masalah"
+              numberOfProblem={70}
+              data={sample4Data}
+              onClick={() => router.push('/help-center/bantuan-pengguna')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <CardWithIndicator
+              headTitle="Permohonan Akun Premium"
+              TypeProblem="Total Permohonan"
+              numberOfProblem={70}
+              data={sample4Data}
+              onClick={() => router.push('/help-center/permohonan-premium')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <CardWithIndicator
+              headTitle="Rekening Bank"
+              TypeProblem="Total Permohonan"
+              numberOfProblem={70}
+              data={sample4Data}
+              onClick={() => router.push('/help-center/rekening-bank')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
 
-        <Grid item xs={12} md={4} sm={4}>
-          <CardWithIndicator
-            headTitle="Laporan Akun"
-            TypeProblem="Akun Dilaporkan"
-            numberOfProblem={10}
-            data={dataLaporanAkun}
-            pathIconLeft={'/images/icons/account-circle.svg'}
-            onClick={() => router.push('/console/help-center/pelaporan-akun')}
-            status={laporanAkunStatus}
-            setStatusList={(val) => onStatusChangeHandler('laporan akun', val)}
-            isFetching={fetchingList.laporanAkun}
-          />
-        </Grid>
-        <Grid item xs={12} md={4} sm={4}>
-          <CardWithIndicator
-            headTitle="Laporan Konten"
-            TypeProblem="Konten Dilaporkan"
-            numberOfProblem={200}
-            data={dataLaporanKonten}
-            status={laporanKontenStatus}
-            pathIconLeft={'/images/icons/img-empty.svg'}
-            onClick={() => router.push('/console/help-center/pelaporan-konten')}
-            setStatusList={(val) => onStatusChangeHandler('laporan kontent', val)}
-            isFetching={fetchingList.laporanKonten}
-          />
-        </Grid>
-        <Grid item xs={12} md={4} sm={4}>
-          <CardWithIndicator
-            headTitle="Laporan Iklan"
-            TypeProblem="Iklan Dilaporkan"
-            numberOfProblem={25}
-            data={dataLaporanIklan}
-            status={laporanIklanStatus}
-            pathIconLeft={'/images/icons/ads-icon.svg'}
-            onClick={() => router.push('/console/help-center/pelaporan-iklan')}
-            setStatusList={(val) => onStatusChangeHandler('laporan iklan', val)}
-            isFetching={fetchingList.laporanIklan}
-          />
-        </Grid>
+          <Grid item xs={12} sm={4}>
+            <CardWithIndicator
+              headTitle="Laporan Konten"
+              TypeProblem="Konten Dilaporkan"
+              numberOfProblem={reportCount?.content?.report[0]?.totalReport}
+              data={reportCount?.content?.report[0]?.data}
+              pathIconLeft={'/images/icons/img-empty.svg'}
+              onClick={() => router.push('/help-center/pelaporan-konten')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <CardWithIndicator
+              headTitle="Banding Konten"
+              TypeProblem="Permohonan Banding"
+              numberOfProblem={reportCount?.content?.appeal[0]?.totalReport}
+              data={reportCount?.content?.appeal[0]?.data || []}
+              pathIconLeft={'/images/icons/banding-konten.svg'}
+              onClick={() => router.push('/help-center/banding-konten')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <CardWithIndicator
+              headTitle="Fingerprint Combat"
+              TypeProblem="Konten Serupa"
+              numberOfProblem={25}
+              data={sample4Data}
+              pathIconLeft={'/images/icons/banding-konten.svg'}
+              onClick={() => router.push('/help-center/konten-serupa')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
 
-        {/* --------- card section 2 (without indicator) --------------------*/}
-        <Grid item xs={12} md={4} sm={4}>
-          <AccountReport isFetching={fetchingList.listPelaporanAkun} />
-        </Grid>
-        <Grid item xs={12} md={4} sm={4}>
-          <ContentReport isFetching={fetchingList.listPelaporanKonten} />
-        </Grid>
-        <Grid item xs={12} md={4} sm={4}>
-          <AdsReport isFetching={fetchingList.listPelaporanIklan} />
-        </Grid>
-      </GridContainer>
+          <Grid item xs={12} sm={6}>
+            <CardWithIndicator
+              headTitle="Laporan Iklan"
+              TypeProblem="Iklan Dilaporkan"
+              numberOfProblem={reportCount?.ads?.report[0]?.totalReport}
+              data={reportCount?.ads?.report[0]?.data}
+              pathIconLeft={'/images/icons/ads-icon.svg'}
+              onClick={() => router.push('/help-center/pelaporan-iklan')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CardWithIndicator
+              headTitle="Banding Iklan Moderasi"
+              TypeProblem="Permohonan Banding"
+              numberOfProblem={reportCount?.ads?.appeal[0]?.totalReport}
+              data={reportCount?.ads?.appeal[0]?.data}
+              pathIconLeft={'/images/icons/ads-banding.svg'}
+              onClick={() => router.push('/help-center/banding-iklan')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
+            />
+          </Grid>
 
-      {/* // start rewrite UI */}
-      {/* <GridContainer>
-          <Grid item xs={12} sm={4} md={3}>
-            <CardMenuHelpCenterComponent
-              clickedElement={() => router.push('/console/help-center/bantuan-pengguna')}
-              icon={iconHelp}
-              title="Bantuan Pengguna"
-              backgroundColor="#FFFFFF"
+          <Grid item xs={12} sm={6}>
+            <CardWithIndicator
+              headTitle="Laporan Akun"
+              TypeProblem="Akun Dilaporkan"
+              numberOfProblem={200}
+              data={sample4Data}
+              pathIconLeft={'/images/icons/users.svg'}
+              onClick={() => router.push('/help-center/pelaporan-akun')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
             />
           </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <CardMenuHelpCenterComponent
-              clickedElement={() => router.push('/console/help-center/pemecahan-masalah')}
-              icon={iconWrench}
-              title="Pemecahan Masalah"
-              backgroundColor="#FFFFFF"
+          <Grid item xs={12} sm={6}>
+            <CardWithIndicator
+              headTitle="Banding Akun Moderasi"
+              TypeProblem="Permohonan"
+              numberOfProblem={25}
+              data={sample4Data}
+              pathIconLeft={'/images/icons/users-banding.svg'}
+              onClick={() => router.push('/help-center/banding-akun')}
+              status={'hue'}
+              setStatusList={() => {}}
+              isFetching={isFetching || deleteRefresh}
             />
           </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <CardMenuHelpCenterComponent
-              clickedElement={() => router.push('/console/help-center/faq')}
-              icon={iconFaq}
-              title="FAQ"
-              backgroundColor="#FFFFFF"
-            />
+
+          {/* --------- card section 2 (without indicator) --------------------*/}
+          <Grid item xs={12} md={4} sm={4}>
+            <AccountReport />
           </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <CardMenuHelpCenterComponent
-              clickedElement={() => router.push('/console/help-center/pengumuman')}
-              icon={iconStar}
-              title="Pengumuman"
-              backgroundColor="#FFFFFF"
-            />
+          <Grid item xs={12} md={4} sm={4}>
+            <ContentReport />
           </Grid>
-          <Grid item xs={12} sm={4} md={3}>
-            <CardMenuHelpCenterComponent
-              clickedElement={() => router.push('/console/help-center/info')}
-              icon={iconStar}
-              title="Hyppe Info"
-              backgroundColor="#FFFFFF"
-            />
+          <Grid item xs={12} md={4} sm={4}>
+            <AdsReport />
           </Grid>
-        </GridContainer> */}
-      {/* // end rewrite UI */}
+        </GridContainer>
+      </PageContainer>
     </>
   );
 };

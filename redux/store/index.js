@@ -26,8 +26,12 @@ import {
   voucherApi,
   adAPI,
   transactionAPI,
+  kontenApi,
+  iklanApi,
+  mediaApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
+import { kycApi } from 'api/console/helpCenter';
 
 const initStore = () => {
   const store = configureStore({
@@ -57,6 +61,10 @@ const initStore = () => {
         voucherApi.middleware,
         adAPI.middleware,
         transactionAPI.middleware,
+        kontenApi.middleware,
+        iklanApi.middleware,
+        mediaApi.middleware,
+        kycApi.middleware,
       ]),
   });
   return store;

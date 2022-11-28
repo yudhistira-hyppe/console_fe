@@ -21,6 +21,8 @@ import {
   bantuanPenggunaApi,
   iklanApi,
   transactionAPI,
+  kontenApi,
+  mediaApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -31,6 +33,7 @@ import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 import { userFriendAPI } from 'api/user/friend';
 import { voucherApi, adAPI } from 'api/console/monetize';
+import { kycApi } from 'api/console/helpCenter';
 
 export default combineReducers({
   common: Common,
@@ -62,6 +65,9 @@ export default combineReducers({
   [divisiAPI.reducerPath]: divisiAPI.reducer,
   [bantuanPenggunaApi.reducerPath]: bantuanPenggunaApi.reducer,
   [iklanApi.reducerPath]: iklanApi.reducer,
+  [kontenApi.reducerPath]: kontenApi.reducer,
   [transactionAPI.reducerPath]: transactionAPI.reducer,
   [adAPI.reducerPath]: adAPI.reducer,
+  [mediaApi.reducerPath]: mediaApi.reducer,
+  [kycApi.reducerPath]: kycApi.reducer,
 });

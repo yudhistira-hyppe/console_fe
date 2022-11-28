@@ -8,8 +8,17 @@ const InterestComponent = (props) => {
 
   return (
     <Stack spacing={3}>
-      <Typography variant="h3">Minat</Typography>
-      <Divider />
+      <Typography
+        style={{
+          fontWeight: 'bold',
+          borderBottom: '1px solid #0000001F',
+          paddingBottom: 20,
+          fontSize: 18,
+          position: 'relative',
+        }}>
+        Minat
+        <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
+      </Typography>
       <Stack gap={1.25} direction="row" flexWrap="wrap">
         {interests.map((interest, index) => (
           <Box

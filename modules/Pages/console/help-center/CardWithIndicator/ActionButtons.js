@@ -15,11 +15,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActionButtons = ({ onClick, isFetching, column }) => {
+const ActionButtons = ({ onClick, isFetching }) => {
   const classes = useStyles();
 
   return (
-    <Box mt={column === 3 ? 16 : 28}>
+    <Box mt={28}>
       {isFetching ? (
         <Skeleton width={'6em'} height="4em" />
       ) : (

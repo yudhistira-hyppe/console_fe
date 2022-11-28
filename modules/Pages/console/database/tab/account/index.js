@@ -68,7 +68,6 @@ const defaultFilters = {
       },
     ],
   },
-  interest: {},
   lastActive: {
     label: 'Terakhir Aktif',
     type: 'radio-group',
@@ -100,24 +99,6 @@ const defaultFilters = {
 const DatabaseTabAccountComponent = () => {
   const [configFilters, setConfigFilters] = useState(defaultFilters);
   const [filters, setFilters] = useState({});
-  const { data: interests } = useGetAllInterestQuery({
-    langIso: 'id',
-    pageNumber: 0,
-    pageRow: 20,
-  });
-
-  useEffect(() => {
-    if (interests) {
-      setConfigFilters({
-        ...configFilters,
-        ['interest']: {
-          label: 'Minat',
-          type: 'checkbox-group',
-          items: interests.data.map((interest) => ({ value: interest.interestName, label: interest.interestName })),
-        },
-      });
-    }
-  }, [interests]);
 
   const onChangeFilters = (filterType, event) => {
     if (filterType === 'field') {

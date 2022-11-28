@@ -4,7 +4,7 @@ export const getAllCookies = () => {
       .split(';')
       .map((item) => item.trim())
       .reduce((obj, cookie) => {
-        const keyAndValue = cookie.split('=');
+        const keyAndValue = cookie.includes('p_h5_upload_u') ? [null, null] : cookie.split('=');
         return { ...obj, [keyAndValue[0]]: JSON.parse(keyAndValue[1]) };
       }, {});
   }

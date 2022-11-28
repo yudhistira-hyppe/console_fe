@@ -25,12 +25,10 @@ import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { LoadingButton } from '@mui/lab';
-import SpinnerLoading from 'components/common/loading/spinner';
 import { useGetDivisiQuery } from 'api/console/divisi';
 
 const breadcrumbs = [
-  { label: 'Home', link: '/' },
-  { label: 'Help Center', link: '/help-center' },
+  { label: 'Pusat Bantuan', link: '/help-center' },
   { label: 'Bantuan Pengguna', link: '/help-center/bantuan-pengguna' },
   { label: 'Detail Masalah', isActive: true },
 ];
@@ -236,11 +234,12 @@ const DetailBantuanPengguna = () => {
           mt={1}
           mb={3}
           onClick={() => router.push('/help-center/bantuan-pengguna')}
+          gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>
-            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
           </Stack>
-          <Typography variant="h1" style={{ color: 'black' }}>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
             Kembali
           </Typography>
         </Stack>

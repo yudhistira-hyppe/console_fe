@@ -2,46 +2,47 @@ import React from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Breadcrumbs from '../../bantuan-pengguna/BreadCrumb';
-import { Grid, Stack } from '@mui/material';
+import { Avatar, Box, Chip, Grid, Pagination, Stack, Tab, Tabs } from '@mui/material';
 
-import { Avatar, Button, Card, CardContent, CardHeader, Chip, Divider, Link, Paper, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Divider, Link, Paper, Typography } from '@material-ui/core';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
-import PortfolioDetails from '../../CardWithIndicator/PortofolioDetails';
-import EmailIcon from '@material-ui/icons/EmailOutlined';
-import CalendarIcon from '@material-ui/icons/CalendarTodayOutlined';
-import UserIcon from '@material-ui/icons/PersonOutlined';
-import LocationIcon from '@material-ui/icons/LocationOn';
-import CakeIcon from '@material-ui/icons/Cake';
-import WCIcon from '@material-ui/icons/Wc';
-import PhoneIcon from '@material-ui/icons/PhoneIphone';
-import HouseIcon from '@material-ui/icons/LocationCity';
-import CircledUserIcon from '@material-ui/icons/AccountCircleRounded';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import CheckCircleIcon from '@material-ui/icons/CheckCircleRounded';
 import ModalConfirmation from '../Modal';
 import DeleteModal from '../Modal/DeleteModal';
 import ViewModal from '../Modal/ViewModal';
-import GetChipColor from 'helpers/getChipColor';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import CmtList from '@coremat/CmtList';
-import ProgressIndicator from '../../CardWithIndicator/ProgressIndicator';
 import { GraphIndicator } from '../../components';
-
-const wallets = [
-  { label: 'Mempromosikan Kekerasan Ekstrim Dan Terorisme', value: 25, rate: 5, color: '#E31D41' },
-  { label: 'Melanggar EULA', value: 25, rate: 5, color: '#FF8800' },
-  { label: 'Keamanan Anak Di Bawah Umur', value: 25, rate: 5, color: '#8DCD03' },
-  { label: 'Tidak Selesai', value: 25, rate: 5, color: '#7C7C7C' },
-];
+import {
+  useDeleteTicketMutation,
+  useGetDetailTicketQuery,
+  useGetReportUserDetailTicketQuery,
+  useUpdateDetailTicketMutation,
+  useUpdateFlagingTicketMutation,
+} from 'api/console/helpCenter/konten';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import GridContainer from '@jumbo/components/GridContainer';
+import {
+  AccountBalance,
+  AccountCircle,
+  Cake,
+  CheckCircleRounded,
+  DateRange,
+  Email,
+  HowToReg,
+  LocationCity,
+  LocationOn,
+  PhoneIphone,
+  Wc,
+} from '@material-ui/icons';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import moment from 'moment';
+import ScrollBar from 'react-perfect-scrollbar';
+import { makeStyles } from '@material-ui/styles';
 
 const breadcrumbs = [
-  { label: 'Home', link: '/console' },
-  { label: 'Help Center', link: '/console/help-center' },
-  { label: 'Pelaporan Akun', link: '/console/pelaporan-akun' },
+  { label: 'Pusat Bantuan', link: '/help-center' },
+  { label: 'Pelaporan Akun', link: '/help-center/pelaporan-akun' },
   { label: 'Rincian Akun', isActive: true },
 ];
 
@@ -103,21 +104,41 @@ const akunPelapor = [
   },
 ];
 
-const laporan = [
-  { total: 20, status: null },
-  { total: 384, status: 'Tidak Ditangguhkan' },
-  { total: 40, status: 'Ditangguhkan' },
-  { total: 40, status: 'Ditangguhkan' },
-];
+const useStyles = makeStyles(() => ({
+  scrollbar: { overflow: 'auto', maxHeight: 500, display: 'flex', flexDirection: 'column', gap: 20, padding: '20px 20px 0' },
+  textTruncate: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    '-webkit-line-clamp': 3,
+    lineClamp: 3,
+    overflow: 'hidden',
+  },
+}));
 
-const DetailKeluhanPengguna = () => {
+const DetalPelaporanAkun = () => {
+  const { authUser } = useAuth();
   const router = useRouter();
+  const classes = useStyles();
   const [showModal, setShowModal] = React.useState({
     show: false,
-    type: '',
-    modalType: '',
+    type: null,
+    modalType: null,
   });
-  const [tabSection, setTabSection] = React.useState('0');
+  const [updateTicket] = useUpdateDetailTicketMutation();
+  const [flagTicket] = useUpdateFlagingTicketMutation();
+  const [deleteTicket] = useDeleteTicketMutation();
+
+  const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
+    postID: router.query?._id,
+    type: 'content',
+  });
+
+  const { data: userReports } = useGetReportUserDetailTicketQuery({
+    postID: router.query?._id,
+    type: 'content',
+  });
 
   const showModalHandler = (data) => {
     setShowModal({
@@ -127,12 +148,31 @@ const DetailKeluhanPengguna = () => {
     });
   };
 
-  const onBackHandler = (e) => {
-    // e.preventDefault();
-    router.push('/console/help-center');
+  const onConfirmModal = (val) => {
+    if (showModal?.type === 'ditangguhkan' || showModal?.type === 'tidak ditangguhkan') {
+      updateTicket({
+        postID: router.query?._id,
+        type: 'content',
+        reasonId: showModal?.type === 'ditangguhkan' ? val?._id : undefined,
+        reason:
+          showModal?.type === 'ditangguhkan' ? (val?.reason === 'Lainnya' ? val?.otherReason : val?.reason) : undefined,
+        ditangguhkan: showModal?.type === 'ditangguhkan',
+      }).then(() => {
+        onCloseModal();
+        router.push('/help-center/pelaporan-konten');
+      });
+    } else if (showModal?.type === 'sensitif') {
+      flagTicket({ postID: router.query?._id, type: 'content' }).then(() => {
+        onCloseModal();
+        router.push('/help-center/pelaporan-konten');
+      });
+    } else {
+      deleteTicket({ postID: router.query?._id, type: 'content', remark: val }).then(() => {
+        onCloseModal();
+        router.push('/help-center/pelaporan-konten');
+      });
+    }
   };
-
-  const onConfirmModal = () => {};
 
   const onCloseModal = () => {
     setShowModal({
@@ -142,8 +182,73 @@ const DetailKeluhanPengguna = () => {
     });
   };
 
-  const handleTabSectionChange = (event, newValue) => {
-    setTabSection(newValue);
+  const getMediaEndpoint = (mediaEndpoint) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+
+    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+  };
+
+  const getMediaUri = (mediaUri) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+
+    return `${STREAM_URL}/profilepict/${mediaUri}${authToken}`;
+  };
+
+  const getImage = (item) => {
+    if (item?.apsara && item?.apsaraId) {
+      if (item?.media?.ImageInfo) {
+        return item?.media?.ImageInfo?.[0]?.URL;
+      } else {
+        return item?.media?.VideoList?.[0]?.CoverURL;
+      }
+    } else if (item?.mediaEndpoint) {
+      return getMediaEndpoint(item?.mediaEndpoint);
+    } else {
+      return '/images/dashboard/content_image.png';
+    }
+  };
+
+  const buttonStyle = (status) => {
+    switch (status) {
+      case 'BARU':
+        return {
+          backgroundColor: '#E6094B1A',
+          color: '#E6094BD9',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+          marginTop: 'auto',
+        };
+      case 'TIDAK DITANGGUHKAN':
+        return {
+          backgroundColor: '#71A5001A',
+          color: '#71A500D9',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+          marginTop: 'auto',
+        };
+      case 'DITANGGUHKAN':
+        return {
+          backgroundColor: 'rgba(103, 103, 103, 0.1)',
+          color: '#676767',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+          marginTop: 'auto',
+        };
+      case 'FLAGING':
+        return {
+          backgroundColor: '#B457F61A',
+          color: '#B457F6D9',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+          marginTop: 'auto',
+        };
+      default:
+        return {};
+    }
   };
 
   return (
@@ -151,673 +256,606 @@ const DetailKeluhanPengguna = () => {
       <Head>
         <title key={'title'}>Hyppe-Console :: Detail Keluhan Pengguna</title>
       </Head>
+      <ModalConfirmation
+        showModal={showModal.show && showModal.modalType === 'confirmation'}
+        type={showModal.type}
+        onClose={onCloseModal}
+        onConfirm={onConfirmModal}
+      />
+      <DeleteModal
+        showModal={showModal.show && showModal.modalType === 'delete'}
+        onClose={onCloseModal}
+        onConfirm={onConfirmModal}
+      />
+      <ViewModal
+        showModal={showModal.show && showModal.modalType === 'view'}
+        userReports={userReports}
+        onClose={onCloseModal}
+      />
 
-      <Stack spacing={1}>
+      <Stack direction={'column'} spacing={2} mb={3}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
-        <Link href="/" onClick={onBackHandler} style={{ cursore: 'pointer' }}>
-          <Stack direction={'row'}>
-            <Stack direction={'column'} justifyContent={'center'}>
-              <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
-            </Stack>
-            <Stack>
-              <Typography variant="h1" style={{ color: 'black' }}>
-                Kembali
-              </Typography>
-            </Stack>
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/help-center/pelaporan-akun')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
           </Stack>
-        </Link>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
+            Kembali
+          </Typography>
+        </Stack>
       </Stack>
+      {loadingDetail ? (
+        <PageLoader />
+      ) : (
+        <PageContainer>
+          <GridContainer>
+            <Grid item xs={12} sm={8}>
+              <Card style={{ padding: '20px', height: '100%' }}>
+                <Stack direction="column" height="100%" spacing={2}>
+                  <Stack direction="row" justifyContent={'space-between'}>
+                    <Typography variant="h2" style={{ fontWeight: 'bold' }}>
+                      Laporan
+                    </Typography>
+                    {/* <div style={{ padding: '2px 5px', borderRadius: '4px', border: 'solid gray 1px' }}>
+                      <Typography variant="body2">Semua</Typography>
+                    </div> */}
+                  </Stack>
 
-      <PageContainer>
-        <Stack direction={'row'} flex={1} spacing={3} mt={3}>
-          <Card style={{ padding: '20px', flex: 2 }}>
-            <Stack direction={'row'} flex={1} justifyContent={'space-between'}>
-              <Typography variant="h3">Laporan</Typography>
-              <Chip label="semua" variant="outlined" />
-            </Stack>
-            <Stack direction={'row'} justifyContent={'space-between'} mt={3}>
-              <Stack spacing={2}>
-                <Stack spacing={1}>
-                  <Typography variant="h1">20</Typography>
-                  <Typography color="primary" variant="subtitle2">
-                    Total Laporan
-                  </Typography>
-                </Stack>
-                <div>
-                  <Button variant="contained" style={{ backgroundColor: 'rgba(233, 42, 99, 1)', color: '#FFFFFF' }}>
-                    Baru
-                  </Button>
-                </div>
-              </Stack>
-
-              <Stack>
-                <GraphIndicator data={wallets} />
-                {/* <CmtList data={wallets} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} /> */}
-                {/* <PortfolioDetails data={wallets} /> */}
-              </Stack>
-            </Stack>
-          </Card>
-
-          <Card style={{ padding: '42px 25px', flex: 1 }}>
-            <Stack spacing={4}>
-              <Stack spacing={2}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}>
-                  Tidak Ditangguhkan
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}>
-                  Ditangguhkan
-                </Button>
-              </Stack>
-
-              <Stack direction={'column'} spacing={1} mt={5}>
-                <Typography>
-                  Ingin dihapus?{' '}
-                  <Link
-                    style={{ fontWeight: 'bold', cursor: 'pointer' }}
-                    onClick={() => showModalHandler({ type: '', modalType: 'delete' })}>
-                    klik disini
-                  </Link>
-                </Typography>
-
-                <Paper
-                  style={{ padding: '15px', backgroundColor: 'rgba(0, 0, 0, 0.02)', color: 'rgba(151, 151, 151, 1)' }}
-                  elevation={0}>
-                  <Typography variant="subtitle2" style={{ textAlign: 'justify' }}>
-                    Ketika kamu memilih ingin dihapus data akan tetap ada dan hanya bisa dilihat di Hyppe Console
-                  </Typography>
-                </Paper>
-              </Stack>
-            </Stack>
-          </Card>
-
-          <Card style={{ flex: 1 }}>
-            <CardHeader title={<Typography variant="h3">Riwayat Laporan</Typography>} />
-            <CardContent>
-              <Grid container py={1}>
-                <Grid item xs={5}>
-                  <Typography variant="caption">Total Laporan</Typography>
-                </Grid>
-                <Grid item xs={7}>
-                  <Typography variant="caption">Tindakan</Typography>
-                </Grid>
-              </Grid>
-              <Divider />
-              <Grid container>
-                {laporan.map((el, i) => (
-                  <Grid container key={i} py={2} borderBottom={'solid rgba(33, 33, 33, 0.08) 2px'}>
-                    <Grid item xs={5}>
-                      <Stack direction={'row'} spacing={1} alignItems={'center'} height={'100%'}>
-                        <Typography variant="subtitle2">{el.total}</Typography>
+                  <Stack direction={'row'}>
+                    <Stack direction={'column'} justifyContent={'space-between'} flex={1}>
+                      <Stack spacing={1}>
+                        <Typography variant="h2">{detail?.totalReport || 0}</Typography>
                         <Typography
-                          variant="subtitle2"
+                          variant="body2"
                           color="primary"
                           style={{ cursor: 'pointer' }}
-                          onClick={() => showModalHandler({ modalType: 'view', type: '' })}>
-                          laporan
+                          onClick={() => showModalHandler({ modalType: 'view' })}>
+                          Total Laporan
                         </Typography>
                       </Stack>
-                    </Grid>
-                    <Grid item xs={7}>
-                      {el.status ? (
-                        <Chip
-                          label={
-                            <Typography fontWeight="bold" variant="subtitle2">
-                              {el.status}
-                            </Typography>
-                          }
-                          style={GetChipColor(el.status)}
-                        />
-                      ) : (
-                        '-'
-                      )}
-                    </Grid>
-                  </Grid>
-                ))}
-              </Grid>
-            </CardContent>
-          </Card>
-        </Stack>
+                    </Stack>
 
-        <Stack mt={3} direction={'row'} justifyContent={'space-between'}>
-          <Stack direction={'row'} spacing={2}>
-            <Stack direction={'column'} justifyContent={'center'}>
-              <Avatar src="https://material-ui.com/static/images/avatar/2.jpg"></Avatar>
-            </Stack>
-            <Stack>
-              <Typography>Mira</Typography>
+                    <Stack flex={3}>
+                      {detail?.dataSum?.length >= 1 ? (
+                        <GraphIndicator data={detail?.dataSum} />
+                      ) : (
+                        <Stack direction="column" alignItems="center" justifyContent="center" height={200}>
+                          <Typography
+                            style={{ padding: '24px 24px 0', fontFamily: 'Lato', fontWeight: 'bold', color: '#737373' }}>
+                            Tidak ada laporan
+                          </Typography>
+                        </Stack>
+                      )}
+                      {/* <PortfolioDetails data={wallets} /> */}
+                    </Stack>
+                  </Stack>
+
+                  <Button variant="contained" style={buttonStyle(detail?.data[0]?.reportStatusLast)}>
+                    {detail?.data[0]?.reportStatusLast === 'FLAGING'
+                      ? 'Ditandai Sensitif'
+                      : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
+                      ? 'Dipulihkan'
+                      : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
+                      ? 'Dihapus'
+                      : 'Baru'}
+                  </Button>
+                </Stack>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Card style={{ padding: '32px 25px', flex: 1 }}>
+                <Stack spacing={3}>
+                  <Stack spacing={2}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}
+                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      Tidak Ditangguhkan
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}
+                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      Tangguhkan
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}
+                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      Ditandai Sensitif
+                    </Button>
+                  </Stack>
+
+                  <Stack direction={'column'} spacing={2} mt={5}>
+                    <Typography>
+                      Ingin dihapus?{' '}
+                      <Link
+                        style={{ fontWeight: 'bold', cursor: 'pointer', textDecorationLine: 'none' }}
+                        onClick={() => showModalHandler({ type: 'delete', modalType: 'delete' })}>
+                        klik disini
+                      </Link>
+                    </Typography>
+
+                    <Paper
+                      style={{
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                        color: 'rgba(151, 151, 151, 1)',
+                        borderRadius: 4,
+                      }}
+                      elevation={0}>
+                      <Typography variant="subtitle2" style={{ fontWeight: 'Normal' }}>
+                        Ketika kamu memilih ingin dihapus data akan tetap ada dan hanya bisa dilihat di Hyppe Console
+                      </Typography>
+                    </Paper>
+                  </Stack>
+                </Stack>
+              </Card>
+            </Grid>
+          </GridContainer>
+          <Stack direction="row" alignItems="center" gap="25px" my="24px" pr="24px">
+            <Avatar sx={{ width: 70, height: 70 }} />
+            <Stack direction="column">
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Mira</Typography>
               <Typography>Mira Setiawan</Typography>
             </Stack>
+            <Stack direction="row" alignItems="center" ml="auto" gap="30px">
+              <Stack direction="column" alignItems="center">
+                <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>2k+</Typography>
+                <Typography style={{ color: '#00000099', fontSize: 14 }}>Pengikut</Typography>
+              </Stack>
+              <Divider orientation="vertical" flexItem />
+              <Stack direction="column" alignItems="center">
+                <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>847</Typography>
+                <Typography style={{ color: '#00000099', fontSize: 14 }}>Mengikuti</Typography>
+              </Stack>
+              <Divider orientation="vertical" flexItem />
+              <Stack direction="column" alignItems="center">
+                <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>500</Typography>
+                <Typography style={{ color: '#00000099', fontSize: 14 }}>Teman</Typography>
+              </Stack>
+            </Stack>
           </Stack>
 
-          <Stack direction={'row'} spacing={2}>
-            <Stack>
-              <Typography variant="h1" style={{ textAlign: 'center' }}>
-                2k+
-              </Typography>
-              <Typography variant="subtitle2" style={{ color: 'black', opacity: '0.6' }}>
-                Pengikut
-              </Typography>
-            </Stack>
-            <Divider orientation="vertical" />
-            <Stack>
-              <Typography variant="h1" style={{ textAlign: 'center' }}>
-                847
-              </Typography>
-              <Typography variant="subtitle2" style={{ color: 'black', opacity: '0.6' }}>
-                Mengikuti
-              </Typography>
-            </Stack>
-            <Divider orientation="vertical" />
-            <Stack>
-              <Typography variant="h1" style={{ textAlign: 'center' }}>
-                500
-              </Typography>
-              <Typography variant="subtitle2" style={{ color: 'black', opacity: '0.6' }}>
-                Teman
-              </Typography>
-            </Stack>
-          </Stack>
-        </Stack>
+          <Stack direction="row" flexWrap="nowrap" gap="24px" mb="24px">
+            <Paper style={{ padding: '35px 24px', width: '100%', maxWidth: 320, height: '100%' }}>
+              <Stack direction={'column'} spacing={3}>
+                <Stack direction={'row'} spacing={3}>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      padding: '6px 6px 0px 6px',
+                      borderRadius: '4px',
+                      backgroundColor: '#EAEAEA',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <span>
+                      <Email style={{ color: '#666666' }} />
+                    </span>
+                  </div>
 
-        <Stack direction={'row'} spacing={3} mt={3}>
-          <Paper style={{ padding: '35px 24px', height: '80%', flex: 0.3 }}>
-            <Stack direction={'column'} spacing={3}>
-              <Stack direction={'row'} spacing={2}>
-                <div
-                  style={{
-                    padding: '6px 6px 0px 6px',
-                    borderRadius: '4px',
-                    backgroundColor: '#EAEAEA',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <span>
-                    <EmailIcon style={{ color: '#DADADA' }} />
-                  </span>
-                </div>
+                  <Stack>
+                    <Typography variant="subtitle2" style={{ color: '#00000099' }}>
+                      Email
+                    </Typography>
+                    <Typography>miraonthewall@gmail.com</Typography>
+                  </Stack>
+                </Stack>
 
-                <Stack>
-                  <Typography variant="subtitle2">Email</Typography>
-                  <Typography>vebby93@gmail.com</Typography>
+                <Stack direction={'row'} spacing={3}>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      padding: '6px 6px 0px 6px',
+                      borderRadius: '4px',
+                      backgroundColor: '#EAEAEA',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <span>
+                      <DateRange style={{ color: '#666666' }} />
+                    </span>
+                  </div>
+
+                  <Stack>
+                    <Typography variant="subtitle2" style={{ color: '#00000099' }}>
+                      Waktu Pendaftaran
+                    </Typography>
+                    <Typography>21/12/2020 - 12:00 WIB</Typography>
+                  </Stack>
+                </Stack>
+
+                <Stack direction={'row'} spacing={3}>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      padding: '6px 6px 0px 6px',
+                      borderRadius: '4px',
+                      backgroundColor: '#EAEAEA',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <span>
+                      <HowToReg style={{ color: '#666666' }} />
+                    </span>
+                  </div>
+
+                  <Stack>
+                    <Typography variant="subtitle2" style={{ color: '#00000099' }}>
+                      Status
+                    </Typography>
+                    <Typography>Basic</Typography>
+                  </Stack>
+                </Stack>
+
+                <Stack direction={'row'} spacing={3}>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      padding: '6px 6px 0px 6px',
+                      borderRadius: '4px',
+                      backgroundColor: '#EAEAEA',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <span>
+                      <AccountCircle style={{ color: '#666666' }} />
+                    </span>
+                  </div>
+
+                  <Stack>
+                    <Typography variant="subtitle2" style={{ color: '#00000099' }}>
+                      Nama sesuai KTP
+                    </Typography>
+                    <Typography>Miraaa</Typography>
+                  </Stack>
                 </Stack>
               </Stack>
-
-              <Stack direction={'row'} spacing={2}>
-                <div
-                  style={{
-                    padding: '6px 6px 0px 6px',
-                    borderRadius: '4px',
-                    backgroundColor: '#EAEAEA',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <span>
-                    <CalendarIcon style={{ color: '#DADADA' }} />
-                  </span>
-                </div>
-
-                <Stack>
-                  <Typography variant="subtitle2">Waktu Pendaftaran</Typography>
-                  <Typography>21/12/2020 - 12:00 WIB</Typography>
-                </Stack>
-              </Stack>
-
-              <Stack direction={'row'} spacing={2}>
-                <div
-                  style={{
-                    padding: '6px 6px 0px 6px',
-                    borderRadius: '4px',
-                    backgroundColor: '#EAEAEA',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <span>
-                    <UserIcon style={{ color: '#DADADA' }} />
-                  </span>
-                </div>
-
-                <Stack>
-                  <Typography variant="subtitle2">Status</Typography>
-                  <Typography>Premium</Typography>
-                </Stack>
-              </Stack>
-
-              <Stack direction={'row'} spacing={2}>
-                <div
-                  style={{
-                    padding: '6px 6px 0px 6px',
-                    borderRadius: '4px',
-                    backgroundColor: '#EAEAEA',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <span>
-                    <CircledUserIcon style={{ color: '#DADADA' }} />
-                  </span>
-                </div>
-
-                <Stack>
-                  <Typography variant="subtitle2">Nama Lengkap</Typography>
-                  <Typography>Vebby Sutanto</Typography>
-                </Stack>
-              </Stack>
-            </Stack>
-          </Paper>
-
-          <Card style={{ flex: 1 }}>
-            <CardHeader style={{ padding: '24px' }} title={<Typography variant="h3">Informasi Pengguna Akun</Typography>}>
-              {' '}
-            </CardHeader>
-
-            <Divider />
-
-            <CardContent style={{ padding: '35px 24px' }}>
-              <Stack spacing={3}>
-                <Stack direction={'column'} spacing={3}>
-                  <Stack direction={'row'} spacing={24}>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <LocationIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+            </Paper>
+            <Paper style={{ width: '100%' }}>
+              <Stack direction="column" height="100%">
+                <Typography style={{ padding: 24, fontWeight: 'bold', borderBottom: '1px solid #0000001F' }}>
+                  Informasi Pengguna Akun
+                </Typography>
+                <GridContainer style={{ padding: 20, height: '100%', flexGrow: 1 }}>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <LocationOn style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
                           Tempat Lahir
                         </Typography>
-                        <Typography variant="subtitle1">Jakarta</Typography>
+                        <Typography>Jakarta</Typography>
                       </Stack>
                     </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <CakeIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <Cake style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
                           Tanggal Lahir
                         </Typography>
-                        <Typography variant="subtitle1">25/10/91</Typography>
+                        <Typography>#000000DE</Typography>
                       </Stack>
                     </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <WCIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption">Jenis Kelamin</Typography>
-                        <Typography variant="subtitle1">Wanita</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <Wc style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
+                          Jenis Kelamin
+                        </Typography>
+                        <Typography>Perempuan</Typography>
                       </Stack>
                     </Stack>
-                  </Stack>
-
-                  <Stack spacing={18} direction={'row'}>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <PhoneIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <PhoneIphone style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
                           Nomor Telepon
                         </Typography>
-                        <Typography variant="subtitle1">081234567890</Typography>
+                        <Typography>081234567890</Typography>
                       </Stack>
                     </Stack>
-
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <HouseIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
-                          Lokasi
-                        </Typography>
-                        <Typography variant="subtitle1">Bogor, Jawa Barat, Indonesia</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <LocationCity style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>Lokasi</Typography>
+                        <Typography>Bogor, Jawa Barat, Indonesia</Typography>
                       </Stack>
                     </Stack>
-                  </Stack>
-                </Stack>
-
-                <Stack direction={'column'} spacing={3}>
-                  <Stack direction={'row'} spacing={14}>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <AccountBalanceIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  </Grid>
+                  <Grid item xs={12} sm={4} />
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <AccountBalance style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
                           Rekening Bank
                         </Typography>
-                        <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                          <Typography variant="subtitle1">BCA *******900</Typography>
-                          <CheckCircleIcon fontSize="small" htmlColor="#5D9405" />
+                        <Stack direction="row" alignItems="center" gap="8px">
+                          <Typography>BCA *******900</Typography>
+                          <CheckCircleRounded style={{ fontSize: 18, color: '#5D9405' }} />
                         </Stack>
-                        <Typography variant="subtitle1">Mar****an</Typography>
+                        <Typography>Mir****an</Typography>
                       </Stack>
                     </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <AccountBalanceIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <AccountBalance style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
                           Rekening Bank
                         </Typography>
-                        <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                          <Typography variant="subtitle1">Mandiri *******900</Typography>
-                          <CheckCircleIcon fontSize="small" htmlColor="#5D9405" />
+                        <Stack direction="row" alignItems="center" gap="8px">
+                          <Typography>BCA *******900</Typography>
+                          <CheckCircleRounded style={{ fontSize: 18, color: '#5D9405' }} />
                         </Stack>
-                        <Typography variant="subtitle1">Mar****an</Typography>
+                        <Typography>Mir****an</Typography>
                       </Stack>
                     </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <AccountBalanceIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <AccountBalance style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
                           Rekening Bank
                         </Typography>
-                        <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                          <Typography variant="subtitle1">BNI *******900</Typography>
-                          <CheckCircleIcon fontSize="small" htmlColor="#5D9405" />
+                        <Stack direction="row" alignItems="center" gap="8px">
+                          <Typography>BCA *******900</Typography>
+                          <CheckCircleRounded style={{ fontSize: 18, color: '#5D9405' }} />
                         </Stack>
-                        <Typography variant="subtitle1">Mar****an</Typography>
+                        <Typography>Mir****an</Typography>
                       </Stack>
                     </Stack>
-                  </Stack>
-
-                  <Stack spacing={19} direction={'row'}>
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <AccountBalanceIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Stack direction="row" alignItems="center" gap="12px" height="100%">
+                      <AccountBalance style={{ fontSize: 36, color: '#666666' }} />
+                      <Stack direction="column">
+                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
                           Rekening Bank
                         </Typography>
-                        <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                          <Typography variant="subtitle1">BRI *******900</Typography>
-                          {/* <CheckCircleIcon fontSize="small" htmlColor="#5D9405" /> */}
+                        <Stack direction="row" alignItems="center" gap="8px">
+                          <Typography>BCA *******900</Typography>
+                          <CheckCircleRounded style={{ fontSize: 18, color: '#5D9405' }} />
                         </Stack>
-                        <Typography variant="subtitle1">Mar****an</Typography>
+                        <Typography>Mir****an</Typography>
                       </Stack>
                     </Stack>
-
-                    <Stack direction={'row'} spacing={1}>
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <AccountBalanceIcon fontSize="large" htmlColor="#DADADA" />
-                      </Stack>
-                      <Stack>
-                        <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
-                          Rekening Bank
-                        </Typography>
-                        <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                          <Typography variant="subtitle1">Mandiri *******900</Typography>
-                          {/* <CheckCircleIcon fontSize="small" htmlColor="#5D9405" /> */}
-                        </Stack>
-                        <Typography variant="subtitle1">Mar****an</Typography>
-                      </Stack>
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </Stack>
-            </CardContent>
-          </Card>
-        </Stack>
-
-        <Stack direction={'row'} spacing={3} mt={3}>
-          <Stack style={{ flex: 0.35 }} spacing={3}>
-            <Stack borderBottom={'solid gray 1px'}>
-              <Typography variant="h2">Minat</Typography>
-            </Stack>
-            <Stack direction={'row'} flexWrap={'wrap'} justifyContent={'space-between'}>
-              <Card style={{ padding: '8px', marginBottom: '1em' }}>Musik</Card>
-              <Card style={{ padding: '8px', marginBottom: '1em' }}>Entertainment</Card>
-              <Card style={{ padding: '8px', marginBottom: '1em' }}>Liburan</Card>
-              <Card style={{ padding: '8px', marginBottom: '1em' }}>Hobi</Card>
-              <Card style={{ padding: '8px', marginBottom: '1em' }}>Mode & Gaya</Card>
-              <Card style={{ padding: '8px', marginBottom: '1em' }}>Kesehatan</Card>
-            </Stack>
-          </Stack>
-
-          <Stack flex={1} spacing={3}>
-            <Paper>
-              <TabContext value={tabSection}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Stack direction={'row'}>
-                    <Stack justifyContent={'center'} alignItems={'flex-start'} flex={0.5} paddingLeft={2}>
-                      <Typography variant="h4">Post Pengguna</Typography>
-                    </Stack>
-                    <TabList
-                      onChange={handleTabSectionChange}
-                      aria-label="basic tabs example"
-                      TabIndicatorProps={{ style: { backgroundColor: '#AB22AF', color: '#AB22AF', fontWeight: 'bold' } }}
-                      textColor="secondary">
-                      <Tab label="All" value="0" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
-                      <Tab label="HYYPEVID" value="1" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
-                      <Tab label="HYYPEPICT" value="2" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
-                      <Tab label="HYYPEDIARY" value="3" style={{ padding: '2em 16px', fontWeight: 'bold' }} />
-                    </TabList>
-                  </Stack>
-                </Box>
-
-                <TabPanel value="0">
-                  <Stack padding={2} spacing={2}>
-                    <Stack direction={'row'} spacing={2}>
-                      <Stack flex={1} style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                        <img src="https://material-ui.com/static/images/avatar/2.jpg" style={{ objectFit: 'cover' }} />
-                      </Stack>
-
-                      <Stack flex={2} spacing={1}>
-                        <div>
-                          <Button disabled variant="contained" color="secondary">
-                            HyppeVid
-                          </Button>
-                        </div>
-                        <Typography>
-                          Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi kesukaan
-                          saya
-                        </Typography>
-                        <Stack direction={'row'} spacing={1}>
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Dilihat</Typography>
-                          </Stack>
-                          <Divider orientation="vertical" />
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Disukai</Typography>
-                          </Stack>
-                          <Divider orientation="vertical" />
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Komentar</Typography>
-                          </Stack>
-                          <Divider orientation="vertical" />
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Dibagikan</Typography>
-                          </Stack>
-                        </Stack>
-                      </Stack>
-
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <Stack direction={'row'} spacing={1}>
-                          <Typography variant="body2">Terdaftar:</Typography>
-                          <Typography variant="body2">Ya</Typography>
-                        </Stack>
-                        <Stack direction={'row'} spacing={1}>
-                          <Typography variant="body2">Dijual:</Typography>
-                          <Typography variant="body2">Tidak</Typography>
-                        </Stack>
-                      </Stack>
-                    </Stack>
-
-                    <Stack direction={'row'} spacing={2}>
-                      <Stack flex={1} style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                        <img src="https://material-ui.com/static/images/avatar/2.jpg" style={{ objectFit: 'cover' }} />
-                      </Stack>
-
-                      <Stack flex={2} spacing={1}>
-                        <div>
-                          <Button disabled variant="contained" color="secondary">
-                            HyppeVid
-                          </Button>
-                        </div>
-                        <Typography>
-                          Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi kesukaan
-                          saya
-                        </Typography>
-                        <Stack direction={'row'} spacing={1}>
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Dilihat</Typography>
-                          </Stack>
-                          <Divider orientation="vertical" />
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Disukai</Typography>
-                          </Stack>
-                          <Divider orientation="vertical" />
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Komentar</Typography>
-                          </Stack>
-                          <Divider orientation="vertical" />
-                          <Stack spacing={1} direction="row">
-                            <Typography variant="subtitle2">233</Typography>
-                            <Typography variant="body2">Dibagikan</Typography>
-                          </Stack>
-                        </Stack>
-                      </Stack>
-
-                      <Stack direction={'column'} justifyContent={'center'}>
-                        <Stack direction={'row'} spacing={1}>
-                          <Typography variant="body2">Terdaftar:</Typography>
-                          <Typography variant="body2">Ya</Typography>
-                        </Stack>
-                        <Stack direction={'row'} spacing={1}>
-                          <Typography variant="body2">Dijual:</Typography>
-                          <Typography variant="body2">Tidak</Typography>
-                        </Stack>
-                      </Stack>
-                    </Stack>
-                  </Stack>
-                </TabPanel>
-
-                <TabPanel value="1">
-                  <Stack justifyContent={'center'} direction={'row'}>
-                    <Typography>NO DATA</Typography>
-                  </Stack>
-                </TabPanel>
-                <TabPanel value="2">
-                  <Stack justifyContent={'center'} direction={'row'}>
-                    <Typography>NO DATA</Typography>
-                  </Stack>
-                </TabPanel>
-                <TabPanel value="3">
-                  <Stack justifyContent={'center'} direction={'row'}>
-                    <Typography>NO DATA</Typography>
-                  </Stack>
-                </TabPanel>
-              </TabContext>
-            </Paper>
-
-            <Paper>
-              <Stack padding={2}>
-                <Typography>Konten Yang Dilaporkan</Typography>
-              </Stack>
-
-              <Stack padding={2} flexWrap={'wrap'} direction={'row'} justifyContent={'space-between'}>
-                <Stack direction={'row'} maxWidth={'30em'} spacing={2} mb={3}>
-                  <Stack>
-                    <div style={{ backgroundColor: 'gray', borderRadius: '10px', height: '100%', width: '180px' }}></div>
-                  </Stack>
-
-                  <Stack spacing={1}>
-                    <div>
-                      <Button disabled variant="contained">
-                        Hyypevid
-                      </Button>
-                    </div>
-                    <Typography>10 things you must know before trading in cryptocurrency</Typography>
-                    <Stack direction={'row'} spacing={1}>
-                      <Typography variant="body2">02/09/22</Typography>
-                      <Divider orientation="vertical" />
-                      <Typography variant="body2">233 Total Laporan</Typography>
-                    </Stack>
-                  </Stack>
-                </Stack>
-                <Stack direction={'row'} maxWidth={'30em'} spacing={2} mb={3}>
-                  <Stack>
-                    <div style={{ backgroundColor: 'gray', borderRadius: '10px', height: '100%', width: '180px' }}></div>
-                  </Stack>
-
-                  <Stack spacing={1}>
-                    <div>
-                      <Button disabled variant="contained">
-                        Hyypevid
-                      </Button>
-                    </div>
-                    <Typography>10 things you must know before trading in cryptocurrency</Typography>
-                    <Stack direction={'row'} spacing={1}>
-                      <Typography variant="body2">02/09/22</Typography>
-                      <Divider orientation="vertical" />
-                      <Typography variant="body2">233 Total Laporan</Typography>
-                    </Stack>
-                  </Stack>
-                </Stack>
-                <Stack direction={'row'} maxWidth={'30em'} spacing={2} mb={3}>
-                  <Stack>
-                    <div style={{ backgroundColor: 'gray', borderRadius: '10px', height: '100%', width: '180px' }}></div>
-                  </Stack>
-
-                  <Stack spacing={1}>
-                    <div>
-                      <Button disabled variant="contained">
-                        Hyypevid
-                      </Button>
-                    </div>
-                    <Typography>10 things you must know before trading in cryptocurrency</Typography>
-                    <Stack direction={'row'} spacing={1}>
-                      <Typography variant="body2">02/09/22</Typography>
-                      <Divider orientation="vertical" />
-                      <Typography variant="body2">233 Total Laporan</Typography>
-                    </Stack>
-                  </Stack>
-                </Stack>
+                  </Grid>
+                </GridContainer>
               </Stack>
             </Paper>
           </Stack>
-        </Stack>
 
-        <ModalConfirmation
-          showModal={showModal.show && showModal.modalType === 'confirmation'}
-          type={showModal.type}
-          onClose={onCloseModal}
-          onConfirm={onConfirmModal}
-        />
-        <DeleteModal
-          showModal={showModal.show && showModal.modalType === 'delete'}
-          onClose={onCloseModal}
-          onConfirm={onConfirmModal}
-        />
-        <ViewModal showModal={showModal.show && showModal.modalType === 'view'} data={akunPelapor} onClose={onCloseModal} />
-      </PageContainer>
+          <Stack direction="row" flexWrap="nowrap" gap="24px" mb="24px">
+            <Stack direction="column" width="100%" maxWidth={320} height="100%" gap="16px">
+              <Typography
+                style={{ fontWeight: 'bold', borderBottom: '1px solid #0000001F', paddingBottom: 14, position: 'relative' }}>
+                Minat
+                <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
+              </Typography>
+              <Stack direction="row" flexWrap="wrap" gap="12px">
+                {[{}, {}, {}, {}].map((item, key) => (
+                  <Chip
+                    key={key}
+                    label="Kesehatan"
+                    size="small"
+                    style={{
+                      backgroundColor: 'white',
+                      borderRadius: 4,
+                      boxShadow:
+                        '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+                      height: 30,
+                      padding: '0 6px',
+                      fontFamily: 'Lato',
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      color: '#00000099',
+                    }}
+                  />
+                ))}
+              </Stack>
+            </Stack>
+            <Stack direction="column" width="100%" gap="24px">
+              <Paper>
+                <Stack direction="column" height="100%">
+                  <Stack direction="row" style={{ borderBottom: '1px solid #0000001F' }}>
+                    <Typography style={{ padding: 24, fontWeight: 'bold' }}>Post Pengguna</Typography>
+                    <Tabs
+                      className="mt-4"
+                      value="vid"
+                      variant="scrollable"
+                      aria-label="disabled scrollable auto tabs"
+                      indicatorColor="secondary"
+                      textColor="secondary"
+                      style={{ marginLeft: 55 }}>
+                      <Tab
+                        label="All"
+                        value="all"
+                        style={{
+                          padding: '0px',
+                          marginRight: '1.5em',
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          fontSize: 16,
+                          textTransform: 'initial',
+                        }}
+                      />
+                      <Tab
+                        label="HyppePic"
+                        value="pic"
+                        style={{
+                          padding: '0px',
+                          marginRight: '1.5em',
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          fontSize: 16,
+                          textTransform: 'initial',
+                        }}
+                      />
+                      <Tab
+                        label="HyppeVid"
+                        value="vid"
+                        style={{
+                          padding: '0px',
+                          marginRight: '1.5em',
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          fontSize: 16,
+                          textTransform: 'initial',
+                        }}
+                      />
+                      <Tab
+                        label="HyppeDiary"
+                        value="diary"
+                        style={{
+                          padding: '0px',
+                          marginRight: '1.5em',
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          fontSize: 16,
+                          textTransform: 'initial',
+                        }}
+                      />
+                    </Tabs>
+                  </Stack>
+                  <ScrollBar className={classes.scrollbar}>
+                    {[{}, {}, {}, {}, {}].map((item, key) => (
+                      <Stack key={key} direction="row" gap="24px">
+                        <img
+                          src="/images/dashboard/content_image.png"
+                          alt="Gambar Konten"
+                          style={{ width: '100%', maxWidth: 187, height: 140 }}
+                        />
+                        <Stack direction="column" justifyContent="space-between">
+                          <Chip
+                            label="HyppeVid"
+                            size="small"
+                            style={{
+                              borderRadius: 4,
+                              fontFamily: 'Lato',
+                              fontWeight: 'bold',
+                              fontSize: 12,
+                              color: '#00000099',
+                              width: 'fit-content',
+                            }}
+                          />
+                          <Typography>
+                            Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi kesukaan
+                            saya
+                          </Typography>
+                          <Typography style={{ fontSize: 14, fontFamily: 'Lato' }}>
+                            {200} <span style={{ color: '#00000061' }}>Suka |</span> {17}{' '}
+                            <span style={{ color: '#00000061' }}>Komentar |</span> {1200}{' '}
+                            <span style={{ color: '#00000061' }}>Dilihat |</span> {40}{' '}
+                            <span style={{ color: '#00000061' }}>Dibagikan</span>
+                          </Typography>
+                          <Typography style={{ fontFamily: 'bold', fontFamily: 'Lato', color: '#00000061', fontSize: 14 }}>
+                            {moment().format('DD/MM/YYYY HH:mm')} WIB
+                          </Typography>
+                        </Stack>
+                        <Stack direction="column" justifyContent="center" gap="4px">
+                          <Typography style={{ fontSize: 12, color: '#00000061', width: 100 }}>
+                            Terdaftar: <span style={{ color: 'black' }}>Ya</span>{' '}
+                          </Typography>
+                          <Typography style={{ fontSize: 12, color: '#00000061', width: 100 }}>
+                            Dijual: <span style={{ color: 'black' }}>Tidak</span>
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    ))}
+                  </ScrollBar>
+                  <Stack direction="row" padding="20px 12px" alignItems="flex-end">
+                    <Pagination count={1} size="small" shape="rounded" color="secondary" />
+                  </Stack>
+                </Stack>
+              </Paper>
+              <Paper>
+                <Stack direction="column" height="100%">
+                  <Stack direction="row">
+                    <Typography style={{ padding: '24px 24px 12px', fontWeight: 'bold' }}>Konten Yang Dilaporkan</Typography>
+                  </Stack>
+                  <ScrollBar className={classes.scrollbar} style={{ height: 340 }}>
+                    <GridContainer>
+                      {[{}, {}, {}].map((item, key) => (
+                        <Grid item xs={6}>
+                          <Stack key={key} direction="row" gap="24px">
+                            <img
+                              src="/images/dashboard/content_image.png"
+                              alt="Gambar Konten"
+                              style={{ width: '100%', maxWidth: 187, height: 140 }}
+                            />
+                            <Stack direction="column" justifyContent="space-between">
+                              <Chip
+                                label="HyppeVid"
+                                size="small"
+                                style={{
+                                  borderRadius: 4,
+                                  fontFamily: 'Lato',
+                                  fontWeight: 'bold',
+                                  fontSize: 12,
+                                  color: '#00000099',
+                                  width: 'fit-content',
+                                }}
+                              />
+                              <Typography className={classes.textTruncate}>
+                                Hari ini bersama keluarga tersayang liburan ke pantai indah kapuk ditemani dengan kopi
+                                kesukaan saya
+                              </Typography>
+                              <Typography
+                                style={{ fontFamily: 'bold', fontFamily: 'Lato', color: '#00000061', fontSize: 12 }}>
+                                <span style={{ color: 'black' }}>{moment().format('DD/MM/YY')}</span> |{' '}
+                                <span style={{ color: 'black' }}>233</span> Total Laporan
+                              </Typography>
+                            </Stack>
+                          </Stack>
+                        </Grid>
+                      ))}
+                    </GridContainer>
+                  </ScrollBar>
+                  <Stack direction="row" padding="20px 12px" alignItems="flex-end">
+                    <Pagination count={1} size="small" shape="rounded" color="secondary" />
+                  </Stack>
+                </Stack>
+              </Paper>
+            </Stack>
+          </Stack>
+        </PageContainer>
+      )}
     </>
   );
 };
 
-export default DetailKeluhanPengguna;
+export default DetalPelaporanAkun;

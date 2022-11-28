@@ -1,31 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import CmtMediaObject from '@coremat/CmtMediaObject';
 import Box from '@material-ui/core/Box';
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import CmtAvatar from '@coremat/CmtAvatar';
-// import { timeFromNow } from '../../../../@jumbo/utils/dateHelper';
-import DoneIcon from '@material-ui/icons/Done';
-import ClearIcon from '@material-ui/icons/Clear';
-import { Fab, Typography } from '@material-ui/core';
-import { useUserGetNewCommentQuery, useUserUpdateCommentMutation } from 'api/user/comment';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   itemRoot: {
-    padding: '8px 24px',
+    padding: '12px 24px',
     boxShadow: '0px 0px 1px rgba(0, 0, 0, 0.161741)',
     transition: 'all .2s',
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.primary.main, 0.1),
-      transform: 'translateY(-4px)',
-      boxShadow: `0 3px 10px 0 ${alpha(theme.palette.common.dark, 0.2)}`,
-      '& $actionButtons': {
-        visibility: 'visible',
-        opacity: 1,
-      },
-    },
 
     '& .Cmt-media-image': {
       marginTop: 0,
@@ -59,31 +45,51 @@ const useStyles = makeStyles((theme) => ({
       marginRight: 12,
     },
   },
+  textTruncate: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    '-webkit-line-clamp': 2,
+    lineClamp: 2,
+    overflow: 'hidden',
+  },
 }));
 
 const AdsReportItem = ({ item }) => {
+  const classes = useStyles();
   const { authUser } = useAuth();
 
-  const classes = useStyles();
+  const now = moment().utc();
 
   const formatDate = (date) => {
-    const format = moment(date?.createdAt).lang('id').format('dddd, D/M/YYYY k:mm');
-
-    return `${format} WIB`;
+    return (
+      <Box fontSize={12} color="#00000061" mt={2} className={classes.textTruncate}>
+        {now.diff(moment(date?.createdAtReportLast).utc(), 'hours') < 12
+          ? 'Hari ini'
+          : now.diff(moment(date?.createdAtReportLast).utc(), 'hours') < 24
+          ? 'Kemarin'
+          : `${now.diff(moment(date?.createdAtReportLast).utc(), 'days')} hari lalu`}
+        , {moment(item?.createdAtReportLast).utc().format('DD/MM/YYYY - HH:mm')} WIB
+      </Box>
+    );
   };
 
   const getTitle = () => {
     return (
       <Box color="text.primary">
-        {/* <Box component="span" color="primary.main"> */}
         <Box component="div">
-          <Typography component="span" variant="h6">
-            Bird Eye!
+          <Typography component="span" variant="h6" className={classes.textTruncate} style={{ height: 50 }}>
+            {item?.name || '-'}
           </Typography>
         </Box>
         <Box component="div" fontSize={13} mt={1}>
-          <Typography component="span" variant="h7">
-            Alasan : Intergritas dan keaslian
+          <Typography
+            component="div"
+            variant="h7"
+            style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: 200 }}
+            title={item?.reasonLast}>
+            Alasan : {item?.reasonLast || '-'}
           </Typography>
         </Box>
       </Box>
@@ -98,22 +104,37 @@ const AdsReportItem = ({ item }) => {
     </Box>
   );
 
-  const getMediaUri = () => {
+  const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
-    const mediaURI = item.avatar.mediaEndpoint;
-    return `${STREAM_URL}${mediaURI}${authToken}`;
+
+    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+  };
+
+  const getImage = (item) => {
+    if (item?.apsara || item?.apsaraId) {
+      if (item?.media?.ImageInfo?.length >= 1) {
+        return item?.media?.ImageInfo?.[0]?.URL;
+      } else if (item?.media?.VideoList?.length >= 1) {
+        return item?.media?.VideoList?.[0]?.CoverURL;
+      } else {
+        return '/images/dashboard/content_image.png';
+      }
+    } else if (item?.mediaEndpoint) {
+      return getMediaUri(item?.mediaEndpoint);
+    } else {
+      return '/images/dashboard/content_image.png';
+    }
   };
 
   return (
     <Box className={classes.itemRoot}>
       <CmtMediaObject
-        // avatar={<CmtAvatar className={classes.avatarRoot} src={item.user.profile_pic} />}
         avatar={
           <div
             style={{
               width: '100px',
               height: '100px',
-              backgroundImage: `url('https://i.pinimg.com/736x/87/27/34/872734510c35f441598413d300e9f448.jpg')`,
+              backgroundImage: `url('${getImage(item)}')`,
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
               backgroundSize: 'cover',
@@ -121,7 +142,6 @@ const AdsReportItem = ({ item }) => {
             }}></div>
         }
         title={getTitle()}
-        // subTitle={item.comment}
         subTitle={getFooter()}
         subTitleProps={{
           className: classes.subTitleRoot,

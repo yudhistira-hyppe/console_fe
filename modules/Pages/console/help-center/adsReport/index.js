@@ -6,23 +6,18 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 // import Chip from '@material-ui/core/Chip';
 
 // template components
-import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import CmtCardContent from '@coremat/CmtCard/CmtCardContent';
 import CmtCard from '@coremat/CmtCard';
 import CmtList from '@coremat/CmtList';
-
-// third party libraries
-import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // partials components
 import AdsReportItem from './AdsReportItem';
 
 // request
-import { useAuth } from 'authentication';
-import { useUserGetNewCommentQuery } from 'api/user/comment';
 import { Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { Stack } from '@mui/material';
+import { useGetListTicketsQuery } from 'api/console/helpCenter/iklan';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -51,26 +46,17 @@ const useStyles = makeStyles((theme) => ({
 
 const dummySkeleton = [1, 2, 3];
 
-const AdsReport = ({ isFetching }) => {
+const AdsReport = () => {
   const classes = useStyles();
-  const { authUser } = useAuth();
 
-  const { data: dataComment } = useUserGetNewCommentQuery(authUser.user.email);
+  const { data: listTickets, isFetching } = useGetListTicketsQuery({ page: 0, limit: 5, type: 'ads', jenis: 'report' });
+
   return (
     <CmtCard className={classes.cardRoot}>
-      <CmtCardHeader
-        title={
-          <div>
-            <Typography variant="h4" component="span" style={{ marginLeft: '7px' }}>
-              Pelaporan Iklan Terakhir
-            </Typography>
-            <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />
-          </div>
-        }>
-        {/* please dont remove code below! this check/notif for readed and unreaded notification  */}
-        {/* <Chip className={classes.chipRoot} label="23 New" color="primary" size="small" /> */}
-      </CmtCardHeader>
-      <CmtCardContent>
+      <Typography style={{ padding: 24, fontWeight: 'bold', borderBottom: '1px solid #0000001F' }}>
+        Pelaporan Iklan Terakhir
+      </Typography>
+      <CmtCardContent style={{ padding: '15px 0' }}>
         {isFetching ? (
           <div>
             {dummySkeleton.map((el, i) => (
@@ -85,14 +71,10 @@ const AdsReport = ({ isFetching }) => {
               </Stack>
             ))}
           </div>
+        ) : listTickets?.arrdata?.length > 0 ? (
+          <CmtList data={listTickets?.arrdata} renderRow={(item, index) => <AdsReportItem key={index} item={item} />} />
         ) : (
-          <PerfectScrollbar className={classes.scrollbarRoot}>
-            {dataComment?.data?.length > 0 ? (
-              <CmtList data={dataComment?.data} renderRow={(item, index) => <AdsReportItem key={index} item={item} />} />
-            ) : (
-              <center>you have no report</center>
-            )}
-          </PerfectScrollbar>
+          <center>you have no report</center>
         )}
       </CmtCardContent>
     </CmtCard>

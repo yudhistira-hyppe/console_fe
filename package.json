@@ -3,6 +3,7 @@
   "version": "1.0.6",
   "private": true,
   "dependencies": {
+    "@alicloud/pop-core": "^1.7.12",
     "@amcharts/amcharts4": "^4.9.37",
     "@date-io/moment": "^1.3.13",
     "@emotion/react": "^11.7.1",
@@ -18,6 +19,7 @@
     "@mui/x-date-pickers": "^5.0.0-beta.1",
     "@mui/x-date-pickers-pro": "^5.0.1",
     "@reduxjs/toolkit": "^1.8.2",
+    "aliyun-upload-vod": "^1.0.6",
     "animate.css": "^4.1.1",
     "async-mutex": "^0.3.2",
     "autosuggest-highlight": "^3.1.1",
