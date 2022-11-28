@@ -148,6 +148,11 @@ export const consoleNav = [
     link: '/ads-center',
   },
   {
+    name: 'Boost Post Center',
+    type: 'item',
+    link: '/boost-center',
+  },
+  {
     name: 'Database',
     type: 'item',
     link: '/database',
