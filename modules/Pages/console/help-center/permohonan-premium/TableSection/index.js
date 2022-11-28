@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({ handleOrder, handlePageChange, order, loading, listTickets }) => {
+const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageChange, order, loading, listTickets }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
 
@@ -75,6 +75,24 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
           </FormControl>
         </Stack>
       </Box>
+
+      <Stack direction="row" gap="10px" mb={2}>
+        {filterList?.map((item, key) => (
+          <Chip
+            key={key}
+            label={item.value}
+            onDelete={() => {
+              if (item.parent === 'search') {
+                handleDeleteFilter(item.parent, '');
+              } else if (item.parent === 'createdAt') {
+                handleDeleteFilter(item.parent, [null, null]);
+              } else {
+                handleDeleteFilter(item.parent, item.value);
+              }
+            }}
+          />
+        ))}
+      </Stack>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
