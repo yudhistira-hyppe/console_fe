@@ -52,7 +52,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
           ) : (
             <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listTickets?.totalsearch} hasil (
+              Menampilkan {listTickets?.totalrow} hasil (
               {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
               {listTickets?.totalrow + listTickets?.page * 10} dari {listTickets?.totalsearch})
             </Typography>

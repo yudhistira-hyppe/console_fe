@@ -90,8 +90,8 @@ const SearchSection = ({ filter, handleChange }) => {
                 renderInput={(startProps, endProps) => (
                   <>
                     <Stack direction={'row'} spacing={1}>
-                      <TextField size="small" autoComplete="off" {...startProps} />
-                      <TextField size="small" autoComplete="off" {...endProps} />
+                      <TextField autoComplete="off" {...startProps} />
+                      <TextField autoComplete="off" {...endProps} />
                     </Stack>
                   </>
                 )}

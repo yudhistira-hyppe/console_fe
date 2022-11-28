@@ -70,17 +70,19 @@ const PermohonanPremium = () => {
           ...prevVal,
           startdate: dateFrom,
           enddate: dateNow,
+          page: 0,
         };
       } else if (kind === 'ticket_range') {
-        return { ...prevVal, startdate: value[0], enddate: value[1] };
+        return { ...prevVal, startdate: value[0], enddate: value[1], page: 0 };
       } else if (kind === 'search') {
-        return { ...prevVal, search: value };
+        return { ...prevVal, search: value, page: 0 };
       } else if (kind === 'status') {
         return {
           ...prevVal,
           status: filter.status.find((item) => item === value)
             ? filter.status.filter((item) => item !== value)
             : [...filter.status, value],
+          page: 0,
         };
       } else {
         return { ...prevVal };
