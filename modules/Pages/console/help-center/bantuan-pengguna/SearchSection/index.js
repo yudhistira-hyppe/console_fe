@@ -32,7 +32,7 @@ const SearchSection = ({ handleChange }) => {
 
   return (
     <>
-      <Box className={classes.inBuildAppCard} p={5} pt={2} style={{ width: 270 }}>
+      <Box className={classes.inBuildAppCard} p={5} pt={2} style={{ width: '100%', maxWidth: 270 }}>
         <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Pencarian Tiket</Typography>
@@ -110,8 +110,8 @@ const SearchSection = ({ handleChange }) => {
                 renderInput={(startProps, endProps) => (
                   <>
                     <Stack direction={'row'} spacing={1}>
-                      <TextField size="small" autoComplete="off" {...startProps} />
-                      <TextField size="small" autoComplete="off" {...endProps} />
+                      <TextField autoComplete="off" {...startProps} />
+                      <TextField autoComplete="off" {...endProps} />
                     </Stack>
                   </>
                 )}
@@ -133,7 +133,7 @@ const SearchSection = ({ handleChange }) => {
                   <FormControlLabel
                     key={key}
                     label={item?.sourceName}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('sumber', item?._id)} />}
                   />
                 ))
               ) : (
@@ -179,7 +179,7 @@ const SearchSection = ({ handleChange }) => {
                   <FormControlLabel
                     key={key}
                     label={item?.descLevel}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
+                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('level', item?._id)} />}
                   />
                 ))
               ) : (

@@ -72,25 +72,29 @@ const ConsoleBantuanPenggunaComponent = () => {
           ...prevVal,
           startdate: dateFrom,
           enddate: dateNow,
+          page: 0,
         };
       } else if (kind === 'ticket_range') {
-        return { ...prevVal, startdate: value[0], enddate: value[1] };
+        return { ...prevVal, startdate: value[0], enddate: value[1], page: 0 };
       } else if (kind === 'status') {
         return {
           ...prevVal,
           status: filter.status.find((item) => item === value)
             ? filter.status.filter((item) => item !== value)
             : [...filter.status, value],
+          page: 0,
         };
       } else if (kind === 'search') {
         return {
           ...prevVal,
           search: value,
+          page: 0,
         };
       } else if (kind === 'penerima') {
         return {
           ...prevVal,
           assignto: value,
+          page: 0,
         };
       } else if (kind === 'sumber') {
         return {
@@ -98,6 +102,7 @@ const ConsoleBantuanPenggunaComponent = () => {
           sumber: filter.sumber.find((item) => item === value)
             ? filter.sumber.filter((item) => item !== value)
             : [...filter.sumber, value],
+          page: 0,
         };
       } else if (kind === 'category') {
         return {
@@ -105,6 +110,7 @@ const ConsoleBantuanPenggunaComponent = () => {
           kategori: filter.kategori.find((item) => item === value)
             ? filter.kategori.filter((item) => item !== value)
             : [...filter.kategori, value],
+          page: 0,
         };
       } else if (kind === 'level') {
         return {
@@ -112,6 +118,7 @@ const ConsoleBantuanPenggunaComponent = () => {
           level: filter.level.find((item) => item === value)
             ? filter.level.filter((item) => item !== value)
             : [...filter.level, value],
+          page: 0,
         };
       }
     });

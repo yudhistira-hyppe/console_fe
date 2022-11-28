@@ -475,10 +475,20 @@ const DetailBantuanPengguna = () => {
                   </Typography>
                 </div>
               </Stack>
+              <Stack direction={'row'} spacing={2} mt={2}>
+                <div style={{ flex: 2 }}>
+                  <Typography variant="body2">Ditangani Oleh</Typography>
+                </div>
+                <div style={{ flex: 3 }}>
+                  <Typography variant="body2" color="#00000099" style={{ opacity: '0.6' }}>
+                    {ticketData?.data[0]?.penerima || '-'}
+                  </Typography>
+                </div>
+              </Stack>
               {ticketData?.data[0]?.asignTo ? (
                 <Stack direction={'row'} alignItems="center" spacing={2} mt={2}>
                   <div style={{ flex: 2 }}>
-                    <Typography variant="body2">Ditangani Oleh</Typography>
+                    <Typography variant="body2">Penerima Tugas</Typography>
                   </div>
                   <div style={{ flex: 3 }}>
                     <Chip label={ticketData?.data[0]?.asignTo || '-'} size="small" style={{ color: '#666666' }} />
