@@ -7,12 +7,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Radio, RadioGroup, Stack } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
-import { debounce } from 'lodash';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import moment from 'moment';
 
@@ -22,7 +20,7 @@ const SearchSection = ({ filter, handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Pembuatan</Typography>
           </AccordionSummary>
@@ -96,9 +94,10 @@ const SearchSection = ({ filter, handleChange }) => {
               />
             </LocalizationProvider>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Akun Pemohon</Typography>
           </AccordionSummary>
@@ -112,9 +111,10 @@ const SearchSection = ({ filter, handleChange }) => {
               onChange={(e) => handleChange(e.target.name, e.target.value)}
             />
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>

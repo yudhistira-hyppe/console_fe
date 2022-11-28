@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { Stack } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
@@ -33,7 +33,7 @@ const SearchSection = ({ handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} style={{ width: '100%', maxWidth: 270 }}>
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Pencarian Tiket</Typography>
           </AccordionSummary>
@@ -45,9 +45,10 @@ const SearchSection = ({ handleChange }) => {
               onChange={(e) => handleSearch(e)}
             />
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
           </AccordionSummary>
@@ -118,9 +119,10 @@ const SearchSection = ({ handleChange }) => {
               />
             </LocalizationProvider>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Sumber</Typography>
           </AccordionSummary>
@@ -141,9 +143,10 @@ const SearchSection = ({ handleChange }) => {
               )}
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Kategori</Typography>
           </AccordionSummary>
@@ -164,9 +167,10 @@ const SearchSection = ({ handleChange }) => {
               )}
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Level</Typography>
           </AccordionSummary>
@@ -187,9 +191,10 @@ const SearchSection = ({ handleChange }) => {
               )}
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
@@ -209,9 +214,10 @@ const SearchSection = ({ handleChange }) => {
               />
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Penerima Tugas</Typography>
           </AccordionSummary>
