@@ -7,142 +7,203 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../../help-center/bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { Stack } from '@mui/material';
+import { Divider, Radio, RadioGroup, Stack } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import moment from 'moment';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
-const SearchSection = ({ handleChange }) => {
+const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
-  const [week, setWeek] = React.useState(null);
-  const [value, setValue] = React.useState([null, null]);
-  function getWeeksAfter(date, amount) {
-    return date && amount ? date.add(amount, 'week') : undefined;
-  }
 
   return (
     <>
-      <Box className={classes.inBuildAppCard} p={5}>
-        <Accordion elevation={0} defaultExpanded>
+      <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Nama Voucher</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari voucher"
+              name="search"
+              filterValue={filter.search}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+            />
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
+            <Typography style={{ fontSize: '13px' }}>Tanggal Transaksi</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
             <Stack direction={'column'} spacing={1} mb={3}>
-              <div>
-                <Chip
-                  clickable
-                  onClick={() => {
-                    handleChange('transaction_date', 7);
-                    setWeek(1), setValue([null, null]);
-                  }}
-                  label="7 Hari"
-                  size="small"
-                  variant={week == 1 ? 'default' : 'outlined'}
-                />
-              </div>
-              <div>
-                <Chip
-                  label="14 Hari"
-                  clickable
-                  onClick={() => {
-                    handleChange('transaction_date', 14);
-                    setWeek(2), setValue([null, null]);
-                  }}
-                  size="small"
-                  variant={week === 2 ? 'default' : 'outlined'}
-                />
-              </div>
-              <div>
-                <Chip
-                  label="1 Bulan"
-                  clickable
-                  onClick={() => {
-                    handleChange('transaction_date', 30);
-                    setWeek(4), setValue([null, null]);
-                  }}
-                  size="small"
-                  variant={week === 4 ? 'default' : 'outlined'}
-                />
-              </div>
-              <div>
-                <Chip
-                  label="3 Bulan"
-                  clickable
-                  onClick={() => {
-                    handleChange('transaction_date', 90);
-                    setWeek(12), setValue([null, null]);
-                  }}
-                  size="small"
-                  variant={week === 12 ? 'default' : 'outlined'}
-                />
-              </div>
+              <Chip
+                label="7 Hari"
+                clickable
+                onClick={() => {
+                  handleChange('createdAt', [moment().subtract(7, 'd').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]);
+                }}
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant="outlined"
+              />
+              <Chip
+                label="14 Hari"
+                clickable
+                onClick={() => {
+                  handleChange('createdAt', [
+                    moment().subtract(14, 'd').format('YYYY-MM-DD'),
+                    moment().format('YYYY-MM-DD'),
+                  ]);
+                }}
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant="outlined"
+              />
+              <Chip
+                label="1 Bulan"
+                clickable
+                onClick={() => {
+                  handleChange('createdAt', [
+                    moment().subtract(30, 'd').format('YYYY-MM-DD'),
+                    moment().format('YYYY-MM-DD'),
+                  ]);
+                }}
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant="outlined"
+              />
+              <Chip
+                label="3 Bulan"
+                clickable
+                onClick={() => {
+                  handleChange('createdAt', [
+                    moment().subtract(90, 'd').format('YYYY-MM-DD'),
+                    moment().format('YYYY-MM-DD'),
+                  ]);
+                }}
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant="outlined"
+              />
             </Stack>
 
             <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
               <DateRangePicker
-                value={value}
-                maxDate={getWeeksAfter(value[0], week)}
+                value={filter.createdAt}
                 onChange={(newValue) => {
-                  handleChange('transaction_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
-                  setValue(newValue);
+                  handleChange('createdAt', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
                 }}
                 renderInput={(startProps, endProps) => (
                   <>
                     <Stack direction={'row'} spacing={1}>
-                      <TextField {...startProps} />
-                      <TextField {...endProps} />
+                      <TextField autoComplete="off" {...startProps} />
+                      <TextField autoComplete="off" {...endProps} />
                     </Stack>
                   </>
                 )}
               />
             </LocalizationProvider>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status Voucher</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup>
-              <FormControlLabel label={'Digunakan'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel label={'Kadaluarsa'} control={<Checkbox defaultChecked={false} />} />
+            <FormGroup onChange={(e) => handleChange('voucher_status', e.target.value)}>
+              <FormControlLabel
+                label={'Digunakan'}
+                value="Digunakan"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.voucher_status.includes('Digunakan')} />
+                }
+              />
+              <FormControlLabel
+                label={'Kadaluarsa'}
+                value="Kadaluarsa"
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.voucher_status.includes('Kadaluarsa')}
+                  />
+                }
+              />
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Masa Berlaku</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup>
-              <FormControlLabel label={'> 30 Hari'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel label={'30-60 Hari'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel label={'61-90 Hari'} control={<Checkbox defaultChecked={false} />} />
-              <FormControlLabel label={'90 Hari <'} control={<Checkbox defaultChecked={false} />} />
-            </FormGroup>
+            <RadioGroup value={filter.period} onChange={(e) => handleChange('period', e.target.value)}>
+              <FormControlLabel
+                label={'> 30 Hari'}
+                value="> 30"
+                control={<Radio defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'30-60 Hari'}
+                value="30-60"
+                control={<Radio defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'61-90 Hari'}
+                value="61-90"
+                control={<Radio defaultChecked={false} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'> 90 Hari'}
+                value="> 90"
+                control={<Radio defaultChecked={false} color="secondary" />}
+              />
+            </RadioGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status Pembayaran</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
-            <FormGroup>
+            <FormGroup onChange={(e) => handleChange('payment_status', e.target.value)}>
               <FormControlLabel
                 label={'Menuggu'}
-                control={<Checkbox defaultChecked={false} onChange={() => handleChange('status_payment', 'WAITING_PAYMENT')} />}
+                value="WAITING_PAYMENT"
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.payment_status.includes('WAITING_PAYMENT')}
+                  />
+                }
               />
               <FormControlLabel
                 label={'Lunas'}
-                control={<Checkbox defaultChecked={false} onChange={() => handleChange('status_payment', 'Success')} />}
+                value="Success"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.payment_status.includes('Success')} />
+                }
               />
               <FormControlLabel
                 label={'Gagal'}
-                control={<Checkbox defaultChecked={false} onChange={() => handleChange('status_payment', 'Cancel')} />}
+                value="Cancel"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.payment_status.includes('Cancel')} />
+                }
               />
             </FormGroup>
           </AccordionDetails>
