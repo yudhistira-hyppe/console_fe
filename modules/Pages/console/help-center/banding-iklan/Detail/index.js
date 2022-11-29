@@ -326,8 +326,7 @@ const DetailBandingIklan = () => {
                   aria-controls={open ? 'composition-menu' : undefined}
                   aria-expanded={open ? 'true' : undefined}
                   style={buttonStyle(detail?.data[0]?.reportStatusLast)}
-                  onClick={handleToggle}
-                  // onClick={detail?.data[0]?.reportStatusLast === 'BARU' ? () => handleToggle() : () => {}}
+                  onClick={detail?.data[0]?.reportStatusLast === 'BARU' ? () => handleToggle() : () => {}}
                   aria-haspopup="true"
                   endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}>
                   {detail?.data[0]?.reportStatusLast === 'FLAGING'
