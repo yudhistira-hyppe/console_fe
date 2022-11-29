@@ -39,7 +39,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets, loading }) => {
+const TableSection = ({
+  filterList,
+  handleDeleteFilter,
+  order,
+  page,
+  handleOrder,
+  handlePageChange,
+  listTickets,
+  loading,
+}) => {
   const [isModal, setModal] = React.useState(false);
   const [selectedEmail, setSelectedEmail] = React.useState('');
   const { authUser } = useAuth();
@@ -92,6 +101,26 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
             </FormControl>
           </Stack>
         </Box>
+
+        <Stack direction="row" gap="10px" mb={2}>
+          {filterList?.map((item, key) => (
+            <Chip
+              key={key}
+              label={item.value}
+              onDelete={() => {
+                if (item.parent === 'search' || item.parent === 'penerima') {
+                  handleDeleteFilter(item.parent, '');
+                } else if (item.parent === 'createdAt') {
+                  handleDeleteFilter(item.parent, [null, null]);
+                } else if (item.parent === 'sumber' || item.parent === 'category' || item.parent === 'level') {
+                  handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+                } else {
+                  handleDeleteFilter(item.parent, item.value);
+                }
+              }}
+            />
+          ))}
+        </Stack>
 
         <TableContainer component={Paper}>
           <Table>
@@ -188,9 +217,7 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
                       ) : (
                         <Avatar />
                       )}
-                      <Typography style={{ fontSize: 12, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {item?.penerima || '-'}
-                      </Typography>
+                      <Typography style={{ fontSize: 12 }}>{item?.penerima || '-'}</Typography>
                     </TableCell>
                   </TableRow>
                 ))
@@ -202,7 +229,7 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
             </TableBody>
           </Table>
         </TableContainer>
-        {listTickets && (
+        {listTickets?.totalsearch >= 1 && (
           <Stack alignItems={'center'} mt={2}>
             <Pagination page={page} count={listTickets?.totalpage} size={'small'} onChange={handlePageChange} />
           </Stack>

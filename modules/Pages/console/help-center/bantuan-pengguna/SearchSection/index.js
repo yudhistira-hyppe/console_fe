@@ -17,18 +17,14 @@ import {
   useGetLevelTicketsQuery,
   useGetSumberTicketsQuery,
 } from 'api/console/helpCenter/bantuan-pengguna';
+import moment from 'moment';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
-const SearchSection = ({ handleChange }) => {
+const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
-  const [week, setWeek] = React.useState(null);
-  const [value, setValue] = React.useState([null, null]);
-  function getWeeksAfter(date, amount) {
-    return date && amount ? date.add(amount, 'week') : undefined;
-  }
   const { data: listSumber, isLoading: loadingSumber } = useGetSumberTicketsQuery();
   const { data: listCategory, isLoading: loadingCategory } = useGetCategoryTicketsQuery();
   const { data: listLevel, isLoading: loadingLevel } = useGetLevelTicketsQuery();
-  const handleSearch = debounce((e) => handleChange(e.target.name, e.target.value), 500);
 
   return (
     <>
@@ -38,11 +34,13 @@ const SearchSection = ({ handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Pencarian Tiket</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
-            <TextField
-              name="search"
-              style={{ width: '100%' }}
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
               placeholder="Cari No. Tiket / Judul Permasalahan"
-              onChange={(e) => handleSearch(e)}
+              name="search"
+              filterValue={filter.search}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
             />
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -53,60 +51,63 @@ const SearchSection = ({ handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
-            <Stack direction={'column'} gap="12px" mb={3}>
+            <Stack direction={'column'} spacing={1} mb={3}>
               <Chip
+                label="7 Hari"
                 clickable
                 onClick={() => {
-                  handleChange('ticket_date', 7);
-                  setWeek(1), setValue([null, null]);
+                  handleChange('createdAt', [moment().subtract(7, 'd').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]);
                 }}
-                label="7 Hari"
                 size="small"
                 style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week == 1 ? 'default' : 'outlined'}
+                variant="outlined"
               />
               <Chip
                 label="14 Hari"
                 clickable
                 onClick={() => {
-                  handleChange('ticket_date', 14);
-                  setWeek(2), setValue([null, null]);
+                  handleChange('createdAt', [
+                    moment().subtract(14, 'd').format('YYYY-MM-DD'),
+                    moment().format('YYYY-MM-DD'),
+                  ]);
                 }}
                 size="small"
                 style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 2 ? 'default' : 'outlined'}
+                variant="outlined"
               />
               <Chip
                 label="1 Bulan"
                 clickable
                 onClick={() => {
-                  handleChange('ticket_date', 30);
-                  setWeek(4), setValue([null, null]);
+                  handleChange('createdAt', [
+                    moment().subtract(30, 'd').format('YYYY-MM-DD'),
+                    moment().format('YYYY-MM-DD'),
+                  ]);
                 }}
                 size="small"
                 style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 4 ? 'default' : 'outlined'}
+                variant="outlined"
               />
               <Chip
                 label="3 Bulan"
                 clickable
                 onClick={() => {
-                  handleChange('ticket_date', 90);
-                  setWeek(12), setValue([null, null]);
+                  handleChange('createdAt', [
+                    moment().subtract(90, 'd').format('YYYY-MM-DD'),
+                    moment().format('YYYY-MM-DD'),
+                  ]);
                 }}
                 size="small"
                 style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 12 ? 'default' : 'outlined'}
+                variant="outlined"
               />
             </Stack>
 
             <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
               <DateRangePicker
-                value={value}
-                maxDate={getWeeksAfter(value[0], week)}
+                value={filter.createdAt}
                 onChange={(newValue) => {
-                  handleChange('ticket_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
-                  setValue(newValue);
+                  handleChange('createdAt', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
                 }}
                 renderInput={(startProps, endProps) => (
                   <>
@@ -135,7 +136,14 @@ const SearchSection = ({ handleChange }) => {
                   <FormControlLabel
                     key={key}
                     label={item?.sourceName}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('sumber', item?._id)} />}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        onClick={() => handleChange('sumber', JSON.stringify({ _id: item?._id, name: item?.sourceName }))}
+                        checked={filter.sumber.map((i) => i?.name).includes(item?.sourceName)}
+                      />
+                    }
                   />
                 ))
               ) : (
@@ -159,7 +167,16 @@ const SearchSection = ({ handleChange }) => {
                   <FormControlLabel
                     key={key}
                     label={item?.nameCategory}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('category', item?._id)} />}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        onClick={() =>
+                          handleChange('category', JSON.stringify({ _id: item?._id, name: item?.nameCategory }))
+                        }
+                        checked={filter.kategori.map((i) => i?.name).includes(item?.nameCategory)}
+                      />
+                    }
                   />
                 ))
               ) : (
@@ -183,7 +200,14 @@ const SearchSection = ({ handleChange }) => {
                   <FormControlLabel
                     key={key}
                     label={item?.descLevel}
-                    control={<Checkbox defaultChecked={false} onClick={() => handleChange('level', item?._id)} />}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        onClick={() => handleChange('level', JSON.stringify({ _id: item?._id, name: item?.descLevel }))}
+                        checked={filter.level.map((i) => i?.name).includes(item?.descLevel)}
+                      />
+                    }
                   />
                 ))
               ) : (
@@ -202,15 +226,36 @@ const SearchSection = ({ handleChange }) => {
             <FormGroup>
               <FormControlLabel
                 label={'Baru'}
-                control={<Checkbox defaultChecked={false} onClick={() => handleChange('status', 'new')} />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    onClick={() => handleChange('status', 'new')}
+                    checked={filter.status.includes('new')}
+                  />
+                }
               />
               <FormControlLabel
                 label={'Dalam Proses'}
-                control={<Checkbox defaultChecked={false} onClick={() => handleChange('status', 'onprogress')} />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    onClick={() => handleChange('status', 'onprogress')}
+                    checked={filter.status.includes('onprogress')}
+                  />
+                }
               />
               <FormControlLabel
                 label={'Selesai'}
-                control={<Checkbox defaultChecked={false} onClick={() => handleChange('status', 'close')} />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    onClick={() => handleChange('status', 'close')}
+                    checked={filter.status.includes('close')}
+                  />
+                }
               />
             </FormGroup>
           </AccordionDetails>
@@ -222,11 +267,13 @@ const SearchSection = ({ handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Penerima Tugas</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
-            <TextField
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari Penerima Tugas"
               name="penerima"
-              style={{ width: '100%' }}
-              placeholder="Pilih Anggota"
-              onChange={(e) => handleSearch(e)}
+              filterValue={filter.assignto}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
             />
           </AccordionDetails>
         </Accordion>

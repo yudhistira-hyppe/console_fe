@@ -25,11 +25,11 @@ const ConsoleBantuanPenggunaComponent = () => {
     sumber: [],
     kategori: [],
     level: [],
-    startdate: '',
-    enddate: '',
+    createdAt: [null, null],
     page: 0,
     limit: 10,
   });
+  const [filterList, setFilterList] = useState([]);
   const router = useRouter();
 
   const getParams = () => {
@@ -41,12 +41,12 @@ const ConsoleBantuanPenggunaComponent = () => {
     });
     filter.search !== '' && Object.assign(params, { search: filter.search });
     filter.assignto !== '' && Object.assign(params, { assignto: filter.assignto });
-    filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
-    filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
+    filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
+    filter.sumber.length >= 1 && Object.assign(params, { sumber: filter.sumber.map((item) => item._id) });
     filter.status.length >= 1 && Object.assign(params, { status: filter.status });
-    filter.sumber.length >= 1 && Object.assign(params, { sumber: filter.sumber });
-    filter.kategori.length >= 1 && Object.assign(params, { kategori: filter.kategori });
-    filter.level.length >= 1 && Object.assign(params, { level: filter.level });
+    filter.kategori.length >= 1 && Object.assign(params, { kategori: filter.kategori.map((item) => item._id) });
+    filter.level.length >= 1 && Object.assign(params, { level: filter.level.map((item) => item._id) });
 
     return params;
   };
@@ -64,18 +64,47 @@ const ConsoleBantuanPenggunaComponent = () => {
   };
 
   const handleSearchChange = (kind, value) => {
+    setFilterList((prevVal) => {
+      switch (kind) {
+        case 'search':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Nomor Tiket' }]
+              : [...prevVal, { parent: kind, value: 'Nomor Tiket' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'penerima':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Penerima Tugas' }]
+              : [...prevVal, { parent: kind, value: 'Penerima Tugas' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'createdAt':
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pembuatan' }]
+              : [...prevVal, { parent: kind, value: 'Tanggal Pembuatan' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'sumber':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'category':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'level':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        default:
+          return prevVal.find((item) => item.value === value)
+            ? [...prevVal.filter((item) => item.value !== value)]
+            : [...prevVal, { parent: kind, value: value }];
+      }
+    });
     setFilter((prevVal) => {
-      if (kind === 'ticket_date') {
-        const dateFrom = moment().subtract(value, 'd').format('YYYY-MM-DD');
-        const dateNow = moment().format('YYYY-MM-DD');
-        return {
-          ...prevVal,
-          startdate: dateFrom,
-          enddate: dateNow,
-          page: 0,
-        };
-      } else if (kind === 'ticket_range') {
-        return { ...prevVal, startdate: value[0], enddate: value[1], page: 0 };
+      if (kind === 'createdAt') {
+        return { ...prevVal, createdAt: value, page: 0 };
       } else if (kind === 'status') {
         return {
           ...prevVal,
@@ -99,25 +128,25 @@ const ConsoleBantuanPenggunaComponent = () => {
       } else if (kind === 'sumber') {
         return {
           ...prevVal,
-          sumber: filter.sumber.find((item) => item === value)
-            ? filter.sumber.filter((item) => item !== value)
-            : [...filter.sumber, value],
+          sumber: filter.sumber.find((item) => item?.name === JSON.parse(value)?.name)
+            ? filter.sumber.filter((item) => item?.name !== JSON.parse(value)?.name)
+            : [...filter.sumber, JSON.parse(value)],
           page: 0,
         };
       } else if (kind === 'category') {
         return {
           ...prevVal,
-          kategori: filter.kategori.find((item) => item === value)
-            ? filter.kategori.filter((item) => item !== value)
-            : [...filter.kategori, value],
+          kategori: filter.kategori.find((item) => item?.name === JSON.parse(value)?.name)
+            ? filter.kategori.filter((item) => item?.name !== JSON.parse(value)?.name)
+            : [...filter.kategori, JSON.parse(value)],
           page: 0,
         };
       } else if (kind === 'level') {
         return {
           ...prevVal,
-          level: filter.level.find((item) => item === value)
-            ? filter.level.filter((item) => item !== value)
-            : [...filter.level, value],
+          level: filter.level.find((item) => item?.name === JSON.parse(value)?.name)
+            ? filter.level.filter((item) => item?.name !== JSON.parse(value)?.name)
+            : [...filter.level, JSON.parse(value)],
           page: 0,
         };
       }
@@ -158,14 +187,16 @@ const ConsoleBantuanPenggunaComponent = () => {
 
       <PageContainer heading="">
         <Stack direction={'row'} spacing={3}>
-          <SearchSection handleChange={handleSearchChange} />
+          <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
+            filterList={filterList}
             order={filter.descending}
             page={filter.page + 1}
+            loading={loadingTicket}
+            listTickets={listTickets}
             handleOrder={onOrderChange}
             handlePageChange={handlePageChange}
-            listTickets={listTickets}
-            loading={loadingTicket}
+            handleDeleteFilter={handleSearchChange}
           />
         </Stack>
       </PageContainer>
