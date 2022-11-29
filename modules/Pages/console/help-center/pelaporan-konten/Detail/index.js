@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Breadcrumbs from '../../bantuan-pengguna/BreadCrumb';
@@ -99,11 +99,12 @@ const akunPelapor = [
 const DetailPelaporanKonten = () => {
   const { authUser } = useAuth();
   const router = useRouter();
-  const [showModal, setShowModal] = React.useState({
+  const [showModal, setShowModal] = useState({
     show: false,
     type: null,
     modalType: null,
   });
+  const [loading, setLoading] = useState(false);
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
@@ -127,6 +128,7 @@ const DetailPelaporanKonten = () => {
   };
 
   const onConfirmModal = (val) => {
+    setLoading(true);
     if (showModal?.type === 'ditangguhkan' || showModal?.type === 'tidak ditangguhkan') {
       updateTicket({
         postID: router.query?._id,
@@ -136,16 +138,19 @@ const DetailPelaporanKonten = () => {
           showModal?.type === 'ditangguhkan' ? (val?.reason === 'Lainnya' ? val?.otherReason : val?.reason) : undefined,
         ditangguhkan: showModal?.type === 'ditangguhkan',
       }).then(() => {
+        setLoading(false);
         onCloseModal();
         router.push('/help-center/pelaporan-konten');
       });
     } else if (showModal?.type === 'sensitif') {
       flagTicket({ postID: router.query?._id, type: 'content' }).then(() => {
+        setLoading(false);
         onCloseModal();
         router.push('/help-center/pelaporan-konten');
       });
     } else {
       deleteTicket({ postID: router.query?._id, type: 'content', remark: val }).then(() => {
+        setLoading(false);
         onCloseModal();
         router.push('/help-center/pelaporan-konten');
       });
@@ -225,7 +230,9 @@ const DetailPelaporanKonten = () => {
           marginTop: 'auto',
         };
       default:
-        return {};
+        return {
+          width: 'fit-content',
+        };
     }
   };
 
@@ -239,11 +246,13 @@ const DetailPelaporanKonten = () => {
         type={showModal.type}
         onClose={onCloseModal}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
       <DeleteModal
         showModal={showModal.show && showModal.modalType === 'delete'}
         onClose={onCloseModal}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
       <ViewModal
         showModal={showModal.show && showModal.modalType === 'view'}
@@ -334,21 +343,24 @@ const DetailPelaporanKonten = () => {
                       variant="outlined"
                       color="primary"
                       onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}
-                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      // disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}
+                    >
                       Tidak Ditangguhkan
                     </Button>
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}
-                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      // disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}
+                    >
                       Tangguhkan
                     </Button>
                     <Button
                       variant="outlined"
                       color="primary"
                       onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}
-                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      // disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}
+                    >
                       Ditandai Sensitif
                     </Button>
                   </Stack>
@@ -390,7 +402,7 @@ const DetailPelaporanKonten = () => {
                 />
                 <CardContent style={{ paddingBottom: 16 }}>
                   <Stack direction="row" alignItems="center" spacing={2}>
-                    <Typography variant="caption">Post ID: {detail?.data[0]?._id}</Typography>
+                    <Typography variant="caption">Post ID: {detail?.data[0]?._id || '-'}</Typography>
                     <Chip
                       label={`Hyppe${detail?.data[0]?.postType}`}
                       style={{ borderRadius: 4, fontFamily: 'Lato', fontSize: 12, color: '#00000099', fontWeight: 'bold' }}
@@ -411,10 +423,10 @@ const DetailPelaporanKonten = () => {
                   </Stack>
                   <Stack direction="column" spacing={2} mt={3}>
                     <Typography style={{ fontSize: 14, fontFamily: 'Lato' }}>
-                      {detail?.data[0]?.likes} <span style={{ color: '#00000061' }}>Suka |</span> {detail?.data[0]?.comments}{' '}
-                      <span style={{ color: '#00000061' }}>Komentar |</span> {detail?.data[0]?.views}{' '}
-                      <span style={{ color: '#00000061' }}>Dilihat |</span> {detail?.data[0]?.shares}{' '}
-                      <span style={{ color: '#00000061' }}>Dibagikan</span>
+                      {detail?.data[0]?.likes || 0} <span style={{ color: '#00000061' }}>Suka |</span>{' '}
+                      {detail?.data[0]?.comments || 0} <span style={{ color: '#00000061' }}>Komentar |</span>{' '}
+                      {detail?.data[0]?.views || 0} <span style={{ color: '#00000061' }}>Dilihat |</span>{' '}
+                      {detail?.data[0]?.shares || 0} <span style={{ color: '#00000061' }}>Dibagikan</span>
                     </Typography>
                     <Typography variant="body2" style={{ fontFamily: 'bold', fontFamily: 'Lato', color: '#00000061' }}>
                       {detail?.data[0]?.createdAt} WIB

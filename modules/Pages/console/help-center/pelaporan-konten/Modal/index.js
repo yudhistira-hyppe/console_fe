@@ -5,8 +5,9 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Stack, TextField } from '@mui/material';
 import { useGetReportReasonQuery } from 'api/console/helpCenter/konten';
+import { LoadingButton } from '@mui/lab';
 
-export default function ModalConfirmation({ showModal, onClose, onConfirm, type }) {
+export default function ModalConfirmation({ showModal, onClose, onConfirm, type, loading }) {
   const [reason, setReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
   const { data: reportReason } = useGetReportReasonQuery();
@@ -36,10 +37,10 @@ export default function ModalConfirmation({ showModal, onClose, onConfirm, type 
   return (
     <Modal
       open={showModal}
-      onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      disableAutoFocus>
+      disableAutoFocus
+      disableEnforceFocus>
       <Box sx={style}>
         {type === 'ditangguhkan' ? (
           <div>
@@ -92,9 +93,10 @@ export default function ModalConfirmation({ showModal, onClose, onConfirm, type 
         )}
 
         <Stack direction={'row'} mt={3} mb={1} justifyContent={'center'} spacing={3}>
-          <Button
+          <LoadingButton
+            loading={loading}
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() =>
               type === 'ditangguhkan' ? onConfirm({ ...JSON.parse(reason), otherReason: otherReason }) : onConfirm()
             }
@@ -104,8 +106,10 @@ export default function ModalConfirmation({ showModal, onClose, onConfirm, type 
                 : reason === '' || (JSON.parse(reason)?.reason === 'Lainnya' && otherReason === '')
             }>
             Konfirmasi
+          </LoadingButton>
+          <Button onClick={onClose} disabled={loading}>
+            Batal
           </Button>
-          <Button onClick={onClose}>Batal</Button>
         </Stack>
       </Box>
     </Modal>
