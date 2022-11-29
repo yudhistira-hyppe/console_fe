@@ -329,7 +329,7 @@ const DetailPelaporanKonten = () => {
                       : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
                       ? 'Dipulihkan'
                       : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
-                      ? 'Dihapus'
+                      ? 'Ditangguhkan'
                       : 'Baru'}
                   </Button>
                 </Stack>
