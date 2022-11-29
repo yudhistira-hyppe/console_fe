@@ -22,7 +22,7 @@ import {
   useGetReportUserDetailTicketQuery,
   useUpdateDetailTicketMutation,
   useUpdateFlagingTicketMutation,
-} from 'api/console/helpCenter/konten';
+} from 'api/console/helpCenter/iklan';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
@@ -41,6 +41,7 @@ const DetailBandingIklan = () => {
     delete: false,
     type: '',
   });
+  const [loading, setLoading] = useState(false);
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
@@ -187,26 +188,30 @@ const DetailBandingIklan = () => {
   };
 
   const onConfirmModal = (val) => {
+    setLoading(true);
     if (modal.type === 'ditangguhkan' || modal.type === 'tidak ditangguhkan') {
       updateTicket({
         postID: router.query?._id,
-        type: 'content',
+        type: 'ads',
         reasonId: modal.type === 'ditangguhkan' ? val?._id : undefined,
         reason: modal.type === 'ditangguhkan' ? (val?.reason === 'Lainnya' ? val?.otherReason : val?.reason) : undefined,
         ditangguhkan: modal.type === 'ditangguhkan',
       }).then(() => {
+        setLoading(false);
         setModal({ ...modal, confirmation: false, type: '' });
-        router.push('/help-center/banding-konten');
+        router.push('/help-center/banding-iklan');
       });
     } else if (modal.type === 'sensitif') {
-      flagTicket({ postID: router.query?._id, type: 'content' }).then(() => {
+      flagTicket({ postID: router.query?._id, type: 'ads' }).then(() => {
+        setLoading(false);
         setModal({ ...modal, confirmation: false, type: '' });
-        router.push('/help-center/banding-konten');
+        router.push('/help-center/banding-iklan');
       });
     } else {
-      deleteTicket({ postID: router.query?._id, type: 'content', remark: val }).then(() => {
+      deleteTicket({ postID: router.query?._id, type: 'ads', remark: val }).then(() => {
+        setLoading(false);
         setModal({ ...modal, confirmation: false, type: '' });
-        router.push('/help-center/banding-konten');
+        router.push('/help-center/banding-iklan');
       });
     }
   };
@@ -227,11 +232,13 @@ const DetailBandingIklan = () => {
         type={modal.type}
         onClose={() => setModal({ ...modal, confirmation: !modal.confirmation })}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
       <ModalDelete
         showModal={modal.delete}
         onClose={() => setModal({ ...modal, delete: !modal.delete })}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
 
       <Stack direction={'column'} spacing={2} mb={3}>
@@ -319,7 +326,8 @@ const DetailBandingIklan = () => {
                   aria-controls={open ? 'composition-menu' : undefined}
                   aria-expanded={open ? 'true' : undefined}
                   style={buttonStyle(detail?.data[0]?.reportStatusLast)}
-                  onClick={detail?.data[0]?.reportStatusLast === 'BARU' ? () => handleToggle() : () => {}}
+                  onClick={handleToggle}
+                  // onClick={detail?.data[0]?.reportStatusLast === 'BARU' ? () => handleToggle() : () => {}}
                   aria-haspopup="true"
                   endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}>
                   {detail?.data[0]?.reportStatusLast === 'FLAGING'

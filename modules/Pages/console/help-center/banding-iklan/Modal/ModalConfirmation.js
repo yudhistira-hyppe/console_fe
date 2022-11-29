@@ -5,8 +5,9 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Stack, TextField } from '@mui/material';
 import { useGetReportReasonQuery } from 'api/console/helpCenter/konten';
+import { LoadingButton } from '@mui/lab';
 
-export default function ModalConfirmation({ showModal, type, onClose, onConfirm }) {
+export default function ModalConfirmation({ showModal, type, onClose, onConfirm, loading }) {
   const [reason, setReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
   const { data: reportReason } = useGetReportReasonQuery();
@@ -37,9 +38,10 @@ export default function ModalConfirmation({ showModal, type, onClose, onConfirm 
     <div>
       <Modal
         open={showModal}
-        onClose={onClose}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-describedby="modal-modal-description"
+        disableAutoFocus
+        disableEnforceFocus>
         <Box sx={style}>
           {type === 'ditangguhkan' ? (
             <>
@@ -92,9 +94,10 @@ export default function ModalConfirmation({ showModal, type, onClose, onConfirm 
           )}
 
           <Stack direction={'row'} mt={4} justifyContent={'center'} spacing={3}>
-            <Button
+            <LoadingButton
+              loading={loading}
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={() =>
                 type === 'ditangguhkan' ? onConfirm({ ...JSON.parse(reason), otherReason: otherReason }) : onConfirm()
               }
@@ -104,8 +107,10 @@ export default function ModalConfirmation({ showModal, type, onClose, onConfirm 
                   : reason === '' || (JSON.parse(reason)?.reason === 'Lainnya' && otherReason === '')
               }>
               Konfirmasi
+            </LoadingButton>
+            <Button onClick={onClose} disabled={loading}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>
