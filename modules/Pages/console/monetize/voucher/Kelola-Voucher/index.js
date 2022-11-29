@@ -18,18 +18,18 @@ import { Stack } from '@mui/system';
 import React from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import { ModalChangeStatusConfirmation } from 'modules/Pages/console/monetize/components';
-import BreadCrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
+import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
 import { useGetVouchersQuery, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
 import moment from 'moment';
-import { Pagination } from '@mui/material';
+import { CircularProgress, Pagination } from '@mui/material';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
 const breadcrumbs = [
-  { label: 'Home', link: '/console' },
-  { label: 'Monetisasi', link: '/console/monetize' },
-  { label: 'Voucher', isActive: true },
+  { label: 'Monetisasi', link: '/monetize' },
+  { label: 'Kelola Voucher', isActive: true },
 ];
 
 const KelolaVoucherComponent = () => {
@@ -37,9 +37,9 @@ const KelolaVoucherComponent = () => {
   const [modalType, setModalType] = React.useState(null);
   const [selectedItem, setSelectedItem] = React.useState({});
   const [updateVoucher] = useUpdateVoucherMutation();
-  const [params, setParams] = React.useState({ page: 0, limit: 5 });
+  const [params, setParams] = React.useState({ page: 0, limit: 10 });
   const router = useRouter();
-  const { data: listVouchers, refetch } = useGetVouchersQuery(params);
+  const { data: listVouchers, isFetching: loadingVoucher } = useGetVouchersQuery(params);
 
   const onChangeStatusHandler = (item) => {
     setShowModal(true);
@@ -53,7 +53,6 @@ const KelolaVoucherComponent = () => {
     };
 
     updateVoucher({ id: selectedItem._id, data });
-    setTimeout(() => refetch(), 500);
     onCancelModalHandler();
   };
 
@@ -66,7 +65,6 @@ const KelolaVoucherComponent = () => {
     setParams((prevVal) => {
       return { ...prevVal, page: value - 1 };
     });
-    refetch();
   };
 
   return (
@@ -74,19 +72,23 @@ const KelolaVoucherComponent = () => {
       <Head>
         <title key="title">HYYPE MONETIZE</title>
       </Head>
-      <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <Stack
-        direction={'row'}
-        mt={1}
-        mb={3}
-        onClick={() => router.push('/monetize')}
-        style={{ width: 'fit-content', cursor: 'pointer' }}>
-        <Stack direction={'column'} justifyContent={'center'}>
-          <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/monetize')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
+          </Stack>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
+            Kembali
+          </Typography>
         </Stack>
-        <Typography variant="h1" style={{ color: 'black' }}>
-          Kembali
-        </Typography>
       </Stack>
 
       <PageContainer>
@@ -95,25 +97,25 @@ const KelolaVoucherComponent = () => {
             title={
               <Stack direction="row" justifyContent="space-between">
                 <Stack direction="column" justifyContent="center">
-                  <Typography fontWeight="bold">Daftar Voucher</Typography>
+                  <Typography style={{ fontWeight: 'bold' }}>Daftar Voucher</Typography>
                 </Stack>
                 <div>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => router.push('/console/monetize/voucher/create')}>
+                  <Button variant="contained" color="primary" onClick={() => router.push('/monetize/voucher/create')}>
                     Buat Voucher
                   </Button>
                 </div>
               </Stack>
             }
+            style={{ padding: 24 }}
           />
           <CardContent style={{ padding: '0px' }}>
             <TableContainer>
               <Table sx={{ minWidth: 650 }} aria-label="basic-table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left">Nama Voucher</TableCell>
+                    <TableCell align="left" style={{ paddingLeft: 24 }}>
+                      Nama Voucher
+                    </TableCell>
                     <TableCell align="left">Waktu Pembuatan</TableCell>
                     <TableCell align="left">Jumlah Kredit</TableCell>
                     <TableCell align="left">Jumlah Stok</TableCell>
@@ -125,61 +127,77 @@ const KelolaVoucherComponent = () => {
                 </TableHead>
 
                 <TableBody>
-                  {listVouchers?.data?.map((item, key) => (
-                    <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell component="th" scope="row">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {item?.nameAds}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {moment(item?.createdAt).format('lll')}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1">{item?.creditValue} Kredit</Typography>
-                        {item?.creditPromo && (
-                          <Typography variant="body1" style={{ fontSize: '12px' }}>
-                            + Bonus {item?.creditPromo} Kredit
+                  {loadingVoucher ? (
+                    <TableCell colSpan={8}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                        <CircularProgress color="secondary" />
+                        <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                      </Stack>
+                    </TableCell>
+                  ) : (
+                    listVouchers?.data?.map((item, key) => (
+                      <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell component="th" scope="row" style={{ paddingLeft: 24 }}>
+                          <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            {item?.nameAds}
                           </Typography>
-                        )}
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {item?.qty} Voucher
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {item?.totalUsed} Voucher
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          Rp {item?.amount}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Switch onClick={() => onChangeStatusHandler(item)} checked={item?.isActive} />
-                      </TableCell>
-                      <TableCell align="left">
-                        <EditIcon
-                          htmlColor="#DADADA"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => router.push(`/monetize/voucher/${item?._id}`)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            {moment(item?.createdAt).utc().format('lll')}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            {numberWithCommas(item?.creditValue || 0)} Kredit
+                          </Typography>
+                          {item?.creditPromo && (
+                            <Typography variant="body1" style={{ fontSize: '12px' }}>
+                              + Bonus {numberWithCommas(item?.creditPromo)} Kredit
+                            </Typography>
+                          )}
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            {item?.qty} Voucher
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            {item?.totalUsed} Voucher
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            Rp {numberWithCommas(item?.amount || 0)}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Switch color="primary" onClick={() => onChangeStatusHandler(item)} checked={item?.isActive} />
+                        </TableCell>
+                        <TableCell align="left">
+                          <EditIcon
+                            htmlColor="#737373"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => router.push(`/monetize/voucher/${item?._id}`)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           </CardContent>
         </Card>
-        {listVouchers && (
+        {listVouchers?.totalsearch >= 1 && !loadingVoucher && (
           <Stack alignItems={'center'} mt={2}>
-            <Pagination count={Math.round(listVouchers?.totalpage)} onChange={handlePageChange} size={'small'} />
+            <Pagination
+              count={Math.round(listVouchers?.totalpage)}
+              page={listVouchers?.page + 1}
+              onChange={handlePageChange}
+              size={'small'}
+            />
           </Stack>
         )}
       </PageContainer>
