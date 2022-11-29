@@ -27,6 +27,8 @@ import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { ModalCreateVoucher } from '../../components';
 import { useCreateVoucherMutation, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
+import { TextField } from '@mui/material';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
 const useStyles = makeStyles((theme) => ({
   inputLabel: {
@@ -71,9 +73,8 @@ const useStyles = makeStyles((theme) => ({
 
 const VoucherFormComponent = ({ data }) => {
   const breadcrumbs = [
-    { label: 'Home', link: '/console' },
-    { label: 'Monetisasi', link: '/console/monetize' },
-    { label: 'Voucher', link: '/console/monetize/voucher' },
+    { label: 'Monetisasi', link: '/monetize' },
+    { label: 'Kelola Voucher', link: '/monetize/voucher' },
     { label: data ? 'Ubah Voucher' : 'Buat Voucher', isActive: true },
   ];
   const [val, setVal] = React.useState({
@@ -82,7 +83,15 @@ const VoucherFormComponent = ({ data }) => {
     creditValue: data?.creditValue || '',
     creditPromo: data?.creditPromo || '',
     qty: data?.qty || '',
-    expiredDay: data?.expiredDay?.toString() || '',
+    expiredDay:
+      data?.expiredDay === 30
+        ? data?.expiredDay?.toString()
+        : data?.expiredDay === 60
+        ? data?.expiredDay?.toString()
+        : data?.expiredDay === 90
+        ? data?.expiredDay?.toString()
+        : 'other' || '',
+    otherExpired: data?.expiredDay || '',
     amount: data?.amount || 0,
     description: data?.description || '',
   });
@@ -115,13 +124,20 @@ const VoucherFormComponent = ({ data }) => {
   const onConfirm = () => {
     const bodyData = {
       ...val,
-      expiredDay: Number(val.expiredDay),
+      expiredDay: val?.expiredDay === 'other' ? val.otherExpired : Number(val.expiredDay),
       amount: val.creditValue * 1500,
       isActive: true,
     };
 
     data
-      ? updateVoucher({ id: data?._id, data: { ...val, expiredDay: Number(val.expiredDay), isActive: data.isActive } })
+      ? updateVoucher({
+          id: data?._id,
+          data: {
+            ...val,
+            expiredDay: val?.expiredDay === 'other' ? val.otherExpired : Number(val.expiredDay),
+            isActive: data.isActive,
+          },
+        })
       : addVoucher(bodyData);
     router.push('/monetize/voucher');
     setShowModal(false);
@@ -131,25 +147,30 @@ const VoucherFormComponent = ({ data }) => {
     setShowModal(false);
   };
 
+  console.log(val);
+
   return (
     <>
       <Head>
         <title key="title">Console:: Hyype Console</title>
       </Head>
 
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <Stack
-        direction={'row'}
-        mt={1}
-        mb={3}
-        onClick={() => router.push('/monetize/voucher')}
-        style={{ width: 'fit-content', cursor: 'pointer' }}>
-        <Stack direction={'column'} justifyContent={'center'}>
-          <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/monetize/voucher')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
+          </Stack>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
+            Kembali
+          </Typography>
         </Stack>
-        <Typography variant="h1" style={{ color: 'black' }}>
-          Kembali
-        </Typography>
       </Stack>
 
       <PageContainer>
@@ -167,6 +188,7 @@ const VoucherFormComponent = ({ data }) => {
                   className={classes.inputForm}
                   value={val?.nameAds}
                   onChange={onInputChange}
+                  disabled={data}
                 />
               </FormControl>
             </Grid>
@@ -182,6 +204,7 @@ const VoucherFormComponent = ({ data }) => {
                   className={classes.inputForm}
                   value={val?.codeVoucher}
                   onChange={onInputChange}
+                  disabled={data}
                 />
                 <FormHelperText>Penamaan kode voucher disarankan lebih dari 5 karakter</FormHelperText>
               </FormControl>
@@ -203,7 +226,9 @@ const VoucherFormComponent = ({ data }) => {
                   value={val?.creditValue}
                   onChange={onInputChange}
                 />
-                <FormHelperText>1 kredit = Rp 1.500,-. Harga voucher = Rp {val?.creditValue * 1500} </FormHelperText>
+                <FormHelperText>
+                  1 kredit = Rp 1.500,-. Harga voucher = Rp {numberWithCommas(val?.creditValue * 1500)}{' '}
+                </FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12} md={6} sm={6}>
@@ -253,37 +278,42 @@ const VoucherFormComponent = ({ data }) => {
                     Masa Berlaku Voucher<span className={classes.requiredMark}>*</span>
                   </InputLabel>
                 </div>
-                <RadioGroup row className="mt-8">
+                <RadioGroup row style={{ marginTop: 50 }}>
                   <FormControlLabel
                     onChange={onExpChange}
                     checked={val?.expiredDay === '30'}
                     value="30"
-                    control={<Radio />}
+                    control={<Radio color="secondary" />}
                     label={'30 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
                     checked={val?.expiredDay === '60'}
                     value="60"
-                    control={<Radio />}
+                    control={<Radio color="secondary" />}
                     label={'60 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
                     checked={val?.expiredDay === '90'}
                     value="90"
-                    control={<Radio />}
+                    control={<Radio color="secondary" />}
                     label={'90 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
                     value="other"
-                    control={<Radio />}
+                    checked={val?.expiredDay === 'other'}
+                    control={<Radio color="secondary" />}
                     label={
-                      <input
+                      <TextField
                         placeholder="Masukkan Jumlah Hari"
                         id="bootstrap-input"
+                        size="small"
+                        value={val?.otherExpired}
+                        onChange={(e) => setVal({ ...val, otherExpired: Number(e.target.value) })}
                         disabled={val?.expiredDay !== 'other'}
+                        color="secondary"
                       />
                     }
                   />
@@ -304,7 +334,10 @@ const VoucherFormComponent = ({ data }) => {
               </Stack>
             }
           />
-          <CardContent>
+          <CardContent style={{ opacity: data ? 0.3 : 1, position: 'relative' }}>
+            {data && (
+              <div style={{ height: '100%', width: '100%', zIndex: 1, background: 'transparent', position: 'absolute' }} />
+            )}
             <Ckeditor
               content={val?.description}
               events={{
@@ -337,7 +370,7 @@ const VoucherFormComponent = ({ data }) => {
             variant="contained"
             color="primary"
             // disabled={!val?.name || !val?.kode || !val?.kredit || !val?.stok || !val?.exp || (!val?.sdk && !data)}>
-            onClick={() => setShowModal(true)}>
+            onClick={() => (data ? onConfirm() : setShowModal(true))}>
             Simpan
           </Button>
           <Button onClick={() => router.back()}>Batal</Button>
