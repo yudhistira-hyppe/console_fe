@@ -115,11 +115,14 @@ const VoucherFormComponent = ({ data }) => {
   const onConfirm = () => {
     const bodyData = {
       ...val,
+      expiredDay: Number(val.expiredDay),
       amount: val.creditValue * 1500,
       isActive: true,
     };
 
-    data ? updateVoucher({ id: data?._id, data: { ...val, isActive: data.isActive } }) : addVoucher(bodyData);
+    data
+      ? updateVoucher({ id: data?._id, data: { ...val, expiredDay: Number(val.expiredDay), isActive: data.isActive } })
+      : addVoucher(bodyData);
     router.push('/monetize/voucher');
     setShowModal(false);
   };
