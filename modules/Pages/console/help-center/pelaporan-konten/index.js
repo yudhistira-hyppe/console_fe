@@ -78,8 +78,8 @@ const PelaporanKonten = () => {
         case 'search':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Pemohon' }]
-              : [...prevVal, { parent: kind, value: 'Pemohon' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Konten' }]
+              : [...prevVal, { parent: kind, value: 'Konten' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'reason':
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
@@ -168,9 +168,6 @@ const PelaporanKonten = () => {
       }
     });
   };
-
-  console.log(filterList);
-  console.log(filter);
 
   return (
     <>

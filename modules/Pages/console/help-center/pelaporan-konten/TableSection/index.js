@@ -99,6 +99,8 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
             onDelete={() => {
               if (item.parent === 'search') {
                 handleDeleteFilter(item.parent, '');
+              } else if (item.parent === 'reason') {
+                handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
               } else if (item.parent === 'range') {
                 handleDeleteFilter('clearRange', []);
               } else {
@@ -249,7 +251,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalsearch >= 1 && (
+      {listTickets?.totalsearch >= 1 && !loading && (
         <Stack alignItems="center" my={3} mr={3}>
           <Pagination
             count={Number(listTickets?.totalpage) || 1}
