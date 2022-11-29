@@ -253,16 +253,28 @@ const DetailBantuanPengguna = () => {
               <Stack direction={'column'} spacing={2}>
                 <Typography variant="h1">{ticketData?.data[0]?.subject}</Typography>
                 <Typography variant="subtitle2">{ticketData?.data[0]?.body}</Typography>
-                {ticketData?.data[0]?.fsSourceUri?.length >= 1 ? (
+                {ticketData?.data[0]?.fsSourceName?.length >= 1 ? (
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    {ticketData?.data[0]?.fsSourceUri?.map(
+                    {ticketData?.data[0]?.fsSourceName?.map(
                       (item, key) =>
-                        key <= 1 && <Chip label="Filename.zip" avatar={<FolderShared />} style={{ marginRight: '1em' }} />,
+                        key <= 1 && (
+                          <Chip
+                            label={
+                              <Typography
+                                title={item}
+                                style={{ width: 100, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 12 }}>
+                                {item}
+                              </Typography>
+                            }
+                            avatar={<FolderShared style={{ marginLeft: 10 }} />}
+                            style={{ marginRight: '1em' }}
+                          />
+                        ),
                     )}
-                    {ticketData?.data[0]?.fsSourceUri?.length > 2 && (
+                    {ticketData?.data[0]?.fsSourceName?.length > 2 && (
                       <Stack direction={'column'} justifyContent={'center'}>
                         <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
-                          +{ticketData?.data[0]?.fsSourceUri.length - 2} Lagi
+                          +{ticketData?.data[0]?.fsSourceName.length - 2} Lagi
                         </Typography>
                       </Stack>
                     )}
