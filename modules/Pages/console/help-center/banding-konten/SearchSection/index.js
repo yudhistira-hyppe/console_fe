@@ -164,32 +164,56 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 value={'Konten ini tidak memiliki konten sensitif'}
                 label={<Typography style={{ fontSize: 12 }}>Konten ini tidak memiliki konten sensitif</Typography>}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.reason.includes('Konten ini tidak memiliki konten sensitif')}
+                  />
+                }
               />
               <FormControlLabel
                 value={'Konten ini memiliki konteks tambahan'}
                 label={<Typography style={{ fontSize: 12 }}>Konten ini memiliki konteks tambahan</Typography>}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.reason.includes('Konten ini memiliki konteks tambahan')}
+                  />
+                }
               />
               <FormControlLabel
                 value={'Lainnya'}
                 label={<Typography style={{ fontSize: 12 }}>Lainnya</Typography>}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.reason.includes('Lainnya')} />}
               />
               <FormControlLabel
                 value={'This content doesn`t have sensitive content'}
                 label={<Typography style={{ fontSize: 12 }}>This content doesn`t have sensitive content</Typography>}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.reason.includes('This content doesn`t have sensitive content')}
+                  />
+                }
               />
               <FormControlLabel
                 value={'This content has additional context'}
                 label={<Typography style={{ fontSize: 12 }}>This content has additional context</Typography>}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.reason.includes('This content has additional context')}
+                  />
+                }
               />
               <FormControlLabel
                 value={'Other'}
                 label={<Typography style={{ fontSize: 12 }}>Other</Typography>}
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.reason.includes('Other')} />}
               />
             </FormGroup>
           </AccordionDetails>
