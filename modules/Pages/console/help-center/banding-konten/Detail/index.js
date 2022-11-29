@@ -41,6 +41,7 @@ const DetailBandingKonten = () => {
     delete: false,
     type: '',
   });
+  const [loading, setLoading] = useState(false);
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
@@ -187,6 +188,7 @@ const DetailBandingKonten = () => {
   };
 
   const onConfirmModal = (val) => {
+    setLoading(true);
     if (modal.type === 'ditangguhkan' || modal.type === 'tidak ditangguhkan') {
       updateTicket({
         postID: router.query?._id,
@@ -195,16 +197,19 @@ const DetailBandingKonten = () => {
         reason: modal.type === 'ditangguhkan' ? (val?.reason === 'Lainnya' ? val?.otherReason : val?.reason) : undefined,
         ditangguhkan: modal.type === 'ditangguhkan',
       }).then(() => {
+        setLoading(false);
         setModal({ ...modal, confirmation: false, type: '' });
         router.push('/help-center/banding-konten');
       });
     } else if (modal.type === 'sensitif') {
       flagTicket({ postID: router.query?._id, type: 'content' }).then(() => {
+        setLoading(false);
         setModal({ ...modal, confirmation: false, type: '' });
         router.push('/help-center/banding-konten');
       });
     } else {
       deleteTicket({ postID: router.query?._id, type: 'content', remark: val }).then(() => {
+        setLoading(false);
         setModal({ ...modal, confirmation: false, type: '' });
         router.push('/help-center/banding-konten');
       });
@@ -227,11 +232,13 @@ const DetailBandingKonten = () => {
         type={modal.type}
         onClose={() => setModal({ ...modal, confirmation: !modal.confirmation })}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
       <ModalDelete
         showModal={modal.delete}
         onClose={() => setModal({ ...modal, delete: !modal.delete })}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
 
       <Stack direction={'column'} spacing={2} mb={3}>
@@ -476,7 +483,7 @@ const DetailBandingKonten = () => {
                       <Typography variant="subtitle2" style={{ color: '#00000099' }}>
                         Email
                       </Typography>
-                      <Typography>{detail?.data[0]?.email}</Typography>
+                      <Typography>{detail?.data[0]?.email || '-'}</Typography>
                     </Stack>
                   </Stack>
 
@@ -530,7 +537,7 @@ const DetailBandingKonten = () => {
                       <Typography variant="subtitle2" style={{ color: '#00000099' }}>
                         Status
                       </Typography>
-                      <Typography>{detail?.data[0]?.statusUser}</Typography>
+                      <Typography>{detail?.data[0]?.statusUser || '-'}</Typography>
                     </Stack>
                   </Stack>
 
@@ -556,7 +563,7 @@ const DetailBandingKonten = () => {
                       <Typography variant="subtitle2" style={{ color: '#00000099' }}>
                         Nama Sesuai KTP
                       </Typography>
-                      <Typography>{detail?.data[0]?.proofpict[0]?.nama || detail?.data[0]?.fullName}</Typography>
+                      <Typography>{detail?.data[0]?.proofpict[0]?.nama || detail?.data[0]?.fullName || '-'}</Typography>
                     </Stack>
                   </Stack>
                 </Stack>
@@ -573,7 +580,7 @@ const DetailBandingKonten = () => {
                     </Stack>
                     <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
                       <Typography variant="body2" color="primary">
-                        @{detail?.data[0]?.pemiliksekarang}
+                        @{detail?.data[0]?.pemiliksekarang || '-'}
                       </Typography>
                     </Stack>
                   </Stack>
