@@ -214,7 +214,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalsearch >= 1 && (
+      {listTickets?.totalsearch >= 1 && !loading && (
         <Stack alignItems="center" my={3} mr={3}>
           <Pagination
             count={Number(listTickets?.totalpage) || 1}
