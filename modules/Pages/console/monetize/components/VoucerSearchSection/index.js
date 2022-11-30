@@ -150,8 +150,8 @@ const SearchSection = ({ filter, handleChange }) => {
           <AccordionDetails style={{ padding: 0 }}>
             <RadioGroup value={filter.period} onChange={(e) => handleChange('period', e.target.value)}>
               <FormControlLabel
-                label={'> 30 Hari'}
-                value="> 30"
+                label={'< 30 Hari'}
+                value="< 30"
                 control={<Radio defaultChecked={false} color="secondary" />}
               />
               <FormControlLabel
@@ -181,28 +181,36 @@ const SearchSection = ({ filter, handleChange }) => {
           <AccordionDetails style={{ padding: '0px' }}>
             <FormGroup onChange={(e) => handleChange('payment_status', e.target.value)}>
               <FormControlLabel
-                label={'Menuggu'}
-                value="WAITING_PAYMENT"
+                label={'Menuggu Pembayaran'}
+                value={JSON.stringify({ _id: 'WAITING_PAYMENT', name: 'Menuggu Pembayaran' })}
                 control={
                   <Checkbox
                     defaultChecked={false}
                     color="secondary"
-                    checked={filter.payment_status.includes('WAITING_PAYMENT')}
+                    checked={filter.payment_status.map((item) => item?._id).includes('WAITING_PAYMENT')}
                   />
                 }
               />
               <FormControlLabel
                 label={'Lunas'}
-                value="Success"
+                value={JSON.stringify({ _id: 'Success', name: 'Lunas' })}
                 control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter.payment_status.includes('Success')} />
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.payment_status.map((item) => item?._id).includes('Success')}
+                  />
                 }
               />
               <FormControlLabel
                 label={'Gagal'}
-                value="Cancel"
+                value={JSON.stringify({ _id: 'Cancel', name: 'Gagal' })}
                 control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter.payment_status.includes('Cancel')} />
+                  <Checkbox
+                    defaultChecked={false}
+                    color="secondary"
+                    checked={filter.payment_status.map((item) => item?._id).includes('Cancel')}
+                  />
                 }
               />
             </FormGroup>

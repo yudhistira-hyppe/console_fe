@@ -28,12 +28,14 @@ const MonetizeVoucherComponent = () => {
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
     });
+    filter.search !== '' && Object.assign(params, { key: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.periodRange[0] && Object.assign(params, { startday: filter.periodRange[0] });
     filter.periodRange[1] && Object.assign(params, { endday: filter.periodRange[1] });
-    filter.voucher_status.length >= 1 && Object.assign(params, { voucher_status: filter.voucher_status });
-    filter.payment_status.length >= 1 && Object.assign(params, { status: filter.payment_status });
+    filter.voucher_status.includes('Digunakan') && Object.assign(params, { used: true });
+    filter.voucher_status.includes('Kadaluarsa') && Object.assign(params, { expired: true });
+    filter.payment_status.length >= 1 && Object.assign(params, { status: filter.payment_status.map((item) => item?._id) });
 
     return params;
   };
@@ -79,6 +81,10 @@ const MonetizeVoucherComponent = () => {
             : [...prevVal, { parent: kind, value: 'Masa Berlaku' }];
         case 'clearRange':
           return [...prevVal.filter((item) => item.parent !== 'period')];
+        case 'payment_status':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -92,7 +98,7 @@ const MonetizeVoucherComponent = () => {
         return { ...prevVal, search: value, page: 0 };
       } else if (kind === 'period') {
         switch (value) {
-          case '> 30':
+          case '< 30':
             return {
               ...prevVal,
               period: value,
@@ -128,9 +134,9 @@ const MonetizeVoucherComponent = () => {
       } else if (kind === 'payment_status') {
         return {
           ...prevVal,
-          payment_status: filter.payment_status.find((item) => item === value)
-            ? filter.payment_status.filter((item) => item !== value)
-            : [...filter.payment_status, value],
+          payment_status: filter.payment_status.find((item) => item?.name === JSON.parse(value)?.name)
+            ? filter.payment_status.filter((item) => item?.name !== JSON.parse(value)?.name)
+            : [...filter.payment_status, JSON.parse(value)],
           page: 0,
         };
       } else if (kind === 'voucher_status') {

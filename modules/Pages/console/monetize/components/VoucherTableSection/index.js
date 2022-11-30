@@ -24,14 +24,6 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
   // const [isDetail, setDetail] = React.useState(false);
   // const [selectedID, setSelectedID] = React.useState({});
 
-  const dataList =
-    listVouchers &&
-    [...listVouchers?.data].sort(function (a, b) {
-      return order === 'desc'
-        ? new Date(b.timestamp) - new Date(a.timestamp)
-        : new Date(a.timestamp) - new Date(b.timestamp);
-    });
-
   return (
     <>
       {/* <ModalDetailTransaction id={selectedID} showModal={isDetail} onCancel={() => setDetail(!isDetail)} /> */}
@@ -77,6 +69,8 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
                   handleDeleteFilter(item.parent, [null, null]);
                 } else if (item.parent === 'period') {
                   handleDeleteFilter('clearRange', []);
+                } else if (item.parent === 'payment_status') {
+                  handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
                 } else {
                   handleDeleteFilter(item.parent, item.value);
                 }
@@ -94,6 +88,9 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
                 <TableCell align="left">Jumlah Kredit</TableCell>
                 <TableCell align="left">Harga</TableCell>
                 <TableCell align="left">Masa Berlaku</TableCell>
+                <TableCell align="left" style={{ width: 100 }}>
+                  Kadaluarsa
+                </TableCell>
                 <TableCell align="left">Status Pembayaran</TableCell>
               </TableRow>
             </TableHead>
@@ -106,8 +103,8 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
                     <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                   </Stack>
                 </TableCell>
-              ) : dataList?.length >= 1 ? (
-                dataList?.map((item, key) =>
+              ) : listVouchers?.data?.length >= 1 ? (
+                listVouchers?.data?.map((item, key) =>
                   item?.vcdata?.map((vc, key) => (
                     <TableRow key={key}>
                       {key === 0 && (
@@ -123,10 +120,10 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '14px' }}>
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
                           {numberWithCommas(vc?.creditValue)} Kredit
                         </Typography>
-                        <Typography variant="body2" style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.6)' }}>
+                        <Typography variant="body2" style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.6)' }}>
                           + Bonus {numberWithCommas(vc?.creditPromo)} Kredit
                         </Typography>
                       </TableCell>
@@ -136,8 +133,13 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '14px' }}>
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
                           {vc?.expiredDay || 0} Hari
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left" style={{ width: 100 }}>
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {moment(vc?.expiredAt).utc().format('DD/MM/YYYY-HH:mm')} WIB
                         </Typography>
                       </TableCell>
                       {key === 0 && (
