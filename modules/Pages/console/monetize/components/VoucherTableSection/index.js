@@ -11,36 +11,34 @@ import {
   Paper,
   Chip,
 } from '@material-ui/core';
-import { Stack } from '@mui/material';
+import { CircularProgress, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import Pagination from '@mui/material/Pagination';
 import moment from 'moment';
 import ModalDetailTransaction from '../Modal/ModalDetailTransaction';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
-const TableSection = ({ listVouchers, order, handleOrder, handlePageChange }) => {
-  const [isDetail, setDetail] = React.useState(false);
-  const [selectedID, setSelectedID] = React.useState({});
-
-  const dataList =
-    listVouchers &&
-    [...listVouchers?.data].sort(function (a, b) {
-      return order === 'desc'
-        ? new Date(b.timestamp) - new Date(a.timestamp)
-        : new Date(a.timestamp) - new Date(b.timestamp);
-    });
+const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, handleOrder, handlePageChange, loading }) => {
+  // const [isDetail, setDetail] = React.useState(false);
+  // const [selectedID, setSelectedID] = React.useState({});
 
   return (
     <>
-      <ModalDetailTransaction id={selectedID} showModal={isDetail} onCancel={() => setDetail(!isDetail)} />
+      {/* <ModalDetailTransaction id={selectedID} showModal={isDetail} onCancel={() => setDetail(!isDetail)} /> */}
       <Stack flex={1}>
         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
           <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
-            <Typography>
-              Menampilkan {listVouchers?.total} hasil ({listVouchers?.page * 10 + 1} -{' '}
-              {listVouchers?.total * (listVouchers?.page + 1)} dari {listVouchers?.totalallrow})
-            </Typography>
+            {loading ? (
+              <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+            ) : (
+              <Typography style={{ fontFamily: 'Normal' }}>
+                Menampilkan {listVouchers?.total} hasil (
+                {listVouchers?.totalsearch >= 1 ? listVouchers?.page * 10 + 1 : listVouchers?.page * 10} -{' '}
+                {listVouchers?.total + listVouchers?.page * 10} dari {listVouchers?.totalsearch})
+              </Typography>
+            )}
           </Box>
           <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
             <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
@@ -52,83 +50,135 @@ const TableSection = ({ listVouchers, order, handleOrder, handlePageChange }) =>
                 value={order}
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: '#FFFFFF' }}>
-                <MenuItem value="desc">Terbaru</MenuItem>
-                <MenuItem value="asc">Terlama</MenuItem>
+                <MenuItem value="true">Terbaru</MenuItem>
+                <MenuItem value="false">Terlama</MenuItem>
               </Select>
             </FormControl>
           </Stack>
         </Box>
 
+        <Stack direction="row" gap="10px" mb={2}>
+          {filterList?.map((item, key) => (
+            <Chip
+              key={key}
+              label={item.value}
+              onDelete={() => {
+                if (item.parent === 'search') {
+                  handleDeleteFilter(item.parent, '');
+                } else if (item.parent === 'createdAt') {
+                  handleDeleteFilter(item.parent, [null, null]);
+                } else if (item.parent === 'period') {
+                  handleDeleteFilter('clearRange', []);
+                } else if (item.parent === 'payment_status') {
+                  handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+                } else {
+                  handleDeleteFilter(item.parent, item.value);
+                }
+              }}
+            />
+          ))}
+        </Stack>
+
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="basic-table">
             <TableHead>
               <TableRow>
-                <TableCell>Waktu Transaksi</TableCell>
-                <TableCell align="left">Invoice Transaksi</TableCell>
+                <TableCell style={{ width: 100 }}>Waktu Transaksi</TableCell>
+                <TableCell align="left">Nama Voucher</TableCell>
+                <TableCell align="left">Jumlah Kredit</TableCell>
                 <TableCell align="left">Harga</TableCell>
-                <TableCell align="left">Pembeli</TableCell>
+                <TableCell align="left">Masa Berlaku</TableCell>
+                <TableCell align="left" style={{ width: 100 }}>
+                  Kadaluarsa
+                </TableCell>
                 <TableCell align="left">Status Pembayaran</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {listVouchers ? (
-                dataList?.map((item, key) => (
-                  <TableRow
-                    key={key}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    style={{ cursor: 'pointer' }}
-                    hover
-                    onClick={() => {
-                      setSelectedID(item._id);
-                      setDetail(!isDetail);
-                    }}>
-                    <TableCell component="th" scope="row">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        {moment(item?.timestamp).format('lll')}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        {item?.noinvoice}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        Rp {item?.amount}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        {item?.fullName}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      {item?.status === 'WAITING_PAYMENT' && (
-                        <Chip label="Menunggu" style={{ backgroundColor: 'rgba(255, 140, 0, 0.15)', color: '#FF8C00D9' }} />
+              {loading ? (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              ) : listVouchers?.data?.length >= 1 ? (
+                listVouchers?.data?.map((item, key) =>
+                  item?.vcdata?.map((vc, key) => (
+                    <TableRow key={key}>
+                      {key === 0 && (
+                        <TableCell rowSpan={item?.vcdata?.length} style={{ width: 100 }}>
+                          <Typography variant="body1" style={{ fontSize: '12px' }}>
+                            {moment(item?.timestamp).utc().format('DD/MM/YY-HH:mm')} WIB
+                          </Typography>
+                        </TableCell>
                       )}
-                      {item?.status === 'Success' && (
-                        <Chip label="Lunas" style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9' }} />
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {vc?.nameAds || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {numberWithCommas(vc?.creditValue)} Kredit
+                        </Typography>
+                        <Typography variant="body2" style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.6)' }}>
+                          + Bonus {numberWithCommas(vc?.creditPromo)} Kredit
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          Rp {numberWithCommas(vc?.amount)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {vc?.expiredDay || 0} Hari
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left" style={{ width: 100 }}>
+                        <Typography variant="body1" style={{ fontSize: '12px' }}>
+                          {moment(vc?.expiredAt).utc().format('DD/MM/YYYY-HH:mm')} WIB
+                        </Typography>
+                      </TableCell>
+                      {key === 0 && (
+                        <TableCell align="left" rowSpan={item?.vcdata?.length}>
+                          {item?.status === 'WAITING_PAYMENT' && (
+                            <Chip label="Menunggu Pembayaran" style={{ backgroundColor: '#0356AF1A', color: '#0356AF' }} />
+                          )}
+                          {item?.status === 'Success' && (
+                            <Chip
+                              label="Berhasil"
+                              style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9' }}
+                            />
+                          )}
+                          {item?.status === 'Cancel' && (
+                            <Chip label="Gagal" style={{ backgroundColor: '#E61D371A', color: '#E61D37' }} />
+                          )}
+                        </TableCell>
                       )}
-                      {item?.status === 'Cancel' && (
-                        <Chip label="Gagal" style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767D9' }} />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
+                    </TableRow>
+                  )),
+                )
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} align="center">
-                    Tidak ada data.
+                    Voucher tidak ditemukan.
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </TableContainer>
-        {listVouchers && (
+        {listVouchers?.totalsearch >= 1 && !loading && (
           <Stack alignItems={'center'} mt={2}>
-            <Pagination count={Number(listVouchers?.totalpage) + 1} size={'small'} onChange={handlePageChange} />
+            <Pagination
+              count={Number(listVouchers?.totalpage)}
+              page={listVouchers?.page + 1}
+              size={'small'}
+              onChange={handlePageChange}
+            />
           </Stack>
         )}
       </Stack>

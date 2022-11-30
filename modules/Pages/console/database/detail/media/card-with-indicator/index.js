@@ -22,7 +22,7 @@ const CardWithIndicator = (props) => {
           labelPos="top-left"
           value={(item.count / data.map((item) => item.count).reduce((a, b) => a + b, 0)) * 100}
           renderValue={(value) => {
-            return `${value}%`;
+            return `${value?.toFixed(2)}%`;
           }}
           containedColor="#AB22AF"
           onlyContained

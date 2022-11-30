@@ -47,7 +47,8 @@ const ModalProfilePenerima = ({ showModal, email, onCancel }) => {
               Jenis Kelamin&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.gender === 'MALE' ? 'Laki - Laki' : 'Perempuan'}
             </Typography>
             <Typography color="#666666">
-              Ketertarikan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.interest?.join(', ')}
+              Ketertarikan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:{' '}
+              {profile?.data[0]?.interest.map((item) => item.interestName)?.join(', ')}
             </Typography>
           </Stack>
           <Stack

@@ -25,7 +25,7 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme) => ({
   ticketHover: {
-    maxWidth: 180,
+    width: 180,
     '&:hover': {
       '& p': {
         fontSize: 12,
@@ -39,7 +39,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets, loading }) => {
+const TableSection = ({
+  filterList,
+  handleDeleteFilter,
+  order,
+  page,
+  handleOrder,
+  handlePageChange,
+  listTickets,
+  loading,
+}) => {
   const [isModal, setModal] = React.useState(false);
   const [selectedEmail, setSelectedEmail] = React.useState('');
   const { authUser } = useAuth();
@@ -63,15 +72,16 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
           setModal(!isModal);
         }}
       />
-      <Stack flex={1}>
+      <Stack flex={1} width="100%" maxWidth={956}>
         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
           <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
             {loading ? (
               <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
             ) : (
-              <Typography>
-                Menampilkan {listTickets?.totalrow} hasil ({listTickets?.page + 1}-{listTickets?.totalrow} dari{' '}
-                {listTickets?.totalallrow})
+              <Typography style={{ fontFamily: 'Normal' }}>
+                Menampilkan {listTickets?.total} hasil (
+                {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
+                {listTickets?.total + listTickets?.page * 10} dari {listTickets?.totalsearch})
               </Typography>
             )}
           </Box>
@@ -92,27 +102,43 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
           </Stack>
         </Box>
 
+        <Stack direction="row" gap="10px" mb={2}>
+          {filterList?.map((item, key) => (
+            <Chip
+              key={key}
+              label={item.value}
+              onDelete={() => {
+                if (item.parent === 'search' || item.parent === 'penerima') {
+                  handleDeleteFilter(item.parent, '');
+                } else if (item.parent === 'createdAt') {
+                  handleDeleteFilter(item.parent, [null, null]);
+                } else if (item.parent === 'sumber' || item.parent === 'category' || item.parent === 'level') {
+                  handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+                } else {
+                  handleDeleteFilter(item.parent, item.value);
+                }
+              }}
+            />
+          ))}
+        </Stack>
+
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="basic-table">
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Nomor Tiket</TableCell>
-                <TableCell align="left" style={{ maxWidth: 100 }}>
+                <TableCell align="left" style={{ width: 120 }}>
+                  Tanggal Masuk Tiket
+                </TableCell>
+                <TableCell align="left" style={{ width: 80 }}>
                   Sumber
                 </TableCell>
-                <TableCell align="left" style={{ width: 125 }}>
+                <TableCell align="left" style={{ width: 140 }}>
                   Kategori
                 </TableCell>
-                <TableCell align="left" style={{ maxWidth: 60 }}>
-                  Level
-                </TableCell>
-                <TableCell align="left" style={{ maxWidth: 140 }}>
-                  Status
-                </TableCell>
-                <TableCell align="left" style={{ width: 70 }}>
-                  Penerima
-                </TableCell>
-                <TableCell align="right">Dibuat</TableCell>
+                <TableCell align="left">Level</TableCell>
+                <TableCell align="left">Status</TableCell>
+                <TableCell align="left">Penerima</TableCell>
               </TableRow>
             </TableHead>
 
@@ -138,22 +164,27 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
                       onClick={() => router.push(`/help-center/bantuan-pengguna/detail/${item?._id}`)}>
                       <Typography variant="body1">{item?.nomortiket}</Typography>
                     </TableCell>
-                    <TableCell align="left" style={{ maxWidth: 100 }}>
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                        {moment(item?.datetime).utc().format('DD/MM/YY - HH:mm')} WIB
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
                         {item?.sourceName || '-'}
                       </Typography>
                     </TableCell>
-                    <TableCell align="left" style={{ width: 125 }}>
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
                         {item?.nameCategory || '-'}
                       </Typography>
                     </TableCell>
-                    <TableCell align="left" style={{ maxWidth: 60 }}>
+                    <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', textAlign: 'center' }}>
                         {item?.nameLevel || '-'}
                       </Typography>
                     </TableCell>
-                    <TableCell align="left" style={{ maxWidth: 140 }}>
+                    <TableCell align="left">
                       {item?.status === 'onprogress' && (
                         <Chip
                           label="Dalam Proses"
@@ -167,7 +198,13 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
                         <Chip label="Baru" style={{ backgroundColor: '#E6094B1A', color: 'red' }} />
                       )}
                     </TableCell>
-                    <TableCell align="center" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <TableCell
+                      align="left"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                      }}>
                       {item?.penerima ? (
                         <Avatar
                           src={getMediaUri(item?.avatar?.mediaEndpoint)}
@@ -180,11 +217,7 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
                       ) : (
                         <Avatar />
                       )}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
-                        {moment(item?.datetime).format('lll')}
-                      </Typography>
+                      <Typography style={{ fontSize: 12 }}>{item?.penerima || '-'}</Typography>
                     </TableCell>
                   </TableRow>
                 ))
@@ -196,7 +229,7 @@ const TableSection = ({ order, page, handleOrder, handlePageChange, listTickets,
             </TableBody>
           </Table>
         </TableContainer>
-        {listTickets && (
+        {listTickets?.totalsearch >= 1 && (
           <Stack alignItems={'center'} mt={2}>
             <Pagination page={page} count={listTickets?.totalpage} size={'small'} onChange={handlePageChange} />
           </Stack>

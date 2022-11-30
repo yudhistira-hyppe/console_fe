@@ -25,11 +25,11 @@ const PelaporanKonten = () => {
     // enddate: '',
     search: '',
     range: '',
-    startreport: null,
-    endreport: null,
+    rangeReport: [],
     status: [],
     reason: [],
   });
+  const [filterList, setFilterList] = useState([]);
   const router = useRouter();
 
   const getParams = () => {
@@ -42,12 +42,12 @@ const PelaporanKonten = () => {
       jenis: 'report',
     });
     filter.search !== '' && Object.assign(params, { key: filter.search });
-    filter.startreport && Object.assign(params, { startreport: filter.startreport });
-    filter.endreport && Object.assign(params, { endreport: filter.endreport });
+    filter.rangeReport[0] && Object.assign(params, { startreport: filter.rangeReport[0] });
+    filter.rangeReport[1] && Object.assign(params, { endreport: filter.rangeReport[1] });
     // filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
     // filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
     filter.status.length >= 1 && Object.assign(params, { status: filter.status });
-    filter.reason.length >= 1 && Object.assign(params, { reason: filter.reason });
+    filter.reason.length >= 1 && Object.assign(params, { reason: filter.reason.map((item) => item._id) });
 
     return params;
   };
@@ -73,19 +73,40 @@ const PelaporanKonten = () => {
   };
 
   const handleSearchChange = (kind, value) => {
+    setFilterList((prevVal) => {
+      switch (kind) {
+        case 'search':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Konten' }]
+              : [...prevVal, { parent: kind, value: 'Konten' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'reason':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'range':
+          return prevVal.find((item) => item.parent === kind)
+            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Jumlah Pelaporan' }]
+            : [...prevVal, { parent: kind, value: 'Jumlah Pelaporan' }];
+        case 'clearRange':
+          return [...prevVal.filter((item) => item.parent !== 'range')];
+        case 'startreport':
+          return prevVal.find((item) => item.parent === 'range')
+            ? [...prevVal.filter((item) => item.parent !== 'range'), { parent: 'range', value: 'Jumlah Pelaporan' }]
+            : [...prevVal, { parent: 'range', value: 'Jumlah Pelaporan' }];
+        case 'endreport':
+          return prevVal.find((item) => item.parent === 'range')
+            ? [...prevVal.filter((item) => item.parent !== 'range'), { parent: 'range', value: 'Jumlah Pelaporan' }]
+            : [...prevVal, { parent: 'range', value: 'Jumlah Pelaporan' }];
+        default:
+          return prevVal.find((item) => item.value === value)
+            ? [...prevVal.filter((item) => item.value !== value)]
+            : [...prevVal, { parent: kind, value: value }];
+      }
+    });
     setFilter((prevVal) => {
-      if (kind === 'ticket_date') {
-        const dateFrom = moment().subtract(value, 'd').format('YYYY-MM-DD');
-        const dateNow = moment().format('YYYY-MM-DD');
-        return {
-          ...prevVal,
-          startdate: dateFrom,
-          enddate: dateNow,
-          page: 0,
-        };
-      } else if (kind === 'ticket_range') {
-        return { ...prevVal, startdate: value[0], enddate: value[1], page: 0 };
-      } else if (kind === 'search') {
+      if (kind === 'search') {
         return { ...prevVal, search: value, page: 0 };
       } else if (kind === 'range') {
         switch (value) {
@@ -93,41 +114,39 @@ const PelaporanKonten = () => {
             return {
               ...prevVal,
               range: value,
-              startreport: 1,
-              endreport: 50,
+              rangeReport: [1, 50],
               page: 0,
             };
           case '51-100':
             return {
               ...prevVal,
               range: value,
-              startreport: 51,
-              endreport: 100,
+              rangeReport: [51, 100],
               page: 0,
             };
           case '101-150':
             return {
               ...prevVal,
               range: value,
-              startreport: 101,
-              endreport: 150,
+              rangeReport: [101, 150],
               page: 0,
             };
           case '151-200':
             return {
               ...prevVal,
               range: value,
-              startreport: 151,
-              endreport: 200,
+              rangeReport: [151, 200],
               page: 0,
             };
           default:
             return { ...prevVal };
         }
+      } else if (kind === 'clearRange') {
+        return { ...prevVal, rangeReport: value, range: '', page: 0 };
       } else if (kind === 'startreport') {
-        return { ...prevVal, startreport: Number(value), range: '', page: 0 };
+        return { ...prevVal, rangeReport: [value, prevVal.rangeReport[1]], range: '', page: 0 };
       } else if (kind === 'endreport') {
-        return { ...prevVal, endreport: Number(value), range: '', page: 0 };
+        return { ...prevVal, rangeReport: [prevVal.rangeReport[0], value], range: '', page: 0 };
       } else if (kind === 'status') {
         return {
           ...prevVal,
@@ -139,9 +158,9 @@ const PelaporanKonten = () => {
       } else if (kind === 'reason') {
         return {
           ...prevVal,
-          reason: filter.reason.find((item) => item === value)
-            ? filter.reason.filter((item) => item !== value)
-            : [...filter.reason, value],
+          reason: filter.reason.find((item) => item?.name === JSON.parse(value)?.name)
+            ? filter.reason.filter((item) => item?.name !== JSON.parse(value)?.name)
+            : [...filter.reason, JSON.parse(value)],
           page: 0,
         };
       } else {
@@ -177,11 +196,13 @@ const PelaporanKonten = () => {
         <Stack direction={'row'} spacing={3}>
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
+            filterList={filterList}
             order={filter.descending}
             loading={loadingTicket}
             listTickets={listTickets}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
+            handleDeleteFilter={handleSearchChange}
           />
         </Stack>
       </PageContainer>

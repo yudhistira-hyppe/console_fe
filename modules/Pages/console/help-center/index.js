@@ -86,8 +86,8 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Bantuan Pengguna"
               TypeProblem="Total Masalah"
-              numberOfProblem={70}
-              data={sample4Data}
+              numberOfProblem={reportCount?.userticket?.ticket[0]?.totalReport}
+              data={reportCount?.userticket?.ticket[0]?.data}
               onClick={() => router.push('/help-center/bantuan-pengguna')}
               status={'hue'}
               setStatusList={() => {}}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Breadcrumbs from '../../bantuan-pengguna/BreadCrumb';
@@ -96,12 +96,13 @@ const akunPelapor = [
 
 const DetailPelaporanIklan = () => {
   const router = useRouter();
-  const [showModal, setShowModal] = React.useState({
+  const { authUser } = useAuth();
+  const [showModal, setShowModal] = useState({
     show: false,
     type: null,
     modalType: null,
   });
-  const { authUser } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
@@ -133,6 +134,7 @@ const DetailPelaporanIklan = () => {
   };
 
   const onConfirmModal = (val) => {
+    setLoading(true);
     if (showModal?.type === 'ditangguhkan' || showModal?.type === 'tidak ditangguhkan') {
       updateTicket({
         postID: router.query?._id,
@@ -142,16 +144,19 @@ const DetailPelaporanIklan = () => {
           showModal?.type === 'ditangguhkan' ? (val?.reason === 'Lainnya' ? val?.otherReason : val?.reason) : undefined,
         ditangguhkan: showModal?.type === 'ditangguhkan',
       }).then(() => {
+        setLoading(false);
         onCloseModal();
         router.push('/help-center/pelaporan-iklan');
       });
     } else if (showModal?.type === 'sensitif') {
       flagTicket({ postID: router.query?._id, type: 'ads' }).then(() => {
+        setLoading(false);
         onCloseModal();
         router.push('/help-center/pelaporan-iklan');
       });
     } else {
       deleteTicket({ postID: router.query?._id, type: 'ads', remark: val }).then(() => {
+        setLoading(false);
         onCloseModal();
         router.push('/help-center/pelaporan-iklan');
       });
@@ -223,7 +228,7 @@ const DetailPelaporanIklan = () => {
           marginTop: 'auto',
         };
       default:
-        return {};
+        return { width: 'fit-content' };
     }
   };
 
@@ -238,11 +243,13 @@ const DetailPelaporanIklan = () => {
         type={showModal.type}
         onClose={onCloseModal}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
       <DeleteModal
         showModal={showModal.show && showModal.modalType === 'delete'}
         onClose={onCloseModal}
         onConfirm={onConfirmModal}
+        loading={loading}
       />
       <ViewModal
         userReports={userReports}
@@ -320,7 +327,7 @@ const DetailPelaporanIklan = () => {
                       : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
                       ? 'Dipulihkan'
                       : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
-                      ? 'Dihapus'
+                      ? 'Ditangguhkan'
                       : 'Baru'}
                   </Button>
                 </Stack>
