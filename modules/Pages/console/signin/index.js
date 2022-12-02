@@ -16,6 +16,7 @@ import { useAuth } from 'authentication';
 import Logo from '@jumbo/components/AppLayout/partials/Logo';
 import { firebaseCloudMessaging } from 'helpers/firebaseHelper';
 import { v4 as uuidv4 } from 'uuid';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const useStyles = makeStyles((theme) => ({
   authThumb: {
@@ -84,6 +85,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const [password, setPassword] = useState('');
   const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
+  const [loadingFCM, setLoadingFCM] = useState(true);
 
   useEffect(async () => {
     getCurrentUserLocation();
@@ -105,6 +107,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
           .getFCMToken()
           .then((token) => {
             setDeviceId(token);
+            setLoadingFCM(false);
           })
           .catch(() => {
             setDeviceId(uuidv4());
@@ -203,6 +206,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
           </form>
           <NotificationLoader loading={isLoading} error={error} />
         </Box>
+        {loadingFCM && <PageLoader />}
       </AuthWrapper>
     </>
   );
