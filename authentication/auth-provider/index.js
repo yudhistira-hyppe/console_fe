@@ -132,11 +132,11 @@ export const useProvideAuth = () => {
       refreshToken: { value: data.refreshToken, expirationHour: expirationHour },
       user: {
         value: {
+          id: data.iduser,
           email: data.email,
           fullName: data.fullName,
           roles: data.roles,
           avatar: data.avatar,
-          institution: data.institution,
           deviceId: user.deviceId,
         },
         expirationHour: expirationHour,
