@@ -99,13 +99,18 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           <TableHead>
             <TableRow>
               <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 2180 }}>
+              <TableCell align="left" style={{ maxWidth: 220 }}>
                 Pemohon Akun
               </TableCell>
               <TableCell align="left">Status</TableCell>
-              <TableCell align="left">Jumlah Permohonan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 150 }}>
+              <TableCell align="left" style={{ maxWidth: 90 }}>
+                Jumlah Permohonan
+              </TableCell>
+              <TableCell align="left" style={{ maxWidth: 90 }}>
                 Tahapan Permohonan
+              </TableCell>
+              <TableCell align="left" style={{ maxWidth: 140 }}>
+                Keterangan
               </TableCell>
             </TableRow>
           </TableHead>
@@ -138,7 +143,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                       {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
                     </Typography>
                   </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 180 }}>
+                  <TableCell align="left" style={{ maxWidth: 220 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                       <Stack direction="column" gap="2px">
@@ -192,14 +197,29 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                       />
                     )}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ maxWidth: 90 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {item?.jumlahPermohonan || 0} Kali
                     </Typography>
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ maxWidth: 90 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {item?.tahapan || '-'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left" style={{ maxWidth: 140, overflow: 'hidden' }}>
+                    <Typography
+                      variant="body1"
+                      style={{ fontSize: '12px' }}
+                      className={classes.textTruncate}
+                      title={
+                        !item?.kycHandle?.[0]?.reasonValue
+                          ? item?.kycHandle?.[0]?.remark || '-'
+                          : item?.kycHandle?.[0]?.reasonValue || '-'
+                      }>
+                      {!item?.kycHandle?.[0]?.reasonValue
+                        ? item?.kycHandle?.[0]?.remark || '-'
+                        : item?.kycHandle?.[0]?.reasonValue || '-'}
                     </Typography>
                   </TableCell>
                 </TableRow>

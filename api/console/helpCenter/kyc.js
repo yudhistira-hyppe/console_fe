@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const kycApi = createApi({
   reducerPath: 'helpCenter/permohonan-premium',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['KYC'],
+  tagTypes: ['KYC', 'Detail'],
   endpoints: (build) => ({
     getListKYC: build.query({
       query: (data) => ({
@@ -14,7 +14,23 @@ export const kycApi = createApi({
       }),
       providesTags: ['KYC'],
     }),
+    getDetailKYC: build.query({
+      query: (data) => ({
+        url: '/mediaproofpicts/detailkyc',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['Detail'],
+    }),
+    approveKYC: build.mutation({
+      query: (data) => ({
+        url: '/mediaproofpicts/approve',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['KYC', 'Detail'],
+    }),
   }),
 });
 
-export const { useGetListKYCQuery } = kycApi;
+export const { useGetListKYCQuery, useGetDetailKYCQuery, useApproveKYCMutation } = kycApi;

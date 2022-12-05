@@ -31,9 +31,10 @@ export const kontenApi = createApi({
       providesTags: ['Util'],
     }),
     getReportReason: build.query({
-      query: () => ({
+      query: (data) => ({
         url: '/reportreasons/all',
         method: 'POST',
+        body: data,
       }),
       providesTags: ['Util'],
     }),

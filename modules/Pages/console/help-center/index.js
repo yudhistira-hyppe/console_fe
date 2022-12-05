@@ -86,7 +86,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Bantuan Pengguna"
               TypeProblem="Total Masalah"
-              numberOfProblem={reportCount?.userticket?.ticket[0]?.totalReport}
+              numberOfProblem={reportCount?.userticket?.ticket[0]?.totalReport || 0}
               data={reportCount?.userticket?.ticket[0]?.data}
               onClick={() => router.push('/help-center/bantuan-pengguna')}
               status={'hue'}
@@ -98,7 +98,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Permohonan Akun Premium"
               TypeProblem="Total Permohonan"
-              numberOfProblem={70}
+              numberOfProblem={70 || 0}
               data={sample4Data}
               onClick={() => router.push('/help-center/permohonan-premium')}
               status={'hue'}
@@ -110,7 +110,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Rekening Bank"
               TypeProblem="Total Permohonan"
-              numberOfProblem={70}
+              numberOfProblem={70 || 0}
               data={sample4Data}
               onClick={() => router.push('/help-center/rekening-bank')}
               status={'hue'}
@@ -123,7 +123,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Laporan Konten"
               TypeProblem="Konten Dilaporkan"
-              numberOfProblem={reportCount?.content?.report[0]?.totalReport}
+              numberOfProblem={reportCount?.content?.report[0]?.totalReport || 0}
               data={reportCount?.content?.report[0]?.data}
               pathIconLeft={'/images/icons/img-empty.svg'}
               onClick={() => router.push('/help-center/pelaporan-konten')}
@@ -136,7 +136,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Banding Konten"
               TypeProblem="Permohonan Banding"
-              numberOfProblem={reportCount?.content?.appeal[0]?.totalReport}
+              numberOfProblem={reportCount?.content?.appeal[0]?.totalReport || 0}
               data={reportCount?.content?.appeal[0]?.data || []}
               pathIconLeft={'/images/icons/banding-konten.svg'}
               onClick={() => router.push('/help-center/banding-konten')}
@@ -149,7 +149,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Fingerprint Combat"
               TypeProblem="Konten Serupa"
-              numberOfProblem={25}
+              numberOfProblem={25 || 0}
               data={sample4Data}
               pathIconLeft={'/images/icons/banding-konten.svg'}
               onClick={() => router.push('/help-center/konten-serupa')}
@@ -163,7 +163,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Laporan Iklan"
               TypeProblem="Iklan Dilaporkan"
-              numberOfProblem={reportCount?.ads?.report[0]?.totalReport}
+              numberOfProblem={reportCount?.ads?.report[0]?.totalReport || 0}
               data={reportCount?.ads?.report[0]?.data}
               pathIconLeft={'/images/icons/ads-icon.svg'}
               onClick={() => router.push('/help-center/pelaporan-iklan')}
@@ -176,7 +176,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Banding Iklan Moderasi"
               TypeProblem="Permohonan Banding"
-              numberOfProblem={reportCount?.ads?.appeal[0]?.totalReport}
+              numberOfProblem={reportCount?.ads?.appeal[0]?.totalReport || 0}
               data={reportCount?.ads?.appeal[0]?.data}
               pathIconLeft={'/images/icons/ads-banding.svg'}
               onClick={() => router.push('/help-center/banding-iklan')}
@@ -190,7 +190,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Laporan Akun"
               TypeProblem="Akun Dilaporkan"
-              numberOfProblem={200}
+              numberOfProblem={200 || 0}
               data={sample4Data}
               pathIconLeft={'/images/icons/users.svg'}
               onClick={() => router.push('/help-center/pelaporan-akun')}
@@ -203,7 +203,7 @@ const ConsoleHelpCenterComponent = () => {
             <CardWithIndicator
               headTitle="Banding Akun Moderasi"
               TypeProblem="Permohonan"
-              numberOfProblem={25}
+              numberOfProblem={25 || 0}
               data={sample4Data}
               pathIconLeft={'/images/icons/users-banding.svg'}
               onClick={() => router.push('/help-center/banding-akun')}

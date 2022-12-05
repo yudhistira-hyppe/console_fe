@@ -24,7 +24,7 @@ const SearchSection = ({ filter, handleChange }) => {
   }
   const handleChangeDelay = debounce((e) => handleChange(e.target.name, e.target.value), 500);
 
-  const { data: reason, isFetching: loadingReason } = useGetReportReasonQuery();
+  const { data: reason, isFetching: loadingReason } = useGetReportReasonQuery({ type: 'content' });
 
   return (
     <>

@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -17,14 +18,10 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalApprove({ showModal, onClose, onConfirm }) {
+export default function ModalApprove({ loading, showModal, onClose, onConfirm }) {
   return (
     <div>
-      <Modal
-        open={showModal}
-        onClose={onClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+      <Modal open={showModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack spacing={1} mb={5}>
             <Typography fontWeight={'bold'}>Kamu Akan Menyetujui Peningkatan Akun</Typography>
@@ -34,9 +31,9 @@ export default function ModalApprove({ showModal, onClose, onConfirm }) {
           </Stack>
 
           <Stack direction={'row'} mt={3} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
+            <LoadingButton loading={loading} variant="contained" color="secondary" onClick={onConfirm}>
               Konfirmasi
-            </Button>
+            </LoadingButton>
             <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
