@@ -116,7 +116,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           <TableHead>
             <TableRow>
               <TableCell style={{ maxWidth: 80 }}>Waktu</TableCell>
-              <TableCell align="left" style={{ maxWidth: 2180 }}>
+              <TableCell align="left" style={{ maxWidth: 180 }}>
                 Konten
               </TableCell>
               <TableCell align="left">Tipe</TableCell>
@@ -159,12 +159,12 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                       {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
                     </Typography>
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ maxWidth: 180 }}>
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <Avatar src={getImage(item)} variant="rounded" />
                       <Typography
                         variant="body1"
-                        style={{ fontSize: '12px', maxWidth: 180 }}
+                        style={{ fontSize: '12px' }}
                         className={classes.textTruncate}
                         title={item?.description}>
                         {item?.description}
