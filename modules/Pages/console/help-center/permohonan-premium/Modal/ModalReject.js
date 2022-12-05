@@ -5,11 +5,12 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Divider, Stack, TextField } from '@mui/material';
 import { useGetReportReasonQuery } from 'api/console/helpCenter/konten';
+import { LoadingButton } from '@mui/lab';
 
-export default function ModalReject({ showModal, onClose, onConfirm, type }) {
+export default function ModalReject({ showModal, onClose, onConfirm, loading }) {
   const [reason, setReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
-  const { data: reportReason } = useGetReportReasonQuery();
+  const { data: reportReason } = useGetReportReasonQuery({ type: 'kyc' });
 
   const style = {
     position: 'absolute',
@@ -48,58 +49,19 @@ export default function ModalReject({ showModal, onClose, onConfirm, type }) {
         </Typography>
         <FormControl style={{ width: '100%' }}>
           <RadioGroup value={reason} style={{ gap: 10 }}>
-            <FormControlLabel
-              value={JSON.stringify({ reason: 'Nomor KTP/ID berbeda dengan nomor yang ada di dokumen pendukung' })}
-              control={<Radio size="small" color="primary" />}
-              onChange={onChangeHandler}
-              label={
-                <Typography color="#666666" variant="body2">
-                  Nomor KTP/ID berbeda dengan nomor yang ada di dokumen pendukung
-                </Typography>
-              }
-            />
-            <FormControlLabel
-              value={JSON.stringify({
-                reason: 'Foto KTP/ID berbeda dengan foto selfie (ada perubahan warna rambut/mata, bentuk wajah, dll)',
-              })}
-              control={<Radio size="small" color="primary" />}
-              onChange={onChangeHandler}
-              label={
-                <Typography color="#666666" variant="body2">
-                  Foto KTP/ID berbeda dengan foto selfie (ada perubahan warna rambut/mata, bentuk wajah, dll)
-                </Typography>
-              }
-            />
-            <FormControlLabel
-              value={JSON.stringify({ reason: 'Dokumen terlalu buram sulit diidentifikasi' })}
-              control={<Radio size="small" color="primary" />}
-              onChange={onChangeHandler}
-              label={
-                <Typography color="#666666" variant="body2">
-                  Dokumen terlalu buram sulit diidentifikasi
-                </Typography>
-              }
-            />
-            <FormControlLabel
-              value={JSON.stringify({ reason: 'Foto KTP/ID tampak buram sulit diidentifikasi dengan foto selfie' })}
-              control={<Radio size="small" color="primary" />}
-              onChange={onChangeHandler}
-              label={
-                <Typography color="#666666" variant="body2">
-                  Foto KTP/ID tampak buram sulit diidentifikasi dengan foto selfie
-                </Typography>
-              }
-            />
-            <FormControlLabel
-              value={JSON.stringify({ reason: 'Lainnya' })}
-              control={<Radio size="small" color="primary" />}
-              onChange={onChangeHandler}
-              label={
-                <Typography color="#666666" variant="body2">
-                  Lainnya
-                </Typography>
-              }
-            />
+            {reportReason?.data?.map((item, key) => (
+              <FormControlLabel
+                key={key}
+                value={JSON.stringify({ _id: item?._id, reason: item?.reason })}
+                control={<Radio size="small" color="primary" />}
+                onChange={onChangeHandler}
+                label={
+                  <Typography color="#666666" variant="body2">
+                    {item?.reason || '-'}
+                  </Typography>
+                }
+              />
+            ))}
           </RadioGroup>
           {reason !== '' && JSON.parse(reason)?.reason === 'Lainnya' && (
             <TextField
@@ -113,13 +75,14 @@ export default function ModalReject({ showModal, onClose, onConfirm, type }) {
         </FormControl>
 
         <Stack direction={'row'} mt={3} mb={1} justifyContent={'center'} spacing={3}>
-          <Button
+          <LoadingButton
+            loading={loading}
             variant="contained"
-            color="primary"
-            onClick={onConfirm}
+            color="secondary"
+            onClick={() => onConfirm({ ...JSON.parse(reason), otherReason: otherReason })}
             disabled={reason === '' || (JSON.parse(reason)?.reason === 'Lainnya' && otherReason === '')}>
             Konfirmasi
-          </Button>
+          </LoadingButton>
           <Button onClick={onClose}>Batal</Button>
         </Stack>
       </Box>
