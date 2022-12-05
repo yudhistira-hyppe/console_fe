@@ -9,7 +9,7 @@ import { useGetReportReasonQuery } from 'api/console/helpCenter/konten';
 export default function ModalConfirmation({ showModal, type, onClose, onConfirm }) {
   const [reason, setReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
-  const { data: reportReason } = useGetReportReasonQuery();
+  const { data: reportReason } = useGetReportReasonQuery({ type: 'content' });
 
   const style = {
     position: 'absolute',

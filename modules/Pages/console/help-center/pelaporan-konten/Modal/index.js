@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab';
 export default function ModalConfirmation({ showModal, onClose, onConfirm, type, loading }) {
   const [reason, setReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
-  const { data: reportReason } = useGetReportReasonQuery();
+  const { data: reportReason } = useGetReportReasonQuery({ type: 'content' });
 
   const style = {
     position: 'absolute',
