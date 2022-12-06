@@ -32,12 +32,18 @@ const CardWithIndicator = (props) => {
   const { title, data } = props;
 
   return (
-    <Card style={{ padding: 24 }}>
+    <Card style={{ padding: 24, height: '100%' }}>
       <Stack direction="column" gap="24px">
         <Typography style={{ fontSize: 18, fontWeight: 'bold' }}>{title}</Typography>
-        <ScrollBar style={{ maxHeight: 210 }}>
-          <CmtList data={data} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} />
-        </ScrollBar>
+        {data?.length >= 1 ? (
+          <ScrollBar style={{ maxHeight: 210, height: '100%' }}>
+            <CmtList data={data} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} />
+          </ScrollBar>
+        ) : (
+          <Stack height={210} alignItems="center" justifyContent="center">
+            <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Tidak ada data</Typography>
+          </Stack>
+        )}
       </Stack>
     </Card>
   );
