@@ -33,21 +33,22 @@ const PostStatus = () => {
                 color: '#0095F2',
                 backgroundColor: '#0095F233',
                 width: 'fit-content',
+                height: 28,
               }}
             />
-            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 6 }}>
+            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 12 }}>
               Pengaturan: <span style={{ color: 'black' }}>Otomatis</span>
             </Typography>
-            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 6 }}>
+            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 8 }}>
               Tanggal:{' '}
               <span style={{ color: 'black' }}>
                 {moment().format('DD/MM/YYYY')} - {moment().subtract(3, 'd').format('DD/MM/YYYY')}
               </span>
             </Typography>
-            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 6 }}>
+            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 8 }}>
               Tipe Jadwal: <span style={{ color: 'black' }}>Otomatis (11:00 - 21:00 WIB)</span>
             </Typography>
-            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 6 }}>
+            <Typography style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.38)', fontWeight: 'bold', marginTop: 8 }}>
               Interval: <span style={{ color: 'black' }}>50 Menit</span>
             </Typography>
           </Stack>
