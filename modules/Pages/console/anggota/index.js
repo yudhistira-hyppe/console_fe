@@ -1,15 +1,27 @@
 import { useState } from 'react';
-import { TabContext, TabList, TabPanel } from '@material-ui/lab';
 import { makeStyles, Typography } from '@material-ui/core';
-import Tab from '@mui/material/Tab';
 import PenggunaComp from './tabComponent/Pengguna';
 import Position from './tabComponent/Position';
 import Divisi from './tabComponent/divisi';
 import { useRouter } from 'next/router';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Tab } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
     backgroundColor: 'rgb(170, 34, 175)',
+  },
+  tab: {
+    '&.MuiTab-root': {
+      minWidth: '60px',
+      padding: '8px',
+      justifyContent: 'end',
+      textTransform: 'capitalize',
+      fontSize: '16px',
+      fontFamily: 'Lato',
+      fontWeight: '700',
+      marginRight: 50,
+    },
   },
 }));
 
@@ -68,27 +80,21 @@ const Anggota = () => {
         <TabList
           onChange={handleChange}
           aria-label="lab API tabs example"
+          textColor="secondary"
+          indicatorColor="secondary"
           variant="scrollable"
-          classes={{
-            indicator: classes.indicator,
-          }}>
+          style={{ marginTop: -20 }}>
           {Tabs.map((tab) => {
-            return (
-              <Tab
-                label={<LabelTab label={tab.label} />}
-                value={tab.value}
-                classes={{
-                  root: classes.tabRoot,
-                }}
-              />
-            );
+            return <Tab label={tab.label} value={tab.value} className={classes.tab} />;
           })}
         </TabList>
         <div style={{ marginTop: '10px' }}>
           {Tabs.map((comp) => {
             return (
               <>
-                <TabPanel value={comp.value}>{comp.component}</TabPanel>
+                <TabPanel value={comp.value} style={{ padding: 0 }}>
+                  {comp.component}
+                </TabPanel>
               </>
             );
           })}
