@@ -116,7 +116,12 @@ const KelolaVoucherComponent = () => {
                     <TableCell align="left" style={{ paddingLeft: 24 }}>
                       Nama Voucher
                     </TableCell>
-                    <TableCell align="left">Waktu Pembuatan</TableCell>
+                    <TableCell align="left" style={{ maxWidth: 100 }}>
+                      Waktu Pembuatan
+                    </TableCell>
+                    <TableCell align="left" style={{ maxWidth: 100 }}>
+                      Waktu Kadaluarsa
+                    </TableCell>
                     <TableCell align="left">Jumlah Kredit</TableCell>
                     <TableCell align="left">Jumlah Stok</TableCell>
                     <TableCell align="left">Telah Dibeli</TableCell>
@@ -135,55 +140,77 @@ const KelolaVoucherComponent = () => {
                       </Stack>
                     </TableCell>
                   ) : (
-                    listVouchers?.data?.map((item, key) => (
-                      <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                        <TableCell component="th" scope="row" style={{ paddingLeft: 24 }}>
-                          <Typography variant="body1" style={{ fontSize: '14px' }}>
-                            {item?.nameAds}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '14px' }}>
-                            {moment(item?.createdAt).utc().format('lll')}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '14px' }}>
-                            {numberWithCommas(item?.creditValue || 0)} Kredit
-                          </Typography>
-                          {item?.creditPromo && (
-                            <Typography variant="body1" style={{ fontSize: '12px' }}>
-                              + Bonus {numberWithCommas(item?.creditPromo)} Kredit
+                    listVouchers?.data?.map((item, key) => {
+                      const now = moment();
+                      const expired = moment(item.expiredAt);
+
+                      return (
+                        <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                          <TableCell component="th" scope="row" style={{ paddingLeft: 24 }}>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontSize: '14px',
+                                fontWeight: 'bold',
+                                color: expired.diff(now, 'day') >= 1 ? 'black' : 'red',
+                              }}>
+                              {item?.nameAds || '-'}
                             </Typography>
-                          )}
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '14px' }}>
-                            {item?.qty} Voucher
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '14px' }}>
-                            {item?.totalUsed} Voucher
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '14px' }}>
-                            Rp {numberWithCommas(item?.amount || 0)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Switch color="primary" onClick={() => onChangeStatusHandler(item)} checked={item?.isActive} />
-                        </TableCell>
-                        <TableCell align="left">
-                          <EditIcon
-                            htmlColor="#737373"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => router.push(`/monetize/voucher/${item?._id}`)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))
+                          </TableCell>
+                          <TableCell align="left" style={{ maxWidth: 100 }}>
+                            <Typography variant="body1" style={{ fontSize: '12px' }}>
+                              {moment(item?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left" style={{ maxWidth: 100 }}>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontSize: '12px',
+                                fontWeight: expired.diff(now, 'day') >= 1 ? '' : 'bold',
+                                color: expired.diff(now, 'day') >= 1 ? 'black' : 'red',
+                              }}>
+                              {moment(item?.expiredAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '14px' }}>
+                              {numberWithCommas(item?.creditValue || 0)} Kredit
+                            </Typography>
+                            {item?.creditPromo > 0 && (
+                              <Typography variant="body1" style={{ fontSize: '12px' }}>
+                                + Bonus {numberWithCommas(item?.creditPromo)} Kredit
+                              </Typography>
+                            )}
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '14px' }}>
+                              {item?.qty} Voucher
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '14px' }}>
+                              {item?.totalUsed} Voucher
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '14px' }}>
+                              Rp {numberWithCommas(item?.amount || 0)}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Switch color="primary" onClick={() => onChangeStatusHandler(item)} checked={item?.isActive} />
+                          </TableCell>
+                          <TableCell align="left">
+                            <EditIcon
+                              htmlColor="#737373"
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => router.push(`/monetize/voucher/${item?._id}`)}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
                   )}
                 </TableBody>
               </Table>

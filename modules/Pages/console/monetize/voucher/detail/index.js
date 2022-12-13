@@ -127,6 +127,7 @@ const VoucherFormComponent = ({ data }) => {
       expiredDay: val?.expiredDay === 'other' ? val.otherExpired : Number(val.expiredDay),
       amount: val.creditValue * 1500,
       isActive: true,
+      creditPromo: val?.creditPromo || 0,
     };
 
     data
@@ -135,7 +136,9 @@ const VoucherFormComponent = ({ data }) => {
           data: {
             ...val,
             expiredDay: val?.expiredDay === 'other' ? val.otherExpired : Number(val.expiredDay),
+            amount: val?.creditValue * 1500,
             isActive: data.isActive,
+            creditPromo: val?.creditPromo || 0,
           },
         })
       : addVoucher(bodyData);
@@ -146,8 +149,6 @@ const VoucherFormComponent = ({ data }) => {
   const onCancel = () => {
     setShowModal(false);
   };
-
-  console.log(val);
 
   return (
     <>
