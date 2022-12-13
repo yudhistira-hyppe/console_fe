@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Dialog, DialogContent, makeStyles, Slide, Snackbar, TextField, Typography } from '@material-ui/core';
-import { Alert, Button, Pagination, Stack } from '@mui/material';
+import { Alert, Button, CircularProgress, Pagination, Stack } from '@mui/material';
 import { useState } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from '@mui/material/Table';
@@ -21,6 +21,7 @@ import { useGetGroupQuery, useDeleteGroupMutation } from 'api/console/group';
 import Link from 'next/link';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 import { useGetDivisiQuery, useDeleteDivisiMutation } from 'api/console/divisi';
+import { Add } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -168,45 +169,39 @@ const Position = () => {
 
   return (
     <>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+      <Stack direction="row" justifyContent="space-between" alignItems="center" margin="20px 0 24px">
         <Box style={{ background: 'rgba(255, 255, 255, 1)', width: '400px' }}>
           <TextField
             fullWidth
-            size="small"
             variant="outlined"
             label="Cari divisi"
             onChange={(e) => setSearch(e.target.value)}
             onKeyPress={onEnterSearch}
             InputProps={{
               endAdornment: (
-                // <InputAdornment>
                 <IconButton>
                   <SearchIcon onClick={handleSearchIcon} />
                 </IconButton>
-                // </InputAdornment>
               ),
             }}
+            style={{ backgroundColor: 'transparent' }}
           />
         </Box>
-        <Box
-          mt={5}
-          display="flex"
-          wordWrap="nowrap"
-          textAlign="center"
-          className={classes.addUser}
+        <Button
+          variant="text"
+          color="secondary"
+          sx={{ '&:hover': { background: 'transparent' } }}
+          style={{ fontWeight: 'bold', fontFamily: 'Lato', height: 56, width: 100 }}
           onClick={() => router.push('/anggota/add-divisi')}>
-          <img src="/images/icons/plus-icon.svg" alt="icon" />
-          <Typography component="div" variant="h6">
-            TAMBAH
-          </Typography>
-        </Box>
+          <Add style={{ fontSize: 16, marginRight: 5 }} /> Tambah
+        </Button>
       </Stack>
-      <TableContainer component={Paper} style={{ marginTop: '10px', minHeight: '400px' }}>
+      <TableContainer component={Paper} style={{ marginTop: '10px' }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
-            <TableRow>
-              <TableCell align="left">
-                <TabelHeadLabel label="Jabatan" />
+            <TableRow style={{ height: 65 }}>
+              <TableCell align="left" style={{ paddingLeft: 30, width: 350 }}>
+                <TabelHeadLabel label="Divisi" />
               </TableCell>
               <TableCell align="left">
                 <TabelHeadLabel label="Description" />
@@ -215,28 +210,41 @@ const Position = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {isFetching && <TableDataSpinner center />}
-
-            {dataDivision?.data?.map((row) => (
-              <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row" align="left">
-                  {row.nameDivision}
-                </TableCell>
-                <TableCell align="left">{row.desc === '' ? 'kosong' : row.desc}</TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? 'long-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={(e) => handleClickThreeDotMenu(e, row)}>
-                    {/* <MoreVertIcon /> */}
-                    <img src="/images/icons/triple-dot.svg" />
-                  </IconButton>
+            {isFetching ? (
+              <TableCell colSpan={8}>
+                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                  <CircularProgress color="secondary" />
+                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                </Stack>
+              </TableCell>
+            ) : dataDivision?.data?.length >= 1 ? (
+              dataDivision?.data?.map((row) => (
+                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="left" style={{ paddingLeft: 30, width: 350 }}>
+                    {row.nameDivision}
+                  </TableCell>
+                  <TableCell align="left">{row.desc || '-'}</TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      aria-label="more"
+                      id="long-button"
+                      aria-controls={open ? 'long-menu' : undefined}
+                      aria-expanded={open ? 'true' : undefined}
+                      aria-haspopup="true"
+                      onClick={(e) => handleClickThreeDotMenu(e, row)}>
+                      {/* <MoreVertIcon /> */}
+                      <img src="/images/icons/triple-dot.svg" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  Divisi tidak ditemukan
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -326,9 +334,11 @@ const Position = () => {
         </Alert>
       </Snackbar>
 
-      <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={handlePagination} count={countPages} />
-      </div>
+      {dataDivision?.data?.length >= 1 && !isFetching && (
+        <div className="mt-6 flex flex-row justify-content-center">
+          <Pagination page={page} onChange={handlePagination} count={countPages} />
+        </div>
+      )}
     </>
   );
 };
