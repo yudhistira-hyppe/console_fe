@@ -23,6 +23,9 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import { useRouter } from 'next/router';
 import { useGetDivisiQuery } from 'api/console/divisi';
 import { useGetGroupQuery, useGetSingleGroupQuery } from 'api/console/group';
+import BackIconNav from '@material-ui/icons/ArrowBackIos';
+import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
+import Head from 'next/head';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -74,8 +77,8 @@ const RichObjectTreeView = () => {
   };
 
   const breadcrumbs = [
-    { label: 'Anggota', link: '/console/anggota' },
-    { label: 'Bantuan Pengguna', isActive: true },
+    { label: 'Anggota', link: '/anggota?tab=jabatan' },
+    { label: 'Edit Jabatan', isActive: true },
   ];
 
   //node is always the root "Parent"
@@ -282,21 +285,34 @@ const RichObjectTreeView = () => {
       }
     }
     setSelected(array_existing);
+    setdataselected(array_existing);
   }, [getSingleGroup]);
+
+  console.log(dataselected);
 
   return (
     <>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-        <Box display="flex" style={{ cursor: 'pointer' }} onClick={() => router.push('/anggota?tab=jabatan')}>
-          <img src="/images/icons/arrow-left.svg" />
-          <Typography variant="h4" component="div">
+      <Head>
+        <title key="title">Hyppe-Console :: Edit Jabatan</title>
+      </Head>
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/anggota?tab=jabatan')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
+          </Stack>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
             Kembali
           </Typography>
-        </Box>
-        <Box>
-          <PageContainer breadcrumbs={breadcrumbs} />
-        </Box>
+        </Stack>
       </Stack>
+
       <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={4}>
         <Box sx={{ width: 500 }}>
           <TextField
@@ -305,7 +321,6 @@ const RichObjectTreeView = () => {
             select
             label="Please select divisi"
             value={selectDivisi}
-            size="small"
             onChange={handleSelectGroup}
             variant="outlined"
             // helperText="Please select divisi"
@@ -321,14 +336,16 @@ const RichObjectTreeView = () => {
             id="outlined-basic"
             fullWidth
             label="Nama Group"
-            size="small"
             variant="outlined"
             value={nameGroup}
             onChange={(e) => setNameGroup(e.target.value)}
           />
         </Box>
-        <Box color="rgba(0, 0, 0, 0.3)" sx={{ width: 400 }}>
-          <span>Contoh : Customer Care / Staff atau Customer Care / Manager atau Customer Care / Head </span>
+        <Box color="rgba(0, 0, 0, 0.3)" sx={{ width: 400 }} style={{ marginTop: 6 }}>
+          <span>
+            contoh : <strong>Customer Care / Staff</strong> atau <strong>Customer Care / Manager</strong> atau{' '}
+            <strong>Customer Care / Head</strong>
+          </span>
         </Box>
       </Stack>
       <TreeView
@@ -344,11 +361,7 @@ const RichObjectTreeView = () => {
       <Divider />
 
       <Box sx={{ width: 100 }} mt={3}>
-        <Button
-          onClick={() => setOpenDialog(true)}
-          variant="outlined"
-          disabled={btnAdd}
-          style={btnAdd ? null : { background: '#AB22AF', color: '#FFFFFF', border: 'none' }}>
+        <Button onClick={() => setOpenDialog(true)} variant="contained" color="primary" disabled={btnAdd}>
           Ubah
         </Button>
       </Box>
