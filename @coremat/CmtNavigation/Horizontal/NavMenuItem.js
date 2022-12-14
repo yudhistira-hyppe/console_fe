@@ -100,7 +100,7 @@ const NavMenuItem = (props) => {
           className={clsx(
             classes.navMenuLink,
             {
-              active: link === `/${path[1]}` || children?.includes(router.pathname),
+              active: link.includes(`/${path[1]}`) || children?.includes(router.pathname),
             },
             'Cmt-nav-menu-link',
           )}>
