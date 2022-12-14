@@ -137,7 +137,7 @@ const TransactionComponent = (props) => {
         </Stack>
         <TableContainer component={Paper}>
           <PerfectScrollbar>
-            <Stack maxHeight={270}>
+            <Stack maxHeight={370}>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow className={classes.tableRow}>
@@ -160,9 +160,12 @@ const TransactionComponent = (props) => {
                       </TableRow>
                     ))}
                   {!isFetching && transactions.length == 0 && (
-                    <TableRow className={classes.tableRowCustomPadding}>
+                    <TableRow>
                       <TableCell colSpan="100%" align="center">
-                        Pengguna belum memiliki transaksi apapun
+                        <Stack alignItems="center" justifyContent="center" gap="16px" height={270}>
+                          <img src="/images/icon-media-empty.png" alt="Icon Empty" style={{ width: 50, height: 50 }} />
+                          <Typography style={{ color: '#666666' }}>Pengguna belum memiliki data apapun</Typography>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   )}
