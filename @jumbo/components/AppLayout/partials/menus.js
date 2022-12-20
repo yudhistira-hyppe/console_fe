@@ -184,6 +184,6 @@ export const consoleNav = [
     type: 'item',
     // this is default for tab
     // link: '/console/anggota?tab=pengguna',
-    link: '/anggota?tab=pengguna',
+    link: '/anggota',
   },
 ];

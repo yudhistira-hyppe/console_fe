@@ -74,7 +74,7 @@ const UserDropDown = () => {
       });
     }
     if (item.label === 'Account') {
-      router.push('/profile-basic');
+      router.push('/profile-console');
     }
   };
 
