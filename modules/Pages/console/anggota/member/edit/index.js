@@ -5,10 +5,10 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import { Typography } from '@material-ui/core';
 import router from 'next/router';
-import { useGetGroupQuery, useGetSingleGroupQuery } from 'api/console/group';
-import { useGetDivisiQuery } from 'api/console/divisi';
+import { useGetGroupQuery } from 'api/console/group';
 import { useGetProfileByUserEmailQuery } from 'api/user/user';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import { useUpdateGroupUserMutation } from 'api/console/getUserHyppe';
 
 const breadcrumbs = [
   { label: 'Anggota', link: '/anggota?tab=pengguna' },
@@ -20,15 +20,12 @@ const AddMember = () => {
     username: '',
     fullname: '',
     position: '',
-    division: '',
     email: '',
   });
 
   const { data: profileUser, isFetching } = useGetProfileByUserEmailQuery(router.query.id);
-  const { data: dataDivisi } = useGetDivisiQuery({ skip: 0, limit: 100 });
-  const { data: dataJabatan } = useGetSingleGroupQuery(
-    (inputValue?.division && JSON.parse(inputValue?.division)?._id) || '',
-  );
+  const { data: dataJabatan } = useGetGroupQuery({ skip: 0, limit: 10, search: '' });
+  const [updateUser] = useUpdateGroupUserMutation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,10 +39,18 @@ const AddMember = () => {
       username: profileUser?.data[0]?.username || '',
       fullname: profileUser?.data[0]?.fullName || '',
       position: '',
-      division: '',
       email: profileUser?.data[0]?.email || '',
     });
   }, [isFetching]);
+
+  const handleUpdate = () => {
+    const data = {
+      email: inputValue?.email,
+      groupId: JSON.parse(inputValue?.position)?._id,
+    };
+
+    updateUser(data).then(() => router.replace('/anggota?tab=pengguna'));
+  };
 
   console.log(inputValue);
 
@@ -76,62 +81,34 @@ const AddMember = () => {
         <PageLoader />
       ) : (
         <Stack direction="column" gap="14px">
-          <Stack direction="row" gap="25px" alignItems="center">
-            <TextField
-              name="username"
-              placeholder="Nama Pengguna"
-              color="secondary"
-              style={{ width: '100%', maxWidth: 400 }}
-              onChange={handleChange}
-              value={inputValue.username}
-              autoComplete="off"
-            />
-            <Typography style={{ color: '#0000004D' }}>contoh: Bayu_Permana</Typography>
-          </Stack>
-          <Stack direction="row" gap="25px" alignItems="center">
-            <TextField
-              name="fullname"
-              placeholder="Nama Lengkap"
-              color="secondary"
-              style={{ width: '100%', maxWidth: 400 }}
-              onChange={handleChange}
-              value={inputValue.fullname}
-              autoComplete="off"
-            />
-            <Typography style={{ color: '#0000004D' }}>contoh: Bayu Permana</Typography>
-          </Stack>
-          <Stack direction="row" gap="25px" alignItems="center">
-            <TextField
-              name="email"
-              placeholder="Email"
-              type="email"
-              color="secondary"
-              style={{ width: '100%', maxWidth: 400 }}
-              onChange={handleChange}
-              value={inputValue.email}
-              autoComplete="off"
-            />
-            <Typography style={{ color: '#0000004D' }}>contoh: Bayu.Permana@gmail.com</Typography>
-          </Stack>
-          <Stack direction="row" gap="25px" alignItems="center">
-            <Select
-              value={inputValue.division}
-              color="secondary"
-              style={{ width: '100%', maxWidth: 400 }}
-              name="division"
-              onChange={handleChange}
-              displayEmpty>
-              <MenuItem value="" disabled>
-                Divisi
-              </MenuItem>
-              {dataDivisi?.data?.map((item, key) => (
-                <MenuItem key={key} value={JSON.stringify(item)}>
-                  {item?.nameDivision || '-'}
-                </MenuItem>
-              ))}
-            </Select>
-            <Typography style={{ color: '#0000004D' }}>Pilih divisi</Typography>
-          </Stack>
+          <TextField
+            name="username"
+            placeholder="Nama Pengguna"
+            color="secondary"
+            style={{ width: '100%', maxWidth: 400 }}
+            onChange={handleChange}
+            value={inputValue.username}
+            disabled
+          />
+          <TextField
+            name="fullname"
+            placeholder="Nama Lengkap"
+            color="secondary"
+            style={{ width: '100%', maxWidth: 400 }}
+            onChange={handleChange}
+            value={inputValue.fullname}
+            disabled
+          />
+          <TextField
+            name="email"
+            placeholder="Email"
+            type="email"
+            color="secondary"
+            style={{ width: '100%', maxWidth: 400 }}
+            onChange={handleChange}
+            value={inputValue.email}
+            disabled
+          />
           <Stack direction="row" gap="25px" alignItems="center">
             <Select
               value={inputValue.position}
@@ -152,7 +129,7 @@ const AddMember = () => {
             <Typography style={{ color: '#0000004D' }}>Pilih jabatan yang sesuai</Typography>
           </Stack>
           <Stack mt={2}>
-            <Button variant="contained" color="secondary" style={{ maxWidth: 120, height: 40 }}>
+            <Button variant="contained" color="secondary" style={{ maxWidth: 120, height: 40 }} onClick={handleUpdate}>
               Ubah
             </Button>
           </Stack>

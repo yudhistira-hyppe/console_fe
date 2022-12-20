@@ -182,14 +182,14 @@ const PenggunaComp = () => {
             style={{ backgroundColor: 'transparent' }}
           />
         </Box>
-        <Button
+        {/* <Button
           variant="text"
           color="secondary"
           sx={{ '&:hover': { background: 'transparent' } }}
           style={{ fontWeight: 'bold', fontFamily: 'Lato', height: 56, width: 100 }}
           onClick={() => router.push('/anggota/add-member')}>
           <Add style={{ fontSize: 16, marginRight: 5 }} /> Tambah
-        </Button>
+        </Button> */}
       </Stack>
       <TableContainer component={Paper} style={{ marginTop: '10px' }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -224,10 +224,10 @@ const PenggunaComp = () => {
               dataAnggota?.data?.map((row) => (
                 <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
                   <TableCell component="th" scope="row" style={{ paddingLeft: 30 }}>
-                    {row.username || '-'}
+                    {row.fullName || '-'}
                   </TableCell>
                   <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="left">{row.group ? row.group : 'kosong'}</TableCell>
+                  <TableCell align="left">{row.group || '-'}</TableCell>
                   <TableCell align="right">
                     <Switch checked={row.status} color="primary" onClick={() => handleChangeStatus(row)} />
                   </TableCell>

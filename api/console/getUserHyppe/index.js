@@ -36,8 +36,21 @@ export const getUserHyppe = createApi({
       }),
       invalidatesTags: ['userHyppe'],
     }),
+    updateGroupUser: build.mutation({
+      query: (payload) => ({
+        url: `/group/user`,
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['userHyppe'],
+    }),
   }),
 });
 
-export const { useGetAnggotaQuery, useGetDetailAnggotaQuery, useDeleteAnggotaMutation, useUpdateStatusGroupUserMutation } =
-  getUserHyppe;
+export const {
+  useGetAnggotaQuery,
+  useGetDetailAnggotaQuery,
+  useDeleteAnggotaMutation,
+  useUpdateStatusGroupUserMutation,
+  useUpdateGroupUserMutation,
+} = getUserHyppe;

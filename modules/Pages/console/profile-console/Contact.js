@@ -25,7 +25,6 @@ import CalenderIcon from 'public/images/icons/calenderIcon';
 import { Select, Slide, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import router from 'next/router';
-import { useUpdateGroupUserMutation } from 'api/console/group';
 
 const useStyles = makeStyles((theme) => ({
   iconView: {
@@ -90,10 +89,8 @@ const Contact = ({ dataUser, dataPosition, query }) => {
     setOpen(false);
   };
 
-  const [updateGroupUser, {}] = useUpdateGroupUserMutation();
-
   const handleUpdateGroup = () => {
-    updateGroupUser(payload);
+    // updateGroupUser(payload);
     setOpen(false);
   };
 
@@ -103,7 +100,7 @@ const Contact = ({ dataUser, dataPosition, query }) => {
         <CmtCardHeader title="Jabatan" />
         <CmtCardContent>
           <Typography variant="h3">
-            {dataUser && Object.keys(dataUser?.data[0].group).length === 0 ? 'kosong' : 'ada isi'}
+            {/* {dataUser && Object?.keys(dataUser?.data[0]?.group).length === 0 ? 'kosong' : 'ada isi'} */}
           </Typography>
           <small onClick={handleClickOpen} className={classes.ubahJabatan}>
             Ubah
