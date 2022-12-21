@@ -51,6 +51,7 @@ const DetailRekeningBank = () => {
     lampiran: false,
   });
   const [selectedLampiran, setSelectedLampiran] = useState({});
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   return (
     <>
@@ -407,10 +408,15 @@ const DetailRekeningBank = () => {
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={() => setModal({ ...modal, approve: !modal.approve })}>
+                  onClick={() => setModal({ ...modal, approve: !modal.approve })}
+                  disabled={!access.find((item) => item?.nameModule === 'help_bank')?.acces?.updateAcces}>
                   Setujui
                 </Button>
-                <Button variant="outlined" color="secondary" onClick={() => setModal({ ...modal, reject: !modal.reject })}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setModal({ ...modal, reject: !modal.reject })}
+                  disabled={!access.find((item) => item?.nameModule === 'help_bank')?.acces?.updateAcces}>
                   Tolak
                 </Button>
               </Stack>

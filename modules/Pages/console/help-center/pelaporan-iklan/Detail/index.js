@@ -106,6 +106,7 @@ const DetailPelaporanIklan = () => {
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,
@@ -341,21 +342,30 @@ const DetailPelaporanIklan = () => {
                       variant="outlined"
                       color="primary"
                       onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}
-                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      disabled={
+                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        !access.find((item) => item?.nameModule === 'help_ads')?.acces?.updateAcces
+                      }>
                       Tidak Ditangguhkan
                     </Button>
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}
-                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      disabled={
+                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        !access.find((item) => item?.nameModule === 'help_ads')?.acces?.updateAcces
+                      }>
                       Tangguhkan
                     </Button>
                     <Button
                       variant="outlined"
                       color="primary"
                       onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}
-                      disabled={detail?.data[0]?.reportStatusLast !== 'BARU'}>
+                      disabled={
+                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        !access.find((item) => item?.nameModule === 'help_ads')?.acces?.updateAcces
+                      }>
                       Ditandai Sensitif
                     </Button>
                   </Stack>
@@ -365,7 +375,11 @@ const DetailPelaporanIklan = () => {
                       Ingin dihapus?{' '}
                       <Link
                         style={{ fontWeight: 'bold', cursor: 'pointer', textDecorationLine: 'none' }}
-                        onClick={() => showModalHandler({ type: 'delete', modalType: 'delete' })}>
+                        onClick={() =>
+                          access.find((item) => item?.nameModule === 'help_ads')?.acces?.updateAcces
+                            ? showModalHandler({ type: 'delete', modalType: 'delete' })
+                            : alert('kamu tidak memiliki akses!')
+                        }>
                         klik disini
                       </Link>
                     </Typography>

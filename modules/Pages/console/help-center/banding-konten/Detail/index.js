@@ -45,6 +45,7 @@ const DetailBandingKonten = () => {
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,
@@ -318,7 +319,8 @@ const DetailBandingKonten = () => {
                   style={buttonStyle(detail?.data[0]?.reportStatusLast)}
                   onClick={detail?.data[0]?.reportStatusLast === 'BARU' ? () => handleToggle() : () => {}}
                   aria-haspopup="true"
-                  endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}>
+                  endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}
+                  disabled={!access.find((item) => item?.nameModule === 'help_appeal_konten')?.acces?.updateAcces}>
                   {detail?.data[0]?.reportStatusLast === 'FLAGING'
                     ? 'Ditandai Sensitif'
                     : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
