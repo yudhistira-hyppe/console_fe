@@ -6,6 +6,7 @@ import Divisi from './tabComponent/divisi';
 import { useRouter } from 'next/router';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Tab } from '@mui/material';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Anggota = () => {
   const classes = useStyles();
   const router = useRouter();
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const handleChange = (event, newValue) => {
     router.push(`${router.pathname}?tab=${newValue}`);
@@ -56,23 +58,33 @@ const Anggota = () => {
 
   // add component here
   // note: just change here to add new Tab && component
-  const Tabs = [
-    {
-      label: 'Pengguna',
-      value: 'pengguna',
-      component: <PenggunaComp />,
-    },
-    {
-      label: 'Jabatan',
-      value: 'jabatan',
-      component: <Position />,
-    },
-    {
-      label: 'Divisi',
-      value: 'divisi',
-      component: <Divisi />,
-    },
-  ];
+  const Tabs = () => {
+    let data = [];
+
+    if (access.map((item) => item?.nameModule).includes('member_users')) {
+      data.push({
+        label: 'Pengguna',
+        value: 'pengguna',
+        component: <PenggunaComp />,
+      });
+    }
+    if (access.map((item) => item?.nameModule).includes('member_position')) {
+      data.push({
+        label: 'Jabatan',
+        value: 'jabatan',
+        component: <Position />,
+      });
+    }
+    if (access.map((item) => item?.nameModule).includes('member_divistion')) {
+      data.push({
+        label: 'Divisi',
+        value: 'divisi',
+        component: <Divisi />,
+      });
+    }
+
+    return data;
+  };
 
   return (
     <>
@@ -84,12 +96,12 @@ const Anggota = () => {
           indicatorColor="secondary"
           variant="scrollable"
           style={{ marginTop: -20 }}>
-          {Tabs.map((tab) => {
+          {Tabs().map((tab) => {
             return <Tab label={tab.label} value={tab.value} className={classes.tab} />;
           })}
         </TabList>
         <div style={{ marginTop: '10px' }}>
-          {Tabs.map((comp) => {
+          {Tabs().map((comp) => {
             return (
               <>
                 <TabPanel value={comp.value} style={{ padding: 0 }}>

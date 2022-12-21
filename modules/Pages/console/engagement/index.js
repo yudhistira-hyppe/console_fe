@@ -5,6 +5,7 @@ import { useGetLogActivityByYearQuery, useGetUserEventActivityByYearQuery } from
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import Metrik from './Tabs/metrik';
 import { makeStyles } from '@material-ui/styles';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles(() => ({
   tab: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles(() => ({
 const ConsoleEngagementComponent = () => {
   const [value, setValue] = useState('metrik');
   const classes = useStyles();
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -46,15 +48,23 @@ const ConsoleEngagementComponent = () => {
           textColor="secondary"
           indicatorColor="secondary"
           style={{ marginTop: -20 }}>
-          <Tab label="Metrik" value="metrik" className={classes.tab} />
-          <Tab label="Trend" value="trend" className={classes.tab} />
+          {access.map((item) => item?.nameModule).includes('engagement_metrik') && (
+            <Tab label="Metrik" value="metrik" className={classes.tab} />
+          )}
+          {access.map((item) => item?.nameModule).includes('engagement_trend') && (
+            <Tab label="Trend" value="trend" className={classes.tab} />
+          )}
         </TabList>
-        <TabPanel className={classes.tabPanel} value="metrik">
-          <Metrik />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="trend">
-          <div>trend</div>
-        </TabPanel>
+        {access.map((item) => item?.nameModule).includes('engagement_metrik') && (
+          <TabPanel className={classes.tabPanel} value="metrik">
+            <Metrik />
+          </TabPanel>
+        )}
+        {access.map((item) => item?.nameModule).includes('engagement_trend') && (
+          <TabPanel className={classes.tabPanel} value="trend">
+            <div>trend</div>
+          </TabPanel>
+        )}
       </TabContext>
     </>
   );

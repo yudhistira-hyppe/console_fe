@@ -11,10 +11,12 @@ import { TabContext, TabPanel } from '@material-ui/lab';
 import MonetizeKepemilikanComponent from './Kepemilikan';
 import { useRouter } from 'next/router';
 import MonetizeJualBeliComponent from './jual-beli';
+import Cookies from 'js-cookie';
 
 const ConsoleMonetizeComponent = () => {
   const [value, setValue] = React.useState('0');
   const router = useRouter();
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -36,77 +38,97 @@ const ConsoleMonetizeComponent = () => {
               aria-label="disabled scrollable auto tabs"
               indicatorColor="secondary"
               textColor="secondary">
-              <Tab
-                label="Dashboard"
-                value="0"
-                style={{
-                  padding: '0px',
-                  marginRight: '1.5em',
-                  fontWeight: 'bold',
-                  fontFamily: 'Lato',
-                  fontSize: 16,
-                  textTransform: 'initial',
-                }}
-              />
-              <Tab
-                label="Voucher"
-                value="1"
-                style={{
-                  padding: '0px',
-                  marginRight: '1.5em',
-                  fontWeight: 'bold',
-                  fontFamily: 'Lato',
-                  fontSize: 16,
-                  textTransform: 'initial',
-                }}
-              />
-              <Tab
-                label="Kepemilikan"
-                value="2"
-                style={{
-                  padding: '0px',
-                  marginRight: '1.5em',
-                  fontWeight: 'bold',
-                  fontFamily: 'Lato',
-                  fontSize: 16,
-                  textTransform: 'initial',
-                }}
-              />
-              <Tab
-                label="Jual-Beli Konten"
-                value="3"
-                style={{
-                  padding: '0px',
-                  marginRight: '1.5em',
-                  fontWeight: 'bold',
-                  fontFamily: 'Lato',
-                  fontSize: 16,
-                  textTransform: 'initial',
-                }}
-              />
+              {access.map((item) => item?.nameModule).includes('monetize_dashboard') && (
+                <Tab
+                  label="Dashboard"
+                  value="0"
+                  style={{
+                    padding: '0px',
+                    marginRight: '1.5em',
+                    fontWeight: 'bold',
+                    fontFamily: 'Lato',
+                    fontSize: 16,
+                    textTransform: 'initial',
+                  }}
+                />
+              )}
+              {access.map((item) => item?.nameModule).includes('monetize_voucher') && (
+                <Tab
+                  label="Voucher"
+                  value="1"
+                  style={{
+                    padding: '0px',
+                    marginRight: '1.5em',
+                    fontWeight: 'bold',
+                    fontFamily: 'Lato',
+                    fontSize: 16,
+                    textTransform: 'initial',
+                  }}
+                />
+              )}
+              {access.map((item) => item?.nameModule).includes('monetize_ownership') && (
+                <Tab
+                  label="Kepemilikan"
+                  value="2"
+                  style={{
+                    padding: '0px',
+                    marginRight: '1.5em',
+                    fontWeight: 'bold',
+                    fontFamily: 'Lato',
+                    fontSize: 16,
+                    textTransform: 'initial',
+                  }}
+                />
+              )}
+              {access.map((item) => item?.nameModule).includes('monetize_buy_sell') && (
+                <Tab
+                  label="Jual-Beli Konten"
+                  value="3"
+                  style={{
+                    padding: '0px',
+                    marginRight: '1.5em',
+                    fontWeight: 'bold',
+                    fontFamily: 'Lato',
+                    fontSize: 16,
+                    textTransform: 'initial',
+                  }}
+                />
+              )}
             </Tabs>
             {value == '1' && (
               <Stack direction={'column'} justifyContent={'center'}>
                 <div>
-                  <Button variant="contained" color="primary" onClick={() => router.push('/monetize/voucher')}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => router.push('/monetize/voucher')}
+                    disabled={!access.map((item) => item?.nameModule).includes('monetize_manage_voucher')}>
                     Kelola voucher
                   </Button>
                 </div>
               </Stack>
             )}
           </Stack>
-          <TabPanel style={{ padding: 0 }} value="0">
-            <MonetizeDashboard />
-          </TabPanel>
-          <TabPanel style={{ padding: 0 }} value="1">
-            <MonetizeVoucher />
-          </TabPanel>
-          <TabPanel style={{ padding: 0 }} value="2">
-            <MonetizeKepemilikanComponent />
-          </TabPanel>
-          <TabPanel style={{ padding: 0 }} value="3">
-            <MonetizeJualBeliComponent />
-          </TabPanel>
+          {access.map((item) => item?.nameModule).includes('monetize_dashboard') && (
+            <TabPanel style={{ padding: 0 }} value="0">
+              <MonetizeDashboard />
+            </TabPanel>
+          )}
+          {access.map((item) => item?.nameModule).includes('monetize_voucher') && (
+            <TabPanel style={{ padding: 0 }} value="1">
+              <MonetizeVoucher />
+            </TabPanel>
+          )}
+          {access.map((item) => item?.nameModule).includes('monetize_ownership') && (
+            <TabPanel style={{ padding: 0 }} value="2">
+              <MonetizeKepemilikanComponent />
+            </TabPanel>
+          )}
+          {access.map((item) => item?.nameModule).includes('monetize_buy_sell') && (
+            <TabPanel style={{ padding: 0 }} value="3">
+              <MonetizeJualBeliComponent />
+            </TabPanel>
+          )}
         </TabContext>
       </PageContainer>
     </>

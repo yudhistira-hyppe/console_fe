@@ -24,6 +24,7 @@ import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'a
 
 // third party modules
 import moment from 'moment';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
@@ -50,6 +51,7 @@ const ConsoleDashboardComponent = () => {
   // const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
   const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery(formattedTodayDate);
   const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   // const countTotal = (data, key) => {
   //   let result = 0;
@@ -66,26 +68,38 @@ const ConsoleDashboardComponent = () => {
       </Head>
       <PageContainer>
         <GridContainer>
-          <Grid item xs={12} sm={6} md={3}>
-            <UserActive title="Pengguna Aktif" secondaryTitle="Bulan ini" amount={10254} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Unggahan title="Total Post" secondaryTitle="Bulan ini" amount={33755} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Pendapatan title="Total Pendapatan" secondaryTitle="Bulan ini" amount={30000000} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Voucher title="Pendapatan Voucher" secondaryTitle="Bulan ini" amount={15015000} />
-          </Grid>
+          {access?.map((item) => item?.nameModule).includes('dashboard_active_user') && (
+            <Grid item xs={12} sm={6} md={3}>
+              <UserActive title="Pengguna Aktif" secondaryTitle="Bulan ini" amount={10254} />
+            </Grid>
+          )}
+          {access?.map((item) => item?.nameModule).includes('dashboard_total_post') && (
+            <Grid item xs={12} sm={6} md={3}>
+              <Unggahan title="Total Post" secondaryTitle="Bulan ini" amount={33755} />
+            </Grid>
+          )}
+          {access?.map((item) => item?.nameModule).includes('dashboard_total_income') && (
+            <Grid item xs={12} sm={6} md={3}>
+              <Pendapatan title="Total Pendapatan" secondaryTitle="Bulan ini" amount={30000000} />
+            </Grid>
+          )}
+          {access?.map((item) => item?.nameModule).includes('dashboard_voucher') && (
+            <Grid item xs={12} sm={6} md={3}>
+              <Voucher title="Pendapatan Voucher" secondaryTitle="Bulan ini" amount={15015000} />
+            </Grid>
+          )}
         </GridContainer>
         <GridContainer style={{ marginTop: 12 }}>
-          <Grid item xs={12} sm={9} md={9}>
-            <ActivitySize data={usersActivityHyppeSevenDay} />
-          </Grid>
-          <Grid item xs={12} sm={3} md={3}>
-            <StatusKepemilikan data={usersMonetizeOneYear} />
-          </Grid>
+          {access?.map((item) => item?.nameModule).includes('dashboard_activity') && (
+            <Grid item xs={12} sm={9} md={9}>
+              <ActivitySize data={usersActivityHyppeSevenDay} />
+            </Grid>
+          )}
+          {access?.map((item) => item?.nameModule).includes('dashboard_status_ownership') && (
+            <Grid item xs={12} sm={3} md={3}>
+              <StatusKepemilikan data={usersMonetizeOneYear} />
+            </Grid>
+          )}
         </GridContainer>
       </PageContainer>
     </>

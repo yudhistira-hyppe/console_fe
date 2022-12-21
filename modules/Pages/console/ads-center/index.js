@@ -7,6 +7,7 @@ import AdsListing from './AdsListing';
 import AdsPerformaceComponents from './AdsPerformance';
 import AdsDemographyComponent from './AdsDemography';
 import { SearchSection, TableSection } from './components';
+import Cookies from 'js-cookie';
 
 const breadcrumbs = [
   { label: 'Home', link: '/console' },
@@ -15,22 +16,22 @@ const breadcrumbs = [
 
 const status = [
   {
-    value: 'tinjau', 
+    value: 'tinjau',
     label: 'Tinjau',
   },
   {
-    value: 'dijadwalkan', 
+    value: 'dijadwalkan',
     label: 'Dijadwalkan',
   },
   {
-    value: 'tayang', 
+    value: 'tayang',
     label: 'Tayang',
   },
   {
-    value: 'ditolak', 
+    value: 'ditolak',
     label: 'Ditolak',
   },
-]
+];
 
 const listAds = {
   totalrow: 10,
@@ -44,7 +45,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 0,
-      ads_status: 'Tinjau'
+      ads_status: 'Tinjau',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -54,7 +55,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 0,
-      ads_status: 'Tinjau'
+      ads_status: 'Tinjau',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -64,7 +65,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 0,
-      ads_status: 'Tinjau'
+      ads_status: 'Tinjau',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -74,7 +75,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 954,
-      ads_status: 'Tayang'
+      ads_status: 'Tayang',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -84,7 +85,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 876,
-      ads_status: 'Tayang'
+      ads_status: 'Tayang',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -94,7 +95,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 750,
-      ads_status: 'Tayang'
+      ads_status: 'Tayang',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -104,7 +105,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 643,
-      ads_status: 'Tayang'
+      ads_status: 'Tayang',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -114,7 +115,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 0,
-      ads_status: 'Habis'
+      ads_status: 'Habis',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -124,7 +125,7 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 0,
-      ads_status: 'Dijadwalkan'
+      ads_status: 'Dijadwalkan',
     },
     {
       createdAt: '22/08/05-13:29 WIB',
@@ -134,10 +135,10 @@ const listAds = {
       ads_placement: 'Pre-HyppeVid',
       ads_credit_used: 1000,
       ads_credit_left: 0,
-      ads_status: 'Ditolak'
-    }
-  ]
-}
+      ads_status: 'Ditolak',
+    },
+  ],
+};
 
 const data = [
   {
@@ -146,7 +147,7 @@ const data = [
     color: {
       Impresi: '#AB22AF',
       CTA: '#455DD8',
-    }
+    },
   },
   {
     Impresi: 1398,
@@ -188,16 +189,17 @@ const ConsoleAdsCenterComponent = () => {
   });
   const [status, setStatus] = React.useState('Semua');
   const [demographyStatus, setDemographyStatus] = React.useState('Semua');
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
         descending: e.target.value,
-        page: 0
-      }
-    })
-  }
+        page: 0,
+      };
+    });
+  };
 
   const handleSearchChange = (kind, value) => {
     setFilter((prevVal) => {
@@ -214,7 +216,7 @@ const ConsoleAdsCenterComponent = () => {
       } else if (kind === 'status') {
         return {
           ...prevVal,
-          status: value
+          status: value,
         };
       } else if (kind === 'search') {
         return {
@@ -247,11 +249,11 @@ const ConsoleAdsCenterComponent = () => {
             ? filter.level.filter((item) => item !== value)
             : [...filter.level, value],
         };
-      } else if (kind === 'penggunaan_kredit'){
+      } else if (kind === 'penggunaan_kredit') {
         return {
           ...prevVal,
-          penggunaan_kredit: value
-        }
+          penggunaan_kredit: value,
+        };
       }
     });
   };
@@ -266,28 +268,28 @@ const ConsoleAdsCenterComponent = () => {
   };
 
   const onResetFilter = (name) => {
-    console.log(name, `<< name`)
+    console.log(name, `<< name`);
     if (name === 'all') {
       setFilter((prev) => {
         return {
           ...prev,
           status: null,
           penggunaan_kredit: null,
-        }
-      })
+        };
+      });
     } else {
       setFilter((prev) => {
         return {
           ...prev,
-          [name]: null
-        }
-      })
+          [name]: null,
+        };
+      });
     }
   };
 
   const onChangeStatusHandler = (value) => {
-    if (value){
-      setStatus(value)
+    if (value) {
+      setStatus(value);
     }
   };
 
@@ -298,45 +300,45 @@ const ConsoleAdsCenterComponent = () => {
       </Head>
       <PageContainer className="mt-3">
         <GridContainer>
-          <Grid item xs={12} md={12} lg={4} xl={4}>
-            <AdsPerformaceComponents 
-              status={status}
-              setStatusList={onChangeStatusHandler}
-              data={data}
-              title={'Performa Iklan'}
-              totalData={1000}
-              description={'Total Iklan'}
-            />
-          </Grid>
-          <Grid item xs={12} md={12} lg={8} xl={8}>
-            <AdsDemographyComponent 
-              status={demographyStatus}
-              setStatus={setDemographyStatus}
-            />
-          </Grid>
+          {access.map((item) => item?.nameModule).includes('ads_performance') && (
+            <Grid item xs={12} md={12} lg={4} xl={4}>
+              <AdsPerformaceComponents
+                status={status}
+                setStatusList={onChangeStatusHandler}
+                data={data}
+                title={'Performa Iklan'}
+                totalData={1000}
+                description={'Total Iklan'}
+              />
+            </Grid>
+          )}
+          {access.map((item) => item?.nameModule).includes('ads_demografis') && (
+            <Grid item xs={12} md={12} lg={8} xl={8}>
+              <AdsDemographyComponent status={demographyStatus} setStatus={setDemographyStatus} />
+            </Grid>
+          )}
         </GridContainer>
 
         <GridContainer>
-          <Grid item xs={12} md={12} lg={3} xl={3} className="mt-3">
-            <SearchSection 
-              loadingStatus={false}
-              status={status}
-              handleChange={handleSearchChange}
-              filter={filter}
-            />
-          </Grid>
+          {access.map((item) => item?.nameModule).includes('ads_table') && (
+            <>
+              <Grid item xs={12} md={12} lg={3} xl={3} className="mt-3">
+                <SearchSection loadingStatus={false} status={status} handleChange={handleSearchChange} filter={filter} />
+              </Grid>
 
-          <Grid item xs={12} md={12} lg={9} xl={9} className="mt-3">
-            <TableSection 
-              order={filter.descending}
-              page={filter.page + 1}
-              handleOrder={onOrderChange}
-              handlePageChange={handlePageChange}
-              listAds={listAds}
-              filter={filter}
-              onResetFilter={onResetFilter}
-            />
-          </Grid>
+              <Grid item xs={12} md={12} lg={9} xl={9} className="mt-3">
+                <TableSection
+                  order={filter.descending}
+                  page={filter.page + 1}
+                  handleOrder={onOrderChange}
+                  handlePageChange={handlePageChange}
+                  listAds={listAds}
+                  filter={filter}
+                  onResetFilter={onResetFilter}
+                />
+              </Grid>
+            </>
+          )}
         </GridContainer>
       </PageContainer>
     </>
