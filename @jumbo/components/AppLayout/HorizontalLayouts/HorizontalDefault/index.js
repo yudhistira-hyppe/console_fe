@@ -21,6 +21,7 @@ import defaultContext from '../../../contextProvider/AppContextProvider/defaultC
 import CmtHorizontal from '../../../../../@coremat/CmtNavigation/Horizontal';
 import { horizontalDefaultNavs, consoleNav } from '../../partials/menus';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const layoutOptions = {
   showFooter: false,
@@ -30,6 +31,78 @@ const layoutOptions = {
 
 const HorizontalDefault = ({ className, children }) => {
   const router = useRouter();
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+
+  const handleMenu = () => {
+    const accessModule = access.map((item) => item.nameModule);
+    let newMenu = consoleNav;
+
+    if (
+      !accessModule.includes('ads_performance') &&
+      !accessModule.includes('ads_demografis') &&
+      !accessModule.includes('ads_table')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Pusat Iklan');
+    }
+    if (
+      !accessModule.includes('boost_statistic') &&
+      !accessModule.includes('boost_engagement') &&
+      !accessModule.includes('boost_table')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Boost Post Center');
+    }
+    if (
+      !accessModule.includes('database_account') &&
+      !accessModule.includes('database_content') &&
+      !accessModule.includes('database_music')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Database');
+    }
+    if (!accessModule.includes('engagement_metrik') && !accessModule.includes('engagement_trend')) {
+      newMenu = newMenu.filter((item) => item.name !== 'Engagement');
+    }
+    if (
+      !accessModule.includes('monetize_dashboard') &&
+      !accessModule.includes('monetize_voucher') &&
+      !accessModule.includes('monetize_ownership') &&
+      !accessModule.includes('monetize_buy_sell')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Monetisasi');
+    }
+    if (
+      !accessModule.includes('help_consumer') &&
+      !accessModule.includes('help_kyc') &&
+      !accessModule.includes('help_bank') &&
+      !accessModule.includes('help_konten') &&
+      !accessModule.includes('help_appeal_konten') &&
+      !accessModule.includes('help_fingerprint') &&
+      !accessModule.includes('help_ads') &&
+      !accessModule.includes('help_appeal_ads') &&
+      !accessModule.includes('help_users') &&
+      !accessModule.includes('help_appeal_users')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Pusat Bantuan');
+    }
+    if (
+      !accessModule.includes('dashboard_active_user') &&
+      !accessModule.includes('dashboard_total_post') &&
+      !accessModule.includes('dashboard_total_income') &&
+      !accessModule.includes('dashboard_voucher') &&
+      !accessModule.includes('dashboard_activity') &&
+      !accessModule.includes('dashboard_status_ownership')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Beranda');
+    }
+    if (
+      !accessModule.includes('member_users') &&
+      !accessModule.includes('member_position') &&
+      !accessModule.includes('member_divistion')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Anggota');
+    }
+
+    return newMenu;
+  };
 
   return (
     <CmtHorizontalLayout
@@ -46,7 +119,7 @@ const HorizontalDefault = ({ className, children }) => {
           <Hidden mdDown>
             <CmtHeaderMain bgcolor="primary.main" color="white">
               {/* <CmtHorizontal menuItems={router.pathname.includes('/console') ? consoleNav : horizontalDefaultNavs} /> */}
-              <CmtHorizontal menuItems={router.pathname.includes('/') ? consoleNav : horizontalDefaultNavs} />
+              <CmtHorizontal menuItems={handleMenu()} />
             </CmtHeaderMain>
           </Hidden>
         </CmtHeader>

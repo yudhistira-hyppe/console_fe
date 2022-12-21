@@ -92,10 +92,6 @@ const NavMenuItem = (props) => {
   //   }
   // };
 
-  console.log(path)
-
-  console.log(path[1])
-
   return (
     <List component="div" disablePadding onClick={handleClick} style={{ height: '100%' }}>
       <Link href={link}>

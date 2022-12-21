@@ -167,18 +167,18 @@ export const consoleNav = [
     type: 'item',
     link: '/monetize',
   },
-  {
-    name: 'Pengumuman',
-    type: 'item',
-    // link: '/console/pengumuman',
-    link: '/pengumuman',
-  },
-  {
-    name: 'Pedoman',
-    type: 'item',
-    link: '/pedoman',
-    // link: '/console/pedoman',
-  },
+  // {
+  //   name: 'Pengumuman',
+  //   type: 'item',
+  //   // link: '/console/pengumuman',
+  //   link: '/pengumuman',
+  // },
+  // {
+  //   name: 'Pedoman',
+  //   type: 'item',
+  //   link: '/pedoman',
+  //   // link: '/console/pedoman',
+  // },
   {
     name: 'Anggota',
     type: 'item',
