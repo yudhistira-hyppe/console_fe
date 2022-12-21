@@ -4,6 +4,8 @@ import { authApi } from 'api/user';
 import { auth as firebaseAuth } from 'helpers/firebaseHelper';
 import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import { createCookies, deleteAllCookies, getAllCookies } from 'helpers/cookiesHelper';
+import { useGetUserAccessMutation } from 'api/user/auth';
+import Cookies from 'js-cookie';
 
 export const useProvideAuth = () => {
   // Start rewritten code
@@ -14,6 +16,7 @@ export const useProvideAuth = () => {
   const [authUser, setAuthUser] = useState();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [userAccess] = useGetUserAccessMutation();
 
   const fetchStart = () => {
     setLoading(true);
@@ -34,9 +37,16 @@ export const useProvideAuth = () => {
     setAuthUser(getAllCookies());
   };
 
+  const setUserAccess = (id) => {
+    userAccess(id).then((res) => {
+      sessionStorage.setItem('access', JSON.stringify(res?.data?.data));
+    });
+  };
+
   const removeAuth = () => {
     deleteAllCookies();
     setAuthUser(null);
+    sessionStorage.clear('access');
   };
 
   const getAuthUser = () => {
@@ -62,7 +72,7 @@ export const useProvideAuth = () => {
       })
       .catch((error) => {
         removeAuth();
-        fetchError(error.data.messages.info.join(' '));
+        fetchError(error?.data?.messages?.info?.join(' '));
       });
   };
 
@@ -95,7 +105,7 @@ export const useProvideAuth = () => {
       })
       .catch((error) => {
         removeAuth();
-        fetchError(error.data.messages.info.join(' '));
+        fetchError(error?.data?.messages?.info?.join(' '));
       });
   };
 
@@ -108,7 +118,7 @@ export const useProvideAuth = () => {
       })
       .catch((error) => {
         removeAuth();
-        fetchError(error.data.messages.info.join(' '));
+        fetchError(error?.data?.messages?.info?.join(' '));
       });
   };
 
@@ -121,7 +131,7 @@ export const useProvideAuth = () => {
         fetchSuccess();
       })
       .catch((error) => {
-        fetchError(error.data.messages.info.join(' '));
+        fetchError(error?.data?.messages?.info?.join(' '));
       });
   };
 
@@ -143,8 +153,9 @@ export const useProvideAuth = () => {
       },
     };
     createCookies(keyAndValueCookies);
-    saveAuth();
     fetchSuccess();
+    saveAuth();
+    setUserAccess(data?.iduser);
   };
   // End rewritten code
 
