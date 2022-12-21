@@ -17,12 +17,17 @@ import {
   DialogContent,
   Slide,
 } from '@material-ui/core';
-import { useGetModuleQuery, useCreateModuleMutation, useUpdateModuleMutation } from 'api/console/module';
+import {
+  useGetModuleQuery,
+  useCreateModuleMutation,
+  useUpdateModuleMutation,
+  useGetSingleGroupQuery,
+} from 'api/console/module';
 import { Stack } from '@mui/system';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
 import { useGetDivisiQuery } from 'api/console/divisi';
-import { useGetGroupQuery, useGetSingleGroupQuery } from 'api/console/group';
+import { useGetGroupQuery } from 'api/console/group';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
@@ -236,7 +241,7 @@ const RichObjectTreeView = () => {
   console.log('isSuccess:', isSuccess);
 
   useEffect(() => {
-    if (isSuccess) window.location.href = `/anggota?tab=jabatan&edited=${isSuccess}`;
+    if (isSuccess) router.replace('/anggota?tab=jabatan');
     if (isError) alert('error bang');
   }, [isSuccess, isError]);
 
@@ -287,8 +292,6 @@ const RichObjectTreeView = () => {
     setSelected(array_existing);
     setdataselected(array_existing);
   }, [getSingleGroup]);
-
-  console.log(dataselected);
 
   return (
     <>

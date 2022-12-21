@@ -5,8 +5,9 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import { Typography } from '@material-ui/core';
 import router from 'next/router';
-import { useGetGroupQuery, useGetSingleGroupQuery } from 'api/console/group';
+import { useGetGroupQuery } from 'api/console/group';
 import { useGetDivisiQuery } from 'api/console/divisi';
+import { useGetSingleGroupQuery } from 'api/console/module';
 
 const breadcrumbs = [
   { label: 'Anggota', link: '/anggota?tab=pengguna' },

@@ -4,11 +4,11 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const moduleAPI = createApi({
   reducerPath: 'moduleApi',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['modules'],
+  tagTypes: ['modules', 'group'],
   endpoints: (build) => ({
     getModule: build.query({
       query: () => ({
-        url: `/module/all`,
+        url: `/module/all?skip=0&limit=300`,
         method: 'GET',
       }),
       providesTags: ['modules'],
@@ -27,9 +27,16 @@ export const moduleAPI = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['modules'],
+      invalidatesTags: ['modules', 'group'],
+    }),
+    getSingleGroup: build.query({
+      query: (id) => ({
+        url: `/group/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['group'],
     }),
   }),
 });
 
-export const { useGetModuleQuery, useCreateModuleMutation, useUpdateModuleMutation } = moduleAPI;
+export const { useGetModuleQuery, useCreateModuleMutation, useUpdateModuleMutation, useGetSingleGroupQuery } = moduleAPI;
