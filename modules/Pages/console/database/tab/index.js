@@ -32,7 +32,7 @@ const DatabaseTabComponent = (props) => {
           {access.map((item) => item?.nameModule).includes('database_content') && (
             <Tab className={classes.tab} label="Konten" value="content" />
           )}
-          {access.map((item) => item?.nameModule).includes('database_media') && (
+          {access.map((item) => item?.nameModule).includes('database_music') && (
             <Tab className={classes.tab} label="Media" value="media" />
           )}
         </TabList>
@@ -46,7 +46,7 @@ const DatabaseTabComponent = (props) => {
             <DatabaseTabContentComponent />
           </TabPanel>
         )}
-        {access.map((item) => item?.nameModule).includes('database_media') && (
+        {access.map((item) => item?.nameModule).includes('database_music') && (
           <TabPanel className={classes.tabPanel} value="media">
             <DatabaseTabMediaComponent />
           </TabPanel>

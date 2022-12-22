@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const UploadMedia = (props) => {
-  const { thumbnail, dataMusic, status, setInputValue, inputValue } = props;
+  const { thumbnail, dataMusic, status, setInputValue, inputValue, disabled } = props;
   const [music, setMusic] = useState(dataMusic);
   const [image, setImage] = useState(thumbnail);
   const [urlMusic, setUrlMusic] = useState(dataMusic);
@@ -73,7 +73,7 @@ const UploadMedia = (props) => {
               <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Thumbnail</Typography>
             </>
           )}
-          <input hidden id="upload_image" type="file" accept="image/png" onChange={handleUploadImage} />
+          <input hidden id="upload_image" type="file" accept="image/png" onChange={handleUploadImage} disabled={disabled} />
         </Box>
       </label>
       <Stack direction="row" gap="12px">
@@ -83,9 +83,10 @@ const UploadMedia = (props) => {
             variant={urlMusic ? 'outlined' : 'contained'}
             color="secondary"
             style={{ fontWeight: 'bold', height: 54, width: status !== 'create' ? '100%' : 170 }}
-            component="label">
+            component="label"
+            disabled={disabled}>
             Upload Lagu
-            <input hidden id="upload" type="file" accept="audio/mpeg" onChange={handleUploadMedia} />
+            <input hidden id="upload" type="file" accept="audio/mpeg" onChange={handleUploadMedia} disabled={disabled} />
           </Button>
         )}
       </Stack>

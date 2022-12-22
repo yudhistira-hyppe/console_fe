@@ -38,6 +38,7 @@ const FormMusic = (props) => {
     confirmation: false,
     status: '',
   });
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const { data: genres } = useGetGenreMusicQuery();
   const { data: themes } = useGetThemeMusicQuery();
@@ -141,6 +142,11 @@ const FormMusic = (props) => {
               status={status}
               setInputValue={setInputValue}
               inputValue={inputValue}
+              disabled={
+                status !== 'create'
+                  ? !access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
+                  : !access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces
+              }
             />
           </Stack>
           <Stack direction={status !== 'create' ? 'column' : 'row'} flexWrap="wrap" width="100%" gap="24px">
@@ -154,6 +160,7 @@ const FormMusic = (props) => {
                 variant="outlined"
                 placeholder="Tulis Judul Musik"
                 onChange={handleChangeInput}
+                disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}
               />
             </Stack>
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
@@ -166,6 +173,7 @@ const FormMusic = (props) => {
                 variant="outlined"
                 placeholder="Tulis Nama Artis"
                 onChange={handleChangeInput}
+                disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}
               />
             </Stack>
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
@@ -176,6 +184,7 @@ const FormMusic = (props) => {
                 variant="outlined"
                 placeholder="Tulis Nama Album"
                 onChange={handleChangeInput}
+                disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}
               />
             </Stack>
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
@@ -187,7 +196,13 @@ const FormMusic = (props) => {
                     setInputValue({ ...inputValue, releaseDate: newValue });
                   }}
                   renderInput={(params) => (
-                    <TextField name="releasedAt" variant="outlined" placeholder="Pilih Tanggal Liris Lagu" {...params} />
+                    <TextField
+                      name="releasedAt"
+                      variant="outlined"
+                      placeholder="Pilih Tanggal Liris Lagu"
+                      disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}
+                      {...params}
+                    />
                   )}
                 />
               </LocalizationProvider>
@@ -202,7 +217,8 @@ const FormMusic = (props) => {
                 placeholder="Pilih Genre Musik"
                 onChange={handleChangeInput}
                 color="secondary"
-                displayEmpty>
+                displayEmpty
+                disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}>
                 <MenuItem value="" disabled>
                   Pilih Genre Musik
                 </MenuItem>
@@ -224,7 +240,8 @@ const FormMusic = (props) => {
                 placeholder="Pilih Tema Musik"
                 onChange={handleChangeInput}
                 color="secondary"
-                displayEmpty>
+                displayEmpty
+                disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}>
                 <MenuItem value="" disabled>
                   Pilih Tema Musik
                 </MenuItem>
@@ -246,7 +263,8 @@ const FormMusic = (props) => {
                 placeholder="Pilih Suasana Hati Musik"
                 onChange={handleChangeInput}
                 color="secondary"
-                displayEmpty>
+                displayEmpty
+                disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}>
                 <MenuItem value="" disabled>
                   Pilih Suasana Hati Musik
                 </MenuItem>
@@ -271,7 +289,8 @@ const FormMusic = (props) => {
                   !inputValue.theme ||
                   !inputValue.mood ||
                   !inputValue.apsaraMusic ||
-                  !inputValue.apsaraThumnail
+                  !inputValue.apsaraThumnail ||
+                  !access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
                 }>
                 Simpan & Post
               </Button>
@@ -287,14 +306,19 @@ const FormMusic = (props) => {
                         confirmation: !modal.confirmation,
                         status: data?.isActive ? 'active' : 'disactive',
                       })
-                    }>
+                    }
+                    disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}>
                     {data?.isActive ? 'Nonaktifkan' : 'Aktifkan'}
                   </Button>
                   <Typography style={{ color: '#3f3f3f' }}>
                     Hapus Musik Ini?{' '}
                     <span
                       style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
-                      onClick={() => setModal({ ...modal, delete: !modal.delete })}>
+                      onClick={() =>
+                        access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
+                          ? setModal({ ...modal, delete: !modal.delete })
+                          : alert('kamu tidak punya akses!')
+                      }>
                       Klik disini
                     </span>
                   </Typography>

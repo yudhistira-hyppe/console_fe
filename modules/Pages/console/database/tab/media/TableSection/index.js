@@ -61,6 +61,7 @@ const TableSection = ({
     visible: false,
     status: 'active',
   });
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -123,6 +124,7 @@ const TableSection = ({
               inputProps={{
                 'aria-label': 'select all desserts',
               }}
+              disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces}
             />
           </TableCell>
           {selected?.length >= 1 ? (
@@ -191,7 +193,11 @@ const TableSection = ({
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography style={{ fontWeight: 'bold' }}>Daftar Musik</Typography>
-        <Button color="secondary" variant="contained" onClick={() => router.push('/database/media/create')}>
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={() => router.push('/database/media/create')}
+          disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces}>
           Tambah Musik
         </Button>
       </Stack>
@@ -277,6 +283,7 @@ const TableSection = ({
                         'aria-labelledby': 'asd',
                       }}
                       onClick={(event) => handleClick(event, item?._id)}
+                      disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces}
                     />
                   </TableCell>
                   <TableCell
@@ -323,7 +330,10 @@ const TableSection = ({
                         setModal({ ...modal, visible: !modal.visible, status: e.target.checked ? 'active' : 'disactive' });
                         setSingleSelect(item?._id);
                       }}
-                      disabled={selected?.length >= 1}
+                      disabled={
+                        selected?.length >= 1 ||
+                        !access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces
+                      }
                     />
                   </TableCell>
                 </TableRow>
