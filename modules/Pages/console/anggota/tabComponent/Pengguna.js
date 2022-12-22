@@ -68,6 +68,7 @@ const PenggunaComp = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userSelectedEmail, setUserSelectedEmail] = useState('');
   const [jabatan, setJabatan] = useState('');
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const open = Boolean(anchorEl);
   const { data: dataAnggota, isFetching } = useGetAnggotaQuery(payload);
@@ -229,7 +230,12 @@ const PenggunaComp = () => {
                   <TableCell align="left">{row.email}</TableCell>
                   <TableCell align="left">{row.group || '-'}</TableCell>
                   <TableCell align="right">
-                    <Switch checked={row.status} color="primary" onClick={() => handleChangeStatus(row)} />
+                    <Switch
+                      checked={row.status}
+                      color="primary"
+                      onClick={() => handleChangeStatus(row)}
+                      disabled={!access.find((item) => item?.nameModule === 'member_users')?.acces?.updateAcces}
+                    />
                   </TableCell>
                   <TableCell align="right" style={{ paddingRight: 40 }}>
                     <IconButton onClick={() => router.push(`/anggota/edit-member/${row?.email}`)}>

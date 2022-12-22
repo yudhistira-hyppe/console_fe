@@ -48,6 +48,7 @@ const RichObjectTreeView = () => {
   const [selectDivisi, setSelectDivisi] = React.useState('');
   const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   // dialog
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -78,7 +79,7 @@ const RichObjectTreeView = () => {
   };
 
   const breadcrumbs = [
-    { label: 'Anggota', link: '/anggota?tab=jabatan' },
+    { label: 'Jabatan', link: '/anggota?tab=jabatan' },
     { label: 'Tambah Jabatan', isActive: true },
   ];
 
@@ -224,7 +225,11 @@ const RichObjectTreeView = () => {
   };
 
   const renderTree = (nodes) => (
-    <TreeItem key={nodes.id} nodeId={nodes.id} label={<LabelChild nodes={nodes} />}>
+    <TreeItem
+      key={nodes.id}
+      nodeId={nodes.id}
+      label={<LabelChild nodes={nodes} />}
+      disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}>
       {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
     </TreeItem>
   );
@@ -293,6 +298,7 @@ const RichObjectTreeView = () => {
             value={selectDivisi}
             onChange={handleSelectGroup}
             variant="outlined"
+            disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}
             // helperText="Please select divisi"
           >
             {divisionSelectData?.data?.map((item) => (
@@ -308,6 +314,7 @@ const RichObjectTreeView = () => {
             label="Nama Jabatan"
             variant="outlined"
             onChange={(e) => setNameGroup(e.target.value)}
+            disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}
           />
         </Box>
         <Box color="rgba(0, 0, 0, 0.3)" sx={{ width: 400 }} style={{ marginTop: 6 }}>
@@ -329,7 +336,11 @@ const RichObjectTreeView = () => {
       <Divider />
 
       <Box sx={{ width: 100 }} mt={3}>
-        <Button onClick={() => setOpenDialog(true)} variant="contained" color="primary" disabled={btnAdd}>
+        <Button
+          onClick={() => setOpenDialog(true)}
+          variant="contained"
+          color="primary"
+          disabled={btnAdd || !access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}>
           Tambah
         </Button>
       </Box>

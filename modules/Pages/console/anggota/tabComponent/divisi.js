@@ -58,7 +58,8 @@ const Position = () => {
     search: search,
   });
   const [id, setId] = useState('');
-  console.log('id:', id);
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+
   /////// notif
   const [state, setState] = React.useState({
     openNotif: false,
@@ -192,7 +193,8 @@ const Position = () => {
           color="secondary"
           sx={{ '&:hover': { background: 'transparent' } }}
           style={{ fontWeight: 'bold', fontFamily: 'Lato', height: 56, width: 100 }}
-          onClick={() => router.push('/anggota/add-divisi')}>
+          onClick={() => router.push('/anggota/add-divisi')}
+          disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.createAcces}>
           <Add style={{ fontSize: 16, marginRight: 5 }} /> Tambah
         </Button>
       </Stack>
@@ -231,7 +233,8 @@ const Position = () => {
                       aria-controls={open ? 'long-menu' : undefined}
                       aria-expanded={open ? 'true' : undefined}
                       aria-haspopup="true"
-                      onClick={(e) => handleClickThreeDotMenu(e, row)}>
+                      onClick={(e) => handleClickThreeDotMenu(e, row)}
+                      disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}>
                       {/* <MoreVertIcon /> */}
                       <img src="/images/icons/triple-dot.svg" />
                     </IconButton>
@@ -265,7 +268,14 @@ const Position = () => {
           },
         }}>
         {options.map((option) => (
-          <MenuItem key={option} onClick={() => handleMenuTable(option)}>
+          <MenuItem
+            key={option}
+            onClick={() => handleMenuTable(option)}
+            disabled={
+              option.title === 'Ubah'
+                ? !access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces
+                : !access.find((item) => item?.nameModule === 'member_divistion')?.acces?.deleteAcces
+            }>
             <Box display="flex">
               {option.icon}
               <span style={{ marginLeft: '7px' }}>{option.title}</span>

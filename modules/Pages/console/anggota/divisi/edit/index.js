@@ -10,9 +10,10 @@ import Head from 'next/head';
 
 const addDivisi = () => {
   const router = useRouter();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const breadcrumbs = [
-    { label: 'Anggota', link: '/anggota?tab=divisi' },
+    { label: 'Divisi', link: '/anggota?tab=divisi' },
     { label: 'Edit Divisi', isActive: true },
   ];
 
@@ -74,6 +75,7 @@ const addDivisi = () => {
           variant="outlined"
           value={nameDivisi}
           onChange={(e) => setNameDivisi(e.target.value)}
+          disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
         />
         <TextField
           style={{ marginTop: '20px' }}
@@ -86,9 +88,14 @@ const addDivisi = () => {
           variant="outlined"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
+          disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
         />
         <Box sx={{ width: 100 }} mt={3}>
-          <Button onClick={handleUpdateDivisi} disbaled={!nameDivisi} variant="contained" color="secondary">
+          <Button
+            onClick={handleUpdateDivisi}
+            disabled={!nameDivisi || !access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
+            variant="contained"
+            color="secondary">
             Ubah
           </Button>
         </Box>

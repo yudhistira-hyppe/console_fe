@@ -22,6 +22,7 @@ const AddMember = () => {
     position: '',
     email: '',
   });
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const { data: profileUser, isFetching } = useGetProfileByUserEmailQuery(router.query.id);
   const { data: dataJabatan } = useGetGroupQuery({ skip: 0, limit: 10, search: '' });
@@ -116,7 +117,8 @@ const AddMember = () => {
               style={{ width: '100%', maxWidth: 400 }}
               name="position"
               onChange={handleChange}
-              displayEmpty>
+              displayEmpty
+              disabled={!access.find((item) => item?.nameModule === 'member_users')?.acces?.updateAcces}>
               <MenuItem value="" disabled>
                 Jabatan
               </MenuItem>
@@ -129,7 +131,12 @@ const AddMember = () => {
             <Typography style={{ color: '#0000004D' }}>Pilih jabatan yang sesuai</Typography>
           </Stack>
           <Stack mt={2}>
-            <Button variant="contained" color="secondary" style={{ maxWidth: 120, height: 40 }} onClick={handleUpdate}>
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{ maxWidth: 120, height: 40 }}
+              onClick={handleUpdate}
+              disabled={!access.find((item) => item?.nameModule === 'member_users')?.acces?.updateAcces}>
               Ubah
             </Button>
           </Stack>

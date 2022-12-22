@@ -15,10 +15,10 @@ const addDivisi = () => {
     desc: '',
   });
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
-  console.log('isBtnDisabled:', isBtnDisabled);
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const breadcrumbs = [
-    { label: 'Anggota', link: '/anggota?tab=divisi' },
+    { label: 'Divisi', link: '/anggota?tab=divisi' },
     { label: 'Tambah Divisi', isActive: true },
   ];
 
@@ -78,6 +78,7 @@ const addDivisi = () => {
               };
             })
           }
+          disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.createAcces}
         />
         <TextField
           style={{ marginTop: '20px' }}
@@ -93,9 +94,14 @@ const addDivisi = () => {
               };
             })
           }
+          disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.createAcces}
         />
         <Box sx={{ width: 100 }} mt={3}>
-          <Button onClick={addDivisi} disabled={isBtnDisabled} variant="contained" color="secondary">
+          <Button
+            onClick={addDivisi}
+            disabled={isBtnDisabled || !access.find((item) => item?.nameModule === 'member_divistion')?.acces?.createAcces}
+            variant="contained"
+            color="secondary">
             Tambah
           </Button>
         </Box>

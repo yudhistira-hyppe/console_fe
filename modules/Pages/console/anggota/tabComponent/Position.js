@@ -57,7 +57,7 @@ const Position = () => {
     search: search,
   });
   const [id, setId] = useState('');
-  console.log('id:', id);
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   /////// notif
   const [state, setState] = React.useState({
@@ -190,7 +190,8 @@ const Position = () => {
           color="secondary"
           sx={{ '&:hover': { background: 'transparent' } }}
           style={{ fontWeight: 'bold', fontFamily: 'Lato', height: 56, width: 100 }}
-          onClick={() => router.push('/anggota/add-position')}>
+          onClick={() => router.push('/anggota/add-position')}
+          disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}>
           <Add style={{ fontSize: 16, marginRight: 5 }} /> Tambah
         </Button>
       </Stack>
@@ -268,7 +269,14 @@ const Position = () => {
                 },
               }}>
               {options.map((option) => (
-                <MenuItem key={option} onClick={() => handleMenuTable(option)}>
+                <MenuItem
+                  key={option}
+                  onClick={() => handleMenuTable(option)}
+                  disabled={
+                    option.title === 'Ubah'
+                      ? !access.find((item) => item?.nameModule === 'member_position')?.acces?.updateAcces
+                      : !access.find((item) => item?.nameModule === 'member_position')?.acces?.deleteAcces
+                  }>
                   <Box display="flex">
                     {option.icon}
                     <span style={{ marginLeft: '7px' }}>{option.title}</span>
