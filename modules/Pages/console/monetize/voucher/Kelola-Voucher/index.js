@@ -40,6 +40,7 @@ const KelolaVoucherComponent = () => {
   const [params, setParams] = React.useState({ page: 0, limit: 10 });
   const router = useRouter();
   const { data: listVouchers, isFetching: loadingVoucher } = useGetVouchersQuery(params);
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const onChangeStatusHandler = (item) => {
     setShowModal(true);
@@ -100,7 +101,11 @@ const KelolaVoucherComponent = () => {
                   <Typography style={{ fontWeight: 'bold' }}>Daftar Voucher</Typography>
                 </Stack>
                 <div>
-                  <Button variant="contained" color="primary" onClick={() => router.push('/monetize/voucher/create')}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => router.push('/monetize/voucher/create')}
+                    disabled={!access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces}>
                     Buat Voucher
                   </Button>
                 </div>
@@ -199,7 +204,14 @@ const KelolaVoucherComponent = () => {
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
-                            <Switch color="primary" onClick={() => onChangeStatusHandler(item)} checked={item?.isActive} />
+                            <Switch
+                              color="primary"
+                              onClick={() => onChangeStatusHandler(item)}
+                              checked={item?.isActive}
+                              disabled={
+                                !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                              }
+                            />
                           </TableCell>
                           <TableCell align="left">
                             <EditIcon

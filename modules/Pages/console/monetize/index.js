@@ -16,7 +16,7 @@ import Cookies from 'js-cookie';
 const ConsoleMonetizeComponent = () => {
   const [value, setValue] = React.useState('0');
   const router = useRouter();
-  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,7 +80,7 @@ const ConsoleMonetizeComponent = () => {
                   }}
                 />
               )}
-              {access.map((item) => item?.nameModule).includes('monetize_buy_sell') && (
+              {access.map((item) => item?.nameModule).includes('monetize_buy/sell') && (
                 <Tab
                   label="Jual-Beli Konten"
                   value="3"
@@ -124,7 +124,7 @@ const ConsoleMonetizeComponent = () => {
               <MonetizeKepemilikanComponent />
             </TabPanel>
           )}
-          {access.map((item) => item?.nameModule).includes('monetize_buy_sell') && (
+          {access.map((item) => item?.nameModule).includes('monetize_buy/sell') && (
             <TabPanel style={{ padding: 0 }} value="3">
               <MonetizeJualBeliComponent />
             </TabPanel>
