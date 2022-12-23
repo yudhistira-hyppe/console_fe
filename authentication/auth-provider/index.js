@@ -64,7 +64,7 @@ export const useProvideAuth = () => {
     login(user)
       .unwrap()
       .then((result) => {
-        if (result.data.roles.includes('ROLE_SYSADMIN')) {
+        if (result.data.roles.includes('ROLE_ADMIN')) {
           onHandleSuccessLogin(user, result, isRememberUser);
         } else {
           fetchError('Akun yang digunakan tidak memiliki akses!');

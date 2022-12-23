@@ -77,7 +77,7 @@ const FilterTableAkunPengguna = (props) => {
             </MenuItem>
             <MenuItem value="ROLE_USER">User</MenuItem>
             <MenuItem value="ROLE_PREMIUM">Premium</MenuItem>
-            <MenuItem value="ROLE_SYSADMIN">Sys Admin</MenuItem>
+            <MenuItem value="ROLE_ADMIN">Sys Admin</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="outlined" className={classes.formControl}>
