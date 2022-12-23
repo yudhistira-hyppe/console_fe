@@ -376,7 +376,7 @@ const DetailPelaporanIklan = () => {
                       <Link
                         style={{ fontWeight: 'bold', cursor: 'pointer', textDecorationLine: 'none' }}
                         onClick={() =>
-                          access.find((item) => item?.nameModule === 'help_ads')?.acces?.updateAcces
+                          access.find((item) => item?.nameModule === 'help_ads')?.acces?.deleteAcces
                             ? showModalHandler({ type: 'delete', modalType: 'delete' })
                             : alert('kamu tidak memiliki akses!')
                         }>

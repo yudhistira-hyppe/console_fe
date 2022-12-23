@@ -393,7 +393,7 @@ const DetalPelaporanAkun = () => {
                       <Link
                         style={{ fontWeight: 'bold', cursor: 'pointer', textDecorationLine: 'none' }}
                         onClick={() =>
-                          access.find((item) => item?.nameModule === 'help_users')?.acces?.updateAcces
+                          access.find((item) => item?.nameModule === 'help_users')?.acces?.deleteAcces
                             ? showModalHandler({ type: 'delete', modalType: 'delete' })
                             : alert('kamu tidak memiliki akses!')
                         }>
