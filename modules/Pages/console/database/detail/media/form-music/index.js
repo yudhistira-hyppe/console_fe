@@ -38,7 +38,7 @@ const FormMusic = (props) => {
     confirmation: false,
     status: '',
   });
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: genres } = useGetGenreMusicQuery();
   const { data: themes } = useGetThemeMusicQuery();

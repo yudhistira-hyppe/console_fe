@@ -26,7 +26,7 @@ const ConsoleHelpCenterComponent = () => {
   const router = useRouter();
   const [filter, setFilter] = useState([null, null]);
   const [deleteRefresh, setDeleteRefresh] = useState(false);
-  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: reportCount, isFetching } = useGetCountingHelpCenterQuery({
     startdate: filter[0] || undefined,

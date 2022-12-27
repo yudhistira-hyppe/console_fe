@@ -80,7 +80,7 @@ const DetailBantuanPengguna = () => {
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [replyTicket] = useReplyTicketMutation();
   const { authUser } = useAuth();
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const getMediaUri = (urlEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;

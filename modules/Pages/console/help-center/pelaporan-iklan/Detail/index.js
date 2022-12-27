@@ -106,7 +106,7 @@ const DetailPelaporanIklan = () => {
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,

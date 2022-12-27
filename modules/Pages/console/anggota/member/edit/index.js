@@ -22,7 +22,7 @@ const AddMember = () => {
     position: '',
     email: '',
   });
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: profileUser, isFetching } = useGetProfileByUserEmailQuery(router.query.id);
   const { data: dataJabatan } = useGetGroupQuery({ skip: 0, limit: 10, search: '' });

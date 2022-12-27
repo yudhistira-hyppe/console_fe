@@ -10,7 +10,7 @@ import Head from 'next/head';
 
 const addDivisi = () => {
   const router = useRouter();
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const breadcrumbs = [
     { label: 'Divisi', link: '/anggota?tab=divisi' },

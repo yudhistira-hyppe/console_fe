@@ -40,7 +40,7 @@ const KelolaVoucherComponent = () => {
   const [params, setParams] = React.useState({ page: 0, limit: 10 });
   const router = useRouter();
   const { data: listVouchers, isFetching: loadingVoucher } = useGetVouchersQuery(params);
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const onChangeStatusHandler = (item) => {
     setShowModal(true);

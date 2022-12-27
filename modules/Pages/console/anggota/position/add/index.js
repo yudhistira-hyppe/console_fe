@@ -48,7 +48,7 @@ const RichObjectTreeView = () => {
   const [selectDivisi, setSelectDivisi] = React.useState('');
   const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   // dialog
   const Transition = React.forwardRef(function Transition(props, ref) {

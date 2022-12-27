@@ -68,7 +68,7 @@ const PenggunaComp = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userSelectedEmail, setUserSelectedEmail] = useState('');
   const [jabatan, setJabatan] = useState('');
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const open = Boolean(anchorEl);
   const { data: dataAnggota, isFetching } = useGetAnggotaQuery(payload);
