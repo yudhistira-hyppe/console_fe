@@ -6,8 +6,11 @@ import { Grid } from '@mui/material';
 import ChartPost from './chart-post';
 import TopBoosted from './top-boosted';
 import TableList from './TableList';
+import Cookies from 'js-cookie';
 
 const BoostCenter = () => {
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+
   return (
     <>
       <Head>
@@ -15,15 +18,21 @@ const BoostCenter = () => {
       </Head>
       <PageContainer>
         <GridContainer>
-          <Grid item xs={12} sm={4}>
-            <ChartPost />
-          </Grid>
-          <Grid item xs={12} sm={8}>
-            <TopBoosted />
-          </Grid>
-          <Grid item xs={12}>
-            <TableList />
-          </Grid>
+          {access.map((item) => item?.nameModule).includes('boost_statistic') && (
+            <Grid item xs={12} sm={4}>
+              <ChartPost />
+            </Grid>
+          )}
+          {access.map((item) => item?.nameModule).includes('boost_engagement') && (
+            <Grid item xs={12} sm={8}>
+              <TopBoosted />
+            </Grid>
+          )}
+          {access.map((item) => item?.nameModule).includes('boost_table') && (
+            <Grid item xs={12}>
+              <TableList />
+            </Grid>
+          )}
         </GridContainer>
       </PageContainer>
     </>

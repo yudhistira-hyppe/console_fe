@@ -21,6 +21,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { formatDateTimeString, formatGender, formatRoles } from 'helpers/stringHelper';
 import useStyles from './index.style';
 import moment from 'moment';
+import { Typography } from '@material-ui/core';
 
 const columnsHeader = ['Nama', 'Jenis Kelamin ', 'Umur', 'Lokasi', 'Jenis Akun', 'Waktu Pendaftaran', 'Terakhir Aktif'];
 
@@ -50,7 +51,7 @@ const DatabaseTabAccountListTableComponent = (props) => {
         },
         role: formatRoles(item.roles) || '-',
         gender: item.gender ? formatGender(item.gender) : '-',
-        age: item.age || '-',
+        age: item.age,
         cities: item.cities || '-',
         interests: item.interest,
         lastActive: item.activity.payload.login_date ? formatDateTimeString(item.activity.payload.login_date) : '-',
@@ -110,7 +111,7 @@ const DatabaseTabAccountListTableComponent = (props) => {
               rows.map((row) => (
                 <TableRow className={classes.tableRow} key={row.id} hover onClick={() => onRowClick(row.user.email)}>
                   <TableCell>
-                    <Stack direction="row" spacing={1.5} maxWidth="212px" overflow="hidden">
+                    <Stack direction="row" alignItems="center" spacing={1.5} maxWidth="212px" overflow="hidden">
                       <CmtAvatar
                         src={getMediaUri(row.user.avatar.mediaEndpoint)}
                         alt={row.user.fullName}
@@ -118,17 +119,33 @@ const DatabaseTabAccountListTableComponent = (props) => {
                         color="random"
                       />
                       <Box overflow="hidden">
-                        <div className={classes.textEllipsis}>{row.user.fullName}</div>
-                        <div className={classes.textEllipsis}>{row.user.email}</div>
+                        <Typography className={classes.textEllipsis} style={{ fontSize: 14 }}>
+                          {row.user.fullName || '-'}
+                        </Typography>
+                        <Typography className={classes.textEllipsis} style={{ fontSize: 14 }}>
+                          {row.user.email || '-'}
+                        </Typography>
                       </Box>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row?.gender}</TableCell>
-                  <TableCell>{row?.age}</TableCell>
-                  <TableCell style={{ width: 120, textTransform: 'capitalize' }}>{row?.cities}</TableCell>
-                  <TableCell>{row?.role}</TableCell>
-                  <TableCell style={{ width: 70 }}>{moment(row?.createdAt).format('DD/MM/YY - HH:mm')} WIB</TableCell>
-                  <TableCell>{row?.lastActive}</TableCell>
+                  <TableCell>
+                    <Typography style={{ fontSize: 14 }}>{row?.gender}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography style={{ fontSize: 14 }}>{row?.age}</Typography>
+                  </TableCell>
+                  <TableCell style={{ width: 120, textTransform: 'capitalize' }}>
+                    <Typography style={{ fontSize: 14 }}>{row?.cities}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography style={{ fontSize: 14 }}>{row?.role}</Typography>
+                  </TableCell>
+                  <TableCell style={{ width: 70 }}>
+                    <Typography style={{ fontSize: 12 }}>{moment(row?.createdAt).format('DD/MM/YY - HH:mm')} WIB</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography style={{ fontSize: 14 }}>{row?.lastActive}</Typography>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

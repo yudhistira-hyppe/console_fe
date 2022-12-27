@@ -100,6 +100,7 @@ const VoucherFormComponent = ({ data }) => {
   const [updateVoucher] = useUpdateVoucherMutation();
   const router = useRouter();
   const classes = useStyles();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const onExpChange = (event) => {
     setVal((prevVal) => {
@@ -127,6 +128,8 @@ const VoucherFormComponent = ({ data }) => {
       expiredDay: val?.expiredDay === 'other' ? val.otherExpired : Number(val.expiredDay),
       amount: val.creditValue * 1500,
       isActive: true,
+      creditValue: Number(val?.creditValue),
+      creditPromo: Number(val?.creditPromo) || 0,
     };
 
     data
@@ -135,7 +138,10 @@ const VoucherFormComponent = ({ data }) => {
           data: {
             ...val,
             expiredDay: val?.expiredDay === 'other' ? val.otherExpired : Number(val.expiredDay),
+            amount: val?.creditValue * 1500,
             isActive: data.isActive,
+            creditValue: Number(val?.creditValue),
+            creditPromo: Number(val?.creditPromo) || 0,
           },
         })
       : addVoucher(bodyData);
@@ -146,8 +152,6 @@ const VoucherFormComponent = ({ data }) => {
   const onCancel = () => {
     setShowModal(false);
   };
-
-  console.log(val);
 
   return (
     <>
@@ -188,7 +192,11 @@ const VoucherFormComponent = ({ data }) => {
                   className={classes.inputForm}
                   value={val?.nameAds}
                   onChange={onInputChange}
-                  disabled={data}
+                  disabled={
+                    data || data
+                      ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                      : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                  }
                 />
               </FormControl>
             </Grid>
@@ -204,7 +212,11 @@ const VoucherFormComponent = ({ data }) => {
                   className={classes.inputForm}
                   value={val?.codeVoucher}
                   onChange={onInputChange}
-                  disabled={data}
+                  disabled={
+                    data || data
+                      ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                      : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                  }
                 />
                 <FormHelperText>Penamaan kode voucher disarankan lebih dari 5 karakter</FormHelperText>
               </FormControl>
@@ -225,6 +237,11 @@ const VoucherFormComponent = ({ data }) => {
                   className={classes.inputForm}
                   value={val?.creditValue}
                   onChange={onInputChange}
+                  disabled={
+                    data
+                      ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                      : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                  }
                 />
                 <FormHelperText>
                   1 kredit = Rp 1.500,-. Harga voucher = Rp {numberWithCommas(val?.creditValue * 1500)}{' '}
@@ -244,6 +261,11 @@ const VoucherFormComponent = ({ data }) => {
                   className={classes.inputForm}
                   value={val?.creditPromo}
                   onChange={onInputChange}
+                  disabled={
+                    data
+                      ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                      : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                  }
                 />
                 <FormHelperText>1 kredit = Rp 0,-</FormHelperText>
               </FormControl>
@@ -264,6 +286,11 @@ const VoucherFormComponent = ({ data }) => {
                   className={classes.inputForm}
                   value={val?.qty}
                   onChange={onInputChange}
+                  disabled={
+                    data
+                      ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                      : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                  }
                 />
                 <FormHelperText>Jumlah voucher dapat disesuaikan dengan kebutuhan</FormHelperText>
               </FormControl>
@@ -283,28 +310,64 @@ const VoucherFormComponent = ({ data }) => {
                     onChange={onExpChange}
                     checked={val?.expiredDay === '30'}
                     value="30"
-                    control={<Radio color="secondary" />}
+                    control={
+                      <Radio
+                        color="secondary"
+                        disabled={
+                          data
+                            ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                            : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                        }
+                      />
+                    }
                     label={'30 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
                     checked={val?.expiredDay === '60'}
                     value="60"
-                    control={<Radio color="secondary" />}
+                    control={
+                      <Radio
+                        color="secondary"
+                        disabled={
+                          data
+                            ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                            : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                        }
+                      />
+                    }
                     label={'60 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
                     checked={val?.expiredDay === '90'}
                     value="90"
-                    control={<Radio color="secondary" />}
+                    control={
+                      <Radio
+                        color="secondary"
+                        disabled={
+                          data
+                            ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                            : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                        }
+                      />
+                    }
                     label={'90 Hari'}
                   />
                   <FormControlLabel
                     onChange={onExpChange}
                     value="other"
                     checked={val?.expiredDay === 'other'}
-                    control={<Radio color="secondary" />}
+                    control={
+                      <Radio
+                        color="secondary"
+                        disabled={
+                          data
+                            ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                            : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                        }
+                      />
+                    }
                     label={
                       <TextField
                         placeholder="Masukkan Jumlah Hari"
@@ -312,7 +375,11 @@ const VoucherFormComponent = ({ data }) => {
                         size="small"
                         value={val?.otherExpired}
                         onChange={(e) => setVal({ ...val, otherExpired: Number(e.target.value) })}
-                        disabled={val?.expiredDay !== 'other'}
+                        disabled={
+                          val?.expiredDay !== 'other' || data
+                            ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                            : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                        }
                         color="secondary"
                       />
                     }
@@ -370,7 +437,12 @@ const VoucherFormComponent = ({ data }) => {
             variant="contained"
             color="primary"
             // disabled={!val?.name || !val?.kode || !val?.kredit || !val?.stok || !val?.exp || (!val?.sdk && !data)}>
-            onClick={() => (data ? onConfirm() : setShowModal(true))}>
+            onClick={() => (data ? onConfirm() : setShowModal(true))}
+            disabled={
+              data
+                ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+            }>
             Simpan
           </Button>
           <Button onClick={() => router.back()}>Batal</Button>

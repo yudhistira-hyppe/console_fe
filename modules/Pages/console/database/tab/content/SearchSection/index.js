@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -7,21 +7,59 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../../../help-center/bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { Divider, Radio, RadioGroup, Stack } from '@mui/material';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers-pro';
-import { debounce } from 'lodash';
+import { Divider, IconButton, InputAdornment, Popover, Radio, RadioGroup, Stack } from '@mui/material';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
+import { DateRange as DateRangePicker } from 'react-date-range';
+import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import moment from 'moment';
+import { useGetInterestContentQuery } from 'api/console/database/content';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
-  const [week, setWeek] = React.useState(null);
-  const [value, setValue] = React.useState([null, null]);
-  function getWeeksAfter(date, amount) {
-    return date && amount ? date.add(amount, 'week') : undefined;
-  }
+  const [value, setValue] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: 'selection',
+    },
+  ]);
+  const [anchorEl, setAnchorEl] = useState(null);
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
+
+  useEffect(() => {
+    if (!filter.createdAt[0] && !null) {
+      setValue([
+        {
+          startDate: new Date(),
+          endDate: null,
+          key: 'selection',
+        },
+      ]);
+    }
+  }, [filter.createdAt]);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setValue([
+      {
+        startDate: new Date(),
+        endDate: null,
+        key: 'selection',
+      },
+    ]);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    handleChange('createdAt', [null, null]);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  const { data: interests, isFetching: loadingInterest } = useGetInterestContentQuery();
 
   return (
     <>
@@ -112,6 +150,7 @@ const SearchSection = ({ filter, handleChange }) => {
               name="description"
               filterValue={filter.description}
               onChange={(e) => handleChangeDelay(e)}
+              color="secondary"
             />
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -119,16 +158,17 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Nama Pengguna</Typography>
+            <Typography style={{ fontSize: '13px' }}>Nama Pemilik</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <DelayedTextField
               fullWidth
               waitForInput={true}
-              placeholder="Cari Keterangan"
-              name="username"
-              filterValue={filter.username}
+              placeholder="Cari Pemilik"
+              name="pemilik"
+              filterValue={filter.pemilik}
               onChange={(e) => handleChangeDelay(e)}
+              color="secondary"
             />
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -136,7 +176,80 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Status Sertifikat</Typography>
+            <Typography style={{ fontSize: '13px' }}>Tanggal Pembuatan</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <TextField
+                value={
+                  value[0]?.endDate
+                    ? `${moment(value[0]?.startDate).format('DD/MM/YYYY')} - ${moment(value[0]?.endDate).format(
+                        'DD/MM/YYYY',
+                      )}`
+                    : ''
+                }
+                color="secondary"
+                placeholder="Pilih Tanggal"
+                autoComplete="off"
+                onClick={handleClick}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <DateRange />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {value[0]?.endDate && (
+                <IconButton
+                  style={{ height: 30, width: 30 }}
+                  onClick={() => {
+                    setValue([
+                      {
+                        startDate: new Date(),
+                        endDate: null,
+                        key: 'selection',
+                      },
+                    ]);
+                    handleChange('createdAt', [null, null]);
+                  }}>
+                  <RemoveCircleOutline color="primary" />
+                </IconButton>
+              )}
+            </Stack>
+
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}>
+              <DateRangePicker
+                onChange={(item) => {
+                  setValue([item.selection]);
+                  handleChange('createdAt', [
+                    moment(item.selection.startDate).format('YYYY-MM-DD'),
+                    item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
+                  ]);
+                  item.selection.endDate && setAnchorEl(null);
+                }}
+                showPreview={false}
+                dragSelectionEnabled={false}
+                retainEndDateOnFirstSelection={true}
+                ranges={value}
+                direction="horizontal"
+              />
+            </Popover>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Status Kepemilikan</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
@@ -146,9 +259,11 @@ const SearchSection = ({ filter, handleChange }) => {
                 control={<Checkbox defaultChecked={false} checked={filter.status.includes('terdaftar')} color="secondary" />}
               />
               <FormControlLabel
-                label={'Bebas'}
-                value="bebas"
-                control={<Checkbox defaultChecked={false} checked={filter.status.includes('bebas')} color="secondary" />}
+                label={'Tidak Terdaftar'}
+                value="tidak terdaftar"
+                control={
+                  <Checkbox defaultChecked={false} checked={filter.status.includes('tidak terdaftar')} color="secondary" />
+                }
               />
             </FormGroup>
           </AccordionDetails>
@@ -163,46 +278,54 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup onChange={(e) => handleChange('type', e.target.value)}>
               <FormControlLabel
                 label={'HyppeStory'}
-                value="story"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('story')} color="secondary" />}
+                value="HyppeStory"
+                control={<Checkbox defaultChecked={false} checked={filter.type.includes('HyppeStory')} color="secondary" />}
               />
               <FormControlLabel
                 label={'HyppeVid'}
-                value="vid"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('vid')} color="secondary" />}
+                value="HyppeVid"
+                control={<Checkbox defaultChecked={false} checked={filter.type.includes('HyppeVid')} color="secondary" />}
               />
               <FormControlLabel
                 label={'HyppeDiary'}
-                value="diary"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('diary')} color="secondary" />}
+                value="HyppeDiary"
+                control={<Checkbox defaultChecked={false} checked={filter.type.includes('HyppeDiary')} color="secondary" />}
               />
               <FormControlLabel
                 label={'HyppePic'}
-                value="pic"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('pic')} color="secondary" />}
+                value="HyppePic"
+                control={<Checkbox defaultChecked={false} checked={filter.type.includes('HyppePic')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded disableGutters>
+        <Accordion elevation={0} disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Kategori</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
-              <FormControlLabel
-                label={'Berita'}
-                value="berita"
-                control={<Checkbox defaultChecked={false} checked={filter.category.includes('berita')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Film'}
-                value="film"
-                control={<Checkbox defaultChecked={false} checked={filter.category.includes('film')} color="secondary" />}
-              />
-            </FormGroup>
+            {loadingInterest ? (
+              <Typography>Loading data...</Typography>
+            ) : (
+              <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
+                {interests.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.interestName || '-'}
+                    value={JSON.stringify({ _id: item?._id, name: item?.interestName })}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        checked={filter.category.map((item) => item?.name).includes(item?.interestName)}
+                      />
+                    }
+                  />
+                ))}
+              </FormGroup>
+            )}
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
         </Accordion>
@@ -244,6 +367,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 placeholder="Harga Minimum"
                 onChange={(e) => handleChange('min_price', e.target.value)}
                 autoComplete="off"
+                color="secondary"
               />
               <DelayedTextField
                 fullWidth
@@ -253,38 +377,13 @@ const SearchSection = ({ filter, handleChange }) => {
                 placeholder="Harga Maksimum"
                 onChange={(e) => handleChange('max_price', e.target.value)}
                 autoComplete="off"
+                color="secondary"
               />
             </Stack>
           </AccordionDetails>
-          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded disableGutters>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Pembuatan</Typography>
-          </AccordionSummary>
-          <AccordionDetails style={{ padding: 0 }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-              <DateRangePicker
-                value={filter.createdAt}
-                onChange={(newValue) => {
-                  handleChange('createdAt', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <Stack direction={'row'} spacing={1}>
-                      <TextField autoComplete="off" {...startProps} />
-                      <TextField autoComplete="off" {...endProps} />
-                    </Stack>
-                  </>
-                )}
-              />
-            </LocalizationProvider>
-          </AccordionDetails>
-          <Divider style={{ marginTop: 16 }} />
-        </Accordion>
-
-        <Accordion elevation={0} defaultExpanded disableGutters>
+        {/* <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Pendaftaran (Ownership)</Typography>
           </AccordionSummary>
@@ -306,7 +405,7 @@ const SearchSection = ({ filter, handleChange }) => {
               />
             </LocalizationProvider>
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
       </Box>
     </>
   );

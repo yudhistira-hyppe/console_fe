@@ -4,13 +4,17 @@ import { TextField, Typography } from '@material-ui/core';
 import { Box, Button, Stack } from '@mui/material';
 import { useGetSingleDivisiQuery, useUpdateDivisiMutation } from 'api/console/divisi';
 import { useRouter } from 'next/router';
+import BackIconNav from '@material-ui/icons/ArrowBackIos';
+import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
+import Head from 'next/head';
 
 const addDivisi = () => {
   const router = useRouter();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const breadcrumbs = [
-    { label: 'Anggota', link: '/console/anggota' },
-    { label: 'Bantuan Pengguna', isActive: true },
+    { label: 'Divisi', link: '/anggota?tab=divisi' },
+    { label: 'Edit Divisi', isActive: true },
   ];
 
   const { data: detailDivisi } = useGetSingleDivisiQuery(router.query.id);
@@ -39,61 +43,60 @@ const addDivisi = () => {
   };
   return (
     <>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-        <Box display="flex" style={{ cursor: 'pointer' }} onClick={() => router.push('/anggota?tab=divisi')}>
-          <img src="/images/icons/arrow-left.svg" />
-          <Typography variant="h4" component="div">
+      <Head>
+        <title key="title">Hyppe-Console :: Edit Divisi</title>
+      </Head>
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/anggota?tab=divisi')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
+          </Stack>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
             Kembali
           </Typography>
-        </Box>
-        <Box>
-          <PageContainer breadcrumbs={breadcrumbs} />
-        </Box>
+        </Stack>
       </Stack>
 
-      <Typography variant="h3" component="div">
-        Edit Divisi
-      </Typography>
-      <Box sx={{ width: 500 }} mt={2}>
+      <Box sx={{ width: 500 }} mt={1}>
         <TextField
           InputLabelProps={{
             shrink: true,
           }}
-          style={{ marginTop: '10px' }}
           id="outlined-basic"
           fullWidth
-          label="Name Division"
-          size="small"
+          label="Nama Divisi"
           variant="outlined"
           value={nameDivisi}
           onChange={(e) => setNameDivisi(e.target.value)}
+          disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
         />
         <TextField
-          style={{ marginTop: '10px' }}
+          style={{ marginTop: '20px' }}
           InputLabelProps={{
             shrink: true,
           }}
           id="outlined-basic"
           fullWidth
-          label="Description"
-          size="small"
+          label="Deskripsi"
           variant="outlined"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
+          disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
         />
         <Box sx={{ width: 100 }} mt={3}>
           <Button
-            variant="outlined"
-            style={{
-              background: '#AB22AF',
-              padding: '3px 7px',
-              color: '#FFFFFF',
-              borderRadius: '2px',
-              border: 'none',
-              letterSpacing: '2px',
-            }}
-            onClick={handleUpdateDivisi}>
-            Tambah
+            onClick={handleUpdateDivisi}
+            disabled={!nameDivisi || !access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
+            variant="contained"
+            color="secondary">
+            Ubah
           </Button>
         </Box>
       </Box>

@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const divisiAPI = createApi({
   reducerPath: 'divisiAPI',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['group'],
+  tagTypes: ['divisi'],
   endpoints: (build) => ({
     getDivisi: build.query({
       query: (payload) => ({
@@ -34,7 +34,7 @@ export const divisiAPI = createApi({
         url: `/division/${id}`,
         method: 'GET',
       }),
-      invalidatesTags: ['divisi'],
+      providesTags: ['divisi'],
     }),
     updateDivisi: build.mutation({
       query: (payload) => ({
@@ -42,6 +42,7 @@ export const divisiAPI = createApi({
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['divisi'],
     }),
   }),
 });

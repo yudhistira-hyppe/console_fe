@@ -40,6 +40,12 @@ export const authApi = createApi({
         body: patch,
       }),
     }),
+    getUserAccess: build.mutation({
+      query: (id) => ({
+        url: `/user/acces/${id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -49,4 +55,5 @@ export const {
   useRefreshTokenMutation,
   useLogoutMutation,
   useUpgradeUserMutation,
+  useGetUserAccessMutation,
 } = authApi;

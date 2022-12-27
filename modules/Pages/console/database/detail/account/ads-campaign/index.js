@@ -107,11 +107,12 @@ const AdsCampaign = (props) => {
                 </Stack>
               ))}
             {!isFetching && adsCampaign.length === 0 && (
-              <Stack alignItems="center">
-                <Typography>
+              <Stack alignItems="center" justifyContent="center" gap="16px" height={500}>
+                <img src="/images/icon-media-empty.png" alt="Icon Empty" style={{ width: 50, height: 50 }} />
+                <Typography style={{ color: '#666666' }}>
                   {payload.search
                     ? `Kampanye iklan dengan kata kunci "${payload.search}" tidak ditemukan`
-                    : 'Pengguna belum memiliki kampanye iklan'}
+                    : 'Pengguna belum memiliki data apapun'}
                 </Typography>
               </Stack>
             )}

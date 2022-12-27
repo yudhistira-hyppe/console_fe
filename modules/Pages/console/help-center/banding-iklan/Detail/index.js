@@ -45,6 +45,7 @@ const DetailBandingIklan = () => {
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,
@@ -280,8 +281,8 @@ const DetailBandingIklan = () => {
                       size="small"
                     />
                     <Typography variant="body2">
-                      Penggunaan Kredit: {numberWithCommas(detail?.data[0]?.totalUsedCredit)} /{' '}
-                      {numberWithCommas(detail?.data[0]?.totalCredit)}
+                      Penggunaan Kredit: {numberWithCommas(detail?.data[0]?.totalUsedCredit || 0)} /{' '}
+                      {numberWithCommas(detail?.data[0]?.totalCredit || 0)}
                     </Typography>
                   </Stack>
                   <Stack direction="column" gap="8px" mt={1}>
@@ -328,7 +329,8 @@ const DetailBandingIklan = () => {
                   style={buttonStyle(detail?.data[0]?.reportStatusLast)}
                   onClick={detail?.data[0]?.reportStatusLast === 'BARU' ? () => handleToggle() : () => {}}
                   aria-haspopup="true"
-                  endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}>
+                  endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}
+                  disabled={!access.find((item) => item?.nameModule === 'help_appeal_ads')?.acces?.updateAcces}>
                   {detail?.data[0]?.reportStatusLast === 'FLAGING'
                     ? 'Ditandai Sensitif'
                     : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'

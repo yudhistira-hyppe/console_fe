@@ -21,6 +21,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -98,12 +99,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             onDelete={() => {
               if (
                 item.parent === 'description' ||
-                item.parent === 'username' ||
+                item.parent === 'pemilik' ||
                 item.parent === 'min_price' ||
                 item.parent === 'max_price'
               ) {
                 handleDeleteFilter(item.parent, '');
-              } else if (item.parent === 'createdAt' || item.parent === 'ownedAt') {
+              } else if (item.parent === 'category') {
+                handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+              } else if (item.parent === 'createdAt') {
                 handleDeleteFilter(item.parent, [null, null]);
               } else {
                 handleDeleteFilter(item.parent, item.value);
@@ -117,14 +120,18 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
             <TableRow>
-              <TableCell align="left">Konten</TableCell>
-              <TableCell align="left">ID Post</TableCell>
-              <TableCell align="left">Pemilik</TableCell>
+              <TableCell align="left" style={{ maxWidth: 120 }}>
+                Konten
+              </TableCell>
+              <TableCell align="left" style={{ maxWidth: 100 }}>
+                Pemilik
+              </TableCell>
               <TableCell align="left">Tipe</TableCell>
               <TableCell align="left">Kepemilikan</TableCell>
               <TableCell align="left">Penjualan</TableCell>
+              <TableCell align="left">Harga</TableCell>
               <TableCell align="left" style={{ maxWidth: 80 }}>
-                Waktu
+                Tanggal
               </TableCell>
             </TableRow>
           </TableHead>
@@ -137,55 +144,57 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                 </Stack>
               </TableCell>
-            ) : listTickets?.arrdata?.length >= 1 ? (
-              listTickets?.arrdata?.map((item, i) => (
+            ) : listTickets?.data?.length >= 1 ? (
+              listTickets?.data?.map((item, i) => (
                 <TableRow
                   key={i}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   hover
                   style={{ cursor: 'pointer' }}
                   onClick={() => router.push(`/database/content/${item?._id}`)}>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ maxWidth: 120 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getImage(item)} variant="rounded" />
-                      <Stack direction="column" gap="2px">
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}>
-                          asdada
-                        </Typography>
-                      </Stack>
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '14px', color: '#00000099' }}
+                        className={classes.textTruncate}>
+                        {item?.description || '-'}
+                      </Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      36R38DHF37C
+                  <TableCell align="left" style={{ maxWidth: 100 }}>
+                    <Typography
+                      variant="body1"
+                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 80, overflow: 'hidden' }}>
+                      {item?.username || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Amanda2
+                      {item?.type || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      HyppeVid
+                      {item?.kepemilikan === 'TIDAK' ? 'Tidak Terdaftar' : 'Terdaftar'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Terdaftar
+                      {item?.statusJual === 'TIDAK' ? 'Tidak Dijual' : 'Dijual'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Dijual
+                    <Typography
+                      variant="body1"
+                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 60, overflow: 'hidden' }}>
+                      Rp {numberWithCommas(item?.saleAmount || 0)}
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 80 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
+                      {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -200,7 +209,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalsearch >= 1 && (
+      {listTickets?.totalsearch >= 1 && !loading && (
         <Stack alignItems="center" my={3} mr={3}>
           <Pagination
             count={Number(listTickets?.totalpage) || 1}

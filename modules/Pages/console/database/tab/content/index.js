@@ -5,6 +5,7 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
+import { useGetListContentQuery } from 'api/console/database/content';
 
 const DatabaseTabContentComponent = () => {
   const [filter, setFilter] = useState({
@@ -12,7 +13,7 @@ const DatabaseTabContentComponent = () => {
     limit: 10,
     descending: 'true',
     description: '',
-    username: '',
+    pemilik: '',
     status: [],
     type: [],
     category: [],
@@ -20,10 +21,37 @@ const DatabaseTabContentComponent = () => {
     min_price: '',
     max_price: '',
     createdAt: [null, null],
-    ownedAt: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
   const router = useRouter();
+
+  const getParams = () => {
+    let params = {};
+    Object.assign(params, {
+      page: filter.page,
+      limit: filter.limit,
+      descending: filter.descending === 'true' ? true : false,
+    });
+    filter.pemilik !== '' && Object.assign(params, { username: filter.pemilik });
+    filter.description !== '' && Object.assign(params, { description: filter.description });
+    // filter.theme.length >= 1 && params.push(`theme=${filter.theme.map((item) => item._id).join(',')}`);
+    // filter.genre.length >= 1 && params.push(`genre=${filter.genre.map((item) => item._id).join(',')}`);
+    // filter.mood.length >= 1 && params.push(`mood=${filter.mood.map((item) => item._id).join(',')}`);
+    filter.status.length >= 1 &&
+      Object.assign(params, { kepemilikan: filter.status.map((item) => (item === 'terdaftar' ? 'YA' : 'TIDAK')) });
+    filter.type.length >= 1 && Object.assign(params, { postType: filter.type });
+    filter.category.length >= 1 && Object.assign(params, { kategori: filter.category.map((item) => item?._id) });
+    filter.is_sell.length >= 1 &&
+      Object.assign(params, { statusJual: filter.is_sell.map((item) => (item === 'dijual' ? 'YA' : 'TIDAK')) });
+    filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[0] });
+    filter.min_price && Object.assign(params, { startmount: Number(filter.min_price) });
+    filter.max_price && Object.assign(params, { endmount: Number(filter.max_price) });
+
+    return params;
+  };
+
+  const { data: listContent, isFetching: loadingContent } = useGetListContentQuery(getParams());
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -52,11 +80,11 @@ const DatabaseTabContentComponent = () => {
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Description' }]
               : [...prevVal, { parent: kind, value: 'Description' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
-        case 'username':
+        case 'pemilik':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Username' }]
-              : [...prevVal, { parent: kind, value: 'Username' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'pemilik' }]
+              : [...prevVal, { parent: kind, value: 'pemilik' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'min_price':
           return value.length >= 1
@@ -82,6 +110,10 @@ const DatabaseTabContentComponent = () => {
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pendaftaran' }]
               : [...prevVal, { parent: kind, value: 'Tanggal Pendaftaran' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'category':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -92,8 +124,8 @@ const DatabaseTabContentComponent = () => {
       switch (kind) {
         case 'description':
           return { ...prevVal, description: value };
-        case 'username':
-          return { ...prevVal, username: value };
+        case 'pemilik':
+          return { ...prevVal, pemilik: value };
         case 'status':
           return {
             ...prevVal,
@@ -113,9 +145,9 @@ const DatabaseTabContentComponent = () => {
         case 'category':
           return {
             ...prevVal,
-            category: filter.category.find((item) => item === value)
-              ? filter.category.filter((item) => item !== value)
-              : [...filter.category, value],
+            category: filter.category.find((item) => item?.name === JSON.parse(value)?.name)
+              ? filter.category.filter((item) => item?.name !== JSON.parse(value)?.name)
+              : [...filter.category, JSON.parse(value)],
             page: 0,
           };
         case 'is_sell':
@@ -140,8 +172,7 @@ const DatabaseTabContentComponent = () => {
     });
   };
 
-  console.log(filter);
-  console.log(filterList);
+  console.log(filter.createdAt);
 
   return (
     <>
@@ -155,8 +186,8 @@ const DatabaseTabContentComponent = () => {
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
             order={filter.descending}
-            loading={false}
-            listTickets={{ arrdata: [{}] }}
+            loading={loadingContent}
+            listTickets={listContent}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
           />

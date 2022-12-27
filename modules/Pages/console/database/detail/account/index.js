@@ -19,6 +19,8 @@ import { useGetProfileByUserEmailQuery, useGetUserBasicsQuery } from 'api/user/u
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { useUserListFriendQuery } from 'api/user/friend';
+import ActiveTime from './active-time';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
   { label: 'Database Akun', link: '/database/account' },
@@ -49,7 +51,7 @@ const DatabaseDetailAccountComponent = (props) => {
 
   useEffect(() => {
     if (userProfileRes) {
-      setAccountDetail({ ...accountDetail, ...userProfileRes.data[0] });
+      setAccountDetail({ ...accountDetail, ...userProfileRes?.data[0] });
     }
   }, [userProfileRes]);
 
@@ -57,7 +59,7 @@ const DatabaseDetailAccountComponent = (props) => {
     if (userFriendListRes) {
       setAccountDetail({
         ...accountDetail,
-        insight: { ...accountDetail.insight, totalFriends: userFriendListRes.count_friend },
+        insight: { ...accountDetail?.insight, totalFriends: userFriendListRes?.count_friend },
       });
     }
   }, [userFriendListRes]);
@@ -94,62 +96,69 @@ const DatabaseDetailAccountComponent = (props) => {
       </Stack>
 
       <PageContainer>
-        {isSuccess && (
-          <Stack spacing={3}>
-            <Stack
-              gap={3}
-              direction={{ xs: 'column', sm: 'row' }}
-              alignItems={{ sm: 'center' }}
-              justifyContent={{ sm: 'space-between' }}>
-              <Stack direction="row" spacing={3}>
-                <CmtAvatar
-                  src={getMediaUri(accountDetail.avatar)}
-                  alt={accountDetail.fullName}
-                  phCharLength={2}
-                  size={80}
-                  color="random"
-                />
-                <Stack justifyContent="center" gap="4px">
-                  <Typography variant="h1">{accountDetail.username}</Typography>
-                  <Box fontSize={14} color="text.secondary">
-                    {accountDetail.fullName}
-                  </Box>
+        {isFetchingUserBasics ? (
+          <PageLoader />
+        ) : (
+          isSuccess && (
+            <Stack spacing={3}>
+              <Stack
+                gap={3}
+                direction={{ xs: 'column', sm: 'row' }}
+                alignItems={{ sm: 'center' }}
+                justifyContent={{ sm: 'space-between' }}>
+                <Stack direction="row" spacing={3}>
+                  <CmtAvatar
+                    src={getMediaUri(accountDetail.avatar)}
+                    alt={accountDetail.fullName}
+                    phCharLength={2}
+                    size={80}
+                    color="random"
+                  />
+                  <Stack justifyContent="center" gap="4px">
+                    <Typography variant="h1">{accountDetail.username}</Typography>
+                    <Box fontSize={14} color="text.secondary">
+                      {accountDetail.fullName}
+                    </Box>
+                  </Stack>
                 </Stack>
+                <Insight insight={accountDetail.insight} />
               </Stack>
-              <Insight insight={accountDetail.insight} />
+              <Grid container gap={3}>
+                <Grid item xs={12} md={3.5}>
+                  <AccountInfo
+                    createdAt={accountDetail.createdAt}
+                    fullName={accountDetail.fullName}
+                    email={accountDetail.email}
+                    roles={accountDetail.roles}
+                  />
+                </Grid>
+                <Grid item xs={12} md>
+                  <UserInfo accountDetail={accountDetail} />
+                </Grid>
+              </Grid>
+              <Grid container gap={3}>
+                <Grid item xs={12} md={3.5}>
+                  <Interest interests={accountDetail.interest} />
+                </Grid>
+                <Grid item xs={12} md>
+                  <UserPost email={accountDetail.email} />
+                </Grid>
+              </Grid>
+              <Grid container gap={3}>
+                <Grid item xs={12} md={6.5}>
+                  <Transaction email={accountDetail.email} />
+                </Grid>
+                <Grid item xs={12} md>
+                  <ActiveTime />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12}>
+                  <AdsCampaign email={accountDetail.email} />
+                </Grid>
+              </Grid>
             </Stack>
-            <Grid container gap={3}>
-              <Grid item xs={12} md={3.5}>
-                <AccountInfo
-                  createdAt={accountDetail.createdAt}
-                  fullName={accountDetail.fullName}
-                  email={accountDetail.email}
-                  roles={accountDetail.roles}
-                />
-              </Grid>
-              <Grid item xs={12} md>
-                <UserInfo accountDetail={accountDetail} />
-              </Grid>
-            </Grid>
-            <Grid container gap={3}>
-              <Grid item xs={12} md={3.5}>
-                <Interest interests={accountDetail.interest} />
-              </Grid>
-              <Grid item xs={12} md>
-                <UserPost email={accountDetail.email} />
-              </Grid>
-            </Grid>
-            <Grid container gap={3}>
-              <Grid item xs={12} md={7}>
-                <Transaction email={accountDetail.email} />
-              </Grid>
-            </Grid>
-            <Grid container>
-              <Grid item xs={12}>
-                <AdsCampaign email={accountDetail.email} />
-              </Grid>
-            </Grid>
-          </Stack>
+          )
         )}
       </PageContainer>
     </>

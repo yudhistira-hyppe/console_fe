@@ -23,6 +23,9 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import { useRouter } from 'next/router';
 import { useGetDivisiQuery } from 'api/console/divisi';
 import { useGetGroupQuery } from 'api/console/group';
+import BackIconNav from '@material-ui/icons/ArrowBackIos';
+import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
+import Head from 'next/head';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -45,6 +48,7 @@ const RichObjectTreeView = () => {
   const [selectDivisi, setSelectDivisi] = React.useState('');
   const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   // dialog
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -75,8 +79,8 @@ const RichObjectTreeView = () => {
   };
 
   const breadcrumbs = [
-    { label: 'Anggota', link: '/console/anggota' },
-    { label: 'Bantuan Pengguna', isActive: true },
+    { label: 'Jabatan', link: '/anggota?tab=jabatan' },
+    { label: 'Tambah Jabatan', isActive: true },
   ];
 
   //node is always the root "Parent"
@@ -221,7 +225,11 @@ const RichObjectTreeView = () => {
   };
 
   const renderTree = (nodes) => (
-    <TreeItem key={nodes.id} nodeId={nodes.id} label={<LabelChild nodes={nodes} />}>
+    <TreeItem
+      key={nodes.id}
+      nodeId={nodes.id}
+      label={<LabelChild nodes={nodes} />}
+      disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}>
       {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
     </TreeItem>
   );
@@ -259,17 +267,27 @@ const RichObjectTreeView = () => {
 
   return (
     <>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-        <Box display="flex" style={{ cursor: 'pointer' }} onClick={() => router.push('/anggota?tab=jabatan')}>
-          <img src="/images/icons/arrow-left.svg" />
-          <Typography variant="h4" component="div">
+      <Head>
+        <title key="title">Hyppe-Console :: Add Jabatan</title>
+      </Head>
+      <Stack direction={'column'} spacing={2} mb={3}>
+        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/anggota?tab=jabatan')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
+          </Stack>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
             Kembali
           </Typography>
-        </Box>
-        <Box>
-          <PageContainer breadcrumbs={breadcrumbs} />
-        </Box>
+        </Stack>
       </Stack>
+
       <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={4}>
         <Box sx={{ width: 500 }}>
           <TextField
@@ -278,9 +296,9 @@ const RichObjectTreeView = () => {
             select
             label="Please select divisi"
             value={selectDivisi}
-            size="small"
             onChange={handleSelectGroup}
             variant="outlined"
+            disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}
             // helperText="Please select divisi"
           >
             {divisionSelectData?.data?.map((item) => (
@@ -294,13 +312,16 @@ const RichObjectTreeView = () => {
             id="outlined-basic"
             fullWidth
             label="Nama Jabatan"
-            size="small"
             variant="outlined"
             onChange={(e) => setNameGroup(e.target.value)}
+            disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}
           />
         </Box>
-        <Box color="rgba(0, 0, 0, 0.3)" sx={{ width: 400 }}>
-          <span>Contoh : Customer Care / Staff atau Customer Care / Manager atau Customer Care / Head </span>
+        <Box color="rgba(0, 0, 0, 0.3)" sx={{ width: 400 }} style={{ marginTop: 6 }}>
+          <span>
+            contoh : <strong>Customer Care / Staff</strong> atau <strong>Customer Care / Manager</strong> atau{' '}
+            <strong>Customer Care / Head</strong>
+          </span>
         </Box>
       </Stack>
       <TreeView
@@ -317,9 +338,9 @@ const RichObjectTreeView = () => {
       <Box sx={{ width: 100 }} mt={3}>
         <Button
           onClick={() => setOpenDialog(true)}
-          variant="outlined"
-          disabled={btnAdd}
-          style={btnAdd ? null : { background: '#AB22AF', color: '#FFFFFF', border: 'none' }}>
+          variant="contained"
+          color="primary"
+          disabled={btnAdd || !access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}>
           Tambah
         </Button>
       </Box>

@@ -13,7 +13,7 @@ const InsightComponent = ({ insight }) => {
       divider={<Divider orientation="vertical" flexItem />}>
       <Stack>
         <Typography component="div" variant="h1" align="center">
-          {formatNumber(insight.followers)}
+          {formatNumber(insight?.followers || 0)}
         </Typography>
         <Box component="span" fontSize={12} color="text.secondary" mt={1} textAlign="center">
           Pengikut
@@ -21,7 +21,7 @@ const InsightComponent = ({ insight }) => {
       </Stack>
       <Stack>
         <Typography component="div" variant="h1" align="center">
-          {formatNumber(insight.followings)}
+          {formatNumber(insight?.followings || 0)}
         </Typography>
         <Box component="span" fontSize={12} color="text.secondary" mt={1} textAlign="center">
           Mengikuti
@@ -29,7 +29,7 @@ const InsightComponent = ({ insight }) => {
       </Stack>
       <Stack>
         <Typography component="div" variant="h1" align="center">
-          {formatNumber(insight.totalFriends)}
+          {formatNumber(insight?.totalFriends || 0)}
         </Typography>
         <Box component="span" fontSize={12} color="text.secondary" mt={1} textAlign="center">
           Teman

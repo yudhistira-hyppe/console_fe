@@ -146,6 +146,7 @@ const DetailBandingAkun = () => {
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
   const [deleteTicket] = useDeleteTicketMutation();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailTicketQuery({
     postID: router.query?._id,
@@ -216,7 +217,9 @@ const DetailBandingAkun = () => {
           marginTop: 'auto',
         };
       default:
-        return {};
+        return {
+          width: 'fit-content',
+        };
     }
   };
 
@@ -263,7 +266,9 @@ const DetailBandingAkun = () => {
           height: 30,
         };
       default:
-        return {};
+        return {
+          width: 'fit-content',
+        };
     }
   };
 
@@ -706,7 +711,8 @@ const DetailBandingAkun = () => {
                   style={buttonStyle(detail?.data[0]?.reportStatusLast)}
                   onClick={handleToggle}
                   aria-haspopup="true"
-                  endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}>
+                  endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}
+                  disabled={!access.find((item) => item?.nameModule === 'help_appeal_users')?.acces?.updateAcces}>
                   {detail?.data[0]?.reportStatusLast === 'FLAGING'
                     ? 'Ditandai Sensitif'
                     : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'

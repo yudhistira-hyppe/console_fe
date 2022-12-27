@@ -151,8 +151,6 @@ const MonetizeVoucherComponent = () => {
     });
   };
 
-  console.log(filter);
-
   return (
     <>
       <PageContainer>

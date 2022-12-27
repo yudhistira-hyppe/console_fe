@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { Button, Pagination, Stack } from '@mui/material';
+import { Button, CircularProgress, Pagination, Stack } from '@mui/material';
 import { useState } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from '@mui/material/Table';
@@ -33,6 +33,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import { useGetAnggotaQuery, useDeleteAnggotaMutation, useUpdateStatusGroupUserMutation } from 'api/console/getUserHyppe';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
+import { Add } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -67,10 +68,10 @@ const PenggunaComp = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userSelectedEmail, setUserSelectedEmail] = useState('');
   const [jabatan, setJabatan] = useState('');
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const open = Boolean(anchorEl);
   const { data: dataAnggota, isFetching } = useGetAnggotaQuery(payload);
-  console.log('isFetching:', isFetching);
 
   const handeOpenMenu = (event, row) => {
     setUserSelectedEmail(row.email);
@@ -140,7 +141,7 @@ const PenggunaComp = () => {
     );
   };
 
-  const [deleteAnggota, {}] = useDeleteAnggotaMutation();
+  const [deleteAnggota] = useDeleteAnggotaMutation();
 
   const handleSelectedAction = (e, row) => {
     const { myValue } = e.currentTarget.dataset;
@@ -149,7 +150,8 @@ const PenggunaComp = () => {
     setAnchorEl(null);
   };
 
-  const [updateStatus, { isSuccess }] = useUpdateStatusGroupUserMutation();
+  const [updateStatus, { isLoading: loadingUpdate }] = useUpdateStatusGroupUserMutation();
+
   const handleChangeStatus = (row) => {
     const payload = {
       email: row?.email,
@@ -160,11 +162,10 @@ const PenggunaComp = () => {
 
   return (
     <>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+      <Stack direction="row" justifyContent="space-between" alignItems="center" margin="20px 0 24px">
         <Box style={{ background: 'rgba(255, 255, 255, 1)', width: '400px' }}>
           <TextField
             fullWidth
-            size="small"
             variant="outlined"
             label="Cari nama / email"
             onChange={(e) => {
@@ -174,23 +175,28 @@ const PenggunaComp = () => {
             onKeyPress={onEnterSearch}
             InputProps={{
               endAdornment: (
-                // <InputAdornment>
                 <IconButton>
                   <SearchIcon onClick={handleSearchIcon} />
                 </IconButton>
-                // </InputAdornment>
               ),
             }}
+            style={{ backgroundColor: 'transparent' }}
           />
         </Box>
-
-        {/* {isLoading ? <TableDataSpinner /> : 'sudah selesai loading'} */}
+        {/* <Button
+          variant="text"
+          color="secondary"
+          sx={{ '&:hover': { background: 'transparent' } }}
+          style={{ fontWeight: 'bold', fontFamily: 'Lato', height: 56, width: 100 }}
+          onClick={() => router.push('/anggota/add-member')}>
+          <Add style={{ fontSize: 16, marginRight: 5 }} /> Tambah
+        </Button> */}
       </Stack>
-      <TableContainer component={Paper} style={{ marginTop: '10px', minHeight: '400px' }}>
+      <TableContainer component={Paper} style={{ marginTop: '10px' }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
-            <TableRow>
-              <TableCell align="left">
+            <TableRow style={{ height: 65 }}>
+              <TableCell align="left" style={{ paddingLeft: 30 }}>
                 <TabelHeadLabel label="Nama" />
               </TableCell>
               <TableCell align="left">
@@ -202,63 +208,49 @@ const PenggunaComp = () => {
               <TableCell align="right">
                 <TabelHeadLabel label="Status" />
               </TableCell>
-              <TableCell align="left"></TableCell>
+              <TableCell align="right" style={{ paddingRight: 40 }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {isFetching && <TableDataSpinner center />}
+            {loadingUpdate && <TableDataSpinner center />}
 
-            {dataAnggota?.data?.map((row) => (
-              <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {row.username}
-                </TableCell>
-                <TableCell align="left">{row.email}</TableCell>
-                <TableCell align="left">{row.group ? row.group : 'kosong'}</TableCell>
-                <TableCell align="right">
-                  <Switch checked={row.status} onClick={() => handleChangeStatus(row)} />
-                </TableCell>
-                <TableCell align="left">
-                  {/* why i selected email when open icon? */}
-                  {/* i face problem when set the data payload (try it dude its weirdd) */}
-                  <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? 'long-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={(e) => handeOpenMenu(e, row)}>
-                    {/* <MoreVertIcon /> */}
-                    <img src="/images/icons/triple-dot.svg" />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    MenuListProps={{
-                      'aria-labelledby': 'long-button',
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleCloseMenu}
-                    PaperProps={{
-                      style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        width: '20ch',
-                        boxShadow: 'none',
-                        border: '1px solid rgba(224, 224, 224, 1)',
-                      },
-                    }}>
-                    {options.map((option) => (
-                      <MenuItem key={option} onClick={(e) => handleSelectedAction(e, row)} data-my-value={option.value}>
-                        <Box display="flex">
-                          {option.icon}
-                          <span style={{ marginLeft: '7px' }}>{option.title}</span>
-                        </Box>
-                      </MenuItem>
-                    ))}
-                  </Menu>
+            {isFetching ? (
+              <TableCell colSpan={8}>
+                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                  <CircularProgress color="secondary" />
+                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                </Stack>
+              </TableCell>
+            ) : dataAnggota?.data?.length >= 1 ? (
+              dataAnggota?.data?.map((row) => (
+                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                  <TableCell component="th" scope="row" style={{ paddingLeft: 30 }}>
+                    {row.fullName || '-'}
+                  </TableCell>
+                  <TableCell align="left">{row.email}</TableCell>
+                  <TableCell align="left">{row.group || '-'}</TableCell>
+                  <TableCell align="right">
+                    <Switch
+                      checked={row.status}
+                      color="primary"
+                      onClick={() => handleChangeStatus(row)}
+                      disabled={!access.find((item) => item?.nameModule === 'member_users')?.acces?.updateAcces}
+                    />
+                  </TableCell>
+                  <TableCell align="right" style={{ paddingRight: 40 }}>
+                    <IconButton onClick={() => router.push(`/anggota/edit-member/${row?.email}`)}>
+                      <img src="/images/icons/edit.svg" alt="icon edit" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  Nama / Email tidak ditemukan
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -318,9 +310,11 @@ const PenggunaComp = () => {
       )}
       {/* // this is only appear when openDialog true end */}
 
-      <div className="mt-6 flex flex-row justify-content-center">
-        <Pagination page={page} onChange={handlePagination} count={countPages} />
-      </div>
+      {dataAnggota?.data?.length >= 1 && !isFetching && (
+        <div className="mt-6 flex flex-row justify-content-center">
+          <Pagination page={page} onChange={handlePagination} count={countPages} />
+        </div>
+      )}
     </>
   );
 };

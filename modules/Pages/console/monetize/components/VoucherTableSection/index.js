@@ -121,15 +121,17 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
                       </TableCell>
                       <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {numberWithCommas(vc?.creditValue)} Kredit
+                          {numberWithCommas(vc?.creditValue || 0)} Kredit
                         </Typography>
-                        <Typography variant="body2" style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.6)' }}>
-                          + Bonus {numberWithCommas(vc?.creditPromo)} Kredit
-                        </Typography>
+                        {vc?.creditPromo && (
+                          <Typography variant="body2" style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.6)' }}>
+                            + Bonus {numberWithCommas(vc?.creditPromo || 0)} Kredit
+                          </Typography>
+                        )}
                       </TableCell>
                       <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          Rp {numberWithCommas(vc?.amount)}
+                          Rp {numberWithCommas(vc?.amount || 0)}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">

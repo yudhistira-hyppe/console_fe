@@ -48,6 +48,7 @@ const DetailPermohonanPremium = () => {
   const [selectedLampiran, setSelectedLampiran] = useState({});
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState({});
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailKYCQuery({ id: router.query?._id });
   const [approveKYC] = useApproveKYCMutation();
@@ -387,9 +388,13 @@ const DetailPermohonanPremium = () => {
                     name="name"
                     size="small"
                     placeholder="Masukan nama sesuai KTP anda"
+                    color="secondary"
                     value={inputValue.name}
                     onChange={handleInputChange}
-                    disabled={detail?.data[0]?.status !== 'BARU'}
+                    disabled={
+                      detail?.data[0]?.status !== 'BARU' ||
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
+                    }
                   />
                 </Stack>
                 <Stack direction="column" gap="5px">
@@ -399,9 +404,13 @@ const DetailPermohonanPremium = () => {
                     type="number"
                     size="small"
                     placeholder="Masukan nomor KTP"
+                    color="secondary"
                     value={inputValue.noKtp}
                     onChange={handleInputChange}
-                    disabled={detail?.data[0]?.status !== 'BARU'}
+                    disabled={
+                      detail?.data[0]?.status !== 'BARU' ||
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
+                    }
                   />
                 </Stack>
                 <Stack direction="column" gap="5px">
@@ -410,9 +419,13 @@ const DetailPermohonanPremium = () => {
                     name="gender"
                     size="small"
                     sx={{ width: 223 }}
+                    color="secondary"
                     value={inputValue.gender}
                     onChange={handleInputChange}
-                    disabled={detail?.data[0]?.status !== 'BARU'}
+                    disabled={
+                      detail?.data[0]?.status !== 'BARU' ||
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
+                    }
                     displayEmpty>
                     <MenuItem value="" disabled>
                       Pilih Jenis Kelamin
@@ -429,8 +442,13 @@ const DetailPermohonanPremium = () => {
                       onChange={(newValue) => {
                         setInputValue({ ...inputValue, dateBirth: newValue });
                       }}
-                      renderInput={(params) => <TextField size="small" placeholder="Pilih tanggal lahir" {...params} />}
-                      disabled={detail?.data[0]?.status !== 'BARU'}
+                      renderInput={(params) => (
+                        <TextField size="small" placeholder="Pilih tanggal lahir" color="secondary" {...params} />
+                      )}
+                      disabled={
+                        detail?.data[0]?.status !== 'BARU' ||
+                        !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
+                      }
                     />
                   </LocalizationProvider>
                 </Stack>
@@ -440,9 +458,13 @@ const DetailPermohonanPremium = () => {
                     name="placeBirth"
                     size="small"
                     placeholder="Masukan tempat lahir"
+                    color="secondary"
                     value={inputValue.placeBirth}
                     onChange={handleInputChange}
-                    disabled={detail?.data[0]?.status !== 'BARU'}
+                    disabled={
+                      detail?.data[0]?.status !== 'BARU' ||
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
+                    }
                   />
                 </Stack>
               </Stack>
@@ -481,7 +503,8 @@ const DetailPermohonanPremium = () => {
                       !inputValue.dateBirth ||
                       !inputValue.gender ||
                       !inputValue.noKtp ||
-                      !inputValue.placeBirth
+                      !inputValue.placeBirth ||
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
                     }>
                     Setujui
                   </Button>
@@ -494,7 +517,8 @@ const DetailPermohonanPremium = () => {
                       !inputValue.dateBirth ||
                       !inputValue.gender ||
                       !inputValue.noKtp ||
-                      !inputValue.placeBirth
+                      !inputValue.placeBirth ||
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
                     }>
                     Tolak
                   </Button>

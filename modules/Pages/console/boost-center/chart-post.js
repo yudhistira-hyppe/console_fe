@@ -41,7 +41,7 @@ const ChartPost = () => {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip wrapperStyle={{ zIndex: 100 }} />
             </PieChart>
             {showPercent && (
               <Stack direction="column" position="absolute" alignItems="center" top="70px" left="60px">

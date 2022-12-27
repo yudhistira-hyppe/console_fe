@@ -7,41 +7,123 @@ const SecureConsolePage = ({ children }) => {
   const { authUser, getAuthUser, isLoading } = useAuth();
   const [isRenderChildren, setIsRenderChildren] = useState(false);
 
+  const handleMenu = () => {
+    const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+    const accessModule = access.map((item) => item.nameModule);
+
+    if (router.pathname.includes('signin')) {
+      setIsRenderChildren(true);
+    } else if (router.pathname === '/' && !authUser) {
+      router.replace('/signin');
+    } else if (
+      router.pathname === '/' &&
+      authUser &&
+      (accessModule.includes('dashboard_active_user') ||
+        accessModule.includes('dashboard_total_post') ||
+        accessModule.includes('dashboard_total_income') ||
+        accessModule.includes('dashboard_voucher') ||
+        accessModule.includes('dashboard_activity') ||
+        accessModule.includes('dashboard_status_ownership'))
+    ) {
+      setIsRenderChildren(true);
+    } else if (
+      router.pathname.includes('help-center') &&
+      (accessModule.includes('help_consumer') ||
+        accessModule.includes('help_kyc') ||
+        accessModule.includes('help_bank') ||
+        accessModule.includes('help_konten') ||
+        accessModule.includes('help_appeal_konten') ||
+        accessModule.includes('help_fingerprint') ||
+        accessModule.includes('help_ads') ||
+        accessModule.includes('help_appeal_ads') ||
+        accessModule.includes('help_users') ||
+        accessModule.includes('help_appeal_users'))
+    ) {
+      setIsRenderChildren(true);
+    } else if (
+      router.pathname.includes('ads-center') &&
+      (accessModule.includes('ads_performance') ||
+        accessModule.includes('ads_demografis') ||
+        accessModule.includes('ads_table'))
+    ) {
+      setIsRenderChildren(true);
+    } else if (
+      router.pathname.includes('boost-center') &&
+      (accessModule.includes('boost_statistic') ||
+        accessModule.includes('boost_engagement') ||
+        accessModule.includes('boost_table'))
+    ) {
+      setIsRenderChildren(true);
+    } else if (
+      router.pathname.includes('database') &&
+      (accessModule.includes('database_account') ||
+        accessModule.includes('database_content') ||
+        accessModule.includes('database_music'))
+    ) {
+      setIsRenderChildren(true);
+    } else if (
+      router.pathname.includes('user-engagement') &&
+      (accessModule.includes('engagement_metrik') || accessModule.includes('engagement_trend'))
+    ) {
+      setIsRenderChildren(true);
+    } else if (
+      router.pathname.includes('monetize') &&
+      (accessModule.includes('monetize_dashboard') ||
+        accessModule.includes('monetize_voucher') ||
+        accessModule.includes('monetize_ownership') ||
+        accessModule.includes('monetize_buy_sell'))
+    ) {
+      setIsRenderChildren(true);
+    } else if (
+      router.pathname.includes('anggota') &&
+      (accessModule.includes('member_users') ||
+        accessModule.includes('member_position') ||
+        accessModule.includes('member_divistion'))
+    ) {
+      setIsRenderChildren(true);
+    } else {
+      setIsRenderChildren(false);
+      router.back();
+    }
+  };
+
   useEffect(() => {
     getAuthUser();
   }, [router]);
 
   useEffect(() => {
     if (!isLoading) {
-      if (!authUser && !router.asPath.includes('/signin') && router.asPath === '/') {
-        router.push('/signin');
-        return;
-      }
-      if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
-        router.push({ pathname: '/signin', query: { redirect: router.asPath } });
-        return;
-      }
-      if (
-        authUser &&
-        authUser.user.roles.includes('ROLE_SYSADMIN') &&
-        router.asPath.includes('/signin') &&
-        router.query.redirect
-      ) {
-        router.push(router.query.redirect);
-        return;
-      }
-      if (
-        authUser &&
-        authUser.user.roles.includes('ROLE_SYSADMIN') &&
-        router.asPath.includes('/signin') &&
-        !router.query.redirect
-      ) {
-        router.push('/');
-        return;
-      }
-      setIsRenderChildren(true);
+      setTimeout(() => {
+        if (!authUser && !router.asPath.includes('/signin') && router.asPath === '/') {
+          router.push('/signin');
+          return;
+        }
+        if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
+          router.push({ pathname: '/signin', query: { redirect: router.asPath } });
+          return;
+        }
+        if (
+          authUser &&
+          authUser.user.roles.includes('ROLE_ADMIN') &&
+          router.asPath.includes('/signin') &&
+          router.query.redirect
+        ) {
+          router.push(router.query.redirect);
+          return;
+        }
+        if (
+          authUser &&
+          authUser.user.roles.includes('ROLE_ADMIN') &&
+          router.asPath.includes('/signin') &&
+          !router.query.redirect
+        ) {
+          router.push('/');
+          return;
+        }
+        handleMenu();
+      }, 500);
     } else {
-      setIsRenderChildren(false);
+      handleMenu();
     }
   }, [isLoading, authUser]);
 

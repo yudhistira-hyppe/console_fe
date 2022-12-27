@@ -7,11 +7,13 @@ import DatabaseTabAccountComponent from './account';
 import DatabaseTabContentComponent from './content';
 import DatabaseTabMediaComponent from './media';
 import useStyles from './index.style';
+import Cookies from 'js-cookie';
 
 const DatabaseTabComponent = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const { tab } = props;
+  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const onTabChange = (_, selectedTab) => {
     router.replace(`/database/${selectedTab}`);
@@ -24,19 +26,31 @@ const DatabaseTabComponent = (props) => {
       </Head>
       <TabContext value={tab}>
         <TabList onChange={onTabChange} textColor="secondary" indicatorColor="secondary" style={{ marginTop: -20 }}>
-          <Tab className={classes.tab} label="Akun" value="account" />
-          <Tab className={classes.tab} label="Konten" value="content" />
-          <Tab className={classes.tab} label="Media" value="media" />
+          {access.map((item) => item?.nameModule).includes('database_account') && (
+            <Tab className={classes.tab} label="Akun" value="account" />
+          )}
+          {access.map((item) => item?.nameModule).includes('database_content') && (
+            <Tab className={classes.tab} label="Konten" value="content" />
+          )}
+          {access.map((item) => item?.nameModule).includes('database_music') && (
+            <Tab className={classes.tab} label="Media" value="media" />
+          )}
         </TabList>
-        <TabPanel className={classes.tabPanel} value="account">
-          <DatabaseTabAccountComponent />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="content">
-          <DatabaseTabContentComponent />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="media">
-          <DatabaseTabMediaComponent />
-        </TabPanel>
+        {access.map((item) => item?.nameModule).includes('database_account') && (
+          <TabPanel className={classes.tabPanel} value="account">
+            <DatabaseTabAccountComponent />
+          </TabPanel>
+        )}
+        {access.map((item) => item?.nameModule).includes('database_content') && (
+          <TabPanel className={classes.tabPanel} value="content">
+            <DatabaseTabContentComponent />
+          </TabPanel>
+        )}
+        {access.map((item) => item?.nameModule).includes('database_music') && (
+          <TabPanel className={classes.tabPanel} value="media">
+            <DatabaseTabMediaComponent />
+          </TabPanel>
+        )}
       </TabContext>
     </>
   );

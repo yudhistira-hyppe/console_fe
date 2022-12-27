@@ -24,6 +24,9 @@ export const createCookies = (keyAndValueCookies) => {
 
 export const deleteAllCookies = () => {
   document.cookie.split(';').forEach((c) => {
-    document.cookie = c.replace(/^ +/, '').replace(/=.*/, `=; expires=${new Date().toUTCString()}; SameSite=None; Secure`);
+    document.cookie = c
+      .trim()
+      .replace(/^ +/, '')
+      .replace(/=.*/, `=; expires=${new Date().toUTCString()}; SameSite=None; Secure`);
   });
 };

@@ -26,6 +26,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { LoadingButton } from '@mui/lab';
 import { useGetDivisiQuery } from 'api/console/divisi';
+import Cookies from 'js-cookie';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -79,6 +80,7 @@ const DetailBantuanPengguna = () => {
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [replyTicket] = useReplyTicketMutation();
   const { authUser } = useAuth();
+  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
 
   const getMediaUri = (urlEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -391,7 +393,8 @@ const DetailBantuanPengguna = () => {
                           variant="contained"
                           color="primary"
                           component="label"
-                          onChange={(e) => setBody({ ...body, file: e.target.files })}>
+                          onChange={(e) => setBody({ ...body, file: e.target.files })}
+                          disabled={!access.find((item) => item?.nameModule === 'help_consumer')?.acces?.createAcces}>
                           Upload File
                           <input hidden accept="image/*" multiple type="file" />
                         </Button>
@@ -424,7 +427,8 @@ const DetailBantuanPengguna = () => {
                 style={{ backgroundColor: buttonColor.background, color: '#fff' }}
                 onClick={handleToggle}
                 aria-haspopup="true"
-                endIcon={<KeyboardArrowDown />}>
+                endIcon={<KeyboardArrowDown />}
+                disabled={!access.find((item) => item?.nameModule === 'help_consumer')?.acces?.updateAcces}>
                 {ticketData?.data[0]?.status === 'new' && 'Baru'}
                 {ticketData?.data[0]?.status === 'onprogress' && 'Dalam Proses'}
                 {ticketData?.data[0]?.status === 'close' && 'Selesai'}
@@ -522,7 +526,8 @@ const DetailBantuanPengguna = () => {
                         onChange={(e) => {
                           setDivisiID(e.target.value);
                           setUserAssign('');
-                        }}>
+                        }}
+                        disabled={!access.find((item) => item?.nameModule === 'help_consumer')?.acces?.updateAcces}>
                         <MenuItem value="">Pilih Divisi</MenuItem>
                         {listDivisi?.data?.map((item, key) => (
                           <MenuItem key={key} value={item?._id}>
@@ -543,7 +548,9 @@ const DetailBantuanPengguna = () => {
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
                         style={{ width: '100%', height: 35 }}
-                        disabled={divisiID === ''}
+                        disabled={
+                          divisiID === '' || !access.find((item) => item?.nameModule === 'help_consumer')?.acces?.updateAcces
+                        }
                         onChange={(e) => setUserAssign(e.target.value)}>
                         {divisiID !== '' && userDivisi?.data?.length > 1 && (
                           <MenuItem value={''} disabled>
@@ -626,7 +633,9 @@ const DetailBantuanPengguna = () => {
                   variant="contained"
                   color="secondary"
                   fullWidth
-                  disabled={userAssign === ''}
+                  disabled={
+                    userAssign === '' || !access.find((item) => item?.nameModule === 'help_consumer')?.acces?.updateAcces
+                  }
                   onClick={() => handleUpdateTicket()}>
                   Submit
                 </LoadingButton>

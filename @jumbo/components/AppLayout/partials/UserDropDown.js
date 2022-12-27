@@ -74,14 +74,14 @@ const UserDropDown = () => {
       });
     }
     if (item.label === 'Account') {
-      router.push('/profile-basic');
+      router.push('/profile-console');
     }
   };
 
   return (
     <Box className={clsx(classes.profileRoot, 'Cmt-profile-pic')}>
       <Stack direction="row" alignItems="center">
-        <Chip label={authUser.user.roles[0] === 'ROLE_SYSADMIN' ? 'Administrator' : 'User'} className={classes.chipRole} />
+        <Chip label={authUser.user.roles.includes('ROLE_ADMIN') ? 'Administrator' : 'User'} className={classes.chipRole} />
       </Stack>
       <CmtDropdownMenu
         onItemClick={onItemClick}

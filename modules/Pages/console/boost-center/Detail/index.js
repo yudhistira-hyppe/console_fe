@@ -9,10 +9,42 @@ import { Typography } from '@material-ui/core';
 import GridContainer from '@jumbo/components/GridContainer';
 import PostDetail from './post-detail';
 import PostStatus from './post-status';
+import Engagement from './Engagement';
+import Comment from './Comment';
+import CardWithIndicator from './card-with-indicator';
+import Interest from './interest';
 
 const breadcrumbs = [
   { label: 'Boost Post Center', link: '/boost-center' },
   { label: 'Rincian Boost Post', isActive: true },
+];
+
+const dummyData = [
+  {
+    label: '<14 tahun',
+    rate: 10,
+    value: 10,
+  },
+  {
+    label: '14 - 24 tahun',
+    rate: 70,
+    value: 70,
+  },
+  {
+    label: '25 - 34 tahun',
+    rate: 20,
+    value: 20,
+  },
+  {
+    label: '35 - 44 tahun',
+    rate: 0,
+    value: 0,
+  },
+  {
+    label: 'Indonesia',
+    rate: 0,
+    value: 0,
+  },
 ];
 
 const DetailBoostCenter = () => {
@@ -46,6 +78,24 @@ const DetailBoostCenter = () => {
           </Grid>
           <Grid item xs={12} sm={8}>
             <PostStatus />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Engagement />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Comment />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <CardWithIndicator title="Rentang Umur Penonton" data={dummyData} />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <CardWithIndicator title="Jenis Kelamin Penonton" data={dummyData} />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <CardWithIndicator title="Wilayah Penonton" data={dummyData} />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Interest />
           </Grid>
         </GridContainer>
       </PageContainer>
