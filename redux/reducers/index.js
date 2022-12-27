@@ -23,6 +23,7 @@ import {
   transactionAPI,
   kontenApi,
   mediaApi,
+  contentApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -69,5 +70,6 @@ export default combineReducers({
   [transactionAPI.reducerPath]: transactionAPI.reducer,
   [adAPI.reducerPath]: adAPI.reducer,
   [mediaApi.reducerPath]: mediaApi.reducer,
+  [contentApi.reducerPath]: contentApi.reducer,
   [kycApi.reducerPath]: kycApi.reducer,
 });
