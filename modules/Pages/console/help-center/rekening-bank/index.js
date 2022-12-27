@@ -20,14 +20,13 @@ const RekeningBank = () => {
     page: 0,
     limit: 10,
     descending: 'true',
-    // startdate: '',
-    // enddate: '',
     search: '',
     range: '',
     from: null,
     to: null,
     status: [],
     reason: [],
+    createdAt: [null, null],
   });
   const router = useRouter();
 
@@ -49,7 +48,13 @@ const RekeningBank = () => {
     });
   };
 
-  const handleSearchChange = (kind, value) => {};
+  const handleSearchChange = (kind, value) => {
+    setFilter((prevVal) => {
+      if (kind === 'createdAt') {
+        return { ...prevVal, createdAt: value, page: 0 };
+      }
+    });
+  };
 
   return (
     <>

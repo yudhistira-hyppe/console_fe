@@ -11,7 +11,7 @@ import TableSection from './TableSection';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
-  { label: 'Permohonan Akun Premium', isActive: true },
+  { label: 'Pelaporan Akun', isActive: true },
 ];
 
 const PelaporanAkun = () => {
