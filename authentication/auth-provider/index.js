@@ -39,14 +39,14 @@ export const useProvideAuth = () => {
 
   const setUserAccess = (id) => {
     userAccess(id).then((res) => {
-      sessionStorage.setItem('access', JSON.stringify(res?.data?.data));
+      localStorage.setItem('access', JSON.stringify(res?.data?.data));
     });
   };
 
   const removeAuth = () => {
     deleteAllCookies();
     setAuthUser(null);
-    sessionStorage.clear('access');
+    localStorage.clear('access');
   };
 
   const getAuthUser = () => {

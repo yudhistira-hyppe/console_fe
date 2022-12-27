@@ -8,7 +8,7 @@ const SecureConsolePage = ({ children }) => {
   const [isRenderChildren, setIsRenderChildren] = useState(false);
 
   const handleMenu = () => {
-    const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+    const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
     const accessModule = access.map((item) => item.nameModule);
 
     if (router.pathname.includes('signin')) {

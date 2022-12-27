@@ -51,7 +51,7 @@ const ConsoleDashboardComponent = () => {
   // const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
   const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery(formattedTodayDate);
   const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
-  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   // const countTotal = (data, key) => {
   //   let result = 0;

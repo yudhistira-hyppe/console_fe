@@ -48,7 +48,7 @@ const DetailPermohonanPremium = () => {
   const [selectedLampiran, setSelectedLampiran] = useState({});
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState({});
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailKYCQuery({ id: router.query?._id });
   const [approveKYC] = useApproveKYCMutation();

@@ -13,7 +13,7 @@ const DatabaseTabComponent = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const { tab } = props;
-  const access =sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const onTabChange = (_, selectedTab) => {
     router.replace(`/database/${selectedTab}`);

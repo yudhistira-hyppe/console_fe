@@ -51,7 +51,7 @@ const DetailRekeningBank = () => {
     lampiran: false,
   });
   const [selectedLampiran, setSelectedLampiran] = useState({});
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   return (
     <>

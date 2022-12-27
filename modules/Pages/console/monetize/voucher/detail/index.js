@@ -100,7 +100,7 @@ const VoucherFormComponent = ({ data }) => {
   const [updateVoucher] = useUpdateVoucherMutation();
   const router = useRouter();
   const classes = useStyles();
-  const access = sessionStorage.getItem('access') ? JSON.parse(sessionStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const onExpChange = (event) => {
     setVal((prevVal) => {
