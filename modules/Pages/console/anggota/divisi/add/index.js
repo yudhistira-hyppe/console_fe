@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
+import { toast, Toaster } from 'react-hot-toast';
+import { LoadingButton } from '@mui/lab';
 
 const addDivisi = () => {
   const router = useRouter();
@@ -22,17 +24,18 @@ const addDivisi = () => {
     { label: 'Tambah Divisi', isActive: true },
   ];
 
-  const [createDivisi, { isSuccess }] = useCreateDivisiMutation();
+  const [createDivisi, { isLoading }] = useCreateDivisiMutation();
 
   const addDivisi = async () => {
-    createDivisi(data);
+    createDivisi(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else {
+        router.replace('/anggota?tab=divisi');
+        toast.success('Berhasil membuat divisi', { duration: 3000 });
+      }
+    });
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      window.location.href = `/anggota?tab=divisi&created=${isSuccess}`;
-    }
-  }, [isSuccess]);
 
   useEffect(() => {
     if (!data.nameDivision) setIsBtnDisabled(true);
@@ -43,6 +46,7 @@ const addDivisi = () => {
 
   return (
     <>
+      <Toaster />
       <Head>
         <title key="title">Hyppe-Console :: Add Divisi</title>
       </Head>
@@ -97,13 +101,14 @@ const addDivisi = () => {
           disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.createAcces}
         />
         <Box sx={{ width: 100 }} mt={3}>
-          <Button
+          <LoadingButton
+            loading={isLoading}
             onClick={addDivisi}
             disabled={isBtnDisabled || !access.find((item) => item?.nameModule === 'member_divistion')?.acces?.createAcces}
             variant="contained"
             color="secondary">
             Tambah
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </>

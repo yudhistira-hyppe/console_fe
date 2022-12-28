@@ -17,20 +17,18 @@ import {
   DialogContent,
   Slide,
 } from '@material-ui/core';
-import {
-  useGetModuleQuery,
-  useCreateModuleMutation,
-  useUpdateModuleMutation,
-  useGetSingleGroupQuery,
-} from 'api/console/module';
+import { useGetModuleQuery } from 'api/console/module';
 import { Stack } from '@mui/system';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
 import { useGetDivisiQuery } from 'api/console/divisi';
-import { useGetGroupQuery } from 'api/console/group';
+import { useGetGroupQuery, useGetSingleGroupQuery, useUpdateModuleMutation } from 'api/console/group';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import { LoadingButton } from '@mui/lab';
+import { toast, Toaster } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -49,8 +47,6 @@ const RichObjectTreeView = () => {
   const router = useRouter();
   const [selected, setSelected] = React.useState([]);
   const [dataselected, setdataselected] = React.useState([]);
-  const [selectDivisi, setSelectDivisi] = React.useState('');
-  const [nameGroup, setNameGroup] = React.useState('');
   const { data: getModule } = useGetModuleQuery();
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
@@ -190,14 +186,14 @@ const RichObjectTreeView = () => {
 
     const finalObject = {
       _id: router.query.id,
-      nameGroup: nameGroup,
-      divisionId: selectDivisi,
+      nameGroup: dataselected.nameGroup,
+      divisionId: dataselected.divisionId,
       desc: 'test group',
       module: resultData,
     };
 
     setSelected(array);
-    if (nameGroup && selectDivisi) {
+    if (dataselected.nameGroup && dataselected.divisionId) {
       setdataselected(finalObject);
     }
   };
@@ -208,7 +204,18 @@ const RichObjectTreeView = () => {
       <>
         {nodes.name === 'root' ? (
           // prevent root treeView without checkbox
-          'Buka Module'
+          <FormControlLabel
+            control={
+              <Checkbox
+                //checked={selected.some((item) => item === nodes.id)}
+                checked={selected.some((item) => item === nodes.id)}
+                onChange={(event) => getOnChangeTreeView(event.currentTarget.checked, nodes)}
+                className={classes.checkbox}
+              />
+            }
+            label="Module Akses"
+            key={nodes.id}
+          />
         ) : (
           <FormControlLabel
             control={
@@ -237,22 +244,19 @@ const RichObjectTreeView = () => {
     </TreeItem>
   );
 
-  const handleSelectGroup = (event) => {
-    setSelectDivisi(event.target.value);
-  };
-
-  const [updateModule, { isSuccess, isError }] = useUpdateModuleMutation();
-  console.log('isError:', isError);
-  console.log('isSuccess:', isSuccess);
-
-  useEffect(() => {
-    if (isSuccess) router.replace('/anggota?tab=jabatan');
-    if (isError) alert('error bang');
-  }, [isSuccess, isError]);
+  const [updateModule, { isLoading }] = useUpdateModuleMutation();
 
   const handleUpdateModule = () => {
-    updateModule(dataselected);
     setOpenDialog(false);
+    updateModule(dataselected).then((res) => {
+      console.log(res);
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else {
+        router.replace('/anggota?tab=jabatan');
+        toast.success('berhasil memperbarui jabatan', { duration: 3000 });
+      }
+    });
   };
 
   const payloadDivisi = {
@@ -265,18 +269,32 @@ const RichObjectTreeView = () => {
   const [btnAdd, setBtnAdd] = React.useState(false);
 
   useEffect(() => {
-    if (selectDivisi && nameGroup && dataselected?.module?.length > 0) {
+    if (dataselected.divisionId && dataselected.nameGroup) {
       setBtnAdd(false);
     } else {
       setBtnAdd(true);
     }
-  }, [dataselected, selectDivisi, nameGroup]);
+  }, [dataselected]);
 
-  const { data: getSingleGroup } = useGetSingleGroupQuery(router.query.id);
+  const { data: getSingleGroup, isFetching: loadingGroup } = useGetSingleGroupQuery(router.query.id);
 
   useEffect(() => {
-    setSelectDivisi(getSingleGroup?.data[0]?.divisionId);
-    setNameGroup(getSingleGroup?.data[0]?.nameGroup);
+    setdataselected({
+      _id: router.query.id,
+      nameGroup: getSingleGroup?.data[0]?.nameGroup,
+      divisionId: getSingleGroup?.data[0]?.divisionId,
+      desc: 'test group',
+      module: getSingleGroup?.data[0]?.data?.map((item) => {
+        return {
+          module: item?.id,
+          desc: 'test group',
+          createAcces: item?.createAcces || undefined,
+          updateAcces: item?.updateAcces || undefined,
+          viewAcces: item?.viewAcces || undefined,
+          deleteAcces: item?.deleteAcces || undefined,
+        };
+      }),
+    });
 
     let array_existing = [];
     for (let i = 0; i < getSingleGroup?.data[0]?.data.length; i++) {
@@ -295,7 +313,6 @@ const RichObjectTreeView = () => {
       }
     }
     setSelected(array_existing);
-    setdataselected(array_existing);
   }, [getSingleGroup]);
 
   return (
@@ -321,64 +338,81 @@ const RichObjectTreeView = () => {
         </Stack>
       </Stack>
 
-      <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={4}>
-        <Box sx={{ width: 500 }}>
-          <TextField
-            fullWidth
-            id="outlined-select-currency"
-            select
-            label="Please select divisi"
-            value={selectDivisi}
-            onChange={handleSelectGroup}
-            variant="outlined"
-            disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.updateAcces}
-            // helperText="Please select divisi"
-          >
-            {divisionSelectData?.data?.map((item) => (
-              <MenuItem key={item?._id} value={item?._id}>
-                {item?.nameDivision}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            style={{ marginTop: '10px' }}
-            id="outlined-basic"
-            fullWidth
-            label="Nama Group"
-            variant="outlined"
-            value={nameGroup}
-            onChange={(e) => setNameGroup(e.target.value)}
-            disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.updateAcces}
-          />
-        </Box>
-        <Box color="rgba(0, 0, 0, 0.3)" sx={{ width: 400 }} style={{ marginTop: 6 }}>
-          <span>
-            contoh : <strong>Customer Care / Staff</strong> atau <strong>Customer Care / Manager</strong> atau{' '}
-            <strong>Customer Care / Head</strong>
-          </span>
-        </Box>
-      </Stack>
-      <TreeView
-        // it will expanded if you put teh id of node below
-        defaultExpanded={['0']}
-        style={{ marginTop: '20px' }}
-        aria-label="rich object"
-        defaultCollapseIcon={<img src="/images/icons/minus-checkbox.svg" />}
-        defaultExpandIcon={<img src="/images/icons/plus-checkbox.svg" />}
-        sx={{ height: 110, flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }}>
-        {renderTree(dataTreeViews)}
-      </TreeView>
-      <Divider />
+      {loadingGroup ? (
+        <PageLoader />
+      ) : (
+        <>
+          <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={4}>
+            <Box sx={{ width: 500 }}>
+              {dataselected.divisionId && (
+                <TextField
+                  fullWidth
+                  id="outlined-select-currency"
+                  select
+                  value={dataselected.divisionId}
+                  onChange={(e) =>
+                    setdataselected((prev) => {
+                      return { ...prev, divisionId: e.target.value };
+                    })
+                  }
+                  variant="outlined"
+                  disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.updateAcces}
+                  // helperText="Please select divisi"
+                >
+                  {divisionSelectData?.data?.map((item) => (
+                    <MenuItem key={item?._id} value={item?._id}>
+                      {item?.nameDivision}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+              <TextField
+                style={{ marginTop: '10px' }}
+                id="outlined-basic"
+                fullWidth
+                variant="outlined"
+                value={dataselected.nameGroup}
+                onChange={(e) =>
+                  setdataselected((prev) => {
+                    return { ...prev, nameGroup: e.target.value };
+                  })
+                }
+                disabled={!access.find((item) => item?.nameModule === 'member_position')?.acces?.updateAcces}
+              />
+            </Box>
+            <Box color="rgba(0, 0, 0, 0.3)" sx={{ width: 400 }} style={{ marginTop: 6 }}>
+              <span>
+                contoh : <strong>Customer Care / Staff</strong> atau <strong>Customer Care / Manager</strong> atau{' '}
+                <strong>Customer Care / Head</strong>
+              </span>
+            </Box>
+          </Stack>
 
-      <Box sx={{ width: 100 }} mt={3}>
-        <Button
-          onClick={() => setOpenDialog(true)}
-          variant="contained"
-          color="primary"
-          disabled={btnAdd || !access.find((item) => item?.nameModule === 'member_position')?.acces?.updateAcces}>
-          Ubah
-        </Button>
-      </Box>
+          <TreeView
+            // it will expanded if you put teh id of node below
+            defaultExpanded={['0']}
+            style={{ marginTop: '20px' }}
+            aria-label="rich object"
+            defaultCollapseIcon={<img src="/images/icons/minus-checkbox.svg" />}
+            defaultExpandIcon={<img src="/images/icons/plus-checkbox.svg" />}
+            sx={{ height: 110, flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }}>
+            {renderTree(dataTreeViews)}
+          </TreeView>
+
+          <Divider />
+
+          <Box sx={{ width: 100 }} mt={3}>
+            <LoadingButton
+              loading={isLoading}
+              onClick={() => setOpenDialog(true)}
+              variant="contained"
+              color="secondary"
+              disabled={btnAdd || !access.find((item) => item?.nameModule === 'member_position')?.acces?.updateAcces}>
+              Ubah
+            </LoadingButton>
+          </Box>
+        </>
+      )}
 
       {openDialog && (
         <Dialog
@@ -431,6 +465,7 @@ const RichObjectTreeView = () => {
           </DialogContent>
         </Dialog>
       )}
+      <Toaster />
     </>
   );
 };

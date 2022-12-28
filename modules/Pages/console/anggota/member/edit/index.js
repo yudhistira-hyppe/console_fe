@@ -54,10 +54,10 @@ const AddMember = () => {
     updateUser(data).then((res) => {
       console.log(res);
       if (res?.error) {
-        toast.error(res?.error?.data?.message);
+        toast.error(res?.error?.data?.message, { duration: 3000 });
       } else if (res?.data) {
         router.replace('/anggota?tab=pengguna');
-        toast.success('Berhasil mengubah jabatan pengguna');
+        toast.success('berhasil memperbarui jabatan pengguna', { duration: 3000 });
       }
     });
   };

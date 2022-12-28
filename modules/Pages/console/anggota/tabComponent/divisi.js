@@ -22,6 +22,7 @@ import Link from 'next/link';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 import { useGetDivisiQuery, useDeleteDivisiMutation } from 'api/console/divisi';
 import { Add } from '@material-ui/icons';
+import { toast, Toaster } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -128,7 +129,7 @@ const Position = () => {
     setCountPages(Math.ceil(count));
   });
 
-  const [deleteDivisi, { isError, isSuccess }] = useDeleteDivisiMutation();
+  const [deleteDivisi] = useDeleteDivisiMutation();
 
   const handlePagination = (e, value) => {
     setPage(value);
@@ -141,11 +142,19 @@ const Position = () => {
   };
 
   const handleDeleteDivisi = () => {
-    deleteDivisi(id);
+    deleteDivisi(id).then((res) => {
+      console.log(res);
+      if (res?.error) {
+        toast.error('Gagal menghapus divisi yang sedang digunakan', { duration: 3000 });
+      } else {
+        toast.success('Berhasil menghapus divisi', { duration: 3000 });
+      }
+    });
     setOpenDialog(false);
   };
 
   const handleMenuTable = (option) => {
+    setAnchorEl(null);
     if (option.title === 'Hapus') {
       setOpenDialog(true);
     }
@@ -349,6 +358,7 @@ const Position = () => {
           <Pagination page={page} onChange={handlePagination} count={countPages} />
         </div>
       )}
+      <Toaster />
     </>
   );
 };

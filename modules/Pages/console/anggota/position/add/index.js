@@ -17,15 +17,17 @@ import {
   DialogContent,
   Slide,
 } from '@material-ui/core';
-import { useGetModuleQuery, useCreateModuleMutation } from 'api/console/module';
+import { useGetModuleQuery } from 'api/console/module';
 import { Stack } from '@mui/system';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { useRouter } from 'next/router';
 import { useGetDivisiQuery } from 'api/console/divisi';
-import { useGetGroupQuery } from 'api/console/group';
+import { useCreateModuleMutation } from 'api/console/group';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
+import { LoadingButton } from '@mui/lab';
+import { toast, Toaster } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -204,8 +206,18 @@ const RichObjectTreeView = () => {
     return (
       <>
         {nodes.name === 'root' ? (
-          // prevent root treeView without checkbox
-          'Buka Module'
+          <FormControlLabel
+            control={
+              <Checkbox
+                //checked={selected.some((item) => item === nodes.id)}
+                checked={selected.some((item) => item === nodes.id)}
+                onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
+                className={classes.checkbox}
+              />
+            }
+            label="Module Akses"
+            key={nodes.id}
+          />
         ) : (
           <FormControlLabel
             control={
@@ -238,16 +250,19 @@ const RichObjectTreeView = () => {
     setSelectDivisi(event.target.value);
   };
 
-  const [createGroup, { isSuccess, isError }] = useCreateModuleMutation();
+  const [createGroup, { isLoading }] = useCreateModuleMutation();
 
   const handleCreate = () => {
-    createGroup(dataselected);
+    createGroup(dataselected).then((res) => {
+      console.log(res);
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else {
+        router.replace('/anggota?tab=jabatan');
+        toast.success('Berhasil membuat jabatan', { duration: 3000 });
+      }
+    });
   };
-
-  useEffect(() => {
-    if (isSuccess) window.location.href = `/anggota?tab=jabatan&created=${isSuccess}`;
-    if (isError) alert('error bang');
-  }, [isSuccess, isError]);
 
   const payloadDivisi = {
     skip: 0,
@@ -336,13 +351,14 @@ const RichObjectTreeView = () => {
       <Divider />
 
       <Box sx={{ width: 100 }} mt={3}>
-        <Button
+        <LoadingButton
+          loading={isLoading}
           onClick={() => setOpenDialog(true)}
           variant="contained"
-          color="primary"
+          color="secondary"
           disabled={btnAdd || !access.find((item) => item?.nameModule === 'member_position')?.acces?.createAcces}>
           Tambah
-        </Button>
+        </LoadingButton>
       </Box>
 
       {openDialog && (
@@ -397,6 +413,7 @@ const RichObjectTreeView = () => {
           </DialogContent>
         </Dialog>
       )}
+      <Toaster />
     </>
   );
 };

@@ -13,6 +13,29 @@ export const group = createApi({
       }),
       providesTags: ['group'],
     }),
+    getSingleGroup: build.query({
+      query: (id) => ({
+        url: `/group/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['group'],
+    }),
+    updateModule: build.mutation({
+      query: (data) => ({
+        url: `/groupmodule/groupupdate`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['group'],
+    }),
+    createModule: build.mutation({
+      query: (data) => ({
+        url: `/groupmodule/groupcreate`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['group'],
+    }),
     deleteGroup: build.mutation({
       query: (id) => ({
         url: `/group/delete?id=${id}`,
@@ -23,4 +46,10 @@ export const group = createApi({
   }),
 });
 
-export const { useGetGroupQuery, useDeleteGroupMutation } = group;
+export const {
+  useGetGroupQuery,
+  useGetSingleGroupQuery,
+  useUpdateModuleMutation,
+  useCreateModuleMutation,
+  useDeleteGroupMutation,
+} = group;

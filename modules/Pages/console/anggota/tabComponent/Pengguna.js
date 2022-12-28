@@ -158,7 +158,7 @@ const PenggunaComp = () => {
       email: row?.email,
       status: !row?.status,
     };
-    updateStatus(payload).then(() => toast.success('Berhasil mengubah status pengguna', { duration: 3000 }));
+    updateStatus(payload).then(() => toast.success('berhasil mengubah status pengguna', { duration: 3000 }));
   };
 
   return (
