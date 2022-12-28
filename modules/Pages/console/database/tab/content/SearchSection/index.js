@@ -55,6 +55,10 @@ const SearchSection = ({ filter, handleChange }) => {
 
   const { data: interests, isFetching: loadingInterest } = useGetInterestContentQuery();
 
+  const handlePress = (e) => {
+    console.log(e);
+  };
+
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
@@ -363,6 +367,14 @@ const SearchSection = ({ filter, handleChange }) => {
                 onChange={(e) => handleChange('min_price', e.target.value)}
                 autoComplete="off"
                 color="secondary"
+                inputProps={{
+                  min: 0,
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
               />
               <DelayedTextField
                 fullWidth
@@ -373,6 +385,14 @@ const SearchSection = ({ filter, handleChange }) => {
                 onChange={(e) => handleChange('max_price', e.target.value)}
                 autoComplete="off"
                 color="secondary"
+                inputProps={{
+                  min: 0,
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
               />
             </Stack>
           </AccordionDetails>
