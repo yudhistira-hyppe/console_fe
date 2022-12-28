@@ -309,7 +309,7 @@ const SearchSection = ({ filter, handleChange }) => {
               <Typography>Loading data...</Typography>
             ) : (
               <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
-                {interests.map((item, key) => (
+                {interests?.map((item, key) => (
                   <FormControlLabel
                     key={key}
                     label={item?.interestName || '-'}
@@ -318,7 +318,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       <Checkbox
                         defaultChecked={false}
                         color="secondary"
-                        checked={filter.category.map((item) => item?.name).includes(item?.interestName)}
+                        checked={filter.category?.map((item) => item?.name).includes(item?.interestName)}
                       />
                     }
                   />

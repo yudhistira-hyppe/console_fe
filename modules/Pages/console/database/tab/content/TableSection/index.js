@@ -204,7 +204,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <TableCell align="left">
                     <Typography
                       variant="body1"
-                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 60, overflow: 'hidden' }}>
+                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 90, overflow: 'hidden' }}>
                       Rp {numberWithCommas(item?.saleAmount || 0)}
                     </Typography>
                   </TableCell>
