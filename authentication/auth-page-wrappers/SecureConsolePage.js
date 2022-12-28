@@ -83,7 +83,7 @@ const SecureConsolePage = ({ children }) => {
       setIsRenderChildren(true);
     } else {
       setIsRenderChildren(false);
-      router.back();
+      router.replace('/');
     }
   };
 
