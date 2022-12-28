@@ -180,7 +180,13 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <TableCell align="left">
                     <Typography
                       variant="body1"
-                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 70, overflow: 'hidden' }}
+                      style={{
+                        fontSize: '12px',
+                        textOverflow: 'ellipsis',
+                        width: 70,
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                      }}
                       title={item?.kategori?.map((item) => item?.interestName).join(', ')}>
                       {item?.kategori?.map((item) => item?.interestName).join(', ') || '-'}
                     </Typography>

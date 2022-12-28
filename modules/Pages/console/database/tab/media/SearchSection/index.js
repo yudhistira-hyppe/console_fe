@@ -48,13 +48,6 @@ const SearchSection = ({ filter, handleChange }) => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setValue([
-      {
-        startDate: new Date(),
-        endDate: new Date(),
-        key: 'selection',
-      },
-    ]);
   };
 
   const handleClose = () => {
