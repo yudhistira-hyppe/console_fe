@@ -21,11 +21,12 @@ const SearchSection = ({ filter, handleChange }) => {
   const [value, setValue] = useState([
     {
       startDate: new Date(),
-      endDate: null,
+      endDate: new Date(),
       key: 'selection',
     },
   ]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isDate, setDate] = useState(false);
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
 
   useEffect(() => {
@@ -33,33 +34,30 @@ const SearchSection = ({ filter, handleChange }) => {
       setValue([
         {
           startDate: new Date(),
-          endDate: null,
+          endDate: new Date(),
           key: 'selection',
         },
       ]);
+      setDate(false);
     }
   }, [filter.createdAt]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setValue([
-      {
-        startDate: new Date(),
-        endDate: null,
-        key: 'selection',
-      },
-    ]);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    handleChange('createdAt', [null, null]);
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
   const { data: interests, isFetching: loadingInterest } = useGetInterestContentQuery();
+
+  const handlePress = (e) => {
+    console.log(e);
+  };
 
   return (
     <>
@@ -182,7 +180,7 @@ const SearchSection = ({ filter, handleChange }) => {
             <Stack direction="row" alignItems="center" spacing={1}>
               <TextField
                 value={
-                  value[0]?.endDate
+                  isDate
                     ? `${moment(value[0]?.startDate).format('DD/MM/YYYY')} - ${moment(value[0]?.endDate).format(
                         'DD/MM/YYYY',
                       )}`
@@ -200,17 +198,18 @@ const SearchSection = ({ filter, handleChange }) => {
                   ),
                 }}
               />
-              {value[0]?.endDate && (
+              {isDate && (
                 <IconButton
                   style={{ height: 30, width: 30 }}
                   onClick={() => {
                     setValue([
                       {
                         startDate: new Date(),
-                        endDate: null,
+                        endDate: new Date(),
                         key: 'selection',
                       },
                     ]);
+                    setDate(false);
                     handleChange('createdAt', [null, null]);
                   }}>
                   <RemoveCircleOutline color="primary" />
@@ -234,11 +233,11 @@ const SearchSection = ({ filter, handleChange }) => {
                     moment(item.selection.startDate).format('YYYY-MM-DD'),
                     item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
                   ]);
-                  item.selection.endDate && setAnchorEl(null);
+                  setDate(true);
                 }}
-                showPreview={false}
                 dragSelectionEnabled={false}
-                retainEndDateOnFirstSelection={true}
+                moveRangeOnFirstSelection={false}
+                editableDateInputs={true}
                 ranges={value}
                 direction="horizontal"
               />
@@ -368,6 +367,14 @@ const SearchSection = ({ filter, handleChange }) => {
                 onChange={(e) => handleChange('min_price', e.target.value)}
                 autoComplete="off"
                 color="secondary"
+                inputProps={{
+                  min: 0,
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
               />
               <DelayedTextField
                 fullWidth
@@ -378,6 +385,14 @@ const SearchSection = ({ filter, handleChange }) => {
                 onChange={(e) => handleChange('max_price', e.target.value)}
                 autoComplete="off"
                 color="secondary"
+                inputProps={{
+                  min: 0,
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
               />
             </Stack>
           </AccordionDetails>

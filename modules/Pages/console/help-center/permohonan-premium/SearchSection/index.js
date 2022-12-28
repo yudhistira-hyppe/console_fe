@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -27,6 +27,19 @@ const SearchSection = ({ filter, handleChange }) => {
   ]);
   const [anchorEl, setAnchorEl] = useState(null);
 
+  useEffect(() => {
+    if (!filter.createdAt[0] && !filter.createdAt[1]) {
+      setWeek(null);
+      setValue([
+        {
+          startDate: new Date(),
+          endDate: null,
+          key: 'selection',
+        },
+      ]);
+    }
+  }, [filter.createdAt]);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setValue([
@@ -52,7 +65,7 @@ const SearchSection = ({ filter, handleChange }) => {
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
         <Accordion elevation={0} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Transaksi</Typography>
+            <Typography style={{ fontSize: '13px' }}>Tanggal Pengajuan</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
             <Stack direction={'column'} spacing={1} mb={3}>
@@ -70,8 +83,8 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(1);
                     setValue([
                       {
-                        startDate: new Date(),
-                        endDate: null,
+                        startDate: new Date().setDate(new Date().getDate() - 7),
+                        endDate: new Date(),
                         key: 'selection',
                       },
                     ]);
@@ -97,8 +110,8 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(2);
                     setValue([
                       {
-                        startDate: new Date(),
-                        endDate: null,
+                        startDate: new Date().setDate(new Date().getDate() - 14),
+                        endDate: new Date(),
                         key: 'selection',
                       },
                     ]);
@@ -123,8 +136,8 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(4);
                     setValue([
                       {
-                        startDate: new Date(),
-                        endDate: null,
+                        startDate: new Date().setDate(new Date().getDate() - 30),
+                        endDate: new Date(),
                         key: 'selection',
                       },
                     ]);
@@ -149,8 +162,8 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(12);
                     setValue([
                       {
-                        startDate: new Date(),
-                        endDate: null,
+                        startDate: new Date().setDate(new Date().getDate() - 90),
+                        endDate: new Date(),
                         key: 'selection',
                       },
                     ]);

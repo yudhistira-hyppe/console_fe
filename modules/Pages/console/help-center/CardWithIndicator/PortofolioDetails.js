@@ -25,6 +25,8 @@ const PortfolioDetails = ({ data }) => {
   const ditangguhkan = data?.find((item) => item._id === 'DITANGGUHKAN');
   const tidak_ditangguhkan = data?.find((item) => item._id === 'TIDAK DITANGGUHKAN');
   const sensitif = data?.find((item) => item._id === 'DITANDAI SENSITIF');
+  const disetujui = data?.find((item) => item._id === 'DISETUJUI');
+  const ditolak = data?.find((item) => item._id === 'DITOLAK');
 
   return (
     <Box width={1} style={{ zIndex: -1, height: 203 }}>
@@ -105,6 +107,31 @@ const PortfolioDetails = ({ data }) => {
               onlyContained
             />
           )}
+          {disetujui && (
+            <CmtProgressBar
+              label={
+                <Box display="flex" alignItems="center">
+                  <Typography
+                    style={{ fontSize: 12, marginRight: 4, textTransform: 'capitalize' }}
+                    title={disetujui?._id || 'DISETUJUI'}
+                    fontFamily="Lato">
+                    {disetujui?._id || 'DISETUJUI'}
+                  </Typography>
+                  |
+                  <Box pl={1} component="span" color="text.secondary" fontSize={12}>
+                    {disetujui?.myCount || 0}
+                  </Box>
+                </Box>
+              }
+              labelPos="top-left"
+              value={Number(disetujui?.persen) || 0}
+              renderValue={(value) => {
+                return `${value}%`;
+              }}
+              containedColor={disetujui?.warna || '#AB22AF'}
+              onlyContained
+            />
+          )}
           {ditangguhkan && (
             <CmtProgressBar
               label={
@@ -177,6 +204,31 @@ const PortfolioDetails = ({ data }) => {
                 return `${value}%`;
               }}
               containedColor={sensitif?.warna || '#AB22AF'}
+              onlyContained
+            />
+          )}
+          {ditolak && (
+            <CmtProgressBar
+              label={
+                <Box display="flex" alignItems="center">
+                  <Typography
+                    style={{ fontSize: 12, marginRight: 4, textTransform: 'capitalize' }}
+                    title={ditolak?._id || 'DITOLAK'}
+                    fontFamily="Lato">
+                    {ditolak?._id || 'DITOLAK'}
+                  </Typography>
+                  |
+                  <Box pl={1} component="span" color="text.secondary" fontSize={12}>
+                    {ditolak?.myCount || 0}
+                  </Box>
+                </Box>
+              }
+              labelPos="top-left"
+              value={Number(ditolak?.persen) || 0}
+              renderValue={(value) => {
+                return `${value}%`;
+              }}
+              containedColor={ditolak?.warna || '#AB22AF'}
               onlyContained
             />
           )}

@@ -127,10 +127,11 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                 Pemilik
               </TableCell>
               <TableCell align="left">Tipe</TableCell>
+              <TableCell align="left">Kategori</TableCell>
               <TableCell align="left">Kepemilikan</TableCell>
               <TableCell align="left">Penjualan</TableCell>
               <TableCell align="left">Harga</TableCell>
-              <TableCell align="left" style={{ maxWidth: 80 }}>
+              <TableCell align="left" style={{ maxWidth: 100 }}>
                 Tanggal
               </TableCell>
             </TableRow>
@@ -158,7 +159,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       <Typography
                         variant="body1"
                         style={{ fontSize: '14px', color: '#00000099' }}
-                        className={classes.textTruncate}>
+                        className={classes.textTruncate}
+                        title={item?.description || '-'}>
                         {item?.description || '-'}
                       </Typography>
                     </Stack>
@@ -173,6 +175,20 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {item?.type || '-'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography
+                      variant="body1"
+                      style={{
+                        fontSize: '12px',
+                        textOverflow: 'ellipsis',
+                        width: 70,
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                      }}
+                      title={item?.kategori?.map((item) => item?.interestName).join(', ')}>
+                      {item?.kategori?.map((item) => item?.interestName).join(', ') || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
@@ -192,7 +208,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       Rp {numberWithCommas(item?.saleAmount || 0)}
                     </Typography>
                   </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 80 }}>
+                  <TableCell align="left" style={{ maxWidth: 100 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
                     </Typography>

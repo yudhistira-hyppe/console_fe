@@ -44,7 +44,7 @@ const DatabaseTabContentComponent = () => {
     filter.is_sell.length >= 1 &&
       Object.assign(params, { statusJual: filter.is_sell.map((item) => (item === 'dijual' ? 'YA' : 'TIDAK')) });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
-    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.min_price && Object.assign(params, { startmount: Number(filter.min_price) });
     filter.max_price && Object.assign(params, { endmount: Number(filter.max_price) });
 
@@ -171,8 +171,6 @@ const DatabaseTabContentComponent = () => {
       }
     });
   };
-
-  console.log(filter.createdAt);
 
   return (
     <>

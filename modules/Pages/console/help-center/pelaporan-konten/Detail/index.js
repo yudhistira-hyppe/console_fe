@@ -558,7 +558,7 @@ const DetailPelaporanKonten = () => {
 
                     <Stack>
                       <Typography variant="subtitle2" style={{ color: '#00000099' }}>
-                        Nama Lengkap
+                        Nama
                       </Typography>
                       <Typography>{detail?.data[0]?.proofpict[0]?.nama || detail?.data[0]?.fullName}</Typography>
                     </Stack>

@@ -26,7 +26,7 @@ const ConsoleHelpCenterComponent = () => {
   const router = useRouter();
   const [filter, setFilter] = useState([null, null]);
   const [deleteRefresh, setDeleteRefresh] = useState(false);
-  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: reportCount, isFetching } = useGetCountingHelpCenterQuery({
     startdate: filter[0] || undefined,
@@ -105,8 +105,8 @@ const ConsoleHelpCenterComponent = () => {
               <CardWithIndicator
                 headTitle="Permohonan Akun Premium"
                 TypeProblem="Total Permohonan"
-                numberOfProblem={70 || 0}
-                data={sample4Data}
+                numberOfProblem={reportCount?.kyc?.kyc[0]?.totalReport || 0}
+                data={reportCount?.kyc?.kyc[0]?.data}
                 onClick={() => router.push('/help-center/permohonan-premium')}
                 status={'hue'}
                 setStatusList={() => {}}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -7,26 +7,56 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../../../help-center/bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { Divider, Radio, RadioGroup, Stack } from '@mui/material';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers-pro';
-import { debounce } from 'lodash';
+import { Divider, IconButton, InputAdornment, Popover, Radio, RadioGroup, Stack } from '@mui/material';
+import { DateRange as DateRangePicker } from 'react-date-range';
+import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import moment from 'moment';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import { useGetGenreMusicQuery, useGetMoodMusicQuery, useGetThemeMusicQuery } from 'api/console/database/media';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
-  const [week, setWeek] = React.useState(null);
-  const [value, setValue] = React.useState([null, null]);
-  function getWeeksAfter(date, amount) {
-    return date && amount ? date.add(amount, 'week') : undefined;
-  }
+  const [value, setValue] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isDate, setDate] = useState(false);
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
 
   const { data: genres, isFetching: loadingGenre } = useGetGenreMusicQuery();
   const { data: themes, isFetching: loadingTheme } = useGetThemeMusicQuery();
   const { data: moods, isFetching: loadingMood } = useGetMoodMusicQuery();
+
+  useEffect(() => {
+    if (!filter.createdAt[0] && !null) {
+      setValue([
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: 'selection',
+        },
+      ]);
+      setDate(false);
+    }
+  }, [filter.createdAt]);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    // handleChange('createdAt', [null, null]);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <>
@@ -144,22 +174,71 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Tanggal Dibuat</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-              <DateRangePicker
-                value={filter.createdAt}
-                onChange={(newValue) => {
-                  handleChange('createdAt', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <TextField
+                value={
+                  isDate
+                    ? `${moment(value[0]?.startDate).format('DD/MM/YYYY')} - ${moment(value[0]?.endDate).format(
+                        'DD/MM/YYYY',
+                      )}`
+                    : ''
+                }
+                color="secondary"
+                placeholder="Pilih Tanggal"
+                autoComplete="off"
+                onClick={handleClick}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <DateRange />
+                    </InputAdornment>
+                  ),
                 }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <Stack direction={'row'} spacing={1}>
-                      <TextField autoComplete="off" {...startProps} />
-                      <TextField autoComplete="off" {...endProps} />
-                    </Stack>
-                  </>
-                )}
               />
-            </LocalizationProvider>
+              {isDate && (
+                <IconButton
+                  style={{ height: 30, width: 30 }}
+                  onClick={() => {
+                    setValue([
+                      {
+                        startDate: new Date(),
+                        endDate: new Date(),
+                        key: 'selection',
+                      },
+                    ]);
+                    setDate(false);
+                    handleChange('createdAt', [null, null]);
+                  }}>
+                  <RemoveCircleOutline color="primary" />
+                </IconButton>
+              )}
+            </Stack>
+
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}>
+              <DateRangePicker
+                onChange={(item) => {
+                  setValue([item.selection]);
+                  handleChange('createdAt', [
+                    moment(item.selection.startDate).format('YYYY-MM-DD'),
+                    item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
+                  ]);
+                  setDate(true);
+                }}
+                dragSelectionEnabled={false}
+                moveRangeOnFirstSelection={false}
+                editableDateInputs={true}
+                ranges={value}
+                direction="horizontal"
+              />
+            </Popover>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
         </Accordion>
