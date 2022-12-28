@@ -8,7 +8,7 @@ const DatabaseTabAccountListComponent = (props) => {
   const { configFilters, filters, onDeleteFilters } = props;
   const [isFiltersChange, setIsFiltersChanges] = useState(true);
   const [filtersWithLabel, setFiltersWithLabel] = useState([]);
-  const [payload, setPayload] = useState({ skip: 0, limit: 10 });
+  const [payload, setPayload] = useState({ page: 0, limit: 10 });
   const { data: userResults, isFetching } = useGetAllUserQuery({ ...payload });
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const DatabaseTabAccountListComponent = (props) => {
       }
       result = { ...result, ...formatted };
     });
-    setPayload({ ...result, skip: 0, limit: 10 });
+    setPayload({ ...result, page: 0, limit: 10 });
     setIsFiltersChanges(true);
   };
 
@@ -92,7 +92,7 @@ const DatabaseTabAccountListComponent = (props) => {
   const onPagePayloadChange = (page) => {
     setPayload({
       ...payload,
-      skip: (page - 1) * 10,
+      page: page - 1,
     });
     setIsFiltersChanges(false);
   };

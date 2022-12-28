@@ -6,9 +6,9 @@ import { useGetAllInterestQuery } from 'api/utils';
 
 const defaultFilters = {
   username: {
-    label: 'Cari Nama Akun',
+    label: 'Cari Username Akun',
     type: 'field',
-    placeholder: 'Cari',
+    placeholder: 'Cari username',
   },
   roles: {
     label: 'Jenis',
