@@ -16,7 +16,7 @@ const AccountInfoComponent = (props) => {
   };
 
   return (
-    <Card>
+    <Card style={{ height: '100%', maxHeight: 245 }}>
       <Stack direction="column" justifyContent="center" padding="24px" height="100%" spacing={3}>
         <Stack direction="row" spacing={3.75}>
           <SvgIcon
