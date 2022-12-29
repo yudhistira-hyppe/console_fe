@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 
 const DatabasePage = () => {
   const router = useRouter();
-  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   useEffect(() => {
+    const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+
     if (access.map((item) => item?.nameModule).includes('database_account')) {
       router.replace('/database/account');
     } else if (access.map((item) => item?.nameModule).includes('database_content')) {
