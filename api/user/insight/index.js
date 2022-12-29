@@ -21,7 +21,13 @@ export const insightAPI = createApi({
         body: payload,
       }),
     }),
+    getAreas: build.query({
+      query: () => ({
+        url: '/areas',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useUserGetInsightQuery, useUserGetInsightViewQuery } = insightAPI;
+export const { useUserGetInsightQuery, useUserGetInsightViewQuery, useGetAreasQuery } = insightAPI;
