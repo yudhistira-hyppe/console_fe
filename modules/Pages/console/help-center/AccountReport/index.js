@@ -55,7 +55,7 @@ const AccountReport = ({ isFetching }) => {
   const classes = useStyles();
   const { authUser } = useAuth();
 
-  const { data: dataComment } = useUserGetNewCommentQuery(authUser.user.email);
+  const { data: dataComment } = useUserGetNewCommentQuery(authUser?.user?.email);
   return (
     <CmtCard className={classes.cardRoot}>
       <CmtCardHeader
@@ -75,7 +75,7 @@ const AccountReport = ({ isFetching }) => {
           <div>
             {dummySkeleton.map((el, i) => (
               <Stack key={i} px={3} direction={'row'} width={'100%'} spacing={2}>
-                <Skeleton height={'9em'} width={'7em'} style={{ marginTop: '0px'}} />
+                <Skeleton height={'9em'} width={'7em'} style={{ marginTop: '0px' }} />
                 <Stack direction={'column'} justifyContent={'center'}>
                   <Skeleton width={'12em'} />
                   <Skeleton width={'12em'} />

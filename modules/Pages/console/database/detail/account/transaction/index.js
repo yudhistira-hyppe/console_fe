@@ -50,7 +50,7 @@ const TransactionComponent = (props) => {
       .then((res) => {
         setPayload({ ...payload, skip: payload.skip + 10 });
         setBalance(res?.totalsaldo[0]);
-        const formattedTransactions = res.fData.map((filteredData) => {
+        const formattedTransactions = res?.fData?.map((filteredData) => {
           return {
             ...formattedTransaction(filteredData),
           };
@@ -150,7 +150,7 @@ const TransactionComponent = (props) => {
                 </TableHead>
                 <TableBody>
                   {transactions.length > 0 &&
-                    transactions.map((transaction) => (
+                    transactions?.map((transaction) => (
                       <TableRow className={classes.tableRow} key={transaction.id}>
                         <TableCell>{transaction.date}</TableCell>
                         <TableCell>{transaction.type}</TableCell>

@@ -1,6 +1,6 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import MonetizeDashboard from './Dashboard';
@@ -21,6 +21,18 @@ const ConsoleMonetizeComponent = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    if (access.map((item) => item?.nameModule).includes('monetize_dashboard')) {
+      setValue('0');
+    } else if (access.map((item) => item?.nameModule).includes('monetize_voucher')) {
+      setValue('1');
+    } else if (access.map((item) => item?.nameModule).includes('monetize_buy/sell')) {
+      setValue('2');
+    } else {
+      setValue('3');
+    }
+  }, [access]);
 
   return (
     <>

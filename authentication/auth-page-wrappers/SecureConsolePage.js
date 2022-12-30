@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication';
+import { Stack } from '@mui/material';
+import { Typography } from '@material-ui/core';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const SecureConsolePage = ({ children }) => {
   const router = useRouter();
   const { authUser, getAuthUser, isLoading } = useAuth();
   const [isRenderChildren, setIsRenderChildren] = useState(false);
+  const [loadingValidate, setLoadingValidate] = useState(true);
 
   const handleMenu = () => {
     const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
@@ -13,6 +17,7 @@ const SecureConsolePage = ({ children }) => {
 
     if (router.pathname.includes('signin')) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (router.pathname === '/' && !authUser) {
       router.replace('/signin');
     } else if (
@@ -26,6 +31,7 @@ const SecureConsolePage = ({ children }) => {
         accessModule.includes('dashboard_status_ownership'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname.includes('help-center') &&
       (accessModule.includes('help_consumer') ||
@@ -40,6 +46,7 @@ const SecureConsolePage = ({ children }) => {
         accessModule.includes('help_appeal_users'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname.includes('ads-center') &&
       (accessModule.includes('ads_performance') ||
@@ -47,6 +54,7 @@ const SecureConsolePage = ({ children }) => {
         accessModule.includes('ads_table'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname.includes('boost-center') &&
       (accessModule.includes('boost_statistic') ||
@@ -54,6 +62,7 @@ const SecureConsolePage = ({ children }) => {
         accessModule.includes('boost_table'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname.includes('database') &&
       (accessModule.includes('database_account') ||
@@ -61,11 +70,13 @@ const SecureConsolePage = ({ children }) => {
         accessModule.includes('database_music'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname.includes('user-engagement') &&
       (accessModule.includes('engagement_metrik') || accessModule.includes('engagement_trend'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname.includes('monetize') &&
       (accessModule.includes('monetize_dashboard') ||
@@ -74,6 +85,7 @@ const SecureConsolePage = ({ children }) => {
         accessModule.includes('monetize_buy_sell'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname.includes('anggota') &&
       (accessModule.includes('member_users') ||
@@ -81,9 +93,11 @@ const SecureConsolePage = ({ children }) => {
         accessModule.includes('member_divistion'))
     ) {
       setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else {
       setIsRenderChildren(false);
-      router.back();
+      setLoadingValidate(false);
+      // router.replace('/');
     }
   };
 
@@ -127,7 +141,17 @@ const SecureConsolePage = ({ children }) => {
     }
   }, [isLoading, authUser]);
 
-  return isRenderChildren && children;
+  return !loadingValidate ? (
+    isRenderChildren ? (
+      children
+    ) : (
+      <Stack height="100%" alignItems="center" justifyContent="center">
+        <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Kamu tidak memiliki akses ke menu ini!</Typography>
+      </Stack>
+    )
+  ) : (
+    <PageLoader />
+  );
 };
 
 export default SecureConsolePage;

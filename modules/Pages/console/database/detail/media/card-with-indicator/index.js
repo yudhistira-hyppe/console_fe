@@ -16,11 +16,11 @@ const CardWithIndicator = (props) => {
         <CmtProgressBar
           label={
             <Box display="flex" alignItems="center">
-              {item._id || 'Other'}
+              {item?._id || 'Other'}
             </Box>
           }
           labelPos="top-left"
-          value={(item.count / data.map((item) => item.count).reduce((a, b) => a + b, 0)) * 100}
+          value={(item?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0)) * 100}
           renderValue={(value) => {
             return `${value?.toFixed(2)}%`;
           }}

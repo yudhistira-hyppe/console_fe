@@ -42,7 +42,7 @@ const DatabaseTabContentComponent = () => {
     filter.type.length >= 1 && Object.assign(params, { postType: filter.type });
     filter.category.length >= 1 && Object.assign(params, { kategori: filter.category.map((item) => item?._id) });
     filter.is_sell.length >= 1 &&
-      Object.assign(params, { statusJual: filter.is_sell.map((item) => (item === 'dijual' ? 'YA' : 'TIDAK')) });
+      Object.assign(params, { statusjual: filter.is_sell.map((item) => (item === 'dijual' ? 'YA' : 'TIDAK')) });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.min_price && Object.assign(params, { startmount: Number(filter.min_price) });

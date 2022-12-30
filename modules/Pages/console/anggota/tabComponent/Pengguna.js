@@ -34,6 +34,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useGetAnggotaQuery, useDeleteAnggotaMutation, useUpdateStatusGroupUserMutation } from 'api/console/getUserHyppe';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 import { Add } from '@material-ui/icons';
+import { toast, Toaster } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -157,7 +158,7 @@ const PenggunaComp = () => {
       email: row?.email,
       status: !row?.status,
     };
-    updateStatus(payload);
+    updateStatus(payload).then(() => toast.success('berhasil mengubah status pengguna', { duration: 3000 }));
   };
 
   return (
@@ -315,6 +316,7 @@ const PenggunaComp = () => {
           <Pagination page={page} onChange={handlePagination} count={countPages} />
         </div>
       )}
+      <Toaster />
     </>
   );
 };

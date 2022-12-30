@@ -16,7 +16,7 @@ const AccountInfoComponent = (props) => {
   };
 
   return (
-    <Card>
+    <Card style={{ height: '100%', maxHeight: 245 }}>
       <Stack direction="column" justifyContent="center" padding="24px" height="100%" spacing={3}>
         <Stack direction="row" spacing={3.75}>
           <SvgIcon
@@ -51,7 +51,7 @@ const AccountInfoComponent = (props) => {
             <Box fontSize={12} color="text.secondary">
               Status
             </Box>
-            <Typography className={classes.accountInfoContent}>{formatRoles(roles)}</Typography>
+            <Typography className={classes.accountInfoContent}>{roles}</Typography>
           </Stack>
         </Stack>
         {/* <Stack direction="row" spacing={3.75}>

@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
+import { LoadingButton } from '@mui/lab';
+import { toast, Toaster } from 'react-hot-toast';
 
 const addDivisi = () => {
   const router = useRouter();
@@ -20,18 +22,12 @@ const addDivisi = () => {
   const { data: detailDivisi } = useGetSingleDivisiQuery(router.query.id);
   const [nameDivisi, setNameDivisi] = useState(detailDivisi?.nameDivision);
   const [desc, setDesc] = useState(detailDivisi?.desc);
-  const [updateDivisi, { isSuccess }] = useUpdateDivisiMutation();
+  const [updateDivisi, { isLoading }] = useUpdateDivisiMutation();
 
   useEffect(() => {
     setNameDivisi(detailDivisi?.nameDivision);
     setDesc(detailDivisi?.desc);
   }, detailDivisi);
-
-  useEffect(() => {
-    if (isSuccess) {
-      window.location.href = `/anggota?tab=divisi&edited=${isSuccess}`;
-    }
-  }, [isSuccess]);
 
   const handleUpdateDivisi = () => {
     const payload = {
@@ -39,8 +35,16 @@ const addDivisi = () => {
       nameDivision: nameDivisi,
       desc: desc,
     };
-    updateDivisi(payload);
+    updateDivisi(payload).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else {
+        router.replace('/anggota?tab=divisi');
+        toast.success('berhasil memperbarui divisi', { duration: 3000 });
+      }
+    });
   };
+
   return (
     <>
       <Head>
@@ -91,15 +95,17 @@ const addDivisi = () => {
           disabled={!access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
         />
         <Box sx={{ width: 100 }} mt={3}>
-          <Button
+          <LoadingButton
+            loading={isLoading}
             onClick={handleUpdateDivisi}
             disabled={!nameDivisi || !access.find((item) => item?.nameModule === 'member_divistion')?.acces?.updateAcces}
             variant="contained"
             color="secondary">
             Ubah
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
+      <Toaster />
     </>
   );
 };

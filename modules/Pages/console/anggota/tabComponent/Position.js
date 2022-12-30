@@ -21,6 +21,7 @@ import { useGetGroupQuery, useDeleteGroupMutation } from 'api/console/group';
 import Link from 'next/link';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 import { Add } from '@material-ui/icons';
+import { toast, Toaster } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -133,10 +134,17 @@ const Position = () => {
     setCountPages(Math.ceil(count));
   });
 
-  const [deleteGroup, { isError, isSuccess }] = useDeleteGroupMutation();
+  const [deleteGroup] = useDeleteGroupMutation();
 
   const handleDeleteGroup = () => {
-    deleteGroup(id);
+    deleteGroup(id).then((res) => {
+      console.log(res);
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else {
+        toast.success('Berhasil menghapus jabatan', { duration: 3000 });
+      }
+    });
     setOpenDialog(false);
   };
 
@@ -153,10 +161,10 @@ const Position = () => {
   const handleMenuTable = (option) => {
     if (option.title === 'Hapus') {
       setOpenDialog(true);
-    }
-    if (option.title === 'Ubah') {
+    } else if (option.title === 'Ubah') {
       router.push(`${router.pathname}/edit-position/${id}`);
     }
+    setAnchorEl(null);
   };
 
   useEffect(() => {
@@ -354,6 +362,7 @@ const Position = () => {
           <Pagination page={page} onChange={handlePagination} count={countPages} />
         </div>
       )}
+      <Toaster />
     </>
   );
 };

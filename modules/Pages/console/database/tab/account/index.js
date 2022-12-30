@@ -1,152 +1,203 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import Head from 'next/head';
 import { Stack } from '@mui/material';
-import DatabaseTabAccountFilterComponent from './filter';
-import DatabaseTabAccountListComponent from './list';
-import { useGetAllInterestQuery } from 'api/utils';
-
-const defaultFilters = {
-  username: {
-    label: 'Cari Nama Akun',
-    type: 'field',
-    placeholder: 'Cari',
-  },
-  roles: {
-    label: 'Jenis',
-    type: 'checkbox-group',
-    items: [
-      {
-        value: 'ROLE_USER',
-        label: 'Basic',
-      },
-      {
-        value: 'ROLE_PREMIUM',
-        label: 'Premium',
-      },
-    ],
-  },
-  gender: {
-    label: 'Jenis Kelamin',
-    type: 'checkbox-group',
-    items: [
-      {
-        value: 'FEMALE',
-        label: 'Perempuan',
-      },
-      {
-        value: 'MALE',
-        label: 'Laki-laki',
-      },
-    ],
-  },
-  age: {
-    label: 'Rentang Umur',
-    type: 'radio-group',
-    items: [
-      {
-        value: '',
-        label: 'Semua Umur',
-      },
-      {
-        value: '<15',
-        label: '<15',
-      },
-      {
-        value: '15-25',
-        label: '15-25',
-      },
-      {
-        value: '26-35',
-        label: '26-35',
-      },
-      {
-        value: '36-50',
-        label: '36-50',
-      },
-      {
-        value: '>50',
-        label: '>50',
-      },
-    ],
-  },
-  lastActive: {
-    label: 'Terakhir Aktif',
-    type: 'radio-group',
-    items: [
-      {
-        value: '',
-        label: 'Semua',
-      },
-      {
-        value: 'ONE_HOUR_AGO',
-        label: '1 Jam Lalu',
-      },
-      {
-        value: 'ONE_DAY_AGO',
-        label: '1 Hari Lalu',
-      },
-      {
-        value: 'ONE_WEEK_AGO',
-        label: '1 Minggu Lalu',
-      },
-      {
-        value: 'ONE_MONTH_AGO',
-        label: '1 Bulan Lalu',
-      },
-    ],
-  },
-};
+import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
+import { useRouter } from 'next/router';
+import SearchSection from './SearchSection';
+import TableSection from './TableSection';
+import { useGetAllUserQuery } from 'api/user/user';
 
 const DatabaseTabAccountComponent = () => {
-  const [configFilters, setConfigFilters] = useState(defaultFilters);
-  const [filters, setFilters] = useState({});
+  const [filter, setFilter] = useState({
+    page: 0,
+    limit: 10,
+    descending: 'true',
+    username: '',
+    gender: [],
+    age: '',
+    area: [],
+    rangeAge: [],
+    type: [],
+    createdAt: [null, null],
+    lastOnline: '',
+    rangeOnline: [null, null],
+  });
+  const [filterList, setFilterList] = useState([]);
+  const router = useRouter();
 
-  const onChangeFilters = (filterType, event) => {
-    if (filterType === 'field') {
-      setFilters({
-        ...filters,
-        [event.target.name]: event.target.value,
-      });
-    }
-    if (filterType === 'checkbox-group') {
-      let newValue;
-      const currentValue = filters[event.target.name] || [];
-      if (event.target.checked) {
-        newValue = [...currentValue, event.target.value];
-      } else {
-        newValue = currentValue.filter((item) => item !== event.target.value);
-      }
-      setFilters({
-        ...filters,
-        [event.target.name]: newValue,
-      });
-    }
-    if (filterType === 'radio-group') {
-      setFilters({
-        ...filters,
-        [event.target.name]: event.target.value,
-      });
-    }
+  const getParams = () => {
+    let params = {};
+    Object.assign(params, {
+      page: filter.page,
+      limit: filter.limit,
+      descending: filter.descending === 'true' ? true : false,
+    });
+    filter.username !== '' && Object.assign(params, { username: filter.username });
+    filter.gender.length >= 1 && Object.assign(params, { gender: filter.gender.map((item) => item) });
+    filter.area.length >= 1 && Object.assign(params, { lokasi: filter.area.map((item) => item?._id) });
+    filter.age !== '' && Object.assign(params, { startage: filter.rangeAge[0], endage: filter.rangeAge[1] });
+    filter.type.length >= 1 && Object.assign(params, { jenis: filter.type.map((item) => item) });
+    filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
+    filter.rangeOnline[0] && Object.assign(params, { startlogin: filter.rangeOnline[0] });
+    filter.rangeOnline[1] && Object.assign(params, { endlogin: filter.rangeOnline[1] });
+
+    return params;
   };
 
-  const onDeleteFilters = (deletedFilter) => {
-    let newFilters = '';
-    const filterValue = filters[deletedFilter.name];
+  console.log(filter);
 
-    if (typeof filterValue === 'object') {
-      newFilters = filterValue.filter((item) => item !== deletedFilter.value);
-    }
+  const { data: listUser, isFetching: loadingUser } = useGetAllUserQuery(getParams());
 
-    setFilters({
-      ...filters,
-      [deletedFilter.name]: newFilters,
+  const onOrderChange = (e, val) => {
+    setFilter((prevVal) => {
+      return {
+        ...prevVal,
+        descending: e.target.value,
+      };
+    });
+  };
+
+  const handlePageChange = (e, value) => {
+    setFilter((prevVal) => {
+      return {
+        ...prevVal,
+        page: value - 1,
+      };
+    });
+  };
+
+  const handleSearchChange = (kind, value) => {
+    setFilterList((prevVal) => {
+      switch (kind) {
+        case 'username':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'username' }]
+              : [...prevVal, { parent: kind, value: 'username' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'age':
+          return prevVal.find((item) => item.parent === kind)
+            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'rentang umur' }]
+            : [...prevVal, { parent: kind, value: 'rentang umur' }];
+        case 'clearAge':
+          return prevVal.filter((item) => item.parent !== 'age');
+        case 'createdAt':
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Daftar' }]
+              : [...prevVal, { parent: kind, value: 'Tanggal Daftar' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'lastOnline':
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Terakhir Online' }]
+              : [...prevVal, { parent: kind, value: 'Terakhir Online' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'area':
+          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'rangeOnline':
+          return [...prevVal];
+        default:
+          return prevVal.find((item) => item.value === value)
+            ? [...prevVal.filter((item) => item.value !== value)]
+            : [...prevVal, { parent: kind, value: value }];
+      }
+    });
+    setFilter((prevVal) => {
+      switch (kind) {
+        case 'username':
+          return { ...prevVal, username: value };
+        case 'gender':
+          return {
+            ...prevVal,
+            gender: filter.gender.find((item) => item === value)
+              ? filter.gender.filter((item) => item !== value)
+              : [...filter.gender, value],
+            page: 0,
+          };
+        case 'area':
+          return {
+            ...prevVal,
+            area: filter.area.find((item) => item?.name === JSON.parse(value)?.name)
+              ? filter.area.filter((item) => item?.name !== JSON.parse(value)?.name)
+              : [...filter.area, JSON.parse(value)],
+            page: 0,
+          };
+        case 'type':
+          return {
+            ...prevVal,
+            type: filter.type.find((item) => item === value)
+              ? filter.type.filter((item) => item !== value)
+              : [...filter.type, value],
+            page: 0,
+          };
+        case 'age':
+          if (value === '< 14') {
+            return {
+              ...prevVal,
+              age: value,
+              rangeAge: [0, 14],
+              page: 0,
+            };
+          } else if (value === '15 - 28') {
+            return {
+              ...prevVal,
+              age: value,
+              rangeAge: [15, 28],
+              page: 0,
+            };
+          } else if (value === '29 - 43') {
+            return {
+              ...prevVal,
+              age: value,
+              rangeAge: [29, 43],
+              page: 0,
+            };
+          } else {
+            return {
+              ...prevVal,
+              age: value,
+              rangeAge: [44, 120],
+              page: 0,
+            };
+          }
+        case 'clearAge':
+          return { ...prevVal, age: '', rangeAge: [], page: 0 };
+        case 'createdAt':
+          return { ...prevVal, createdAt: value, page: 0 };
+        case 'lastOnline':
+          return { ...prevVal, lastOnline: value, page: 0 };
+        case 'rangeOnline':
+          return { ...prevVal, rangeOnline: value, page: 0 };
+        default:
+          return { ...prevVal };
+      }
     });
   };
 
   return (
-    <Stack direction={'row'} spacing={3}>
-      <DatabaseTabAccountFilterComponent configFilters={configFilters} filters={filters} onChange={onChangeFilters} />
-      <DatabaseTabAccountListComponent configFilters={configFilters} filters={filters} onDeleteFilters={onDeleteFilters} />
-    </Stack>
+    <>
+      <Head>
+        <title key="title">Hyppe-Console :: Database Konten</title>
+      </Head>
+      <PageContainer heading="">
+        <Stack direction={'row'} spacing={3}>
+          <SearchSection filter={filter} handleChange={handleSearchChange} />
+          <TableSection
+            filterList={filterList}
+            handleDeleteFilter={handleSearchChange}
+            order={filter.descending}
+            loading={loadingUser}
+            listTickets={listUser}
+            handlePageChange={handlePageChange}
+            handleOrder={onOrderChange}
+          />
+        </Stack>
+      </PageContainer>
+    </>
   );
 };
 

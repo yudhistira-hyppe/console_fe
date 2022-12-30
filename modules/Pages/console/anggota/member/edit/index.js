@@ -6,9 +6,10 @@ import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import { Typography } from '@material-ui/core';
 import router from 'next/router';
 import { useGetGroupQuery } from 'api/console/group';
-import { useGetProfileByUserEmailQuery } from 'api/user/user';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
-import { useUpdateGroupUserMutation } from 'api/console/getUserHyppe';
+import { useGetProfileByUserEmailQuery, useUpdateGroupUserMutation } from 'api/console/getUserHyppe';
+import { LoadingButton } from '@mui/lab';
+import { toast, Toaster } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Anggota', link: '/anggota?tab=pengguna' },
@@ -26,7 +27,7 @@ const AddMember = () => {
 
   const { data: profileUser, isFetching } = useGetProfileByUserEmailQuery(router.query.id);
   const { data: dataJabatan } = useGetGroupQuery({ skip: 0, limit: 10, search: '' });
-  const [updateUser] = useUpdateGroupUserMutation();
+  const [updateUser, { isLoading }] = useUpdateGroupUserMutation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +40,7 @@ const AddMember = () => {
       ...inputValue,
       username: profileUser?.data[0]?.username || '',
       fullname: profileUser?.data[0]?.fullName || '',
-      position: '',
+      position: profileUser?.data[0]?.groupId || '',
       email: profileUser?.data[0]?.email || '',
     });
   }, [isFetching]);
@@ -47,13 +48,19 @@ const AddMember = () => {
   const handleUpdate = () => {
     const data = {
       email: inputValue?.email,
-      groupId: JSON.parse(inputValue?.position)?._id,
+      groupId: inputValue?.position,
     };
 
-    updateUser(data).then(() => router.replace('/anggota?tab=pengguna'));
+    updateUser(data).then((res) => {
+      console.log(res);
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else if (res?.data) {
+        router.replace('/anggota?tab=pengguna');
+        toast.success('berhasil memperbarui jabatan pengguna', { duration: 3000 });
+      }
+    });
   };
-
-  console.log(inputValue);
 
   return (
     <>
@@ -123,7 +130,7 @@ const AddMember = () => {
                 Jabatan
               </MenuItem>
               {dataJabatan?.data?.map((item, key) => (
-                <MenuItem key={key} value={JSON.stringify(item)}>
+                <MenuItem key={key} value={item?._id}>
                   {item?.nameGroup || '-'}
                 </MenuItem>
               ))}
@@ -131,17 +138,21 @@ const AddMember = () => {
             <Typography style={{ color: '#0000004D' }}>Pilih jabatan yang sesuai</Typography>
           </Stack>
           <Stack mt={2}>
-            <Button
+            <LoadingButton
+              loading={isLoading}
               variant="contained"
               color="secondary"
               style={{ maxWidth: 120, height: 40 }}
               onClick={handleUpdate}
-              disabled={!access.find((item) => item?.nameModule === 'member_users')?.acces?.updateAcces}>
+              disabled={
+                !access.find((item) => item?.nameModule === 'member_users')?.acces?.updateAcces || !inputValue.position
+              }>
               Ubah
-            </Button>
+            </LoadingButton>
           </Stack>
         </Stack>
       )}
+      <Toaster />
     </>
   );
 };

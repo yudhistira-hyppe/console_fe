@@ -7,6 +7,7 @@ const useStyles = makeStyles(() => ({
     height: '90px',
     objectFit: 'cover',
     borderRadius: '4px',
+    border: '1px solid #dddddd',
   },
   adCampaignDescription: {
     '&.MuiTypography-root': {

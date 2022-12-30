@@ -6,7 +6,9 @@ import { Typography } from '@material-ui/core';
 import CmtSearch from '@coremat/CmtSearch';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import moment from 'moment';
-import { useLazyUserAdListQuery } from 'api/console/monetize/ad';
+import { useLazyUserAdListQuery, useUserAdListQuery } from 'api/console/monetize/ad';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import { LoadingButton } from '@mui/lab';
 
 const AdsCampaign = (props) => {
   const { email } = props;
@@ -18,39 +20,22 @@ const AdsCampaign = (props) => {
     skip: 0,
     limit: 10,
   });
-  const [fetchAdsCampaign] = useLazyUserAdListQuery();
-  const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
+  const { data: userAds, isFetching: loadingAds } = useUserAdListQuery(payload);
 
   useEffect(() => {
-    getAdsCampaign();
-  }, [payload.search]);
-
-  const getAdsCampaign = () => {
-    setIsFetching(true);
-    fetchAdsCampaign(payload)
-      .unwrap()
-      .then((res) => {
-        setPayload((prevState) => ({
-          ...prevState,
-          skip: payload.skip + 10,
-        }));
-        setAdsCampaign((prevState) => [...prevState, ...res.data]);
-        setIsFetching(false);
-        setShowLoadMoreBtn(res.data.length === payload.limit);
-      })
-      .catch(() => {
-        setIsFetching(false);
-      });
-  };
+    setAdsCampaign((prev) => {
+      return payload?.search !== '' ? userAds?.data : prev?.length >= 1 ? [...prev, ...userAds?.data] : userAds?.data;
+    });
+  }, [userAds]);
 
   const onSearchInputBlur = (value) => {
+    value === '' && setAdsCampaign([]);
     setPayload((prevState) => ({
       ...prevState,
       search: value,
       skip: 0,
     }));
-    setAdsCampaign([]);
   };
 
   const onErrorPostImage = (error) => {
@@ -69,66 +54,72 @@ const AdsCampaign = (props) => {
         />
       </Stack>
       <Divider />
-      <Stack padding="24px">
-        <PerfectScrollbar>
-          <Stack maxHeight={408} gap={2} alignItems="center">
-            {adsCampaign.length > 0 &&
-              adsCampaign.map((adCampaign) => (
-                <Stack key={adCampaign._id} width="100%" direction={'row'} spacing={2}>
-                  <img
-                    className={classes.adCampaignImage}
-                    src={adCampaign.media.VideoList[0].CoverURL}
-                    alt={adCampaign.name}
-                    onError={onErrorPostImage}
-                  />
-                  <Stack flex={1} gap={1}>
-                    <Typography className={classes.adCampaignDescription}>{adCampaign.name}</Typography>
-                    <Box fontSize={12} lineHeight="16px">
-                      <Box component="span" color="text.disabled">
-                        Tanggal Mulai
-                      </Box>
-                      {` ${moment(adCampaign.timestamp).locale('id').format('DD/MM/YYYY - HH:mm')}`}
+      <PerfectScrollbar style={{ maxHeight: 408, padding: 20 }}>
+        <Stack minHeight={368} direction="column" gap="20px" alignItems="center">
+          {loadingAds ? (
+            <Stack height={368} alignItems="center" justifyContent="center" spacing={2}>
+              <CircularProgress color="secondary" />
+              <Typography style={{ fontWeight: 'bold' }}>Loading data...</Typography>
+            </Stack>
+          ) : adsCampaign?.length >= 1 ? (
+            adsCampaign?.map((item) => (
+              <Stack direction="row" key={item._id} width="100%">
+                <img
+                  className={classes.adCampaignImage}
+                  src={item?.media?.VideoList[0].CoverURL || '/images/dashboard/content_image.png'}
+                  alt={item?.name}
+                />
+                <Stack direction="column" justifyContent="space-between" gap={1} ml={2} my={1}>
+                  <Typography className={classes.adCampaignDescription}>{item?.name}</Typography>
+                  <Box fontSize={12} lineHeight="16px">
+                    <Box component="span" color="text.disabled">
+                      Tanggal Mulai
                     </Box>
-                  </Stack>
-                  <Stack gap={0.5}>
-                    <Box fontSize={12} lineHeight="16px">
-                      <Box component="span" color="text.disabled">
-                        Rencana Tayang
-                      </Box>{' '}
-                      -
-                    </Box>
-                    <Box fontSize={12} lineHeight="16px">
-                      <Box component="span" color="text.disabled">
-                        Penempatan
-                      </Box>{' '}
-                      -
-                    </Box>
-                  </Stack>
+                    {` ${moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm')}`}
+                  </Box>
                 </Stack>
-              ))}
-            {!isFetching && adsCampaign.length === 0 && (
-              <Stack alignItems="center" justifyContent="center" gap="16px" height={500}>
-                <img src="/images/icon-media-empty.png" alt="Icon Empty" style={{ width: 50, height: 50 }} />
-                <Typography style={{ color: '#666666' }}>
-                  {payload.search
-                    ? `Kampanye iklan dengan kata kunci "${payload.search}" tidak ditemukan`
-                    : 'Pengguna belum memiliki data apapun'}
-                </Typography>
+                <Stack gap={0.5} ml="auto">
+                  <Box fontSize={12} lineHeight="16px">
+                    <Box component="span" color="text.disabled">
+                      Rencana Tayang:
+                    </Box>{' '}
+                    {numberWithCommas(item?.tayang || 0)} Kali
+                  </Box>
+                  <Box fontSize={12} lineHeight="16px">
+                    <Box component="span" color="text.disabled">
+                      Durasi:
+                    </Box>{' '}
+                    {Number(item?.duration).toFixed(0)} Detik
+                  </Box>
+                </Stack>
               </Stack>
-            )}
-            {!isFetching && showLoadMoreBtn && (
-              <Button variant="contained" color="secondary" onClick={() => getAdsCampaign()}>
-                Muat lebih banyak
-              </Button>
-            )}
-            {isFetching && (
-              <Stack alignItems="center">
-                <CircularProgress color="secondary" />
-              </Stack>
-            )}
-          </Stack>
-        </PerfectScrollbar>
-      </Stack>
+            ))
+          ) : (
+            <Stack alignItems="center" justifyContent="center" gap="16px" height={368}>
+              <img src="/images/icon-media-empty.png" alt="Icon Empty" style={{ width: 50, height: 50 }} />
+              <Typography style={{ color: '#666666' }}>
+                {payload.search
+                  ? `Kampanye iklan dengan kata kunci "${payload.search}" tidak ditemukan`
+                  : 'Pengguna belum memiliki data apapun'}
+              </Typography>
+            </Stack>
+          )}
+
+          {!loadingAds && userAds?.skip < userAds?.totalSearch - 10 && (
+            <LoadingButton
+              loading={loadingButton}
+              variant="contained"
+              color="secondary"
+              onClick={() =>
+                setPayload((prev) => {
+                  return { ...prev, skip: payload?.skip + 10 };
+                })
+              }>
+              Muat lebih banyak
+            </LoadingButton>
+          )}
+        </Stack>
+      </PerfectScrollbar>
     </Card>
   );
 };

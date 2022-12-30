@@ -13,7 +13,6 @@ import { Card, IconButton, Stack, TextField } from '@mui/material';
 import { DateRangePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Delete } from '@material-ui/icons';
-import Cookies from 'js-cookie';
 
 const sample4Data = [
   { _id: 'BARU', persen: 3, myCount: 4, warna: '#E31D41' },
@@ -37,8 +36,6 @@ const ConsoleHelpCenterComponent = () => {
     setDeleteRefresh(true);
     setTimeout(() => setDeleteRefresh(false), 50);
   }, [reportCount]);
-
-  console.log(access);
 
   return (
     <>
@@ -86,8 +83,8 @@ const ConsoleHelpCenterComponent = () => {
         </Stack>
 
         <GridContainer>
-          {access.map((item) => item?.nameModule).includes('help_consumer') && (
-            <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4}>
+            {access.map((item) => item?.nameModule).includes('help_consumer') ? (
               <CardWithIndicator
                 headTitle="Bantuan Pengguna"
                 TypeProblem="Total Masalah"
@@ -98,10 +95,17 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('help_kyc') && (
-            <Grid item xs={12} sm={4}>
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Bantuan Pengguna</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            {access.map((item) => item?.nameModule).includes('help_kyc') ? (
               <CardWithIndicator
                 headTitle="Permohonan Akun Premium"
                 TypeProblem="Total Permohonan"
@@ -112,10 +116,17 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('help_bank') && (
-            <Grid item xs={12} sm={4}>
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Permohonan Akun Premium</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            {access.map((item) => item?.nameModule).includes('help_bank') ? (
               <CardWithIndicator
                 headTitle="Rekening Bank"
                 TypeProblem="Total Permohonan"
@@ -126,11 +137,18 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Rekening Bank</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
 
-          {access.map((item) => item?.nameModule).includes('help_konten') && (
-            <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4}>
+            {access.map((item) => item?.nameModule).includes('help_konten') ? (
               <CardWithIndicator
                 headTitle="Laporan Konten"
                 TypeProblem="Konten Dilaporkan"
@@ -142,10 +160,17 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('help_appeal_konten') && (
-            <Grid item xs={12} sm={4}>
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Laporan Konten</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            {access.map((item) => item?.nameModule).includes('help_appeal_konten') ? (
               <CardWithIndicator
                 headTitle="Banding Konten"
                 TypeProblem="Permohonan Banding"
@@ -157,10 +182,17 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('help_fingerprint') && (
-            <Grid item xs={12} sm={4}>
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Banding Konten</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            {access.map((item) => item?.nameModule).includes('help_fingerprint') ? (
               <CardWithIndicator
                 headTitle="Fingerprint Combat"
                 TypeProblem="Konten Serupa"
@@ -172,11 +204,18 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Fingerprint Combat</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
 
-          {access.map((item) => item?.nameModule).includes('help_ads') && (
-            <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}>
+            {access.map((item) => item?.nameModule).includes('help_ads') ? (
               <CardWithIndicator
                 headTitle="Laporan Iklan"
                 TypeProblem="Iklan Dilaporkan"
@@ -188,10 +227,17 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('help_appeal_ads') && (
-            <Grid item xs={12} sm={6}>
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>laporan Iklan</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            {access.map((item) => item?.nameModule).includes('help_appeal_ads') ? (
               <CardWithIndicator
                 headTitle="Banding Iklan Moderasi"
                 TypeProblem="Permohonan Banding"
@@ -203,11 +249,18 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
+            ) : (
+              <Card style={{ height: '100%', padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Banding Iklan Moderasi</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
 
-          {access.map((item) => item?.nameModule).includes('help_users') && (
-            <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}>
+            {access.map((item) => item?.nameModule).includes('help_users') ? (
               <CardWithIndicator
                 headTitle="Laporan Akun"
                 TypeProblem="Akun Dilaporkan"
@@ -219,10 +272,17 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('help_appeal_users') && (
-            <Grid item xs={12} sm={6}>
+            ) : (
+              <Card style={{ height: 315, padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Laporan Akun</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            {access.map((item) => item?.nameModule).includes('help_appeal_users') ? (
               <CardWithIndicator
                 headTitle="Banding Akun Moderasi"
                 TypeProblem="Permohonan"
@@ -234,10 +294,17 @@ const ConsoleHelpCenterComponent = () => {
                 setStatusList={() => {}}
                 isFetching={isFetching || deleteRefresh}
               />
-            </Grid>
-          )}
+            ) : (
+              <Card style={{ height: 315, padding: 16, display: 'flex', flexDirection: 'column' }}>
+                <Typography style={{ fontWeight: 'bold' }}>Banding Akun Moderasi</Typography>
+                <Stack height="100%" alignItems="center" justifyContent="center">
+                  Kamu tidak memiliki akses untuk fitur ini!
+                </Stack>
+              </Card>
+            )}
+          </Grid>
         </GridContainer>
-        <GridContainer>
+        <GridContainer style={{ marginTop: 12 }}>
           <Grid item xs={12} md={4} sm={4}>
             <AccountReport />
           </Grid>

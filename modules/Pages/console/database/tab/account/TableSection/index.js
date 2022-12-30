@@ -32,6 +32,7 @@ const useStyles = makeStyles(() => ({
     '-webkit-line-clamp': 2,
     lineClamp: 2,
     overflow: 'hidden',
+    whiteSpace: 'nowrap',
   },
 }));
 
@@ -45,20 +46,6 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
     return `${STREAM_URL}${mediaEndpoint}${authToken}`;
   };
 
-  const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
-      if (item?.media?.ImageInfo) {
-        return item?.media?.ImageInfo?.[0]?.URL;
-      } else {
-        return item?.media?.VideoList?.[0]?.CoverURL;
-      }
-    } else if (item?.mediaEndpoint) {
-      return getMediaUri(item?.mediaEndpoint);
-    } else {
-      return '/images/dashboard/content_image.png';
-    }
-  };
-
   return (
     <Stack flex={1}>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={3}>
@@ -67,9 +54,9 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
           ) : (
             <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listTickets?.total} hasil (
-              {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
-              {listTickets?.total + listTickets?.page * 10} dari {listTickets?.totalsearch})
+              Menampilkan {listTickets?.totalfilter} hasil (
+              {listTickets?.totalrow >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
+              {listTickets?.totalrow + listTickets?.page * 10} dari {listTickets?.totalfilter})
             </Typography>
           )}
         </Box>
@@ -97,17 +84,17 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             key={key}
             label={item.value}
             onDelete={() => {
-              if (
-                item.parent === 'description' ||
-                item.parent === 'pemilik' ||
-                item.parent === 'min_price' ||
-                item.parent === 'max_price'
-              ) {
+              if (item.parent === 'username') {
                 handleDeleteFilter(item.parent, '');
-              } else if (item.parent === 'category') {
+              } else if (item.parent === 'age') {
+                handleDeleteFilter('clearAge', '');
+              } else if (item.parent === 'area') {
                 handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
               } else if (item.parent === 'createdAt') {
                 handleDeleteFilter(item.parent, [null, null]);
+              } else if (item.parent === 'lastOnline') {
+                handleDeleteFilter(item.parent, '');
+                handleDeleteFilter('rangeOnline', []);
               } else {
                 handleDeleteFilter(item.parent, item.value);
               }
@@ -120,19 +107,22 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
             <TableRow>
-              <TableCell align="left" style={{ maxWidth: 120 }}>
-                Konten
+              <TableCell align="left" style={{ maxWidth: 160 }}>
+                Nama
               </TableCell>
               <TableCell align="left" style={{ maxWidth: 100 }}>
-                Pemilik
+                Jenis Kelamin
               </TableCell>
-              <TableCell align="left">Tipe</TableCell>
-              <TableCell align="left">Kategori</TableCell>
-              <TableCell align="left">Kepemilikan</TableCell>
-              <TableCell align="left">Penjualan</TableCell>
-              <TableCell align="left">Harga</TableCell>
+              <TableCell align="left">Umur</TableCell>
+              <TableCell align="left" style={{ maxWidth: 150 }}>
+                Lokasi
+              </TableCell>
+              <TableCell align="left">Jenis Akun</TableCell>
+              <TableCell align="left" style={{ width: 150 }}>
+                Tanggal Daftar
+              </TableCell>
               <TableCell align="left" style={{ maxWidth: 100 }}>
-                Tanggal
+                Terakhir Aktif
               </TableCell>
             </TableRow>
           </TableHead>
@@ -152,65 +142,73 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   hover
                   style={{ cursor: 'pointer' }}
-                  onClick={() => router.push(`/database/content/${item?._id}`)}>
-                  <TableCell align="left" style={{ maxWidth: 120 }}>
+                  onClick={() => router.push(`/database/account/${item?.email}`)}>
+                  <TableCell align="left" style={{ maxWidth: 160 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getImage(item)} variant="rounded" />
-                      <Typography
-                        variant="body1"
-                        style={{ fontSize: '14px', color: '#00000099' }}
-                        className={classes.textTruncate}
-                        title={item?.description || '-'}>
-                        {item?.description || '-'}
-                      </Typography>
+                      <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
+                      <Stack gap="4px" overflow="hidden" width="100%">
+                        <Typography
+                          variant="body1"
+                          style={{ fontSize: '14px', color: '#00000099' }}
+                          className={classes.textTruncate}
+                          title={item?.username || '-'}>
+                          {item?.username || '-'}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          style={{ fontSize: '12px', color: '#00000099' }}
+                          className={classes.textTruncate}
+                          title={item?.email || '-'}>
+                          {item?.email || '-'}
+                        </Typography>
+                      </Stack>
                     </Stack>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 100 }}>
                     <Typography
                       variant="body1"
                       style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 80, overflow: 'hidden' }}>
-                      {item?.username || '-'}
+                      {item?.gender === 'MALE' && 'Laki-laki'}
+                      {item?.gender === 'FEMALE' && 'Perempuan'}
+                      {item?.gender === 'OTHER' && 'Lainnya'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.type || '-'}
+                      {item?.age || 0}
                     </Typography>
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" style={{ maxWidth: 150 }}>
                     <Typography
                       variant="body1"
                       style={{
                         fontSize: '12px',
                         textOverflow: 'ellipsis',
-                        width: 70,
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
-                      }}
-                      title={item?.kategori?.map((item) => item?.interestName).join(', ')}>
-                      {item?.kategori?.map((item) => item?.interestName).join(', ') || '-'}
+                      }}>
+                      {item?.area || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.kepemilikan === 'TIDAK' ? 'Tidak Terdaftar' : 'Terdaftar'}
+                      {item?.jenis || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.statusJual === 'TIDAK' ? 'Tidak Dijual' : 'Dijual'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography
-                      variant="body1"
-                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 90, overflow: 'hidden' }}>
-                      Rp {numberWithCommas(item?.saleAmount || 0)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 100 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                    <Typography variant="body1" style={{ fontSize: '12px', maxWidth: 80 }}>
                       {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      {item?.activity
+                        ? moment(new Date(item?.activity?.createdAt))
+                            .locale('id')
+                            .startOf('hour')
+                            .fromNow()
+                            .replace(' yang ', ' ')
+                        : '-'}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -225,7 +223,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalsearch >= 1 && !loading && (
+      {listTickets?.totalfilter >= 1 && !loading && (
         <Stack alignItems="center" my={3} mr={3}>
           <Pagination
             count={Number(listTickets?.totalpage) || 1}

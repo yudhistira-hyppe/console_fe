@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const getUserHyppe = createApi({
   reducerPath: 'getUserHyppe',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['userHyppe'],
+  tagTypes: ['userHyppe', 'detailUser'],
   endpoints: (build) => ({
     getAnggota: build.query({
       query: (payload) => ({
@@ -20,6 +20,16 @@ export const getUserHyppe = createApi({
         url: `/getuserhyppe?skip=${skip}&limit=${limit}&groupId=${groupId}`,
         method: 'GET',
       }),
+    }),
+    getProfileByUserEmail: build.query({
+      query: (email) => ({
+        url: `/profile`,
+        method: 'POST',
+        body: {
+          email,
+        },
+      }),
+      providesTags: ['detailUser'],
     }),
     deleteAnggota: build.mutation({
       query: (email) => ({
@@ -42,7 +52,7 @@ export const getUserHyppe = createApi({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['userHyppe'],
+      invalidatesTags: ['userHyppe', 'detailUser'],
     }),
   }),
 });
@@ -50,6 +60,7 @@ export const getUserHyppe = createApi({
 export const {
   useGetAnggotaQuery,
   useGetDetailAnggotaQuery,
+  useGetProfileByUserEmailQuery,
   useDeleteAnggotaMutation,
   useUpdateStatusGroupUserMutation,
   useUpdateGroupUserMutation,

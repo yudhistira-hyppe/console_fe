@@ -71,6 +71,7 @@
     "react-dropzone": "^11.0.3",
     "react-export-excel": "^0.5.3",
     "react-google-maps": "^9.4.5",
+    "react-hot-toast": "^2.4.0",
     "react-intl": "^5.6.8",
     "react-jvectormap": "^0.0.16",
     "react-notifications": "^1.6.0",
