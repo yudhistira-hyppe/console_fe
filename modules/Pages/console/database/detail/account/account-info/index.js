@@ -51,7 +51,7 @@ const AccountInfoComponent = (props) => {
             <Box fontSize={12} color="text.secondary">
               Status
             </Box>
-            <Typography className={classes.accountInfoContent}>{formatRoles(roles)}</Typography>
+            <Typography className={classes.accountInfoContent}>{roles}</Typography>
           </Stack>
         </Stack>
         {/* <Stack direction="row" spacing={3.75}>

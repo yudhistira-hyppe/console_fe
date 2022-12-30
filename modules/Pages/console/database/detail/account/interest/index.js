@@ -20,7 +20,7 @@ const InterestComponent = (props) => {
         <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
       </Typography>
       <Stack gap={1.25} direction="row" flexWrap="wrap">
-        {interests.map((interest, index) => (
+        {interests?.map((interest, index) => (
           <Box
             key={`${interest}-${index}`}
             sx={{

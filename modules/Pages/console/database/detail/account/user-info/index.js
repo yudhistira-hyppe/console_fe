@@ -22,7 +22,7 @@ const UserInfoComponent = (props) => {
 
   useEffect(() => {
     if (userBankAccountsRes) {
-      const formattedBankAccounts = userBankAccountsRes.data.map((bankAccount) => {
+      const formattedBankAccounts = userBankAccountsRes?.data?.map((bankAccount) => {
         const bankName = bankAccount.bankname.replace(/bank\s/i, '');
         const accountNumber = maskCharacterExceptLastN(bankAccount.noRek, '*', 3);
         const accountName = maskCharacterExceptLastN(bankAccount.nama, '*', 2);
@@ -40,7 +40,7 @@ const UserInfoComponent = (props) => {
     return (
       [city, area, country]
         .filter((item) => item)
-        .map((item) => capitalizeEachWord(item))
+        ?.map((item) => capitalizeEachWord(item))
         .join(', ') || '-'
     );
   };
@@ -151,7 +151,7 @@ const UserInfoComponent = (props) => {
             </Grid>
             {userBankAccounts.length > 0 && (
               <Grid container spacing={4}>
-                {userBankAccounts.map((bankAccount) => (
+                {userBankAccounts?.map((bankAccount) => (
                   <Grid key={bankAccount.id} item xs={12} sm={4}>
                     <Stack direction="row" spacing={2}>
                       <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
