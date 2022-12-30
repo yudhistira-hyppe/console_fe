@@ -6,6 +6,7 @@ import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import MediaChart from './media-chart';
 import { useGetListMusicQuery } from 'api/console/database/media';
+import { Toaster } from 'react-hot-toast';
 
 const DatabaseTabMediaComponent = () => {
   const [filter, setFilter] = useState({
@@ -149,6 +150,7 @@ const DatabaseTabMediaComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Database Media</title>
       </Head>
+      <Toaster />
       <PageContainer heading="">
         <MediaChart />
 
