@@ -23,10 +23,14 @@ export const createCookies = (keyAndValueCookies) => {
 };
 
 export const deleteAllCookies = () => {
-  document.cookie.split(';').forEach((c) => {
-    document.cookie = c
-      .trim()
-      .replace(/^ +/, '')
-      .replace(/=.*/, `=; expires=${new Date().toUTCString()}; SameSite=None; Secure`);
-  });
+  console.log('hapusssss');
+
+  const cookies = document.cookie.split(';');
+
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i];
+    const eqPos = cookie.indexOf('=');
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  }
 };
