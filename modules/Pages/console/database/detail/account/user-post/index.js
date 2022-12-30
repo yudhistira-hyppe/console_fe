@@ -31,7 +31,7 @@ const UserPost = (props) => {
     skip: 0,
     limit: 10,
     postType: '',
-    email: authUser?.user?.email,
+    email: email,
   });
   const [posts, setPosts] = useState({
     tab: tab,
@@ -40,21 +40,11 @@ const UserPost = (props) => {
   const { data: contentPost, isFetching: loadingContent } = useUserContentsGroupQuery(payload);
 
   useEffect(() => {
-    setPosts((prev) => {
-      return prev?.tab === tab
-        ? prev?.data?.length >= 1
-          ? {
-              tab: tab,
-              data: [...prev?.data, ...contentPost?.data],
-            }
-          : {
-              tab: tab,
-              data: contentPost?.data,
-            }
-        : {
-            tab: tab,
-            data: contentPost?.data,
-          };
+    setPosts(() => {
+      return {
+        tab: tab,
+        data: contentPost?.data,
+      };
     });
   }, [contentPost]);
 
@@ -70,20 +60,18 @@ const UserPost = (props) => {
 
   const getPostImage = (item) => {
     if (item?.apsara || item?.apsaraId) {
-      if (item?.media?.ImageInfo) {
+      if (item?.media?.ImageInfo?.length >= 1) {
         return item?.media?.ImageInfo?.[0]?.URL;
-      } else {
+      } else if (item?.media?.VideoList?.length >= 1) {
         return item?.media?.VideoList?.[0]?.CoverURL;
+      } else {
+        return '/images/dashboard/content_image.png';
       }
     } else if (item?.mediaEndpoint) {
-      return '';
+      return '/images/dashboard/content_image.png';
     } else {
       return '/images/dashboard/content_image.png';
     }
-  };
-
-  const onErrorPostImage = (error) => {
-    error.target.src = '/images/icons/img-empty.svg';
   };
 
   return (
@@ -108,7 +96,7 @@ const UserPost = (props) => {
         <PerfectScrollbar style={{ maxHeight: 544, padding: 20 }}>
           <Stack direction="column" width="100%" alignItems="center" gap="12px">
             {loadingContent ? (
-              <Stack height={544} alignItems="center" justifyContent="center" spacing={2}>
+              <Stack height={504} alignItems="center" justifyContent="center" spacing={2}>
                 <CircularProgress color="secondary" />
                 <Typography style={{ fontWeight: 'bold' }}>Loading data...</Typography>
               </Stack>
@@ -155,7 +143,7 @@ const UserPost = (props) => {
                 </CmtMediaObject>
               ))
             ) : (
-              <Stack height={544} alignItems="center" justifyContent="center" spacing={2}>
+              <Stack height={504} alignItems="center" justifyContent="center" spacing={2}>
                 <img src="/images/icons/empty-posts.svg" alt="Empty Post" />
                 <Typography>Pengguna belum memiliki kiriman apapun</Typography>
               </Stack>

@@ -16,6 +16,17 @@ const useStyles = makeStyles((theme) => ({
       padding: '24px 0',
     },
   },
+  imageThumbRoot: {
+    marginRight: 24,
+    borderRadius: theme.shape.borderRadius,
+    height: 150,
+    width: '100%',
+    objectFit: 'cover',
+    objectPosition: 'center',
+    [theme.breakpoints.up('sm')]: {
+      width: 200,
+    },
+  },
   postImage: {
     minWidth: '167px',
     width: '167px',
