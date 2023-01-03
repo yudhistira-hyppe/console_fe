@@ -26,6 +26,7 @@ const SearchSection = ({ filter, handleChange }) => {
       key: 'selection',
     },
   ]);
+  const [isDate, setDate] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
@@ -38,24 +39,16 @@ const SearchSection = ({ filter, handleChange }) => {
           key: 'selection',
         },
       ]);
+      setDate(false);
     }
   }, [filter.createdAt]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setValue([
-      {
-        startDate: new Date(),
-        endDate: null,
-        key: 'selection',
-      },
-    ]);
-    setWeek(null);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    handleChange('createdAt', ['', '']);
   };
 
   const open = Boolean(anchorEl);
@@ -93,7 +86,9 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 1) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(7, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
@@ -120,7 +115,9 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 2) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(14, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
@@ -146,7 +143,9 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 4) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(30, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
@@ -172,7 +171,9 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 12) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(90, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
@@ -196,7 +197,7 @@ const SearchSection = ({ filter, handleChange }) => {
             <Stack direction="row" alignItems="center" spacing={1}>
               <TextField
                 value={
-                  value[0]?.endDate
+                  isDate
                     ? `${moment(value[0]?.startDate).format('DD/MM/YYYY')} - ${moment(value[0]?.endDate).format(
                         'DD/MM/YYYY',
                       )}`
@@ -204,6 +205,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 }
                 placeholder="Pilih Tanggal"
                 autoComplete="off"
+                color="secondary"
                 onClick={handleClick}
                 InputProps={{
                   startAdornment: (
@@ -213,18 +215,19 @@ const SearchSection = ({ filter, handleChange }) => {
                   ),
                 }}
               />
-              {value[0]?.endDate && (
+              {isDate && (
                 <IconButton
                   style={{ height: 30, width: 30 }}
                   onClick={() => {
                     setValue([
                       {
                         startDate: new Date(),
-                        endDate: null,
+                        endDate: new Date(),
                         key: 'selection',
                       },
                     ]);
                     handleChange('createdAt', ['', '']);
+                    setDate(false);
                   }}>
                   <RemoveCircleOutline color="primary" />
                 </IconButton>
@@ -247,11 +250,12 @@ const SearchSection = ({ filter, handleChange }) => {
                     moment(item.selection.startDate).format('YYYY-MM-DD'),
                     item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
                   ]);
-                  item.selection.endDate && setAnchorEl(null);
+                  setDate(true);
+                  setWeek(null);
                 }}
-                showPreview={false}
                 dragSelectionEnabled={false}
-                retainEndDateOnFirstSelection={true}
+                moveRangeOnFirstSelection={false}
+                editableDateInputs={true}
                 ranges={value}
                 direction="horizontal"
               />
