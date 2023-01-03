@@ -165,7 +165,7 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
                 )
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={7} align="center">
                     Voucher tidak ditemukan.
                   </TableCell>
                 </TableRow>
