@@ -20,6 +20,9 @@ const SecureConsolePage = ({ children }) => {
       setLoadingValidate(false);
     } else if (router.pathname === '/' && !authUser) {
       router.replace('/signin');
+    } else if (router.pathname === '/profile-console' && authUser) {
+      setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname === '/' &&
       authUser &&

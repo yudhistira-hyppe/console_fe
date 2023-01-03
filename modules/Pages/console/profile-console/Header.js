@@ -147,7 +147,7 @@ const Header = ({ userDetail, tabValue, handleTabChange, dataUser }) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const mediaURI = dataUser?.data[0]?.avatar?.mediaEndpoint;
 
-    return `${STREAM_URL}${mediaURI}${authToken}`;
+    return `${STREAM_URL}/v4${mediaURI}${authToken}`;
   };
   const { data: dataFriends } = useUserListFriendQuery(authUser.user.email);
 
