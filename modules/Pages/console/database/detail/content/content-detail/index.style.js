@@ -12,7 +12,7 @@ export const useStyles = makeStyles(() => ({
     color: '#666666 !important',
   },
   label: {
-    fontSize: '14px !important',
+    fontSize: '12px !important',
     color: 'rgba(0, 0, 0, 0.38)',
     fontFamily: 'Lato !important',
     width: 250,

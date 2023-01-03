@@ -1,9 +1,10 @@
 import React from 'react';
 import { Card, Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
-import moment from 'moment';
 
-const WaktuTayang = () => {
+const WaktuTayang = (props) => {
+  const { data } = props;
+
   return (
     <Card style={{ height: '100%' }}>
       <Stack direction="column" height="100%">
@@ -11,7 +12,7 @@ const WaktuTayang = () => {
           Total Waktu Tayang
         </Typography>
         <Stack direction="column" alignItems="center" justifyContent="center" height="100%">
-          <Typography style={{ fontWeight: 'bold', fontSize: 22 }}>{moment().format('HH:mm:ss')}</Typography>
+          <Typography style={{ fontWeight: 'bold', fontSize: 22 }}>{data}</Typography>
           <Typography style={{ fontSize: 14, color: '#666666' }}>Jam</Typography>
         </Stack>
       </Stack>

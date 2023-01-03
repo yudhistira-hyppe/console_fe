@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
 
 const MoreInfo = (props) => {
-  const { detail } = props;
+  const { data } = props;
 
   return (
     <Card style={{ height: '100%' }}>
@@ -16,8 +16,8 @@ const MoreInfo = (props) => {
             </Typography>
           </Stack>
           <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-            {detail?.data[0]?.tagpeople?.length >= 1 ? (
-              detail?.data[0]?.tagpeople?.map((item, key) => (
+            {data?.tagPeople?.length >= 1 ? (
+              data?.tagPeople?.map((item, key) => (
                 <Typography key={key} variant="body2" color="primary" style={{ marginRight: '0.3em' }}>
                   @{item?.name}
                 </Typography>
@@ -37,8 +37,8 @@ const MoreInfo = (props) => {
             </Typography>
           </Stack>
           <Stack>
-            <Typography variant="body2" color="textSecondary">
-              {detail?.data[0]?.music || '-'}
+            <Typography variant="body2" color="primary" style={{ fontWeight: 'bold' }}>
+              {data?.musicTitle ? `${data?.musicTitle} - ${data?.albumName}` : '-'}
             </Typography>
           </Stack>
         </Stack>
@@ -51,7 +51,7 @@ const MoreInfo = (props) => {
           </Stack>
           <Stack>
             <Typography variant="body2" color="textSecondary">
-              {detail?.data[0]?.location || '-'}
+              {data?.location || '-'}
             </Typography>
           </Stack>
         </Stack>
@@ -64,8 +64,8 @@ const MoreInfo = (props) => {
           </Stack>
           <Stack>
             <Typography variant="body2" color="textSecondary">
-              {detail?.data[0]?.visibility === 'PUBLIC' ? 'Publik' : 'Privasi'}{' '}
-              {detail?.data[0]?.allowComments ? ', Komentar Diizinkan' : 'Komentar Tidak Diizinkan'}
+              {data?.visibility === 'PUBLIC' ? 'Publik' : 'Privasi'}{' '}
+              {data?.allowComments ? ', Komentar Diizinkan' : 'Komentar Tidak Diizinkan'}
             </Typography>
           </Stack>
         </Stack>
