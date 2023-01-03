@@ -227,6 +227,16 @@ const DetailBantuanPengguna = () => {
     });
   };
 
+  const getFile = (uri, key, isDetail) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const localUri = uri.split('/supportfile');
+    const mediaURI = localUri[1].split('_');
+
+    return isDetail
+      ? `${STREAM_URL}/v4/ticket/detail/supportfile${mediaURI[0]}/${key}${authToken}`
+      : `${STREAM_URL}/v4/ticket/supportfile${mediaURI[0]}/${key}${authToken}`;
+  };
+
   return (
     <>
       <Stack direction={'column'} spacing={2} mb={3}>
@@ -270,6 +280,7 @@ const DetailBantuanPengguna = () => {
                             }
                             avatar={<FolderShared style={{ marginLeft: 10 }} />}
                             style={{ marginRight: '1em' }}
+                            onClick={() => window.open(getFile(ticketData?.data[0]?.fsSourceUri[0], key))}
                           />
                         ),
                     )}
@@ -331,9 +342,16 @@ const DetailBantuanPengguna = () => {
                                 {item?.fsSourceUri?.map((item, key) => (
                                   <Chip
                                     key={key}
-                                    label="Filename.zip"
+                                    label={
+                                      <Typography
+                                        title={item}
+                                        style={{ width: 100, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 12 }}>
+                                        {item}
+                                      </Typography>
+                                    }
                                     avatar={<FolderShared />}
                                     style={{ marginRight: '1em' }}
+                                    onClick={() => window.open(getFile(item, key, true))}
                                   />
                                 ))}
                               </div>

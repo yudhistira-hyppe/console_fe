@@ -81,8 +81,8 @@ const ConsoleBantuanPenggunaComponent = () => {
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pembuatan' }]
-              : [...prevVal, { parent: kind, value: 'Tanggal Pembuatan' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Masuk Tiket' }]
+              : [...prevVal, { parent: kind, value: 'Tanggal Masuk Tiket' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'sumber':
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)

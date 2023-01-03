@@ -73,8 +73,8 @@ const PermohonanPremium = () => {
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pembuatan' }]
-              : [...prevVal, { parent: kind, value: 'Tanggal Pembuatan' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pengajuan' }]
+              : [...prevVal, { parent: kind, value: 'Tanggal Pengajuan' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         default:
           return prevVal.find((item) => item.value === value)
@@ -100,9 +100,6 @@ const PermohonanPremium = () => {
       }
     });
   };
-
-  console.log(filterList);
-  console.log(filter);
 
   return (
     <>

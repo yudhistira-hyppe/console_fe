@@ -1,6 +1,6 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import MonetizeDashboard from './Dashboard';
@@ -11,11 +11,11 @@ import { TabContext, TabPanel } from '@material-ui/lab';
 import MonetizeKepemilikanComponent from './Kepemilikan';
 import { useRouter } from 'next/router';
 import MonetizeJualBeliComponent from './jual-beli';
-import Cookies from 'js-cookie';
 
 const ConsoleMonetizeComponent = () => {
-  const [value, setValue] = React.useState('0');
+  const [value, setValue] = useState('0');
   const router = useRouter();
+  const [renderPanel, setRenderPanel] = useState(false);
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const handleChange = (event, newValue) => {
@@ -27,12 +27,26 @@ const ConsoleMonetizeComponent = () => {
       setValue('0');
     } else if (access.map((item) => item?.nameModule).includes('monetize_voucher')) {
       setValue('1');
-    } else if (access.map((item) => item?.nameModule).includes('monetize_buy/sell')) {
+    } else if (access.map((item) => item?.nameModule).includes('monetize_ownership')) {
       setValue('2');
-    } else {
+    } else if (access.map((item) => item?.nameModule).includes('monetize_buy/sell')) {
       setValue('3');
     }
-  }, [access]);
+  }, []);
+
+  useEffect(() => {
+    if (value === '0' && access.map((item) => item?.nameModule).includes('monetize_dashboard')) {
+      setRenderPanel(true);
+    } else if (value === '1' && access.map((item) => item?.nameModule).includes('monetize_voucher')) {
+      setRenderPanel(true);
+    } else if (value === '2' && access.map((item) => item?.nameModule).includes('monetize_ownership')) {
+      setRenderPanel(true);
+    } else if (value === '3' && access.map((item) => item?.nameModule).includes('monetize_buy/sell')) {
+      setRenderPanel(true);
+    } else {
+      setRenderPanel(false);
+    }
+  }, [value]);
 
   return (
     <>
@@ -121,22 +135,22 @@ const ConsoleMonetizeComponent = () => {
               </Stack>
             )}
           </Stack>
-          {access.map((item) => item?.nameModule).includes('monetize_dashboard') && (
+          {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="0">
               <MonetizeDashboard />
             </TabPanel>
           )}
-          {access.map((item) => item?.nameModule).includes('monetize_voucher') && (
+          {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="1">
               <MonetizeVoucher />
             </TabPanel>
           )}
-          {access.map((item) => item?.nameModule).includes('monetize_ownership') && (
+          {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="2">
               <MonetizeKepemilikanComponent />
             </TabPanel>
           )}
-          {access.map((item) => item?.nameModule).includes('monetize_buy/sell') && (
+          {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="3">
               <MonetizeJualBeliComponent />
             </TabPanel>

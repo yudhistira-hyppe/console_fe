@@ -142,7 +142,7 @@ const SearchSection = ({ filter, handleChange }) => {
             <Popover
               id={id}
               open={openCreated}
-              anchorEl={anchorEl}
+              anchorEl={anchorEl.create}
               onClose={() => setAnchorEl({ ...anchorEl, create: null })}
               anchorOrigin={{
                 vertical: 'bottom',
@@ -351,7 +351,7 @@ const SearchSection = ({ filter, handleChange }) => {
             <Popover
               id={id}
               open={openOnline}
-              anchorEl={anchorEl}
+              anchorEl={anchorEl.online}
               onClose={() => setAnchorEl({ ...anchorEl, online: null })}
               anchorOrigin={{
                 vertical: 'bottom',

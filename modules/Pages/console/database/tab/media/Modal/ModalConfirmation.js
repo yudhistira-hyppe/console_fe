@@ -4,6 +4,7 @@ import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
 import { useUpdateStatusMusicMutation } from 'api/console/database/media';
+import { toast } from 'react-hot-toast';
 
 const style = {
   position: 'absolute',
@@ -26,7 +27,16 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
       status: status === 'active' ? true : false,
     };
 
-    updateStatus(data).then(() => onConfirm());
+    updateStatus(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        isSingle
+          ? toast.success('Berhasil mengubah status musik')
+          : toast.success(`Berhasil mengubah ${data1?.length} status musik`);
+      }
+      onConfirm();
+    });
   };
 
   const handleDelete = () => {

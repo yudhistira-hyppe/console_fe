@@ -18,6 +18,8 @@ import router from 'next/router';
 import UploadMedia from '../upload-media';
 import { onMediaUpload } from 'api/console/database/mediaService';
 import { onImageUpload } from 'api/console/database/imageService';
+import { LoadingButton } from '@mui/lab';
+import { toast, Toaster } from 'react-hot-toast';
 
 const FormMusic = (props) => {
   const { status, data, id } = props;
@@ -38,6 +40,7 @@ const FormMusic = (props) => {
     confirmation: false,
     status: '',
   });
+  const [loading, setLoading] = useState(false);
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: genres } = useGetGenreMusicQuery();
@@ -70,6 +73,7 @@ const FormMusic = (props) => {
     const uploadFileMedia = new File([inputValue.apsaraMusic], inputValue.apsaraMusic?.name, { type: 'audio/mp3' });
     const uploadFileImage = new File([inputValue.apsaraThumnail], inputValue.apsaraThumnail?.name, { type: 'image/png' });
 
+    setLoading(true);
     handleApsaraMedia().then((res) => {
       onMediaUpload(
         res,
@@ -82,13 +86,27 @@ const FormMusic = (props) => {
               uploadFileImage,
               () => {
                 bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
-                createMusic(bodyData).then(() => router.replace('/database/media'));
+                createMusic(bodyData).then((res) => {
+                  if (res?.error) {
+                    toast.error(res?.error?.data?.message);
+                  } else if (res?.data) {
+                    router.push('/database/media');
+                    toast.success('Berhasil membuat musik');
+                  }
+                  setLoading(false);
+                });
               },
-              () => alert('upload thumnail ke apsara gagal'),
+              () => {
+                alert('upload thumnail ke apsara gagal');
+                setLoading(false);
+              },
             );
           });
         },
-        () => alert('upload media ke apsara gagal'),
+        () => {
+          alert('upload media ke apsara gagal');
+          setLoading(false);
+        },
       );
     });
 
@@ -99,6 +117,7 @@ const FormMusic = (props) => {
     let bodyData = { ...inputValue, _id: id };
     const uploadFileImage = new File([inputValue.apsaraThumnail], inputValue.apsaraThumnail?.name, { type: 'image/png' });
 
+    setLoading(true);
     if (bodyData.apsaraThumnail !== data?.apsaraThumnail) {
       handleApsaraImage().then((res) => {
         onImageUpload(
@@ -106,13 +125,32 @@ const FormMusic = (props) => {
           uploadFileImage,
           () => {
             bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
-            updateMusic(bodyData).then(() => router.replace('/database/media'));
+            updateMusic(bodyData).then((res) => {
+              if (res?.error) {
+                toast.error(res?.error?.data?.message);
+              } else if (res?.data) {
+                router.push('/database/media');
+                toast.success('Berhasil memperbarui musik');
+              }
+              setLoading(false);
+            });
           },
-          () => alert('upload thumnail ke apsara gagal'),
+          () => {
+            alert('upload thumnail ke apsara gagal');
+            setLoading(false);
+          },
         );
       });
     } else {
-      updateMusic(bodyData).then(() => router.replace('/database/media'));
+      updateMusic(bodyData).then((res) => {
+        if (res?.error) {
+          toast.error(res?.error?.data?.message);
+        } else if (res?.data) {
+          router.push('/database/media');
+          toast.success('Berhasil memperbarui musik');
+        }
+        setLoading(false);
+      });
     }
 
     setModal({ ...modal, save: !modal.save });
@@ -277,7 +315,8 @@ const FormMusic = (props) => {
               </Select>
             </Stack>
             <Stack direction="row" flexWrap="wrap" columnGap="32px" rowGap="12px" width="100%">
-              <Button
+              <LoadingButton
+                loading={loading}
                 variant="contained"
                 color="secondary"
                 style={{ width: 'fit-content', fontWeight: 'bold' }}
@@ -293,7 +332,7 @@ const FormMusic = (props) => {
                   !access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
                 }>
                 Simpan & Post
-              </Button>
+              </LoadingButton>
               {status !== 'create' && (
                 <>
                   <Button
