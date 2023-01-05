@@ -13,9 +13,6 @@ const SecureConsolePage = ({ children }) => {
   const [isRenderChildren, setIsRenderChildren] = useState(false);
   const [loadingValidate, setLoadingValidate] = useState(true);
 
-  console.log();
-  console.log(isEmpty(authUser));
-
   const handleMenu = () => {
     const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
     const accessModule = access.map((item) => item.nameModule);

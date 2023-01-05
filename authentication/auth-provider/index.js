@@ -157,7 +157,6 @@ export const useProvideAuth = () => {
     fetchSuccess();
     saveAuth();
     setUserAccess(data?.iduser);
-    router.push('/');
   };
   // End rewritten code
 
