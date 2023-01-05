@@ -147,7 +147,7 @@ const SecureConsolePage = ({ children }) => {
       return;
     }
     setTimeout(() => handleMenu(), 500);
-  }, [authUser]);
+  }, [isLoading, authUser]);
 
   return !loadingValidate ? (
     isRenderChildren ? (
