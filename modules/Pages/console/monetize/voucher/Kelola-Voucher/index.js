@@ -26,6 +26,7 @@ import { useGetVouchersQuery, useUpdateVoucherMutation } from 'api/console/monet
 import moment from 'moment';
 import { CircularProgress, Pagination } from '@mui/material';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import { toast, Toaster } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Monetisasi', link: '/monetize' },
@@ -53,7 +54,13 @@ const KelolaVoucherComponent = () => {
       isActive: !selectedItem.isActive,
     };
 
-    updateVoucher({ id: selectedItem._id, data });
+    updateVoucher({ id: selectedItem._id, data }).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else {
+        toast.success('Berhasil mengubah status voucher');
+      }
+    });
     onCancelModalHandler();
   };
 
@@ -246,6 +253,7 @@ const KelolaVoucherComponent = () => {
         onCancel={onCancelModalHandler}
         onConfirm={onConfirmModalHandler}
       />
+      <Toaster />
     </>
   );
 };
