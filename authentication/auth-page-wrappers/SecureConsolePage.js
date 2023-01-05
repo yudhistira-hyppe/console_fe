@@ -27,7 +27,8 @@ const SecureConsolePage = ({ children }) => {
       }
     } else {
       if (router.pathname.includes('signin')) {
-        router.replace('/');
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
       } else if (
         router.pathname === '/' &&
         authUser &&
@@ -118,33 +119,35 @@ const SecureConsolePage = ({ children }) => {
 
   useEffect(() => {
     if (!isLoading) {
-      if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
-        router.push({ pathname: '/signin', query: { redirect: router.asPath } });
-        return;
-      }
-      if (!authUser && !router.pathname.includes('/signin') && router.pathname === '/') {
-        router.push('/signin');
-        return;
-      }
-      if (
-        authUser &&
-        authUser.user.roles.includes('ROLE_ADMIN') &&
-        router.asPath.includes('/signin') &&
-        router.query.redirect
-      ) {
-        router.push(router.query.redirect);
-        return;
-      }
-      if (
-        authUser &&
-        authUser.user.roles.includes('ROLE_ADMIN') &&
-        router.asPath.includes('/signin') &&
-        !router.query.redirect
-      ) {
-        router.push('/');
-        return;
-      }
-      setTimeout(() => handleMenu(), 500);
+      setTimeout(() => {
+        if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
+          router.push({ pathname: '/signin', query: { redirect: router.asPath } });
+          return;
+        }
+        if (!authUser && !router.pathname.includes('/signin') && router.pathname === '/') {
+          router.push('/signin');
+          return;
+        }
+        if (
+          authUser &&
+          authUser.user.roles.includes('ROLE_ADMIN') &&
+          router.asPath.includes('/signin') &&
+          router.query.redirect
+        ) {
+          router.push(router.query.redirect);
+          return;
+        }
+        if (
+          authUser &&
+          authUser.user.roles.includes('ROLE_ADMIN') &&
+          router.asPath.includes('/signin') &&
+          !router.query.redirect
+        ) {
+          router.push('/');
+          return;
+        }
+        handleMenu();
+      }, 200);
     } else {
       handleMenu();
     }
