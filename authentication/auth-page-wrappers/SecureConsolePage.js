@@ -4,6 +4,8 @@ import { useAuth } from 'authentication';
 import { Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import { consoleNav } from '@jumbo/components/AppLayout/partials/menus';
+import { isEmpty } from 'lodash';
 
 const SecureConsolePage = ({ children }) => {
   const router = useRouter();
@@ -11,98 +13,104 @@ const SecureConsolePage = ({ children }) => {
   const [isRenderChildren, setIsRenderChildren] = useState(false);
   const [loadingValidate, setLoadingValidate] = useState(true);
 
+  console.log();
+  console.log(isEmpty(authUser));
+
   const handleMenu = () => {
     const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
     const accessModule = access.map((item) => item.nameModule);
 
-    if (router.pathname.includes('signin')) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (router.pathname === '/' && !authUser) {
-      router.replace('/signin');
-    } else if (router.pathname === '/profile-console' && authUser) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname === '/' &&
-      authUser &&
-      (accessModule.includes('dashboard_active_user') ||
-        accessModule.includes('dashboard_total_post') ||
-        accessModule.includes('dashboard_total_income') ||
-        accessModule.includes('dashboard_voucher') ||
-        accessModule.includes('dashboard_activity') ||
-        accessModule.includes('dashboard_status_ownership'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname.includes('help-center') &&
-      (accessModule.includes('help_consumer') ||
-        accessModule.includes('help_kyc') ||
-        accessModule.includes('help_bank') ||
-        accessModule.includes('help_konten') ||
-        accessModule.includes('help_appeal_konten') ||
-        accessModule.includes('help_fingerprint') ||
-        accessModule.includes('help_ads') ||
-        accessModule.includes('help_appeal_ads') ||
-        accessModule.includes('help_users') ||
-        accessModule.includes('help_appeal_users'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname.includes('ads-center') &&
-      (accessModule.includes('ads_performance') ||
-        accessModule.includes('ads_demografis') ||
-        accessModule.includes('ads_table'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname.includes('boost-center') &&
-      (accessModule.includes('boost_statistic') ||
-        accessModule.includes('boost_engagement') ||
-        accessModule.includes('boost_table'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname.includes('database') &&
-      (accessModule.includes('database_account') ||
-        accessModule.includes('database_content') ||
-        accessModule.includes('database_music'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname.includes('user-engagement') &&
-      (accessModule.includes('engagement_metrik') || accessModule.includes('engagement_trend'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname.includes('monetize') &&
-      (accessModule.includes('monetize_dashboard') ||
-        accessModule.includes('monetize_voucher') ||
-        accessModule.includes('monetize_ownership') ||
-        accessModule.includes('monetize_buy_sell'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else if (
-      router.pathname.includes('anggota') &&
-      (accessModule.includes('member_users') ||
-        accessModule.includes('member_position') ||
-        accessModule.includes('member_divistion'))
-    ) {
-      setIsRenderChildren(true);
-      setLoadingValidate(false);
-    } else {
-      if (authUser) {
+    if (isEmpty(authUser)) {
+      if (router.pathname.includes('signin')) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (consoleNav.map((item) => item.link).includes(router.pathname)) {
         setIsRenderChildren(false);
         setLoadingValidate(false);
+      }
+    } else {
+      if (router.pathname.includes('signin')) {
+        router.replace('/');
+      } else if (
+        router.pathname === '/' &&
+        authUser &&
+        (accessModule.includes('dashboard_active_user') ||
+          accessModule.includes('dashboard_total_post') ||
+          accessModule.includes('dashboard_total_income') ||
+          accessModule.includes('dashboard_voucher') ||
+          accessModule.includes('dashboard_activity') ||
+          accessModule.includes('dashboard_status_ownership'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (router.pathname === '/profile-console' && authUser) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('help-center') &&
+        (accessModule.includes('help_consumer') ||
+          accessModule.includes('help_kyc') ||
+          accessModule.includes('help_bank') ||
+          accessModule.includes('help_konten') ||
+          accessModule.includes('help_appeal_konten') ||
+          accessModule.includes('help_fingerprint') ||
+          accessModule.includes('help_ads') ||
+          accessModule.includes('help_appeal_ads') ||
+          accessModule.includes('help_users') ||
+          accessModule.includes('help_appeal_users'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('ads-center') &&
+        (accessModule.includes('ads_performance') ||
+          accessModule.includes('ads_demografis') ||
+          accessModule.includes('ads_table'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('boost-center') &&
+        (accessModule.includes('boost_statistic') ||
+          accessModule.includes('boost_engagement') ||
+          accessModule.includes('boost_table'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('database') &&
+        (accessModule.includes('database_account') ||
+          accessModule.includes('database_content') ||
+          accessModule.includes('database_music'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('user-engagement') &&
+        (accessModule.includes('engagement_metrik') || accessModule.includes('engagement_trend'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('monetize') &&
+        (accessModule.includes('monetize_dashboard') ||
+          accessModule.includes('monetize_voucher') ||
+          accessModule.includes('monetize_ownership') ||
+          accessModule.includes('monetize_buy_sell'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('anggota') &&
+        (accessModule.includes('member_users') ||
+          accessModule.includes('member_position') ||
+          accessModule.includes('member_divistion'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
       } else {
-        router.push('/signin');
+        setIsRenderChildren(false);
+        setLoadingValidate(false);
       }
     }
   };
@@ -112,44 +120,34 @@ const SecureConsolePage = ({ children }) => {
   }, [router]);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (authUser) {
-        setTimeout(() => {
-          if (!authUser && !router.asPath.includes('/signin') && router.asPath === '/') {
-            router.push('/signin');
-            return;
-          }
-          if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
-            router.push({ pathname: '/signin', query: { redirect: router.asPath } });
-            return;
-          }
-          if (
-            authUser &&
-            authUser.user.roles.includes('ROLE_ADMIN') &&
-            router.asPath.includes('/signin') &&
-            router.query.redirect
-          ) {
-            router.push(router.query.redirect);
-            return;
-          }
-          if (
-            authUser &&
-            authUser.user.roles.includes('ROLE_ADMIN') &&
-            router.asPath.includes('/signin') &&
-            !router.query.redirect
-          ) {
-            router.push('/');
-            return;
-          }
-          handleMenu();
-        }, 500);
-      } else {
-        handleMenu();
-      }
-    } else {
-      handleMenu();
+    if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
+      router.push({ pathname: '/signin', query: { redirect: router.asPath } });
+      return;
     }
-  }, [isLoading, authUser]);
+    if (!authUser && !router.pathname.includes('/signin') && router.pathname === '/') {
+      router.push('/signin');
+      return;
+    }
+    if (
+      authUser &&
+      authUser.user.roles.includes('ROLE_ADMIN') &&
+      router.asPath.includes('/signin') &&
+      router.query.redirect
+    ) {
+      router.push(router.query.redirect);
+      return;
+    }
+    if (
+      authUser &&
+      authUser.user.roles.includes('ROLE_ADMIN') &&
+      router.asPath.includes('/signin') &&
+      !router.query.redirect
+    ) {
+      router.push('/');
+      return;
+    }
+    setTimeout(() => handleMenu(), 500);
+  }, [authUser]);
 
   return !loadingValidate ? (
     isRenderChildren ? (
