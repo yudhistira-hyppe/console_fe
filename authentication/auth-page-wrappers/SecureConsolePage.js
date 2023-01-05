@@ -117,33 +117,37 @@ const SecureConsolePage = ({ children }) => {
   }, [router]);
 
   useEffect(() => {
-    if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
-      router.push({ pathname: '/signin', query: { redirect: router.asPath } });
-      return;
+    if (!isLoading) {
+      if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
+        router.push({ pathname: '/signin', query: { redirect: router.asPath } });
+        return;
+      }
+      if (!authUser && !router.pathname.includes('/signin') && router.pathname === '/') {
+        router.push('/signin');
+        return;
+      }
+      if (
+        authUser &&
+        authUser.user.roles.includes('ROLE_ADMIN') &&
+        router.asPath.includes('/signin') &&
+        router.query.redirect
+      ) {
+        router.push(router.query.redirect);
+        return;
+      }
+      if (
+        authUser &&
+        authUser.user.roles.includes('ROLE_ADMIN') &&
+        router.asPath.includes('/signin') &&
+        !router.query.redirect
+      ) {
+        router.push('/');
+        return;
+      }
+      setTimeout(() => handleMenu(), 500);
+    } else {
+      handleMenu();
     }
-    if (!authUser && !router.pathname.includes('/signin') && router.pathname === '/') {
-      router.push('/signin');
-      return;
-    }
-    if (
-      authUser &&
-      authUser.user.roles.includes('ROLE_ADMIN') &&
-      router.asPath.includes('/signin') &&
-      router.query.redirect
-    ) {
-      router.push(router.query.redirect);
-      return;
-    }
-    if (
-      authUser &&
-      authUser.user.roles.includes('ROLE_ADMIN') &&
-      router.asPath.includes('/signin') &&
-      !router.query.redirect
-    ) {
-      router.push('/');
-      return;
-    }
-    setTimeout(() => handleMenu(), 500);
   }, [isLoading, authUser]);
 
   return !loadingValidate ? (
