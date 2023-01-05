@@ -20,6 +20,9 @@ const SecureConsolePage = ({ children }) => {
       setLoadingValidate(false);
     } else if (router.pathname === '/' && !authUser) {
       router.replace('/signin');
+    } else if (router.pathname === '/profile-console' && authUser) {
+      setIsRenderChildren(true);
+      setLoadingValidate(false);
     } else if (
       router.pathname === '/' &&
       authUser &&
@@ -95,9 +98,12 @@ const SecureConsolePage = ({ children }) => {
       setIsRenderChildren(true);
       setLoadingValidate(false);
     } else {
-      setIsRenderChildren(false);
-      setLoadingValidate(false);
-      // router.replace('/');
+      if (authUser) {
+        setIsRenderChildren(false);
+        setLoadingValidate(false);
+      } else {
+        router.push('/signin');
+      }
     }
   };
 
@@ -107,35 +113,39 @@ const SecureConsolePage = ({ children }) => {
 
   useEffect(() => {
     if (!isLoading) {
-      setTimeout(() => {
-        if (!authUser && !router.asPath.includes('/signin') && router.asPath === '/') {
-          router.push('/signin');
-          return;
-        }
-        if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
-          router.push({ pathname: '/signin', query: { redirect: router.asPath } });
-          return;
-        }
-        if (
-          authUser &&
-          authUser.user.roles.includes('ROLE_ADMIN') &&
-          router.asPath.includes('/signin') &&
-          router.query.redirect
-        ) {
-          router.push(router.query.redirect);
-          return;
-        }
-        if (
-          authUser &&
-          authUser.user.roles.includes('ROLE_ADMIN') &&
-          router.asPath.includes('/signin') &&
-          !router.query.redirect
-        ) {
-          router.push('/');
-          return;
-        }
+      if (authUser) {
+        setTimeout(() => {
+          if (!authUser && !router.asPath.includes('/signin') && router.asPath === '/') {
+            router.push('/signin');
+            return;
+          }
+          if (!authUser && !router.asPath.includes('/signin') && router.asPath !== '/' && !router.asPath.includes('[')) {
+            router.push({ pathname: '/signin', query: { redirect: router.asPath } });
+            return;
+          }
+          if (
+            authUser &&
+            authUser.user.roles.includes('ROLE_ADMIN') &&
+            router.asPath.includes('/signin') &&
+            router.query.redirect
+          ) {
+            router.push(router.query.redirect);
+            return;
+          }
+          if (
+            authUser &&
+            authUser.user.roles.includes('ROLE_ADMIN') &&
+            router.asPath.includes('/signin') &&
+            !router.query.redirect
+          ) {
+            router.push('/');
+            return;
+          }
+          handleMenu();
+        }, 500);
+      } else {
         handleMenu();
-      }, 500);
+      }
     } else {
       handleMenu();
     }

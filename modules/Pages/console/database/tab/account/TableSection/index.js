@@ -43,7 +43,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
-    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}/v4${mediaEndpoint}${authToken}`;
   };
 
   return (

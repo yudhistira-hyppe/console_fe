@@ -13,11 +13,11 @@ const ProgressIndicator = (props) => {
       <CmtProgressBar
         label={
           <Box display="flex" alignItems="center">
-            {item.label}
+            {item._id || '-'}
           </Box>
         }
         labelPos="top-left"
-        value={item.value}
+        value={item.persen}
         renderValue={(value) => {
           return `${value}%`;
         }}
@@ -35,9 +35,16 @@ const CardWithIndicator = (props) => {
     <Card style={{ padding: 24 }}>
       <Stack direction="column" gap="24px">
         <Typography style={{ fontSize: 18, fontWeight: 'bold' }}>{title}</Typography>
-        <ScrollBar style={{ maxHeight: 210 }}>
-          <CmtList data={data} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} />
-        </ScrollBar>
+        {data?.length >= 1 ? (
+          <ScrollBar style={{ height: 210 }}>
+            <CmtList data={data} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} />
+          </ScrollBar>
+        ) : (
+          <Stack direction="column" alignItems="center" justifyContent="center" gap="20px" textAlign="center" height={210}>
+            <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
+            <Typography style={{ color: '#666666' }}>Konten ini belum memiliki data {title}</Typography>
+          </Stack>
+        )}
       </Stack>
     </Card>
   );

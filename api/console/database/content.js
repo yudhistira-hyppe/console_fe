@@ -21,7 +21,14 @@ export const contentApi = createApi({
       }),
       providesTags: ['Util'],
     }),
+    getDetailContent: build.query({
+      query: (data) => ({
+        url: '/getusercontents/database/details',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetListContentQuery, useGetInterestContentQuery } = contentApi;
+export const { useGetListContentQuery, useGetInterestContentQuery, useGetDetailContentQuery } = contentApi;

@@ -126,7 +126,7 @@ const TableSection = ({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Nomor Tiket</TableCell>
+                <TableCell style={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>Nomor Tiket</TableCell>
                 <TableCell align="left" style={{ width: 120 }}>
                   Tanggal Masuk Tiket
                 </TableCell>
@@ -161,8 +161,12 @@ const TableSection = ({
                       component="th"
                       scope="row"
                       className={classes.ticketHover}
-                      onClick={() => router.push(`/help-center/bantuan-pengguna/detail/${item?._id}`)}>
-                      <Typography variant="body1">{item?.nomortiket}</Typography>
+                      onClick={() => router.push(`/help-center/bantuan-pengguna/detail/${item?._id}`)}
+                      style={{ maxWidth: 150 }}
+                      title={item?.nomortiket}>
+                      <Typography variant="body1" style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {item?.nomortiket}
+                      </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
@@ -217,7 +221,16 @@ const TableSection = ({
                       ) : (
                         <Avatar />
                       )}
-                      <Typography style={{ fontSize: 12 }}>{item?.penerima || '-'}</Typography>
+                      <Typography
+                        style={{
+                          fontSize: 12,
+                          width: 120,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
+                        {item?.penerima || '-'}
+                      </Typography>
                     </TableCell>
                   </TableRow>
                 ))

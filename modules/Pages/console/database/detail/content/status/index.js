@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
 const Status = (props) => {
-  const { detail } = props;
+  const { data } = props;
 
   return (
     <Card style={{ height: '100%' }}>
@@ -18,7 +18,7 @@ const Status = (props) => {
           </Stack>
           <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
             <Typography variant="body2" color="primary">
-              @{detail?.data[0]?.pemiliksekarang}
+              @{data?.username || '-'}
             </Typography>
           </Stack>
         </Stack>
@@ -37,7 +37,7 @@ const Status = (props) => {
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
               }}>
-              {detail?.data[0]?.postID}
+              {data?.postID || '-'}
             </Typography>
           </Stack>
         </Stack>
@@ -48,7 +48,7 @@ const Status = (props) => {
             </Typography>
           </Stack>
           <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-            <Typography variant="body2">{detail?.data[0]?.saleAmount > 0 ? 'Ya' : 'Tidak'}</Typography>
+            <Typography variant="body2">{data?.statusJual === 'YA' ? 'Ya' : 'Tidak'}</Typography>
           </Stack>
         </Stack>
         <Stack direction={'row'}>
@@ -58,7 +58,7 @@ const Status = (props) => {
             </Typography>
           </Stack>
           <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-            <Typography variant="body2">{numberWithCommas(detail?.data[0]?.saleAmount || 0)}</Typography>
+            <Typography variant="body2">{numberWithCommas(data?.saleAmount || 0)}</Typography>
           </Stack>
         </Stack>
         <Stack direction={'row'}>
@@ -69,8 +69,8 @@ const Status = (props) => {
           </Stack>
           <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
             <Typography variant="body2">
-              {detail?.data[0]?.saleView && 'Views'} {detail?.data[0]?.saleLike && 'Likes'}
-              {!detail?.data[0]?.saleView && !detail?.data[0]?.saleLike && '-'}
+              {data?.saleView && 'Views'} {data?.saleLike && 'Likes'}
+              {!data?.saleView && !data?.saleLike && '-'}
             </Typography>
           </Stack>
         </Stack>
