@@ -6,6 +6,7 @@ import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'fireb
 import { createCookies, deleteAllCookies, getAllCookies } from 'helpers/cookiesHelper';
 import { useGetUserAccessMutation } from 'api/user/auth';
 import Cookies from 'js-cookie';
+import router from 'next/router';
 
 export const useProvideAuth = () => {
   // Start rewritten code
@@ -156,6 +157,7 @@ export const useProvideAuth = () => {
     fetchSuccess();
     saveAuth();
     setUserAccess(data?.iduser);
+    router.push('/');
   };
   // End rewritten code
 
