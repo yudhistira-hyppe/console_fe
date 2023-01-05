@@ -51,6 +51,7 @@ const KelolaVoucherComponent = () => {
 
   const onConfirmModalHandler = () => {
     const data = {
+      ...selectedItem,
       isActive: !selectedItem.isActive,
     };
 
