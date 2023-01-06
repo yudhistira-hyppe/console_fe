@@ -12,6 +12,12 @@ export const userApi = createApi({
         body: data,
       }),
     }),
+    getuserDatabaseDetail: build.query({
+      query: (id) => ({
+        url: `user/userdetail/${id}`,
+        method: 'GET',
+      }),
+    }),
     getUserBasics: build.query({
       query: (email) => ({
         url: `/userbasics/${email}`,
@@ -48,6 +54,7 @@ export const userApi = createApi({
 
 export const {
   useGetAllUserQuery,
+  useGetuserDatabaseDetailQuery,
   useGetUserBasicsQuery,
   useGetProfileByUserEmailQuery,
   useGetAccountBalanceQuery,

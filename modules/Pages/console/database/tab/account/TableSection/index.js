@@ -42,8 +42,9 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const endpoint = mediaEndpoint?.split('_');
 
-    return `${STREAM_URL}/v4${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}/v4${endpoint?.[0]}${authToken}`;
   };
 
   return (
@@ -142,7 +143,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   hover
                   style={{ cursor: 'pointer' }}
-                  onClick={() => router.push(`/database/account/${item?.email}`)}>
+                  onClick={() => router.push(`/database/account/${item?._id}`)}>
                   <TableCell align="left" style={{ maxWidth: 160 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />

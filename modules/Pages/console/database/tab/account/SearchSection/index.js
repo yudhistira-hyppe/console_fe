@@ -19,6 +19,7 @@ import { useGetAreasQuery } from 'api/user/insight';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
+  const [week, setWeek] = useState(null);
   const [value, setValue] = useState([
     {
       startDate: new Date(),
@@ -51,6 +52,7 @@ const SearchSection = ({ filter, handleChange }) => {
         },
       ]);
       setDate(false);
+      setWeek(null);
     }
   }, [filter.createdAt]);
 
@@ -99,6 +101,121 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Tanggal Daftar</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
+            <Stack direction={'column'} spacing={1} mb={3}>
+              <Chip
+                clickable
+                onClick={() => {
+                  if (week === 1) {
+                    setWeek(null);
+                    handleChange('createdAt', ['', '']);
+                    setDate(false);
+                  } else {
+                    setDate(true);
+                    handleChange('createdAt', [
+                      moment().subtract(7, 'd').format('YYYY-MM-DD'),
+                      moment().format('YYYY-MM-DD'),
+                    ]);
+                    setWeek(1);
+                    setValue([
+                      {
+                        startDate: new Date().setDate(new Date().getDate() - 7),
+                        endDate: new Date(),
+                        key: 'selection',
+                      },
+                    ]);
+                  }
+                }}
+                label="7 Hari"
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant={week == 1 ? 'default' : 'outlined'}
+              />
+              <Chip
+                label="14 Hari"
+                clickable
+                onClick={() => {
+                  if (week === 2) {
+                    setWeek(null);
+                    handleChange('createdAt', ['', '']);
+                    setDate(false);
+                  } else {
+                    setDate(true);
+                    handleChange('createdAt', [
+                      moment().subtract(14, 'd').format('YYYY-MM-DD'),
+                      moment().format('YYYY-MM-DD'),
+                    ]);
+                    setWeek(2);
+                    setValue([
+                      {
+                        startDate: new Date().setDate(new Date().getDate() - 14),
+                        endDate: new Date(),
+                        key: 'selection',
+                      },
+                    ]);
+                  }
+                }}
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant={week === 2 ? 'default' : 'outlined'}
+              />
+              <Chip
+                label="1 Bulan"
+                clickable
+                onClick={() => {
+                  if (week === 4) {
+                    setWeek(null);
+                    handleChange('createdAt', ['', '']);
+                    setDate(false);
+                  } else {
+                    setDate(true);
+                    handleChange('createdAt', [
+                      moment().subtract(30, 'd').format('YYYY-MM-DD'),
+                      moment().format('YYYY-MM-DD'),
+                    ]);
+                    setWeek(4);
+                    setValue([
+                      {
+                        startDate: new Date().setDate(new Date().getDate() - 30),
+                        endDate: new Date(),
+                        key: 'selection',
+                      },
+                    ]);
+                  }
+                }}
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant={week === 4 ? 'default' : 'outlined'}
+              />
+              <Chip
+                label="3 Bulan"
+                clickable
+                onClick={() => {
+                  if (week === 12) {
+                    setWeek(null);
+                    handleChange('createdAt', ['', '']);
+                    setDate(false);
+                  } else {
+                    setDate(true);
+                    handleChange('createdAt', [
+                      moment().subtract(90, 'd').format('YYYY-MM-DD'),
+                      moment().format('YYYY-MM-DD'),
+                    ]);
+                    setWeek(12);
+                    setValue([
+                      {
+                        startDate: new Date().setDate(new Date().getDate() - 90),
+                        endDate: new Date(),
+                        key: 'selection',
+                      },
+                    ]);
+                  }
+                }}
+                size="small"
+                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
+                variant={week === 12 ? 'default' : 'outlined'}
+              />
+            </Stack>
+
             <Stack direction="row" alignItems="center" spacing={1}>
               <TextField
                 value={
@@ -156,6 +273,7 @@ const SearchSection = ({ filter, handleChange }) => {
                     item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
                   ]);
                   setDate(true);
+                  setWeek(null);
                 }}
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
