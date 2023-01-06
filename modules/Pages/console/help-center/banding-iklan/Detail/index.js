@@ -24,6 +24,7 @@ import {
   useUpdateFlagingTicketMutation,
 } from 'api/console/helpCenter/iklan';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -276,7 +277,9 @@ const DetailBandingIklan = () => {
                 <CardContent style={{ padding: '20px 0 0' }}>
                   <Stack direction="row" alignItems="center" spacing={2}>
                     <Chip
-                      label={`${detail?.data[0]?.place}-Hyppe${detail?.data[0]?.type === 'video' ? 'Vid' : 'Pict'}`}
+                      label={`${detail?.data[0]?.nameType === 'Content Ads' ? detail?.data[0]?.place + '-' : ''}Hyppe${
+                        detail?.data[0]?.type === 'video' ? 'Vid' : 'Pict'
+                      }`}
                       style={{ borderRadius: 4, fontFamily: 'Lato', fontSize: 12, color: '#00000099', fontWeight: 'bold' }}
                       size="small"
                     />
@@ -443,21 +446,22 @@ const DetailBandingIklan = () => {
                       </Stack>
                     </Stack>
 
-                    <Stack flex={3}>
-                      {detail?.dataSum.length >= 1 ? (
-                        <Stack height={200}>
-                          <GraphIndicator data={detail?.dataSum} />
-                        </Stack>
-                      ) : (
-                        <Stack direction="column" alignItems="center" justifyContent="center" height={200}>
-                          <Typography
-                            style={{ padding: '24px 24px 0', fontFamily: 'Lato', fontWeight: 'bold', color: '#737373' }}>
-                            Tidak ada laporan
-                          </Typography>
-                        </Stack>
-                      )}
-                      {/* <PortfolioDetails data={wallets} /> */}
-                    </Stack>
+                    <ScrollBar style={{ maxHeight: 200, flex: 3 }}>
+                      <Stack pr="40px">
+                        {detail?.dataSum.length >= 1 ? (
+                          <Stack height={200}>
+                            <GraphIndicator data={detail?.dataSum} />
+                          </Stack>
+                        ) : (
+                          <Stack direction="column" alignItems="center" justifyContent="center" height={200}>
+                            <Typography
+                              style={{ padding: '24px 24px 0', fontFamily: 'Lato', fontWeight: 'bold', color: '#737373' }}>
+                              Tidak ada laporan
+                            </Typography>
+                          </Stack>
+                        )}
+                      </Stack>
+                    </ScrollBar>
                   </Stack>
                 </Stack>
               </Paper>
