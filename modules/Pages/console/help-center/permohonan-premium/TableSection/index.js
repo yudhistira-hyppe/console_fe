@@ -24,13 +24,13 @@ import router from 'next/router';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
-    width: '100%',
-    textOverflow: 'ellipsis',
+    width: 150,
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
     '-webkit-line-clamp': 1,
     lineClamp: 1,
     overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 }));
 
@@ -144,7 +144,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                       {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
                     </Typography>
                   </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 220 }}>
+                  <TableCell align="left" style={{ maxWidth: 220, overflow: 'hidden' }}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                       <Stack direction="column" gap="2px">

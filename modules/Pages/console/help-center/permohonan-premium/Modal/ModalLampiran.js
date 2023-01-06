@@ -31,13 +31,15 @@ export default function ModalLampiran({ showModal, onClose, data }) {
             <Typography fontWeight={'bold'}>Lampiran {data?.id}</Typography>
             <Close onClick={onClose} style={{ cursor: 'pointer' }} />
           </Stack>
-          <img
-            src={data?.src}
-            srcSet={data?.src}
-            alt="asd"
-            loading="lazy"
-            style={{ borderRadius: 8, width: '100%', height: 250, objectFit: 'cover', objectPosition: 'center' }}
-          />
+          <Stack alignItems="center" justifyContent="center">
+            <img
+              src={data?.src}
+              srcSet={data?.src}
+              alt="asd"
+              loading="lazy"
+              style={{ borderRadius: 8, width: '75%', height: 'auto', objectFit: 'cover', objectPosition: 'center' }}
+            />
+          </Stack>
         </Box>
       </Modal>
     </div>
