@@ -145,7 +145,7 @@ const SearchSection = ({ filter, handleChange }) => {
               <DelayedTextField
                 fullWidth
                 waitForInput={true}
-                placeholder="From"
+                placeholder="Min"
                 name="startreport"
                 filterValue={filter.rangeReport[0]}
                 onChange={(e) => handleChange(e.target.name, Number(e.target.value))}
@@ -153,7 +153,7 @@ const SearchSection = ({ filter, handleChange }) => {
               <DelayedTextField
                 fullWidth
                 waitForInput={true}
-                placeholder="To"
+                placeholder="Maks"
                 name="endreport"
                 filterValue={filter.rangeReport[1]}
                 onChange={(e) => handleChange(e.target.name, Number(e.target.value))}
