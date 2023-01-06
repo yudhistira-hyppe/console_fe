@@ -13,6 +13,7 @@ const MonetizeVoucherComponent = () => {
     limit: 10,
     descending: 'true',
     search: '',
+    labelTanggal: '',
     createdAt: [null, null],
     period: '',
     periodRange: '',
@@ -66,8 +67,8 @@ const MonetizeVoucherComponent = () => {
         case 'search':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Voucher' }]
-              : [...prevVal, { parent: kind, value: 'Voucher' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: value }]
+              : [...prevVal, { parent: kind, value: value }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
@@ -75,10 +76,14 @@ const MonetizeVoucherComponent = () => {
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Waktu Transaksi' }]
               : [...prevVal, { parent: kind, value: 'Waktu Transaksi' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'labelTanggal':
+          return prevVal.find((item) => item.parent === 'createdAt')
+            ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
+            : [...prevVal];
         case 'period':
           return prevVal.find((item) => item.parent === kind)
-            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Masa Berlaku' }]
-            : [...prevVal, { parent: kind, value: 'Masa Berlaku' }];
+            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `${value} Hari` }]
+            : [...prevVal, { parent: kind, value: `${value} Hari` }];
         case 'clearRange':
           return [...prevVal.filter((item) => item.parent !== 'period')];
         case 'payment_status':
@@ -94,6 +99,8 @@ const MonetizeVoucherComponent = () => {
     setFilter((prevVal) => {
       if (kind === 'createdAt') {
         return { ...prevVal, createdAt: value, page: 0 };
+      } else if (kind === 'labelTanggal') {
+        return { ...prevVal, labelTanggal: value, page: 0 };
       } else if (kind === 'search') {
         return { ...prevVal, search: value, page: 0 };
       } else if (kind === 'period') {
