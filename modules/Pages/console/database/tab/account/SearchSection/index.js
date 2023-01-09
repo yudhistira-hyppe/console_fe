@@ -108,6 +108,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 1) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelCreated', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -115,6 +116,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(7, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelCreated', '7 hari Terakhir');
                     setWeek(1);
                     setValue([
                       {
@@ -137,6 +139,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 2) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelCreated', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -144,6 +147,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(14, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelCreated', '14 Hari Terakhir');
                     setWeek(2);
                     setValue([
                       {
@@ -165,6 +169,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 4) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelCreated', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -172,6 +177,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(30, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelCreated', '1 Bulan Terakhir');
                     setWeek(4);
                     setValue([
                       {
@@ -193,6 +199,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 12) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelCreated', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -200,6 +207,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(90, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelCreated', '3 Bulan Terakhir');
                     setWeek(12);
                     setValue([
                       {
@@ -225,9 +233,9 @@ const SearchSection = ({ filter, handleChange }) => {
                       )}`
                     : ''
                 }
-                color="secondary"
                 placeholder="Pilih Tanggal"
                 autoComplete="off"
+                color="secondary"
                 onClick={(e) => setAnchorEl({ ...anchorEl, create: e.currentTarget })}
                 InputProps={{
                   startAdornment: (
@@ -248,8 +256,9 @@ const SearchSection = ({ filter, handleChange }) => {
                         key: 'selection',
                       },
                     ]);
+                    handleChange('createdAt', ['', '']);
+                    handleChange('labelCreated', '');
                     setDate(false);
-                    handleChange('createdAt', [null, null]);
                   }}>
                   <RemoveCircleOutline color="primary" />
                 </IconButton>
@@ -272,6 +281,12 @@ const SearchSection = ({ filter, handleChange }) => {
                     moment(item.selection.startDate).format('YYYY-MM-DD'),
                     item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
                   ]);
+                  handleChange(
+                    'labelCreated',
+                    `${moment(item.selection.startDate).format('DD-MM-YYYY')} - ${
+                      item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
+                    }`,
+                  );
                   setDate(true);
                   setWeek(null);
                 }}
@@ -294,13 +309,13 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup onChange={(e) => handleChange('gender', e.target.value)}>
               <FormControlLabel
                 label={'Perempuan'}
-                value="FEMALE"
-                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('FEMALE')} color="secondary" />}
+                value="Perempuan"
+                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('Perempuan')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Laki-laki'}
-                value="MALE"
-                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('MALE')} color="secondary" />}
+                value="Laki-laki"
+                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('Laki-laki')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
@@ -483,7 +498,12 @@ const SearchSection = ({ filter, handleChange }) => {
                     item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
                   ]);
                   setOnline(true);
-                  handleChange('lastOnline', 'range');
+                  handleChange(
+                    'lastOnline',
+                    `${moment(item.selection.startDate).format('DD-MM-YYYY')} - ${
+                      item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
+                    }`,
+                  );
                 }}
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
