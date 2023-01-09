@@ -3,7 +3,9 @@ import Box from '@material-ui/core/Box';
 import CmtProgressBar from '@coremat/CmtProgressBar';
 import { Typography } from '@mui/material';
 
-const ProgressIndicator = ({ item, ...rest }) => {
+const ProgressIndicator = ({ item, colorIndex, ...rest }) => {
+  const color = ['#E6094B', '#FF8C00', '#8DCD03', '#7C7C7C'];
+
   return (
     <Box width={1} {...rest}>
       <CmtProgressBar
@@ -20,7 +22,7 @@ const ProgressIndicator = ({ item, ...rest }) => {
         renderValue={(value) => {
           return `${value}%`;
         }}
-        containedColor={item.color}
+        containedColor={color[colorIndex]}
         onlyContained
       />
     </Box>

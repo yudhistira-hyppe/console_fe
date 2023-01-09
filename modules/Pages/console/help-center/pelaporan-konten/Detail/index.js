@@ -450,9 +450,14 @@ const DetailPelaporanKonten = () => {
               <Stack direction="row" alignItems="center" spacing={3} mb={4}>
                 <Avatar src={getMediaUri(detail?.data[0]?.avatar?.mediaUri)} style={{ width: 80, height: 80 }} />
                 <Stack direction="column" gap="5px">
-                  <Typography variant="h1">{detail?.data[0]?.fullName}</Typography>
+                  <Typography
+                    variant="h1"
+                    style={{ width: 250, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}
+                    title={detail?.data[0]?.fullName}>
+                    {detail?.data[0]?.fullName || '-'}
+                  </Typography>
                   <Typography variant="h5" style={{ color: '#00000099' }}>
-                    {detail?.data[0]?.username}
+                    {detail?.data[0]?.username || '-'}
                   </Typography>
                 </Stack>
               </Stack>
@@ -644,7 +649,7 @@ const DetailPelaporanKonten = () => {
                     </Stack>
                     <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
                       <Typography variant="body2" color="primary">
-                        @{detail?.data[0]?.pemiliksekarang}
+                        @{detail?.data[0]?.username || '-'}
                       </Typography>
                     </Stack>
                   </Stack>
@@ -715,7 +720,7 @@ const DetailPelaporanKonten = () => {
                           <span style={{ color: '#AB22AF', fontWeight: 'bold' }}>@{detail?.data[0]?.namapenjual}</span>{' '}
                           seharga Rp.
                           {numberWithCommas(detail?.data[0]?.saleAmount)} kepada
-                          <span style={{ color: '#AB22AF', fontWeight: 'bold' }}> @{detail?.data[0]?.pemiliksekarang}</span>
+                          <span style={{ color: '#AB22AF', fontWeight: 'bold' }}> @{detail?.data[0]?.username}</span>
                         </Typography>
                         <Typography variant="caption" color="textSecondary">
                           {moment(detail?.data[0]?.tgltransaksi).format('DD/MM/YYYY - HH:mm')} WIB

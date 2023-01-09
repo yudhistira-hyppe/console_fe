@@ -24,6 +24,7 @@ import {
   useUpdateFlagingTicketMutation,
 } from 'api/console/helpCenter/konten';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -442,21 +443,22 @@ const DetailBandingKonten = () => {
                       </Stack>
                     </Stack>
 
-                    <Stack flex={3}>
-                      {detail?.dataSum.length >= 1 ? (
-                        <Stack height={200}>
-                          <GraphIndicator data={detail?.dataSum} />
-                        </Stack>
-                      ) : (
-                        <Stack direction="column" alignItems="center" justifyContent="center" height={200}>
-                          <Typography
-                            style={{ padding: '24px 24px 0', fontFamily: 'Lato', fontWeight: 'bold', color: '#737373' }}>
-                            Tidak ada laporan
-                          </Typography>
-                        </Stack>
-                      )}
-                      {/* <PortfolioDetails data={wallets} /> */}
-                    </Stack>
+                    <ScrollBar style={{ maxHeight: 200, flex: 3 }}>
+                      <Stack pr="40px">
+                        {detail?.dataSum.length >= 1 ? (
+                          <Stack height={200}>
+                            <GraphIndicator data={detail?.dataSum} />
+                          </Stack>
+                        ) : (
+                          <Stack direction="column" alignItems="center" justifyContent="center" height={200}>
+                            <Typography
+                              style={{ padding: '24px 24px 0', fontFamily: 'Lato', fontWeight: 'bold', color: '#737373' }}>
+                              Tidak ada laporan
+                            </Typography>
+                          </Stack>
+                        )}
+                      </Stack>
+                    </ScrollBar>
                   </Stack>
                 </Stack>
               </Paper>
@@ -581,7 +583,10 @@ const DetailBandingKonten = () => {
                       </Typography>
                     </Stack>
                     <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
-                      <Typography variant="body2" color="primary">
+                      <Typography
+                        variant="body2"
+                        color="primary"
+                        style={{ maxWidth: 240, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                         @{detail?.data[0]?.pemiliksekarang || '-'}
                       </Typography>
                     </Stack>

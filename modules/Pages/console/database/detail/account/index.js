@@ -15,7 +15,7 @@ import Interest from './interest';
 import UserPost from './user-post';
 import Transaction from './transaction';
 import AdsCampaign from './ads-campaign';
-import { useGetProfileByUserEmailQuery, useGetUserBasicsQuery } from 'api/user/user';
+import { useGetProfileByUserEmailQuery, useGetUserBasicsQuery, useGetuserDatabaseDetailQuery } from 'api/user/user';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { useUserListFriendQuery } from 'api/user/friend';
@@ -29,47 +29,15 @@ const breadcrumbs = [
 
 const DatabaseDetailAccountComponent = (props) => {
   const { detailId } = props;
-  const router = useRouter();
   const { authUser } = useAuth();
-  const [accountDetail, setAccountDetail] = useState({});
-  const { data: userBasicsRes, isFetching: isFetchingUserBasics } = useGetUserBasicsQuery(detailId);
-  const { data: userProfileRes } = useGetProfileByUserEmailQuery(detailId, {
-    skip: Object.keys(accountDetail).length === 0,
-  });
-  const { data: userFriendListRes, isSuccess } = useUserListFriendQuery(detailId, { skip: !userProfileRes });
-
-  useEffect(() => {
-    if (!isFetchingUserBasics) {
-      if (userBasicsRes && userBasicsRes.data) {
-        const { createdAt, dob } = userBasicsRes.data;
-        setAccountDetail({ createdAt, dob });
-      } else {
-        router.replace('/database/account');
-      }
-    }
-  }, [userBasicsRes, isFetchingUserBasics]);
-
-  useEffect(() => {
-    if (userProfileRes) {
-      setAccountDetail({ ...accountDetail, ...userProfileRes?.data[0] });
-    }
-  }, [userProfileRes]);
-
-  useEffect(() => {
-    if (userFriendListRes) {
-      setAccountDetail({
-        ...accountDetail,
-        insight: { ...accountDetail?.insight, totalFriends: userFriendListRes?.count_friend },
-      });
-    }
-  }, [userFriendListRes]);
+  const router = useRouter();
+  const { data: userFriendListRes, isSuccess, isLoading } = useGetuserDatabaseDetailQuery(detailId);
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
-    if (mediaEndpoint) {
-      return `${STREAM_URL}${mediaEndpoint}${authToken}`;
-    }
-    return '';
+    const endpoint = mediaEndpoint?.split('_');
+
+    return `${STREAM_URL}/v4${endpoint?.[0]}${authToken}`;
   };
 
   return (
@@ -96,7 +64,7 @@ const DatabaseDetailAccountComponent = (props) => {
       </Stack>
 
       <PageContainer>
-        {isFetchingUserBasics ? (
+        {isLoading ? (
           <PageLoader />
         ) : (
           isSuccess && (
@@ -108,45 +76,45 @@ const DatabaseDetailAccountComponent = (props) => {
                 justifyContent={{ sm: 'space-between' }}>
                 <Stack direction="row" spacing={3}>
                   <CmtAvatar
-                    src={getMediaUri(accountDetail.avatar)}
-                    alt={accountDetail.fullName}
+                    src={getMediaUri(userFriendListRes?.[0]?.avatar)}
+                    alt={userFriendListRes?.[0]?.fullName}
                     phCharLength={2}
                     size={80}
                     color="random"
                   />
                   <Stack justifyContent="center" gap="4px">
-                    <Typography variant="h1">{accountDetail.username}</Typography>
+                    <Typography variant="h1">{userFriendListRes?.[0]?.username}</Typography>
                     <Box fontSize={14} color="text.secondary">
-                      {accountDetail.fullName}
+                      {userFriendListRes?.[0]?.fullName}
                     </Box>
                   </Stack>
                 </Stack>
-                <Insight insight={accountDetail.insight} />
+                <Insight insight={userFriendListRes?.[0]?.insights} />
               </Stack>
               <Grid container gap={3}>
                 <Grid item xs={12} md={3.5}>
                   <AccountInfo
-                    createdAt={accountDetail.createdAt}
-                    fullName={accountDetail.fullName}
-                    email={accountDetail.email}
-                    roles={accountDetail.roles}
+                    createdAt={userFriendListRes?.[0]?.createdAt}
+                    fullName={userFriendListRes?.[0]?.fullName || '-'}
+                    email={userFriendListRes?.[0]?.email || '-'}
+                    roles={userFriendListRes?.[0]?.roles || '-'}
                   />
                 </Grid>
                 <Grid item xs={12} md>
-                  <UserInfo accountDetail={accountDetail} />
+                  <UserInfo accountDetail={userFriendListRes?.[0]} />
                 </Grid>
               </Grid>
               <Grid container gap={3}>
                 <Grid item xs={12} md={3.5}>
-                  <Interest interests={accountDetail.interest} />
+                  <Interest interests={userFriendListRes?.[0]?.interests} />
                 </Grid>
                 <Grid item xs={12} md>
-                  <UserPost email={accountDetail.email} />
+                  <UserPost email={userFriendListRes?.[0]?.email} />
                 </Grid>
               </Grid>
               <Grid container gap={3}>
                 <Grid item xs={12} md={6.5}>
-                  <Transaction email={accountDetail.email} />
+                  <Transaction email={userFriendListRes?.[0]?.email} />
                 </Grid>
                 <Grid item xs={12} md>
                   <ActiveTime />
@@ -154,7 +122,7 @@ const DatabaseDetailAccountComponent = (props) => {
               </Grid>
               <Grid container>
                 <Grid item xs={12}>
-                  <AdsCampaign email={accountDetail.email} />
+                  <AdsCampaign email={userFriendListRes?.[0]?.email} />
                 </Grid>
               </Grid>
             </Stack>

@@ -17,24 +17,7 @@ const UserInfoComponent = (props) => {
   const { authUser } = useAuth();
   const { accountDetail } = props;
   const [tab, setTab] = useState('1');
-  const { data: userBankAccountsRes } = useGetBankAccountByUserEmailQuery(accountDetail.email);
-  const [userBankAccounts, setUserBankAccounts] = useState([]);
-
-  useEffect(() => {
-    if (userBankAccountsRes) {
-      const formattedBankAccounts = userBankAccountsRes?.data?.map((bankAccount) => {
-        const bankName = bankAccount.bankname.replace(/bank\s/i, '');
-        const accountNumber = maskCharacterExceptLastN(bankAccount.noRek, '*', 3);
-        const accountName = maskCharacterExceptLastN(bankAccount.nama, '*', 2);
-        return {
-          id: bankAccount._id,
-          detail: `${bankName} ${accountNumber}`,
-          accountName: accountName,
-        };
-      });
-      setUserBankAccounts(formattedBankAccounts);
-    }
-  }, [userBankAccountsRes]);
+  const [userBankAccounts, setUserBankAccounts] = useState(accountDetail?.userbankaccounts);
 
   const formattedLocation = (city, area, country) => {
     return (
@@ -51,8 +34,39 @@ const UserInfoComponent = (props) => {
 
   const getImage = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const endpoint = mediaEndpoint?.split('_');
 
-    return `${STREAM_URL}/v4/${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}/v4${endpoint?.[0]}${authToken}`;
+  };
+
+  const blurNumberCard = (item) => {
+    const number = item?.split('');
+    let blurredNumber = [];
+
+    number?.map((n, idx) => {
+      if (idx < number?.length - 3) {
+        blurredNumber.push('*');
+      } else {
+        blurredNumber.push(n);
+      }
+    });
+
+    return blurredNumber.join('');
+  };
+
+  const blurUsername = (item) => {
+    const name = item?.split('');
+    let blurredName = [];
+
+    name?.map((n, idx) => {
+      if (idx > 2 && idx < name.length - 2) {
+        blurredName.push('*');
+      }  else {
+        blurredName.push(n);
+      }
+    });
+
+    return blurredName.join('');
   };
 
   return (
@@ -128,7 +142,7 @@ const UserInfoComponent = (props) => {
                       Nomor Telepon
                     </Typography>
                     <Typography className={classes.userInfoContent} variant="h4">
-                      {accountDetail.mobileNumber || '-'}
+                      {accountDetail?.mobileNumber || '-'}
                     </Typography>
                   </Box>
                 </Stack>
@@ -143,13 +157,13 @@ const UserInfoComponent = (props) => {
                       Lokasi
                     </Typography>
                     <Typography className={classes.userInfoContent} variant="h4">
-                      {formattedLocation(accountDetail.city, accountDetail.area, accountDetail.country)}
+                      {accountDetail?.states || '-'}
                     </Typography>
                   </Box>
                 </Stack>
               </Grid>
             </Grid>
-            {userBankAccounts.length > 0 && (
+            {userBankAccounts.length >= 1 && (
               <Grid container spacing={4}>
                 {userBankAccounts?.map((bankAccount) => (
                   <Grid key={bankAccount.id} item xs={12} sm={4}>
@@ -163,10 +177,10 @@ const UserInfoComponent = (props) => {
                         </Typography>
                         <Box>
                           <Typography className={classes.userInfoContent} variant="h4">
-                            {bankAccount.detail}
+                            {bankAccount?.bankname?.replace('Bank ', '')} {blurNumberCard(bankAccount?.noRek)}
                           </Typography>
                           <Typography className={classes.userInfoContent} variant="h4">
-                            {bankAccount.accountName}
+                            {blurUsername(bankAccount?.nama)}
                           </Typography>
                         </Box>
                       </Box>
@@ -182,12 +196,12 @@ const UserInfoComponent = (props) => {
             <Stack direction="column" p="24px" gap="24px">
               <Stack direction="row">
                 <ImageList sx={{ width: '100%' }} cols={4} gap="12px" rowHeight={140}>
-                  {[{}, {}]?.map((item, key) => (
+                  {accountDetail?.dokument?.map((item, key) => (
                     <ImageListItem key={key}>
                       <img
                         src={getImage(item)}
                         srcSet={getImage(item)}
-                        alt="asd"
+                        alt="Lampiran Akun Premium"
                         loading="lazy"
                         style={{
                           borderRadius: 8,

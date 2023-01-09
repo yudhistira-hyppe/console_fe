@@ -9,10 +9,12 @@ import AccountReport from './AccountReport';
 import ContentReport from './ContentReport';
 import AdsReport from './adsReport';
 import { useGetCountingHelpCenterQuery } from 'api/console/helpCenter/ticket';
-import { Card, IconButton, Stack, TextField } from '@mui/material';
-import { DateRangePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Delete } from '@material-ui/icons';
+import { Card, IconButton, InputAdornment, Popover, Stack, TextField } from '@mui/material';
+import { DateRange as DateRangePicker } from 'react-date-range';
+import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
+import moment from 'moment';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 const sample4Data = [
   { _id: 'BARU', persen: 3, myCount: 4, warna: '#E31D41' },
@@ -23,19 +25,38 @@ const sample4Data = [
 
 const ConsoleHelpCenterComponent = () => {
   const router = useRouter();
-  const [filter, setFilter] = useState([null, null]);
+  const [value, setValue] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+  const [isDate, setDate] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [deleteRefresh, setDeleteRefresh] = useState(false);
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: reportCount, isFetching } = useGetCountingHelpCenterQuery({
-    startdate: filter[0] || undefined,
-    enddate: filter[1] || undefined,
+    startdate: isDate ? moment(value[0]?.startDate).format('YYYY-MM-DD') : undefined,
+    enddate: isDate ? moment(value[0]?.endDate).format('YYYY-MM-DD') : undefined,
   });
 
   useEffect(() => {
     setDeleteRefresh(true);
     setTimeout(() => setDeleteRefresh(false), 50);
   }, [reportCount]);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <>
@@ -46,39 +67,67 @@ const ConsoleHelpCenterComponent = () => {
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4} mt="-25px">
           <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>Bantuan Pengguna</Typography>
           <Card style={{ padding: 10 }}>
-            <Stack direction="row" alignItems="center" gap="8px">
-              <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-                <DateRangePicker
-                  value={filter}
-                  onChange={(newValue) => {
-                    setFilter([newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD') || null]);
-                  }}
-                  renderInput={(startProps, endProps) => (
-                    <>
-                      <Stack direction={'row'} spacing={1}>
-                        <TextField
-                          size="small"
-                          autoComplete="off"
-                          color="secondary"
-                          style={{ maxWidth: 150 }}
-                          {...startProps}
-                        />
-                        <TextField
-                          size="small"
-                          autoComplete="off"
-                          color="secondary"
-                          style={{ maxWidth: 150 }}
-                          {...endProps}
-                        />
-                      </Stack>
-                    </>
-                  )}
-                />
-              </LocalizationProvider>
-              <IconButton color="secondary" onClick={() => setFilter([null, null])}>
-                <Delete />
-              </IconButton>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <TextField
+                value={
+                  isDate
+                    ? `${moment(value[0]?.startDate).format('DD/MM/YYYY')} - ${moment(value[0]?.endDate).format(
+                        'DD/MM/YYYY',
+                      )}`
+                    : ''
+                }
+                placeholder="Pilih Tanggal"
+                autoComplete="off"
+                color="secondary"
+                size="small"
+                onClick={handleClick}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <DateRange />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {isDate && (
+                <IconButton
+                  style={{ height: 30, width: 30 }}
+                  onClick={() => {
+                    setValue([
+                      {
+                        startDate: new Date(),
+                        endDate: new Date(),
+                        key: 'selection',
+                      },
+                    ]);
+                    setDate(false);
+                  }}>
+                  <RemoveCircleOutline color="primary" />
+                </IconButton>
+              )}
             </Stack>
+
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}>
+              <DateRangePicker
+                onChange={(item) => {
+                  setValue([item.selection]);
+                  setDate(true);
+                }}
+                dragSelectionEnabled={false}
+                moveRangeOnFirstSelection={false}
+                editableDateInputs={true}
+                ranges={value}
+                direction="horizontal"
+              />
+            </Popover>
           </Card>
         </Stack>
 

@@ -101,8 +101,9 @@ const DetailPermohonanPremium = () => {
 
   const getAvatar = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const endpoint = mediaEndpoint?.split('_');
 
-    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}/v4${endpoint?.[0]}${authToken}`;
   };
 
   return (
@@ -211,7 +212,11 @@ const DetailPermohonanPremium = () => {
                     <Typography variant="subtitle2" style={{ color: '#00000099' }}>
                       Email
                     </Typography>
-                    <Typography>{detail?.data[0]?.email || '-'}</Typography>
+                    <Typography
+                      style={{ width: 150, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+                      title={detail?.data[0]?.email || '-'}>
+                      {detail?.data[0]?.email || '-'}
+                    </Typography>
                   </Stack>
                 </Stack>
 
@@ -315,10 +320,18 @@ const DetailPermohonanPremium = () => {
                     <Stack direction="row" alignItems="center" gap="12px" height="100%">
                       <PhoneIphone style={{ fontSize: 36, color: '#666666' }} />
                       <Stack direction="column">
-                        <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>
+                        <Typography
+                          style={{
+                            fontSize: 12,
+                            color: '#00000099',
+                            fontWeight: 'bold',
+                          }}>
                           Nomor Telepon
                         </Typography>
-                        <Typography>{detail?.data[0]?.mobileNumber || '-'}</Typography>
+                        <Typography
+                          style={{ width: 150, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                          {detail?.data[0]?.mobileNumber || '-'}
+                        </Typography>
                       </Stack>
                     </Stack>
                   </Grid>

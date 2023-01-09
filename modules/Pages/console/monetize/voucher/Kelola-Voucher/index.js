@@ -24,7 +24,7 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
 import { useGetVouchersQuery, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
 import moment from 'moment';
-import { CircularProgress, Pagination } from '@mui/material';
+import { CircularProgress, IconButton, Pagination } from '@mui/material';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { toast, Toaster } from 'react-hot-toast';
 
@@ -51,6 +51,7 @@ const KelolaVoucherComponent = () => {
 
   const onConfirmModalHandler = () => {
     const data = {
+      ...selectedItem,
       isActive: !selectedItem.isActive,
     };
 
@@ -125,14 +126,11 @@ const KelolaVoucherComponent = () => {
               <Table sx={{ minWidth: 650 }} aria-label="basic-table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left" style={{ paddingLeft: 24 }}>
+                    <TableCell align="left" style={{ paddingLeft: 24, maxWidth: 230 }}>
                       Nama Voucher
                     </TableCell>
                     <TableCell align="left" style={{ maxWidth: 100 }}>
                       Waktu Pembuatan
-                    </TableCell>
-                    <TableCell align="left" style={{ maxWidth: 100 }}>
-                      Waktu Kadaluarsa
                     </TableCell>
                     <TableCell align="left">Jumlah Kredit</TableCell>
                     <TableCell align="left">Jumlah Stok</TableCell>
@@ -158,46 +156,67 @@ const KelolaVoucherComponent = () => {
 
                       return (
                         <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                          <TableCell component="th" scope="row" style={{ paddingLeft: 24 }}>
+                          <TableCell component="th" scope="row" style={{ paddingLeft: 24, maxWidth: 230 }}>
                             <Typography
                               variant="body1"
                               style={{
                                 fontSize: '14px',
                                 fontWeight: 'bold',
-                                color: expired.diff(now, 'day') >= 1 ? 'black' : 'red',
-                              }}>
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}
+                              title={item?.nameAds}>
                               {item?.nameAds || '-'}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left" style={{ maxWidth: 100 }}>
-                            <Typography variant="body1" style={{ fontSize: '12px' }}>
-                              {moment(item?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
                             </Typography>
                           </TableCell>
                           <TableCell align="left" style={{ maxWidth: 100 }}>
                             <Typography
                               variant="body1"
-                              style={{
-                                fontSize: '12px',
-                                fontWeight: expired.diff(now, 'day') >= 1 ? '' : 'bold',
-                                color: expired.diff(now, 'day') >= 1 ? 'black' : 'red',
-                              }}>
-                              {moment(item?.expiredAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
+                              style={{ fontSize: '12px', width: 80, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {moment(item?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
-                            <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontSize: '14px',
+                                maxWidth: 150,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                              title={numberWithCommas(item?.creditValue || 0) + ' Kredit'}>
                               {numberWithCommas(item?.creditValue || 0)} Kredit
                             </Typography>
                             {item?.creditPromo > 0 && (
-                              <Typography variant="body1" style={{ fontSize: '12px' }}>
+                              <Typography
+                                variant="body1"
+                                style={{
+                                  fontSize: '12px',
+                                  maxWidth: 150,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                title={numberWithCommas(item?.creditPromo) + ' Kredit'}>
                                 + Bonus {numberWithCommas(item?.creditPromo)} Kredit
                               </Typography>
                             )}
                           </TableCell>
                           <TableCell align="left">
-                            <Typography variant="body1" style={{ fontSize: '14px' }}>
-                              {item?.qty} Voucher
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontSize: '14px',
+                                maxWidth: 150,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                              title={numberWithCommas(item?.qty || 0) + ' Voucher'}>
+                              {numberWithCommas(item?.qty || 0)} Voucher
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
@@ -206,7 +225,16 @@ const KelolaVoucherComponent = () => {
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
-                            <Typography variant="body1" style={{ fontSize: '14px' }}>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontSize: '14px',
+                                maxWidth: 100,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                              title={'Rp ' + numberWithCommas(item?.amount || 0)}>
                               Rp {numberWithCommas(item?.amount || 0)}
                             </Typography>
                           </TableCell>
@@ -221,11 +249,9 @@ const KelolaVoucherComponent = () => {
                             />
                           </TableCell>
                           <TableCell align="left">
-                            <EditIcon
-                              htmlColor="#737373"
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => router.push(`/monetize/voucher/${item?._id}`)}
-                            />
+                            <IconButton onClick={() => router.push(`/monetize/voucher/${item?._id}`)}>
+                              <EditIcon htmlColor="#737373" style={{ cursor: 'pointer' }} />
+                            </IconButton>
                           </TableCell>
                         </TableRow>
                       );

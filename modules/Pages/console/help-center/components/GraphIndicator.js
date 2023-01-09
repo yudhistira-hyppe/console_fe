@@ -20,7 +20,9 @@ const GraphIndicatorComponent = ({ data }) => {
   return (
     <CmtList
       data={data}
-      renderRow={(item, index) => <ProgressIndicator key={index} className={classes.listItemRoot} item={item} />}
+      renderRow={(item, index) => (
+        <ProgressIndicator key={index} colorIndex={index} className={classes.listItemRoot} item={item} />
+      )}
     />
   );
 };
