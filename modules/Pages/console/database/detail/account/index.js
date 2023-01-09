@@ -76,7 +76,7 @@ const DatabaseDetailAccountComponent = (props) => {
                 justifyContent={{ sm: 'space-between' }}>
                 <Stack direction="row" spacing={3}>
                   <CmtAvatar
-                    src={getMediaUri(userFriendListRes?.[0]?.avatar)}
+                    src={getMediaUri(userFriendListRes?.[0]?.avatar?.mediaEndpoint)}
                     alt={userFriendListRes?.[0]?.fullName}
                     phCharLength={2}
                     size={80}
@@ -89,7 +89,7 @@ const DatabaseDetailAccountComponent = (props) => {
                     </Box>
                   </Stack>
                 </Stack>
-                <Insight insight={userFriendListRes?.[0]?.insights} />
+                <Insight insight={userFriendListRes?.[0]?.insights} friends={userFriendListRes?.[0]?.friend} />
               </Stack>
               <Grid container gap={3}>
                 <Grid item xs={12} md={3.5}>
@@ -97,7 +97,7 @@ const DatabaseDetailAccountComponent = (props) => {
                     createdAt={userFriendListRes?.[0]?.createdAt}
                     fullName={userFriendListRes?.[0]?.fullName || '-'}
                     email={userFriendListRes?.[0]?.email || '-'}
-                    roles={userFriendListRes?.[0]?.roles || '-'}
+                    roles={userFriendListRes?.[0]?.statusUser || '-'}
                   />
                 </Grid>
                 <Grid item xs={12} md>

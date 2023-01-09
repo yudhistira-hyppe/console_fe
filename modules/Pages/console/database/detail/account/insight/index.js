@@ -4,7 +4,7 @@ import { Typography, Box } from '@material-ui/core';
 import { Divider, Stack } from '@mui/material';
 import { formatNumber } from 'helpers/stringHelper';
 
-const InsightComponent = ({ insight }) => {
+const InsightComponent = ({ insight, friends }) => {
   return (
     <Stack
       direction="row"
@@ -29,7 +29,7 @@ const InsightComponent = ({ insight }) => {
       </Stack>
       <Stack>
         <Typography component="div" variant="h1" align="center">
-          {formatNumber(insight?.totalFriends || 0)}
+          {formatNumber(friends || 0)}
         </Typography>
         <Box component="span" fontSize={12} color="text.secondary" mt={1} textAlign="center">
           Teman

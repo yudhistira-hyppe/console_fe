@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Divider, Grid, ImageList, ImageListItem, Stack, SvgIcon, Tab } from '@mui/material';
 import { Box, Typography } from '@material-ui/core';
-import { AccountBalance, Cake, LocationCity, LocationOn, PhoneIphone, Wc } from '@material-ui/icons';
+import { AccountBalance, Cake, CheckCircle, LocationCity, LocationOn, PhoneIphone, Wc } from '@material-ui/icons';
 import { useGetBankAccountByUserEmailQuery } from 'api/user/user';
 import { capitalizeEachWord, formatGender, maskCharacterExceptLastN } from 'helpers/stringHelper';
 import moment from 'moment';
@@ -61,7 +61,7 @@ const UserInfoComponent = (props) => {
     name?.map((n, idx) => {
       if (idx > 2 && idx < name.length - 2) {
         blurredName.push('*');
-      }  else {
+      } else {
         blurredName.push(n);
       }
     });
@@ -85,111 +85,120 @@ const UserInfoComponent = (props) => {
         </Box>
         <Divider />
         <TabPanel value="1" style={{ padding: 0 }}>
-          <Stack padding="36px 24px" rowGap={4}>
-            <Grid container spacing={4}>
-              <Grid item xs={12} sm={4}>
-                <Stack direction="row" spacing={2}>
-                  <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
-                    <LocationOn />
-                  </SvgIcon>
-                  <Box>
-                    <Typography className={classes.userInfoLabel} variant="caption">
-                      Tempat Lahir
-                    </Typography>
-                    <Typography className={classes.userInfoContent} variant="h4">
-                      {'-'}
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Stack direction="row" spacing={2}>
-                  <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
-                    <Cake />
-                  </SvgIcon>
-                  <Box>
-                    <Typography className={classes.userInfoLabel} variant="caption">
-                      Tanggal Lahir
-                    </Typography>
-                    <Typography className={classes.userInfoContent} variant="h4">
-                      {accountDetail?.dob ? formattedDOB(accountDetail.dob) : '-'}
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Stack direction="row" spacing={2}>
-                  <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
-                    <Wc />
-                  </SvgIcon>
-                  <Box>
-                    <Typography className={classes.userInfoLabel} variant="caption">
-                      Jenis Kelamin
-                    </Typography>
-                    <Typography className={classes.userInfoContent} variant="h4">
-                      {accountDetail.gender ? formatGender(accountDetail.gender) : '-'}
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Stack direction="row" spacing={2}>
-                  <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
-                    <PhoneIphone />
-                  </SvgIcon>
-                  <Box>
-                    <Typography className={classes.userInfoLabel} variant="caption">
-                      Nomor Telepon
-                    </Typography>
-                    <Typography className={classes.userInfoContent} variant="h4">
-                      {accountDetail?.mobileNumber || '-'}
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Stack direction="row" spacing={2}>
-                  <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
-                    <LocationCity />
-                  </SvgIcon>
-                  <Box>
-                    <Typography className={classes.userInfoLabel} variant="caption">
-                      Lokasi
-                    </Typography>
-                    <Typography className={classes.userInfoContent} variant="h4">
-                      {accountDetail?.states || '-'}
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Grid>
-            </Grid>
-            {userBankAccounts.length >= 1 && (
+          <ScrollBar style={{ maxHeight: 300 }}>
+            <Stack padding="36px 24px" rowGap={4}>
               <Grid container spacing={4}>
-                {userBankAccounts?.map((bankAccount) => (
-                  <Grid key={bankAccount.id} item xs={12} sm={4}>
-                    <Stack direction="row" spacing={2}>
-                      <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
-                        <AccountBalance />
-                      </SvgIcon>
-                      <Box>
-                        <Typography className={classes.userInfoLabel} variant="caption">
-                          Rekening Bank
-                        </Typography>
-                        <Box>
-                          <Typography className={classes.userInfoContent} variant="h4">
-                            {bankAccount?.bankname?.replace('Bank ', '')} {blurNumberCard(bankAccount?.noRek)}
-                          </Typography>
-                          <Typography className={classes.userInfoContent} variant="h4">
-                            {blurUsername(bankAccount?.nama)}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Stack>
-                  </Grid>
-                ))}
+                <Grid item xs={12} sm={4}>
+                  <Stack direction="row" spacing={2}>
+                    <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
+                      <LocationOn />
+                    </SvgIcon>
+                    <Box>
+                      <Typography className={classes.userInfoLabel} variant="caption">
+                        Tempat Lahir
+                      </Typography>
+                      <Typography className={classes.userInfoContent} variant="h4">
+                        {accountDetail?.tempatLahir || '-'}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Stack direction="row" spacing={2}>
+                    <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
+                      <Cake />
+                    </SvgIcon>
+                    <Box>
+                      <Typography className={classes.userInfoLabel} variant="caption">
+                        Tanggal Lahir
+                      </Typography>
+                      <Typography className={classes.userInfoContent} variant="h4">
+                        {accountDetail?.dob ? formattedDOB(accountDetail.dob) : '-'}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Stack direction="row" spacing={2}>
+                    <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
+                      <Wc />
+                    </SvgIcon>
+                    <Box>
+                      <Typography className={classes.userInfoLabel} variant="caption">
+                        Jenis Kelamin
+                      </Typography>
+                      <Typography className={classes.userInfoContent} variant="h4">
+                        {accountDetail.gender ? formatGender(accountDetail.gender) : '-'}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Stack direction="row" spacing={2}>
+                    <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
+                      <PhoneIphone />
+                    </SvgIcon>
+                    <Box>
+                      <Typography className={classes.userInfoLabel} variant="caption">
+                        Nomor Telepon
+                      </Typography>
+                      <Typography className={classes.userInfoContent} variant="h4">
+                        {accountDetail?.mobileNumber || '-'}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Stack direction="row" spacing={2}>
+                    <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
+                      <LocationCity />
+                    </SvgIcon>
+                    <Box>
+                      <Typography className={classes.userInfoLabel} variant="caption">
+                        Lokasi
+                      </Typography>
+                      <Typography className={classes.userInfoContent} variant="h4">
+                        {accountDetail?.states || '-'}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Grid>
               </Grid>
-            )}
-          </Stack>
+              {userBankAccounts.length >= 1 && (
+                <Grid container spacing={4}>
+                  {userBankAccounts?.map((bankAccount) => (
+                    <Grid key={bankAccount.id} item xs={12} sm={4}>
+                      <Stack direction="row" spacing={2}>
+                        <Box style={{ position: 'relative' }}>
+                          <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
+                            <AccountBalance />
+                          </SvgIcon>
+                          {bankAccount?.active && (
+                            <CheckCircle
+                              style={{ position: 'absolute', bottom: 20, right: -6, color: '#5D9405', fontSize: 20 }}
+                            />
+                          )}
+                        </Box>
+                        <Box>
+                          <Typography className={classes.userInfoLabel} variant="caption">
+                            Rekening Bank
+                          </Typography>
+                          <Box>
+                            <Typography className={classes.userInfoContent} variant="h4">
+                              {bankAccount?.bankname?.replace('Bank ', '')} {blurNumberCard(bankAccount?.noRek)}
+                            </Typography>
+                            <Typography className={classes.userInfoContent} variant="h4">
+                              {blurUsername(bankAccount?.nama)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Stack>
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+            </Stack>
+          </ScrollBar>
         </TabPanel>
         <TabPanel value="2" style={{ padding: 0 }}>
           <ScrollBar style={{ maxHeight: 300 }}>
