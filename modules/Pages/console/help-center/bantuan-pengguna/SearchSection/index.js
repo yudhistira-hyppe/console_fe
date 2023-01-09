@@ -76,6 +76,7 @@ const SearchSection = ({ filter, handleChange }) => {
               name="search"
               filterValue={filter.search}
               onChange={(e) => handleChange(e.target.name, e.target.value)}
+              color="secondary"
             />
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -83,7 +84,7 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
+            <Typography style={{ fontSize: '13px' }}>Tanggal Tiket</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
             <Stack direction={'column'} spacing={1} mb={3}>
@@ -93,6 +94,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 1) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -100,6 +102,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(7, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '7 hari Terakhir');
                     setWeek(1);
                     setValue([
                       {
@@ -122,6 +125,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 2) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -129,6 +133,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(14, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '14 Hari Terakhir');
                     setWeek(2);
                     setValue([
                       {
@@ -150,6 +155,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 4) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -157,6 +163,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(30, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '1 Bulan Terakhir');
                     setWeek(4);
                     setValue([
                       {
@@ -178,6 +185,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 12) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -185,6 +193,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       moment().subtract(90, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '3 Bulan Terakhir');
                     setWeek(12);
                     setValue([
                       {
@@ -234,6 +243,7 @@ const SearchSection = ({ filter, handleChange }) => {
                       },
                     ]);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
                     setDate(false);
                   }}>
                   <RemoveCircleOutline color="primary" />
@@ -257,6 +267,12 @@ const SearchSection = ({ filter, handleChange }) => {
                     moment(item.selection.startDate).format('YYYY-MM-DD'),
                     item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
                   ]);
+                  handleChange(
+                    'labelTanggal',
+                    `${moment(item.selection.startDate).format('DD-MM-YYYY')} - ${
+                      item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
+                    }`,
+                  );
                   setDate(true);
                   setWeek(null);
                 }}
