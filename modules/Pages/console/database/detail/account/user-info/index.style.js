@@ -9,6 +9,10 @@ const useStyles = makeStyles(() => ({
   userInfoContent: {
     '&.MuiTypography-root': {
       fontWeight: '400',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      width: 160,
     },
   },
 }));

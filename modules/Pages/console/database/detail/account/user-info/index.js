@@ -39,6 +39,36 @@ const UserInfoComponent = (props) => {
     return `${STREAM_URL}/v4${endpoint?.[0]}${authToken}`;
   };
 
+  const blurNumberCard = (item) => {
+    const number = item?.split('');
+    let blurredNumber = [];
+
+    number?.map((n, idx) => {
+      if (idx < number?.length - 3) {
+        blurredNumber.push('*');
+      } else {
+        blurredNumber.push(n);
+      }
+    });
+
+    return blurredNumber.join('');
+  };
+
+  const blurUsername = (item) => {
+    const name = item?.split('');
+    let blurredName = [];
+
+    name?.map((n, idx) => {
+      if (idx > 2 && idx < name.length - 2) {
+        blurredName.push('*');
+      }  else {
+        blurredName.push(n);
+      }
+    });
+
+    return blurredName.join('');
+  };
+
   return (
     <Card>
       <TabContext value={tab}>
@@ -147,10 +177,10 @@ const UserInfoComponent = (props) => {
                         </Typography>
                         <Box>
                           <Typography className={classes.userInfoContent} variant="h4">
-                            {bankAccount.detail}
+                            {bankAccount?.bankname?.replace('Bank ', '')} {blurNumberCard(bankAccount?.noRek)}
                           </Typography>
                           <Typography className={classes.userInfoContent} variant="h4">
-                            {bankAccount.accountName}
+                            {blurUsername(bankAccount?.nama)}
                           </Typography>
                         </Box>
                       </Box>
