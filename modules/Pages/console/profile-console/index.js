@@ -1,5 +1,5 @@
 import GridContainer from '@jumbo/components/GridContainer';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import Contact from './Contact';
 import About from './About';
@@ -9,6 +9,8 @@ import { useGetProfileByUserEmailQuery } from 'api/user/user';
 import { useGetGroupQuery } from 'api/console/group';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Avatar, Card, Stack } from '@mui/material';
+import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const useStyles = makeStyles(() => ({
   pageFull: {
@@ -30,44 +32,43 @@ const useStyles = makeStyles(() => ({
 
 const ProfileBasic = () => {
   const classes = useStyles();
-  const router = useRouter();
-  const [payload, setPayload] = useState({
-    skip: 0,
-    limit: 10,
-  });
   const { authUser } = useAuth();
   const { data: dataProfile } = useGetProfileByUserEmailQuery(authUser.user.email);
 
-  const { data: dataPosition } = useGetGroupQuery(payload);
+  const getImage = (mediaEndpoint) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const endpoint = mediaEndpoint?.split('_');
+
+    return `${STREAM_URL}/v4${endpoint[0]}${authToken}`;
+  };
 
   return (
-    <>
-      <GridContainer>
-        <Grid item xs={12} lg={12} className={classes.profileSidebar}>
-          <Box>
-            <Header dataUser={dataProfile} />
-          </Box>
-        </Grid>
-
-        <Grid item xs={12} lg={4} className={classes.profileSidebar}>
-          <Box mb={6}>
-            {/* <Contact userDetail={userDetail} /> */}
-            <Contact dataUser={dataProfile} dataPosition={dataPosition} query={router.query} />
-          </Box>
-          <Box mb={6}>{/* <Friends friends={userDetail.friends} /> */}</Box>
-          <Box mb={6}>{/* <UserPhotos /> */}</Box>
-        </Grid>
-        <Grid item xs={12} lg={8} className={classes.profileMainContent}>
-          <Box mb={6}>
-            <About dataUser={dataProfile} />
-          </Box>
-          {/* <Box mb={6}>
-            <Biography />
-          </Box> */}
-          {/* <Events events={userDetail.events} /> */}
-        </Grid>
-      </GridContainer>
-    </>
+    <Card style={{ width: '65%', margin: '0 auto', padding: '24px 24px 44px' }}>
+      <Stack direction="column" gap={3}>
+        <Typography style={{ fontWeight: 'bold' }}>Profil</Typography>
+        <Avatar
+          src={getImage(dataProfile?.data[0]?.avatar?.mediaEndpoint)}
+          alt="Profile Image User"
+          style={{ width: 80, height: 80, objectFit: 'cover', objectPosition: 'center' }}
+        />
+        <Stack>
+          <Typography style={{ fontSize: 12, color: '#666666' }}>Nama Lengkap</Typography>
+          <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>{dataProfile?.data[0]?.fullName || '-'}</Typography>
+        </Stack>
+        <Stack>
+          <Typography style={{ fontSize: 12, color: '#666666' }}>Jabatan</Typography>
+          <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>{dataProfile?.data[0]?.group || '-'}</Typography>
+        </Stack>
+        <Stack>
+          <Typography style={{ fontSize: 12, color: '#666666' }}>Divisi</Typography>
+          <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>{dataProfile?.data[0]?.divisi || '-'}</Typography>
+        </Stack>
+        <Stack>
+          <Typography style={{ fontSize: 12, color: '#666666' }}>Email</Typography>
+          <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>{dataProfile?.data[0]?.email || '-'}</Typography>
+        </Stack>
+      </Stack>
+    </Card>
   );
 };
 
