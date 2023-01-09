@@ -126,14 +126,11 @@ const KelolaVoucherComponent = () => {
               <Table sx={{ minWidth: 650 }} aria-label="basic-table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left" style={{ paddingLeft: 24, maxWidth: 130 }}>
+                    <TableCell align="left" style={{ paddingLeft: 24, maxWidth: 230 }}>
                       Nama Voucher
                     </TableCell>
                     <TableCell align="left" style={{ maxWidth: 100 }}>
                       Waktu Pembuatan
-                    </TableCell>
-                    <TableCell align="left" style={{ maxWidth: 100 }}>
-                      Waktu Kadaluarsa
                     </TableCell>
                     <TableCell align="left">Jumlah Kredit</TableCell>
                     <TableCell align="left">Jumlah Stok</TableCell>
@@ -159,13 +156,12 @@ const KelolaVoucherComponent = () => {
 
                       return (
                         <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                          <TableCell component="th" scope="row" style={{ paddingLeft: 24, maxWidth: 130 }}>
+                          <TableCell component="th" scope="row" style={{ paddingLeft: 24, maxWidth: 230 }}>
                             <Typography
                               variant="body1"
                               style={{
                                 fontSize: '14px',
                                 fontWeight: 'bold',
-                                color: expired.diff(now, 'day') >= 1 ? 'black' : 'red',
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -179,20 +175,6 @@ const KelolaVoucherComponent = () => {
                               variant="body1"
                               style={{ fontSize: '12px', width: 80, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {moment(item?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left" style={{ maxWidth: 100 }}>
-                            <Typography
-                              variant="body1"
-                              style={{
-                                fontSize: '12px',
-                                fontWeight: expired.diff(now, 'day') >= 1 ? '' : 'bold',
-                                color: expired.diff(now, 'day') >= 1 ? 'black' : 'red',
-                                width: 80,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                              }}>
-                              {moment(item?.expiredAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
