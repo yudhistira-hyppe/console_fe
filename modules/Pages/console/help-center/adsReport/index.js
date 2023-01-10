@@ -49,7 +49,13 @@ const dummySkeleton = [1, 2, 3];
 const AdsReport = () => {
   const classes = useStyles();
 
-  const { data: listTickets, isFetching } = useGetListTicketsQuery({ page: 0, limit: 5, type: 'ads', jenis: 'report' });
+  const { data: listTickets, isFetching } = useGetListTicketsQuery({
+    page: 0,
+    limit: 5,
+    type: 'ads',
+    jenis: 'report',
+    descending: true,
+  });
 
   return (
     <CmtCard className={classes.cardRoot}>
