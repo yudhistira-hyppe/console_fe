@@ -37,7 +37,7 @@ export default function ModalLampiran({ showModal, onClose, data }) {
               srcSet={data?.src}
               alt="asd"
               loading="lazy"
-              style={{ borderRadius: 8, width: '75%', height: 'auto', objectFit: 'cover', objectPosition: 'center' }}
+              style={{ borderRadius: 8, width: '15vw', height: 'auto', objectFit: 'cover', objectPosition: 'center' }}
             />
           </Stack>
         </Box>
