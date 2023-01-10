@@ -78,8 +78,8 @@ const PelaporanKonten = () => {
         case 'search':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Konten' }]
-              : [...prevVal, { parent: kind, value: 'Konten' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Konten (${value})` }]
+              : [...prevVal, { parent: kind, value: `Konten (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'reason':
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
@@ -87,18 +87,28 @@ const PelaporanKonten = () => {
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
         case 'range':
           return prevVal.find((item) => item.parent === kind)
-            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Jumlah Pelaporan' }]
-            : [...prevVal, { parent: kind, value: 'Jumlah Pelaporan' }];
+            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Jumlah Laporan (${value})` }]
+            : [...prevVal, { parent: kind, value: `Jumlah Laporan (${value})` }];
         case 'clearRange':
           return [...prevVal.filter((item) => item.parent !== 'range')];
         case 'startreport':
-          return prevVal.find((item) => item.parent === 'range')
-            ? [...prevVal.filter((item) => item.parent !== 'range'), { parent: 'range', value: 'Jumlah Pelaporan' }]
-            : [...prevVal, { parent: 'range', value: 'Jumlah Pelaporan' }];
+          return filter.rangeReport[1]
+            ? prevVal.find((item) => item.parent === 'range')
+              ? [
+                  ...prevVal.filter((item) => item.parent !== 'range'),
+                  { parent: 'range', value: `Jumlah Laporan (Kombinasi)` },
+                ]
+              : [...prevVal, { parent: 'range', value: `Jumlah Laporan (Kombinasi)` }]
+            : [...prevVal.filter((item) => item.parent !== 'range')];
         case 'endreport':
-          return prevVal.find((item) => item.parent === 'range')
-            ? [...prevVal.filter((item) => item.parent !== 'range'), { parent: 'range', value: 'Jumlah Pelaporan' }]
-            : [...prevVal, { parent: 'range', value: 'Jumlah Pelaporan' }];
+          return filter.rangeReport[0]
+            ? prevVal.find((item) => item.parent === 'range')
+              ? [
+                  ...prevVal.filter((item) => item.parent !== 'range'),
+                  { parent: 'range', value: `Jumlah Laporan (Kombinasi)` },
+                ]
+              : [...prevVal, { parent: 'range', value: `Jumlah Laporan (Kombinasi)` }]
+            : [...prevVal.filter((item) => item.parent !== 'range')];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]

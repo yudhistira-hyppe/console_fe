@@ -30,89 +30,6 @@ const SearchSection = ({ filter, handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
-        {/* <Accordion elevation={0} defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Masuk</Typography>
-          </AccordionSummary>
-          <AccordionDetails style={{ padding: '0px' }}>
-            <Stack direction={'column'} spacing={1} mb={3}>
-              <Chip
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 7);
-                  setWeek(1), setValue([null, null]);
-                }}
-                label="7 Hari"
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week == 1 ? 'default' : 'outlined'}
-              />
-              <Chip
-                label="14 Hari"
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 14);
-                  setWeek(2), setValue([null, null]);
-                }}
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 2 ? 'default' : 'outlined'}
-              />
-              <Chip
-                label="1 Bulan"
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 30);
-                  setWeek(4), setValue([null, null]);
-                }}
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 4 ? 'default' : 'outlined'}
-              />
-              <Chip
-                label="3 Bulan"
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 90);
-                  setWeek(12), setValue([null, null]);
-                }}
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 12 ? 'default' : 'outlined'}
-              />
-            </Stack>
-
-            <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-              <DateRangePicker
-                value={value}
-                maxDate={getWeeksAfter(value[0], week)}
-                onChange={(newValue) => {
-                  handleChange('ticket_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
-                  setValue(newValue);
-                  setWeek(null);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <Stack direction={'row'} spacing={1}>
-                      <TextField size="small" autoComplete="off" {...startProps} />
-                      <TextField size="small" autoComplete="off" {...endProps} />
-                    </Stack>
-                  </>
-                )}
-              />
-            </LocalizationProvider>
-          </AccordionDetails>
-        </Accordion> */}
-
-        {/* <Accordion elevation={0} defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Akun Pelapor</Typography>
-          </AccordionSummary>
-          <AccordionDetails style={{ padding: 0 }}>
-            <TextField style={{ width: '100%' }} placeholder="Cari" />
-          </AccordionDetails>
-        </Accordion> */}
-
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Konten Dilaporkan</Typography>
@@ -125,6 +42,7 @@ const SearchSection = ({ filter, handleChange }) => {
               name="search"
               filterValue={filter.search}
               onChange={(e) => handleChange(e.target.name, e.target.value)}
+              color="secondary"
             />
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -136,10 +54,10 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <RadioGroup value={filter.range} onChange={(e) => handleChange('range', e.target.value)}>
-              <FormControlLabel value="1-50" label={'1-50'} control={<Radio />} />
-              <FormControlLabel value="51-100" label={'51-100'} control={<Radio />} />
-              <FormControlLabel value="101-150" label={'101-150'} control={<Radio />} />
-              <FormControlLabel value="151-200" label={'151-200'} control={<Radio />} />
+              <FormControlLabel value="1-50" label={'1-50'} control={<Radio color="secondary" />} />
+              <FormControlLabel value="51-100" label={'51-100'} control={<Radio color="secondary" />} />
+              <FormControlLabel value="101-150" label={'101-150'} control={<Radio color="secondary" />} />
+              <FormControlLabel value="151-200" label={'151-200'} control={<Radio color="secondary" />} />
             </RadioGroup>
             <Stack direction="row" spacing={1} mt={1}>
               <DelayedTextField
@@ -149,6 +67,15 @@ const SearchSection = ({ filter, handleChange }) => {
                 name="startreport"
                 filterValue={filter.rangeReport[0]}
                 onChange={(e) => handleChange(e.target.name, Number(e.target.value))}
+                color="secondary"
+                inputProps={{
+                  min: 0,
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
               />
               <DelayedTextField
                 fullWidth
@@ -157,6 +84,15 @@ const SearchSection = ({ filter, handleChange }) => {
                 name="endreport"
                 filterValue={filter.rangeReport[1]}
                 onChange={(e) => handleChange(e.target.name, Number(e.target.value))}
+                color="secondary"
+                inputProps={{
+                  min: 0,
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
               />
             </Stack>
           </AccordionDetails>

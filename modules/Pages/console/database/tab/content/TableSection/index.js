@@ -25,7 +25,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
-    width: '100%',
+    width: 100,
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
@@ -120,7 +120,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
             <TableRow>
-              <TableCell align="left" style={{ maxWidth: 120 }}>
+              <TableCell align="left" style={{ maxWidth: 150 }}>
                 Konten
               </TableCell>
               <TableCell align="left" style={{ maxWidth: 100 }}>
@@ -153,7 +153,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   hover
                   style={{ cursor: 'pointer' }}
                   onClick={() => router.push(`/database/content/${item?._id}`)}>
-                  <TableCell align="left" style={{ maxWidth: 120 }}>
+                  <TableCell align="left" style={{ maxWidth: 150 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={getImage(item)} variant="rounded" />
                       <Typography

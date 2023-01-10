@@ -25,6 +25,7 @@ const ConsoleBantuanPenggunaComponent = () => {
     sumber: [],
     kategori: [],
     level: [],
+    labelTanggal: '',
     createdAt: [null, null],
     page: 0,
     limit: 10,
@@ -69,21 +70,25 @@ const ConsoleBantuanPenggunaComponent = () => {
         case 'search':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Nomor Tiket' }]
-              : [...prevVal, { parent: kind, value: 'Nomor Tiket' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Nomor Tiket (${value})` }]
+              : [...prevVal, { parent: kind, value: `Nomor Tiket (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'penerima':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Penerima Tugas' }]
-              : [...prevVal, { parent: kind, value: 'Penerima Tugas' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Penerima (${value})` }]
+              : [...prevVal, { parent: kind, value: `Penerima (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Masuk Tiket' }]
-              : [...prevVal, { parent: kind, value: 'Tanggal Masuk Tiket' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Waktu Transaksi' }]
+              : [...prevVal, { parent: kind, value: 'Waktu Transaksi' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'labelTanggal':
+          return prevVal.find((item) => item.parent === 'createdAt')
+            ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
+            : [...prevVal];
         case 'sumber':
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
             ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
@@ -105,6 +110,8 @@ const ConsoleBantuanPenggunaComponent = () => {
     setFilter((prevVal) => {
       if (kind === 'createdAt') {
         return { ...prevVal, createdAt: value, page: 0 };
+      } else if (kind === 'labelTanggal') {
+        return { ...prevVal, labelTanggal: value, page: 0 };
       } else if (kind === 'status') {
         return {
           ...prevVal,

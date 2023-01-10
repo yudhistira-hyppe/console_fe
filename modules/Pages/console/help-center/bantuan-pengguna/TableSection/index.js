@@ -128,7 +128,7 @@ const TableSection = ({
               <TableRow>
                 <TableCell style={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>Nomor Tiket</TableCell>
                 <TableCell align="left" style={{ width: 120 }}>
-                  Tanggal Masuk Tiket
+                  Tanggal Tiket
                 </TableCell>
                 <TableCell align="left" style={{ width: 80 }}>
                   Sumber

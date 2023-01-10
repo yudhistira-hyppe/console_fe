@@ -18,6 +18,7 @@ const DatabaseTabAccountComponent = () => {
     area: [],
     rangeAge: [],
     type: [],
+    labelCreated: '',
     createdAt: [null, null],
     lastOnline: '',
     rangeOnline: [null, null],
@@ -33,7 +34,8 @@ const DatabaseTabAccountComponent = () => {
       descending: filter.descending === 'true' ? true : false,
     });
     filter.username !== '' && Object.assign(params, { username: filter.username });
-    filter.gender.length >= 1 && Object.assign(params, { gender: filter.gender.map((item) => item) });
+    filter.gender.length >= 1 &&
+      Object.assign(params, { gender: filter.gender.map((item) => (item === 'Perempuan' ? 'FEMALE' : 'MALE')) });
     filter.area.length >= 1 && Object.assign(params, { lokasi: filter.area.map((item) => item?._id) });
     filter.age !== '' && Object.assign(params, { startage: filter.rangeAge[0], endage: filter.rangeAge[1] });
     filter.type.length >= 1 && Object.assign(params, { jenis: filter.type.map((item) => item) });
@@ -44,8 +46,6 @@ const DatabaseTabAccountComponent = () => {
 
     return params;
   };
-
-  console.log(filter);
 
   const { data: listUser, isFetching: loadingUser } = useGetAllUserQuery(getParams());
 
@@ -73,13 +73,13 @@ const DatabaseTabAccountComponent = () => {
         case 'username':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'username' }]
-              : [...prevVal, { parent: kind, value: 'username' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `username (${value})` }]
+              : [...prevVal, { parent: kind, value: `username (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'age':
           return prevVal.find((item) => item.parent === kind)
-            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'rentang umur' }]
-            : [...prevVal, { parent: kind, value: 'rentang umur' }];
+            ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `rentang umur (${value})` }]
+            : [...prevVal, { parent: kind, value: `rentang umur (${value})` }];
         case 'clearAge':
           return prevVal.filter((item) => item.parent !== 'age');
         case 'createdAt':
@@ -88,11 +88,18 @@ const DatabaseTabAccountComponent = () => {
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Daftar' }]
               : [...prevVal, { parent: kind, value: 'Tanggal Daftar' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'labelCreated':
+          return prevVal.find((item) => item.parent === 'createdAt')
+            ? [
+                ...prevVal.filter((item) => item.parent !== 'createdAt'),
+                { parent: 'createdAt', value: `Tanggal Daftar (${value})` },
+              ]
+            : [...prevVal];
         case 'lastOnline':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Terakhir Online' }]
-              : [...prevVal, { parent: kind, value: 'Terakhir Online' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Terakhir Online (${value})` }]
+              : [...prevVal, { parent: kind, value: `Terakhir Online (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'area':
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
@@ -168,6 +175,8 @@ const DatabaseTabAccountComponent = () => {
           return { ...prevVal, age: '', rangeAge: [], page: 0 };
         case 'createdAt':
           return { ...prevVal, createdAt: value, page: 0 };
+        case 'labelCreated':
+          return { ...prevVal, labelCreated: value };
         case 'lastOnline':
           return { ...prevVal, lastOnline: value, page: 0 };
         case 'rangeOnline':

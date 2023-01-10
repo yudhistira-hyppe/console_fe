@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetListContentQuery } from 'api/console/database/content';
+import moment from 'moment';
 
 const DatabaseTabContentComponent = () => {
   const [filter, setFilter] = useState({
@@ -77,38 +78,44 @@ const DatabaseTabContentComponent = () => {
         case 'description':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Description' }]
-              : [...prevVal, { parent: kind, value: 'Description' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Deskripsi (${value})` }]
+              : [...prevVal, { parent: kind, value: `Deskripsi (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'pemilik':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'pemilik' }]
-              : [...prevVal, { parent: kind, value: 'pemilik' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Pemilik (${value})` }]
+              : [...prevVal, { parent: kind, value: `Pemilik (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'min_price':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Min Price' }]
-              : [...prevVal, { parent: kind, value: 'Min Price' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Minimal Harga (${value})` }]
+              : [...prevVal, { parent: kind, value: `Minimal Harga (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'max_price':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Max Price' }]
-              : [...prevVal, { parent: kind, value: 'Max Price' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Maksimal Harga (${value})` }]
+              : [...prevVal, { parent: kind, value: `Maksimal Harga (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pembuatan' }]
-              : [...prevVal, { parent: kind, value: 'Tanggal Pembuatan' }]
-            : [...prevVal.filter((item) => item.parent !== kind)];
-        case 'ownedAt':
-          return value.length >= 1 && value[0]
-            ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pendaftaran' }]
-              : [...prevVal, { parent: kind, value: 'Tanggal Pendaftaran' }]
+              ? [
+                  ...prevVal.filter((item) => item.parent !== kind),
+                  {
+                    parent: kind,
+                    value: `Tanggal Pembuatan (${value.map((item) => moment(item)?.format('DD-MM-YYYY')).join('-')})`,
+                  },
+                ]
+              : [
+                  ...prevVal,
+                  {
+                    parent: kind,
+                    value: `Tanggal Pembuatan (${value.map((item) => moment(item)?.format('DD-MM-YYYY')).join('-')})`,
+                  },
+                ]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'category':
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)

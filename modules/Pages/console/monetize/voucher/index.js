@@ -67,8 +67,8 @@ const MonetizeVoucherComponent = () => {
         case 'search':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: value }]
-              : [...prevVal, { parent: kind, value: value }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Voucher (${value})` }]
+              : [...prevVal, { parent: kind, value: `Voucher (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]

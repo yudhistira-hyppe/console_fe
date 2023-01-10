@@ -261,8 +261,8 @@ const SearchSection = ({ filter, handleChange }) => {
                   ]);
                   handleChange(
                     'labelTanggal',
-                    `${moment(item.selection.startDate).format('YYYY-MM-DD')} - ${
-                      item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : ''
+                    `${moment(item.selection.startDate).format('DD-MM-YYYY')} - ${
+                      item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
                     }`,
                   );
                   setDate(true);

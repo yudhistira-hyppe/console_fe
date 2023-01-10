@@ -22,6 +22,7 @@ const BandingIklan = () => {
     limit: 10,
     descending: 'true',
     search: '',
+    labelTanggal: '',
     createdAt: [null, null],
     status: [],
     reason: [],
@@ -73,15 +74,19 @@ const BandingIklan = () => {
         case 'search':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Pemohon' }]
-              : [...prevVal, { parent: kind, value: 'Pemohon' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Pemohon (${value})` }]
+              : [...prevVal, { parent: kind, value: `Pemohon (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Pengajuan' }]
-              : [...prevVal, { parent: kind, value: 'Tanggal Pengajuan' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Waktu Transaksi' }]
+              : [...prevVal, { parent: kind, value: 'Waktu Transaksi' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'labelTanggal':
+          return prevVal.find((item) => item.parent === 'createdAt')
+            ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
+            : [...prevVal];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -91,6 +96,8 @@ const BandingIklan = () => {
     setFilter((prevVal) => {
       if (kind === 'createdAt') {
         return { ...prevVal, createdAt: value, page: 0 };
+      } else if (kind === 'labelTanggal') {
+        return { ...prevVal, labelTanggal: value, page: 0 };
       } else if (kind === 'search') {
         return { ...prevVal, search: value, page: 0 };
       } else if (kind === 'status') {
