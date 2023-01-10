@@ -25,12 +25,24 @@ import {
 } from 'api/console/helpCenter/konten';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import ScrollBar from 'react-perfect-scrollbar';
+import { makeStyles } from '@material-ui/styles';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
   { label: 'Permohonan Banding Konten', link: '/help-center/banding-konten' },
   { label: 'Rincian Banding Konten', isActive: true },
 ];
+
+const useStyles = makeStyles(() => ({
+  textTruncate: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    '-webkit-line-clamp': 2,
+    overflow: 'hidden',
+  },
+}));
 
 const DetailBandingKonten = () => {
   const { authUser } = useAuth();
@@ -42,6 +54,7 @@ const DetailBandingKonten = () => {
     delete: false,
     type: '',
   });
+  const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [updateTicket] = useUpdateDetailTicketMutation();
   const [flagTicket] = useUpdateFlagingTicketMutation();
@@ -284,8 +297,8 @@ const DetailBandingKonten = () => {
                     />
                   </Stack>
                   <Stack direction="column" gap="8px" mt={1}>
-                    <Typography>{detail?.data[0]?.description || '-'}</Typography>
-                    <Typography variant="caption" style={{ color: '#00000099' }}>
+                    <Typography className={classes.textTruncate}>{detail?.data[0]?.description || '-'}</Typography>
+                    <Typography variant="caption" className={classes.textTruncate} style={{ color: '#00000099' }}>
                       {detail?.data[0]?.description || '-'}
                     </Typography>
                     <Stack direction={'row'} spacing={1}>

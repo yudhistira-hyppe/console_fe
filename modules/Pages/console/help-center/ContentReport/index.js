@@ -40,7 +40,13 @@ const dummySkeleton = [1, 2, 3];
 const ContentReport = () => {
   const classes = useStyles();
 
-  const { data: listTickets, isFetching } = useGetListTicketsQuery({ page: 0, limit: 5, type: 'content', jenis: 'report' });
+  const { data: listTickets, isFetching } = useGetListTicketsQuery({
+    page: 0,
+    limit: 5,
+    type: 'content',
+    jenis: 'report',
+    descending: true,
+  });
 
   return (
     <CmtCard className={classes.cardRoot}>
