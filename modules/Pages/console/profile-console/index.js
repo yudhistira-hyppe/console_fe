@@ -6,11 +6,9 @@ import About from './About';
 import Header from './Header';
 import { useAuth } from 'authentication';
 import { useGetProfileByUserEmailQuery } from 'api/user/user';
-import { useGetGroupQuery } from 'api/console/group';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { Avatar, Card, Stack } from '@mui/material';
 import { STREAM_URL } from 'authentication/auth-provider/config';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const useStyles = makeStyles(() => ({
   pageFull: {
@@ -33,16 +31,18 @@ const useStyles = makeStyles(() => ({
 const ProfileBasic = () => {
   const classes = useStyles();
   const { authUser } = useAuth();
-  const { data: dataProfile } = useGetProfileByUserEmailQuery(authUser.user.email);
+  const { data: dataProfile, isLoading } = useGetProfileByUserEmailQuery(authUser.user.email);
 
   const getImage = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const endpoint = mediaEndpoint?.split('_');
 
-    return `${STREAM_URL}/v4${endpoint[0]}${authToken}`;
+    return `${STREAM_URL}/v5${endpoint?.[0]}${authToken}`;
   };
 
-  return (
+  return isLoading ? (
+    <PageLoader />
+  ) : (
     <Card style={{ width: '65%', margin: '0 auto', padding: '24px 24px 44px' }}>
       <Stack direction="column" gap={3}>
         <Typography style={{ fontWeight: 'bold' }}>Profil</Typography>
