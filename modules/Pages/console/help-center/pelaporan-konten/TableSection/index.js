@@ -156,7 +156,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                   }>
                   <TableCell component="th" scope="row">
                     <Typography variant="body1" style={{ fontSize: '12px', maxWidth: 80 }}>
-                      {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
+                      {moment(item?.createdAtReportLast).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 180 }}>
@@ -166,8 +166,8 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                         variant="body1"
                         style={{ fontSize: '12px' }}
                         className={classes.textTruncate}
-                        title={item?.description}>
-                        {item?.description}
+                        title={item?.description || '-'}>
+                        {item?.description || '-'}
                       </Typography>
                     </Stack>
                   </TableCell>
