@@ -16,7 +16,6 @@ import { FolderShared, KeyboardArrowDown } from '@material-ui/icons';
 import {
   useGetDetailTicketQuery,
   useGetLogHistoryDetailTicketQuery,
-  useGetUserDivisiQuery,
   useReplyTicketMutation,
   useUpdateDetailTicketMutation,
 } from 'api/console/helpCenter/bantuan-pengguna';
@@ -27,6 +26,7 @@ import { useAuth } from 'authentication';
 import { LoadingButton } from '@mui/lab';
 import { useGetDivisiQuery } from 'api/console/divisi';
 import Cookies from 'js-cookie';
+import { useGetUserDivisiQuery } from 'api/console/getUserHyppe';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -87,6 +87,21 @@ const DetailBantuanPengguna = () => {
     const mediaURI = urlEndpoint;
 
     return `${STREAM_URL}${mediaURI}${authToken}`;
+  };
+
+  const userGroupDivisi = () => {
+    let data = [];
+
+    userDivisi?.data?.map((item) => {
+      item?.user?.map((users) => {
+        data.push({
+          _id: users._id,
+          name: users.fullName,
+        });
+      });
+    });
+
+    return data;
   };
 
   const handleToggle = () => {
@@ -546,7 +561,9 @@ const DetailBantuanPengguna = () => {
                           setUserAssign('');
                         }}
                         disabled={!access.find((item) => item?.nameModule === 'help_consumer')?.acces?.updateAcces}>
-                        <MenuItem value="">Pilih Divisi</MenuItem>
+                        <MenuItem value="" disabled>
+                          Pilih Divisi
+                        </MenuItem>
                         {listDivisi?.data?.map((item, key) => (
                           <MenuItem key={key} value={item?._id}>
                             {item?.nameDivision}
@@ -570,7 +587,7 @@ const DetailBantuanPengguna = () => {
                           divisiID === '' || !access.find((item) => item?.nameModule === 'help_consumer')?.acces?.updateAcces
                         }
                         onChange={(e) => setUserAssign(e.target.value)}>
-                        {divisiID !== '' && userDivisi?.data?.length > 1 && (
+                        {divisiID !== '' && userGroupDivisi()?.length >= 1 && (
                           <MenuItem value={''} disabled>
                             Pilih User
                           </MenuItem>
@@ -579,10 +596,10 @@ const DetailBantuanPengguna = () => {
                           <MenuItem value={''} disabled>
                             ---
                           </MenuItem>
-                        ) : userDivisi?.data?.length > 1 ? (
-                          userDivisi?.data?.map((item, key) => (
-                            <MenuItem key={key} value={item?.user[0]?._id}>
-                              {item?.user[0]?.fullName || '-'}
+                        ) : userGroupDivisi()?.length >= 1 ? (
+                          userGroupDivisi()?.map((item, key) => (
+                            <MenuItem key={key} value={item?._id}>
+                              {item?.name || '-'}
                             </MenuItem>
                           ))
                         ) : (

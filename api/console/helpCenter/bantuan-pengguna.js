@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const bantuanPenggunaApi = createApi({
   reducerPath: 'helpCenter/bantuan-pengguna',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['TicketList', 'Divisi'],
+  tagTypes: ['TicketList'],
   endpoints: (build) => ({
     getListTickets: build.query({
       query: (params) => ({
@@ -67,14 +67,6 @@ export const bantuanPenggunaApi = createApi({
       }),
       providesTags: ['TicketList'],
     }),
-    getUserDivisi: build.query({
-      query: (data) => ({
-        url: '/groupmodule/detail',
-        method: 'POST',
-        body: data,
-      }),
-      providesTags: ['Divisi'],
-    }),
   }),
 });
 
@@ -87,5 +79,4 @@ export const {
   useUpdateDetailTicketMutation,
   useReplyTicketMutation,
   useGetLogHistoryDetailTicketQuery,
-  useGetUserDivisiQuery,
 } = bantuanPenggunaApi;
