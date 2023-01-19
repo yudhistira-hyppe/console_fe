@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   ticketHover: {
     width: 180,
     '&:hover': {
+      cursor: 'pointer',
       '& p': {
         fontSize: 12,
         color: '#AB22AF',
@@ -152,11 +153,7 @@ const TableSection = ({
                 </TableCell>
               ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, key) => (
-                  <TableRow
-                    hover
-                    key={key}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    style={{ cursor: 'pointer' }}>
+                  <TableRow hover key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell
                       component="th"
                       scope="row"
@@ -235,8 +232,10 @@ const TableSection = ({
                   </TableRow>
                 ))
               ) : (
-                <TableCell colSpan={7} align="center">
-                  Tidak ada data.
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Bantuan Pengguna</Typography>
+                  </Stack>
                 </TableCell>
               )}
             </TableBody>

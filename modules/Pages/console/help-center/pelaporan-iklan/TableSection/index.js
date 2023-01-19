@@ -208,9 +208,9 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                 </TableRow>
               ))
             ) : (
-              <TableCell colSpan={6}>
-                <Stack alignItems="center" justifyContent="center" height={468}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data pelaporan</Typography>
+              <TableCell colSpan={8}>
+                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Pelaporan Iklan</Typography>
                 </Stack>
               </TableCell>
             )}

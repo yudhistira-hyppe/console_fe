@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const getUserHyppe = createApi({
   reducerPath: 'getUserHyppe',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['userHyppe', 'detailUser'],
+  tagTypes: ['userHyppe', 'userDivisi', 'detailUser'],
   endpoints: (build) => ({
     getAnggota: build.query({
       query: (payload) => ({
@@ -14,6 +14,14 @@ export const getUserHyppe = createApi({
         method: 'GET',
       }),
       providesTags: ['userHyppe'],
+    }),
+    getUserDivisi: build.query({
+      query: (data) => ({
+        url: '/groupmodule/detail',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['userDivisi'],
     }),
     getDetailAnggota: build.query({
       query: ({ skip, limit, groupId }) => ({
@@ -36,7 +44,7 @@ export const getUserHyppe = createApi({
         url: `/group/user?email=${email}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['userHyppe'],
+      invalidatesTags: ['userHyppe', 'userDivisi'],
     }),
     updateStatusGroupUser: build.mutation({
       query: (payload) => ({
@@ -44,7 +52,7 @@ export const getUserHyppe = createApi({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['userHyppe'],
+      invalidatesTags: ['userHyppe', 'userDivisi'],
     }),
     updateGroupUser: build.mutation({
       query: (payload) => ({
@@ -52,13 +60,14 @@ export const getUserHyppe = createApi({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['userHyppe', 'detailUser'],
+      invalidatesTags: ['userHyppe', 'detailUser', 'userDivisi'],
     }),
   }),
 });
 
 export const {
   useGetAnggotaQuery,
+  useGetUserDivisiQuery,
   useGetDetailAnggotaQuery,
   useGetProfileByUserEmailQuery,
   useDeleteAnggotaMutation,

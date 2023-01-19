@@ -23,7 +23,10 @@ const SecureConsolePage = ({ children }) => {
         setLoadingValidate(false);
       } else if (consoleNav.map((item) => item.link).includes(router.pathname)) {
         setIsRenderChildren(false);
-        setLoadingValidate(false);
+        setLoadingValidate(true);
+      } else {
+        setIsRenderChildren(false);
+        setLoadingValidate(true);
       }
     } else {
       if (router.pathname.includes('signin')) {
@@ -108,7 +111,7 @@ const SecureConsolePage = ({ children }) => {
         setLoadingValidate(false);
       } else {
         setIsRenderChildren(false);
-        setLoadingValidate(false);
+        setLoadingValidate(true);
       }
     }
   };
@@ -154,7 +157,7 @@ const SecureConsolePage = ({ children }) => {
   }, [isLoading, authUser]);
 
   return !loadingValidate ? (
-    isRenderChildren ? (
+    isRenderChildren && !loadingValidate ? (
       children
     ) : (
       <Stack height="100%" alignItems="center" justifyContent="center">

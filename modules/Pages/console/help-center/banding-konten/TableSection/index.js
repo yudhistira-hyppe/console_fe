@@ -227,7 +227,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
             ) : (
               <TableCell colSpan={8}>
                 <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
+                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Banding Konten</Typography>
                 </Stack>
               </TableCell>
             )}
