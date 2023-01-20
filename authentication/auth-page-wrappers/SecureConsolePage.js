@@ -111,7 +111,7 @@ const SecureConsolePage = ({ children }) => {
         setLoadingValidate(false);
       } else {
         setIsRenderChildren(false);
-        setLoadingValidate(true);
+        setLoadingValidate(false);
       }
     }
   };

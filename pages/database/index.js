@@ -11,7 +11,7 @@ const DatabasePage = () => {
       router.replace('/database/account');
     } else if (access.map((item) => item?.nameModule).includes('database_content')) {
       router.replace('/database/content');
-    } else if (access.map((item) => item?.nameModule).includes('database_media')) {
+    } else if (access.map((item) => item?.nameModule).includes('database_music')) {
       router.replace('/database/media');
     } else {
       router.replace('/');
