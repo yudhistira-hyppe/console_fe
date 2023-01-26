@@ -108,7 +108,7 @@
     "videojs-hls-quality-selector": "^1.1.4"
   },
   "scripts": {
-    "dev": "cross-env node server.js",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --fix .",
