@@ -7,7 +7,6 @@ import { Box } from '@material-ui/core';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import AuthWrapper from 'modules/Components/Auth/AuthWrapper';
 import CmtImage from '@coremat/CmtImage';
 import IntlMessages from '@jumbo/utils/IntlMessages';
@@ -17,6 +16,8 @@ import Logo from '@jumbo/components/AppLayout/partials/Logo';
 import { firebaseCloudMessaging } from 'helpers/firebaseHelper';
 import { v4 as uuidv4 } from 'uuid';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import { toast } from 'react-hot-toast';
+import { Checkbox, Stack } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   authThumb: {
@@ -86,6 +87,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
   const [loadingFCM, setLoadingFCM] = useState(true);
+  const [isNotifAllowed, setNotifAllowed] = useState(true);
 
   useEffect(async () => {
     getCurrentUserLocation();
@@ -100,9 +102,26 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     }
   }, [location, deviceId, email, password]);
 
+  useEffect(() => {
+    setEmail(localStorage.getItem('email'));
+    setPassword(localStorage.getItem('password'));
+    setIsRememberMeChecked(localStorage.getItem('checkbox') === 'true');
+  }, []);
+
+  useEffect(() => {
+    if (error === '') {
+      if (loadingFCM) {
+        toast.loading('Menghubungkan ke server...', { id: 'signin' });
+      } else {
+        toast.success('Berhasil terhubung dengan server', { id: 'signin' });
+      }
+    }
+  }, [loadingFCM, error]);
+
   const generateFCMToken = async () => {
-    await Notification.requestPermission()
-      .then(async () => {
+    await Notification.requestPermission().then(async (res) => {
+      if (res === 'granted') {
+        setNotifAllowed(true);
         await firebaseCloudMessaging
           .getFCMToken()
           .then((token) => {
@@ -111,11 +130,13 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
           })
           .catch(() => {
             setDeviceId(uuidv4());
+            setLoadingFCM(false);
           });
-      })
-      .catch(() => {
-        setDeviceId(uuidv4());
-      });
+      } else {
+        setNotifAllowed(false);
+        toast.error('Notifikasi browser diwajibkan!', { id: 'signin' });
+      }
+    });
   };
 
   const getCurrentUserLocation = () => {
@@ -129,7 +150,16 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     );
   };
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
+    toast.loading('loading...', { id: 'signin' });
+
+    if (isRememberMeChecked) {
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
+      localStorage.setItem('checkbox', true);
+    }
+
     consoleLoginWithEmail(
       {
         email,
@@ -166,13 +196,13 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
           <Typography component="div" variant="h1" className={classes.titleRoot}>
             Login
           </Typography>
-          <form>
+          <form onSubmit={onSubmit}>
             <Box mb={2}>
               <TextField
                 label={<IntlMessages id="appModule.email" />}
                 fullWidth
                 onChange={(event) => setEmail(event.target.value?.toLowerCase())}
-                defaultValue={email}
+                value={email}
                 margin="normal"
                 variant="outlined"
                 className={classes.textFieldRoot}
@@ -184,7 +214,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
                 label={<IntlMessages id="appModule.password" />}
                 fullWidth
                 onChange={(event) => setPassword(event.target.value)}
-                defaultValue={password}
+                value={password}
                 margin="normal"
                 variant="outlined"
                 className={classes.textFieldRoot}
@@ -193,21 +223,43 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
               <FormControlLabel
                 className={classes.formcontrolLabelRoot}
-                control={<Checkbox checked={isRememberMeChecked} onChange={(_, value) => setIsRememberMeChecked(value)} />}
+                control={
+                  <Checkbox
+                    checked={isRememberMeChecked}
+                    onChange={(_, value) => setIsRememberMeChecked(value)}
+                    color="secondary"
+                  />
+                }
                 label="Remember me"
               />
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
-              <Button onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">
+              <Button type="submit" onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">
                 {/* <IntlMessages id="appModule.signIn" /> */}
                 Masuk
               </Button>
             </Box>
           </form>
-          <NotificationLoader loading={isLoading} error={error} />
+          {/* <NotificationLoader loading={isLoading} error={error} /> */}
         </Box>
-        {loadingFCM && <PageLoader />}
       </AuthWrapper>
+
+      {!isNotifAllowed && (
+        <Stack
+          height="100vh"
+          alignItems="center"
+          justifyContent="center"
+          spacing={2}
+          position="absolute"
+          zIndex={100}
+          width="100%"
+          style={{ background: 'rgb(255 255 255 / 90%)' }}>
+          <img src="/images/non-active.png" alt="Visual Non Active" />
+          <Typography style={{ fontWeight: 'bold', fontSize: 20, width: '50%', textAlign: 'center' }}>
+            Nyalakan Notifikasi Browser Terlebih Dahulu Untuk Melanjutkan Explorasi Dashboard!
+          </Typography>
+        </Stack>
+      )}
     </>
   );
 };
