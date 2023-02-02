@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import {
   Avatar,
@@ -31,6 +31,8 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Viewer from 'viewerjs';
+import 'viewerjs/dist/viewer.css';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -49,13 +51,14 @@ const DetailPermohonanPremium = () => {
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState({ name: '', noKtp: '', gender: '', dateBirth: null, placeBirth: '' });
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const [viewer, setViewer] = useState('');
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailKYCQuery({ id: router.query?._id });
   const [approveKYC] = useApproveKYCMutation();
 
   useEffect(() => {
     setInputValue({
-      name: detail?.data[0]?.fullName || '',
+      name: detail?.data[0]?.nama || '',
       noKtp: detail?.data[0]?.idcardnumber || '',
       gender: detail?.data[0]?.jenisKelamin || '',
       dateBirth: detail?.data[0]?.tglLahir ? moment(detail?.data[0]?.tglLahir) : null,
@@ -73,7 +76,9 @@ const DetailPermohonanPremium = () => {
   const getImage = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
-    return `${STREAM_URL}/v5/${mediaEndpoint}${authToken}`;
+    const endpoint = mediaEndpoint.split('/');
+
+    return `${STREAM_URL}/v5/${endpoint[1]}/${detail?.data[0]?._id}${authToken}`;
   };
 
   const handleConfirm = (val) => {
@@ -104,6 +109,14 @@ const DetailPermohonanPremium = () => {
     const endpoint = mediaEndpoint?.split('_');
 
     return `${STREAM_URL}/v5${endpoint?.[0]}${authToken}`;
+  };
+
+  useEffect(() => {
+    !loadingDetail && setViewer(new Viewer(document.getElementById('images')));
+  }, [loadingDetail]);
+
+  const handleView = () => {
+    return viewer.toggle();
   };
 
   return (
@@ -482,28 +495,23 @@ const DetailPermohonanPremium = () => {
                 </Stack>
               </Stack>
               <Stack direction="column" p="24px" gap="24px">
-                <Stack direction="column" gap="8px">
-                  <Stack direction="row">
+                <div>
+                  <Stack direction="row" id="images">
                     <ImageList sx={{ width: '100%' }} cols={5} rowHeight={180}>
                       {detail?.data[0]?.FileEndpoint?.map((item, key) => (
-                        <ImageListItem
-                          key={key}
-                          onClick={() => {
-                            setModal({ ...modal, lampiran: !modal.lampiran });
-                            setSelectedLampiran({ id: key + 1, src: getImage(item) });
-                          }}>
-                          <img
+                        <ImageListItem key={key} onClick={handleView}>
+                          <Avatar
+                            variant="rounded"
                             src={getImage(item)}
                             srcSet={getImage(item)}
-                            alt="asd"
-                            loading="lazy"
-                            style={{ borderRadius: 8, height: '100%', cursor: 'pointer' }}
+                            alt="X"
+                            style={{ borderRadius: 8, height: '100%', width: '100%', cursor: 'pointer' }}
                           />
                         </ImageListItem>
                       ))}
                     </ImageList>
                   </Stack>
-                </Stack>
+                </div>
               </Stack>
               {detail?.data[0]?.status === 'BARU' && (
                 <Stack direction="row" justifyContent="center" gap="8px" py="24px">
