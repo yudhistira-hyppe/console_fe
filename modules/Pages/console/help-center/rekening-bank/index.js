@@ -8,6 +8,7 @@ import { Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
+import { useGetListBankQuery } from 'api/console/helpCenter/bank';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -16,19 +17,31 @@ const breadcrumbs = [
 
 const RekeningBank = () => {
   const [filter, setFilter] = useState({
-    type: 'content',
     page: 0,
     limit: 10,
     descending: 'true',
-    search: '',
-    range: '',
-    from: null,
-    to: null,
-    status: [],
-    reason: [],
+    labelTanggal: '',
     createdAt: [null, null],
+    status: [],
   });
+  const [filterList, setFilterList] = useState([]);
   const router = useRouter();
+
+  const getParams = () => {
+    let params = {};
+    Object.assign(params, {
+      page: filter.page,
+      limit: filter.limit,
+      descending: filter.descending === 'true' ? true : false,
+    });
+    filter.search !== '' && Object.assign(params, { namapemohon: filter.search });
+    filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
+    filter.status.length >= 1 && Object.assign(params, { statusLast: filter.status });
+    return params;
+  };
+
+  const { data: listTickets, isFetching: loadingTicket } = useGetListBankQuery(getParams());
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -49,9 +62,47 @@ const RekeningBank = () => {
   };
 
   const handleSearchChange = (kind, value) => {
+    setFilterList((prevVal) => {
+      switch (kind) {
+        case 'search':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Pemohon (${value})` }]
+              : [...prevVal, { parent: kind, value: `Pemohon (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'createdAt':
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Waktu Transaksi' }]
+              : [...prevVal, { parent: kind, value: 'Waktu Transaksi' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'labelTanggal':
+          return prevVal.find((item) => item.parent === 'createdAt')
+            ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
+            : [...prevVal];
+        default:
+          return prevVal.find((item) => item.value === value)
+            ? [...prevVal.filter((item) => item.value !== value)]
+            : [...prevVal, { parent: kind, value: value }];
+      }
+    });
     setFilter((prevVal) => {
-      if (kind === 'createdAt') {
+      if (kind === 'search') {
+        return { ...prevVal, search: value, page: 0 };
+      } else if (kind === 'status') {
+        return {
+          ...prevVal,
+          status: filter.status.find((item) => item === value)
+            ? filter.status.filter((item) => item !== value)
+            : [...filter.status, value],
+          page: 0,
+        };
+      } else if (kind === 'createdAt') {
         return { ...prevVal, createdAt: value, page: 0 };
+      } else if (kind === 'labelTanggal') {
+        return { ...prevVal, labelTanggal: value, page: 0 };
+      } else {
+        return { ...prevVal };
       }
     });
   };
@@ -59,7 +110,7 @@ const RekeningBank = () => {
   return (
     <>
       <Head>
-        <title key="title">Hyppe-Console :: Permohonan Akun Premium</title>
+        <title key="title">Hyppe-Console :: Rekening Bank</title>
       </Head>
       <Stack direction={'column'} spacing={2} mb={3}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -82,11 +133,13 @@ const RekeningBank = () => {
         <Stack direction={'row'} spacing={3}>
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
+            filterList={filterList}
             order={filter.descending}
-            loading={false}
-            listTickets={{ arrdata: [{}] }}
+            loading={loadingTicket}
+            listTickets={listTickets}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
+            handleDeleteFilter={handleSearchChange}
           />
         </Stack>
       </PageContainer>
