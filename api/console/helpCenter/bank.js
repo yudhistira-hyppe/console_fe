@@ -14,7 +14,13 @@ export const bankApi = createApi({
       }),
       providesTags: ['bank'],
     }),
+    getDetailBank: build.query({
+      query: (id) => ({
+        url: `/userbankaccounts/getAccountList/${id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetListBankQuery } = bankApi;
+export const { useGetListBankQuery, useGetDetailBankQuery } = bankApi;
