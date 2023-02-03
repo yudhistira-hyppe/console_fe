@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { CircularProgress, Pagination, Stack } from '@mui/material';
+import { CircularProgress, IconButton, Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -22,6 +22,7 @@ import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import { NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteFilter, order, loading, listTickets }) => {
+const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
 
@@ -50,24 +51,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   return (
     <Stack flex={1}>
       <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={3}>
-        <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
-          {loading ? (
-            <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-          ) : (
-            <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listTickets?.totalfilter} hasil (
-              {listTickets?.totalrow >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
-              {listTickets?.totalrow + listTickets?.page * 10} dari {listTickets?.totalfilter})
-            </Typography>
-          )}
-        </Box>
+        <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}></Box>
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
           <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Typography>Urutkan berdasarkan</Typography>
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={order}
+              value={filter.descending}
               onChange={handleOrder}
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
@@ -188,7 +179,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                       }}>
-                      {item?.area || '-'}
+                      {item?.areas || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
@@ -203,12 +194,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.activity
-                        ? moment(new Date(item?.activity?.createdAt))
-                            .locale('id')
-                            .startOf('hour')
-                            .fromNow()
-                            .replace(' yang ', ' ')
+                      {item?.lastlogin
+                        ? moment(item?.lastlogin).locale('id').startOf('hour').fromNow().replace(' yang ', ' ')
                         : '-'}
                     </Typography>
                   </TableCell>
@@ -224,14 +211,17 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalfilter >= 1 && !loading && (
-        <Stack alignItems="center" my={3} mr={3}>
-          <Pagination
-            count={Number(listTickets?.totalpage) || 1}
-            page={Number(listTickets?.page) + 1}
-            size="small"
-            onChange={handlePageChange}
-          />
+      {listTickets?.data?.length >= 10 && !loading && (
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+          <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
+            <NavigateBefore />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() => handlePageChange(filter.page + 1)}
+            disabled={listTickets?.data?.length < 10}>
+            <NavigateNext />
+          </IconButton>
         </Stack>
       )}
     </Stack>
