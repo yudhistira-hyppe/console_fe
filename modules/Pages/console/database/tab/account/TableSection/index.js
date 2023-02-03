@@ -134,10 +134,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   hover
                   style={{ cursor: 'pointer' }}
-                  onClick={() => router.push(`/database/account/${item?._id}`)}>
+                  onClick={() => router.push(`/database/account/${item?.iduser}`)}>
                   <TableCell align="left" style={{ maxWidth: 160 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
+                      <Avatar src={getMediaUri(item?.avatar[0]?.mediaEndpoint)} />
                       <Stack gap="4px" overflow="hidden" width="100%">
                         <Typography
                           variant="body1"

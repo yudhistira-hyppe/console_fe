@@ -128,7 +128,7 @@ const UserInfoComponent = (props) => {
                         Jenis Kelamin
                       </Typography>
                       <Typography className={classes.userInfoContent} variant="h4">
-                        {accountDetail.gender ? formatGender(accountDetail.gender) : '-'}
+                        {accountDetail?.gender}
                       </Typography>
                     </Box>
                   </Stack>
