@@ -21,6 +21,9 @@ import { useGetListTicketsQuery } from 'api/console/helpCenter/iklan';
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
+    display: 'flex',
+    minHeight: 400,
+    flexDirection: 'column',
     position: 'relative',
     '& .Cmt-card-content': {
       paddingLeft: 0,
@@ -62,25 +65,36 @@ const AdsReport = () => {
       <Typography style={{ padding: 24, fontWeight: 'bold', borderBottom: '1px solid #0000001F' }}>
         Pelaporan Iklan Terakhir
       </Typography>
-      <CmtCardContent style={{ padding: '15px 0' }}>
+      <CmtCardContent
+        style={{
+          padding: '15px 0',
+          height: '100%',
+          width: '100%',
+          margin: 'auto 0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         {isFetching ? (
-          <div>
-            {dummySkeleton.map((el, i) => (
-              <Stack key={i} px={3} direction={'row'} width={'100%'} spacing={2}>
-                <Skeleton height={'9em'} width={'7em'} style={{ marginTop: '0px' }} />
-                <Stack direction={'column'} justifyContent={'center'}>
-                  <Skeleton width={'12em'} />
-                  <Skeleton width={'12em'} />
-                  <Skeleton width={'12em'} />
-                  <Skeleton width={'12em'} />
-                </Stack>
+          dummySkeleton.map((el, i) => (
+            <Stack key={i} px={3} direction={'row'} width={'100%'} spacing={2}>
+              <Skeleton height={'9em'} width={'7em'} style={{ marginTop: '0px' }} />
+              <Stack direction={'column'} justifyContent={'center'}>
+                <Skeleton width={'12em'} />
+                <Skeleton width={'12em'} />
+                <Skeleton width={'12em'} />
+                <Skeleton width={'12em'} />
               </Stack>
-            ))}
-          </div>
-        ) : listTickets?.arrdata?.length > 0 ? (
-          <CmtList data={listTickets?.arrdata} renderRow={(item, index) => <AdsReportItem key={index} item={item} />} />
+            </Stack>
+          ))
+        ) : []?.length > 0 ? (
+          <CmtList
+            data={[]}
+            renderRow={(item, index) => <AdsReportItem key={index} item={item} />}
+            style={{ width: '100%' }}
+          />
         ) : (
-          <center>you have no report</center>
+          <Typography style={{ color: '#737373', fontSize: 14 }}>Tidak ada data</Typography>
         )}
       </CmtCardContent>
     </CmtCard>
