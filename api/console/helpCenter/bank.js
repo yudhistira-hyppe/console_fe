@@ -19,8 +19,17 @@ export const bankApi = createApi({
         url: `/userbankaccounts/getAccountList/${id}`,
         method: 'GET',
       }),
+      providesTags: ['bank'],
+    }),
+    updateStatusBank: build.mutation({
+      query: (data) => ({
+        url: '/userbankaccounts/approval',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['bank'],
     }),
   }),
 });
 
-export const { useGetListBankQuery, useGetDetailBankQuery } = bankApi;
+export const { useGetListBankQuery, useGetDetailBankQuery, useUpdateStatusBankMutation } = bankApi;

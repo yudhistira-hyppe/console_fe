@@ -3,6 +3,7 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import {
   Avatar,
   Button,
+  Chip,
   Divider,
   Grid,
   ImageList,
@@ -37,7 +38,7 @@ import GridContainer from '@jumbo/components/GridContainer';
 import ModalApprove from '../Modal/ModalApprove';
 import ModalReject from '../Modal/ModalReject';
 import ModalLampiran from '../Modal/ModalLampiran';
-import { useGetDetailBankQuery } from 'api/console/helpCenter/bank';
+import { useGetDetailBankQuery, useUpdateStatusBankMutation } from 'api/console/helpCenter/bank';
 import { useGetuserDatabaseDetailQuery } from 'api/user/user';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { STREAM_URL } from 'authentication/auth-provider/config';
@@ -46,6 +47,7 @@ import moment from 'moment';
 import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -64,6 +66,7 @@ const DetailRekeningBank = () => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
   const router = useRouter();
   const { authUser } = useAuth();
+  const [approvalBank, { isLoading: loadingApproval }] = useUpdateStatusBankMutation();
 
   const { data: detailBank, isLoading: loadingDetail } = useGetDetailBankQuery(router.query._id);
   const { data: insightUser, isLoading: loadingInsight } = useGetuserDatabaseDetailQuery(
@@ -122,19 +125,49 @@ const DetailRekeningBank = () => {
     return blurredName.join('');
   };
 
+  const handleApproval = (approve, payload) => {
+    const data = {
+      id: detailBank?.data?._id,
+      disetujui: approve,
+      iduserhandle: authUser?.user?.id,
+      reason: payload ? payload.reason : undefined,
+      reasonId: payload ? payload._id : undefined,
+    };
+
+    toast.loading('Loading...', { id: 'approval' });
+
+    approvalBank(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { id: 'approval', duration: 3000 });
+      } else {
+        router.replace('/help-center/rekening-bank', { id: 'approval' });
+        approve
+          ? toast.success('Berhasil Menyetujui Rekening User', { id: 'approval', duration: 3000 })
+          : toast.success('Berhasil Menolak Rekening User', { id: 'approval', duration: 3000 });
+      }
+    });
+  };
+
   return (
     <>
       <Head>
         <title key={'title'}>Hyppe-Console :: Rincian Bank</title>
       </Head>
 
-      <ModalApprove showModal={modal.approve} onClose={() => setModal({ ...modal, approve: !modal.approve })} />
+      <ModalApprove
+        showModal={modal.approve}
+        onClose={() => setModal({ ...modal, approve: !modal.approve })}
+        onConfirm={() => handleApproval(true)}
+        loading={loadingApproval}
+      />
       <ModalReject
         showModal={modal.reject}
         onClose={() => {
           setModal({ ...modal, reject: !modal.reject });
           setSelectedLampiran({});
         }}
+        onConfirm={(val) => handleApproval(false, val)}
+        loading={loadingApproval}
       />
       <ModalLampiran
         showModal={modal.lampiran}
@@ -472,12 +505,51 @@ const DetailRekeningBank = () => {
                 </Stack>
               </Stack>
             </Paper>
+
             <Paper style={{ width: '100%' }}>
               <Stack direction="column" height="100%">
-                <Typography style={{ padding: 24, fontWeight: 'bold', borderBottom: '1px solid #0000001F' }}>
-                  Dokumen Pendukung
-                </Typography>
-                <Stack direction="row" gap="8px" padding="24px 24px 0">
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  borderBottom="1px solid #0000001F"
+                  padding="24px">
+                  <Typography style={{ fontWeight: 'bold' }}>Dokumen Pendukung</Typography>
+                  {detailBank?.data?.statusLast === 'BARU' && (
+                    <Chip
+                      label="Baru"
+                      style={{
+                        backgroundColor: '#E6094B1A',
+                        color: '#E6094BD9',
+                        fontWeight: 'bold',
+                        fontFamily: 'Normal',
+                      }}
+                    />
+                  )}
+                  {detailBank?.data?.statusLast === 'DISETUJUI' && (
+                    <Chip
+                      label="Disetujui"
+                      style={{
+                        backgroundColor: '#71A5001A',
+                        color: '#71A500D9',
+                        fontWeight: 'bold',
+                        fontFamily: 'Normal',
+                      }}
+                    />
+                  )}
+                  {detailBank?.data?.statusLast === 'DITOLAK' && (
+                    <Chip
+                      label="Ditolak"
+                      style={{
+                        backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                        color: '#676767',
+                        fontWeight: 'bold',
+                        fontFamily: 'Normal',
+                      }}
+                    />
+                  )}
+                </Stack>
+                <Stack direction="row" alignItems="center" gap="8px" padding="24px" height="100%">
                   <ImageList sx={{ width: 600 }} cols={3} rowHeight={180} id="images">
                     {detailBank?.data?.dokumenPendukung?.map((item, key) => (
                       <ImageListItem key={key} onClick={handleView}>
@@ -492,22 +564,24 @@ const DetailRekeningBank = () => {
                     ))}
                   </ImageList>
                 </Stack>
-                <Stack direction="row" justifyContent="center" gap="8px" py="24px" marginTop="auto">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setModal({ ...modal, approve: !modal.approve })}
-                    disabled={!access.find((item) => item?.nameModule === 'help_bank')?.acces?.updateAcces}>
-                    Setujui
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => setModal({ ...modal, reject: !modal.reject })}
-                    disabled={!access.find((item) => item?.nameModule === 'help_bank')?.acces?.updateAcces}>
-                    Tolak
-                  </Button>
-                </Stack>
+                {detailBank?.statusLast === 'BARU' && (
+                  <Stack direction="row" justifyContent="center" gap="8px" pb="24px" marginTop="auto">
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => setModal({ ...modal, approve: !modal.approve })}
+                      disabled={!access.find((item) => item?.nameModule === 'help_bank')?.acces?.updateAcces}>
+                      Setujui
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => setModal({ ...modal, reject: !modal.reject })}
+                      disabled={!access.find((item) => item?.nameModule === 'help_bank')?.acces?.updateAcces}>
+                      Tolak
+                    </Button>
+                  </Stack>
+                )}
               </Stack>
             </Paper>
           </Stack>

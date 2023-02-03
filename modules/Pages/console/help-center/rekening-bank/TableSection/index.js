@@ -165,7 +165,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                         }}
                       />
                     )}
-                    {item?.statusLast === 'APPROVE' && (
+                    {item?.statusLast === 'DISETUJUI' && (
                       <Chip
                         label="Disetujui"
                         style={{
@@ -176,7 +176,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                         }}
                       />
                     )}
-                    {item?.statusLast === 'CANCELED' && (
+                    {item?.statusLast === 'DITOLAK' && (
                       <Chip
                         label="Ditolak"
                         style={{
