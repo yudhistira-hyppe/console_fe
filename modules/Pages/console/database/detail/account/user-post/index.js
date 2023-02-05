@@ -4,7 +4,7 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Typography } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Card, CircularProgress, Divider, Stack, Tab, Button } from '@mui/material';
+import { Box, Card, CircularProgress, Divider, Stack, Tab, Button, Avatar } from '@mui/material';
 import { useAuth } from 'authentication';
 import { useUserContentsGroupQuery } from 'api/user/content/management';
 import { STREAM_URL } from 'authentication/auth-provider/config';
@@ -61,16 +61,16 @@ const UserPost = (props) => {
   const getPostImage = (item) => {
     if (item?.apsara || item?.apsaraId) {
       if (item?.media?.ImageInfo?.length >= 1) {
-        return item?.media?.ImageInfo?.[0]?.URL;
+        return item?.media?.ImageInfo?.[0]?.URL || new Error();
       } else if (item?.media?.VideoList?.length >= 1) {
-        return item?.media?.VideoList?.[0]?.CoverURL;
+        return item?.media?.VideoList?.[0]?.CoverURL || new Error();
       } else {
-        return '/images/dashboard/content_image.png';
+        return new Error();
       }
     } else if (item?.mediaEndpoint) {
-      return '/images/dashboard/content_image.png';
+      return new Error();
     } else {
-      return '/images/dashboard/content_image.png';
+      return new Error();
     }
   };
 
@@ -110,7 +110,7 @@ const UserPost = (props) => {
                     <Box
                       position="relative"
                       style={{ width: 200, height: 150, border: '1px solid #eeeeee', borderRadius: 4 }}>
-                      <CmtImage className={classes.imageThumbRoot} src={getPostImage(post)} alt={post.title} />
+                      <Avatar src={getPostImage(post)} alt="X" variant="rounded" style={{ width: '100%', height: '100%' }} />
                     </Box>
                   }
                   avatarPos="center"
