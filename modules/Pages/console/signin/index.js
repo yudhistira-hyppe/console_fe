@@ -191,7 +191,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         )}
         <Box className={classes.authContent}>
           <Box mb={7}>
-            <Logo />
+            <img src="images/logo-console.png" alt="Logo Dashboard" style={{ width: '36%' }} />
           </Box>
           <Typography component="div" variant="h1" className={classes.titleRoot}>
             Login
