@@ -195,7 +195,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {item?.lastlogin
-                        ? moment(item?.lastlogin).locale('id').startOf('hour').fromNow().replace(' yang ', ' ')
+                        ? moment(item?.lastlogin).locale('id').startOf('minute').fromNow().replace(' yang ', ' ')
                         : '-'}
                     </Typography>
                   </TableCell>
