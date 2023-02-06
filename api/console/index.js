@@ -17,6 +17,7 @@ import { divisiAPI } from './divisi';
 import { voucherApi, adAPI } from './monetize';
 import { transactionAPI } from './transaction';
 import { mediaApi, contentApi } from './database';
+import { boostAPI } from './boost';
 
 export {
   dashboardApi,
@@ -38,4 +39,5 @@ export {
   contentApi,
   kycApi,
   bankApi,
+  boostAPI,
 };
