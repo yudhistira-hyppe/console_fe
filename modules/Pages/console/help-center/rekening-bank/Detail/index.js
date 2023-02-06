@@ -330,7 +330,7 @@ const DetailRekeningBank = () => {
                     <Typography variant="subtitle2" style={{ color: '#00000099' }}>
                       Nama Sesuai KTP
                     </Typography>
-                    <Typography>Miraaa</Typography>
+                    <Typography>{detailBank?.data?.namaKTP || '-'}</Typography>
                   </Stack>
                 </Stack>
               </Stack>
