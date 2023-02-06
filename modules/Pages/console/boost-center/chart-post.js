@@ -10,7 +10,7 @@ const data = [
   { name: 'Total Boost Post', value: 120, color: '#23036A' },
 ];
 
-const ChartPost = () => {
+const ChartPost = ({ totalPost, chartData, persenJangkauan }) => {
   const [showPercent, setShowPercent] = useState(false);
 
   useEffect(() => {
@@ -31,12 +31,14 @@ const ChartPost = () => {
         </Stack>
         <Stack direction="row" justifyContent="space-between" alignItems="center" height="100%">
           <Stack direction="column">
-            <Typography style={{ color: '#23036A', fontWeight: 900, fontSize: 24 }}>{numberWithCommas(125000)}</Typography>
+            <Typography style={{ color: '#23036A', fontWeight: 900, fontSize: 24 }}>
+              {numberWithCommas(totalPost)}
+            </Typography>
             <Typography style={{ fontSize: 12, color: '#737373' }}>Total Boost Post</Typography>
           </Stack>
           <Stack direction="column" position="relative" gap="30px">
             <PieChart height={180} width={180} margin={{ top: 20 }}>
-              <Pie data={data} innerRadius={60} outerRadius={80} fill="#8884d8" paddingAngle={5} dataKey="value">
+              <Pie data={chartData} innerRadius={60} outerRadius={80} fill="#8884d8" paddingAngle={5} dataKey="value">
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
@@ -44,9 +46,23 @@ const ChartPost = () => {
               <Tooltip wrapperStyle={{ zIndex: 100 }} />
             </PieChart>
             {showPercent && (
-              <Stack direction="column" position="absolute" alignItems="center" top="70px" left="60px">
-                <Typography style={{ fontSize: 32, color: '#AB22AF', fontWeight: 'bold', lineHeight: '1.2em' }}>
-                  20%
+              <Stack
+                direction="column"
+                position="absolute"
+                alignItems="center"
+                justifyContent="center"
+                top="75px"
+                left="45px">
+                <Typography
+                  style={{
+                    fontSize: 26,
+                    color: '#AB22AF',
+                    fontWeight: 'bold',
+                    lineHeight: '1.2em',
+                    width: 90,
+                    textAlign: 'center',
+                  }}>
+                  {persenJangkauan}%
                 </Typography>
                 <Typography style={{ fontSize: 12, color: '#737373' }}>Jangkauan</Typography>
               </Stack>
