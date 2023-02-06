@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userActiveCard = ({ title, amount, progress, children, secondaryTitle }) => {
+const userActiveCard = ({ title, amount, progress, children, handlePayload }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -106,11 +106,15 @@ const userActiveCard = ({ title, amount, progress, children, secondaryTitle }) =
           </Box>
         </Popover>
       </Stack>
-      <Select defaultValue={7} className={classes.dateSelect}>
-        <MenuItem value={7}>7 Hari</MenuItem>
-        <MenuItem value={14}>14 Hari</MenuItem>
-        <MenuItem value={30}>30 Hari</MenuItem>
-        <MenuItem value={90}>90 Hari</MenuItem>
+      <Select
+        defaultValue={6}
+        className={classes.dateSelect}
+        color="secondary"
+        onChange={(e) => handlePayload(e.target.value)}>
+        <MenuItem value={6}>7 Hari</MenuItem>
+        <MenuItem value={13}>14 Hari</MenuItem>
+        <MenuItem value={29}>30 Hari</MenuItem>
+        <MenuItem value={89}>90 Hari</MenuItem>
       </Select>
     </Stack>
   );

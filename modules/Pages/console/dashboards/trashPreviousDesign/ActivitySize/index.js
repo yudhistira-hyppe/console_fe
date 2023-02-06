@@ -11,6 +11,8 @@ import ActivitySizeGraph from './ActivitySizeGraph';
 import { MenuItem, Popover, Select, Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import { Error } from '@material-ui/icons';
+import { useGetPostAnalyticQuery } from 'api/console/dashboard';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   cardHeaderRoot: {
@@ -82,10 +84,16 @@ const measuredActivityTitle = [
   },
 ];
 
-const ActivitySize = ({ data }) => {
+const ActivitySize = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [payload, setPayload] = useState({
+    startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
+    enddate: moment().format('YYYY-MM-DD'),
+  });
+
+  const { data: postAnalytic } = useGetPostAnalyticQuery(payload);
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -93,6 +101,10 @@ const ActivitySize = ({ data }) => {
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
+  };
+
+  const handlePayload = (value) => {
+    setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
   };
 
   const TitleComp = (
@@ -128,11 +140,15 @@ const ActivitySize = ({ data }) => {
           </Box>
         </Popover>
       </Stack>
-      <Select defaultValue={7} className={classes.dateSelect}>
-        <MenuItem value={7}>7 Hari</MenuItem>
-        <MenuItem value={14}>14 Hari</MenuItem>
-        <MenuItem value={30}>30 Hari</MenuItem>
-        <MenuItem value={90}>90 Hari</MenuItem>
+      <Select
+        defaultValue={6}
+        className={classes.dateSelect}
+        color="secondary"
+        onChange={(e) => handlePayload(e.target.value)}>
+        <MenuItem value={6}>7 Hari</MenuItem>
+        <MenuItem value={13}>14 Hari</MenuItem>
+        <MenuItem value={29}>30 Hari</MenuItem>
+        <MenuItem value={89}>90 Hari</MenuItem>
       </Select>
     </Stack>
   );
@@ -154,15 +170,11 @@ const ActivitySize = ({ data }) => {
           renderRow={(item, index) => <ActivitySizeItem key={index} item={item} />}
         />
         <Box>
-          <ActivitySizeGraph data={data ? data.data : {}} />
+          <ActivitySizeGraph data={postAnalytic?.data || []} />
         </Box>
       </CmtAdvCardContent>
     </CmtAdvCard>
   );
-};
-
-ActivitySize.propTypes = {
-  data: PropTypes.object,
 };
 
 export default ActivitySize;
