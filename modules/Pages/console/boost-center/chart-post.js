@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Stack, Tooltip as MuiTooltip } from '@mui/material';
+import { Box, Card, Stack, Tooltip as MuiTooltip } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import { Info, Lens } from '@material-ui/icons';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
+import { makeStyles } from '@material-ui/styles';
 
-const data = [
-  { name: 'Jangkauan', value: 20, color: '#AB22AF' },
-  { name: 'Total Boost Post', value: 120, color: '#23036A' },
-];
+const useStyles = makeStyles((theme) => ({
+  tooltip: {
+    position: 'relative',
+    borderRadius: 6,
+    padding: '4px 12px',
+    backgroundColor: 'rgb(157 143 167)',
+    color: theme.palette.common.white,
+  },
+}));
 
 const ChartPost = ({ totalPost, chartData, persenJangkauan }) => {
   const [showPercent, setShowPercent] = useState(false);
+  const classes = useStyles();
 
   useEffect(() => {
     setShowPercent(false);
@@ -39,11 +46,22 @@ const ChartPost = ({ totalPost, chartData, persenJangkauan }) => {
           <Stack direction="column" position="relative" gap="30px">
             <PieChart height={180} width={180} margin={{ top: 20 }}>
               <Pie data={chartData} innerRadius={60} outerRadius={80} fill="#8884d8" paddingAngle={5} dataKey="value">
-                {data.map((entry, index) => (
+                {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip wrapperStyle={{ zIndex: 100 }} />
+              <Tooltip
+                labelStyle={{ color: 'black' }}
+                wrapperStyle={{ zIndex: 100 }}
+                cursor={false}
+                content={(data) => {
+                  return data.payload[0] ? (
+                    <Box className={classes.tooltip}>
+                      {data.payload?.[0]?.payload?.name}: {data.payload?.[0]?.payload?.value}
+                    </Box>
+                  ) : null;
+                }}
+              />
             </PieChart>
             {showPercent && (
               <Stack

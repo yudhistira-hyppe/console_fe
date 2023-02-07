@@ -32,10 +32,14 @@ const BoostCenter = () => {
                   persenJangkauan={analyticBoost?.data?.persenjangkauan}
                   chartData={[
                     {
+                      name: 'Jangkauan',
                       value: Number(analyticBoost?.data?.persenjangkauan),
+                      color: '#AB22AF',
                     },
                     {
+                      name: 'Boost Post',
                       value: Number(analyticBoost?.data?.persentotalpost),
+                      color: '#23036A',
                     },
                   ]}
                 />
