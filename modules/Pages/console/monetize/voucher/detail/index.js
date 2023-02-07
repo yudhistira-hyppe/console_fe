@@ -29,7 +29,7 @@ import { ModalCreateVoucher } from '../../components';
 import { useCreateVoucherMutation, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
 import { TextField } from '@mui/material';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   inputLabel: {
@@ -463,8 +463,6 @@ const VoucherFormComponent = ({ data }) => {
         </Stack>
       </PageContainer>
       <ModalCreateVoucher showModal={showModal} onConfirm={onConfirm} onCancel={onCancel} />
-
-      <Toaster />
     </>
   );
 };

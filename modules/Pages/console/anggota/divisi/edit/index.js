@@ -8,7 +8,7 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
 import { LoadingButton } from '@mui/lab';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const addDivisi = () => {
   const router = useRouter();
@@ -105,7 +105,6 @@ const addDivisi = () => {
           </LoadingButton>
         </Box>
       </Box>
-      <Toaster />
     </>
   );
 };

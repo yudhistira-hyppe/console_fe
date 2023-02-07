@@ -34,7 +34,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useGetAnggotaQuery, useDeleteAnggotaMutation, useUpdateStatusGroupUserMutation } from 'api/console/getUserHyppe';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 import { Add } from '@material-ui/icons';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -248,7 +248,9 @@ const PenggunaComp = () => {
             ) : (
               <TableRow>
                 <TableCell colSpan={6} align="center">
-                  Nama / Email tidak ditemukan
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data ditemukan</Typography>
+                  </Stack>
                 </TableCell>
               </TableRow>
             )}
@@ -316,7 +318,6 @@ const PenggunaComp = () => {
           <Pagination page={page} onChange={handlePagination} count={countPages} />
         </div>
       )}
-      <Toaster />
     </>
   );
 };

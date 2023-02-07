@@ -28,7 +28,7 @@ import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { LoadingButton } from '@mui/lab';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -465,7 +465,6 @@ const RichObjectTreeView = () => {
           </DialogContent>
         </Dialog>
       )}
-      <Toaster />
     </>
   );
 };
