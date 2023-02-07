@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
-import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetAllUserQuery } from 'api/user/user';
@@ -24,7 +23,6 @@ const DatabaseTabAccountComponent = () => {
     rangeOnline: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
-  const router = useRouter();
 
   const getParams = () => {
     let params = {};
@@ -58,11 +56,11 @@ const DatabaseTabAccountComponent = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -198,7 +196,7 @@ const DatabaseTabAccountComponent = () => {
           <TableSection
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
-            order={filter.descending}
+            filter={filter}
             loading={loadingUser}
             listTickets={listUser}
             handlePageChange={handlePageChange}

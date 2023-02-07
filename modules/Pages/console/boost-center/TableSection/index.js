@@ -21,6 +21,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -47,14 +48,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const getImage = (item) => {
     if (item?.apsara && item?.apsaraId) {
       if (item?.media?.ImageInfo) {
-        return item?.media?.ImageInfo?.[0]?.URL;
+        return item?.media?.ImageInfo?.[0]?.URL || new Error();
       } else {
-        return item?.media?.VideoList?.[0]?.CoverURL;
+        return item?.media?.VideoList?.[0]?.CoverURL || new Error();
       }
     } else if (item?.mediaEndpoint) {
-      return getMediaUri(item?.mediaEndpoint);
+      return getMediaUri(item?.mediaEndpoint) || new Error();
     } else {
-      return '/images/dashboard/content_image.png';
+      return new Error();
     }
   };
 
@@ -96,8 +97,12 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             key={key}
             label={item.value}
             onDelete={() => {
-              if (item.parent === 'createdAt') {
-                handleDeleteFilter(item.parent, [null, null]);
+              if (item.parent === 'range') {
+                handleDeleteFilter('clearRange', []);
+              } else if (item.parent === 'createdAt') {
+                handleDeleteFilter(item.parent, []);
+              } else if (item.parent === 'jadwal') {
+                handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
               } else {
                 handleDeleteFilter(item.parent, item.value);
               }
@@ -142,8 +147,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                 </Stack>
               </TableCell>
-            ) : listTickets?.arrdata?.length >= 1 ? (
-              listTickets?.arrdata?.map((item, i) => (
+            ) : listTickets?.data?.length >= 1 ? (
+              listTickets?.data?.map((item, i) => (
                 <TableRow
                   key={i}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -152,72 +157,79 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}>
                   <TableCell align="left" style={{ width: 150 }}>
                     <Stack direction="row" gap="15px">
-                      <Avatar src={getImage(item)} variant="rounded" />
+                      <Avatar src={getImage(item)} variant="rounded" alt="X" />
                       <Stack direction="column" gap="2px">
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          asdada asdada sdadsa adsadas
+                          {item?.description || '-'}
                         </Typography>
                       </Stack>
                     </Stack>
                   </TableCell>
                   <TableCell align="left" style={{ width: 120 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      HyppeVid
+                      {item?.type || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 150 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Otomatis <br /> (11:00 - 21:00 WIB)
+                      {item?.sessionName || '-'} <br /> ({item?.sessionStart.slice(0, 5)} - {item?.sessionEnd.slice(0, 5)}{' '}
+                      WIB)
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 120 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment().format('DD/MM/YYYY')}
+                      {moment(item?.start).format('DD/MM/YYYY')}
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 180 }}>
-                    {/* <Chip
-                      label="Sedang Berlangsung"
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        fontFamily: 'Lato',
-                        color: '#0095F2',
-                        backgroundColor: '#0095F233',
-                      }}
-                    /> */}
-                    {/* <Chip
-                      label="Dijadwalkan"
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        fontFamily: 'Lato',
-                        color: '#71A500D9',
-                        backgroundColor: '#71A5001A',
-                      }}
-                    /> */}
-                    <Chip
-                      label="Selesai"
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        fontFamily: 'Lato',
-                        color: '#FF8C00D9',
-                        backgroundColor: '#FF8C0026',
-                      }}
-                    />
+                    {item?.statusPengajuan === 'Sedang Berlangsung' && (
+                      <Chip
+                        label="Sedang Berlangsung"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          color: '#0095F2',
+                          backgroundColor: '#0095F233',
+                        }}
+                      />
+                    )}
+                    {item?.statusPengajuan === 'Dijadwalkan' && (
+                      <Chip
+                        label="Dijadwalkan"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          color: '#71A500D9',
+                          backgroundColor: '#71A5001A',
+                        }}
+                      />
+                    )}
+                    {item?.statusPengajuan === 'Selesai' && (
+                      <Chip
+                        label="Selesai"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          color: '#FF8C00D9',
+                          backgroundColor: '#FF8C0026',
+                        }}
+                      />
+                    )}
                   </TableCell>
                   <TableCell align="left" style={{ width: 100 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      300
+                      {numberWithCommas(item?.jangkauan)}
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 80 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Terjual
+                      {item?.keterangan}
                     </Typography>
                   </TableCell>
                 </TableRow>

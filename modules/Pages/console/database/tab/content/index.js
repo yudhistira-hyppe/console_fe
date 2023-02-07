@@ -63,11 +63,11 @@ const DatabaseTabContentComponent = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -190,7 +190,7 @@ const DatabaseTabContentComponent = () => {
           <TableSection
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
-            order={filter.descending}
+            filter={filter}
             loading={loadingContent}
             listTickets={listContent}
             handlePageChange={handlePageChange}

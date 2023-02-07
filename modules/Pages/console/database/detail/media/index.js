@@ -13,7 +13,6 @@ import Interest from './interest';
 import FormMusic from './form-music';
 import { useGetDetailMusicQuery } from 'api/console/database/media';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
-import { Toaster } from 'react-hot-toast';
 
 const dummyData = [
   {
@@ -58,7 +57,6 @@ const DatabaseDetailMediaComponent = (props) => {
       <Head>
         <title key="title">Hyppe-Console :: Database Create Media</title>
       </Head>
-      <Toaster />
       <Stack direction={'column'} spacing={2} mb={3}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
         <Stack

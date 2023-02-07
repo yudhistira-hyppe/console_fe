@@ -16,13 +16,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import CmtMediaObject from '@coremat/CmtMediaObject';
 import { Stack, Typography } from '@mui/material';
 import { readNotification } from 'redux/actions/Profiles';
+import { Notifications } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   feedItemRoot: {
-    padding: '0 10px 10px',
+    padding: '15px 24px',
     position: 'relative',
-    flexDirection: 'column',
-    gap: 5,
+    flexDirection: 'row !important',
+    gap: 15,
     borderBottom: `1px solid ${alpha(theme.palette.common.dark, 0.065)}`,
     '& .Cmt-media-object': {
       alignItems: 'center',
@@ -37,12 +38,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardRoot: {
-    '& .Cmt-header-root': {
-      paddingTop: 4,
-      paddingBottom: 4,
-    },
     '& .Cmt-card-content': {
-      padding: '0 0 16px !important',
+      padding: '0 !important',
     },
   },
   typography: {
@@ -63,15 +60,38 @@ const useStyles = makeStyles((theme) => ({
   },
   scrollbarRoot: {
     height: 300,
-    padding: 16,
     display: 'flex',
     flexDirection: 'column',
-    gap: 10,
   },
   popoverRoot: {
     '& .MuiPopover-paper': {
       width: 375,
     },
+  },
+  iconNotif: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#EEEEEE',
+    borderRadius: 100,
+    padding: 10,
+    height: 45,
+    width: 45,
+  },
+  textTruncate: {
+    fontSize: '16px',
+    fontFamily: 'Lato !important',
+    fontWeight: 'bold !important',
+    letterSpacing: '0.15px',
+    lineHeight: '1.3em !important',
+    color: '#202020',
+    width: '100%',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    '-webkit-line-clamp': 2,
+    lineClamp: 2,
+    overflow: 'hidden',
   },
 }));
 
@@ -147,10 +167,9 @@ const HeaderNotifications = () => {
         }}>
         <CmtCard className={classes.cardRoot}>
           <CmtCardHeader
-            title="Notifications"
+            title="Notifikasi"
             actionsPos="top-corner"
-            actions={actions}
-            actionHandler={handleHeaderDropDown}
+            actions=""
             separator={{
               color: theme.palette.borderColor.dark,
               borderWidth: 1,
@@ -158,38 +177,64 @@ const HeaderNotifications = () => {
             }}
           />
           <CmtCardContent>
-            {/* {dataNotification?.data?.length > 0 ? (
+            {notification?.data?.length >= 1 ? (
               <>
                 <PerfectScrollbar className={classes.scrollbarRoot}>
-                  <CmtList
-                    data={dataNotification?.data}
-                    renderRow={(item, index) => <NotificationItem key={index} item={item} />}
-                  />
+                  {notification?.data?.map(
+                    (item, key) =>
+                      key < 5 && (
+                        <Stack key={key} className={classes.feedItemRoot}>
+                          <Box className={classes.iconNotif}>
+                            <Notifications style={{ color: '#666666' }} />
+                          </Box>
+                          <Stack direction="column" gap="8px" width="100%">
+                            <CmtMediaObject
+                              subTitle={
+                                <Typography className={classes.textTruncate}>
+                                  {item?.notification?.title} {''}
+                                  {item?.notification?.body}
+                                </Typography>
+                              }
+                              style={{ width: '100%', flexGrow: 1 }}
+                            />
+                            <Typography fontSize={12} fontFamily="Lato" color="rgba(0, 0, 0, 0.38)">
+                              {moment().diff(moment(item?.created_at), 'minutes') === 0
+                                ? 'Baru saja'
+                                : `${moment().diff(moment(item?.created_at), 'minutes')} menit lalu`}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      ),
+                  )}
                 </PerfectScrollbar>
+                <Box style={{ display: 'flex', borderTop: '1px solid', borderColor: theme.palette.borderColor.dark }}>
+                  <Button
+                    color="secondary"
+                    style={{
+                      width: '100%',
+                      height: 60,
+                      fontFamily: 'Lato',
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      color: '#AB22AF',
+                    }}
+                    onClick={() => router.push('/notification')}>
+                    Lihat semua
+                  </Button>
+                </Box>
               </>
             ) : (
-              <Box p={6}>
-                <Typography variant="body2">No notifications found</Typography>
-              </Box>
-            )} */}
-            {notification?.data?.length >= 1 ? (
-              <PerfectScrollbar className={classes.scrollbarRoot}>
-                {/* <CmtList
-                  data={notification?.data}
-                  renderRow={(item, index) => <NotificationItem key={index} item={item} />}
-                /> */}
-                {notification?.data?.map((item, key) => (
-                  <Stack key={key} className={classes.feedItemRoot}>
-                    <Typography fontSize={12} fontFamily="Lato" color="rgba(0, 0, 0, 0.38)">
-                      {item?.created_at}
-                    </Typography>
-                    <CmtMediaObject title={item?.notification?.title} subTitle={item?.notification?.body} />
-                  </Stack>
-                ))}
-              </PerfectScrollbar>
-            ) : (
-              <Box p={6}>
-                <Typography variant="body2">No notifications found</Typography>
+              <Box
+                style={{
+                  padding: '20px 24px',
+                  height: 300,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Typography fontWeight="bold" fontFamily="Lato" color="rgba(0, 0, 0, 0.38)">
+                  Tidak ada notifikasi baru
+                </Typography>
               </Box>
             )}
           </CmtCardContent>

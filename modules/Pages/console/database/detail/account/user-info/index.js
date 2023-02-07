@@ -128,7 +128,7 @@ const UserInfoComponent = (props) => {
                         Jenis Kelamin
                       </Typography>
                       <Typography className={classes.userInfoContent} variant="h4">
-                        {accountDetail.gender ? formatGender(accountDetail.gender) : '-'}
+                        {accountDetail?.gender}
                       </Typography>
                     </Box>
                   </Stack>
@@ -164,7 +164,7 @@ const UserInfoComponent = (props) => {
                   </Stack>
                 </Grid>
               </Grid>
-              {userBankAccounts.length >= 1 && (
+              {userBankAccounts?.length >= 1 && (
                 <Grid container spacing={4}>
                   {userBankAccounts?.map((bankAccount) => (
                     <Grid key={bankAccount.id} item xs={12} sm={4}>

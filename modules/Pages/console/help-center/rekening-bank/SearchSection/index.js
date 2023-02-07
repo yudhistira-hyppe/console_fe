@@ -7,8 +7,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { IconButton, InputAdornment, Popover, Radio, RadioGroup, Stack } from '@mui/material';
-import { debounce } from 'lodash';
+import { Divider, IconButton, InputAdornment, Popover, Stack } from '@mui/material';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import { DateRange as DateRangePicker } from 'react-date-range';
 import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
 import moment from 'moment';
@@ -21,12 +21,12 @@ const SearchSection = ({ filter, handleChange }) => {
   const [value, setValue] = useState([
     {
       startDate: new Date(),
-      endDate: null,
+      endDate: new Date(),
       key: 'selection',
     },
   ]);
+  const [isDate, setDate] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const handleChangeDelay = debounce((e) => handleChange(e.target.name, e.target.value), 500);
 
   useEffect(() => {
     if (!filter.createdAt[0] && !filter.createdAt[1]) {
@@ -34,28 +34,20 @@ const SearchSection = ({ filter, handleChange }) => {
       setValue([
         {
           startDate: new Date(),
-          endDate: null,
+          endDate: new Date(),
           key: 'selection',
         },
       ]);
+      setDate(false);
     }
   }, [filter.createdAt]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setValue([
-      {
-        startDate: new Date(),
-        endDate: null,
-        key: 'selection',
-      },
-    ]);
-    setWeek(null);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    handleChange('createdAt', ['', '']);
   };
 
   const open = Boolean(anchorEl);
@@ -64,16 +56,25 @@ const SearchSection = ({ filter, handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Akun Pemohon</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <TextField name="search" style={{ width: '100%' }} placeholder="Cari" onChange={(e) => handleChangeDelay(e)} />
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari Pemohon"
+              name="search"
+              filterValue={filter.search}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+              color="secondary"
+            />
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Pengajuan</Typography>
           </AccordionSummary>
@@ -85,11 +86,15 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 1) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(7, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '7 hari Terakhir');
                     setWeek(1);
                     setValue([
                       {
@@ -112,11 +117,15 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 2) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(14, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '14 Hari Terakhir');
                     setWeek(2);
                     setValue([
                       {
@@ -138,11 +147,15 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 4) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(30, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '1 Bulan Terakhir');
                     setWeek(4);
                     setValue([
                       {
@@ -164,11 +177,15 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 12) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
+                    setDate(false);
                   } else {
+                    setDate(true);
                     handleChange('createdAt', [
                       moment().subtract(90, 'd').format('YYYY-MM-DD'),
                       moment().format('YYYY-MM-DD'),
                     ]);
+                    handleChange('labelTanggal', '3 Bulan Terakhir');
                     setWeek(12);
                     setValue([
                       {
@@ -188,7 +205,7 @@ const SearchSection = ({ filter, handleChange }) => {
             <Stack direction="row" alignItems="center" spacing={1}>
               <TextField
                 value={
-                  value[0]?.endDate
+                  isDate
                     ? `${moment(value[0]?.startDate).format('DD/MM/YYYY')} - ${moment(value[0]?.endDate).format(
                         'DD/MM/YYYY',
                       )}`
@@ -196,6 +213,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 }
                 placeholder="Pilih Tanggal"
                 autoComplete="off"
+                color="secondary"
                 onClick={handleClick}
                 InputProps={{
                   startAdornment: (
@@ -205,18 +223,20 @@ const SearchSection = ({ filter, handleChange }) => {
                   ),
                 }}
               />
-              {value[0]?.endDate && (
+              {isDate && (
                 <IconButton
                   style={{ height: 30, width: 30 }}
                   onClick={() => {
                     setValue([
                       {
                         startDate: new Date(),
-                        endDate: null,
+                        endDate: new Date(),
                         key: 'selection',
                       },
                     ]);
                     handleChange('createdAt', ['', '']);
+                    handleChange('labelTanggal', '');
+                    setDate(false);
                   }}>
                   <RemoveCircleOutline color="primary" />
                 </IconButton>
@@ -239,19 +259,27 @@ const SearchSection = ({ filter, handleChange }) => {
                     moment(item.selection.startDate).format('YYYY-MM-DD'),
                     item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
                   ]);
-                  item.selection.endDate && setAnchorEl(null);
+                  handleChange(
+                    'labelTanggal',
+                    `${moment(item.selection.startDate).format('DD-MM-YYYY')} - ${
+                      item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
+                    }`,
+                  );
+                  setDate(true);
+                  setWeek(null);
                 }}
-                showPreview={false}
                 dragSelectionEnabled={false}
-                retainEndDateOnFirstSelection={true}
+                moveRangeOnFirstSelection={false}
+                editableDateInputs={true}
                 ranges={value}
                 direction="horizontal"
               />
             </Popover>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
-        <Accordion elevation={0} defaultExpanded>
+        <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
@@ -259,18 +287,20 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
                 label={'Baru'}
-                value="baru"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                value="BARU"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('BARU')} />}
               />
               <FormControlLabel
                 label={'Disetujui'}
-                value="disetujui"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                value="DISETUJUI"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DISETUJUI')} />
+                }
               />
               <FormControlLabel
                 label={'Ditolak'}
-                value="ditolak"
-                control={<Checkbox defaultChecked={false} color="secondary" />}
+                value="DITOLAK"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DITOLAK')} />}
               />
             </FormGroup>
           </AccordionDetails>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { wrapper } from 'redux/store';
@@ -19,9 +19,16 @@ import { firebaseApp } from 'helpers/firebaseHelper';
 import { getMessaging, onMessage } from 'firebase/messaging';
 import { useDispatch } from 'react-redux';
 import { setNotification } from 'redux/actions/Profiles';
+import { Stack } from '@mui/material';
+import { Typography } from '@material-ui/core';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import { Toaster } from 'react-hot-toast';
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
+  const [blur, setBlur] = useState(false);
+  const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,11 +49,21 @@ const MainApp = (props) => {
   }, []);
 
   useEffect(() => {
-    Notification.requestPermission().then(() => {
+    if (Notification.permission === 'granted') {
       const message = getMessaging(firebaseApp);
       onMessage(message, (payload) => dispatch(setNotification(payload)));
-    });
+    }
   });
+
+  useEffect(async () => {
+    fetch('https://static.ads-twitter.com/uwt.js', { method: 'head', mode: 'no-cors' })
+      .then(() => {
+        setBlur(false);
+      })
+      .catch(() => {
+        setBlur(true);
+      });
+  }, []);
 
   return (
     <React.Fragment>
@@ -57,7 +74,27 @@ const MainApp = (props) => {
       <AuthProvider>
         <AppContextProvider>
           <AppWrapper>
-            <Component {...pageProps} />
+            <Toaster />
+            {blur && Cookies.get('user') ? (
+              <Stack
+                height="100vh"
+                alignItems="center"
+                justifyContent="center"
+                spacing={2}
+                position="absolute"
+                top={router.pathname.includes('on-boarding') ? 0 : -120}
+                left={0}
+                zIndex={100}
+                width="100%"
+                style={{ background: '#ffffffa6' }}>
+                <img src="/images/non-active.png" alt="Visual Non Active" />
+                <Typography style={{ fontWeight: 'bold', fontSize: 20, width: '50%', textAlign: 'center' }}>
+                  Matikan Ads Block Terlebih Dahulu Untuk Melanjutkan Explorasi Dashboard!
+                </Typography>
+              </Stack>
+            ) : (
+              <Component {...pageProps} />
+            )}
           </AppWrapper>
         </AppContextProvider>
       </AuthProvider>

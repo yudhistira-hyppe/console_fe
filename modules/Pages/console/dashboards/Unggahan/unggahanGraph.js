@@ -2,6 +2,7 @@ import React from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from 'recharts';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/styles';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   tooltip: {
@@ -13,28 +14,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InstalasiGraph = () => {
+const InstalasiGraph = ({ data }) => {
   const classes = useStyles();
-  const ripple = [
-    { month: 'Jan', price: 1500 },
-    { month: '', price: 400 },
-    { month: 'Feb', price: 2000 },
-    { month: 'Mar', price: 1200 },
-    { month: 'Apr', price: 2200 },
-    { month: 'May', price: 2600 },
-    { month: 'Jun', price: 4300 },
-    { month: 'July', price: 2900 },
-    { month: 'Aug', price: 3800 },
-    { month: 'Sep', price: 1500 },
-  ];
+
   return (
     <ResponsiveContainer width="100%" height={112}>
-      <AreaChart data={ripple} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+      <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
         <Tooltip
           labelStyle={{ color: 'black' }}
           cursor={false}
           content={(data) => {
-            return data.payload[0] ? <Box className={classes.tooltip}>${data.payload[0].payload.price}</Box> : null;
+            return data.payload[0] ? (
+              <Box className={classes.tooltip}>
+                {moment(data.payload[0].payload._id).format('DD MMM YYYY')}: {data.payload[0].payload.totaldata} Post
+              </Box>
+            ) : null;
           }}
         />
         <defs>
@@ -44,7 +38,7 @@ const InstalasiGraph = () => {
           </linearGradient>
         </defs>
         <Area
-          dataKey="price"
+          dataKey="totaldata"
           type="monotone"
           strokeWidth={2}
           stackId="2"

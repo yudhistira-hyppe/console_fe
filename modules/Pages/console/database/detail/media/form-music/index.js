@@ -19,7 +19,7 @@ import UploadMedia from '../upload-media';
 import { onMediaUpload } from 'api/console/database/mediaService';
 import { onImageUpload } from 'api/console/database/imageService';
 import { LoadingButton } from '@mui/lab';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const FormMusic = (props) => {
   const { status, data, id } = props;

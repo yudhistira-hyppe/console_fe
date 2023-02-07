@@ -7,6 +7,7 @@ import { createCookies, deleteAllCookies, getAllCookies } from 'helpers/cookiesH
 import { useGetUserAccessMutation } from 'api/user/auth';
 import Cookies from 'js-cookie';
 import router from 'next/router';
+import { toast } from 'react-hot-toast';
 
 export const useProvideAuth = () => {
   // Start rewritten code
@@ -47,7 +48,7 @@ export const useProvideAuth = () => {
   const removeAuth = () => {
     deleteAllCookies();
     setAuthUser(null);
-    localStorage.clear('access');
+    localStorage.removeItem('access');
   };
 
   const getAuthUser = () => {
@@ -67,13 +68,18 @@ export const useProvideAuth = () => {
       .then((result) => {
         if (result.data.roles.includes('ROLE_ADMIN')) {
           onHandleSuccessLogin(user, result, isRememberUser);
+          return toast.success('Login Berhasil', { id: 'signin' });
         } else {
           fetchError('Akun yang digunakan tidak memiliki akses!');
+          return toast.error('Akun yang digunakan tidak memiliki akses!', { id: 'signin' });
         }
       })
       .catch((error) => {
         removeAuth();
         fetchError(error?.data?.messages?.info?.join(' '));
+        return toast.error(error.data?.messages?.info?.join(' ') || 'Login bermasalah, silahkan coba lagi', {
+          id: 'signin',
+        });
       });
   };
 
@@ -130,9 +136,11 @@ export const useProvideAuth = () => {
       .then(() => {
         removeAuth();
         fetchSuccess();
+        return toast.success('Logout Berhasil', { id: 'signout' });
       })
       .catch((error) => {
         fetchError(error?.data?.messages?.info?.join(' '));
+        return toast.error(error?.data?.messages?.info?.join(' '), { id: 'signout' });
       });
   };
 

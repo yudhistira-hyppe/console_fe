@@ -18,14 +18,6 @@ import Unggahan from './Unggahan';
 import Pendapatan from './Pendapatan';
 import Voucher from './Voucher';
 
-// request
-import { useGetUserActivityByYearQuery, useGetUserActivityHyppeByDateQuery } from 'api/console/engagement';
-import { useGetUserActivityBeforeTodayQuery, useGetMonetizeByYearQuery } from 'api/console/dashboard';
-
-// third party modules
-import moment from 'moment';
-import Cookies from 'js-cookie';
-
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
     marginBottom: 0,
@@ -44,22 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ConsoleDashboardComponent = () => {
   const classes = useStyles();
-  const currentYear = new Date().getFullYear();
-  const formattedTodayDate = moment(new Date()).format('YYYY-MM-DD');
-  // const { data: activeUsersSevenDay } = useGetUserActivityBeforeTodayQuery(6);
-  // const { data: activeUsersThirtyDay } = useGetUserActivityBeforeTodayQuery(29);
-  // const { data: activeUsersOneYear } = useGetUserActivityByYearQuery(currentYear);
-  const { data: usersActivityHyppeSevenDay } = useGetUserActivityHyppeByDateQuery(formattedTodayDate);
-  const { data: usersMonetizeOneYear } = useGetMonetizeByYearQuery(currentYear);
-  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
-
-  // const countTotal = (data, key) => {
-  //   let result = 0;
-  //   if (data) {
-  //     result = data.reduce((total, value) => total + value[key], 0);
-  //   }
-  //   return result;
-  // };
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   return (
     <>
@@ -70,34 +47,34 @@ const ConsoleDashboardComponent = () => {
         <GridContainer>
           {access?.map((item) => item?.nameModule).includes('dashboard_active_user') && (
             <Grid item xs={12} sm={6} md={3}>
-              <UserActive title="Pengguna Aktif" secondaryTitle="Bulan ini" amount={10254} />
+              <UserActive />
             </Grid>
           )}
           {access?.map((item) => item?.nameModule).includes('dashboard_total_post') && (
             <Grid item xs={12} sm={6} md={3}>
-              <Unggahan title="Total Post" secondaryTitle="Bulan ini" amount={33755} />
+              <Unggahan />
             </Grid>
           )}
           {access?.map((item) => item?.nameModule).includes('dashboard_total_income') && (
             <Grid item xs={12} sm={6} md={3}>
-              <Pendapatan title="Total Pendapatan" secondaryTitle="Bulan ini" amount={30000000} />
+              <Pendapatan />
             </Grid>
           )}
           {access?.map((item) => item?.nameModule).includes('dashboard_voucher') && (
             <Grid item xs={12} sm={6} md={3}>
-              <Voucher title="Pendapatan Voucher" secondaryTitle="Bulan ini" amount={15015000} />
+              <Voucher />
             </Grid>
           )}
         </GridContainer>
         <GridContainer style={{ marginTop: 12 }}>
           {access?.map((item) => item?.nameModule).includes('dashboard_activity') && (
             <Grid item xs={12} sm={9} md={9}>
-              <ActivitySize data={usersActivityHyppeSevenDay} />
+              <ActivitySize />
             </Grid>
           )}
           {access?.map((item) => item?.nameModule).includes('dashboard_status_ownership') && (
             <Grid item xs={12} sm={3} md={3}>
-              <StatusKepemilikan data={usersMonetizeOneYear} />
+              <StatusKepemilikan />
             </Grid>
           )}
         </GridContainer>

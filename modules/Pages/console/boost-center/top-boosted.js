@@ -3,6 +3,9 @@ import { Typography } from '@material-ui/core';
 import { Avatar, Card, CircularProgress, Stack, Tooltip as MuiTooltip } from '@mui/material';
 import { Info } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -17,8 +20,29 @@ const useStyles = makeStyles(() => ({
 }));
 
 const TopBoosted = (props) => {
-  const { loading } = props;
+  const { loading, data } = props;
   const classes = useStyles();
+  const { authUser } = useAuth();
+
+  const getMediaUri = (mediaEndpoint) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+
+    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+  };
+
+  const getImage = (item) => {
+    if (item?.apsara && item?.apsaraId) {
+      if (item?.media?.ImageInfo) {
+        return item?.media?.ImageInfo?.[0]?.URL || new Error();
+      } else {
+        return item?.media?.VideoList?.[0]?.CoverURL || new Error();
+      }
+    } else if (item?.mediaEndpoint) {
+      return getMediaUri(item?.mediaEndpoint) || new Error();
+    } else {
+      return new Error();
+    }
+  };
 
   return (
     <Card style={{ padding: 28 }}>
@@ -45,26 +69,33 @@ const TopBoosted = (props) => {
               <Typography style={{ fontWeight: 'bold', color: '#737373' }}>loading data...</Typography>
             </Stack>
           ) : (
-            [{}, {}, {}, {}, {}]?.map((item, key) => (
+            data?.map((item, key) => (
               <Stack key={key} direction="row" alignItems="center" gap="8px">
                 <Typography style={{ width: 85, fontWeight: 'bold', color: '#00000099' }}>{key + 1}</Typography>
                 <Stack direction="row" gap="12px" width={250}>
-                  <Avatar
-                    src="/images/dashboard/content_image.png"
-                    variant="rounded"
-                    style={{ width: '100%', maxWidth: 40, height: 40 }}
-                  />
+                  <Avatar src={getImage(item)} variant="rounded" style={{ width: '100%', maxWidth: 40, height: 40 }} />
                   <Typography variant="body1" className={classes.textTruncate} style={{ fontSize: 14, color: '#00000099' }}>
-                    aksdoak adasdas asdasd asdasdsad adasdsa sadasda sadasd
+                    {item?.description || '-'}
                   </Typography>
                 </Stack>
-                <Typography style={{ width: 180, fontSize: 14, fontWeight: 'bold', color: '#00000099' }}>
-                  36R38DHF37C
+                <Typography
+                  className={classes.textTruncate}
+                  style={{
+                    width: 160,
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    color: '#00000099',
+                    marginRight: 20,
+                    whiteSpace: 'nowrap',
+                  }}>
+                  {item?.postID || '-'}
                 </Typography>
                 <Typography style={{ width: 150, fontSize: 14, fontWeight: 'bold', color: '#00000099' }}>
-                  HyppeVid
+                  {item?.postType || '-'}
                 </Typography>
-                <Typography style={{ fontWeight: 'bold', fontSize: 14, color: '#00000099' }}>300</Typography>
+                <Typography style={{ fontWeight: 'bold', fontSize: 14, color: '#00000099' }}>
+                  {numberWithCommas(item?.jangkauan)}
+                </Typography>
               </Stack>
             ))
           )}

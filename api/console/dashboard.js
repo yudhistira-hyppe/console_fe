@@ -5,48 +5,55 @@ export const dashboardApi = createApi({
   reducerPath: 'console/dashboard',
   baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
-    getUserActivityByDate: build.query({
-      query: (date) => ({
-        url: `/contentevents/useractivitynow`,
+    getUserActive: build.query({
+      query: (data) => ({
+        url: '/userauths/useractivebychart',
         method: 'POST',
-        body: {
-          date,
-        },
+        body: data,
       }),
     }),
-    getUserActivityBeforeToday: build.query({
-      query: (day) => ({
-        url: `/contentevents/useractivitybeforetoday`,
-        method: 'POST',
-        body: {
-          day,
-        },
+    getUserTotalPost: build.query({
+      query: (data) => ({
+        url: '/posts/postbychart',
+        method: 'POSt',
+        body: data,
       }),
     }),
-    getUserEventActivityBeforeToday: build.query({
-      query: (day) => ({
-        url: `/contentevents/useractivitysize`,
+    getAdminBalances: build.query({
+      query: (data) => ({
+        url: '/accountbalances/incomebychart',
         method: 'POST',
-        body: {
-          day,
-        },
+        body: data,
       }),
     }),
-    getMonetizeByYear: build.query({
-      query: (year) => ({
-        url: `/posts/monetizebyyear`,
+    getVoucherIncome: build.query({
+      query: (data) => ({
+        url: '/transactions/vouchersellchart',
         method: 'POST',
-        body: {
-          year,
-        },
+        body: data,
+      }),
+    }),
+    getPostAnalytic: build.query({
+      query: (data) => ({
+        url: '/posts/analityc',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getOwnershipChart: build.query({
+      query: () => ({
+        url: '/posts/showsertifikasistatbychart',
+        method: 'GET',
       }),
     }),
   }),
 });
 
 export const {
-  useGetUserActivityByDateQuery,
-  useGetUserActivityBeforeTodayQuery,
-  useGetUserEventActivityBeforeTodayQuery,
-  useGetMonetizeByYearQuery,
+  useGetUserActiveQuery,
+  useGetUserTotalPostQuery,
+  useGetAdminBalancesQuery,
+  useGetVoucherIncomeQuery,
+  useGetPostAnalyticQuery,
+  useGetOwnershipChartQuery,
 } = dashboardApi;

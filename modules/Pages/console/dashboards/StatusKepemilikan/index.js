@@ -5,14 +5,9 @@ import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { Error } from '@material-ui/icons';
 import { MenuItem, Popover, Select, Stack } from '@mui/material';
+import { useGetOwnershipChartQuery } from 'api/console/dashboard';
 import React, { useState } from 'react';
 import { PieChart, Pie, Sector, Cell, Tooltip } from 'recharts';
-
-const data = [
-  { name: 'Bersetifikat', value: 30 },
-  { name: 'Tidak Bersetifikat', value: 70 },
-];
-const COLORS = ['rgba(225, 102, 24, 1)', 'rgba(69, 195, 229, 1)'];
 
 const useStyles = makeStyles({
   cardAdvRoot: {
@@ -31,6 +26,7 @@ const useStyles = makeStyles({
     backgroundColor: 'rgba(0, 0, 0, 0.38);',
     color: '#FFFFFF',
     fontSize: 14,
+    textTransform: 'capitalize',
   },
   avatar: {
     display: 'flex',
@@ -48,6 +44,21 @@ const StatusKepemilikan = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const { data: ownershipChart } = useGetOwnershipChartQuery();
+
+  const fixedData = () => {
+    let array = [];
+
+    ownershipChart?.data?.map((item) => {
+      array.push({
+        ...item,
+        persentase: Number(item.persentase.toFixed(2)),
+      });
+    });
+
+    return array;
+  };
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -101,29 +112,32 @@ const StatusKepemilikan = () => {
         />
         <center>
           <PieChart width={250} height={260}>
-            <Pie data={data} innerRadius={70} outerRadius={100} fill="#8884d8" paddingAngle={5} dataKey="value">
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Pie data={fixedData()} innerRadius={70} outerRadius={100} fill="#8884d8" paddingAngle={5} dataKey="persentase">
+              {fixedData()?.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.id === 'TIDAK BERSERTIFIKAT' ? 'rgba(225, 102, 24, 1)' : 'rgba(69, 195, 229, 1)'}
+                />
               ))}
             </Pie>
             <Tooltip
               labelStyle={{ color: 'black' }}
               cursor={false}
               content={(data) => {
-                return data.payload[0] && <Box className={classes.tooltip}>{data.payload[0].value}%</Box>;
+                return data.payload?.[0] && <Box className={classes.tooltip}>{data.payload?.[0].value}%</Box>;
               }}
             />
           </PieChart>
         </center>
         <Stack direction="column" gap="6px" ml="24px" mb="16px">
           <Stack direction="row" alignItems="center">
-            <Box bgcolor={COLORS[1]} className={classes.avatar} />
+            <Box bgcolor={'rgba(69, 195, 229, 1)'} className={classes.avatar} />
             <Box fontSize={14} fontWeight={700} color="text.primary">
               Bersetifikat
             </Box>
           </Stack>
           <Stack direction="row" alignItems="center">
-            <Box bgcolor={COLORS[0]} className={classes.avatar} />
+            <Box bgcolor={'rgba(225, 102, 24, 1)'} className={classes.avatar} />
             <Box fontSize={14} fontWeight={700} color="text.primary">
               Tidak Bersetifikat
             </Box>

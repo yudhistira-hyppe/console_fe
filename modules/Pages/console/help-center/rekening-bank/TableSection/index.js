@@ -34,28 +34,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({ handleOrder, handlePageChange, order, loading, listTickets }) => {
+const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageChange, order, loading, listTickets }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
-    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
-  };
-
-  const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
-      if (item?.media?.ImageInfo) {
-        return item?.media?.ImageInfo?.[0]?.URL;
-      } else {
-        return item?.media?.VideoList?.[0]?.CoverURL;
-      }
-    } else if (item?.mediaEndpoint) {
-      return getMediaUri(item?.mediaEndpoint);
-    } else {
-      return '/images/dashboard/content_image.png';
-    }
+    return `${STREAM_URL}/v5${mediaEndpoint}${authToken}`;
   };
 
   return (
@@ -90,6 +76,24 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
         </Stack>
       </Box>
 
+      <Stack direction="row" gap="10px" mb={2}>
+        {filterList?.map((item, key) => (
+          <Chip
+            key={key}
+            label={item.value}
+            onDelete={() => {
+              if (item.parent === 'search') {
+                handleDeleteFilter(item.parent, '');
+              } else if (item.parent === 'createdAt') {
+                handleDeleteFilter(item.parent, [null, null]);
+              } else {
+                handleDeleteFilter(item.parent, item.value);
+              }
+            }}
+          />
+        ))}
+      </Stack>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
@@ -110,8 +114,8 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                   <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                 </Stack>
               </TableCell>
-            ) : listTickets?.arrdata?.length >= 1 ? (
-              listTickets?.arrdata?.map((item, i) => (
+            ) : listTickets?.data?.length >= 1 ? (
+              listTickets?.data?.map((item, i) => (
                 <TableRow
                   key={i}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -127,30 +131,30 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                   }>
                   <TableCell style={{ maxWidth: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAtReportLast).utc().format('YY/MM/DD - HH:mm')} WIB
+                      {moment(item?.tanggalPengajuan).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 180 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getImage(item)} />
+                      <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                       <Stack direction="column" gap="2px">
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          asdada
+                          {item?.fullName || '-'}
                         </Typography>
                         <Typography
                           variant="body1"
                           style={{ fontSize: '12px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          asdada
+                          {item?.email || '-'}
                         </Typography>
                       </Stack>
                     </Stack>
                   </TableCell>
                   <TableCell align="left">
-                    {item?.reportStatusLast === 'BARU' && (
+                    {item?.statusLast === 'BARU' && (
                       <Chip
                         label="Baru"
                         style={{
@@ -161,7 +165,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {item?.reportStatusLast === 'APPROVE' && (
+                    {item?.statusLast === 'DISETUJUI' && (
                       <Chip
                         label="Disetujui"
                         style={{
@@ -172,7 +176,7 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {item?.reportStatusLast === 'CANCELED' && (
+                    {item?.statusLast === 'DITOLAK' && (
                       <Chip
                         label="Ditolak"
                         style={{
@@ -183,21 +187,21 @@ const TableSection = ({ handleOrder, handlePageChange, order, loading, listTicke
                         }}
                       />
                     )}
-                    {!item?.reportStatusLast && '-'}
+                    {!item?.statusLast && '-'}
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableCell colSpan={8}>
                 <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
+                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Rekening Bank</Typography>
                 </Stack>
               </TableCell>
             )}
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalsearch >= 1 && (
+      {listTickets?.totalsearch >= 1 && !loading && (
         <Stack alignItems="center" my={3} mr={3}>
           <Pagination
             count={Number(listTickets?.totalpage) || 1}

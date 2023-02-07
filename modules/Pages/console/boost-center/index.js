@@ -7,9 +7,13 @@ import ChartPost from './chart-post';
 import TopBoosted from './top-boosted';
 import TableList from './TableList';
 import Cookies from 'js-cookie';
+import { useGetAnalyticBoostQuery } from 'api/console/boost';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const BoostCenter = () => {
-  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+
+  const { data: analyticBoost, isLoading: loadingAnalytic } = useGetAnalyticBoostQuery();
 
   return (
     <>
@@ -17,23 +21,42 @@ const BoostCenter = () => {
         <title key="title">Hyppe-Console :: Boost Center</title>
       </Head>
       <PageContainer>
-        <GridContainer>
-          {access.map((item) => item?.nameModule).includes('boost_statistic') && (
-            <Grid item xs={12} sm={4}>
-              <ChartPost />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('boost_engagement') && (
-            <Grid item xs={12} sm={8}>
-              <TopBoosted />
-            </Grid>
-          )}
-          {access.map((item) => item?.nameModule).includes('boost_table') && (
-            <Grid item xs={12}>
-              <TableList />
-            </Grid>
-          )}
-        </GridContainer>
+        {loadingAnalytic ? (
+          <PageLoader />
+        ) : (
+          <GridContainer>
+            {access.map((item) => item?.nameModule).includes('boost_statistic') && (
+              <Grid item xs={12} sm={4}>
+                <ChartPost
+                  totalPost={analyticBoost?.data?.totalpost}
+                  persenJangkauan={analyticBoost?.data?.persenjangkauan}
+                  chartData={[
+                    {
+                      name: 'Jangkauan',
+                      value: Number(analyticBoost?.data?.persenjangkauan),
+                      color: '#AB22AF',
+                    },
+                    {
+                      name: 'Boost Post',
+                      value: Number(analyticBoost?.data?.persentotalpost),
+                      color: '#23036A',
+                    },
+                  ]}
+                />
+              </Grid>
+            )}
+            {access.map((item) => item?.nameModule).includes('boost_engagement') && (
+              <Grid item xs={12} sm={8}>
+                <TopBoosted data={analyticBoost?.data?.post} loading={loadingAnalytic} />
+              </Grid>
+            )}
+            {access.map((item) => item?.nameModule).includes('boost_table') && (
+              <Grid item xs={12}>
+                <TableList />
+              </Grid>
+            )}
+          </GridContainer>
+        )}
       </PageContainer>
     </>
   );

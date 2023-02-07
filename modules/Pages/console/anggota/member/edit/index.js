@@ -9,7 +9,7 @@ import { useGetGroupQuery } from 'api/console/group';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { useGetProfileByUserEmailQuery, useUpdateGroupUserMutation } from 'api/console/getUserHyppe';
 import { LoadingButton } from '@mui/lab';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Anggota', link: '/anggota?tab=pengguna' },
@@ -152,7 +152,6 @@ const AddMember = () => {
           </Stack>
         </Stack>
       )}
-      <Toaster />
     </>
   );
 };

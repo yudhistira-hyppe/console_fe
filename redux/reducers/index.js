@@ -24,6 +24,7 @@ import {
   kontenApi,
   mediaApi,
   contentApi,
+  boostAPI,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -34,7 +35,7 @@ import { accountBalancesAPI } from 'api/user/accountBalances';
 import { contentManagementAPI } from 'api/user/content/management';
 import { userFriendAPI } from 'api/user/friend';
 import { voucherApi, adAPI } from 'api/console/monetize';
-import { kycApi } from 'api/console/helpCenter';
+import { bankApi, kycApi } from 'api/console/helpCenter';
 
 export default combineReducers({
   common: Common,
@@ -72,4 +73,6 @@ export default combineReducers({
   [mediaApi.reducerPath]: mediaApi.reducer,
   [contentApi.reducerPath]: contentApi.reducer,
   [kycApi.reducerPath]: kycApi.reducer,
+  [bankApi.reducerPath]: bankApi.reducer,
+  [boostAPI.reducerPath]: boostAPI.reducer,
 });

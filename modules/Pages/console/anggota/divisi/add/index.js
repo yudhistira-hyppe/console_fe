@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { LoadingButton } from '@mui/lab';
 
 const addDivisi = () => {
@@ -46,7 +46,6 @@ const addDivisi = () => {
 
   return (
     <>
-      <Toaster />
       <Head>
         <title key="title">Hyppe-Console :: Add Divisi</title>
       </Head>

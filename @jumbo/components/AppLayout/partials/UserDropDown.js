@@ -10,6 +10,7 @@ import { useAuth } from '../../../../authentication';
 import { useRouter } from 'next/router';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { Chip, Stack, Typography } from '@mui/material';
+import { toast } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   profileRoot: {
@@ -68,6 +69,7 @@ const UserDropDown = () => {
 
   const onItemClick = (item) => {
     if (item.label === 'Logout') {
+      toast.loading('loading...', { id: 'signout' });
       userSignOut({
         email: authUser.user.email,
         deviceId: authUser.user.deviceId,

@@ -179,8 +179,8 @@ const ConsoleHelpCenterComponent = () => {
               <CardWithIndicator
                 headTitle="Rekening Bank"
                 TypeProblem="Total Permohonan"
-                numberOfProblem={70 || 0}
-                data={sample4Data}
+                numberOfProblem={0}
+                data={[]}
                 onClick={() => router.push('/help-center/rekening-bank')}
                 status={'hue'}
                 setStatusList={() => {}}
@@ -245,8 +245,8 @@ const ConsoleHelpCenterComponent = () => {
               <CardWithIndicator
                 headTitle="Fingerprint Combat"
                 TypeProblem="Konten Serupa"
-                numberOfProblem={25 || 0}
-                data={sample4Data}
+                numberOfProblem={0}
+                data={[]}
                 pathIconLeft={'/images/icons/banding-konten.svg'}
                 onClick={() => router.push('/help-center/konten-serupa')}
                 status={'hue'}
@@ -313,8 +313,8 @@ const ConsoleHelpCenterComponent = () => {
               <CardWithIndicator
                 headTitle="Laporan Akun"
                 TypeProblem="Akun Dilaporkan"
-                numberOfProblem={200 || 0}
-                data={sample4Data}
+                numberOfProblem={0}
+                data={[]}
                 pathIconLeft={'/images/icons/users.svg'}
                 onClick={() => router.push('/help-center/pelaporan-akun')}
                 status={'hue'}
@@ -335,8 +335,8 @@ const ConsoleHelpCenterComponent = () => {
               <CardWithIndicator
                 headTitle="Banding Akun Moderasi"
                 TypeProblem="Permohonan"
-                numberOfProblem={25 || 0}
-                data={sample4Data}
+                numberOfProblem={0}
+                data={[]}
                 pathIconLeft={'/images/icons/users-banding.svg'}
                 onClick={() => router.push('/help-center/banding-akun')}
                 status={'hue'}

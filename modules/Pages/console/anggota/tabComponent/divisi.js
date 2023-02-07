@@ -22,7 +22,7 @@ import Link from 'next/link';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
 import { useGetDivisiQuery, useDeleteDivisiMutation } from 'api/console/divisi';
 import { Add } from '@material-ui/icons';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
   addUser: {
@@ -358,7 +358,6 @@ const Position = () => {
           <Pagination page={page} onChange={handlePagination} count={countPages} />
         </div>
       )}
-      <Toaster />
     </>
   );
 };
