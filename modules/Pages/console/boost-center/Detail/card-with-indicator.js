@@ -13,11 +13,17 @@ const ProgressIndicator = (props) => {
       <CmtProgressBar
         label={
           <Box display="flex" alignItems="center">
-            {item.label}
+            {item._id === 'OTHER' || item._id === 'other'
+              ? 'Lainnya'
+              : item._id === 'FEMALE'
+              ? 'Perempuan'
+              : item._id === 'MALE'
+              ? 'Laki-laki'
+              : item._id}
           </Box>
         }
         labelPos="top-left"
-        value={item.value}
+        value={item.persen}
         renderValue={(value) => {
           return `${value}%`;
         }}

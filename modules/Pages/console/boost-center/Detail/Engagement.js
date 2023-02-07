@@ -4,17 +4,17 @@ import { Typography } from '@material-ui/core';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { Lens } from '@material-ui/icons';
 
-const Engagement = () => {
+const Engagement = ({ view, like, comment }) => {
   return (
     <Card style={{ padding: '18px 24px', height: '100%' }}>
       <Stack direction="column" height="100%">
         <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Engagement</Typography>
 
         <Stack direction="row" gap="24px" mt="12px">
-          <Stack direction="row" alignItems="center" gap="8px">
+          {/* <Stack direction="row" alignItems="center" gap="8px">
             <Lens style={{ color: '#212121', fontSize: 12 }} />
             <Typography variant="caption">Total Sebelum</Typography>
-          </Stack>
+          </Stack> */}
           <Stack direction="row" alignItems="center" gap="8px">
             <Lens style={{ color: '#AB22AF', fontSize: 12 }} />
             <Typography variant="caption">Total Penambahan</Typography>
@@ -24,23 +24,23 @@ const Engagement = () => {
         <Stack direction="row" justifyContent="space-evenly" alignItems="center" height="100%">
           <Stack direction="column" alignItems="center">
             <Typography style={{ color: '#AB22AF', fontSize: 24, fontWeight: 'bold', lineHeight: '1.2em' }}>
-              {numberWithCommas(40962)}
+              {numberWithCommas(view || 0)}
             </Typography>
-            <Typography style={{ fontWeight: 'bold', fontSize: 12, marginBottom: 8 }}>
+            {/* <Typography style={{ fontWeight: 'bold', fontSize: 12, marginBottom: 8 }}>
               {numberWithCommas(40642)} <span style={{ color: '#979797' }}>(+ 320)</span>
-            </Typography>
+            </Typography> */}
             <Typography style={{ color: '#737373' }}>Dilihat</Typography>
           </Stack>
           <Stack direction="column" alignItems="center">
             <Typography style={{ color: '#AB22AF', fontSize: 24, fontWeight: 'bold', lineHeight: '1.2em' }}>
-              {numberWithCommas(1330)}
+              {numberWithCommas(like || 0)}
             </Typography>
-            <Typography style={{ fontWeight: 'bold', fontSize: 12, marginBottom: 8 }}>
+            {/* <Typography style={{ fontWeight: 'bold', fontSize: 12, marginBottom: 8 }}>
               {numberWithCommas(1180)} <span style={{ color: '#979797' }}>(+ 150)</span>
-            </Typography>
+            </Typography> */}
             <Typography style={{ color: '#737373' }}>Disukai</Typography>
           </Stack>
-          <Stack direction="column" alignItems="center">
+          {/* <Stack direction="column" alignItems="center">
             <Typography style={{ color: '#AB22AF', fontSize: 24, fontWeight: 'bold', lineHeight: '1.2em' }}>
               {numberWithCommas(570)}
             </Typography>
@@ -48,14 +48,14 @@ const Engagement = () => {
               {numberWithCommas(570)} <span style={{ color: '#979797' }}>(+ 0)</span>
             </Typography>
             <Typography style={{ color: '#737373' }}>Dibagikan</Typography>
-          </Stack>
+          </Stack> */}
           <Stack direction="column" alignItems="center">
             <Typography style={{ color: '#AB22AF', fontSize: 24, fontWeight: 'bold', lineHeight: '1.2em' }}>
-              {numberWithCommas(523)}
+              {numberWithCommas(comment || 0)}
             </Typography>
-            <Typography style={{ fontWeight: 'bold', fontSize: 12, marginBottom: 8 }}>
+            {/* <Typography style={{ fontWeight: 'bold', fontSize: 12, marginBottom: 8 }}>
               {numberWithCommas(503)} <span style={{ color: '#979797' }}>(+ 20)</span>
-            </Typography>
+            </Typography> */}
             <Typography style={{ color: '#737373' }}>Dikomentari</Typography>
           </Stack>
         </Stack>

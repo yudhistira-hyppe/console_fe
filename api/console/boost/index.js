@@ -25,7 +25,19 @@ export const boostAPI = createApi({
         method: 'POST',
       }),
     }),
+    getDetailBoostPost: build.query({
+      query: (data) => ({
+        url: '/getusercontents/boostconsole/list/details',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetListBoostPostQuery, useGetListSessionBoostQuery, useGetAnalyticBoostQuery } = boostAPI;
+export const {
+  useGetListBoostPostQuery,
+  useGetListSessionBoostQuery,
+  useGetAnalyticBoostQuery,
+  useGetDetailBoostPostQuery,
+} = boostAPI;
