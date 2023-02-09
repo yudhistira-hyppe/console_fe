@@ -2,8 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import GridContainer from '@jumbo/components/GridContainer';
-import { Stack, Typography } from '@mui/material';
-import { Grid, Link } from '@material-ui/core';
+import { Stack } from '@mui/material';
+import { Grid, Link, Typography } from '@material-ui/core';
 import {
   AdsContentDetail,
   AdsHistoryDetail,
@@ -14,9 +14,11 @@ import {
 import Breadcrumbs from '../../help-center/bantuan-pengguna/BreadCrumb';
 import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
+import { useGetDetailAdsQuery } from 'api/console/ads';
+import moment from 'moment';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
-  { label: 'Home', link: '/' },
   { label: 'Ads Center', link: '/ads-center' },
   { label: 'Rincian Iklan', isActive: true },
 ];
@@ -42,63 +44,61 @@ const AdsDetailComponent = () => {
     });
   };
 
-  const onBackHandler = (e) => {
-    e.preventDefault();
-    router.push('/ads-center');
-  };
-
-  React.useEffect(() => {
-    // Fetch Data Here
-    return () => {};
-  }, []);
+  const { data: adsDetail, isLoading: loadingAds } = useGetDetailAdsQuery({
+    id: router.query._id,
+    startdate: moment().subtract(7, 'day').format('YYYY-MM-DD'),
+    enddate: moment().format('YYYY-MM-DD'),
+  });
 
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Pusat Iklan Detail</title>
       </Head>
-
-      <Stack spacing={1}>
+      <Stack direction={'column'} spacing={2} mb={3}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
-        <Link href="/" onClick={onBackHandler} style={{ cursore: 'pointer', textDecorationLine: 'none' }}>
-          <Stack direction={'row'}>
-            <Stack direction={'column'} justifyContent={'center'}>
-              <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '15px', fontWeight: 'bold' }} />
-            </Stack>
-            <Stack>
-              <Typography
-                style={{ color: 'black', textDecorationLine: 'none' }}
-                variant="h5"
-                fontWeight="bold"
-                fontFamily="Lato">
-                Kembali
-              </Typography>
-            </Stack>
+        <Stack
+          direction={'row'}
+          mt={1}
+          mb={3}
+          onClick={() => router.push('/ads-center')}
+          gap="5px"
+          style={{ width: 'fit-content', cursor: 'pointer' }}>
+          <Stack direction={'column'} justifyContent={'center'}>
+            <BackIconNav fontSize="small" style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }} />
           </Stack>
-        </Link>
+          <Typography variant="h1" style={{ fontSize: 20, color: 'black' }}>
+            Kembali
+          </Typography>
+        </Stack>
       </Stack>
 
-      <PageContainer className="mt-5">
-        <GridContainer>
-          <Grid item sm={12} md={12} lg={6} xl={6}>
-            <AdsContentDetail
-              status={status}
-              showModal={showModal}
-              setShowModal={setShowModal}
-              buttonColor={buttonColor}
-              setButtonColor={setButtonColor}
-              setStatus={setStatus}
-            />
-          </Grid>
+      {loadingAds ? (
+        <PageLoader />
+      ) : (
+        <PageContainer>
+          <GridContainer>
+            <Grid item sm={12} md={12} lg={6} xl={6}>
+              <AdsContentDetail
+                status={status}
+                showModal={showModal}
+                setShowModal={setShowModal}
+                buttonColor={buttonColor}
+                setButtonColor={setButtonColor}
+                setStatus={setStatus}
+                detailAds={adsDetail?.data?.[0]}
+              />
+            </Grid>
 
-          <Grid item sm={12} md={12} lg={6} xl={6}>
-            <Stack direction="column" gap={4}>
-              <AdsHistoryDetail />
-              <AdsWatcherDetailComponent />
-            </Stack>
-          </Grid>
-        </GridContainer>
-      </PageContainer>
+            <Grid item sm={12} md={12} lg={6} xl={6}>
+              <Stack direction="column" gap={4}>
+                <AdsHistoryDetail />
+                <AdsWatcherDetailComponent />
+              </Stack>
+            </Grid>
+          </GridContainer>
+        </PageContainer>
+      )}
 
       <AdsModalChangeStatus
         showModal={showModal.show && showModal.type !== 'media'}
@@ -107,7 +107,11 @@ const AdsDetailComponent = () => {
         type={showModal.type}
       />
 
-      <ModalMedia showModal={showModal.show && showModal.type === 'media'} onClose={onCloseModal} />
+      <ModalMedia
+        showModal={showModal.show && showModal.type === 'media'}
+        onClose={onCloseModal}
+        idApsara={adsDetail?.data?.[0]?.apsaraId}
+      />
     </>
   );
 };
