@@ -1,10 +1,42 @@
 import React from 'react';
 import { Button, Card } from '@material-ui/core';
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Avatar } from '@mui/material';
 import { ButtonDropdown } from '../';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
-const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColor, setButtonColor, setStatus }) => {
+const AdsContentDetailComponent = ({
+  status,
+  setShowModal,
+  showModal,
+  buttonColor,
+  setButtonColor,
+  setStatus,
+  detailAds,
+}) => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const { authUser } = useAuth();
+
+  const getMediaUri = (mediaEndpoint) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+
+    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+  };
+
+  const getImage = (item) => {
+    if (item?.apsara && item?.apsaraId) {
+      if (item?.media?.ImageInfo) {
+        return item?.media?.ImageInfo?.[0]?.URL || new Error();
+      } else {
+        return item?.media?.VideoList?.[0]?.CoverURL || new Error();
+      }
+    } else if (item?.mediaEndpoint) {
+      return getMediaUri(item?.mediaEndpoint) || new Error();
+    } else {
+      return new Error();
+    }
+  };
 
   return (
     <>
@@ -26,9 +58,10 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
         )}
 
         <div className="my-4">
-          <img
-            src="/images/thumbnail_yt.png"
-            style={{ cursor: 'pointer' }}
+          <Avatar
+            src={getImage(detailAds)}
+            variant="rounded"
+            style={{ cursor: 'pointer', width: '100%', height: 312 }}
             onClick={() => {
               setShowModal({
                 ...showModal,
@@ -46,7 +79,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
             </Typography>
 
             <Typography fontFamily={'Lato'} color="secondary" fontWeight="bold">
-              @ikeaindonesia
+              @-
             </Typography>
           </Stack>
 
@@ -55,7 +88,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
               Judul:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>IKEA - Let's Relax</Typography>
+            <Typography fontFamily={'Lato'}>{detailAds?.name || '-'}</Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>
@@ -81,9 +114,11 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
               Situs Link:
             </Typography>
 
-            <Typography fontFamily={'Lato'} color="secondary">
-              www.IKEA.id
-            </Typography>
+            <a href={detailAds?.urlLink} target="_blank" rel="noreferrer">
+              <Typography fontFamily={'Lato'} color="secondary">
+                {detailAds?.urlLink}
+              </Typography>
+            </a>
           </Stack>
 
           <Stack direction="row" spacing={1}>
@@ -91,7 +126,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
               Tipe Iklan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>@ikeaindonesia</Typography>
+            <Typography fontFamily={'Lato'}>{detailAds?.nameType}</Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>
@@ -99,7 +134,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
               Rencana Penayangan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>@ikeaindonesia</Typography>
+            <Typography fontFamily={'Lato'}>{numberWithCommas(detailAds?.tayang)} Kali</Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>
@@ -107,7 +142,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
               Penempatan Iklan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>@ikeaindonesia</Typography>
+            <Typography fontFamily={'Lato'}>-</Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>
@@ -115,7 +150,9 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
               Kredit Tersisa:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>1.000</Typography>
+            <Typography fontFamily={'Lato'}>
+              {numberWithCommas(detailAds?.totalCredit - (detailAds?.usedCredit + detailAds?.usedCreditFree) || 0)}
+            </Typography>
           </Stack>
         </div>
       </Card>

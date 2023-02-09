@@ -13,7 +13,41 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
+    getDemographicAds: build.query({
+      query: (data) => ({
+        url: '/ads/console/adscenter/demographchart',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getListAds: build.query({
+      query: (data) => ({
+        url: '/ads/console/adscenter/listads',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getDetailAds: build.query({
+      query: (data) => ({
+        url: '/ads/management/adscenter/details',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getVideoFromApsara: build.query({
+      query: (data) => ({
+        url: '/posts/getvideo',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetPerformanceAdsQuery } = adsApi;
+export const {
+  useGetPerformanceAdsQuery,
+  useGetDemographicAdsQuery,
+  useGetListAdsQuery,
+  useGetDetailAdsQuery,
+  useGetVideoFromApsaraQuery,
+} = adsApi;

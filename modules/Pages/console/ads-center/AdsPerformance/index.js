@@ -1,97 +1,77 @@
-import React from 'react';
-import { Card, Grid } from '@material-ui/core';
-import { Typography, Stack } from '@mui/material';
-import { ButtonPopper } from '../components';
-import { makeStyles } from '@material-ui/styles';
-import Chart from './Chart';
+import React, { useState } from 'react';
+import { Card, Typography } from '@material-ui/core';
 import { BulletsText } from '../components';
+import { CircularProgress, MenuItem, Select, Stack } from '@mui/material';
+import { makeStyles } from '@material-ui/styles';
+import moment from 'moment';
+import { useGetPerformanceAdsQuery } from 'api/console/ads';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import AdsGraph from './adsGraph';
 
-const useStyles = makeStyles((theme) => ({
-  mainContainer: {
-    height: '100%'
-  },
-  gridItemContainer: {
-    padding: '0em 1em 0em 1em',
-    marginTop: '1em'
-  },
-  gridItemHeader: {
-    padding: '1em 1em 0em 1em'
+const useStyles = makeStyles(() => ({
+  dateSelect: {
+    '& .MuiSelect-select': {
+      padding: '2px 10px',
+      fontSize: 12,
+    },
+    '& .MuiSvgIcon-root': {
+      width: 18,
+      height: 18,
+      top: 5,
+    },
   },
 }));
 
-
-const AdsPerformaceComponents = ({ status, setStatusList, title, totalData, description, data }) => {
+const AdsPerformaceComponents = () => {
   const classes = useStyles();
+  const [payload, setPayload] = useState({
+    startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
+    enddate: moment().format('YYYY-MM-DD'),
+  });
+
+  const handlePayload = (value) => {
+    setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
+  };
+
+  const { data: adsPerformance, isFetching: loadingPerformance } = useGetPerformanceAdsQuery(payload);
 
   return (
-    <Card className={classes.mainContainer}>
-        <Grid container direction={'column'}>
-          <Grid item sm={12} md={12} lg={12} className={classes.gridItemHeader}>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography
-                fontWeight="bold"
-                fontFamily="Lato"
-              >
-                { title }
-              </Typography>
+    <Card style={{ height: '100%', paddingTop: 28 }}>
+      <Stack direction="column" height="100%">
+        <Stack direction="row" justifyContent="space-between" px="28px">
+          <Typography style={{ fontWeight: 'bold' }}>Performa Iklan</Typography>
+          <Select
+            defaultValue={6}
+            className={classes.dateSelect}
+            color="secondary"
+            onChange={(e) => handlePayload(e.target.value)}>
+            <MenuItem value={6}>7 Hari</MenuItem>
+            <MenuItem value={13}>14 Hari</MenuItem>
+            <MenuItem value={29}>30 Hari</MenuItem>
+            <MenuItem value={89}>90 Hari</MenuItem>
+          </Select>
+        </Stack>
 
-              <ButtonPopper  
-                status={status}
-                setStatus={setStatusList}
-              />
+        <Stack direction="column" mt={1} px="28px">
+          <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>{numberWithCommas(10000)}</Typography>
+          <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Total Iklan</Typography>
 
-            </Stack>
-          </Grid>
+          <Stack direction="row" spacing={2} mt={1}>
+            <BulletsText title="Impresi" color="#AB22AF" />
+            <BulletsText title="CTA" color="#455DD8" />
+          </Stack>
+        </Stack>
 
-          <Grid item className={classes.gridItemContainer}>
-            <Stack>
-              <Typography
-                fontWeight="bold"
-                fontFamily="Lato"
-              >
-                { 
-                  totalData ? 
-                  new Intl.NumberFormat(['ban', 'id']).format(Number(totalData)) 
-                  : '-' 
-                }
-              </Typography>
-
-              <Typography
-                fontFamily="Lato"
-                variant="caption"
-              >
-                { description || '-' }
-              </Typography>
-
-              <Stack direction="row" spacing={2}>
-                {
-                  Array.isArray(data) &&
-                  Object.keys(data[0]).map((key) => {
-                    if (key !== 'color'){
-                      return (
-                        <BulletsText 
-                          title={key}
-                          color={data[0].color[key]}
-                        />
-                      )
-                    }
-                  })
-                }
-              </Stack>
-            </Stack>
-          </Grid>
-
-          <Grid item className='mt-4 p-0'>
-            <Chart 
-              data={data}
-              strokeWidth={2}
-              height={130}
-              width={443}
-            />
-          </Grid>
-        </Grid>
+        {loadingPerformance ? (
+          <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
+            <CircularProgress color="secondary" size={28} />
+          </Stack>
+        ) : (
+          <AdsGraph data={adsPerformance?.data?.data || []} />
+        )}
+      </Stack>
     </Card>
-  )
+  );
 };
 
 export default AdsPerformaceComponents;
