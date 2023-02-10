@@ -61,7 +61,7 @@ const UserDropDown = () => {
   const router = useRouter();
 
   const getMediaUri = () => {
-    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const authToken = `?x-auth-token=${authUser?.token}&x-auth-user=${authUser?.user?.email}`;
     const mediaURI = authUser?.user?.avatar?.mediaEndpoint;
 
     return `${STREAM_URL}/v5${mediaURI}${authToken}`;
