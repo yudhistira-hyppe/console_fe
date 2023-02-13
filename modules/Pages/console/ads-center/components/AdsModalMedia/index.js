@@ -2,23 +2,27 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import CardMedia from '@material-ui/core/CardMedia';
+import { useGetVideoFromApsaraQuery } from 'api/console/ads';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '50%',
-  height: '50%',
   bgcolor: 'background.paper',
+  height: '60vh',
   boxShadow: 24,
   p: 0,
   borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
-export default function AdsModalMedia({ showModal, onClose }) {
+export default function AdsModalMedia({ showModal, onClose, idApsara }) {
+  const { data: adsVideo } = useGetVideoFromApsaraQuery({ apsaraId: idApsara });
 
-    return (
+  return (
     <div>
       <Modal
         open={showModal}
@@ -26,14 +30,7 @@ export default function AdsModalMedia({ showModal, onClose }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <CardMedia 
-            component={'iframe'}
-            height={'100%'}
-            image="https://www.youtube.com/embed/ZnuwB35GYMY?controls=0"
-            title="YouTube video player"
-            alt="green-iguana"
-            allowFullScreen
-          />
+          <video src={adsVideo?.PlayUrl} controls height="100%" />
         </Box>
       </Modal>
     </div>

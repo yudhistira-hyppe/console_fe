@@ -33,6 +33,7 @@ import {
   kycApi,
   bankApi,
   boostAPI,
+  adsApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -71,6 +72,7 @@ const initStore = () => {
         kycApi.middleware,
         bankApi.middleware,
         boostAPI.middleware,
+        adsApi.middleware,
       ]),
   });
   return store;

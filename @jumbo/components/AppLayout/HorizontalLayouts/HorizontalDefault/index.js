@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 import Hidden from '@material-ui/core/Hidden';
@@ -22,6 +22,9 @@ import CmtHorizontal from '../../../../../@coremat/CmtNavigation/Horizontal';
 import { horizontalDefaultNavs, consoleNav } from '../../partials/menus';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import { useAuth } from 'authentication';
+import { Typography } from '@material-ui/core';
+import { Skeleton, Stack } from '@mui/material';
 
 const layoutOptions = {
   showFooter: false,
@@ -31,9 +34,12 @@ const layoutOptions = {
 
 const HorizontalDefault = ({ className, children }) => {
   const router = useRouter();
-  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const { isLoading, authUser } = useAuth();
+  const [accessModule, setAccessModule] = useState([]);
+  const [loadingValidate, setLoadingValidate] = useState(true);
 
   const handleMenu = () => {
+    const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
     const accessModule = access.map((item) => item.nameModule);
     let newMenu = consoleNav;
 
@@ -101,8 +107,17 @@ const HorizontalDefault = ({ className, children }) => {
       newMenu = newMenu.filter((item) => item.name !== 'Anggota');
     }
 
-    return newMenu;
+    setAccessModule(newMenu);
+    setLoadingValidate(false);
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      setTimeout(() => handleMenu(), 200);
+    } else {
+      handleMenu();
+    }
+  }, [isLoading, authUser]);
 
   return (
     <CmtHorizontalLayout
@@ -119,7 +134,19 @@ const HorizontalDefault = ({ className, children }) => {
           <Hidden mdDown>
             <CmtHeaderMain bgcolor="primary.main" color="white">
               {/* <CmtHorizontal menuItems={router.pathname.includes('/console') ? consoleNav : horizontalDefaultNavs} /> */}
-              <CmtHorizontal menuItems={handleMenu()} />
+              {loadingValidate ? (
+                <Stack direction="row" spacing={3} alignItems="center" margin="13px 0">
+                  <Skeleton variant="rounded" height={20} width={80} />
+                  <Skeleton variant="rounded" height={20} width={120} />
+                  <Skeleton variant="rounded" height={20} width={80} />
+                  <Skeleton variant="rounded" height={20} width={100} />
+                  <Skeleton variant="rounded" height={20} width={120} />
+                  <Skeleton variant="rounded" height={20} width={80} />
+                  <Skeleton variant="rounded" height={20} width={100} />
+                </Stack>
+              ) : (
+                <CmtHorizontal menuItems={accessModule} />
+              )}
             </CmtHeaderMain>
           </Hidden>
         </CmtHeader>

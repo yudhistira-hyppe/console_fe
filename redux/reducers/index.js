@@ -25,6 +25,7 @@ import {
   mediaApi,
   contentApi,
   boostAPI,
+  adsApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -75,4 +76,5 @@ export default combineReducers({
   [kycApi.reducerPath]: kycApi.reducer,
   [bankApi.reducerPath]: bankApi.reducer,
   [boostAPI.reducerPath]: boostAPI.reducer,
+  [adsApi.reducerPath]: adsApi.reducer,
 });

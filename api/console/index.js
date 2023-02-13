@@ -18,6 +18,7 @@ import { voucherApi, adAPI } from './monetize';
 import { transactionAPI } from './transaction';
 import { mediaApi, contentApi } from './database';
 import { boostAPI } from './boost';
+import { adsApi } from './ads';
 
 export {
   dashboardApi,
@@ -40,4 +41,5 @@ export {
   kycApi,
   bankApi,
   boostAPI,
+  adsApi,
 };
