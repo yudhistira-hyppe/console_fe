@@ -179,8 +179,8 @@ const ConsoleHelpCenterComponent = () => {
               <CardWithIndicator
                 headTitle="Rekening Bank"
                 TypeProblem="Total Permohonan"
-                numberOfProblem={0}
-                data={[]}
+                numberOfProblem={reportCount?.appealAkunBank?.appealAkunBank[0]?.totalReport || 0}
+                data={reportCount?.appealAkunBank?.appealAkunBank[0]?.data}
                 onClick={() => router.push('/help-center/rekening-bank')}
                 status={'hue'}
                 setStatusList={() => {}}
