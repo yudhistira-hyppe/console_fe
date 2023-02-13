@@ -53,7 +53,9 @@ const AdsPerformaceComponents = () => {
         </Stack>
 
         <Stack direction="column" mt={1} px="28px">
-          <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>{numberWithCommas(10000)}</Typography>
+          <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>
+            {numberWithCommas(adsPerformance?.total || 0)}
+          </Typography>
           <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Total Iklan</Typography>
 
           <Stack direction="row" spacing={2} mt={1}>
@@ -67,7 +69,7 @@ const AdsPerformaceComponents = () => {
             <CircularProgress color="secondary" size={28} />
           </Stack>
         ) : (
-          <AdsGraph data={adsPerformance?.data?.data || []} />
+          <AdsGraph data={adsPerformance?.data || []} />
         )}
       </Stack>
     </Card>

@@ -33,9 +33,11 @@ const AdsGraph = ({ data }) => {
                   {moment(data.payload?.[0].payload.createdAt).format('DD MMM YYYY')}
                 </Typography>
                 <Typography style={{ fontSize: 12 }}>
-                  Impresi: {numberWithCommas(data.payload?.[0].payload.totalview)}
+                  Impresi: {numberWithCommas(data.payload?.[0].payload?.totalview)}
                 </Typography>
-                <Typography style={{ fontSize: 12 }}>CTA: {numberWithCommas(data.payload?.[0].payload.totalclick)}</Typography>
+                <Typography style={{ fontSize: 12 }}>
+                  CTA: {numberWithCommas(data.payload?.[0].payload?.totalclick)}
+                </Typography>
               </Stack>
             ) : null;
           }}

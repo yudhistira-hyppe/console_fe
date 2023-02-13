@@ -67,9 +67,9 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
           ) : (
             <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listTickets?.total} hasil (
+              Menampilkan {listTickets?.totaldatainpage} hasil (
               {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
-              {listTickets?.total + listTickets?.page * 10} dari {listTickets?.totalsearch})
+              {listTickets?.totaldatainpage + listTickets?.page * 10} dari {listTickets?.totalsearch})
             </Typography>
           )}
         </Box>
@@ -166,7 +166,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          {item?.description || '-'}
+                          {item?.name || '-'}
                         </Typography>
                       </Stack>
                     </Stack>
@@ -187,14 +187,12 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   </TableCell>
                   <TableCell align="left" style={{ width: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {numberWithCommas(item?.totalUsedCredit || 0)} Kredit
+                      {numberWithCommas(item?.usedCredit + item?.usedCreditFree || 0)} Kredit
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.totalCredit - item?.totalUsedCredit > 0
-                        ? `${numberWithCommas(item?.totalCredit - item?.totalUsedCredit)} Kredit`
-                        : '-'}
+                      {numberWithCommas(item?.totalUsedCredit - (item?.usedCredit + item?.usedCreditFree))} Kredit
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 130 }}>
