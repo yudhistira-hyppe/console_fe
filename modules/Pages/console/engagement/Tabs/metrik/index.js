@@ -7,6 +7,8 @@ import UserActiveGraph from '../../CardChart/GraphicChart';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { Box, LinearProgress, Stack, Typography, Tooltip as TooltipMui } from '@mui/material';
 import CmtAdvCard from '@coremat/CmtAdvCard';
+import PenggunaBaru from '../../PenggunaBaru';
+import PenggunaAktif from '../../PenggunaAktif';
 
 const Metrik = () => {
   const [chartValue, setChartValue] = useState({
@@ -100,56 +102,10 @@ const Metrik = () => {
   return (
     <Grid container spacing={5}>
       <Grid item xs={12} sm={6} md={6}>
-        <CardChart
-          title="Pengguna Baru"
-          tooltipPlacement="bottom"
-          tooltipTitle="Jumlah pengguna baru yang mendaftar di aplikasi dalam kurun waktu tertentu"
-          content={
-            <>
-              <Stack px={2}>
-                <Typography fontWeight="bold" fontFamily="Lato" fontSize={24} color="#CB76CD">
-                  {numberWithCommas(300)}
-                </Typography>
-              </Stack>
-              <UserActiveGraph
-                dataChart={ripple}
-                colorGradient={'color10'}
-                colorStop1={'rgba(203, 118, 205, 0.6)'}
-                colorStop2={'rgba(217, 217, 217, 0)'}
-                dataKey="new"
-              />
-            </>
-          }
-          status={chartValue.pengguna}
-          setStatusList={(val) => setChartValue({ ...chartValue, pengguna: val })}
-          cardStyle={{ height: '16em' }}
-        />
+        <PenggunaBaru />
       </Grid>
       <Grid item xs={12} sm={6} md={6}>
-        <CardChart
-          title="Pengguna Aktif"
-          tooltipPlacement="bottom"
-          tooltipTitle="Pengguna yang aktif menggunakan aplikasi dalam kurun waktu tertentu"
-          content={
-            <>
-              <Stack px={2}>
-                <Typography fontWeight="bold" fontFamily="Lato" fontSize={24} color="#B04FF6">
-                  {numberWithCommas(10524)}
-                </Typography>
-              </Stack>
-              <UserActiveGraph
-                dataChart={ripple}
-                colorGradient={'color12'}
-                colorStop1={'rgba(176, 79, 246, 0.4)'}
-                colorStop2={'rgba(255, 255, 255, 0)'}
-                dataKey="active"
-              />
-            </>
-          }
-          status={chartValue.pengguna}
-          setStatusList={(val) => setChartValue({ ...chartValue, pengguna: val })}
-          cardStyle={{ height: '16em' }}
-        />
+        <PenggunaAktif />
       </Grid>
       <Grid item xs={12}>
         <CardChart
