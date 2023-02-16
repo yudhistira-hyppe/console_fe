@@ -20,7 +20,7 @@ const userActiveGraph = ({ data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={112}>
-      <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+      <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
         <Tooltip
           labelStyle={{ color: 'black' }}
           cursor={false}

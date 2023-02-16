@@ -19,14 +19,14 @@ const userActiveGraph = ({ data }) => {
 
   return (
     <ResponsiveContainer width="100%" height={112}>
-      <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+      <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
         <Tooltip
           labelStyle={{ color: 'black' }}
           cursor={false}
           content={(data) => {
             return data.payload[0] ? (
               <Box className={classes.tooltip}>
-                {moment(data.payload[0].payload._id).format('DD MMM YYYY')}: {data.payload[0].payload.totaldata} User
+                {moment(data.payload[0].payload._id).format('DD MMM YYYY')}: {data.payload[0].payload.count} User
               </Box>
             ) : null;
           }}
@@ -38,7 +38,7 @@ const userActiveGraph = ({ data }) => {
           </linearGradient>
         </defs>
         <Area
-          dataKey="totaldata"
+          dataKey="count"
           type="monotone"
           strokeWidth={2}
           stackId="2"
