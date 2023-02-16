@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     borderRadius: 6,
     padding: '4px 12px',
-    backgroundColor: 'rgba(69, 93, 216, 1)',
+    backgroundColor: '#CB76CD',
     color: theme.palette.common.white,
   },
 }));
