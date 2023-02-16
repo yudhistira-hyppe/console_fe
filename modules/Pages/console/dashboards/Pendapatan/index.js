@@ -5,6 +5,7 @@ import PendapatanGraph from './PendapataGraph';
 import { useGetAdminBalancesQuery } from 'api/console/dashboard';
 import moment from 'moment';
 import { useAuth } from 'authentication';
+import { CircularProgress, Stack } from '@mui/material';
 
 const Pendapatan = () => {
   const { authUser } = useAuth();
@@ -12,7 +13,7 @@ const Pendapatan = () => {
     iduser: authUser?.user?.id,
     date: moment().subtract(6, 'day').format('YYYY-MM-DD'),
   });
-  const { data: adminBalance } = useGetAdminBalancesQuery(payload);
+  const { data: adminBalance, isFetching: loadingBalance } = useGetAdminBalancesQuery(payload);
 
   const handlePayload = (value) => {
     setPayload({ ...payload, date: moment().subtract(value, 'day').format('YYYY-MM-DD') });
@@ -28,7 +29,13 @@ const Pendapatan = () => {
       secondaryTitle="Bulan ini"
       amount={totalBalance()}
       handlePayload={handlePayload}>
-      <PendapatanGraph data={adminBalance?.data?.data} />
+      {loadingBalance ? (
+        <Stack direction="column" alignItems="center" justifyContent="center" height={112} spacing={2}>
+          <CircularProgress color="secondary" size={24} />
+        </Stack>
+      ) : (
+        <PendapatanGraph data={adminBalance?.data?.data} />
+      )}
     </PendapatanCard>
   );
 };

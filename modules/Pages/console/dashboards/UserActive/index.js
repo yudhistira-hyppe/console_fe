@@ -1,3 +1,4 @@
+import { CircularProgress, Stack } from '@mui/material';
 import { useGetUserActiveQuery } from 'api/console/dashboard';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -10,7 +11,7 @@ const UserActive = () => {
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
   });
-  const { data: userActive } = useGetUserActiveQuery(payload);
+  const { data: userActive, isFetching: loadingActive } = useGetUserActiveQuery(payload);
 
   const handlePayload = (value) => {
     setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
@@ -22,7 +23,13 @@ const UserActive = () => {
 
   return (
     <UserActiveCard title="Pengguna Aktif" secondaryTitle="Bulan ini" amount={totalActive()} handlePayload={handlePayload}>
-      <UserActiveGraph data={userActive?.data} />
+      {loadingActive ? (
+        <Stack direction="column" alignItems="center" justifyContent="center" height={112} spacing={2}>
+          <CircularProgress color="secondary" size={24} />
+        </Stack>
+      ) : (
+        <UserActiveGraph data={userActive?.data} />
+      )}
     </UserActiveCard>
   );
 };
