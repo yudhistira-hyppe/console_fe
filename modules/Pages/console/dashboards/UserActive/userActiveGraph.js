@@ -26,7 +26,7 @@ const userActiveGraph = ({ data }) => {
           content={(data) => {
             return data.payload[0] ? (
               <Box className={classes.tooltip}>
-                {moment(data.payload[0].payload._id).format('DD MMM YYYY')}: {data.payload[0].payload.count} User
+                {moment(data.payload[0].payload.date).format('DD MMM YYYY')}: {data.payload[0].payload.count} User
               </Box>
             ) : null;
           }}
