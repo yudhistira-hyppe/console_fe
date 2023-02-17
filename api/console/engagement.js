@@ -26,7 +26,14 @@ export const engagementApi = createApi({
         body: data,
       }),
     }),
+    getActivityUser: build.query({
+      query: (data) => ({
+        url: '/posts/interaksi',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetNewUserQuery, useGetDemographyUserQuery, useGetSesiUserQuery } = engagementApi;
+export const { useGetNewUserQuery, useGetDemographyUserQuery, useGetSesiUserQuery, useGetActivityUserQuery } = engagementApi;

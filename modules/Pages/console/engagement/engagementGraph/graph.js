@@ -3,7 +3,7 @@ import { AreaChart, Area, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
 const VisitorChart = ({ data, color, chartGradientColor }) => {
   return (
-    <ResponsiveContainer width="100%" height={200}>
+    <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
         <XAxis dataKey="month" orientation="top" axisLine={false} />
         <Tooltip labelStyle={{ color: 'black' }} cursor={false} />

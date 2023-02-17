@@ -4,12 +4,13 @@ import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
-import { Stack, Tooltip, Typography } from '@mui/material';
-import GridContainer from '@jumbo/components/GridContainer';
+import { MenuItem, Select, Stack, Tooltip, Typography } from '@mui/material';
 import { Grid, makeStyles, Box, alpha } from '@material-ui/core';
 import VisitorChart from './graph';
 import CmtAvatar from '@coremat/CmtAvatar';
 import { intranet } from './fakeData';
+import moment from 'moment';
+import { useGetActivityUserQuery } from 'api/console/engagement';
 
 const useStyles = makeStyles((theme) => ({
   actionBtn: {
@@ -27,132 +28,124 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     marginLeft: 10,
   },
+  dateSelect: {
+    '& .MuiSelect-select': {
+      padding: '2px 10px',
+      fontSize: 12,
+    },
+    '& .MuiSvgIcon-root': {
+      width: 18,
+      height: 18,
+      top: 5,
+    },
+  },
 }));
 
 const EngagementGraph = () => {
-  const { siteVisitors } = intranet;
-  const [country, setCountry] = useState(siteVisitors.countryList[0]);
-
   const classes = useStyles();
+  const [payload, setPayload] = useState({
+    startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
+    enddate: moment().format('YYYY-MM-DD'),
+  });
+
+  const handlePayload = (value) => {
+    setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
+  };
+
+  const { data: activityUser, isFetching: loadingActivity } = useGetActivityUserQuery(payload);
+
   const [isActiveAction, setIsActiveAction] = useState('dilihat');
   console.log('isActiveAction:', isActiveAction);
+
   const engagementAction = [
     {
       label: 'Dilihat',
       icon: <img src="/images/icons/Eye_On.svg" width="24" alt="icon" />,
       color: '#D72934',
-      value: 10000,
+      value: activityUser?.data?.map((item) => item.views)?.reduce((a, b) => a + b, 0),
       key: 'dilihat',
     },
     {
       label: 'Disukai',
       icon: <img src="/images/icons/likes.svg" width="24" alt="icon" />,
       color: '#3F51B5',
-      value: 200000,
+      value: activityUser?.data?.map((item) => item.likes)?.reduce((a, b) => a + b, 0),
       key: 'disukai',
     },
     {
       label: 'Komentar',
       icon: <img src="/images/icons/Message.svg" width="24" alt="icon" />,
       color: '#FFA005',
-      value: 100,
+      value: activityUser?.data?.map((item) => item.comments)?.reduce((a, b) => a + b, 0),
       key: 'komentar',
     },
-    {
-      label: 'Dibagikan',
-      icon: <img src="/images/icons/Share.svg" width="24" alt="icon" />,
-      color: '#5D9405',
-      value: 1000,
-      key: 'dibagikan',
-    },
   ];
-  const Title = () => {
-    return (
-      <>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Stack flex={1} direction="row" alignItems="center">
-            <Typography fontFamily="Lato" fontWeight="bold">
-              Interaksi
-            </Typography>
-            <Tooltip
-              placement="bottom"
-              title="Aktivitas pengguna ketika menggunakan fitur di aplikasi yang dapat ditampilkan berdasarkan kurun waktu tertentu">
-              <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />
-            </Tooltip>
-          </Stack>
-          <ButtonGroup size="small" aria-label="small button group">
-            <Button key="one">
-              <span style={{ fontSize: '10px' }}>Harian</span>
-            </Button>
 
-            <Button key="two">
-              <span style={{ fontSize: '10px' }}>Mingguan</span>
-            </Button>
-
-            <Button key="three">
-              <span style={{ fontSize: '10px' }}>Bulanan</span>
-            </Button>
-
-            <Button key="three">
-              <span style={{ fontSize: '10px' }}>Rentang</span>
-            </Button>
-          </ButtonGroup>
-        </Stack>
-      </>
-    );
-  };
   return (
-    <GridContainer>
-      <Grid item xs={12} sm={4} md={4}>
-        <Stack
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="space-between"
-          // style={{ border: '1px solid black' }}
-          spacing={1}>
-          {engagementAction.map((action) => {
-            return (
-              <>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="flex-start"
-                  // my={1}
-                  // mx={2}
-                  onClick={() => setIsActiveAction(action.key)}
-                  style={{ padding: '5px 10px', borderRadius: '10px', cursor: 'pointer' }}
-                  className={action.key === isActiveAction ? classes.actionBtn : null}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexWrap: 'wrap',
-                    }}>
-                    {action.icon}
-                    <span style={{ marginLeft: '7px' }}>{action.label}</span>
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexWrap: 'wrap',
-                    }}>
-                    {action.value}
-                    <span>
-                      <Box bgcolor={action.color} color={action.color} className={classes.avatar} />
-                    </span>
-                  </div>
-                </Stack>
-              </>
-            );
-          })}
-        </Stack>
-      </Grid>
+    <>
+      <Select
+        defaultValue={6}
+        className={classes.dateSelect}
+        color="secondary"
+        onChange={(e) => handlePayload(e.target.value)}
+        style={{ position: 'absolute', top: 16, right: 24 }}>
+        <MenuItem value={6}>7 Hari</MenuItem>
+        <MenuItem value={13}>14 Hari</MenuItem>
+        <MenuItem value={29}>30 Hari</MenuItem>
+        <MenuItem value={89}>90 Hari</MenuItem>
+      </Select>
+      <Grid container style={{ gap: 40, flexWrap: 'nowrap', height: 230 }}>
+        <Grid item xs={12} sm={4} md={4}>
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="space-between"
+            style={{ height: '100%' }}
+            spacing={1}>
+            {engagementAction.map((action) => {
+              return (
+                <>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    // my={1}
+                    // mx={2}
+                    onClick={() => setIsActiveAction(action.key)}
+                    style={{ padding: '5px 10px', borderRadius: '10px', cursor: 'pointer' }}
+                    className={action.key === isActiveAction ? classes.actionBtn : null}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                      }}>
+                      {action.icon}
+                      <span style={{ marginLeft: '7px' }}>{action.label}</span>
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                      }}>
+                      {action.value}
+                      <span>
+                        <Box bgcolor={action.color} color={action.color} className={classes.avatar} />
+                      </span>
+                    </div>
+                  </Stack>
+                </>
+              );
+            })}
+          </Stack>
+        </Grid>
 
-      <Grid item xs={12} sm={8} md={8}>
-        <VisitorChart data={country.data} color={country.badgeColor} chartGradientColor={country.chartGradientColor} />
+        <Grid item xs={12} sm={8} md={8}>
+          <VisitorChart data={[]} color={''} chartGradientColor={''} />
+        </Grid>
       </Grid>
-    </GridContainer>
+    </>
   );
 };
 
