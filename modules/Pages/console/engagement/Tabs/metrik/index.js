@@ -9,6 +9,7 @@ import { Box, LinearProgress, Stack, Typography, Tooltip as TooltipMui } from '@
 import CmtAdvCard from '@coremat/CmtAdvCard';
 import PenggunaBaru from '../../PenggunaBaru';
 import PenggunaAktif from '../../PenggunaAktif';
+import DemographyUser from '../../DemographyUser';
 
 const Metrik = () => {
   const [chartValue, setChartValue] = useState({
@@ -112,83 +113,9 @@ const Metrik = () => {
           title="Demografis"
           tooltipPlacement="bottom"
           tooltipTitle="Jumlah pengguna aplikasi berdasarkan jenis kelamin & wilayah"
-          content={
-            <Stack direction="row" flexWrap="nowrap" width="100%" paddingX={2}>
-              <Grid container style={{ maxWidth: '60%', rowGap: 10, borderRight: '1px solid rgba(0, 0, 0, 0.12)' }}>
-                <Grid item xs={6}>
-                  <DemografisProgress location="Jakarta" value={1000} progress={15} background="#FF8C00" />
-                </Grid>
-                <Grid item xs={6}>
-                  <DemografisProgress location="Bandung" value={1000} progress={15} background="#7F39FB" />
-                </Grid>
-                <Grid item xs={6}>
-                  <DemografisProgress location="Bali" value={1000} progress={15} background="#03DAC5" />
-                </Grid>
-                <Grid item xs={6}>
-                  <DemografisProgress location="Papua" value={1000} progress={15} background="#B457F6" />
-                </Grid>
-                <Grid item xs={6}>
-                  <DemografisProgress location="Jawa Barat" value={1000} progress={15} background="#D72934" />
-                </Grid>
-                <Grid item xs={6}>
-                  <DemografisProgress location="Lainnya" value={1850} progress={25} background="#5D9405" />
-                </Grid>
-              </Grid>
-              <Stack direction="column" alignItems="center" spacing={2}>
-                <PieChart width={400} height={160}>
-                  <Pie data={gender} innerRadius={45} outerRadius={80} fill="#8884d8" dataKey="value">
-                    {gender.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    labelStyle={{ color: 'black' }}
-                    cursor={false}
-                    content={(gender) => {
-                      return (
-                        gender.payload[0] && (
-                          <Box
-                            style={{
-                              position: 'relative',
-                              borderRadius: 6,
-                              padding: '4px 12px',
-                              backgroundColor: 'rgba(0, 0, 0, 0.38)',
-                              color: '#FFFFFF',
-                              fontSize: 14,
-                            }}>
-                            {gender.payload[0].value} Orang
-                          </Box>
-                        )
-                      );
-                    }}
-                  />
-                </PieChart>
-                <Stack direction="row" spacing={2}>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Box style={{ backgroundColor: '#AB22AF', width: 10, height: 10, borderRadius: 100 }} />
-                    <Typography fontFamily="Lato" fontWeight="bold">
-                      Wanita
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Box style={{ backgroundColor: '#23036A', width: 10, height: 10, borderRadius: 100 }} />
-                    <Typography fontFamily="Lato" fontWeight="bold">
-                      Laki-laki
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Box style={{ backgroundColor: '#0795F4', width: 10, height: 10, borderRadius: 100 }} />
-                    <Typography fontFamily="Lato" fontWeight="bold">
-                      Lainnya
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Stack>
-            </Stack>
-          }
+          content={<DemographyUser />}
           status={chartValue.pengguna}
           setStatusList={(val) => setChartValue({ ...chartValue, pengguna: val })}
-          cardStyle={{ height: '20em' }}
         />
       </Grid>
       <Grid item xs={12}>

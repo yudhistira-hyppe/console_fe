@@ -101,7 +101,7 @@ const userActiveCard = ({ title, amount, progress, children, handlePayload }) =>
           }}
           onClose={handlePopoverClose}
           disableRestoreFocus>
-          <Box width={200} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
+          <Box width={300} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
             Pengguna yang aktif menggunakan aplikasi dalam kurun waktu tertentu
           </Box>
         </Popover>
