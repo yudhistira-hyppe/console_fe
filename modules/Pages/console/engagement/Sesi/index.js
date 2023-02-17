@@ -1,62 +1,114 @@
+import { makeStyles } from '@material-ui/styles';
+import { CircularProgress, MenuItem, Select, Stack } from '@mui/material';
+import { useGetSesiUserQuery } from 'api/console/engagement';
+import moment from 'moment';
+import { useState } from 'react';
 import { AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Area, Brush } from 'recharts';
-import CmtAdvCard from '@coremat/CmtAdvCard';
-import CmtCardHeader from '@coremat/CmtCard/CmtCardHeader';
-import { Button, Stack } from '@mui/material';
-import { ButtonGroup } from '@material-ui/core';
 
-const data = [
-  { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
-  { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
-  { name: 'Page C', uv: 2000, pv: 9800, amt: 2290 },
-  { name: 'Page D', uv: 2780, pv: 3908, amt: 2000 },
-  { name: 'Page E', uv: 1890, pv: 4800, amt: 2181 },
-  { name: 'Page F', uv: 2390, pv: 3800, amt: 2500 },
-  { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
-];
+const useStyles = makeStyles((theme) => ({
+  mainContainer: {
+    height: '100%',
+    padding: 28,
+  },
+  borderRightBox: {
+    borderRight: 'solid 0.9px rgba(0, 0, 0, 0.12)',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  bullets: {
+    width: '0.6em',
+    height: '0.6em',
+    borderRadius: '100px',
+  },
+  dateSelect: {
+    '& .MuiSelect-select': {
+      padding: '2px 10px',
+      fontSize: 12,
+    },
+    '& .MuiSvgIcon-root': {
+      width: 18,
+      height: 18,
+      top: 5,
+    },
+  },
+  tooltip: {
+    position: 'relative',
+    borderRadius: 6,
+    padding: '4px 12px',
+    backgroundColor: 'rgb(157 143 167)',
+    color: theme.palette.common.white,
+  },
+}));
 
 const SesiGraph = () => {
+  const classes = useStyles();
+  const [payload, setPayload] = useState({
+    startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
+    enddate: moment().format('YYYY-MM-DD'),
+  });
+
+  const handlePayload = (value) => {
+    setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
+  };
+
+  const { data: sesiUser, isFetching: loadingSesi } = useGetSesiUserQuery(payload);
+
+  const dataSesi = () => {
+    let newData = [];
+
+    sesiUser?.data?.map((item) => {
+      newData.push({
+        date: moment(item.date).format('DD/MM/YYYY'),
+        menit: item.count,
+      });
+    });
+
+    return newData;
+  };
+
   return (
     <>
-      <CmtAdvCard>
-        <CmtCardHeader
-          titleProps={{
-            variant: 'h4',
-            component: 'div',
-          }}
-          title={
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <div>Sesi</div>
-              <div>
-                <ButtonGroup size="small" aria-label="small button group">
-                  <Button key="one">
-                    <span style={{ fontSize: '10px' }}>Harian</span>
-                  </Button>
-                  <Button key="two">
-                    <span style={{ fontSize: '10px' }}>Mingguan</span>
-                  </Button>
-                  <Button key="three">
-                    <span style={{ fontSize: '10px' }}>Bulanan</span>
-                  </Button>
-                  <Button key="three">
-                    <span style={{ fontSize: '10px' }}>Rentang</span>
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Stack>
-          }
-        />
-
-        <ResponsiveContainer width="100%" height={200}>
-          <AreaChart data={data} syncId="anyId" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="3 3" />
+      <Select
+        defaultValue={6}
+        className={classes.dateSelect}
+        color="secondary"
+        onChange={(e) => handlePayload(e.target.value)}
+        style={{ position: 'absolute', top: 16, right: 24 }}>
+        <MenuItem value={6}>7 Hari</MenuItem>
+        <MenuItem value={13}>14 Hari</MenuItem>
+        <MenuItem value={29}>30 Hari</MenuItem>
+        <MenuItem value={89}>90 Hari</MenuItem>
+      </Select>
+      {loadingSesi ? (
+        <Stack direction="column" alignItems="center" justifyContent="center" height={230} spacing={2}>
+          <CircularProgress color="secondary" size={28} />
+        </Stack>
+      ) : (
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={dataSesi()} syncId="anyId" margin={{ top: 30, right: 0, left: 20, bottom: 0 }}>
+            <XAxis dataKey="date" tickLine={false} axisLine={false} tickSize={10} />
+            <YAxis tickFormatter={(value) => `${value} Menit`} tickLine={false} axisLine={false} tickSize={10} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <Tooltip labelStyle={{ color: 'black' }} itemStyle={{ color: 'black' }} cursor={false} />
-            <Area type="monotone" dataKey="pv" stroke="rgba(171, 34, 175, 1)" fill="rgba(171, 34, 175, 1)" />
-            {/* <Brush /> */}
+            <defs>
+              <linearGradient id="color15" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#D45AD8" stopOpacity={1} />
+                <stop offset="95%" stopColor="#D45AD833" stopOpacity={1} />
+              </linearGradient>
+            </defs>
+            <Area
+              dataKey="menit"
+              type="monotone"
+              strokeWidth={2}
+              stackId="2"
+              stroke="#AB22AF"
+              fill="url(#color15)"
+              fillOpacity={1}
+            />
           </AreaChart>
         </ResponsiveContainer>
-      </CmtAdvCard>
+      )}
     </>
   );
 };

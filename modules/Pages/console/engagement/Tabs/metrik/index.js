@@ -10,6 +10,7 @@ import CmtAdvCard from '@coremat/CmtAdvCard';
 import PenggunaBaru from '../../PenggunaBaru';
 import PenggunaAktif from '../../PenggunaAktif';
 import DemographyUser from '../../DemographyUser';
+import SesiGraph from '../../Sesi';
 
 const Metrik = () => {
   const [chartValue, setChartValue] = useState({
@@ -119,39 +120,11 @@ const Metrik = () => {
         />
       </Grid>
       <Grid item xs={12}>
-        {/*  NOTED : the heck is happend, i cant make it modular, 
-      when i export the component the error is 'main is undefined' seriously i dont know why */}
-        {/* please give it a try */}
-        {/* <SesiGraph /> */}
         <CardChart
           title="Rata-rata Sesi Pengguna"
           tooltipPlacement="bottom"
           tooltipTitle="Akumulasi waktu aktivitas pengguna yang masuk ke dalam aplikasi dalam satu sesi kunjungan termasuk saat pengguna berpindah-pindah halaman hingga pengguna menutup aplikasi "
-          content={
-            <ResponsiveContainer width="100%" height={320}>
-              <AreaChart data={data} syncId="anyId" margin={{ top: 20, right: 50, bottom: 40 }}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <CartesianGrid strokeDasharray="0" />
-                <Tooltip labelStyle={{ color: 'black' }} itemStyle={{ color: 'black' }} cursor={false} />
-                <defs>
-                  <linearGradient id="color18" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="1%" stopColor="rgba(212, 90, 216, 0.2)" stopOpacity={1} />
-                    <stop offset="95%" stopColor="white" stopOpacity={1} />
-                  </linearGradient>
-                </defs>
-                <Area
-                  dataKey="timeSpend"
-                  type="monotone"
-                  strokeWidth={2}
-                  stackId="2"
-                  stroke="rgba(171, 34, 175, 1)"
-                  fill="url(#color18)"
-                  fillOpacity={1}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          }
+          content={<SesiGraph />}
           status={chartValue.pengguna}
           setStatusList={(val) => setChartValue({ ...chartValue, pengguna: val })}
           cardStyle={{ height: '26em' }}
