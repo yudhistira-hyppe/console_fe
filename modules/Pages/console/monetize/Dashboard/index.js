@@ -93,62 +93,6 @@ const MonetizeDashboardComponent = () => {
               setStatusList={(val) => changeStatusHandler(val, 'jualBeli')}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <CardChart
-              title={'Pendapatan Kepemilikan'}
-              amount={'Rp 16.500.000'}
-              dataChart={ripple}
-              colorGradient={'color18'}
-              colorStop1={'rgba(229, 157, 30, 1)'}
-              colorStop2={'rgba(217, 217, 217, 0)'}
-              dataKey={'price'}
-              status={kepemilikanStatus}
-              setStatusList={(val) => changeStatusHandler(val, 'kepemilikan')}
-            />
-          </Grid>
-        </GridContainer>
-      </Grid>
-      <Grid item xs={12}>
-        <GridContainer>
-          <Grid item xs={12} md={4} sm={4}>
-            <CardChart
-              title={'Voucher Terjual'}
-              amount={'Rp 16.500.000'}
-              dataChart={ripple}
-              colorGradient={'color18'}
-              colorStop1={'rgba(229, 157, 30, 1)'}
-              colorStop2={'rgba(217, 217, 217, 0)'}
-              dataKey={'price'}
-              status={voucherTerjualStatus}
-              setStatusList={(val) => changeStatusHandler(val, 'voucherTerjual')}
-            />
-          </Grid>
-          <Grid item xs={12} md={4} sm={4}>
-            <CardChart
-              title={'Jual Beli Konten'}
-              amount={'Rp 16.500.000'}
-              dataChart={ripple}
-              colorGradient={'color16'}
-              colorStop1={'rgba(215, 41, 52, 1)'}
-              colorStop2={'rgba(244, 229, 246, 0)'}
-              dataKey={'price'}
-              status={jualBeliKontenStatus}
-              setStatusList={(val) => changeStatusHandler(val, 'jualBeliKonten')}
-            />
-          </Grid>
-          <Grid item xs={12} md={4} sm={4}>
-            <CardChart
-              title={'Pendaftaran Kepemilikan'}
-              amount={'Rp 16.500.000'}
-              dataChart={ripple}
-              colorGradient={'color12'}
-              colorStop1={'rgba(180, 87, 246, 1)'}
-              colorStop2={'rgba(244, 229, 246, 0)'}
-              dataKey={'price'}
-              status={pendapatanKepemilikanStatus}
-              setStatusList={(val) => changeStatusHandler(val, 'pendapatanKepemilikan')}
-            />
-          </Grid>
         </GridContainer>
       </Grid>
     </Grid>
