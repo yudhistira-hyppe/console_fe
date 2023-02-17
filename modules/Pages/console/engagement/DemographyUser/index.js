@@ -4,9 +4,9 @@ import ScrollBar from 'react-perfect-scrollbar';
 import CmtProgressBar from '@coremat/CmtProgressBar';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { BulletsText } from '../../ads-center/components';
-import { useGetDemographicAdsQuery } from 'api/console/ads';
 import { makeStyles } from '@material-ui/styles';
 import moment from 'moment';
+import { useGetDemographyUserQuery } from 'api/console/engagement';
 
 const data = [
   { name: 'Perempuan', color: '#AB22AF' },
@@ -58,17 +58,17 @@ const ProgressIndicator = (props) => {
       <CmtProgressBar
         label={
           <Box display="flex" alignItems="center">
-            {item._id === 'other' || item._id === 'OTHER'
+            {item.stateName === 'Other'
               ? 'Lainnya'
-              : item._id === 'FEMALE'
+              : item.stateName === 'FEMALE'
               ? 'Perempuan'
-              : item._id === 'MALE'
+              : item.stateName === 'MALE'
               ? 'Laki-laki'
-              : item._id}
+              : item.stateName}
           </Box>
         }
         labelPos="top-left"
-        value={item.persentase}
+        value={item.persen}
         renderValue={(value) => {
           return `${value}%`;
         }}
@@ -90,7 +90,7 @@ const DemographyUser = () => {
     setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
   };
 
-  const { data: adsDemographic, isFetching: loadingDemographic } = useGetDemographicAdsQuery(payload);
+  const { data: demographyUser, isFetching: loadingDemographic } = useGetDemographyUserQuery(payload);
 
   return (
     <>
@@ -111,10 +111,10 @@ const DemographyUser = () => {
             <Stack direction="column" alignItems="center" justifyContent="center" height={230} spacing={2}>
               <CircularProgress color="secondary" size={28} />
             </Stack>
-          ) : adsDemographic?.data?.daerah?.length >= 1 ? (
-            <ScrollBar style={{ height: 230 }}>
-              <Grid container>
-                {adsDemographic?.data?.daerah?.map((item, key) => (
+          ) : demographyUser?.data[0]?.wilayah?.length >= 1 ? (
+            <ScrollBar style={{ height: 230, width: '100%', paddingRight: 15 }}>
+              <Grid container columnSpacing={2}>
+                {demographyUser?.data[0]?.wilayah?.map((item, key) => (
                   <Grid item xs={12} md={12} lg={6} xl={6}>
                     <ProgressIndicator item={item} />
                   </Grid>
@@ -136,14 +136,19 @@ const DemographyUser = () => {
             <Stack direction="column" alignItems="center" justifyContent="center" height={180} spacing={2}>
               <CircularProgress color="secondary" size={28} />
             </Stack>
-          ) : adsDemographic?.data?.gender?.map((item) => item.total)?.reduce((a, b) => a + b, 0) >= 1 ? (
+          ) : demographyUser?.data[0]?.gender?.map((item) => item.count)?.reduce((a, b) => a + b, 0) >= 1 ? (
             <ResponsiveContainer width="100%" height={180}>
               <PieChart margin={{ top: 20, left: 0 }}>
-                <Pie data={adsDemographic?.data?.gender} innerRadius={48} outerRadius={80} paddingAngle={2} dataKey="total">
-                  {adsDemographic?.data?.gender?.map((entry, index) => (
+                <Pie
+                  data={demographyUser?.data[0]?.gender}
+                  innerRadius={48}
+                  outerRadius={80}
+                  paddingAngle={2}
+                  dataKey="count">
+                  {demographyUser?.data[0]?.gender?.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={entry._id === 'MALE' ? '#23036A' : entry._id === 'FEMALE' ? '#AB22AF' : '#0795F4'}
+                      fill={entry.gender === 'MALE' ? '#23036A' : entry.gender === 'FEMALE' ? '#AB22AF' : '#0795F4'}
                     />
                   ))}
                 </Pie>
@@ -154,12 +159,12 @@ const DemographyUser = () => {
                   content={(data) => {
                     return data.payload?.[0] ? (
                       <Box className={classes.tooltip}>
-                        {data.payload?.[0]?.payload?._id === 'MALE'
+                        {data.payload?.[0]?.payload?.gender === 'MALE'
                           ? 'Laki-laki'
-                          : data.payload?.[0]?.payload?._id === 'FEMALE'
+                          : data.payload?.[0]?.payload?.gender === 'FEMALE'
                           ? 'Perempuan'
                           : 'Tidak Diketahui'}{' '}
-                        : {data.payload?.[0]?.payload?.total}
+                        : {data.payload?.[0]?.payload?.count}
                       </Box>
                     ) : null;
                   }}

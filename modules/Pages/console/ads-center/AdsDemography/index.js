@@ -154,8 +154,8 @@ const AdsDemographyComponent = () => {
               <CircularProgress color="secondary" size={28} />
             </Stack>
           ) : adsDemographic?.data?.daerah?.length >= 1 ? (
-            <ScrollBar style={{ height: 230 }}>
-              <Grid container>
+            <ScrollBar style={{ height: 230, width: '100%', paddingRight: 15 }}>
+              <Grid container columnSpacing={2}>
                 {adsDemographic?.data?.daerah?.map((item, key) => (
                   <Grid item xs={12} md={12} lg={6} xl={6}>
                     <ProgressIndicator item={item} />
