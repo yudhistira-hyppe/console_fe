@@ -14,7 +14,7 @@ import { getUserHyppe } from './getUserHyppe';
 import { group } from './group';
 import { moduleAPI } from './module';
 import { divisiAPI } from './divisi';
-import { voucherApi, adAPI } from './monetize';
+import { voucherApi, adAPI, dashboardMonetizeAPI } from './monetize';
 import { transactionAPI } from './transaction';
 import { mediaApi, contentApi } from './database';
 import { boostAPI } from './boost';
@@ -42,4 +42,5 @@ export {
   bankApi,
   boostAPI,
   adsApi,
+  dashboardMonetizeAPI,
 };

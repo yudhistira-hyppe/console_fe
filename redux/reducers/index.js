@@ -26,6 +26,7 @@ import {
   contentApi,
   boostAPI,
   adsApi,
+  dashboardMonetizeAPI,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -77,4 +78,5 @@ export default combineReducers({
   [bankApi.reducerPath]: bankApi.reducer,
   [boostAPI.reducerPath]: boostAPI.reducer,
   [adsApi.reducerPath]: adsApi.reducer,
+  [dashboardMonetizeAPI.reducerPath]: dashboardMonetizeAPI.reducer,
 });

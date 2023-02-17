@@ -23,19 +23,6 @@ const useStyles = makeStyles((theme) => ({
 const CardChartComponent = ({ dataChart, title, amount, colorGradient, colorStop1, colorStop2, strokeColor, dataKey }) => {
   const classes = useStyles();
 
-  const ripple = [
-    { month: 'Jan', price: 1500 },
-    { month: '', price: 400 },
-    { month: 'Feb', price: 2000 },
-    { month: 'Mar', price: 1200 },
-    { month: 'Apr', price: 2200 },
-    { month: 'May', price: 2600 },
-    { month: 'Jun', price: 4300 },
-    { month: 'July', price: 2900 },
-    { month: 'Aug', price: 3800 },
-    { month: 'Sep', price: 1500 },
-  ];
-
   return (
     <ResponsiveContainer width="100%" height={64}>
       <AreaChart data={dataChart} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
@@ -43,7 +30,7 @@ const CardChartComponent = ({ dataChart, title, amount, colorGradient, colorStop
           labelStyle={{ color: 'black' }}
           cursor={false}
           content={(data) => {
-            return data.payload[0] ? <Box className={classes.tooltip}>${data.payload[0].payload.price}</Box> : null;
+            return data.payload[0] ? <Box className={classes.tooltip}>{data.payload[0].payload[dataKey]}</Box> : null;
           }}
         />
         <defs>
