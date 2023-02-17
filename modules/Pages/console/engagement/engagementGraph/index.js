@@ -81,6 +81,21 @@ const EngagementGraph = () => {
     },
   ];
 
+  const ActivityData = () => {
+    let newData = [];
+
+    activityUser?.data?.map((item) => {
+      newData.push({
+        date: moment(item.date).format('DD/MM/YY'),
+        Dilihat: item.views,
+        Disukai: item.likes,
+        Komentar: item.comments,
+      });
+    });
+
+    return newData;
+  };
+
   return (
     <>
       <Select
@@ -142,7 +157,14 @@ const EngagementGraph = () => {
         </Grid>
 
         <Grid item xs={12} sm={8} md={8}>
-          <VisitorChart data={[]} color={''} chartGradientColor={''} />
+          <VisitorChart
+            data={ActivityData()}
+            color={isActiveAction === 'dilihat' ? '#D7293499' : isActiveAction === 'disukai' ? '#3F51B599' : '#FFA00599'}
+            kind={isActiveAction}
+            chartGradientColor={
+              isActiveAction === 'dilihat' ? '#D7293499' : isActiveAction === 'disukai' ? '#3F51B599' : '#FFA00599'
+            }
+          />
         </Grid>
       </Grid>
     </>
