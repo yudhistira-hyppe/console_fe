@@ -92,7 +92,7 @@ const ConsoleMonetizeComponent = () => {
                   }}
                 />
               )}
-              {access.map((item) => item?.nameModule).includes('monetize_ownership') && (
+              {/* {access.map((item) => item?.nameModule).includes('monetize_ownership') && (
                 <Tab
                   label="Kepemilikan"
                   value="2"
@@ -105,7 +105,7 @@ const ConsoleMonetizeComponent = () => {
                     textTransform: 'initial',
                   }}
                 />
-              )}
+              )} */}
               {access.map((item) => item?.nameModule).includes('monetize_buy/sell') && (
                 <Tab
                   label="Jual-Beli Konten"
@@ -145,11 +145,11 @@ const ConsoleMonetizeComponent = () => {
               <MonetizeVoucher />
             </TabPanel>
           )}
-          {renderPanel && (
+          {/* {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="2">
               <MonetizeKepemilikanComponent />
             </TabPanel>
-          )}
+          )} */}
           {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="3">
               <MonetizeJualBeliComponent />

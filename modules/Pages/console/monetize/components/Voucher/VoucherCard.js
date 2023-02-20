@@ -58,7 +58,7 @@ const userActiveCard = ({ title, amount, progress, children, handlePayload }) =>
 
   const headerSubTitle = (
     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <div style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10, color: '#455DD8' }}>Rp {numberWithCommas(amount)}</div>
+      <div style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10 }}>Rp {numberWithCommas(amount)}</div>
       {progress && (
         <Box ml={2} fontSize={16} color={progress?.color && null} display="flex" flexDirection="row" alignItems="center">
           <span className="mr-1">{progress?.value && null}</span>
