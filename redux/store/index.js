@@ -35,6 +35,7 @@ import {
   boostAPI,
   adsApi,
   dashboardMonetizeAPI,
+  jualBeliAPI,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -75,6 +76,7 @@ const initStore = () => {
         boostAPI.middleware,
         adsApi.middleware,
         dashboardMonetizeAPI.middleware,
+        jualBeliAPI.middleware,
       ]),
   });
   return store;
