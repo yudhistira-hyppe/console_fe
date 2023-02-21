@@ -15,7 +15,6 @@ const MonetizeJualBeliComponent = () => {
     payment_status: [],
   });
   const [filterList, setFilterList] = useState([]);
-  const [kind, setKind] = useState('sell');
 
   const getParams = () => {
     let params = {};
@@ -23,17 +22,21 @@ const MonetizeJualBeliComponent = () => {
       page: filter.page,
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
-      sell: kind === 'sell',
-      buy: kind === 'buy',
-      boost: false,
-      rewards: false,
-      withdrawal: false,
-      email: 'ilhamarahman97@gmail.com',
-      jenis: 'CONTENT',
     });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.payment_status.length >= 1 && Object.assign(params, { status: filter.payment_status.map((item) => item?._id) });
+    filter.payment_status.length >= 1 &&
+      Object.assign(params, {
+        status: filter.payment_status?.map((item) => {
+          if (item === 'Berhasil') {
+            return 'Success';
+          } else if (item === 'Gagal') {
+            return 'Cancel';
+          } else if (item === 'Menunggu Pembayaran') {
+            return 'WAITING_PAYMENT';
+          }
+        }),
+      });
 
     return params;
   };
@@ -82,15 +85,13 @@ const MonetizeJualBeliComponent = () => {
         return { ...prevVal, createdAt: value, page: 0 };
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
-      } else if (kind === 'kind') {
-        setFilterList([]);
+      } else if (kind === 'payment_status') {
         return {
+          ...prevVal,
+          payment_status: filter.payment_status.find((item) => item === value)
+            ? filter.payment_status.filter((item) => item !== value)
+            : [...filter.payment_status, value],
           page: 0,
-          limit: 10,
-          descending: 'true',
-          labelTanggal: '',
-          createdAt: [null, null],
-          payment_status: [],
         };
       } else {
         return { ...prevVal };
@@ -102,7 +103,7 @@ const MonetizeJualBeliComponent = () => {
     <>
       <PageContainer>
         <Stack direction="row" spacing={3}>
-          <SearchSection filter={filter} handleChange={handleSearchChange} kind={kind} setKind={setKind} />
+          <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             filterList={filterList}
             listTransaction={listTransaction}
@@ -111,7 +112,6 @@ const MonetizeJualBeliComponent = () => {
             handleOrder={onOrderChange}
             handlePageChange={handlePageChange}
             handleDeleteFilter={handleSearchChange}
-            kind={kind}
           />
         </Stack>
       </PageContainer>

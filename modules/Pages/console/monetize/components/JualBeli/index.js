@@ -20,7 +20,7 @@ const JualBeli = () => {
 
   return (
     <JualBeliCard
-      title="Pendapatan Voucher"
+      title="Pendapatan Jual Beli"
       secondaryTitle="Bulan ini"
       amount={jualBeli?.data?.total || 0}
       handlePayload={handlePayload}>

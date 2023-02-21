@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchSection = ({ filter, handleChange, kind, setKind }) => {
+const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
   const [week, setWeek] = useState(null);
   const [value, setValue] = useState([
@@ -47,7 +47,7 @@ const SearchSection = ({ filter, handleChange, kind, setKind }) => {
       ]);
       setDate(false);
     }
-  }, [filter.createdAt, kind]);
+  }, [filter.createdAt]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -270,69 +270,43 @@ const SearchSection = ({ filter, handleChange, kind, setKind }) => {
 
         <Accordion elevation={0} disableGutters defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tipe Transaksi</Typography>
+            <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue={kind}
-              name="kind"
-              onChange={(e) => {
-                setKind(e.target.value);
-                handleChange('kind');
-                setValue([null, null]);
-                setWeek(null);
-              }}>
-              <FormControlLabel value="sell" label={'Penjualan'} control={<Radio color="secondary" />} />
-              <FormControlLabel value="buy" label={'Pembelian'} control={<Radio color="secondary" />} />
-            </RadioGroup>
-          </AccordionDetails>
-          <Divider style={{ marginTop: 16 }} />
-        </Accordion>
-
-        <Accordion elevation={0} disableGutters defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Status Voucher</Typography>
-          </AccordionSummary>
-          <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
-              {/* <FormControlLabel
-                label={<Typography style={{ fontSize: 14 }}>Berhasil</Typography>}
+            <FormGroup onChange={(e) => handleChange('payment_status', e.target.value)}>
+              <FormControlLabel
+                label="Berhasil"
                 control={
                   <Checkbox
                     defaultChecked={false}
-                    checked={filter.status.includes('Berhasil')}
+                    checked={filter.payment_status.includes('Berhasil')}
                     value={'Berhasil'}
                     color="secondary"
                   />
                 }
               />
               <FormControlLabel
-                label={<Typography style={{ fontSize: 14 }}>{kind === 'pembelian' ? 'Gagal' : 'Ditolak'}</Typography>}
+                label="Gagal"
                 control={
                   <Checkbox
                     defaultChecked={false}
-                    checked={filter.status.includes(kind === 'pembelian' ? 'Gagal' : 'Ditolak')}
-                    value={kind === 'pembelian' ? 'Gagal' : 'Ditolak'}
+                    checked={filter.payment_status.includes('Gagal')}
+                    value={'Gagal'}
                     color="secondary"
                   />
                 }
               />
               <FormControlLabel
-                label={
-                  <Typography style={{ fontSize: 14 }}>
-                    {kind === 'pembelian' ? 'Menunggu Pembayaran' : 'Menunggu Approval'}
-                  </Typography>
-                }
+                label="Menunggu Pembayaran"
                 control={
                   <Checkbox
                     defaultChecked={false}
-                    checked={filter.status.includes(kind === 'pembelian' ? 'Menunggu Pembayaran' : 'Menunggu Approval')}
-                    value={kind === 'pembelian' ? 'Menunggu Pembayaran' : 'Menunggu Approval'}
+                    checked={filter.payment_status.includes('Menunggu Pembayaran')}
+                    value={'Menunggu Pembayaran'}
                     color="secondary"
                   />
                 }
-              /> */}
+              />
             </FormGroup>
           </AccordionDetails>
         </Accordion>

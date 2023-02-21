@@ -7,7 +7,7 @@ export const jualBeliAPI = createApi({
   endpoints: (build) => ({
     getListJualBeliContent: build.query({
       query: (data) => ({
-        url: '/transactions/list',
+        url: '/transactions/list/content',
         method: 'POST',
         body: data,
       }),

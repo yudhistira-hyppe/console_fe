@@ -74,7 +74,7 @@ const JualBeliCard = ({ title, amount, progress, children, handlePayload }) => {
 
   const TitleComp = (
     <Stack direction="row" alignItems="center" gap={8} justifyContent="space-between">
-      <Stack direction="row" alignItems="center" gap={2} position="relative" style={{ height: 40 }}>
+      <Stack direction="row" alignItems="center" gap={1} position="relative" style={{ height: 40 }}>
         <Typography variant="h4" component="div">
           {title}
         </Typography>
@@ -101,7 +101,7 @@ const JualBeliCard = ({ title, amount, progress, children, handlePayload }) => {
           onClose={handlePopoverClose}
           disableRestoreFocus>
           <Box width={200} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
-            Jumlah pembelian voucher oleh pengguna dalam kurun waktu tertentu
+            Jumlah pendapatan yang dihasilkan pada jual beli konten dalam kurun waktu tertentu
           </Box>
         </Popover>
       </Stack>

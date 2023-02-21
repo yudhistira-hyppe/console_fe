@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -18,6 +18,8 @@ import FormControl from '@mui/material/FormControl';
 import Pagination from '@mui/material/Pagination';
 import moment from 'moment';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import ModalDetail from './ModalDetail';
+import { isEmpty } from 'lodash';
 
 const TableSection = ({
   order,
@@ -27,10 +29,13 @@ const TableSection = ({
   listTransaction,
   filterList,
   handleDeleteFilter,
-  kind,
 }) => {
+  const [selectedItem, setSelectedItem] = useState({});
+
   return (
     <Stack flex={1}>
+      <ModalDetail visible={!isEmpty(selectedItem)} handleClose={() => setSelectedItem({})} data={selectedItem} />
+
       <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
         <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
           {loading ? (
@@ -67,14 +72,8 @@ const TableSection = ({
               key={key}
               label={item.value}
               onDelete={() => {
-                if (item.parent === 'search') {
-                  handleDeleteFilter(item.parent, '');
-                } else if (item.parent === 'createdAt') {
+                if (item.parent === 'createdAt') {
                   handleDeleteFilter(item.parent, [null, null]);
-                } else if (item.parent === 'period') {
-                  handleDeleteFilter('clearRange', []);
-                } else if (item.parent === 'payment_status') {
-                  handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
                 } else {
                   handleDeleteFilter(item.parent, item.value);
                 }
@@ -85,22 +84,21 @@ const TableSection = ({
       )}
 
       <TableContainer component={Paper}>
-        <Typography
-          variant="h3"
-          style={{ fontFamily: 'Lato', padding: '20px 16px', boxShadow: '0px 0px 1px rgba(0, 0, 0, 0.161741)' }}>
-          {kind === 'sell' ? 'Penjualan' : 'Pembelian'}
-        </Typography>
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
             <TableRow>
-              <TableCell>Waktu Transaksi</TableCell>
-              <TableCell align="left">Invoice Transaksi</TableCell>
+              <TableCell style={{ maxWidth: 80 }}>Waktu Transaksi</TableCell>
               <TableCell align="left" style={{ maxWidth: 200 }}>
                 Konten
               </TableCell>
-              <TableCell align="left">Harga</TableCell>
-              <TableCell align="left">{kind === 'sell' ? 'Penjual' : 'Pembeli'}</TableCell>
-              <TableCell align="left">Status Pembayaran</TableCell>
+              <TableCell align="left" style={{ maxWidth: 140 }}>
+                Penjual
+              </TableCell>
+              <TableCell align="left" style={{ maxWidth: 140 }}>
+                Pembeli
+              </TableCell>
+              <TableCell align="left">Jumlah</TableCell>
+              <TableCell align="left">Status</TableCell>
             </TableRow>
           </TableHead>
 
@@ -114,15 +112,15 @@ const TableSection = ({
               </TableCell>
             ) : listTransaction?.data?.length >= 1 ? (
               listTransaction?.data?.map((item, key) => (
-                <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                  <TableCell component="th" scope="row">
+                <TableRow
+                  key={key}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelectedItem(item)}
+                  hover>
+                  <TableCell style={{ maxWidth: 80 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.timestamp).format('lll')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.noinvoice}
+                      {moment(item?.timestamp).utc().format('DD/MM/YY-HH:mm')} WIB
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 200 }}>
@@ -139,14 +137,37 @@ const TableSection = ({
                       {item?.descriptionContent}
                     </Typography>
                   </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      Rp {numberWithCommas(item?.totalamount || 0)}
+                  <TableCell align="left" style={{ maxWidth: 140 }}>
+                    <Typography
+                      variant="body1"
+                      style={{
+                        fontSize: '12px',
+                        width: '100%',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                      }}
+                      title={item?.penjual}>
+                      {item?.penjual || '-'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="left" style={{ maxWidth: 140 }}>
+                    <Typography
+                      variant="body1"
+                      style={{
+                        fontSize: '12px',
+                        width: '100%',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                      }}
+                      title={item?.pembeli}>
+                      {item?.pembeli || '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {'-'}
+                      Rp {numberWithCommas(item?.totalamount || 0)}
                     </Typography>
                   </TableCell>
                   <TableCell align="left">

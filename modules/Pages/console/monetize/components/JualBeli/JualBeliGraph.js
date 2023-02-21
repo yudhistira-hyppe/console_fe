@@ -34,7 +34,7 @@ const JualBeliGraph = ({ data }) => {
           }}
         />
         <defs>
-          <linearGradient id="color15" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="color20" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="rgba(203, 118, 205, 0.2)" stopOpacity={1} />
             <stop offset="95%" stopColor="rgba(255, 255, 255, 0)" stopOpacity={1} />
           </linearGradient>
@@ -45,7 +45,7 @@ const JualBeliGraph = ({ data }) => {
           strokeWidth={2}
           stackId="2"
           stroke="#CB76CD"
-          fill="url(#color15)"
+          fill="url(#color20)"
           fillOpacity={1}
         />
       </AreaChart>
