@@ -34,6 +34,8 @@ import {
   bankApi,
   boostAPI,
   adsApi,
+  dashboardMonetizeAPI,
+  jualBeliAPI,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -73,6 +75,8 @@ const initStore = () => {
         bankApi.middleware,
         boostAPI.middleware,
         adsApi.middleware,
+        dashboardMonetizeAPI.middleware,
+        jualBeliAPI.middleware,
       ]),
   });
   return store;

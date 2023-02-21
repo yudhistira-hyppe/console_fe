@@ -5,48 +5,35 @@ export const engagementApi = createApi({
   reducerPath: 'console/engagement',
   baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
-    getLogActivityByYear: build.query({
-      query: (year) => ({
-        url: `/activityevents/logsctivitas`,
+    getNewUser: build.query({
+      query: (data) => ({
+        url: '/userbasics/newuser',
         method: 'POST',
-        body: {
-          year,
-        },
+        body: data,
       }),
     }),
-    getUserEventActivityByYear: build.query({
-      query: (year) => ({
-        url: `/contentevents/useractivitysizeYear`,
+    getDemographyUser: build.query({
+      query: (data) => ({
+        url: '/userbasics/demografis',
         method: 'POST',
-        body: {
-          year,
-        },
+        body: data,
       }),
     }),
-    getUserActivityByYear: build.query({
-      query: (year) => ({
-        url: `/contentevents/useractivityyear`,
+    getSesiUser: build.query({
+      query: (data) => ({
+        url: '/activityevents/logactivitas/sesi',
         method: 'POST',
-        body: {
-          year,
-        },
+        body: data,
       }),
     }),
-    getUserActivityHyppeByDate: build.query({
-      query: (date) => ({
-        url: `/getaktifitas`,
+    getActivityUser: build.query({
+      query: (data) => ({
+        url: '/posts/interaksi',
         method: 'POST',
-        body: {
-          date,
-        },
+        body: data,
       }),
     }),
   }),
 });
 
-export const {
-  useGetLogActivityByYearQuery,
-  useGetUserEventActivityByYearQuery,
-  useGetUserActivityByYearQuery,
-  useGetUserActivityHyppeByDateQuery,
-} = engagementApi;
+export const { useGetNewUserQuery, useGetDemographyUserQuery, useGetSesiUserQuery, useGetActivityUserQuery } = engagementApi;

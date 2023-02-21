@@ -73,12 +73,13 @@ const DetailPermohonanPremium = () => {
     });
   };
 
-  const getImage = (mediaEndpoint) => {
+  const getImage = (mediaEndpoint, key) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
-
     const endpoint = mediaEndpoint.split('/');
 
-    return `${STREAM_URL}/v5/${endpoint[1]}/${detail?.data[0]?._id}${authToken}`;
+    return endpoint.includes('supportfile')
+      ? `${STREAM_URL}/v5/${endpoint[1]}/${detail?.data[0]?._id}/${key}${authToken}`
+      : `${STREAM_URL}/v5/${endpoint[1]}/${detail?.data[0]?._id}${authToken}`;
   };
 
   const handleConfirm = (val) => {
@@ -502,8 +503,8 @@ const DetailPermohonanPremium = () => {
                         <ImageListItem key={key} onClick={handleView}>
                           <Avatar
                             variant="rounded"
-                            src={getImage(item)}
-                            srcSet={getImage(item)}
+                            src={getImage(item, key)}
+                            srcSet={getImage(item, key)}
                             alt="X"
                             style={{ borderRadius: 8, height: '100%', width: '100%', cursor: 'pointer' }}
                           />

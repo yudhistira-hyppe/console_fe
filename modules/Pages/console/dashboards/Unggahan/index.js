@@ -4,10 +4,11 @@ import { useGetUserTotalPostQuery } from 'api/console/dashboard';
 import UnggahanCard from './unggahanCard';
 import UnggahanGraph from './unggahanGraph';
 import moment from 'moment';
+import { CircularProgress, Stack } from '@mui/material';
 
 const Unggahan = () => {
   const [payload, setPayload] = useState({ date: moment().subtract(6, 'day').format('YYYY-MM-DD') });
-  const { data: userPost } = useGetUserTotalPostQuery(payload);
+  const { data: userPost, isFetching: loadingPost } = useGetUserTotalPostQuery(payload);
 
   const handlePayload = (value) => {
     setPayload({ ...payload, date: moment().subtract(value, 'day').format('YYYY-MM-DD') });
@@ -19,7 +20,13 @@ const Unggahan = () => {
 
   return (
     <UnggahanCard title="Total Post" secondaryTitle="Bulan ini" amount={totalPost()} handlePayload={handlePayload}>
-      <UnggahanGraph data={userPost?.data?.data} />
+      {loadingPost ? (
+        <Stack direction="column" alignItems="center" justifyContent="center" height={112} spacing={2}>
+          <CircularProgress color="secondary" size={24} />
+        </Stack>
+      ) : (
+        <UnggahanGraph data={userPost?.data?.data} />
+      )}
     </UnggahanCard>
   );
 };

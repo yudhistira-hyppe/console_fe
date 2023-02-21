@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { Card, Grid } from '@material-ui/core';
-import { Typography, Stack, MenuItem, Select, Box, CircularProgress } from '@mui/material';
+import { Typography, Stack, MenuItem, Select, Box, CircularProgress, Popover } from '@mui/material';
 import { GraphIndicator } from '../../help-center/components';
 import { ButtonPopper, BulletsText } from '../components';
 import { makeStyles } from '@material-ui/styles';
@@ -9,6 +9,7 @@ import moment from 'moment';
 import { useGetDemographicAdsQuery } from 'api/console/ads';
 import ScrollBar from 'react-perfect-scrollbar';
 import CmtProgressBar from '@coremat/CmtProgressBar';
+import { Error } from '@material-ui/icons';
 
 const data = [
   { name: 'Perempuan', color: '#AB22AF' },
@@ -83,6 +84,16 @@ const ProgressIndicator = (props) => {
 
 const AdsDemographyComponent = () => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
   const [payload, setPayload] = useState({
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
@@ -97,9 +108,33 @@ const AdsDemographyComponent = () => {
   return (
     <Card className={classes.mainContainer}>
       <Stack direction="row" justifyContent="space-between">
-        <Typography fontFamily="Lato" fontWeight="bold">
-          Demografis
-        </Typography>
+        <Stack direction="row" alignItems="center" gap={1}>
+          <Typography fontFamily="Lato" fontWeight="bold">
+            Demografis
+          </Typography>
+          <Error
+            style={{ fontSize: 14, color: '#737373' }}
+            onMouseEnter={handlePopoverOpen}
+            onMouseLeave={handlePopoverClose}
+          />
+          <Popover
+            id="mouse-over-popover"
+            sx={{
+              pointerEvents: 'none',
+            }}
+            open={open}
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            onClose={handlePopoverClose}
+            disableRestoreFocus>
+            <Box width={300} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
+              Data wilayah pengguna yang terjangkau oleh penayangan iklan di aplikasi Hyppe
+            </Box>
+          </Popover>
+        </Stack>
         <Select
           defaultValue={6}
           className={classes.dateSelect}
@@ -118,9 +153,9 @@ const AdsDemographyComponent = () => {
             <Stack direction="column" alignItems="center" justifyContent="center" height={230} spacing={2}>
               <CircularProgress color="secondary" size={28} />
             </Stack>
-          ) : (
-            <ScrollBar style={{ height: 230 }}>
-              <Grid container>
+          ) : adsDemographic?.data?.daerah?.length >= 1 ? (
+            <ScrollBar style={{ height: 230, width: '100%', paddingRight: 15 }}>
+              <Grid container columnSpacing={2}>
                 {adsDemographic?.data?.daerah?.map((item, key) => (
                   <Grid item xs={12} md={12} lg={6} xl={6}>
                     <ProgressIndicator item={item} />
@@ -128,37 +163,57 @@ const AdsDemographyComponent = () => {
                 ))}
               </Grid>
             </ScrollBar>
+          ) : (
+            <Stack direction="column" alignItems="center" justifyContent="center" gap={2}>
+              <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
+              <Typography fontFamily="Lato" color="#666666" fontWeight="bold" fontSize={14}>
+                Tidak ada data.
+              </Typography>
+            </Stack>
           )}
         </Grid>
 
         <Grid item sm={12} md={12} lg={5} xl={5}>
-          <PieChart height={180} width={260} margin={{ top: 20, left: 60 }}>
-            <Pie data={adsDemographic?.data?.gender} innerRadius={48} outerRadius={80} paddingAngle={2} dataKey="total">
-              {adsDemographic?.data?.gender?.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={entry._id === 'MALE' ? '#23036A' : entry._id === 'FEMALE' ? '#AB22AF' : '#0795F4'}
-                />
-              ))}
-            </Pie>
-            <Tooltip
-              labelStyle={{ color: 'black' }}
-              wrapperStyle={{ zIndex: 100 }}
-              cursor={false}
-              content={(data) => {
-                return data.payload?.[0] ? (
-                  <Box className={classes.tooltip}>
-                    {data.payload?.[0]?.payload?._id === 'MALE'
-                      ? 'Laki-laki'
-                      : data.payload?.[0]?.payload?._id === 'FEMALE'
-                      ? 'Perempuan'
-                      : 'Tidak Diketahui'}{' '}
-                    : {data.payload?.[0]?.payload?.total}
-                  </Box>
-                ) : null;
-              }}
-            />
-          </PieChart>
+          {loadingDemographic ? (
+            <Stack direction="column" alignItems="center" justifyContent="center" height={180} spacing={2}>
+              <CircularProgress color="secondary" size={28} />
+            </Stack>
+          ) : adsDemographic?.data?.gender?.map((item) => item.total)?.reduce((a, b) => a + b, 0) >= 1 ? (
+            <PieChart height={180} width={260} margin={{ top: 20, left: 60 }}>
+              <Pie data={adsDemographic?.data?.gender} innerRadius={48} outerRadius={80} paddingAngle={2} dataKey="total">
+                {adsDemographic?.data?.gender?.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry._id === 'MALE' ? '#23036A' : entry._id === 'FEMALE' ? '#AB22AF' : '#0795F4'}
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                labelStyle={{ color: 'black' }}
+                wrapperStyle={{ zIndex: 100 }}
+                cursor={false}
+                content={(data) => {
+                  return data.payload?.[0] ? (
+                    <Box className={classes.tooltip}>
+                      {data.payload?.[0]?.payload?._id === 'MALE'
+                        ? 'Laki-laki'
+                        : data.payload?.[0]?.payload?._id === 'FEMALE'
+                        ? 'Perempuan'
+                        : 'Tidak Diketahui'}{' '}
+                      : {data.payload?.[0]?.payload?.total}
+                    </Box>
+                  ) : null;
+                }}
+              />
+            </PieChart>
+          ) : (
+            <Stack direction="column" alignItems="center" justifyContent="center" gap={2} height={180}>
+              <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
+              <Typography fontFamily="Lato" color="#666666" fontWeight="bold" fontSize={14}>
+                Tidak ada data.
+              </Typography>
+            </Stack>
+          )}
 
           <Stack direction="row" justifyContent={'center'} spacing={2} mt={3}>
             {Array.isArray(data) &&

@@ -1,206 +1,69 @@
 import CmtCard from '@coremat/CmtCard';
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack } from '@mui/system';
-import { Tooltip, Typography } from '@mui/material';
-import { makeStyles } from '@material-ui/styles';
-import { Button, Popper, Paper, ClickAwayListener, Grow } from '@material-ui/core';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@mui/material/MenuItem';
+import { Popover, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-import TextField from '@mui/material/TextField';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { StaticDateRangePicker } from '@mui/x-date-pickers-pro/StaticDateRangePicker';
 import { DateRangePickerDay as MuiDateRangePickerDay } from '@mui/x-date-pickers-pro/DateRangePickerDay';
 import Box from '@mui/material/Box';
+import { Error } from '@material-ui/icons';
 
-const DateRangePickerDay = styled(MuiDateRangePickerDay)(
-  ({ theme, isHighlighting, isStartOfHighlighting, isEndOfHighlighting }) => ({
-    ...(isHighlighting && {
-      borderRadius: 0,
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-      '&:hover, &:focus': {
-        backgroundColor: theme.palette.primary.dark,
-      },
-    }),
-    ...(isStartOfHighlighting && {
-      borderTopLeftRadius: '50%',
-      borderBottomLeftRadius: '50%',
-    }),
-    ...(isEndOfHighlighting && {
-      borderTopRightRadius: '50%',
-      borderBottomRightRadius: '50%',
-    }),
-  }),
-);
+const GraphChart = ({ title, tooltipTitle, content, cardStyle }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-const GraphChart = ({ title, setStatusList, status, tooltipPlacement, tooltipTitle, content, cardStyle }) => {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([null, null]);
-  const [showDate, setShowDate] = React.useState(false);
-  const [showType, setShowType] = React.useState(null);
-  const anchorRef = React.useRef();
-  const prevOpen = React.useRef(open);
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef?.current?.focus();
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const childrenWithProps = React.Children.map(content, (child) => {
+    // Checking isValidElement is the safe way and avoids a
+    // typescript error too.
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child);
     }
-
-    prevOpen.current = open;
-  }, [open]);
-
-  const handleListKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  };
-
-  const handleClose = (newValue) => {
-    if (showType === 'harian' && newValue[0] !== null) {
-      setOpen(false);
-      setShowDate(false);
-    } else if (showType !== 'harian' && newValue[0] && newValue[1]) {
-      setOpen(false);
-      setShowDate(false);
-    }
-    console.log(value);
-    setStatusList(showType);
-    // if (!e.target.id) {
-    //   setOpen(false);
-    // }
-    // setStatusList(e.target.id);
-  };
-
-  const renderWeekPickerDay = (date, dateRangePickerDayProps) => {
-    return <DateRangePickerDay {...dateRangePickerDayProps} />;
-  };
-
-  const onDateChangeHandler = (newValue) => {
-    setValue(newValue);
-    handleClose(newValue);
-  };
-
-  const onShowTypeChangeHandler = (e) => {
-    if (e.target.id !== 'semua') {
-      setShowDate(true);
-      setShowType(e.target.id);
-    }
-  };
+    return child;
+  });
 
   return (
-    <CmtCard style={cardStyle}>
-      <Stack px={2} py={2} direction="row" justifyContent={'space-between'}>
-        <Stack flex={1} direction="row">
+    <CmtCard style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', position: 'relative', ...cardStyle }}>
+      <Stack direction="row" justifyContent={'space-between'}>
+        <Stack flex={1} direction="row" alignItems="center" gap={1}>
           <Typography fontWeight="bold" fontFamily="Lato">
             {title}
           </Typography>
-          <Tooltip placement={tooltipPlacement} title={tooltipTitle}>
-            <img src="/images/icons/small-info.svg" style={{ marginLeft: '7px' }} />
-          </Tooltip>
-        </Stack>
-        <Stack flex={1} justifyContent="flex-end" direction="row">
-          <div>
-            <Button
-              ref={anchorRef}
-              variant="outlined"
-              aria-controls={open ? 'composition-menu' : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-haspopup="true"
-              onClick={() => {
-                setOpen((val) => !val);
-                setValue([null, null]);
-              }}
-              style={{
-                fontSize: '0.7rem',
-                // border: '1px solid black',
-                padding: '1px 18px',
-                borderRadius: '4px',
-                backgroundColor: '#F2F2F2',
-              }}>
-              {status}
-            </Button>
-          </div>
-          <Popper
+          <Error
+            style={{ fontSize: 14, color: '#737373' }}
+            onMouseEnter={handlePopoverOpen}
+            onMouseLeave={handlePopoverClose}
+          />
+          <Popover
+            id="mouse-over-popover"
+            sx={{
+              pointerEvents: 'none',
+            }}
             open={open}
-            anchorEl={anchorRef.current}
-            role={undefined}
-            placement="bottom-start"
-            transition
-            disablePortal
-            style={{ backgroundColor: 'white', zIndex: 10 }}>
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{
-                  transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-                }}>
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList
-                      autoFocusItem={open}
-                      id="composition-menu"
-                      aria-labelledby="composition-button"
-                      onKeyDown={handleListKeyDown}>
-                      <MenuItem>
-                        <Typography variant="body2" id="semua" onClick={onShowTypeChangeHandler}>
-                          Semua
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem>
-                        <Typography variant="body2" id="harian" onClick={onShowTypeChangeHandler}>
-                          Harian
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem>
-                        <Typography variant="body2" id="mingguan" onClick={onShowTypeChangeHandler}>
-                          Mingguan
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem>
-                        <Typography variant="body2" id="bulanan" onClick={onShowTypeChangeHandler}>
-                          Bulanan
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem>
-                        <Typography variant="body2" id="rentang" onClick={onShowTypeChangeHandler}>
-                          Rentang
-                        </Typography>
-                      </MenuItem>
-                      <div>
-                        {showDate && showType && (
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <StaticDateRangePicker
-                              displayStaticWrapperAs="desktop"
-                              label="date range"
-                              value={value}
-                              onChange={onDateChangeHandler}
-                              renderDay={renderWeekPickerDay}
-                              renderInput={(startProps, endProps) => (
-                                <React.Fragment>
-                                  <TextField {...startProps} />
-                                  <Box sx={{ mx: 2 }}> to </Box>
-                                  <TextField {...endProps} />
-                                </React.Fragment>
-                              )}
-                            />
-                          </LocalizationProvider>
-                        )}
-                      </div>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            onClose={handlePopoverClose}
+            disableRestoreFocus>
+            <Box width={300} p="15px 20px" color="#ffffff" bgcolor="#282828" borderRadius="4px">
+              {tooltipTitle}
+            </Box>
+          </Popover>
         </Stack>
       </Stack>
-      {content}
+      <div style={{ marginTop: 'auto', height: '100%' }}>{childrenWithProps}</div>
     </CmtCard>
   );
 };

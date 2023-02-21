@@ -1,11 +1,12 @@
 import React from 'react';
-import { AreaChart, Area, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { AreaChart, Area, ResponsiveContainer, Tooltip, XAxis, CartesianGrid } from 'recharts';
 
-const VisitorChart = ({ data, color, chartGradientColor }) => {
+const VisitorChart = ({ data, color, kind, chartGradientColor }) => {
   return (
-    <ResponsiveContainer width="100%" height={200}>
-      <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-        <XAxis dataKey="month" orientation="top" axisLine={false} />
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart data={data} margin={{ top: 10, right: 0, left: 40, bottom: 0 }}>
+        <XAxis dataKey="date" orientation="top" axisLine={false} tickLine={false} />
+        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
         <Tooltip labelStyle={{ color: 'black' }} cursor={false} />
         <defs>
           <linearGradient id="color6" x1="0" y1="0" x2="1" y2="0" gradientTransform="rotate(90)">
@@ -14,7 +15,7 @@ const VisitorChart = ({ data, color, chartGradientColor }) => {
           </linearGradient>
         </defs>
         <Area
-          dataKey="amount"
+          dataKey={kind === 'dilihat' ? 'Dilihat' : kind === 'disukai' ? 'Disukai' : 'Komentar'}
           type="monotone"
           strokeWidth={1}
           stackId="2"

@@ -7,7 +7,7 @@ export const dashboardApi = createApi({
   endpoints: (build) => ({
     getUserActive: build.query({
       query: (data) => ({
-        url: '/userauths/useractivebychart',
+        url: '/activityevents/logactivitas/sesi',
         method: 'POST',
         body: data,
       }),

@@ -87,12 +87,13 @@ const DetailRekeningBank = () => {
     return `${STREAM_URL}/v5${mediaEndpoint}${authToken}`;
   };
 
-  const getImage = (mediaEndpoint) => {
+  const getImage = (mediaEndpoint, key) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const endpoint = mediaEndpoint?.split('/');
 
-    const endpoint = mediaEndpoint.split('/');
-
-    return `${STREAM_URL}/v5/${endpoint[1]}/${detailBank?.data?._id}${authToken}`;
+    return endpoint.includes('supportfile')
+      ? `${STREAM_URL}/v5/${endpoint[1]}/${endpoint[2]}/${detailBank?.data?._id}/${key}${authToken}`
+      : `${STREAM_URL}/v5/${endpoint[1]}/${detailBank?.data?._id}${authToken}`;
   };
 
   const blurNumberCard = (item) => {
@@ -555,8 +556,8 @@ const DetailRekeningBank = () => {
                       <ImageListItem key={key} onClick={handleView}>
                         <Avatar
                           variant="rounded"
-                          src={getImage(item)}
-                          srcSet={getImage(item)}
+                          src={getImage(item, key)}
+                          srcSet={getImage(item, key)}
                           alt="X"
                           style={{ borderRadius: 8, height: '100%', width: '100%', cursor: 'pointer' }}
                         />
