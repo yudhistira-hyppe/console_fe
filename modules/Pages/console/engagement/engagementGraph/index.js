@@ -67,7 +67,7 @@ const EngagementGraph = () => {
     },
     {
       label: 'Disukai',
-      icon: <img src="/images/icons/likes.svg" width="24" alt="icon" />,
+      icon: <img src="/images/icons/Likes.svg" width="24" alt="icon" />,
       color: '#3F51B5',
       value: activityUser?.data?.map((item) => item.likes)?.reduce((a, b) => a + b, 0),
       key: 'disukai',
