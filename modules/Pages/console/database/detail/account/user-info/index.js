@@ -36,7 +36,7 @@ const UserInfoComponent = (props) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const endpoint = mediaEndpoint?.split('_');
 
-    return `${STREAM_URL}/v5${endpoint?.[0]}${authToken}`;
+    return `${STREAM_URL}${endpoint?.[0]}${authToken}`;
   };
 
   const blurNumberCard = (item) => {
