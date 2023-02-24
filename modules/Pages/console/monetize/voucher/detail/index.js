@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
       '"Segoe UI Symbol"',
     ].join(','),
     '&:focus': {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: theme.palette.primary.main,
     },
   },
@@ -199,18 +198,19 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Nama Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <input
+                <TextField
                   name="nameAds"
                   placeholder="Tulis Nama Voucher"
-                  id="bootstrap-input"
-                  className={classes.inputForm}
                   value={val?.nameAds}
                   onChange={onInputChange}
+                  size="small"
+                  color="secondary"
                   disabled={
                     data || data
                       ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
                       : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
                   }
+                  style={{ marginTop: 57, maxWidth: 470 }}
                 />
               </FormControl>
             </Grid>
@@ -219,18 +219,19 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Kode Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <input
+                <TextField
                   name="codeVoucher"
                   placeholder="Tulis Kode Voucher"
-                  id="bootstrap-input"
-                  className={classes.inputForm}
                   value={val?.codeVoucher}
                   onChange={onInputChange}
+                  size="small"
+                  color="secondary"
                   disabled={
                     data || data
                       ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
                       : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
                   }
+                  style={{ marginTop: 57, maxWidth: 470 }}
                 />
                 <FormHelperText>Penamaan kode voucher disarankan lebih dari 5 karakter</FormHelperText>
               </FormControl>
@@ -243,19 +244,28 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Jumlah Kredit<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <input
+                <TextField
                   name="creditValue"
                   type="number"
                   placeholder="Tulis Jumlah Kredit"
-                  id="bootstrap-input"
-                  className={classes.inputForm}
                   value={val?.creditValue}
                   onChange={onInputChange}
+                  size="small"
+                  color="secondary"
                   disabled={
                     data
                       ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
                       : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
                   }
+                  inputProps={{
+                    min: 0,
+                    onKeyPress: (event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    },
+                  }}
+                  style={{ marginTop: 57, maxWidth: 470 }}
                 />
                 <FormHelperText>
                   1 kredit = Rp 1.500,-. Harga voucher = Rp {numberWithCommas(val?.creditValue * 1500)}{' '}
@@ -267,19 +277,28 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Jumlah Bonus Kredit<span className={classes.optionalText}>{` (Jika ada)`}</span>
                 </InputLabel>
-                <input
+                <TextField
                   name="creditPromo"
                   type="number"
                   placeholder="Tulis Jumlah Bonus"
-                  id="bootstrap-input"
-                  className={classes.inputForm}
                   value={val?.creditPromo}
                   onChange={onInputChange}
+                  size="small"
+                  color="secondary"
                   disabled={
                     data
                       ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
                       : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
                   }
+                  inputProps={{
+                    min: 0,
+                    onKeyPress: (event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    },
+                  }}
+                  style={{ marginTop: 57, maxWidth: 470 }}
                 />
                 <FormHelperText>1 kredit = Rp 0,-</FormHelperText>
               </FormControl>
@@ -292,19 +311,28 @@ const VoucherFormComponent = ({ data }) => {
                 <InputLabel htmlFor="bootstrap-input" className={classes.inputLabel}>
                   Jumlah Stok Voucher<span className={classes.requiredMark}>*</span>
                 </InputLabel>
-                <input
+                <TextField
                   name="qty"
                   type="number"
                   placeholder="Tulis Jumlah Voucher"
-                  id="bootstrap-input"
-                  className={classes.inputForm}
                   value={val?.qty}
                   onChange={onInputChange}
+                  size="small"
+                  color="secondary"
                   disabled={
                     data
                       ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
                       : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
                   }
+                  inputProps={{
+                    min: 0,
+                    onKeyPress: (event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    },
+                  }}
+                  style={{ marginTop: 57, maxWidth: 470 }}
                 />
                 <FormHelperText>Jumlah voucher dapat disesuaikan dengan kebutuhan</FormHelperText>
               </FormControl>
@@ -395,6 +423,14 @@ const VoucherFormComponent = ({ data }) => {
                             : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
                         }
                         color="secondary"
+                        inputProps={{
+                          min: 0,
+                          onKeyPress: (event) => {
+                            if (!/[0-9]/.test(event.key)) {
+                              event.preventDefault();
+                            }
+                          },
+                        }}
                       />
                     }
                   />
