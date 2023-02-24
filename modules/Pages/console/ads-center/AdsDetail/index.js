@@ -14,9 +14,10 @@ import {
 import Breadcrumbs from '../../help-center/bantuan-pengguna/BreadCrumb';
 import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
-import { useGetDetailAdsQuery } from 'api/console/ads';
+import { useApproveAdsMutation, useGetDetailAdsQuery } from 'api/console/ads';
 import moment from 'moment';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Ads Center', link: '/ads-center' },
@@ -34,6 +35,7 @@ const AdsDetailComponent = () => {
     children1: null,
     children2: null,
   });
+  const [approveAds, { isLoading }] = useApproveAdsMutation();
 
   const onCloseModal = () => {
     setShowModal({
@@ -49,6 +51,23 @@ const AdsDetailComponent = () => {
     startdate: moment().subtract(7, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
   });
+
+  const handleApproveAds = () => {
+    const payload = {
+      _id: adsDetail?.data[0]?._id,
+    };
+
+    toast.loading('Loading...', { id: 'approve-ads' });
+    approveAds(payload).then((res) => {
+      if (res?.error) {
+        console.log(res);
+        toast.error(res?.error?.data?.messages?.info[0], { id: 'approve-ads', duration: 3000 });
+      } else {
+        router.replace('/ads-center');
+        toast.success('berhasil menjadwalkan ads', { id: 'approve-ads', duration: 3000 });
+      }
+    });
+  };
 
   return (
     <>
@@ -103,8 +122,9 @@ const AdsDetailComponent = () => {
       <AdsModalChangeStatus
         showModal={showModal.show && showModal.type !== 'media'}
         onClose={onCloseModal}
-        onConfirm={onCloseModal}
+        onConfirm={handleApproveAds}
         type={showModal.type}
+        loading={isLoading}
       />
 
       <ModalMedia

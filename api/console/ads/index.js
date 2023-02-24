@@ -26,6 +26,7 @@ export const adsApi = createApi({
         method: 'POST',
         body: data,
       }),
+      providesTags: ['ads'],
     }),
     getDetailAds: build.query({
       query: (data) => ({
@@ -41,6 +42,14 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
+    approveAds: build.mutation({
+      query: (data) => ({
+        url: '/ads/approve',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['ads'],
+    }),
   }),
 });
 
@@ -50,4 +59,5 @@ export const {
   useGetListAdsQuery,
   useGetDetailAdsQuery,
   useGetVideoFromApsaraQuery,
+  useApproveAdsMutation,
 } = adsApi;

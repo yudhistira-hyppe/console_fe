@@ -61,7 +61,7 @@ const AdsContentDetailComponent = ({
           <Avatar
             src={getImage(detailAds)}
             variant="rounded"
-            style={{ cursor: 'pointer', width: '100%', height: 312 }}
+            style={{ cursor: 'pointer', width: '100%', height: 312, border: '1px solid #eeeeee' }}
             onClick={() => {
               setShowModal({
                 ...showModal,
