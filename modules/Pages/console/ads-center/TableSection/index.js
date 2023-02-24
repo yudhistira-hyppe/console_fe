@@ -196,19 +196,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 130 }}>
-                    {item?.statusPengajuan === 'Sedang Berlangsung' && (
-                      <Chip
-                        label="Sedang Berlangsung"
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: 'Lato',
-                          color: '#0095F2',
-                          backgroundColor: '#0095F233',
-                        }}
-                      />
-                    )}
-                    {item?.statusPengajuan === 'DRAFT' && (
+                    {item?.status === 'DRAFT' && (
                       <Chip
                         label="Tinjau"
                         style={{
@@ -245,7 +233,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalsearch >= 1 && (
+      {listTickets?.totalsearch >= 1 && !loading && (
         <Stack alignItems="center" my={3} mr={3}>
           <Pagination
             count={Number(listTickets?.totalpage) || 1}

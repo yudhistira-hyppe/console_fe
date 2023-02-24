@@ -248,8 +248,8 @@ const DetailBantuanPengguna = () => {
     const mediaURI = localUri[1].split('_');
 
     return isDetail
-      ? `${STREAM_URL}/v5/ticket/detail/supportfile${mediaURI[0]}/${key}${authToken}`
-      : `${STREAM_URL}/v5/ticket/supportfile${mediaURI[0]}/${key}${authToken}`;
+      ? `${STREAM_URL}/ticket/detail/supportfile${mediaURI[0]}/${key}${authToken}`
+      : `${STREAM_URL}/ticket/supportfile${mediaURI[0]}/${key}${authToken}`;
   };
 
   return (

@@ -84,7 +84,7 @@ const DetailRekeningBank = () => {
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
-    return `${STREAM_URL}/v5${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
   };
 
   const getImage = (mediaEndpoint, key) => {
@@ -92,8 +92,8 @@ const DetailRekeningBank = () => {
     const endpoint = mediaEndpoint?.split('/');
 
     return endpoint.includes('supportfile')
-      ? `${STREAM_URL}/v5/${endpoint[1]}/${endpoint[2]}/${detailBank?.data?._id}/${key}${authToken}`
-      : `${STREAM_URL}/v5/${endpoint[1]}/${detailBank?.data?._id}${authToken}`;
+      ? `${STREAM_URL}/${endpoint[1]}/${endpoint[2]}/${detailBank?.data?._id}/${key}${authToken}`
+      : `${STREAM_URL}/${endpoint[1]}/${detailBank?.data?._id}${authToken}`;
   };
 
   const blurNumberCard = (item) => {
