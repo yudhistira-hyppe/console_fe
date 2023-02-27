@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AdsButtonDropdown = ({ status, setStatus, setShowModal, showModal, buttonColor, setButtonColor, disabled }) => {
+const AdsButtonDropdown = ({ status, setShowModal, showModal, buttonColor, disabled }) => {
   const classes = useStyles();
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
@@ -45,35 +45,12 @@ const AdsButtonDropdown = ({ status, setStatus, setShowModal, showModal, buttonC
   const handleClose = (event) => {
     const newStatus = event.target.id;
     switch (newStatus) {
-      case 'Tayang':
-        setButtonColor({ background: '#0095F2' });
-        setShowModal({
-          ...showModal,
-          show: true,
-          type: newStatus,
-        });
-        break;
-      case 'Dijadwalkan':
-        setShowModal({
-          ...showModal,
-          show: true,
-          type: newStatus,
-        });
-        break;
       case 'Tinjau':
-        setStatus(newStatus);
-        setButtonColor({ background: '#E92A63' });
-        break;
-      case 'Ditolak':
         setShowModal({
           ...showModal,
           show: true,
-          type: newStatus,
+          type: 'Dijadwalkan',
         });
-        break;
-      case 'Habis':
-        setStatus(newStatus);
-        setButtonColor({ background: '#FF8C00' });
         break;
       default:
         break;
@@ -116,16 +93,10 @@ const AdsButtonDropdown = ({ status, setStatus, setShowModal, showModal, buttonC
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}>
-                  <MenuItem id="Dijadwalkan" onClick={handleClose} className={classes.menuItemText}>
+                  <MenuItem id={status} onClick={handleClose} className={classes.menuItemText}>
                     Iklan Layak Untuk Tayang
                     <ArrowForward fontSize="small" className="mx-2" htmlColor="rgba(0, 0, 0, 0.38)" />
                     <Chip label="Dijadwalkan" className={`${classes.lato} ${classes.bold} ${classes.scheduledBadge}`} />
-                  </MenuItem>
-
-                  <MenuItem id="Ditolak" onClick={handleClose} className={classes.menuItemText}>
-                    Iklan Tidak Layak Tayang
-                    <ArrowForward fontSize="small" className="mx-2" htmlColor="rgba(0, 0, 0, 0.38)" />
-                    <Chip label="Ditolak" className={`${classes.lato} ${classes.bold} ${classes.deniedBadge}`} />
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>

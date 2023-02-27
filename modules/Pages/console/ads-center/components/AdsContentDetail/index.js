@@ -1,22 +1,16 @@
 import React from 'react';
 import { Button, Card } from '@material-ui/core';
-import { Typography, Stack, Avatar } from '@mui/material';
+import { Typography, Stack, Avatar, Chip } from '@mui/material';
 import { ButtonDropdown } from '../';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
-const AdsContentDetailComponent = ({
-  status,
-  setShowModal,
-  showModal,
-  buttonColor,
-  setButtonColor,
-  setStatus,
-  detailAds,
-}) => {
+const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColor, detailAds }) => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
   const { authUser } = useAuth();
+
+  console.log(status);
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -44,11 +38,9 @@ const AdsContentDetailComponent = ({
         {status === 'Tinjau' ? (
           <ButtonDropdown
             status={status}
-            setStatus={setStatus}
             setShowModal={setShowModal}
             showModal={showModal}
             buttonColor={buttonColor}
-            setButtonColor={setButtonColor}
             disabled={!access.find((item) => item?.nameModule)?.acces?.updateAcces}
           />
         ) : (
@@ -75,7 +67,7 @@ const AdsContentDetailComponent = ({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <Stack direction="row" spacing={1}>
             <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Pembuatan Iklan:
+              Pembuat Iklan:
             </Typography>
 
             <Typography fontFamily={'Lato'} color="secondary" fontWeight="bold">
@@ -105,7 +97,7 @@ const AdsContentDetailComponent = ({
             </Typography>
 
             <Typography fontFamily={'Lato'} color="secondary" fontWeight="bold">
-              @ikeaindonesia
+              {'-'}
             </Typography>
           </Stack>
 
@@ -142,7 +134,17 @@ const AdsContentDetailComponent = ({
               Penempatan Iklan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>-</Typography>
+            <Typography fontFamily={'Lato'}>
+              {detailAds?.namePlace ? (
+                <Chip
+                  label={detailAds?.namePlace}
+                  size="small"
+                  style={{ padding: 2, borderRadius: 6, fontFamily: 'Normal', color: '#00000099', fontSize: 12 }}
+                />
+              ) : (
+                '-'
+              )}
+            </Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>

@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const adsApi = createApi({
   reducerPath: 'ads-center',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['ads'],
+  tagTypes: ['ads', 'detail'],
   endpoints: (build) => ({
     getPerformanceAds: build.query({
       query: (data) => ({
@@ -34,6 +34,7 @@ export const adsApi = createApi({
         method: 'POST',
         body: data,
       }),
+      providesTags: ['detail'],
     }),
     getVideoFromApsara: build.query({
       query: (data) => ({
@@ -48,7 +49,7 @@ export const adsApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['ads'],
+      invalidatesTags: ['ads', 'detail'],
     }),
   }),
 });
