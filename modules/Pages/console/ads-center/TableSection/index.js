@@ -122,13 +122,13 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               <TableCell align="left" style={{ width: 120 }}>
                 Tipe
               </TableCell>
-              <TableCell align="left" style={{ width: 150 }}>
+              <TableCell align="left" style={{ width: 130 }}>
                 Penempatan
               </TableCell>
               <TableCell align="left" style={{ width: 130 }}>
                 Kredit Terpakai
               </TableCell>
-              <TableCell align="left" style={{ maxWidth: 130 }}>
+              <TableCell align="left" style={{ width: 130 }}>
                 Kredit Tersisa
               </TableCell>
               <TableCell align="left" style={{ width: 130 }}>
@@ -176,7 +176,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       {item?.type_data || '-'}
                     </Typography>
                   </TableCell>
-                  <TableCell align="left" style={{ width: 150 }}>
+                  <TableCell align="left" style={{ width: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {item?.type_data === 'In App Ads'
                         ? '-'
@@ -190,7 +190,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       {numberWithCommas(item?.usedCredit + item?.usedCreditFree || 0)} Kredit
                     </Typography>
                   </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 130 }}>
+                  <TableCell align="left" style={{ width: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {numberWithCommas(item?.totalUsedCredit - (item?.usedCredit + item?.usedCreditFree))} Kredit
                     </Typography>

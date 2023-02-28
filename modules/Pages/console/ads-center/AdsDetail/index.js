@@ -20,14 +20,12 @@ import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
-  { label: 'Ads Center', link: '/ads-center' },
+  { label: 'Pusat Iklan', link: '/ads-center' },
   { label: 'Rincian Iklan', isActive: true },
 ];
 
 const AdsDetailComponent = () => {
   const router = useRouter();
-  const [buttonColor, setButtonColor] = React.useState({ background: '#E92A63' });
-  const [status, setStatus] = React.useState('Tinjau');
   const [showModal, setShowModal] = React.useState({
     show: false,
     type: 'Tayang',
@@ -99,12 +97,10 @@ const AdsDetailComponent = () => {
           <GridContainer>
             <Grid item sm={12} md={12} lg={6} xl={6}>
               <AdsContentDetail
-                status={status}
+                status={adsDetail?.data[0]?.status === 'DRAFT' ? 'Tinjau' : 'Dijadwalkan'}
                 showModal={showModal}
                 setShowModal={setShowModal}
-                buttonColor={buttonColor}
-                setButtonColor={setButtonColor}
-                setStatus={setStatus}
+                buttonColor={{ background: adsDetail?.data[0]?.status === 'DRAFT' ? '#E92A63' : '#71A500' }}
                 detailAds={adsDetail?.data?.[0]}
               />
             </Grid>
