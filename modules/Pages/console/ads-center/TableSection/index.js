@@ -155,7 +155,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   onClick={() => router.push({ pathname: `/ads-center/detail`, query: { _id: item?._id } })}>
                   <TableCell align="left" style={{ width: 120 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.timestamp).format('DD/MM/YYYY - HH:mm')} WIB
+                      {moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 150 }}>
