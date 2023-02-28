@@ -71,7 +71,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
             </Typography>
 
             <Typography fontFamily={'Lato'} color="secondary" fontWeight="bold">
-              @-
+              @{detailAds?.fullName || '-'}
             </Typography>
           </Stack>
 
@@ -97,7 +97,16 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
             </Typography>
 
             <Typography fontFamily={'Lato'} color="secondary" fontWeight="bold">
-              {'-'}
+              <Stack direction="row" gap="8px">
+                {detailAds?.listgender?.map((item, key) => (
+                  <Chip
+                    key={key}
+                    label={item}
+                    size="small"
+                    style={{ padding: 2, borderRadius: 6, fontFamily: 'Normal', color: '#00000099', fontSize: 12 }}
+                  />
+                ))}
+              </Stack>
             </Typography>
           </Stack>
 
