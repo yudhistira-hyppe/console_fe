@@ -9,7 +9,7 @@ const DatabaseComponent = dynamic(() => import('modules/Pages/console/database')
   loading: () => <PageLoader />,
 });
 
-const validDatabaseTab = ['account', 'content', 'media'];
+const validDatabaseTab = ['account', 'content', 'music', 'effect'];
 
 const DatabaseDynamicPage = () => {
   const { authUser } = useAuth();
