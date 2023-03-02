@@ -289,7 +289,11 @@ const TableSection = ({
                       disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces}
                     />
                   </TableCell>
-                  <TableCell align="left" className={classes.hoverCell} style={{ maxWidth: 320, width: 320 }}>
+                  <TableCell
+                    align="left"
+                    className={classes.hoverCell}
+                    style={{ maxWidth: 320, width: 320 }}
+                    onClick={() => router.push(`/database/effect/${i}`)}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={item?.apsaraThumnailUrl} variant="rounded" />
                       <Typography

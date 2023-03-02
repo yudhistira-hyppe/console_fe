@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import DatabaseDetailAccountComponent from './account';
 import DatabaseDetailContentComponent from './content';
+import DatabaseDetailEffectComponent from './effect';
 import DatabaseDetailMediaComponent from './media';
 
 const DatabaseDetailComponent = (props) => {
@@ -11,8 +12,10 @@ const DatabaseDetailComponent = (props) => {
       return <DatabaseDetailAccountComponent detailId={detailId} />;
     case 'content':
       return <DatabaseDetailContentComponent detailId={detailId} />;
-    default:
+    case 'music':
       return <DatabaseDetailMediaComponent detailId={detailId} />;
+    default:
+      return <DatabaseDetailEffectComponent detailId={detailId} />;
   }
 };
 
