@@ -46,7 +46,7 @@ const DatabaseDetailMediaComponent = (props) => {
   const { detailId } = props;
 
   const breadcrumbs = [
-    { label: 'Database Media', link: '/database/media' },
+    { label: 'Database Media', link: '/database/music' },
     { label: detailId === 'create' ? 'Create Music' : 'Rincian Music', isActive: true },
   ];
 
@@ -63,7 +63,7 @@ const DatabaseDetailMediaComponent = (props) => {
           direction={'row'}
           mt={1}
           mb={3}
-          onClick={() => router.push('/database/media')}
+          onClick={() => router.push('/database/music')}
           gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>

@@ -90,7 +90,7 @@ const FormMusic = (props) => {
                   if (res?.error) {
                     toast.error(res?.error?.data?.message);
                   } else if (res?.data) {
-                    router.push('/database/media');
+                    router.push('/database/music');
                     toast.success('Berhasil membuat musik');
                   }
                   setLoading(false);
@@ -129,7 +129,7 @@ const FormMusic = (props) => {
               if (res?.error) {
                 toast.error(res?.error?.data?.message);
               } else if (res?.data) {
-                router.push('/database/media');
+                router.push('/database/music');
                 toast.success('Berhasil memperbarui musik');
               }
               setLoading(false);
@@ -146,7 +146,7 @@ const FormMusic = (props) => {
         if (res?.error) {
           toast.error(res?.error?.data?.message);
         } else if (res?.data) {
-          router.push('/database/media');
+          router.push('/database/music');
           toast.success('Berhasil memperbarui musik');
         }
         setLoading(false);

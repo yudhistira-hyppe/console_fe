@@ -28,7 +28,7 @@ export default function ModalConfirmation({ showModal, status, id, onClose }) {
     };
 
     updateStatus(data).then(() => {
-      router.replace('/database/media');
+      router.replace('/database/music');
       onClose();
     });
   };
