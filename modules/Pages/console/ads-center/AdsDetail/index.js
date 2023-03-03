@@ -67,6 +67,32 @@ const AdsDetailComponent = () => {
     });
   };
 
+  const getStatusAds = () => {
+    switch (adsDetail?.data[0]?.status) {
+      case 'DRAFT':
+        return 'Tinjau';
+      case 'APPROVE':
+        return 'Dijadwalkan';
+      case 'FINISH':
+        return 'Habis';
+      case 'REPORTED':
+        return 'Ditangguhkan';
+    }
+  };
+
+  const getBackgroundButton = () => {
+    switch (adsDetail?.data[0]?.status) {
+      case 'DRAFT':
+        return '#E92A63';
+      case 'APPROVE':
+        return '#71A500';
+      case 'FINISH':
+        return '#FF8C00';
+      case 'REPORTED':
+        return '#676767';
+    }
+  };
+
   return (
     <>
       <Head>
@@ -97,10 +123,10 @@ const AdsDetailComponent = () => {
           <GridContainer>
             <Grid item sm={12} md={12} lg={6} xl={6}>
               <AdsContentDetail
-                status={adsDetail?.data[0]?.status === 'DRAFT' ? 'Tinjau' : 'Dijadwalkan'}
+                status={getStatusAds()}
                 showModal={showModal}
                 setShowModal={setShowModal}
-                buttonColor={{ background: adsDetail?.data[0]?.status === 'DRAFT' ? '#E92A63' : '#71A500' }}
+                buttonColor={{ background: getBackgroundButton() }}
                 detailAds={adsDetail?.data?.[0]}
               />
             </Grid>
