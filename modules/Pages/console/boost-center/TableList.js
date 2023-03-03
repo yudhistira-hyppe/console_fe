@@ -25,7 +25,7 @@ const TableList = () => {
     });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.jadwal.length >= 1 && Object.assign(params, { sessionid: filter.jadwal.map((item) => item._id) });
+    filter.jadwal.length >= 1 && Object.assign(params, { sessionid: filter.jadwal.map((item) => item._id).flat(2) });
     filter.status.length >= 1 && Object.assign(params, { statuspengajuan: filter.status });
 
     return params;
