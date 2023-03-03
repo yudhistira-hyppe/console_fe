@@ -241,7 +241,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             ) : (
               <TableCell colSpan={8}>
                 <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
+                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Boost Post</Typography>
                 </Stack>
               </TableCell>
             )}
