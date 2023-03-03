@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const classes = useStyles({ variant });
-  const { isLoading, error, consoleLoginWithEmail } = useAuth();
+  const { isLoading: loadingAuth, error, consoleLoginWithEmail } = useAuth();
   const [location, setLocation] = useState();
   const [deviceId, setDeviceId] = useState();
   const [email, setEmail] = useState('');
@@ -234,7 +234,12 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
               />
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
-              <Button type="submit" onClick={onSubmit} disabled={isLoginDisabled} variant="contained" color="primary">
+              <Button
+                type="submit"
+                onClick={onSubmit}
+                disabled={isLoginDisabled || loadingAuth}
+                variant="contained"
+                color="primary">
                 {/* <IntlMessages id="appModule.signIn" /> */}
                 Masuk
               </Button>
