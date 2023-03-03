@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     borderRadius: 6,
     padding: '4px 12px',
-    backgroundColor: 'rgb(157 143 167)',
+    backgroundColor: 'rgb(40, 40, 40)',
     color: theme.palette.common.white,
   },
 }));
@@ -45,7 +45,7 @@ const ChartPost = ({ totalPost, chartData, persenJangkauan }) => {
           </Stack>
           <Stack direction="column" position="relative" gap="30px">
             <PieChart height={180} width={180} margin={{ top: 20 }}>
-              <Pie data={chartData} innerRadius={60} outerRadius={80} fill="#8884d8" paddingAngle={5} dataKey="value">
+              <Pie data={chartData} innerRadius={60} outerRadius={80} fill="#8884d8" paddingAngle={1} dataKey="value">
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
@@ -57,7 +57,7 @@ const ChartPost = ({ totalPost, chartData, persenJangkauan }) => {
                 content={(data) => {
                   return data.payload[0] ? (
                     <Box className={classes.tooltip}>
-                      {data.payload?.[0]?.payload?.name}: {data.payload?.[0]?.payload?.value}
+                      {data.payload?.[0]?.payload?.name}: {data.payload?.[0]?.payload?.value}%
                     </Box>
                   ) : null;
                 }}
