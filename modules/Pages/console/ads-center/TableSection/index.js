@@ -220,6 +220,30 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         }}
                       />
                     )}
+                    {item?.status === 'FINISH' && (
+                      <Chip
+                        label="Habis"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          color: '#FF8C00D9',
+                          backgroundColor: '#FF8C0026',
+                        }}
+                      />
+                    )}
+                    {item?.status === 'REPORTED' && (
+                      <Chip
+                        label="Ditangguhkan"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          color: '#676767D9',
+                          backgroundColor: '#6767671A',
+                        }}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ))
