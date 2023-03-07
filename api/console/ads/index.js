@@ -15,7 +15,7 @@ export const adsApi = createApi({
     }),
     getDemographicAds: build.query({
       query: (data) => ({
-        url: '/ads/console/adscenter/demographchart',
+        url: '/userads/console/adscenter/demographchart',
         method: 'POST',
         body: data,
       }),
