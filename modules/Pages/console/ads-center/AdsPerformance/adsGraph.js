@@ -42,24 +42,8 @@ const AdsGraph = ({ data }) => {
             ) : null;
           }}
         />
-        <Area
-          dataKey="totalclick"
-          type="monotone"
-          strokeWidth={2}
-          stackId="2"
-          stroke="#CB76CD"
-          fill="url(#color13)"
-          fillOpacity={1}
-        />
-        <Area
-          dataKey="totalview"
-          type="monotone"
-          strokeWidth={2}
-          stackId="2"
-          stroke="#455DD8"
-          fill="url(#color13)"
-          fillOpacity={1}
-        />
+        <Area dataKey="totalview" type="monotone" strokeWidth={2} stroke="#CB76CD" fill="url(#color13)" fillOpacity={1} />
+        <Area dataKey="totalclick" type="monotone" strokeWidth={2} stroke="#455DD8" fill="url(#color13)" fillOpacity={1} />
       </AreaChart>
     </ResponsiveContainer>
   );
