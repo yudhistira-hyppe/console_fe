@@ -19,6 +19,7 @@ import moment from 'moment';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { toast } from 'react-hot-toast';
 import AdsDescriptionDetail from '../components/AdsDescriptionDetail';
+import TableListPenonton from './TableListPenonton';
 
 const breadcrumbs = [
   { label: 'Pusat Iklan', link: '/ads-center' },
@@ -138,6 +139,11 @@ const AdsDetailComponent = () => {
                 <AdsHistoryDetail idAds={adsDetail?.data?.[0]?._id} />
                 {/* <AdsWatcherDetailComponent /> */}
               </Stack>
+            </Grid>
+
+            <Grid item sm={12}>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 24 }}>Table List Penonton</Typography>
+              <TableListPenonton />
             </Grid>
           </GridContainer>
         </PageContainer>
