@@ -36,6 +36,12 @@ export const adsApi = createApi({
       }),
       providesTags: ['detail'],
     }),
+    getLogDetailAds: build.query({
+      query: (id) => ({
+        url: `/ads/console/adscenter/historydetail/${id}`,
+        method: 'GET',
+      }),
+    }),
     getVideoFromApsara: build.query({
       query: (data) => ({
         url: '/posts/getvideo',
@@ -59,6 +65,7 @@ export const {
   useGetDemographicAdsQuery,
   useGetListAdsQuery,
   useGetDetailAdsQuery,
+  useGetLogDetailAdsQuery,
   useGetVideoFromApsaraQuery,
   useApproveAdsMutation,
 } = adsApi;

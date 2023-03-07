@@ -1,14 +1,21 @@
 import React from 'react';
-import { Typography, Stack, Avatar, Card } from '@mui/material';
+import { Typography, Stack, Avatar, Card, CircularProgress } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
+import ScrollBar from 'react-perfect-scrollbar';
+import { useGetLogDetailAdsQuery } from 'api/console/ads';
+import { useAuth } from 'authentication';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import moment from 'moment';
 
 const useStyles = makeStyles(() => ({
   cardRoot: {
-    height: '40%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   cardHeader: {
     height: '15%',
-    padding: '2em',
+    padding: '2em 2em 0',
   },
   historyListContainer: {
     height: 200,
@@ -21,87 +28,51 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const dummyData = [
-  {
-    user: '@ikeaindonesia ',
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'mengajukan permohonan pemasangan iklan dari Hyppe Business',
-  },
-  {
-    user: '@paramita ',
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'telah menyetujui penjadwalan iklan di Hyppe Console',
-  },
-  {
-    user: null,
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'Iklan telah ditayangkan sesuai jadwal dari sistem Hyppe Console',
-  },
-  {
-    user: null,
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'Kredit iklan telah habis digunakan dari sistem Hyppe Console',
-  },
-  {
-    user: '@ikeaindonesia ',
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'mengajukan permohonan pemasangan iklan dari Hyppe Business',
-  },
-  {
-    user: '@paramita ',
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'telah menyetujui penjadwalan iklan di Hyppe Console',
-  },
-  {
-    user: null,
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'Iklan telah ditayangkan sesuai jadwal dari sistem Hyppe Console',
-  },
-  {
-    user: null,
-    title: 'Iklan diajukan',
-    date: '31/08/2022-13:00 WIB',
-    desc: 'Kredit iklan telah habis digunakan dari sistem Hyppe Console',
-  },
-];
+const AdsDetailComponent = ({ idAds }) => {
+  const classes = useStyles();
+  const { authUser } = useAuth();
 
-const HistoryItem = ({ item }) => (
-  <Stack direction="row" spacing={2} mb={2}>
-    <Stack direction="column" justifyContent="center">
-      <Avatar src={item?.img} />
-    </Stack>
+  const { data: logDetail, isLoading: loadingLog } = useGetLogDetailAdsQuery(idAds);
 
-    <div>
-      <Stack direction="row" spacing={1}>
-        <Stack direction="column" justifyContent="center">
-          <Typography fontFamily="Lato" variant="body2">
-            {item?.title}
-          </Typography>
-        </Stack>
-        <Stack direction="column" justifyContent="center">
-          <Typography fontFamily="Lato" color="rgba(0, 0, 0, 0.38)" variant="body2">
-            {item?.date}
-          </Typography>
-        </Stack>
+  const getImage = (mediaEndpoint) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const endpoint = mediaEndpoint?.split('_');
+
+    return `${STREAM_URL}${endpoint?.[0]}${authToken}`;
+  };
+
+  const HistoryItem = ({ item }) => (
+    <Stack direction="row" spacing={2} mb={2}>
+      <Stack direction="column" justifyContent="center">
+        <Avatar src={getImage(item?.profile?.mediaEndpoint)} />
       </Stack>
 
-      <Typography fontFamily="Lato" variant="caption">
-        {item?.user && <span className={`${useStyles().textPrimaryBold} mr-1`}>{item.user}</span>}
-        {item?.desc}
-      </Typography>
-    </div>
-  </Stack>
-);
+      <div>
+        <Stack direction="row" alignItems="end" spacing={1}>
+          <Typography fontFamily="Lato" variant="body1" fontWeight="bold">
+            {item?.titlerow === 'pemohon' && 'Iklan Diajukan'}
+            {item?.titlerow === 'adminapprove' && 'Iklan Dijadwalkan'}
+            {item?.titlerow === 'lastpenonton' && 'Iklan Habis'}
+          </Typography>
+          <Typography fontFamily="Lato" color="rgba(0, 0, 0, 0.38)" fontSize={12}>
+            {moment(item?.tempcreatedAt).format('DD/MM/YYYY - HH:mm')} WIB
+          </Typography>
+        </Stack>
 
-const AdsDetailComponent = () => {
-  const classes = useStyles();
+        <Typography fontFamily="Lato" variant="caption">
+          {item?.profile?.fullName && item?.titlerow !== 'lastpenonton' && (
+            <span className={`${useStyles().textPrimaryBold} mr-1`} style={{ fontWeight: 'bold', fontFamily: 'Normal' }}>
+              @{item.profile?.fullName}
+            </span>
+          )}
+          {item?.titlerow === 'pemohon' && 'mengajukan permohonan pemasangan iklan dari Hyppe Business'}
+          {item?.titlerow === 'adminapprove' && 'telah menyetujui untuk menjadwalankan iklan di Hyppe Business.'}
+          {item?.titlerow === 'lastpenonton' && 'Kredit iklan telah habis digunakan dari sistem Hyppe Console'}
+        </Typography>
+      </div>
+    </Stack>
+  );
+
   return (
     <>
       <Card className={classes.cardRoot}>
@@ -111,11 +82,17 @@ const AdsDetailComponent = () => {
           </Typography>
         </div>
 
-        <div className={classes.historyListContainer}>
-          {dummyData.map((el, key) => (
-            <HistoryItem item={el} key={key} />
-          ))}
-        </div>
+        <Stack height="100%" direction="column" style={{ padding: '0 24px', margin: '24px 0' }}>
+          <ScrollBar style={{ maxHeight: 260 }}>
+            {loadingLog ? (
+              <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
+                <CircularProgress color="secondary" size={32} />
+              </Stack>
+            ) : (
+              logDetail?.data?.map((item, key) => <HistoryItem item={item} key={key} />)
+            )}
+          </ScrollBar>
+        </Stack>
       </Card>
     </>
   );

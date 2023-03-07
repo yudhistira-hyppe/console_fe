@@ -5,6 +5,7 @@ import { ButtonDropdown } from '../';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import moment from 'moment';
 
 const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColor, detailAds }) => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
@@ -33,8 +34,8 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
   };
 
   return (
-    <>
-      <Card style={{ padding: '2em', height: '100%' }}>
+    <Stack direction="column" gap={2}>
+      <Card style={{ padding: '2em' }}>
         {status === 'Tinjau' ? (
           <ButtonDropdown
             status={status}
@@ -53,7 +54,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
           <Avatar
             src={getImage(detailAds)}
             variant="rounded"
-            style={{ cursor: 'pointer', width: '100%', height: 312, border: '1px solid #eeeeee' }}
+            style={{ cursor: 'pointer', width: '100%', height: 280, border: '1px solid #eeeeee' }}
             onClick={() => {
               setShowModal({
                 ...showModal,
@@ -67,16 +68,6 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <Stack direction="row" spacing={1}>
             <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Pembuat Iklan:
-            </Typography>
-
-            <Typography fontFamily={'Lato'} color="secondary" fontWeight="bold">
-              @{detailAds?.fullName || '-'}
-            </Typography>
-          </Stack>
-
-          <Stack direction="row" spacing={1}>
-            <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
               Judul:
             </Typography>
 
@@ -85,10 +76,28 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
 
           <Stack direction="row" spacing={1}>
             <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Objektifitas:
+              Tipe Iklan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>Lalu-lintas</Typography>
+            <Typography fontFamily={'Lato'}>{detailAds?.nameType}</Typography>
+          </Stack>
+
+          <Stack direction="row" spacing={1}>
+            <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
+              Penempatan Iklan:
+            </Typography>
+
+            <Typography fontFamily={'Lato'}>
+              {detailAds?.namePlace ? (
+                <Chip
+                  label={detailAds?.namePlace}
+                  size="small"
+                  style={{ padding: 2, borderRadius: 6, fontFamily: 'Normal', color: '#00000099', fontSize: 12 }}
+                />
+              ) : (
+                'Popup saat masuk aplikasi'
+              )}
+            </Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>
@@ -116,7 +125,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
             </Typography>
 
             <a href={detailAds?.urlLink} target="_blank" rel="noreferrer">
-              <Typography fontFamily={'Lato'} color="secondary">
+              <Typography fontFamily={'Lato'} color="secondary" style={{ textDecoration: 'underline' }}>
                 {detailAds?.urlLink}
               </Typography>
             </a>
@@ -124,50 +133,14 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
 
           <Stack direction="row" spacing={1}>
             <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Tipe Iklan:
+              Tanggal Mulai Iklan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>{detailAds?.nameType}</Typography>
-          </Stack>
-
-          <Stack direction="row" spacing={1}>
-            <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Rencana Penayangan:
-            </Typography>
-
-            <Typography fontFamily={'Lato'}>{numberWithCommas(detailAds?.tayang)} Kali</Typography>
-          </Stack>
-
-          <Stack direction="row" spacing={1}>
-            <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Penempatan Iklan:
-            </Typography>
-
-            <Typography fontFamily={'Lato'}>
-              {detailAds?.namePlace ? (
-                <Chip
-                  label={detailAds?.namePlace}
-                  size="small"
-                  style={{ padding: 2, borderRadius: 6, fontFamily: 'Normal', color: '#00000099', fontSize: 12 }}
-                />
-              ) : (
-                '-'
-              )}
-            </Typography>
-          </Stack>
-
-          <Stack direction="row" spacing={1}>
-            <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Kredit Tersisa:
-            </Typography>
-
-            <Typography fontFamily={'Lato'}>
-              {numberWithCommas(detailAds?.totalCredit - (detailAds?.usedCredit + detailAds?.usedCreditFree) || 0)}
-            </Typography>
+            <Typography fontFamily={'Lato'}>{moment(detailAds?.liveAt).format('DD/MM/YYYY')}</Typography>
           </Stack>
         </div>
       </Card>
-    </>
+    </Stack>
   );
 };
 
