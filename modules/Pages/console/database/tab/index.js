@@ -9,6 +9,7 @@ import DatabaseTabMediaComponent from './media';
 import useStyles from './index.style';
 import Cookies from 'js-cookie';
 import DatabaseTabEffectComponent from './effect';
+import DatabaseTabStickerComponent from './sticker';
 
 const DatabaseTabComponent = (props) => {
   const classes = useStyles();
@@ -37,6 +38,7 @@ const DatabaseTabComponent = (props) => {
             <Tab className={classes.tab} label="Musik" value="music" />
           )}
           <Tab className={classes.tab} label="Efek" value="effect" />
+          <Tab className={classes.tab} label="Stiker" value="sticker" />
         </TabList>
         {access.map((item) => item?.nameModule).includes('database_account') && (
           <TabPanel className={classes.tabPanel} value="account">
@@ -55,6 +57,9 @@ const DatabaseTabComponent = (props) => {
         )}
         <TabPanel className={classes.tabPanel} value="effect">
           <DatabaseTabEffectComponent />
+        </TabPanel>
+        <TabPanel className={classes.tabPanel} value="sticker">
+          <DatabaseTabStickerComponent />
         </TabPanel>
       </TabContext>
     </>
