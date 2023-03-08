@@ -44,6 +44,16 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
             buttonColor={buttonColor}
             disabled={!access.find((item) => item?.nameModule)?.acces?.updateAcces}
           />
+        ) : status === 'Dijadwalkan' ? (
+          detailAds?.isActive ? (
+            <Button variant="container" disabled style={{ backgroundColor: buttonColor.background, color: '#fff' }}>
+              {status}
+            </Button>
+          ) : (
+            <Button variant="container" disabled style={{ backgroundColor: '#676767', color: '#fff' }}>
+              Dinonaktifkan
+            </Button>
+          )
         ) : (
           <Button variant="container" disabled style={{ backgroundColor: buttonColor.background, color: '#fff' }}>
             {status}

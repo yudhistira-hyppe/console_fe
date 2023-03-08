@@ -208,7 +208,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         }}
                       />
                     )}
-                    {item?.status === 'APPROVE' && (
+                    {item?.status === 'APPROVE' && item?.isActive && (
                       <Chip
                         label="Dijadwalkan"
                         style={{
@@ -244,13 +244,25 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         }}
                       />
                     )}
+                    {item?.status === 'APPROVE' && !item?.isActive && (
+                      <Chip
+                        label="Dinonaktifkan"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: 'Lato',
+                          color: '#676767D9',
+                          backgroundColor: '#6767671A',
+                        }}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableCell colSpan={8}>
                 <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
+                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Iklan yang sedang berjalan</Typography>
                 </Stack>
               </TableCell>
             )}

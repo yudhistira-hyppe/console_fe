@@ -79,6 +79,8 @@ const AdsDetailComponent = () => {
         return 'Habis';
       case 'REPORTED':
         return 'Ditangguhkan';
+      default:
+        return 'Dinonaktifkan';
     }
   };
 
@@ -91,6 +93,8 @@ const AdsDetailComponent = () => {
       case 'FINISH':
         return '#FF8C00';
       case 'REPORTED':
+        return '#676767';
+      default:
         return '#676767';
     }
   };
