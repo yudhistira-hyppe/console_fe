@@ -9,14 +9,14 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 450,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
   borderRadius: '4px',
 };
 
-export default function ModalSave({ showModal, onClose, onConfirm }) {
+export default function ModalSave({ showModal, onClose, onConfirm, status }) {
   return (
     <div>
       <Modal
@@ -26,14 +26,23 @@ export default function ModalSave({ showModal, onClose, onConfirm }) {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack direction="column" alignItems="center" gap="8px">
-            <img src="/images/save-media.png" style={{ width: 150 }} />
-            <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 24 }}>Simpan & Post Musik ?</Typography>
-            <Typography style={{ textAlign: 'center' }}>
-              Kamu akan menyimpan musik ini. Musik akan tersedia di aplikasi Hyppe untuk digunakan
-            </Typography>
+            {status !== 'create' ? (
+              <>
+                <img src="/images/save-effect.png" style={{ height: 250 }} />
+                <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 24 }}>Simpan Efek?</Typography>
+                <Typography style={{ textAlign: 'center' }}>Semua perubahan yang kamu buat akan tersimpan</Typography>
+              </>
+            ) : (
+              <>
+                <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>Simpan Efek</Typography>
+                <Typography style={{ textAlign: 'center', fontFamily: 'Lato' }}>
+                  Kamu akan <strong>menyimpan & mengaktifkan</strong> efek ini. Efek akan tersedia di aplikasi Hyppe
+                </Typography>
+              </>
+            )}
           </Stack>
 
-          <Stack direction={'row'} mt={6} justifyContent={'center'} spacing={3}>
+          <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
             <Button variant="contained" color="primary" onClick={onConfirm}>
               Konfirmasi
             </Button>

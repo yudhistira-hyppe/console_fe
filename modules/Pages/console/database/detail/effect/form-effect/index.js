@@ -1,43 +1,35 @@
 import React, { useState } from 'react';
-import { Button, Card, MenuItem, Select, Stack } from '@mui/material';
+import { Button, Card, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
 import { TextField, Typography } from '@material-ui/core';
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers-pro';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ModalDelete from '../Modal/ModalDelete';
 import ModalSave from '../Modal/ModalSave';
 import ModalConfirmation from '../Modal/ModalConfirmation';
-import {
-  useCreateMusicMutation,
-  useGetGenreMusicQuery,
-  useGetMoodMusicQuery,
-  useGetThemeMusicQuery,
-  useUpdateMusicMutation,
-} from 'api/console/database/media';
-import moment from 'moment';
 import router from 'next/router';
-import UploadMedia from '../upload-media';
 import { onMediaUpload } from 'api/console/database/mediaService';
 import { onImageUpload } from 'api/console/database/imageService';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
+import UploadThumbnail from '../upload-thumbnail';
+import UploadEffect from '../upload-effect';
+import ModalBatal from '../Modal/ModalBatal';
 
-const FormMusic = (props) => {
+const FormEffect = (props) => {
   const { status, data, id } = props;
   const [inputValue, setInputValue] = useState({
     effectName: '',
-    category: [],
+    category: '',
     status: '',
-    apsaraThumnail: '',
+    apsaraThumbnail: '',
+    apsaraEffect: '',
   });
   const [modal, setModal] = useState({
     delete: false,
     save: false,
     confirmation: false,
+    cancel: false,
     status: '',
   });
   const [loading, setLoading] = useState(false);
-
-  const { data: genres } = useGetGenreMusicQuery();
 
   const handleChangeInput = (e) => {
     const value = e.target.value;
@@ -68,8 +60,13 @@ const FormMusic = (props) => {
 
   return (
     <>
-      <ModalDelete showModal={modal.delete} onClose={() => setModal({ ...modal, delete: !modal.delete })} />
+      <ModalDelete
+        showModal={modal.delete}
+        onClose={() => setModal({ ...modal, delete: !modal.delete })}
+        onConfirm={() => router.replace('/database/effect')}
+      />
       <ModalSave
+        status={status}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
         onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
@@ -80,19 +77,24 @@ const FormMusic = (props) => {
         onClose={() => setModal({ ...modal, confirmation: !modal.confirmation, status: '' })}
         id={id}
       />
+      <ModalBatal
+        showModal={modal.cancel}
+        onClose={() => setModal({ ...modal, cancel: !modal.cancel })}
+        onConfirm={() => router.replace('/database/effect')}
+      />
+
+      {status === 'create' && (
+        <Stack direction="column" width="100%" gap="12px" marginBottom="24px">
+          <UploadEffect status={status} setInputValue={setInputValue} inputValue={inputValue} />
+        </Stack>
+      )}
 
       <Card style={{ padding: 34 }}>
-        <Stack direction={status !== 'create' ? 'row' : 'column'} gap="24px">
-          <Stack direction="column" width="100%" maxWidth={status !== 'create' ? 170 : '100%'} gap="12px">
-            <UploadMedia
-              thumbnail={data?.apsaraThumnailUrl}
-              dataMusic={data?.music?.PlayURL}
-              status={status}
-              setInputValue={setInputValue}
-              inputValue={inputValue}
-            />
+        <Stack direction={'row'} gap="24px">
+          <Stack direction="column" width="100%" maxWidth={170} gap="12px">
+            <UploadThumbnail thumbnail={''} status={status} setInputValue={setInputValue} inputValue={inputValue} />
           </Stack>
-          <Stack direction={status !== 'create' ? 'column' : 'row'} flexWrap="wrap" width="100%" gap="24px">
+          <Stack direction={'column'} width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
               <Typography style={{ fontWeight: 'bold' }}>
                 Nama Efek <span style={{ color: '#E61D37' }}>*</span>
@@ -107,24 +109,20 @@ const FormMusic = (props) => {
             </Stack>
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
               <Typography style={{ fontWeight: 'bold' }}>
-                Category <span style={{ color: '#E61D37' }}>*</span>
+                Kategori <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <Select
                 name="category"
                 value={inputValue.category}
-                placeholder="Pilih Category Efek"
+                placeholder="Pilih Kategori Efek"
                 onChange={handleChangeInput}
                 color="secondary"
                 displayEmpty>
                 <MenuItem value="" disabled>
-                  Pilih Category Efek
+                  Pilih Kategori Efek
                 </MenuItem>
-                {genres?.data?.length >= 1 &&
-                  genres?.data?.map((item, key) => (
-                    <MenuItem key={key} value={item?._id}>
-                      {item?.name || '-'}
-                    </MenuItem>
-                  ))}
+                <MenuItem value="estetis">Estetis</MenuItem>
+                <MenuItem value="khusus">Efek Khusus</MenuItem>
               </Select>
             </Stack>
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
@@ -145,7 +143,7 @@ const FormMusic = (props) => {
                 <MenuItem value="nonaktif">Tidak Aktif</MenuItem>
               </Select>
             </Stack>
-            <Stack direction="column" rowGap="12px" width="100%">
+            <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
               <LoadingButton
                 loading={loading}
                 variant="contained"
@@ -153,12 +151,37 @@ const FormMusic = (props) => {
                 style={{ width: 'fit-content', fontWeight: 'bold' }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
                 disabled={
-                  !inputValue.effectName || !inputValue.category || !inputValue.status || !inputValue.apsaraThumnail
+                  !inputValue.effectName ||
+                  !inputValue.category ||
+                  !inputValue.status ||
+                  !inputValue.apsaraThumbnail ||
+                  !inputValue.apsaraEffect
                 }>
-                Terapkan
+                {status !== 'create' ? 'Terapkan' : 'Simpan'}
               </LoadingButton>
+              {status === 'create' && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ width: 'fit-content', fontWeight: 'bold' }}
+                  onClick={() => {
+                    if (
+                      !inputValue.effectName &&
+                      !inputValue.category &&
+                      !inputValue.status &&
+                      !inputValue.apsaraThumbnail &&
+                      !inputValue.apsaraEffect
+                    ) {
+                      router.replace('/database/effect');
+                    } else {
+                      setModal({ ...modal, cancel: !modal.cancel });
+                    }
+                  }}>
+                  Batal
+                </Button>
+              )}
               {status !== 'create' && (
-                <Typography style={{ color: '#3f3f3f' }}>
+                <Typography style={{ color: '#3f3f3f', width: '100%' }}>
                   Hapus Efek Ini?{' '}
                   <span
                     style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
@@ -175,4 +198,4 @@ const FormMusic = (props) => {
   );
 };
 
-export default FormMusic;
+export default FormEffect;

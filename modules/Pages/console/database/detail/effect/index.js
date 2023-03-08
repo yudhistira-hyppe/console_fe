@@ -10,8 +10,8 @@ import CardWithDivider from './card-with-divider';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import CardWithIndicator from './card-with-indicator';
 import Interest from './interest';
-import FormMusic from './form-music';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import FormEffect from './form-effect';
 
 const dummyData = [
   {
@@ -46,7 +46,7 @@ const DatabaseDetailEffectComponent = (props) => {
 
   const breadcrumbs = [
     { label: 'Database Efek', link: '/database/effect' },
-    { label: detailId === 'create' ? 'Create Efek' : 'Rincian Efek', isActive: true },
+    { label: detailId === 'create' ? 'Tambah Efek' : 'Rincian Efek', isActive: true },
   ];
 
   return (
@@ -54,7 +54,10 @@ const DatabaseDetailEffectComponent = (props) => {
       <Head>
         <title key="title">Hyppe-Console :: Database Create Media</title>
       </Head>
-      <Stack direction={'column'} spacing={2} mb={3}>
+      <Stack
+        direction={'column'}
+        spacing={2}
+        style={detailId !== 'create' ? { marginBottom: 24 } : { width: '70%', margin: '0 auto 24px' }}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
         <Stack
           direction={'row'}
@@ -72,9 +75,9 @@ const DatabaseDetailEffectComponent = (props) => {
         </Stack>
       </Stack>
 
-      <GridContainer>
-        <Grid item xs={12} sm={detailId !== 'create' ? 5 : 12}>
-          <FormMusic status={detailId !== 'create' ? 'detail' : 'create'} data={{}} id={detailId} />
+      <GridContainer style={detailId !== 'create' ? {} : { width: '70%', margin: '0 auto' }}>
+        <Grid item xs={12} sm={detailId !== 'create' ? 5 : 12} style={detailId !== 'create' ? {} : { padding: 0 }}>
+          <FormEffect status={detailId !== 'create' ? 'detail' : 'create'} data={{}} id={detailId} />
         </Grid>
         {detailId !== 'create' && (
           <Grid item xs={12} sm={7}>

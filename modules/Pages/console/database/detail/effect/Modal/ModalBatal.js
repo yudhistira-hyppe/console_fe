@@ -10,14 +10,14 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 450,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
   borderRadius: '4px',
 };
 
-export default function ModalDelete({ showModal, onClose, onConfirm }) {
+export default function ModalBatal({ showModal, onClose, onConfirm }) {
   return (
     <div>
       <Modal
@@ -27,9 +27,9 @@ export default function ModalDelete({ showModal, onClose, onConfirm }) {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack direction="column" alignItems="center" gap="8px">
-            <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>Hapus Efek</Typography>
+            <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>Batal</Typography>
             <Typography style={{ textAlign: 'center', fontFamily: 'Lato' }}>
-              Apakah kamu yakin ingin menghapus efek ini?
+              Kamu akan membatalkan penambahan stiker. Semua data yang sudah dimasukan tidak akan tersimpan
             </Typography>
           </Stack>
 

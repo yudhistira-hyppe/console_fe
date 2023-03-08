@@ -116,8 +116,6 @@ const DatabaseTabEffectComponent = () => {
     });
   };
 
-  console.log(filterList);
-
   return (
     <>
       <Head>
@@ -135,7 +133,7 @@ const DatabaseTabEffectComponent = () => {
             handleDeleteFilter={handleSearchChange}
             order={filter.order}
             loading={false}
-            listMusic={{ data: [{}, {}] }}
+            listEffect={{ data: [{}, {}] }}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
           />

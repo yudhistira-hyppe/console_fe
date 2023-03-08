@@ -21,7 +21,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
-// import ModalConfirmation from '../Modal/ModalConfirmation';
+import ModalConfirmation from '../Modal/ModalConfirmation';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -50,7 +50,7 @@ const TableSection = ({
   handleDeleteFilter,
   order,
   loading,
-  listMusic,
+  listEffect,
 }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
@@ -61,8 +61,6 @@ const TableSection = ({
     status: 'active',
   });
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
-
-  console.log(listMusic);
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -86,7 +84,7 @@ const TableSection = ({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = listMusic?.data?.map((n) => n._id);
+      const newSelected = listEffect?.data?.map((n, key) => key);
       setSelected(newSelected);
       return;
     }
@@ -181,7 +179,7 @@ const TableSection = ({
 
   return (
     <Stack flex={1}>
-      {/* <ModalConfirmation
+      <ModalConfirmation
         showModal={modal.visible}
         onClose={() => {
           setModal({ ...modal, visible: !modal.visible, status: 'active' });
@@ -196,7 +194,7 @@ const TableSection = ({
           setSingleSelect('');
           setSelected([]);
         }}
-      /> */}
+      />
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography style={{ fontWeight: 'bold' }}>Daftar Efek</Typography>
@@ -211,9 +209,9 @@ const TableSection = ({
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
           ) : (
             <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listMusic?.totalRow} hasil (
-              {listMusic?.totalRow >= 1 ? filter.page * 10 + 1 : listMusic?.pageNumber_ * 10} -{' '}
-              {listMusic?.pageRow * (filter.page + 1)} dari {listMusic?.totalRow})
+              Menampilkan {listEffect?.totalRow} hasil (
+              {listEffect?.totalRow >= 1 ? filter.page * 10 + 1 : listEffect?.pageNumber_ * 10} -{' '}
+              {listEffect?.pageRow * (filter.page + 1)} dari {listEffect?.totalRow})
             </Typography>
           )}
         </Box>
@@ -227,9 +225,11 @@ const TableSection = ({
               onChange={handleOrder}
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
-              style={{ backgroundColor: 'white' }}>
+              style={{ backgroundColor: 'white' }}
+              color="secondary">
               <MenuItem value={'desc'}>Terbaru</MenuItem>
               <MenuItem value={'asc'}>Terlama</MenuItem>
+              <MenuItem value={'popular'}>Terpopuler</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -260,7 +260,7 @@ const TableSection = ({
           <EnhancedTableHead
             numSelected={selected.length}
             onSelectAllClick={handleSelectAllClick}
-            rowCount={listMusic?.data?.length}
+            rowCount={listEffect?.data?.length}
           />
 
           <TableBody>
@@ -271,8 +271,8 @@ const TableSection = ({
                   <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                 </Stack>
               </TableCell>
-            ) : listMusic?.data?.length >= 1 ? (
-              listMusic?.data?.map((item, i) => (
+            ) : listEffect?.data?.length >= 1 ? (
+              listEffect?.data?.map((item, i) => (
                 <TableRow
                   key={i}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -281,11 +281,11 @@ const TableSection = ({
                   <TableCell style={{ maxWidth: 80, width: 80 }}>
                     <Checkbox
                       color="secondary"
-                      checked={selected.includes(item?._id)}
+                      checked={selected.includes(i)}
                       inputProps={{
                         'aria-labelledby': 'asd',
                       }}
-                      onClick={(event) => handleClick(event, item?._id)}
+                      onClick={(event) => handleClick(event, i)}
                       disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces}
                     />
                   </TableCell>
@@ -341,10 +341,10 @@ const TableSection = ({
         </Table>
       </TableContainer>
 
-      {listMusic?.totalRow >= 1 && (
+      {listEffect?.totalRow >= 1 && (
         <Stack alignItems="center" my={3} mr={3}>
           <Pagination
-            count={(Number(listMusic?.totalRow) / Number(listMusic?.pageRow)).toFixed(0) || 1}
+            count={(Number(listEffect?.totalRow) / Number(listEffect?.pageRow)).toFixed(0) || 1}
             page={Number(filter.page) + 1}
             size="small"
             onChange={handlePageChange}
