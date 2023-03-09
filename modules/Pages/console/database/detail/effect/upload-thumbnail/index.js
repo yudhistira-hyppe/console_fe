@@ -28,7 +28,6 @@ const UploadThumbnail = (props) => {
   const classes = useStyles();
 
   const handleUploadImage = (e) => {
-    console.log('upload thumbnail');
     if (e.target.files[0]?.type !== 'image/png') {
       alert('salah format woyy 🤬');
       return;
@@ -37,7 +36,7 @@ const UploadThumbnail = (props) => {
       const blob = new Blob(e.target.files, { type: 'image/png' });
       const url = URL.createObjectURL(blob);
       setUrlImage(url);
-      setInputValue({ ...inputValue, apsaraThumnail: e.target.files[0] });
+      setInputValue({ ...inputValue, apsaraThumbnail: e.target.files[0] });
     }
   };
 

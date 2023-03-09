@@ -28,7 +28,6 @@ const UploadEffect = (props) => {
   const classes = useStyles();
 
   const handleUploadEffect = (e) => {
-    console.log('upload effect');
     if (e.target.files[0]?.type !== 'image/png') {
       alert('salah format woyy 🤬');
       return;
@@ -37,7 +36,7 @@ const UploadEffect = (props) => {
       const blob = new Blob(e.target.files, { type: 'image/png' });
       const url = URL.createObjectURL(blob);
       setUrlEffect(url);
-      setInputValue({ ...inputValue, apsaraThumnail: e.target.files[0] });
+      setInputValue({ ...inputValue, apsaraEffect: e.target.files[0] });
     }
   };
 

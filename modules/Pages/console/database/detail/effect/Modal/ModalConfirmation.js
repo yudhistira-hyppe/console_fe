@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
-import { useUpdateStatusMusicMutation } from 'api/console/database/media';
 import router from 'next/router';
 
 const style = {
@@ -19,18 +18,13 @@ const style = {
 };
 
 export default function ModalConfirmation({ showModal, status, id, onClose }) {
-  const [updateStatus] = useUpdateStatusMusicMutation();
-
   const handleStatus = () => {
     const data = {
       _id: [id],
       status: status === 'active' ? false : true,
     };
 
-    updateStatus(data).then(() => {
-      router.replace('/database/music');
-      onClose();
-    });
+    onClose();
   };
 
   return (

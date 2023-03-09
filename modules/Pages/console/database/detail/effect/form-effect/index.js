@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
+import { Button, Card, Divider, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
 import { TextField, Typography } from '@material-ui/core';
 import ModalDelete from '../Modal/ModalDelete';
 import ModalSave from '../Modal/ModalSave';
@@ -58,6 +58,8 @@ const FormEffect = (props) => {
     setModal({ ...modal, save: !modal.save });
   };
 
+  console.log(inputValue);
+
   return (
     <>
       <ModalDelete
@@ -89,13 +91,13 @@ const FormEffect = (props) => {
         </Stack>
       )}
 
-      <Card style={{ padding: 34 }}>
-        <Stack direction={'row'} gap="24px">
+      <Card style={{ padding: 20 }}>
+        <Stack direction={'row-reverse'} gap="24px">
           <Stack direction="column" width="100%" maxWidth={170} gap="12px">
             <UploadThumbnail thumbnail={''} status={status} setInputValue={setInputValue} inputValue={inputValue} />
           </Stack>
           <Stack direction={'column'} width="100%" gap="24px">
-            <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
+            <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '65%'}>
               <Typography style={{ fontWeight: 'bold' }}>
                 Nama Efek <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
@@ -107,7 +109,7 @@ const FormEffect = (props) => {
                 onChange={handleChangeInput}
               />
             </Stack>
-            <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
+            <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '65%'}>
               <Typography style={{ fontWeight: 'bold' }}>
                 Kategori <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
@@ -125,7 +127,7 @@ const FormEffect = (props) => {
                 <MenuItem value="khusus">Efek Khusus</MenuItem>
               </Select>
             </Stack>
-            <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
+            <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '65%'}>
               <Typography style={{ fontWeight: 'bold' }}>
                 Status <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
@@ -180,19 +182,51 @@ const FormEffect = (props) => {
                   Batal
                 </Button>
               )}
-              {status !== 'create' && (
-                <Typography style={{ color: '#3f3f3f', width: '100%' }}>
-                  Hapus Efek Ini?{' '}
-                  <span
-                    style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
-                    onClick={() => setModal({ ...modal, delete: !modal.delete })}>
-                    Klik disini
-                  </span>
-                </Typography>
-              )}
             </Stack>
           </Stack>
         </Stack>
+        {status !== 'create' && (
+          <>
+            <Divider style={{ margin: '24px 0' }} />
+            <Stack direction="column" columnGap="32px" rowGap="12px" width="100%">
+              <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
+                <Typography style={{ fontWeight: 'bold' }}>
+                  Status <span style={{ color: '#E61D37' }}>*</span>
+                </Typography>
+                <RadioGroup
+                  row
+                  value={data?.isActive ? 'active' : 'disactive'}
+                  style={{ gap: 40 }}
+                  onChange={() =>
+                    setModal({
+                      ...modal,
+                      confirmation: !modal.confirmation,
+                      status: data?.isActive ? 'active' : 'disactive',
+                    })
+                  }>
+                  <FormControlLabel
+                    value="active"
+                    control={<Radio color="secondary" />}
+                    label={<Typography>Aktif</Typography>}
+                  />
+                  <FormControlLabel
+                    value="disactive"
+                    control={<Radio color="secondary" />}
+                    label={<Typography>Tidak Aktif</Typography>}
+                  />
+                </RadioGroup>
+              </Stack>
+              <Typography style={{ color: '#3f3f3f' }}>
+                Hapus Efek Ini?{' '}
+                <span
+                  style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
+                  onClick={() => setModal({ ...modal, delete: !modal.delete })}>
+                  Klik disini
+                </span>
+              </Typography>
+            </Stack>
+          </>
+        )}
       </Card>
     </>
   );
