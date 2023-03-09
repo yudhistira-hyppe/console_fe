@@ -15,6 +15,7 @@ import moment from 'moment';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { useGetListSessionBoostQuery } from 'api/console/boost';
+import { useGetAreasQuery } from 'api/user/insight';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -53,6 +54,7 @@ const SearchSection = ({ filter, handleChange }) => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+  const { data: areas, isLoading: loadingArea } = useGetAreasQuery();
 
   return (
     <>
@@ -282,24 +284,84 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Rentang Umur</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <RadioGroup onChange={(e) => handleChange('age', e.target.value)}>
+              <FormControlLabel
+                label={'< 14'}
+                value="< 14"
+                control={<Radio defaultChecked={false} checked={filter.age === '< 14'} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'15 - 28'}
+                value="15 - 28"
+                control={<Radio defaultChecked={false} checked={filter.age === '15 - 28'} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'29 - 43'}
+                value="29 - 43"
+                control={<Radio defaultChecked={false} checked={filter.age === '29 - 43'} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'> 44'}
+                value="> 44"
+                control={<Radio defaultChecked={false} checked={filter.age === '> 44'} color="secondary" />}
+              />
+            </RadioGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Area</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            {loadingArea ? (
+              <Typography>Loading data...</Typography>
+            ) : (
+              <FormGroup onChange={(e) => handleChange('area', e.target.value)}>
+                {areas?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.stateName || '-'}
+                    value={JSON.stringify({ _id: item?._id, name: item?.stateName })}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        checked={filter.area?.map((item) => item?.name).includes(item?.stateName)}
+                      />
+                    }
+                  />
+                ))}
+              </FormGroup>
+            )}
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Jenis Kelamin</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
+            <FormGroup onChange={(e) => handleChange('gender', e.target.value)}>
               <FormControlLabel
                 label={'Laki-laki'}
                 value="Laki-laki"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Laki-laki')} />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.gender.includes('Laki-laki')} />}
               />
               <FormControlLabel
                 label={'Perempuan'}
                 value="Perempuan"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Perempuan')} />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.gender.includes('Perempuan')} />}
               />
               <FormControlLabel
                 label={'Lainnya'}
                 value="Lainnya"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Lainnya')} />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.gender.includes('Lainnya')} />}
               />
             </FormGroup>
           </AccordionDetails>
@@ -311,26 +373,32 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Prioritas</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
+            <FormGroup onChange={(e) => handleChange('priority', e.target.value)}>
               <FormControlLabel
                 label={'Tertinggi'}
                 value="Tertinggi"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Tertinggi')} />}
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.priority.includes('Tertinggi')} />
+                }
               />
               <FormControlLabel
                 label={'Menengah'}
                 value="Menengah"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Menengah')} />}
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.priority.includes('Menengah')} />
+                }
               />
               <FormControlLabel
                 label={'Rendah'}
                 value="Rendah"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Rendah')} />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.priority.includes('Rendah')} />}
               />
               <FormControlLabel
                 label={'Terendah'}
                 value="Terendah"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Terendah')} />}
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.priority.includes('Terendah')} />
+                }
               />
             </FormGroup>
           </AccordionDetails>

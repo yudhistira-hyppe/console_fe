@@ -147,7 +147,7 @@ const AdsDetailComponent = () => {
 
             <Grid item sm={12}>
               <Typography style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 24 }}>Table List Penonton</Typography>
-              <TableListPenonton />
+              <TableListPenonton idAds={router.query._id} />
             </Grid>
           </GridContainer>
         </PageContainer>

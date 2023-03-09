@@ -49,6 +49,13 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
+    getViewerAds: build.query({
+      query: (data) => ({
+        url: '/userads/console/adscenter/listpenonton',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     approveAds: build.mutation({
       query: (data) => ({
         url: '/ads/approve',
@@ -67,5 +74,6 @@ export const {
   useGetDetailAdsQuery,
   useGetLogDetailAdsQuery,
   useGetVideoFromApsaraQuery,
+  useGetViewerAdsQuery,
   useApproveAdsMutation,
 } = adsApi;
