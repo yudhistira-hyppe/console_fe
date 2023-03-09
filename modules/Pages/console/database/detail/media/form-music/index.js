@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, MenuItem, Select, Stack } from '@mui/material';
+import { Button, Card, Divider, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
 import { TextField, Typography } from '@material-ui/core';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -118,6 +118,7 @@ const FormMusic = (props) => {
     const uploadFileImage = new File([inputValue.apsaraThumnail], inputValue.apsaraThumnail?.name, { type: 'image/png' });
 
     setLoading(true);
+    toast.loading('Loading update...', { id: 'update' });
     if (bodyData.apsaraThumnail !== data?.apsaraThumnail) {
       handleApsaraImage().then((res) => {
         onImageUpload(
@@ -127,10 +128,10 @@ const FormMusic = (props) => {
             bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
             updateMusic(bodyData).then((res) => {
               if (res?.error) {
-                toast.error(res?.error?.data?.message);
+                toast.error(res?.error?.data?.message, { id: 'update' });
               } else if (res?.data) {
                 router.push('/database/music');
-                toast.success('Berhasil memperbarui musik');
+                toast.success('Berhasil memperbarui musik', { id: 'update' });
               }
               setLoading(false);
             });
@@ -171,8 +172,8 @@ const FormMusic = (props) => {
         id={id}
       />
 
-      <Card style={{ padding: '20px 35px 20px 20px', height: '100%' }}>
-        <Stack direction={status !== 'create' ? 'row' : 'column'} gap="24px">
+      <Card style={{ padding: 20, height: '100%' }}>
+        <Stack direction={status !== 'create' ? 'row-reverse' : 'column'} gap="24px">
           <Stack direction="column" width="100%" maxWidth={status !== 'create' ? 170 : '100%'} gap="12px">
             <UploadMedia
               thumbnail={data?.apsaraThumnailUrl}
@@ -314,58 +315,85 @@ const FormMusic = (props) => {
                   ))}
               </Select>
             </Stack>
+
             <Stack direction="row" flexWrap="wrap" columnGap="32px" rowGap="12px" width="100%">
               <LoadingButton
                 loading={loading}
                 variant="contained"
                 color="secondary"
-                style={{ width: 'fit-content', fontWeight: 'bold' }}
+                style={{ width: 150, fontWeight: 'bold' }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
                 disabled={
-                  !inputValue.musicTitle ||
-                  !inputValue.artistName ||
-                  !inputValue.genre ||
-                  !inputValue.theme ||
-                  !inputValue.mood ||
-                  !inputValue.apsaraMusic ||
-                  !inputValue.apsaraThumnail ||
+                  (status !== 'create'
+                    ? inputValue.musicTitle === data?.musicTitle &&
+                      inputValue.artistName === data?.artistName &&
+                      inputValue.genre === data?.genre &&
+                      inputValue.theme === data?.theme &&
+                      inputValue.mood === data?.mood &&
+                      inputValue.apsaraMusic === data?.apsaraMusic &&
+                      inputValue.apsaraThumnail === data?.apsaraThumnail &&
+                      inputValue.albumName === data?.albumName &&
+                      inputValue.releaseDate.format('DD/MM/YYYY') === moment(data?.releaseDate).format('DD/MM/YYYY')
+                    : !inputValue.musicTitle ||
+                      !inputValue.artistName ||
+                      !inputValue.genre ||
+                      !inputValue.theme ||
+                      !inputValue.mood ||
+                      !inputValue.apsaraMusic ||
+                      !inputValue.apsaraThumnail) ||
                   !access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
                 }>
-                Simpan & Post
+                Simpan
               </LoadingButton>
-              {status !== 'create' && (
-                <>
-                  <Button
-                    variant="text"
-                    color="secondary"
-                    style={{ width: 'fit-content', fontWeight: 'bold' }}
-                    onClick={() =>
-                      setModal({
-                        ...modal,
-                        confirmation: !modal.confirmation,
-                        status: data?.isActive ? 'active' : 'disactive',
-                      })
-                    }
-                    disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces}>
-                    {data?.isActive ? 'Nonaktifkan' : 'Aktifkan'}
-                  </Button>
-                  <Typography style={{ color: '#3f3f3f' }}>
-                    Hapus Musik Ini?{' '}
-                    <span
-                      style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
-                      onClick={() =>
-                        access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
-                          ? setModal({ ...modal, delete: !modal.delete })
-                          : alert('kamu tidak punya akses!')
-                      }>
-                      Klik disini
-                    </span>
-                  </Typography>
-                </>
-              )}
             </Stack>
           </Stack>
         </Stack>
+        {status !== 'create' && (
+          <>
+            <Divider style={{ margin: '24px 0' }} />
+            <Stack direction="column" columnGap="32px" rowGap="12px" width="100%">
+              <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '48%'}>
+                <Typography style={{ fontWeight: 'bold' }}>
+                  Status <span style={{ color: '#E61D37' }}>*</span>
+                </Typography>
+                <RadioGroup
+                  row
+                  value={data?.isActive ? 'active' : 'disactive'}
+                  style={{ gap: 40 }}
+                  onChange={() =>
+                    setModal({
+                      ...modal,
+                      confirmation: !modal.confirmation,
+                      status: data?.isActive ? 'active' : 'disactive',
+                    })
+                  }>
+                  <FormControlLabel
+                    value="active"
+                    control={<Radio color="secondary" />}
+                    label={<Typography>Aktif</Typography>}
+                  />
+                  <FormControlLabel
+                    value="disactive"
+                    control={<Radio color="secondary" />}
+                    label={<Typography>Tidak Aktif</Typography>}
+                  />
+                </RadioGroup>
+              </Stack>
+              <Typography style={{ color: '#3f3f3f' }}>
+                Hapus Musik Ini?{' '}
+                <span
+                  style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
+                  onClick={() =>
+                    access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
+                      ? setModal({ ...modal, delete: !modal.delete })
+                      : alert('kamu tidak punya akses!')
+                  }>
+                  Klik disini
+                </span>
+              </Typography>
+            </Stack>
+          </>
+        )}
       </Card>
     </>
   );

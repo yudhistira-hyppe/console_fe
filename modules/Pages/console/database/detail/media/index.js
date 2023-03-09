@@ -46,8 +46,8 @@ const DatabaseDetailMediaComponent = (props) => {
   const { detailId } = props;
 
   const breadcrumbs = [
-    { label: 'Database Media', link: '/database/music' },
-    { label: detailId === 'create' ? 'Create Music' : 'Rincian Music', isActive: true },
+    { label: 'Database Musik', link: '/database/music' },
+    { label: detailId === 'create' ? 'Tambah Musik' : 'Rincian Musik', isActive: true },
   ];
 
   const { data: detailMusic, isFetching: loadingDetail } = detailId !== 'create' ? useGetDetailMusicQuery(detailId) : {};

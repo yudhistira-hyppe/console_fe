@@ -63,7 +63,7 @@ const UploadMedia = (props) => {
 
   return (
     <>
-      <label htmlFor={status === 'create' && 'upload_image'} style={{ width: 'fit-content' }}>
+      <label htmlFor={status === 'create' && 'upload_image'} style={{ width: '100%' }}>
         <Box className={classes.uploadBox} style={{ width: status !== 'create' ? '100%' : 170 }}>
           {image ? (
             <Avatar src={urlImage} alt="Thumbnail Music" variant="square" style={{ width: '100%', height: 'auto' }} />
