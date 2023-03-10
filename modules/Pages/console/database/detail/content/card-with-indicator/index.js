@@ -48,7 +48,9 @@ const CardWithIndicator = (props) => {
         ) : (
           <Stack direction="column" alignItems="center" justifyContent="center" gap="20px" textAlign="center" height={210}>
             <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
-            <Typography style={{ color: '#666666' }}>Konten ini belum memiliki data {title}</Typography>
+            <Typography style={{ color: '#666666', fontSize: 14, fontWeight: 'bold' }}>
+              Konten ini belum memiliki data {title}
+            </Typography>
           </Stack>
         )}
       </Stack>
