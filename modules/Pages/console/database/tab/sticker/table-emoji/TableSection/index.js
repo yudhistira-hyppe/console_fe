@@ -200,7 +200,7 @@ const TableSection = ({
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography style={{ fontWeight: 'bold' }}>Daftar Emoji</Typography>
         <Stack direction="row" spacing={2}>
-          <Button color="secondary" variant="outlined">
+          <Button color="secondary" variant="outlined" onClick={() => router.push('/database/sticker/kelola-emoji')}>
             Kelola Emoji
           </Button>
           <Button color="secondary" variant="contained">

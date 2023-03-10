@@ -3,6 +3,7 @@ import DatabaseDetailAccountComponent from './account';
 import DatabaseDetailContentComponent from './content';
 import DatabaseDetailEffectComponent from './effect';
 import DatabaseDetailMediaComponent from './media';
+import DatabaseDetailStickerComponent from './sticker';
 
 const DatabaseDetailComponent = (props) => {
   const { tab, detailId } = props;
@@ -14,8 +15,10 @@ const DatabaseDetailComponent = (props) => {
       return <DatabaseDetailContentComponent detailId={detailId} />;
     case 'music':
       return <DatabaseDetailMediaComponent detailId={detailId} />;
-    default:
+    case 'effect':
       return <DatabaseDetailEffectComponent detailId={detailId} />;
+    default:
+      return <DatabaseDetailStickerComponent detailId={detailId} />;
   }
 };
 
