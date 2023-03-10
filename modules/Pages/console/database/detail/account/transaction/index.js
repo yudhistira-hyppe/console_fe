@@ -15,115 +15,46 @@ import {
 } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { useLazyAllTransactionQuery } from 'api/console/transaction';
+import { useAllTransactionQuery } from 'api/console/transaction';
 import moment from 'moment';
 import { formatCurrency, formatTransactionStatus } from 'helpers/stringHelper';
 import useStyles from './index.style';
+import { LoadingButton } from '@mui/lab';
+import { useGetAccountBalanceQuery } from 'api/user/user';
 
 const TransactionComponent = (props) => {
   const classes = useStyles();
   const { email } = props;
-  const [balance, setBalance] = useState({});
-  const [transactions, setTransactions] = useState([]);
   const [payload, setPayload] = useState({
     email: email,
     sell: true,
     buy: true,
     withdrawal: true,
     rewards: true,
-    skip: 0,
+    boost: true,
+    page: 0,
     limit: 10,
   });
+  const [transaction, setTransaction] = useState([]);
 
-  const [fetchTransactions] = useLazyAllTransactionQuery();
-  const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
+  const { data: listTransaction, isFetching: loadingMore, isLoading: loadingTransaction } = useAllTransactionQuery(payload);
+  const { data: accountBalance, isFetching: loadingBalance } = useGetAccountBalanceQuery({ email: email });
 
   useEffect(() => {
-    getTransactions();
-  }, []);
-
-  const getTransactions = () => {
-    setIsFetching(true);
-    fetchTransactions(payload)
-      .unwrap()
-      .then((res) => {
-        setPayload({ ...payload, skip: payload.skip + 10 });
-        setBalance(res?.totalsaldo[0]);
-        const formattedTransactions = res?.fData?.map((filteredData) => {
-          return {
-            ...formattedTransaction(filteredData),
-          };
-        });
-        setTransactions([...transactions, ...formattedTransactions]);
-        setIsFetching(false);
-        setShowLoadMoreBtn(res.fData.length === payload.limit);
-      })
-      .catch(() => {
-        setIsFetching(false);
+    if (!loadingMore) {
+      setTransaction((prevVal) => {
+        return [...prevVal, ...listTransaction?.data];
       });
-  };
-
-  const formattedTransaction = (transaction) => {
-    let formatted = {
-      id: transaction._id,
-      date: moment(transaction.timestamp).format('DD/MM/YYYY - HH:mm'),
-    };
-
-    switch (transaction.type.toLowerCase()) {
-      case 'rewards':
-        formatted = {
-          ...formatted,
-          desc: transaction.description,
-          status: formatTransactionStatus('success'),
-        };
-        if (transaction.debet) {
-          formatted = {
-            ...formatted,
-            type: 'Pendapatan',
-            amount: transaction.debet || 0,
-          };
-        }
-        if (transaction.kredit) {
-          formatted = {
-            ...formatted,
-            type: 'Pengeluaran',
-            amount: transaction.kredit || 0,
-          };
-        }
-        break;
-      case 'buy':
-        formatted = {
-          ...formatted,
-          type: 'Pengeluaran',
-          amount: transaction.totalamount || 0,
-          desc: 'Pembelian Konten',
-          status: formatTransactionStatus(transaction.status),
-        };
-        break;
-      case 'sell':
-        formatted = {
-          ...formatted,
-          type: 'Pendapatan',
-          amount: transaction.amount || 0,
-          desc: 'Penjualan Konten',
-          status: formatTransactionStatus(transaction.status),
-        };
-        break;
-      case 'withdrawal':
-        formatted = {
-          ...formatted,
-          type: 'Penarikan',
-          amount: transaction.amount || 0,
-          desc: 'Penarikan',
-          status: formatTransactionStatus('success'),
-        };
-        break;
-      default:
-        break;
     }
+  }, [listTransaction]);
 
-    return formatted;
+  const handleLoadMore = () => {
+    setPayload((prevVal) => {
+      return {
+        ...prevVal,
+        page: prevVal.page + 1,
+      };
+    });
   };
 
   return (
@@ -132,7 +63,9 @@ const TransactionComponent = (props) => {
         <Stack direction="row" justifyContent="space-between" padding={3}>
           <Stack direction="row" gap={3}>
             <Typography variant="h4">Saldo</Typography>
-            <Typography variant="body2">Rp {formatCurrency(balance?.totalsaldo || 0)}</Typography>
+            <Typography variant="body2">
+              Rp {!loadingBalance ? formatCurrency(accountBalance?.data[0]?.totalsaldo || 0) : '-'}
+            </Typography>
           </Stack>
         </Stack>
         <TableContainer component={Paper}>
@@ -145,21 +78,57 @@ const TransactionComponent = (props) => {
                     <TableCell>Jenis</TableCell>
                     <TableCell>Nominal</TableCell>
                     <TableCell>Keterangan</TableCell>
-                    <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {transactions.length > 0 &&
-                    transactions?.map((transaction) => (
-                      <TableRow className={classes.tableRow} key={transaction.id}>
-                        <TableCell>{transaction.date}</TableCell>
-                        <TableCell>{transaction.type}</TableCell>
-                        <TableCell>Rp {formatCurrency(transaction.amount)}</TableCell>
-                        <TableCell>{transaction.desc}</TableCell>
-                        <TableCell>{transaction.status}</TableCell>
+                  {loadingTransaction ? (
+                    <TableRow className={classes.tableRowCustomPadding}>
+                      <TableCell colSpan="100%" align="center">
+                        <CircularProgress color="secondary" />
+                      </TableCell>
+                    </TableRow>
+                  ) : transaction?.length >= 1 ? (
+                    transaction?.map((item, key) => (
+                      <TableRow className={classes.tableRow} key={key}>
+                        <TableCell>
+                          <Typography style={{ fontSize: 14 }}>
+                            {moment(item?.timestamp).utc().format('DD/MM/YYYY HH:mm')}{' '}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography style={{ fontSize: 14 }}>
+                            {item?.type === 'Sell' && 'Pendapatan'}
+                            {item?.type === 'Buy' && 'Pengeluaran'}
+                            {item?.type === 'Withdraws' && 'Penarikan'}
+                            {item?.type === 'Rewards' && 'Pendapatan'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography style={{ fontSize: 14 }}>Rp {formatCurrency(item?.totalamount || 0)}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography style={{ fontSize: 14 }}>
+                            {item?.jenis === 'CONTENT'
+                              ? item?.type === 'Buy'
+                                ? 'Pembelian Konten'
+                                : 'Penjualan Konten'
+                              : ''}
+                            {item?.jenis === 'Withdraws' && 'Penarikan'}
+                            {item?.jenis === 'VOUCHER'
+                              ? item?.type === 'Buy'
+                                ? 'Pembelian Voucher'
+                                : 'Penjualan Voucher'
+                              : ''}
+                            {item?.jenis === 'BOOST_CONTENT'
+                              ? item?.type === 'Buy'
+                                ? 'Pembelian Boost'
+                                : 'Penjualan Boost'
+                              : ''}
+                          </Typography>
+                        </TableCell>
                       </TableRow>
-                    ))}
-                  {!isFetching && transactions.length == 0 && (
+                    ))
+                  ) : (
                     <TableRow>
                       <TableCell colSpan="100%" align="center">
                         <Stack alignItems="center" justifyContent="center" gap="16px" height={270}>
@@ -169,19 +138,12 @@ const TransactionComponent = (props) => {
                       </TableCell>
                     </TableRow>
                   )}
-                  {!isFetching && showLoadMoreBtn && (
+                  {!loadingTransaction && transaction?.length < listTransaction?.totalsearch && (
                     <TableRow className={classes.tableRowCustomPadding}>
                       <TableCell colSpan="100%" align="center">
-                        <Button variant="contained" color="secondary" onClick={() => getTransactions()}>
+                        <LoadingButton loading={loadingMore} variant="contained" color="secondary" onClick={handleLoadMore}>
                           Muat lebih banyak
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                  {isFetching && (
-                    <TableRow className={classes.tableRowCustomPadding}>
-                      <TableCell colSpan="100%" align="center">
-                        <CircularProgress color="secondary" />
+                        </LoadingButton>
                       </TableCell>
                     </TableRow>
                   )}
