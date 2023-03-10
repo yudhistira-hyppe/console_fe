@@ -4,40 +4,40 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Typography } from '@material-ui/core';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Card, CircularProgress, Divider, Stack, Tab, Button, Avatar } from '@mui/material';
+import { Box, Card, CircularProgress, Divider, Stack, Tab, Button, Avatar, Pagination, IconButton } from '@mui/material';
 import { useAuth } from 'authentication';
-import { useUserContentsGroupQuery } from 'api/user/content/management';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { formatPostType } from 'helpers/stringHelper';
 import useStyles from './index.style';
 import CmtMediaObject from '@coremat/CmtMediaObject';
 import CmtImage from '@coremat/CmtImage';
 import { fakeDb } from 'modules/FakeDb/fake-db';
+import { useGetListContentQuery } from 'api/console/database/content';
+import { NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 const postsConfig = [
   { key: 'all', label: 'ALL' },
-  { key: 'vid', label: 'HYPPEVID' },
-  { key: 'pict', label: 'HYPPEPICT' },
-  { key: 'story', label: 'HYPPESTORY' },
-  { key: 'diary', label: 'HYPPEDIARY' },
+  { key: 'HyppeVid', label: 'HYPPEVID' },
+  { key: 'HyppePic', label: 'HYPPEPICT' },
+  { key: 'HyppeStory', label: 'HYPPESTORY' },
+  { key: 'HyppeDiary', label: 'HYPPEDIARY' },
 ];
 
 const UserPost = (props) => {
-  const { email } = props;
+  const { username } = props;
   const classes = useStyles();
-  const { authUser } = useAuth();
   const [tab, setTab] = useState('all');
   const [payload, setPayload] = useState({
-    skip: 0,
+    page: 0,
     limit: 10,
-    postType: '',
-    email: email,
+    descending: true,
+    username: username,
   });
   const [posts, setPosts] = useState({
     tab: tab,
     data: [],
   });
-  const { data: contentPost, isFetching: loadingContent } = useUserContentsGroupQuery(payload);
+  const { data: contentPost, isFetching: loadingContent } = useGetListContentQuery(payload);
 
   useEffect(() => {
     setPosts(() => {
@@ -50,10 +50,12 @@ const UserPost = (props) => {
 
   const onTabChange = (_, selectedTab) => {
     setTab(selectedTab);
+    console.log(selectedTab);
     setPayload((prev) => {
       return {
         ...prev,
-        postType: selectedTab === 'all' ? '' : selectedTab,
+        postType: selectedTab === 'all' ? undefined : [selectedTab],
+        page: 0,
       };
     });
   };
@@ -93,7 +95,7 @@ const UserPost = (props) => {
             ))}
           </TabList>
         </Box>
-        <PerfectScrollbar style={{ maxHeight: 544, padding: 20 }}>
+        <PerfectScrollbar style={{ maxHeight: 544, minHeight: 544, padding: 20 }}>
           <Stack direction="column" width="100%" alignItems="center" gap="12px">
             {loadingContent ? (
               <Stack height={504} alignItems="center" justifyContent="center" spacing={2}>
@@ -150,6 +152,34 @@ const UserPost = (props) => {
             )}
           </Stack>
         </PerfectScrollbar>
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} m={2}>
+          <IconButton
+            color="secondary"
+            onClick={() =>
+              setPayload((prevVal) => {
+                return {
+                  ...prevVal,
+                  page: prevVal.page - 1,
+                };
+              })
+            }
+            disabled={payload.page < 1 || loadingContent}>
+            <NavigateBefore />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() =>
+              setPayload((prevVal) => {
+                return {
+                  ...prevVal,
+                  page: prevVal.page + 1,
+                };
+              })
+            }
+            disabled={posts?.data?.length < payload.limit || loadingContent}>
+            <NavigateNext />
+          </IconButton>
+        </Stack>
       </TabContext>
     </Card>
   );

@@ -70,7 +70,7 @@ const TransactionComponent = (props) => {
         </Stack>
         <TableContainer component={Paper}>
           <PerfectScrollbar>
-            <Stack maxHeight={370}>
+            <Stack maxHeight={370} minHeight={370}>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow className={classes.tableRow}>
