@@ -127,24 +127,6 @@ const FormEffect = (props) => {
                 <MenuItem value="khusus">Efek Khusus</MenuItem>
               </Select>
             </Stack>
-            <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '65%'}>
-              <Typography style={{ fontWeight: 'bold' }}>
-                Status <span style={{ color: '#E61D37' }}>*</span>
-              </Typography>
-              <Select
-                name="status"
-                value={inputValue.status}
-                placeholder="Pilih Status"
-                onChange={handleChangeInput}
-                color="secondary"
-                displayEmpty>
-                <MenuItem value="" disabled>
-                  Pilih Status
-                </MenuItem>
-                <MenuItem value="aktif">Aktif</MenuItem>
-                <MenuItem value="nonaktif">Tidak Aktif</MenuItem>
-              </Select>
-            </Stack>
             <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
               <LoadingButton
                 loading={loading}
