@@ -41,6 +41,7 @@ export const adsApi = createApi({
         url: `/ads/console/adscenter/historydetail/${id}`,
         method: 'GET',
       }),
+      providesTags: ['detail'],
     }),
     getVideoFromApsara: build.query({
       query: (data) => ({
@@ -55,6 +56,7 @@ export const adsApi = createApi({
         method: 'POST',
         body: data,
       }),
+      providesTags: ['ads'],
     }),
     approveAds: build.mutation({
       query: (data) => ({
