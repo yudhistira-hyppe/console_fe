@@ -214,9 +214,10 @@ const TableSection = ({
                             setModal(!isModal);
                           }}
                           style={{ cursor: 'pointer' }}
+                          alt={item?.penerima}
                         />
                       ) : (
-                        <Avatar />
+                        <Avatar src={new Error()} alt="X" />
                       )}
                       <Typography
                         style={{

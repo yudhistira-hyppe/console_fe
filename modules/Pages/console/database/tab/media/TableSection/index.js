@@ -119,7 +119,7 @@ const TableSection = ({
             <Checkbox
               color="secondary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
+              checked={numSelected > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
               inputProps={{
                 'aria-label': 'select all desserts',
@@ -196,7 +196,7 @@ const TableSection = ({
         <Button
           color="secondary"
           variant="contained"
-          onClick={() => router.push('/database/media/create')}
+          onClick={() => router.push('/database/music/create')}
           disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces}>
           Tambah Musik
         </Button>
@@ -288,7 +288,7 @@ const TableSection = ({
                   </TableCell>
                   <TableCell
                     align="left"
-                    onClick={() => router.push(`/database/media/${item?._id}`)}
+                    onClick={() => router.push(`/database/music/${item?._id}`)}
                     className={classes.hoverCell}>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={item?.apsaraThumnailUrl} variant="rounded" />
@@ -355,7 +355,10 @@ const TableSection = ({
             count={(Number(listMusic?.totalRow) / Number(listMusic?.pageRow)).toFixed(0) || 1}
             page={Number(filter.page) + 1}
             size="small"
-            onChange={handlePageChange}
+            onChange={(e, value) => {
+              handlePageChange(e, value);
+              setSelected([]);
+            }}
           />
         </Stack>
       )}

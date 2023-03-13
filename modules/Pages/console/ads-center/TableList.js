@@ -35,6 +35,10 @@ const TableList = () => {
             return 'APPROVE';
           } else if (item === 'Tinjau') {
             return 'DRAFT';
+          } else if (item === 'Habis') {
+            return 'FINISH';
+          } else if (item === 'Ditangguhkan') {
+            return 'REPORTED';
           }
         }),
       });

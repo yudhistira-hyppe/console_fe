@@ -280,6 +280,25 @@ const SearchSection = ({ filter, handleChange }) => {
                   <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Dijadwalkan')} />
                 }
               />
+              <FormControlLabel
+                label={'Habis'}
+                value="Habis"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Habis')} />}
+              />
+              <FormControlLabel
+                label={'Ditangguhkan'}
+                value="Ditangguhkan"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Ditangguhkan')} />
+                }
+              />
+              <FormControlLabel
+                label={'Dinonaktifkan'}
+                value="Dinonaktifkan"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Dinonaktifkan')} />
+                }
+              />
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />

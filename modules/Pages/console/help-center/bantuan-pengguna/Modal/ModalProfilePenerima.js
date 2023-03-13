@@ -38,17 +38,22 @@ const ModalProfilePenerima = ({ showModal, email, onCancel }) => {
       ) : (
         <Box sx={style}>
           <Stack direction="row" justifyContent="center">
-            <Avatar alt="avatar profile penerima" src={getMediaUri()} sx={{ width: 250, height: 250 }} />
+            <Avatar alt={profile?.data[0]?.fullName} src={getMediaUri()} sx={{ width: 250, height: 250 }} />
           </Stack>
           <Stack direction="column" spacing={1} my={3}>
             <Typography color="#666666">Nama Lengkap : {profile?.data[0]?.fullName}</Typography>
             <Typography color="#666666">Alamat Email&nbsp;&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.email}</Typography>
             <Typography color="#666666">
-              Jenis Kelamin&nbsp;&nbsp;&nbsp;: {profile?.data[0]?.gender === 'MALE' ? 'Laki - Laki' : 'Perempuan'}
+              Jenis Kelamin&nbsp;&nbsp;&nbsp;:{' '}
+              {profile?.data[0]?.gender === 'MALE'
+                ? 'Laki - Laki'
+                : profile?.data[0]?.gender === 'FEMALE'
+                ? 'Perempuan'
+                : 'Lainnya'}
             </Typography>
             <Typography color="#666666">
               Ketertarikan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:{' '}
-              {profile?.data[0]?.interest.map((item) => item.interestName)?.join(', ')}
+              {profile?.data[0]?.interest.map((item) => item.interestName)?.join(', ') || '-'}
             </Typography>
           </Stack>
           <Stack
@@ -62,11 +67,11 @@ const ModalProfilePenerima = ({ showModal, email, onCancel }) => {
             </Stack>
             <Stack direction="column" alignItems="center" width={150}>
               <Typography fontWeight="bold">FOLLOWERS</Typography>
-              <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+              <Typography color="#666666">{profile?.data[0]?.insight?.followers}</Typography>
             </Stack>
             <Stack direction="column" alignItems="center" width={150}>
               <Typography fontWeight="bold">FOLLOWING</Typography>
-              <Typography color="#666666">{profile?.data[0]?.insight?.posts}</Typography>
+              <Typography color="#666666">{profile?.data[0]?.insight?.followings}</Typography>
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="center" mt={4}>

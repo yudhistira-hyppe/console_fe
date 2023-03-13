@@ -18,6 +18,8 @@ import { useApproveAdsMutation, useGetDetailAdsQuery } from 'api/console/ads';
 import moment from 'moment';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { toast } from 'react-hot-toast';
+import AdsDescriptionDetail from '../components/AdsDescriptionDetail';
+import TableListPenonton from './TableListPenonton';
 
 const breadcrumbs = [
   { label: 'Pusat Iklan', link: '/ads-center' },
@@ -67,6 +69,36 @@ const AdsDetailComponent = () => {
     });
   };
 
+  const getStatusAds = () => {
+    switch (adsDetail?.data[0]?.status) {
+      case 'DRAFT':
+        return 'Tinjau';
+      case 'APPROVE':
+        return 'Dijadwalkan';
+      case 'FINISH':
+        return 'Habis';
+      case 'REPORTED':
+        return 'Ditangguhkan';
+      default:
+        return 'Dinonaktifkan';
+    }
+  };
+
+  const getBackgroundButton = () => {
+    switch (adsDetail?.data[0]?.status) {
+      case 'DRAFT':
+        return '#E92A63';
+      case 'APPROVE':
+        return '#71A500';
+      case 'FINISH':
+        return '#FF8C00';
+      case 'REPORTED':
+        return '#676767';
+      default:
+        return '#676767';
+    }
+  };
+
   return (
     <>
       <Head>
@@ -95,21 +127,27 @@ const AdsDetailComponent = () => {
       ) : (
         <PageContainer>
           <GridContainer>
-            <Grid item sm={12} md={12} lg={6} xl={6}>
+            <Grid item sm={12} md={12} lg={5} xl={5}>
               <AdsContentDetail
-                status={adsDetail?.data[0]?.status === 'DRAFT' ? 'Tinjau' : 'Dijadwalkan'}
+                status={getStatusAds()}
                 showModal={showModal}
                 setShowModal={setShowModal}
-                buttonColor={{ background: adsDetail?.data[0]?.status === 'DRAFT' ? '#E92A63' : '#71A500' }}
+                buttonColor={{ background: getBackgroundButton() }}
                 detailAds={adsDetail?.data?.[0]}
               />
             </Grid>
 
-            <Grid item sm={12} md={12} lg={6} xl={6}>
-              <Stack direction="column" gap={4}>
-                <AdsHistoryDetail />
-                <AdsWatcherDetailComponent />
+            <Grid item sm={12} md={12} lg={7} xl={7}>
+              <Stack direction="column" gap={4} height="100%">
+                <AdsDescriptionDetail detailAds={adsDetail?.data?.[0]} />
+                <AdsHistoryDetail idAds={adsDetail?.data?.[0]?._id} />
+                {/* <AdsWatcherDetailComponent /> */}
               </Stack>
+            </Grid>
+
+            <Grid item sm={12}>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 24 }}>Table List Penonton</Typography>
+              <TableListPenonton idAds={router.query._id} />
             </Grid>
           </GridContainer>
         </PageContainer>

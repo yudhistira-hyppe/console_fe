@@ -15,9 +15,11 @@ const AdsCampaign = (props) => {
   const classes = useStyles();
   const [adsCampaign, setAdsCampaign] = useState([]);
   const [payload, setPayload] = useState({
+    startdate: moment().subtract(90, 'day').format('YYYY/MM/DD'),
+    enddate: moment().format('YYYY/MM/DD'),
     email: email,
     search: '',
-    skip: 0,
+    page: 0,
     limit: 10,
   });
   const [loadingButton, setLoadingButton] = useState(false);
@@ -34,7 +36,7 @@ const AdsCampaign = (props) => {
     setPayload((prevState) => ({
       ...prevState,
       search: value,
-      skip: 0,
+      page: 0,
     }));
   };
 
@@ -78,7 +80,7 @@ const AdsCampaign = (props) => {
                     {` ${moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm')}`}
                   </Box>
                 </Stack>
-                <Stack gap={0.5} ml="auto">
+                <Stack gap={0.5} ml="auto" alignItems="flex-end">
                   <Box fontSize={12} lineHeight="16px">
                     <Box component="span" color="text.disabled">
                       Rencana Tayang:
@@ -87,9 +89,9 @@ const AdsCampaign = (props) => {
                   </Box>
                   <Box fontSize={12} lineHeight="16px">
                     <Box component="span" color="text.disabled">
-                      Durasi:
+                      Penempatan:
                     </Box>{' '}
-                    {Number(item?.duration).toFixed(0)} Detik
+                    {item?.nameType}
                   </Box>
                 </Stack>
               </Stack>
@@ -105,14 +107,14 @@ const AdsCampaign = (props) => {
             </Stack>
           )}
 
-          {!loadingAds && userAds?.skip < userAds?.totalSearch - 10 && (
+          {!loadingAds && adsCampaign?.length < userAds?.totalsearch && (
             <LoadingButton
               loading={loadingButton}
               variant="contained"
               color="secondary"
               onClick={() =>
                 setPayload((prev) => {
-                  return { ...prev, skip: payload?.skip + 10 };
+                  return { ...prev, page: payload.page + 1 };
                 })
               }>
               Muat lebih banyak

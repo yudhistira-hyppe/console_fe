@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
 import { useUpdateStatusMusicMutation } from 'api/console/database/media';
 import router from 'next/router';
+import { toast } from 'react-hot-toast';
 
 const style = {
   position: 'absolute',
@@ -27,9 +28,13 @@ export default function ModalConfirmation({ showModal, status, id, onClose }) {
       status: status === 'active' ? false : true,
     };
 
-    updateStatus(data).then(() => {
-      router.replace('/database/media');
-      onClose();
+    updateStatus(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success(`Berhasil mengubah status musik`);
+      }
+      router.replace('/database/music');
     });
   };
 

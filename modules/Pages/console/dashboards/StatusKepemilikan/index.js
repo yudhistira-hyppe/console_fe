@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     position: 'relative',
     borderRadius: 6,
     padding: '4px 12px',
-    backgroundColor: 'rgba(0, 0, 0, 0.38);',
+    backgroundColor: 'rgb(40, 40, 40)',
     color: '#FFFFFF',
     fontSize: 14,
     textTransform: 'capitalize',
@@ -112,7 +112,7 @@ const StatusKepemilikan = () => {
         />
         <center>
           <PieChart width={250} height={260}>
-            <Pie data={fixedData()} innerRadius={70} outerRadius={100} fill="#8884d8" paddingAngle={5} dataKey="persentase">
+            <Pie data={fixedData()} innerRadius={70} outerRadius={100} fill="#8884d8" paddingAngle={1} dataKey="persentase">
               {fixedData()?.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
@@ -124,7 +124,13 @@ const StatusKepemilikan = () => {
               labelStyle={{ color: 'black' }}
               cursor={false}
               content={(data) => {
-                return data.payload?.[0] && <Box className={classes.tooltip}>{data.payload?.[0].value}%</Box>;
+                return (
+                  data.payload?.[0] && (
+                    <Box className={classes.tooltip}>
+                      {data.payload?.[0]?.payload?.id}: {data.payload?.[0]?.payload?.persentase}%
+                    </Box>
+                  )
+                );
               }}
             />
           </PieChart>

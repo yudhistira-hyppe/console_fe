@@ -8,12 +8,14 @@ import DatabaseTabContentComponent from './content';
 import DatabaseTabMediaComponent from './media';
 import useStyles from './index.style';
 import Cookies from 'js-cookie';
+import DatabaseTabEffectComponent from './effect';
+import DatabaseTabStickerComponent from './sticker';
 
 const DatabaseTabComponent = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const { tab } = props;
-  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const onTabChange = (_, selectedTab) => {
     router.replace(`/database/${selectedTab}`);
@@ -33,8 +35,10 @@ const DatabaseTabComponent = (props) => {
             <Tab className={classes.tab} label="Konten" value="content" />
           )}
           {access.map((item) => item?.nameModule).includes('database_music') && (
-            <Tab className={classes.tab} label="Media" value="media" />
+            <Tab className={classes.tab} label="Musik" value="music" />
           )}
+          <Tab className={classes.tab} label="Efek" value="effect" />
+          <Tab className={classes.tab} label="Stiker" value="sticker" />
         </TabList>
         {access.map((item) => item?.nameModule).includes('database_account') && (
           <TabPanel className={classes.tabPanel} value="account">
@@ -47,10 +51,16 @@ const DatabaseTabComponent = (props) => {
           </TabPanel>
         )}
         {access.map((item) => item?.nameModule).includes('database_music') && (
-          <TabPanel className={classes.tabPanel} value="media">
+          <TabPanel className={classes.tabPanel} value="music">
             <DatabaseTabMediaComponent />
           </TabPanel>
         )}
+        <TabPanel className={classes.tabPanel} value="effect">
+          <DatabaseTabEffectComponent />
+        </TabPanel>
+        <TabPanel className={classes.tabPanel} value="sticker">
+          <DatabaseTabStickerComponent />
+        </TabPanel>
       </TabContext>
     </>
   );

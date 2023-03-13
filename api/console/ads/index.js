@@ -15,7 +15,7 @@ export const adsApi = createApi({
     }),
     getDemographicAds: build.query({
       query: (data) => ({
-        url: '/ads/console/adscenter/demographchart',
+        url: '/userads/console/adscenter/demographchart',
         method: 'POST',
         body: data,
       }),
@@ -36,12 +36,27 @@ export const adsApi = createApi({
       }),
       providesTags: ['detail'],
     }),
+    getLogDetailAds: build.query({
+      query: (id) => ({
+        url: `/ads/console/adscenter/historydetail/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['detail'],
+    }),
     getVideoFromApsara: build.query({
       query: (data) => ({
         url: '/posts/getvideo',
         method: 'POST',
         body: data,
       }),
+    }),
+    getViewerAds: build.query({
+      query: (data) => ({
+        url: '/userads/console/adscenter/listpenonton',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['ads'],
     }),
     approveAds: build.mutation({
       query: (data) => ({
@@ -59,6 +74,8 @@ export const {
   useGetDemographicAdsQuery,
   useGetListAdsQuery,
   useGetDetailAdsQuery,
+  useGetLogDetailAdsQuery,
   useGetVideoFromApsaraQuery,
+  useGetViewerAdsQuery,
   useApproveAdsMutation,
 } = adsApi;

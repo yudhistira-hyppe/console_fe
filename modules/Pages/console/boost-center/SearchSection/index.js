@@ -273,25 +273,64 @@ const SearchSection = ({ filter, handleChange }) => {
               {loadingSession ? (
                 <Typography>loading data...</Typography>
               ) : (
-                listSession?.map((item, key) => (
+                <>
                   <FormControlLabel
-                    key={key}
-                    label={
-                      <Typography style={{ fontSize: 12 }}>
-                        {item?.name === 'automatic' ? 'Otomatis' : item?.name} ({item?.start.slice(0, 5)} -{' '}
-                        {item?.end.slice(0, 5)})
-                      </Typography>
-                    }
-                    value={JSON.stringify({ _id: item._id, name: item.name })}
+                    label={<Typography style={{ fontSize: 12 }}>Pagi (08:00 - 12:00)</Typography>}
+                    value={JSON.stringify({
+                      _id: ['6360b9ea723300000c00528f', '637315d812220000fc001a02'],
+                      name: 'Pagi (08:00 - 12:00)',
+                    })}
                     control={
                       <Checkbox
                         defaultChecked={false}
                         color="secondary"
-                        checked={filter.jadwal?.map((item) => item?.name).includes(item.name)}
+                        checked={filter.jadwal?.map((item) => item?.name).includes('Pagi (08:00 - 12:00)')}
                       />
                     }
                   />
-                ))
+                  <FormControlLabel
+                    label={<Typography style={{ fontSize: 12 }}>Siang (13:00 - 18:00)</Typography>}
+                    value={JSON.stringify({
+                      _id: ['637315d812220000fc001a03', '6360b9fd723300000c005290'],
+                      name: 'Siang (13:00 - 18:00)',
+                    })}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        checked={filter.jadwal?.map((item) => item?.name).includes('Siang (13:00 - 18:00)')}
+                      />
+                    }
+                  />
+                  <FormControlLabel
+                    label={<Typography style={{ fontSize: 12 }}>Malam (19:00 - 07:00)</Typography>}
+                    value={JSON.stringify({
+                      _id: ['637315d812220000fc001a04', '6360ba01723300000c005291'],
+                      name: 'Malam (19:00 - 07:00)',
+                    })}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        checked={filter.jadwal?.map((item) => item?.name).includes('Malam (19:00 - 07:00)')}
+                      />
+                    }
+                  />
+                  <FormControlLabel
+                    label={<Typography style={{ fontSize: 12 }}>Otomatis</Typography>}
+                    value={JSON.stringify({
+                      _id: ['6371dc159f0500005e0030e6'],
+                      name: 'Otomatis',
+                    })}
+                    control={
+                      <Checkbox
+                        defaultChecked={false}
+                        color="secondary"
+                        checked={filter.jadwal?.map((item) => item?.name).includes('Otomatis')}
+                      />
+                    }
+                  />
+                </>
               )}
             </FormGroup>
           </AccordionDetails>

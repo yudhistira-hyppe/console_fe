@@ -180,7 +180,7 @@ const AdsDemographyComponent = () => {
             </Stack>
           ) : adsDemographic?.data?.gender?.map((item) => item.total)?.reduce((a, b) => a + b, 0) >= 1 ? (
             <PieChart height={180} width={260} margin={{ top: 20, left: 60 }}>
-              <Pie data={adsDemographic?.data?.gender} innerRadius={48} outerRadius={80} paddingAngle={2} dataKey="total">
+              <Pie data={adsDemographic?.data?.gender} innerRadius={48} outerRadius={80} paddingAngle={1} dataKey="total">
                 {adsDemographic?.data?.gender?.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}

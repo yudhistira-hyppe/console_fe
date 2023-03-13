@@ -20,7 +20,7 @@ const Categories = (props) => {
         <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
       </Typography>
       {data?.length >= 1 ? (
-        <Stack direction="row" flexWrap="wrap" gap="12px" height="100%">
+        <Stack direction="row" flexWrap="wrap" gap="12px">
           {data.map((item, key) => (
             <Chip
               key={key}
