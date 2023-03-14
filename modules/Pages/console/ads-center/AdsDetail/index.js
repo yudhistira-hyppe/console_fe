@@ -145,7 +145,7 @@ const AdsDetailComponent = () => {
               </Stack>
             </Grid>
 
-            <Grid item sm={12}>
+            <Grid item sm={12} style={{ position: 'relative' }}>
               <Typography style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 24 }}>Table List Penonton</Typography>
               <TableListPenonton idAds={router.query._id} />
             </Grid>

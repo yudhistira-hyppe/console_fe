@@ -402,6 +402,27 @@ const SearchSection = ({ filter, handleChange }) => {
               />
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Status Penonton</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
+              <FormControlLabel
+                label={'View'}
+                value="View"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('View')} />}
+              />
+              <FormControlLabel
+                label={'Klik Aksi'}
+                value="Klik Aksi"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Klik Aksi')} />}
+              />
+            </FormGroup>
+          </AccordionDetails>
         </Accordion>
       </Box>
     </>
