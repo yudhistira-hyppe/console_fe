@@ -111,7 +111,6 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               <TableCell align="left">Area</TableCell>
               <TableCell align="left">Prioritas</TableCell>
               <TableCell align="left">Kredit Terpakai</TableCell>
-              <TableCell align="left">Status</TableCell>
             </TableRow>
           </TableHead>
 
@@ -215,9 +214,6 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   </TableCell>
                   <TableCell align="left" style={{ width: 130 }}>
                     {item?.valueType || '-'}
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 80 }}>
-                    {item?.status}
                   </TableCell>
                 </TableRow>
               ))
