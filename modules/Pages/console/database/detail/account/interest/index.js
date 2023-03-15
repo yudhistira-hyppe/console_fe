@@ -19,20 +19,35 @@ const InterestComponent = (props) => {
         Minat
         <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
       </Typography>
-      <Stack gap={1.25} direction="row" flexWrap="wrap">
-        {interests?.map((interest, index) => (
-          <Box
-            key={`${interest}-${index}`}
-            sx={{
-              boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
-              backgroundColor: '#FFFFFF',
-              borderRadius: '4px',
-              color: 'rgba(0, 0, 0, 0.6)',
-              padding: '6px 8px',
-            }}>
-            <Typography variant="h5">{interest.interestName}</Typography>
-          </Box>
-        ))}
+      <Stack gap={1.25} direction="row" flexWrap="wrap" height={200}>
+        {interests?.length >= 1 ? (
+          interests?.map((interest, index) => (
+            <Box
+              key={`${interest}-${index}`}
+              sx={{
+                boxShadow:
+                  '0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)',
+                backgroundColor: '#FFFFFF',
+                borderRadius: '4px',
+                color: 'rgba(0, 0, 0, 0.6)',
+                padding: '6px 8px',
+              }}>
+              <Typography variant="h5">{interest.interestName}</Typography>
+            </Box>
+          ))
+        ) : (
+          <Stack
+            direction="column"
+            height="100%"
+            width="100%"
+            alignItems="center"
+            justifyContent="center"
+            gap="20px"
+            textAlign="center">
+            <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
+            <Typography style={{ color: '#666666' }}>User ini belum memiliki data minat</Typography>
+          </Stack>
+        )}
       </Stack>
     </Stack>
   );
