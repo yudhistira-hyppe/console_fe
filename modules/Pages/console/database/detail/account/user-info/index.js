@@ -11,6 +11,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import ScrollBar from 'react-perfect-scrollbar';
+import GridContainer from '@jumbo/components/GridContainer';
 
 const UserInfoComponent = (props) => {
   const classes = useStyles();
@@ -86,8 +87,8 @@ const UserInfoComponent = (props) => {
         <Divider />
         <TabPanel value="1" style={{ padding: 0 }}>
           <ScrollBar style={{ maxHeight: 300 }}>
-            <Stack padding="36px 24px" rowGap={4}>
-              <Grid container spacing={4}>
+            <Stack padding="24px" rowGap={4}>
+              <GridContainer style={{ height: 144 }}>
                 <Grid item xs={12} sm={4}>
                   <Stack direction="row" spacing={2}>
                     <SvgIcon sx={{ fontSize: '36px', color: 'text.disabled' }}>
@@ -163,7 +164,7 @@ const UserInfoComponent = (props) => {
                     </Box>
                   </Stack>
                 </Grid>
-              </Grid>
+              </GridContainer>
               {userBankAccounts?.length >= 1 && (
                 <Grid container spacing={4}>
                   {userBankAccounts?.map((bankAccount) => (
@@ -204,25 +205,31 @@ const UserInfoComponent = (props) => {
           <ScrollBar style={{ maxHeight: 300 }}>
             <Stack direction="column" p="24px" gap="24px">
               <Stack direction="row">
-                <ImageList sx={{ width: '100%' }} cols={4} gap="12px" rowHeight={140}>
-                  {accountDetail?.dokument?.map((item, key) => (
-                    <ImageListItem key={key}>
-                      <img
-                        src={getImage(item)}
-                        srcSet={getImage(item)}
-                        alt="Lampiran Akun Premium"
-                        loading="lazy"
-                        style={{
-                          borderRadius: 8,
-                          height: 140,
-                          objectFit: 'cover',
-                          objectPosition: 'center',
-                          border: '1px solid #dddddd',
-                        }}
-                      />
-                    </ImageListItem>
-                  ))}
-                </ImageList>
+                {accountDetail?.dokument?.length >= 1 ? (
+                  <ImageList sx={{ width: '100%' }} cols={4} gap="12px" rowHeight={120}>
+                    {accountDetail?.dokument?.map((item, key) => (
+                      <ImageListItem key={key}>
+                        <img
+                          src={getImage(item)}
+                          srcSet={getImage(item)}
+                          alt="Lampiran Akun Premium"
+                          loading="lazy"
+                          style={{
+                            borderRadius: 8,
+                            height: 140,
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                            border: '1px solid #dddddd',
+                          }}
+                        />
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
+                ) : (
+                  <Stack width="100%" height={120}>
+                    <Typography>User ini belum melampirkan dokumen</Typography>
+                  </Stack>
+                )}
               </Stack>
             </Stack>
           </ScrollBar>
