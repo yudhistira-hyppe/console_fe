@@ -125,7 +125,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             ) : listViewers?.data?.length >= 1 ? (
               listViewers?.data?.map((item, i) => (
                 <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                  <TableCell align="left" style={{ maxWidth: 120 }}>
+                  <TableCell align="left" style={{ maxWidth: 100 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {moment(item?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
