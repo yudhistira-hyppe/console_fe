@@ -14,7 +14,6 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
-import { useGetThemeMusicQuery } from 'api/console/database/media';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -28,8 +27,6 @@ const SearchSection = ({ filter, handleChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isDate, setDate] = useState(false);
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
-
-  const { data: themes, isFetching: loadingTheme } = useGetThemeMusicQuery();
 
   useEffect(() => {
     if (!filter.createdAt[0] && !null) {
@@ -147,37 +144,6 @@ const SearchSection = ({ filter, handleChange }) => {
                 direction="horizontal"
               />
             </Popover>
-          </AccordionDetails>
-          <Divider style={{ marginTop: 16 }} />
-        </Accordion>
-
-        <Accordion elevation={0} defaultExpanded disableGutters>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Kategori</Typography>
-          </AccordionSummary>
-          <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
-              {loadingTheme ? (
-                <Typography>Loading data...</Typography>
-              ) : themes?.data?.length >= 1 ? (
-                themes?.data?.map((item, key) => (
-                  <FormControlLabel
-                    key={key}
-                    label={item?.name}
-                    value={JSON.stringify(item)}
-                    control={
-                      <Checkbox
-                        defaultChecked={false}
-                        checked={filter.category?.map((t) => t.name).includes(item?.name)}
-                        color="secondary"
-                      />
-                    }
-                  />
-                ))
-              ) : (
-                <Typography>Tidak ada data.</Typography>
-              )}
-            </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
         </Accordion>

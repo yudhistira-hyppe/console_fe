@@ -12,7 +12,6 @@ const TableListGif = () => {
     order: 'desc',
     gif: '',
     createdAt: [null, null],
-    category: [],
     labelPenggunaan: '',
     rangePenggunaan: [],
     status: [],
@@ -29,7 +28,6 @@ const TableListGif = () => {
     filter.gif !== '' && Object.assign(params, { name: filter.gif });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.category?.length >= 1 && Object.assign(params, { category: filter.category.join(', ') });
     filter.status?.length >= 1 && Object.assign(params, { status: filter.status.join(', ') });
   };
 
@@ -78,10 +76,6 @@ const TableListGif = () => {
                   },
                 ]
             : [...prevVal.filter((item) => item.parent !== kind)];
-        case 'category':
-          return prevVal.find((item) => item.value === JSON.parse(value)?.name)
-            ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
-            : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
         case 'rangePenggunaan':
           return prevVal.find((item) => item.parent === 'rangePenggunaan')
             ? value === ''
@@ -100,14 +94,6 @@ const TableListGif = () => {
           return { ...prevVal, gif: value, page: 0 };
         case 'createdAt':
           return { ...prevVal, createdAt: value, page: 0 };
-        case 'category':
-          return {
-            ...prevVal,
-            category: filter.category.find((item) => item?.name === JSON.parse(value)?.name)
-              ? filter.category.filter((item) => item?.name !== JSON.parse(value)?.name)
-              : [...filter.category, JSON.parse(value)],
-            page: 0,
-          };
         case 'rangePenggunaan':
           if (value === '<= 200') {
             return {

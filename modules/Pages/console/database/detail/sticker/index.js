@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import DetailEmoji from './detail-emoji';
+import DetailGIF from './detail-gif';
 import DetailSticker from './detail-sticker';
 import KelolaEmoji from './kelola-emoji';
 import KelolaSticker from './kelola-sticker';
@@ -23,6 +24,10 @@ const DatabaseDetailStickerComponent = () => {
       setRenderChildren(true);
     } else if (slug[1] && tab === 'emoji') {
       setRenderChildren(true);
+    } else if (slug[1] === 'create' && tab === 'gif') {
+      setRenderChildren(true);
+    } else if (slug[1] && tab === 'gif') {
+      setRenderChildren(true);
     }
   }, [router]);
 
@@ -38,6 +43,10 @@ const DatabaseDetailStickerComponent = () => {
     return <DetailEmoji kind="create" />;
   } else if (isRenderChildren && slug[1] && tab === 'emoji') {
     return <DetailEmoji kind="update" />;
+  } else if (isRenderChildren && slug[1] === 'create' && tab === 'gif') {
+    return <DetailGIF kind="create" />;
+  } else if (isRenderChildren && slug[1] && tab === 'gif') {
+    return <DetailGIF kind="update" />;
   } else {
     return null;
   }

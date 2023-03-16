@@ -21,6 +21,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import ModalConfirmation from '../Modal/ModalConfirmation';
+import router from 'next/router';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -82,7 +83,7 @@ const TableSection = ({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = listGif?.data?.map((n) => n._id);
+      const newSelected = listGif?.data?.map((n, key) => key);
       setSelected(newSelected);
       return;
     }
@@ -162,9 +163,6 @@ const TableSection = ({
                 Tanggal Unggah
               </TableCell>
               <TableCell align="left" style={{ width: 220 }}>
-                Kategori
-              </TableCell>
-              <TableCell align="left" style={{ width: 220 }}>
                 Jumlah Digunakan
               </TableCell>
               <TableCell align="left" style={{ width: 120 }}>
@@ -199,7 +197,17 @@ const TableSection = ({
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography style={{ fontWeight: 'bold' }}>Daftar GIF</Typography>
         <Stack direction="row" spacing={2}>
-          <Button color="secondary" variant="contained">
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() =>
+              router.push({
+                pathname: '/database/sticker/create',
+                query: {
+                  tab: 'gif',
+                },
+              })
+            }>
             Tambah GIF
           </Button>
         </Stack>
@@ -249,8 +257,6 @@ const TableSection = ({
                 handleDeleteFilter(item.parent, '');
               } else if (item.parent === 'createdAt') {
                 handleDeleteFilter(item.parent, [null, null]);
-              } else if (item.parent === 'category') {
-                handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
               } else if (item.parent === 'rangePenggunaan') {
                 handleDeleteFilter(item.parent, '');
               } else {
@@ -287,14 +293,25 @@ const TableSection = ({
                   <TableCell style={{ maxWidth: 80, width: 80 }}>
                     <Checkbox
                       color="secondary"
-                      checked={selected.includes(item?._id)}
+                      checked={selected.includes(i)}
                       inputProps={{
                         'aria-labelledby': 'asd',
                       }}
-                      onClick={(event) => handleClick(event, item?._id)}
+                      onClick={(event) => handleClick(event, i)}
                     />
                   </TableCell>
-                  <TableCell align="left" className={classes.hoverCell} style={{ maxWidth: 320, width: 320 }}>
+                  <TableCell
+                    align="left"
+                    className={classes.hoverCell}
+                    style={{ maxWidth: 320, width: 320 }}
+                    onClick={() =>
+                      router.push({
+                        pathname: `/database/sticker/${i}`,
+                        query: {
+                          tab: 'gif',
+                        },
+                      })
+                    }>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={item?.apsaraThumnailUrl || new Error()} variant="rounded" alt="X" />
                       <Typography
@@ -308,11 +325,6 @@ const TableSection = ({
                   <TableCell align="left" style={{ maxWidth: 320, width: 320 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {moment(item?.createdAt).format('DD/MM/YY')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 220, width: 220 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {'-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 220, width: 220 }}>
