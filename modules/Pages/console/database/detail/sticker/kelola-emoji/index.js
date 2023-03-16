@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import Breadcrumbs from '../../../../help-center/bantuan-pengguna/BreadCrumb';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { Typography } from '@material-ui/core';
 import router from 'next/router';
+import ModalCreate from './Modal/ModalCreate';
+import CategoryCarousel from './CategoryCarousel';
+import ListEmoji from './ListEmoji';
 
 const breadcrumbs = [
   {
@@ -19,7 +22,43 @@ const breadcrumbs = [
   { label: 'Kelola Emoji', isActive: true },
 ];
 
+const dummyCategory = [
+  {
+    name: 'Hot',
+    image: 'fire.png',
+  },
+  {
+    name: 'Dekoratif',
+    image: 'party.png',
+  },
+  {
+    name: 'Teks',
+    image: 'teks.png',
+  },
+  {
+    name: 'Suasana Hati',
+    image: 'smile.png',
+  },
+  {
+    name: 'Gaya Hidup',
+    image: 'coffee.png',
+  },
+  {
+    name: 'Alam',
+    image: 'plant.png',
+  },
+  {
+    name: 'Events',
+    image: 'event.png',
+  },
+];
+
 const KelolaEmoji = () => {
+  const [modal, setModal] = useState({
+    create: false,
+  });
+  const [tab, setTab] = useState(dummyCategory[0].name);
+
   return (
     <>
       <Head>
@@ -49,6 +88,25 @@ const KelolaEmoji = () => {
           </Typography>
         </Stack>
       </Stack>
+
+      <ModalCreate showModal={modal.create} onClose={() => setModal({ ...modal, create: !modal.create })} />
+
+      <Stack direction="column">
+        <Stack direction="row" alignItems="center" gap={3}>
+          <Typography style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Kategori Emoji</Typography>
+          <Button variant="text" color="secondary" style={{ marginTop: 2 }}>
+            <Typography
+              style={{ fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}
+              onClick={() => setModal({ ...modal, create: !modal.create })}>
+              Tambah Kategori
+            </Typography>
+          </Button>
+        </Stack>
+      </Stack>
+
+      <CategoryCarousel data={dummyCategory} tab={tab} setTab={setTab} />
+
+      <ListEmoji category={dummyCategory.find((item) => item.name === tab)} />
     </>
   );
 };

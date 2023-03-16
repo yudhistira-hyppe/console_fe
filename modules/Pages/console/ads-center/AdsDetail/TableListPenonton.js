@@ -3,6 +3,13 @@ import { Stack } from '@mui/material';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetViewerAdsQuery } from 'api/console/ads';
+import { LoadingButton } from '@mui/lab';
+import { GetApp } from '@material-ui/icons';
+import { Typography } from '@material-ui/core';
+import jsPDF from 'jspdf';
+import { toast } from 'react-hot-toast';
+import { renderToString } from 'react-dom/server';
+import DocumentPDF from './DocumentPDF';
 
 const TableListPenonton = ({ idAds }) => {
   const [filter, setFilter] = useState({
@@ -19,8 +26,10 @@ const TableListPenonton = ({ idAds }) => {
     rangeCredit: [],
     priority: [],
     gender: [],
+    status: [],
   });
   const [filterList, setFilterList] = useState([]);
+  const [isExport, setExport] = useState(false);
 
   const getParams = () => {
     let params = {};
@@ -35,6 +44,16 @@ const TableListPenonton = ({ idAds }) => {
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.area.length >= 1 && Object.assign(params, { area: filter.area.map((item) => item?._id) });
     filter.age !== '' && Object.assign(params, { minage: filter.rangeAge[0], maxage: filter.rangeAge[1] });
+    filter.status.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status.map((item) => {
+          if (item === 'View') {
+            return 'view';
+          } else if (item === 'Klik Aksi') {
+            return 'click';
+          }
+        }),
+      });
     filter.priority.length >= 1 &&
       Object.assign(params, {
         filterpriority: filter.priority.map((item) => {
@@ -66,6 +85,11 @@ const TableListPenonton = ({ idAds }) => {
   };
 
   const { data: listViewers, isFetching: loadingViewers } = useGetViewerAdsQuery(getParams());
+  const {
+    data: listExport,
+    isFetching: loadingExport,
+    isError,
+  } = useGetViewerAdsQuery({ ...getParams(), page: 0, limit: 1000000 });
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -175,6 +199,14 @@ const TableListPenonton = ({ idAds }) => {
             : [...filter.priority, value],
           page: 0,
         };
+      } else if (kind === 'status') {
+        return {
+          ...prevVal,
+          status: filter.status.find((item) => item === value)
+            ? filter.status.filter((item) => item !== value)
+            : [...filter.status, value],
+          page: 0,
+        };
       } else if (kind === 'gender') {
         return {
           ...prevVal,
@@ -189,19 +221,61 @@ const TableListPenonton = ({ idAds }) => {
     });
   };
 
+  const generatePDF = () => {
+    const exportPDF = new jsPDF('p', 'px', 'a4');
+    exportPDF.html(renderToString(<DocumentPDF data={listExport?.data} />), {
+      callback: function (exportPDF) {
+        exportPDF.setProperties({ title: 'Laporan Riwayat Transaksi' });
+        exportPDF.output('dataurlnewwindow');
+        setExport(false);
+      },
+      x: 0,
+      y: 0,
+    });
+  };
+
+  const handleExport = () => {
+    setExport(true);
+    const toastId = toast.loading('Generate pdf...');
+    setTimeout(() => {
+      if (isError) {
+        toast.error('Terjadi kesalahan saat generate pdf, silahkan coba lagi.', { id: toastId, duration: 2000 });
+        setExport(false);
+      } else {
+        toast.success('Berhasil generate pdf', { id: toastId });
+        generatePDF();
+      }
+    }, 2000);
+  };
+
   return (
-    <Stack direction={'row'} spacing={3}>
-      <SearchSection filter={filter} handleChange={handleSearchChange} />
-      <TableSection
-        filterList={filterList}
-        order={filter.descending}
-        loading={loadingViewers}
-        listViewers={listViewers}
-        handlePageChange={handlePageChange}
-        handleOrder={onOrderChange}
-        handleDeleteFilter={handleSearchChange}
-      />
-    </Stack>
+    <>
+      <Stack position="absolute" top="9px" right="12px">
+        <LoadingButton
+          loading={loadingExport}
+          color="secondary"
+          variant="outlined"
+          style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+          onClick={handleExport}
+          disabled={isExport}>
+          <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>Unduh</Typography>
+          <GetApp style={{ fontSize: 18 }} />
+        </LoadingButton>
+      </Stack>
+
+      <Stack direction={'row'} spacing={3}>
+        <SearchSection filter={filter} handleChange={handleSearchChange} />
+        <TableSection
+          filterList={filterList}
+          order={filter.descending}
+          loading={loadingViewers}
+          listViewers={listViewers}
+          handlePageChange={handlePageChange}
+          handleOrder={onOrderChange}
+          handleDeleteFilter={handleSearchChange}
+        />
+      </Stack>
+    </>
   );
 };
 
