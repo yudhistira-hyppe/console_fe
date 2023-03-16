@@ -28,7 +28,7 @@ export default function ModalCreate({ showModal, onClose, onConfirm }) {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack direction="column" gap="8px" width="100%">
-            <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Tambah Kategori Stiker</Typography>
+            <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Tambah Kategori Emoji</Typography>
             <TextField
               placeholder="Masukan nama kategori"
               inputProps={{ maxLength: 20 }}
