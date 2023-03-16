@@ -200,7 +200,7 @@ const TableSection = ({
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography style={{ fontWeight: 'bold' }}>Daftar GIF</Typography>
         <Stack direction="row" spacing={2}>
-          <Button color="secondary" variant="outlined">
+          <Button color="secondary" variant="outlined" onClick={() => router.push('/database/sticker/kelola-gif')}>
             Kelola GIF
           </Button>
           <Button color="secondary" variant="contained">
