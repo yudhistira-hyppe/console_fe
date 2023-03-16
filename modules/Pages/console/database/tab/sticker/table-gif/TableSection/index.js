@@ -20,8 +20,7 @@ import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
-import router from 'next/router';
-// import ModalConfirmation from '../Modal/ModalConfirmation';
+import ModalConfirmation from '../Modal/ModalConfirmation';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -180,7 +179,7 @@ const TableSection = ({
 
   return (
     <Stack flex={1}>
-      {/* <ModalConfirmation
+      <ModalConfirmation
         showModal={modal.visible}
         onClose={() => {
           setModal({ ...modal, visible: !modal.visible, status: 'active' });
@@ -195,14 +194,11 @@ const TableSection = ({
           setSingleSelect('');
           setSelected([]);
         }}
-      /> */}
+      />
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography style={{ fontWeight: 'bold' }}>Daftar GIF</Typography>
         <Stack direction="row" spacing={2}>
-          <Button color="secondary" variant="outlined" onClick={() => router.push('/database/sticker/kelola-gif')}>
-            Kelola GIF
-          </Button>
           <Button color="secondary" variant="contained">
             Tambah GIF
           </Button>
