@@ -17,8 +17,10 @@ const DatabaseDetailComponent = (props) => {
       return <DatabaseDetailMediaComponent detailId={detailId} />;
     case 'effect':
       return <DatabaseDetailEffectComponent detailId={detailId} />;
-    default:
+    case 'sticker':
       return <DatabaseDetailStickerComponent detailId={detailId} />;
+    default:
+      return null;
   }
 };
 

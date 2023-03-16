@@ -308,7 +308,18 @@ const TableSection = ({
                       onClick={(event) => handleClick(event, i)}
                     />
                   </TableCell>
-                  <TableCell align="left" className={classes.hoverCell} style={{ maxWidth: 320, width: 320 }}>
+                  <TableCell
+                    align="left"
+                    className={classes.hoverCell}
+                    style={{ maxWidth: 320, width: 320 }}
+                    onClick={() =>
+                      router.push({
+                        pathname: `/database/sticker/${i}`,
+                        query: {
+                          tab: 'sticker',
+                        },
+                      })
+                    }>
                     <Stack direction="row" alignItems="center" gap="15px">
                       <Avatar src={item?.apsaraThumnailUrl || new Error()} variant="rounded" alt="X" />
                       <Typography
