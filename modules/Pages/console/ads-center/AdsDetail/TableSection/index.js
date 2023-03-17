@@ -110,7 +110,6 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               <TableCell align="left">Umur</TableCell>
               <TableCell align="left">Area</TableCell>
               <TableCell align="left">Prioritas</TableCell>
-              <TableCell align="left">Kredit Terpakai</TableCell>
             </TableRow>
           </TableHead>
 
@@ -125,7 +124,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             ) : listViewers?.data?.length >= 1 ? (
               listViewers?.data?.map((item, i) => (
                 <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                  <TableCell align="left" style={{ maxWidth: 100 }}>
+                  <TableCell align="left" style={{ maxWidth: 80 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
                       {moment(item?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
@@ -211,9 +210,6 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         />
                       )}
                     </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 130 }}>
-                    {item?.valueType || '-'}
                   </TableCell>
                 </TableRow>
               ))

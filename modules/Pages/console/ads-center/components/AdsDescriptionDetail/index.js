@@ -38,7 +38,7 @@ const AdsDescriptionDetail = ({ detailAds }) => {
 
           <Stack direction="row" spacing={1}>
             <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Rencana Penayangan:
+              Kredit Penayangan:
             </Typography>
 
             <Typography fontFamily={'Lato'}>{numberWithCommas(detailAds?.tayang || 0)} Kali</Typography>
@@ -46,15 +46,10 @@ const AdsDescriptionDetail = ({ detailAds }) => {
 
           <Stack direction="row" spacing={1}>
             <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Sisa Penayangan:
+              Sisa Kredit Penayangan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>
-              {detailAds?.nameType === 'In App Ads'
-                ? numberWithCommas((detailAds?.totalCredit - (detailAds?.usedCredit + detailAds?.usedCreditFree)) / 2 || 0)
-                : numberWithCommas(detailAds?.totalCredit - (detailAds?.usedCredit + detailAds?.usedCreditFree) || 0)}{' '}
-              Kali
-            </Typography>
+            <Typography fontFamily={'Lato'}>{detailAds?.tayang - detailAds?.totalView} Kali</Typography>
           </Stack>
         </div>
       </Card>
