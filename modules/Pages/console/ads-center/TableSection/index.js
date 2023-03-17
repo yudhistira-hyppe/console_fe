@@ -187,12 +187,15 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   </TableCell>
                   <TableCell align="left" style={{ width: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {numberWithCommas(item?.usedCredit + item?.usedCreditFree || 0)} Kredit
+                      {numberWithCommas(item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1) || 0)} Kredit
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 130 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {numberWithCommas(item?.totalUsedCredit - (item?.usedCredit + item?.usedCreditFree))} Kredit
+                      {numberWithCommas(
+                        item?.totalUsedCredit - item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1),
+                      )}{' '}
+                      Kredit
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ width: 130 }}>
