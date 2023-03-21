@@ -39,6 +39,8 @@ const TableList = () => {
             return 'FINISH';
           } else if (item === 'Ditangguhkan') {
             return 'REPORTED';
+          } else if (item === 'Dinonaktifkan') {
+            return 'NONACTIVE';
           }
         }),
       });
@@ -143,7 +145,7 @@ const TableList = () => {
   };
 
   return (
-    <Stack direction={'row'} spacing={3}>
+    <Stack direction={'row'} gap={3} overflow="hidden">
       <SearchSection filter={filter} handleChange={handleSearchChange} />
       <TableSection
         filterList={filterList}
