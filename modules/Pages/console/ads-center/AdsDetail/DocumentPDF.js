@@ -32,7 +32,6 @@ const DocumentPDF = ({ data }) => {
           <TableCell style={{ fontSize: 8, padding: 5, borderBottom: 'none', backgroundColor: '#FBFBFB' }}>
             Prioritas
           </TableCell>
-          <TableCell style={{ fontSize: 8, padding: 5, borderBottom: 'none', backgroundColor: '#FBFBFB' }}>Kredit</TableCell>
         </TableRow>
         <TableBody>
           {data?.map((item, key) => (
@@ -72,9 +71,6 @@ const DocumentPDF = ({ data }) => {
                   {item?.priority === 'LOW' && 'Rendah'}
                   {item?.priority === 'LOWEST' && 'Terendah'}
                 </Typography>
-              </TableCell>
-              <TableCell style={{ padding: 5, width: 50, borderBottom: 'none' }}>
-                <Typography style={{ fontSize: 8 }}>{item?.valueType || '-'}</Typography>
               </TableCell>
             </TableRow>
           ))}

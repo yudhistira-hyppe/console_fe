@@ -56,7 +56,7 @@ const SearchSection = ({ filter, handleChange }) => {
 
   return (
     <>
-      <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
+      <Box className={classes.inBuildAppCard} p={5} pt={2} width="100%" maxWidth={270}>
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Pembuatan</Typography>
@@ -292,13 +292,13 @@ const SearchSection = ({ filter, handleChange }) => {
                   <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Ditangguhkan')} />
                 }
               />
-              {/* <FormControlLabel
+              <FormControlLabel
                 label={'Dinonaktifkan'}
                 value="Dinonaktifkan"
                 control={
                   <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Dinonaktifkan')} />
                 }
-              /> */}
+              />
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
