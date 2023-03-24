@@ -10,6 +10,8 @@ const MonetizeJualBeliComponent = () => {
     page: 0,
     limit: 10,
     descending: 'true',
+    penjual: '',
+    pembeli: '',
     labelTanggal: '',
     createdAt: [null, null],
     payment_status: [],
@@ -23,6 +25,8 @@ const MonetizeJualBeliComponent = () => {
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
     });
+    filter.penjual && Object.assign(params, { penjual: filter.penjual });
+    filter.pembeli && Object.assign(params, { pembeli: filter.pembeli });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.payment_status.length >= 1 &&
@@ -64,6 +68,18 @@ const MonetizeJualBeliComponent = () => {
   const handleSearchChange = (kind, value) => {
     setFilterList((prevVal) => {
       switch (kind) {
+        case 'penjual':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Penjual (${value})` }]
+              : [...prevVal, { parent: kind, value: `Penjual (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'pembeli':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Pembeli (${value})` }]
+              : [...prevVal, { parent: kind, value: `Pembeli (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
@@ -83,6 +99,10 @@ const MonetizeJualBeliComponent = () => {
     setFilter((prevVal) => {
       if (kind === 'createdAt') {
         return { ...prevVal, createdAt: value, page: 0 };
+      } else if (kind === 'penjual') {
+        return { ...prevVal, penjual: value, page: 0 };
+      } else if (kind === 'pembeli') {
+        return { ...prevVal, pembeli: value, page: 0 };
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
       } else if (kind === 'payment_status') {
