@@ -74,6 +74,8 @@ const TableSection = ({
               onDelete={() => {
                 if (item.parent === 'createdAt') {
                   handleDeleteFilter(item.parent, [null, null]);
+                } else if (item.parent === 'penjual' || item.parent === 'pembeli') {
+                  handleDeleteFilter(item.parent, '');
                 } else {
                   handleDeleteFilter(item.parent, item.value);
                 }

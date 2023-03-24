@@ -10,6 +10,7 @@ import { Divider, IconButton, InputAdornment, Popover, Radio, RadioGroup, Stack 
 import { DateRange as DateRangePicker } from 'react-date-range';
 import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
 import moment from 'moment';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
 const useStyles = makeStyles((theme) => ({
   inBuildAppCard: {
@@ -63,6 +64,42 @@ const SearchSection = ({ filter, handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Nama Penjual</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari penjual"
+              name="penjual"
+              color="secondary"
+              filterValue={filter.penjual}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+            />
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Nama Pembeli</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari pembeli"
+              name="pembeli"
+              color="secondary"
+              filterValue={filter.pembeli}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+            />
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
         <Accordion elevation={0} disableGutters defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Transaksi</Typography>
