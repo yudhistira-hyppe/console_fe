@@ -197,7 +197,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       <TableCell align="left" style={{ width: 130 }}>
                         <Typography variant="body1" style={{ fontSize: '12px' }}>
                           {numberWithCommas(
-                            item?.totalUsedCredit - item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1),
+                            item?.totalCredit - item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1),
                           )}{' '}
                           Kredit
                         </Typography>

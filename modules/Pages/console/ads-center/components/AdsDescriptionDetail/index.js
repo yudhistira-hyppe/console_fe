@@ -49,7 +49,7 @@ const AdsDescriptionDetail = ({ detailAds }) => {
               Sisa Kredit Penayangan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>{detailAds?.tayang - detailAds?.totalView} Kali</Typography>
+            <Typography fontFamily={'Lato'}>{detailAds?.tayang - detailAds?.view} Kali</Typography>
           </Stack>
         </div>
       </Card>
