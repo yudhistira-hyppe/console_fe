@@ -59,11 +59,11 @@ const BandingIklan = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -87,6 +87,8 @@ const BandingIklan = () => {
           return prevVal.find((item) => item.parent === 'createdAt')
             ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
             : [...prevVal];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -115,6 +117,17 @@ const BandingIklan = () => {
             ? filter.reason.filter((item) => item !== value)
             : [...filter.reason, value],
           page: 0,
+        };
+      } else if (kind === 'clearAll') {
+        return {
+          page: 0,
+          limit: 10,
+          descending: 'true',
+          search: '',
+          labelTanggal: '',
+          createdAt: [null, null],
+          status: [],
+          reason: [],
         };
       } else {
         return { ...prevVal };
@@ -150,7 +163,7 @@ const BandingIklan = () => {
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             filterList={filterList}
-            order={filter.descending}
+            filter={filter}
             loading={loadingTicket}
             listTickets={listTickets}
             handleOrder={onOrderChange}

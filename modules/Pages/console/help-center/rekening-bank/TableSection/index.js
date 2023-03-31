@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { CircularProgress, Pagination, Stack } from '@mui/material';
+import { CircularProgress, Divider, IconButton, Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -21,6 +21,8 @@ import { makeStyles } from '@material-ui/styles';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
+import ScrollBar from 'react-perfect-scrollbar';
+import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -34,7 +36,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageChange, order, loading, listTickets }) => {
+const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageChange, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
 
@@ -45,26 +47,48 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
   };
 
   return (
-    <Stack flex={1}>
-      <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
-        <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
-          {loading ? (
-            <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+    <Stack flex={1} width="100%" maxWidth={956}>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" mb={5} style={{ gap: 12 }}>
+        <Stack direction="row" gap={2} alignItems="center" width={600}>
+          {filterList?.length >= 1 ? (
+            <ScrollBar style={{ width: 550, height: '100%' }}>
+              <Stack direction="row" gap="10px">
+                {filterList?.map((item, key) => (
+                  <Chip
+                    key={key}
+                    label={item.value}
+                    onDelete={() => {
+                      if (item.parent === 'search') {
+                        handleDeleteFilter(item.parent, '');
+                      } else if (item.parent === 'createdAt') {
+                        handleDeleteFilter(item.parent, [null, null]);
+                      } else {
+                        handleDeleteFilter(item.parent, item.value);
+                      }
+                    }}
+                  />
+                ))}
+              </Stack>
+            </ScrollBar>
           ) : (
-            <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listTickets?.total} hasil (
-              {listTickets?.totalsearch >= 1 ? listTickets?.page * 10 + 1 : listTickets?.page * 10} -{' '}
-              {listTickets?.total + listTickets?.page * 10} dari {listTickets?.totalsearch})
-            </Typography>
+            <Typography>Belum ada filter yang diterapkan</Typography>
           )}
-        </Box>
+          {filterList?.length >= 1 && (
+            <IconButton onClick={() => handleDeleteFilter('clearAll', '')}>
+              <Delete />
+            </IconButton>
+          )}
+        </Stack>
+
+        <Divider orientation="vertical" flexItem />
+
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
           <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Typography>Urutkan berdasarkan</Typography>
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={order}
+              value={filter.descending}
               onChange={handleOrder}
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
@@ -75,24 +99,6 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           </FormControl>
         </Stack>
       </Box>
-
-      <Stack direction="row" gap="10px" mb={2}>
-        {filterList?.map((item, key) => (
-          <Chip
-            key={key}
-            label={item.value}
-            onDelete={() => {
-              if (item.parent === 'search') {
-                handleDeleteFilter(item.parent, '');
-              } else if (item.parent === 'createdAt') {
-                handleDeleteFilter(item.parent, [null, null]);
-              } else {
-                handleDeleteFilter(item.parent, item.value);
-              }
-            }}
-          />
-        ))}
-      </Stack>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
@@ -201,14 +207,17 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.totalsearch >= 1 && !loading && (
-        <Stack alignItems="center" my={3} mr={3}>
-          <Pagination
-            count={Number(listTickets?.totalpage) || 1}
-            page={Number(listTickets?.page) + 1}
-            size="small"
-            onChange={handlePageChange}
-          />
+      {listTickets?.data?.length >= 1 && !loading && (
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+          <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
+            <NavigateBefore />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() => handlePageChange(filter.page + 1)}
+            disabled={listTickets?.data?.length < 10}>
+            <NavigateNext />
+          </IconButton>
         </Stack>
       )}
     </Stack>

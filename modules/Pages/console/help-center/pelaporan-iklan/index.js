@@ -21,8 +21,6 @@ const PelaporanIklan = () => {
     page: 0,
     limit: 10,
     descending: 'true',
-    // startdate: '',
-    // enddate: '',
     search: '',
     range: '',
     rangeReport: [],
@@ -63,11 +61,11 @@ const PelaporanIklan = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -109,6 +107,8 @@ const PelaporanIklan = () => {
                 ]
               : [...prevVal, { parent: 'range', value: `Jumlah Pelaporan (Kombinasi)` }]
             : [...prevVal.filter((item) => item.parent !== 'range')];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -173,6 +173,17 @@ const PelaporanIklan = () => {
             : [...filter.reason, JSON.parse(value)],
           page: 0,
         };
+      } else if (kind === 'clearAll') {
+        return {
+          page: 0,
+          limit: 10,
+          descending: 'true',
+          search: '',
+          range: '',
+          rangeReport: [],
+          status: [],
+          reason: [],
+        };
       } else {
         return { ...prevVal };
       }
@@ -207,7 +218,7 @@ const PelaporanIklan = () => {
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             filterList={filterList}
-            order={filter.descending}
+            filter={filter}
             loading={loadingTicket}
             listTickets={listTickets}
             handleOrder={onOrderChange}
