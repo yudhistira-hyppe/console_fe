@@ -59,11 +59,11 @@ const TableList = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -87,6 +87,8 @@ const TableList = () => {
               ? [...prevVal.filter((item) => item.parent !== 'rangeCredit')]
               : [...prevVal.filter((item) => item.parent !== 'rangeCredit'), { parent: 'rangeCredit', value: value }]
             : [...prevVal, { parent: kind, value: value }];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -138,6 +140,17 @@ const TableList = () => {
             : [...filter.status, value],
           page: 0,
         };
+      } else if (kind === 'clearAll') {
+        return {
+          page: 0,
+          limit: 10,
+          descending: 'true',
+          labelTanggal: '',
+          createdAt: [null, null],
+          labelCredit: '',
+          rangeCredit: [],
+          status: [],
+        };
       } else {
         return { ...prevVal };
       }
@@ -149,7 +162,7 @@ const TableList = () => {
       <SearchSection filter={filter} handleChange={handleSearchChange} />
       <TableSection
         filterList={filterList}
-        order={filter.descending}
+        filter={filter}
         loading={loadingAds}
         listTickets={listAds}
         handlePageChange={handlePageChange}
