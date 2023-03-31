@@ -101,6 +101,8 @@ const ConsoleBantuanPenggunaComponent = () => {
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
             ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -156,15 +158,29 @@ const ConsoleBantuanPenggunaComponent = () => {
             : [...filter.level, JSON.parse(value)],
           page: 0,
         };
+      } else if (kind === 'clearAll') {
+        return {
+          descending: 'true',
+          assignto: '',
+          search: '',
+          status: [],
+          sumber: [],
+          kategori: [],
+          level: [],
+          labelTanggal: '',
+          createdAt: [null, null],
+          page: 0,
+          limit: 10,
+        };
       }
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -197,8 +213,7 @@ const ConsoleBantuanPenggunaComponent = () => {
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             filterList={filterList}
-            order={filter.descending}
-            page={filter.page + 1}
+            filter={filter}
             loading={loadingTicket}
             listTickets={listTickets}
             handleOrder={onOrderChange}
