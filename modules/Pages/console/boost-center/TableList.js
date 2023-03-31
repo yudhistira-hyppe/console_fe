@@ -42,16 +42,14 @@ const TableList = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
-
-  console.log(filter);
 
   const handleSearchChange = (kind, value) => {
     setFilterList((prevVal) => {
@@ -70,6 +68,8 @@ const TableList = () => {
           return prevVal.find((item) => item.parent === 'createdAt')
             ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
             : [...prevVal];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -97,6 +97,16 @@ const TableList = () => {
             : [...filter.jadwal, JSON.parse(value)],
           page: 0,
         };
+      } else if (kind === 'clearAll') {
+        return {
+          page: 0,
+          limit: 10,
+          descending: 'true',
+          labelTanggal: '',
+          createdAt: [null, null],
+          jadwal: [],
+          status: [],
+        };
       } else {
         return { ...prevVal };
       }
@@ -108,7 +118,7 @@ const TableList = () => {
       <SearchSection filter={filter} handleChange={handleSearchChange} />
       <TableSection
         filterList={filterList}
-        order={filter.descending}
+        filter={filter}
         loading={loadingBoost}
         listTickets={listBoost}
         handlePageChange={handlePageChange}
