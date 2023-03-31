@@ -52,11 +52,11 @@ const RekeningBank = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -80,6 +80,8 @@ const RekeningBank = () => {
           return prevVal.find((item) => item.parent === 'createdAt')
             ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
             : [...prevVal];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -101,6 +103,8 @@ const RekeningBank = () => {
         return { ...prevVal, createdAt: value, page: 0 };
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
+      } else if (kind === 'clearAll') {
+        return { page: 0, limit: 10, descending: 'true', labelTanggal: '', createdAt: [null, null], status: [] };
       } else {
         return { ...prevVal };
       }
@@ -134,7 +138,7 @@ const RekeningBank = () => {
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             filterList={filterList}
-            order={filter.descending}
+            filter={filter}
             loading={loadingTicket}
             listTickets={listTickets}
             handlePageChange={handlePageChange}
