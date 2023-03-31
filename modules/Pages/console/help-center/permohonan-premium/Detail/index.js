@@ -120,6 +120,8 @@ const DetailPermohonanPremium = () => {
     return viewer.toggle();
   };
 
+  console.log(detail?.data[0]);
+
   return (
     <>
       <Head>
@@ -457,8 +459,18 @@ const DetailPermohonanPremium = () => {
                     <MenuItem value="" disabled>
                       Pilih Jenis Kelamin
                     </MenuItem>
-                    <MenuItem value="MALE">Laki - laki</MenuItem>
+                    <MenuItem value={'MALE'}>Laki - laki</MenuItem>
                     <MenuItem value="FEMALE">Perempuan</MenuItem>
+                    <MenuItem
+                      value={'Laki-laki'}
+                      style={{ display: detail?.data[0]?.status === 'DISETUJUI' ? 'block' : 'none' }}>
+                      Laki - laki
+                    </MenuItem>
+                    <MenuItem
+                      value="Perempuan"
+                      style={{ display: detail?.data[0]?.status === 'DISETUJUI' ? 'block' : 'none' }}>
+                      Perempuan
+                    </MenuItem>
                   </Select>
                 </Stack>
                 <Stack direction="column" gap="5px">
