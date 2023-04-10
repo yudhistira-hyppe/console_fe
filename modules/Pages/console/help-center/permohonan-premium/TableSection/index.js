@@ -26,7 +26,7 @@ import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
-    width: 150,
+    width: 200,
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
     '-webkit-line-clamp': 1,
@@ -102,144 +102,150 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 220 }}>
-                Pemohon Akun
-              </TableCell>
-              <TableCell align="left">Status</TableCell>
-              <TableCell align="left" style={{ maxWidth: 90 }}>
-                Jumlah Permohonan
-              </TableCell>
-              <TableCell align="left" style={{ maxWidth: 90 }}>
-                Tahapan Permohonan
-              </TableCell>
-              <TableCell align="left" style={{ maxWidth: 140 }}>
-                Keterangan
-              </TableCell>
-            </TableRow>
-          </TableHead>
+        <ScrollBar>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Tanggal Pengajuan</TableCell>
+                <TableCell align="left">Akun Pemohon</TableCell>
+                <TableCell align="left">Status</TableCell>
+                <TableCell align="left">Jumlah</TableCell>
+                <TableCell align="left">Tahapan</TableCell>
+                <TableCell align="left">Keterangan</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {loading ? (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
-            ) : listTickets?.data?.length >= 1 ? (
-              listTickets?.data?.map((item, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  hover
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    router.push({
-                      pathname: '/help-center/permohonan-premium/detail',
-                      query: {
-                        _id: item?._id,
-                      },
-                    })
-                  }>
-                  <TableCell style={{ maxWidth: 130 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 220, overflow: 'hidden' }}>
-                    <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
-                      <Stack direction="column" gap="2px">
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}>
-                          {item?.username || '-'}
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '12px', color: '#00000099' }}
-                          className={classes.textTruncate}>
-                          {item?.email || '-'}
-                        </Typography>
+            <TableBody>
+              {loading ? (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              ) : listTickets?.data?.length >= 1 ? (
+                listTickets?.data?.map((item, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    hover
+                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      router.push({
+                        pathname: '/help-center/permohonan-premium/detail',
+                        query: {
+                          _id: item?._id,
+                        },
+                      })
+                    }>
+                    <TableCell>
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                        {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" alignItems="center" gap="15px" width={260}>
+                        <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint?.replace('.jpeg', ''))} />
+                        <Stack direction="column" gap="2px">
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: '14px', color: '#00000099' }}
+                            className={classes.textTruncate}>
+                            {item?.username || '-'}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: '12px', color: '#00000099' }}
+                            className={classes.textTruncate}>
+                            {item?.email || '-'}
+                          </Typography>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="left">
-                    {item?.status === 'BARU' && (
-                      <Chip
-                        label="Baru"
-                        style={{
-                          backgroundColor: '#E6094B1A',
-                          color: '#E6094BD9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.status === 'DISETUJUI' && (
-                      <Chip
-                        label="Disetujui"
-                        style={{
-                          backgroundColor: '#71A5001A',
-                          color: '#71A500D9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.status === 'DITOLAK' && (
-                      <Chip
-                        label="Ditolak"
-                        style={{
-                          backgroundColor: 'rgba(103, 103, 103, 0.1)',
-                          color: '#676767',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 90 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.jumlahPermohonan || 0} Kali
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 90 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.tahapan || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 140, overflow: 'hidden' }}>
-                    <Typography
-                      variant="body1"
-                      style={{ fontSize: '12px' }}
-                      // className={classes.textTruncate}
-                      title={
-                        !item?.kycHandle?.[0]?.reasonValue
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack width={160} direction="row">
+                        {item?.status === 'BARU' && (
+                          <Chip
+                            label="Permintaan Baru"
+                            style={{
+                              backgroundColor: '#E6094B1A',
+                              color: '#E6094BD9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'DISETUJUI' && (
+                          <Chip
+                            label="Disetujui Admin"
+                            style={{
+                              backgroundColor: '#71A5001A',
+                              color: '#71A500D9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'DITOLAK' && (
+                          <Chip
+                            label="Ditolak Admin"
+                            style={{
+                              backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                              color: '#676767',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'BYSYSTEM' && (
+                          <Chip
+                            label="Disetujui Sistem"
+                            style={{
+                              backgroundColor: '#71A5001A',
+                              color: '#71A500D9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 60 }}>
+                        {item?.jumlahPermohonan || 0} Kali
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 60 }}>
+                        {item?.tahapan || '-'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left" style={{ overflow: 'hidden' }}>
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '12px', width: 200 }}
+                        title={
+                          !item?.kycHandle?.[0]?.reasonValue
+                            ? item?.kycHandle?.[0]?.remark || '-'
+                            : item?.kycHandle?.[0]?.reasonValue || '-'
+                        }>
+                        {!item?.kycHandle?.[0]?.reasonValue
                           ? item?.kycHandle?.[0]?.remark || '-'
-                          : item?.kycHandle?.[0]?.reasonValue || '-'
-                      }>
-                      {!item?.kycHandle?.[0]?.reasonValue
-                        ? item?.kycHandle?.[0]?.remark || '-'
-                        : item?.kycHandle?.[0]?.reasonValue || '-'}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
-                </Stack>
-              </TableCell>
-            )}
-          </TableBody>
-        </Table>
+                          : item?.kycHandle?.[0]?.reasonValue || '-'}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
+                  </Stack>
+                </TableCell>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollBar>
       </TableContainer>
       {listTickets?.data?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>

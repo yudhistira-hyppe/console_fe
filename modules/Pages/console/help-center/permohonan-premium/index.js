@@ -38,7 +38,20 @@ const PermohonanPremium = () => {
     filter.search !== '' && Object.assign(params, { keys: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    filter.status.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status?.map((item) => {
+          if (item === 'Disetujui Sistem') {
+            return 'BYSYSTEM';
+          } else if (item === 'Ditolak Admin') {
+            return 'DITOLAK';
+          } else if (item === 'Disetujui Admin') {
+            return 'DISETUJUI';
+          } else if (item === 'Permintaan Baru') {
+            return 'BARU';
+          }
+        }),
+      });
     return params;
   };
 
