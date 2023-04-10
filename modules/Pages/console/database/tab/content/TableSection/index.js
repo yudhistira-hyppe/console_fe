@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { CircularProgress, IconButton, Pagination, Stack } from '@mui/material';
+import { CircularProgress, Divider, IconButton, Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -22,11 +22,12 @@ import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
-import { NavigateBefore, NavigateNext } from '@material-ui/icons';
+import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
-    width: 100,
+    width: 160,
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
@@ -61,9 +62,50 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   };
 
   return (
-    <Stack flex={1}>
-      <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={3}>
-        <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}></Box>
+    <Stack flex={1} width="100%" maxWidth={956}>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" mb={5} style={{ gap: 12 }}>
+        <Stack direction="row" gap={2} alignItems="center" width={600}>
+          {filterList?.length >= 1 ? (
+            <ScrollBar style={{ width: 550, height: '100%' }}>
+              <Stack direction="row" gap="10px">
+                {filterList?.map((item, key) => (
+                  <Chip
+                    key={key}
+                    label={item.value}
+                    onDelete={() => {
+                      if (
+                        item.parent === 'description' ||
+                        item.parent === 'pemilik' ||
+                        item.parent === 'min_price' ||
+                        item.parent === 'max_price'
+                      ) {
+                        handleDeleteFilter(item.parent, '');
+                      } else if (item.parent === 'category') {
+                        handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+                      } else if (item.parent === 'createdAt') {
+                        handleDeleteFilter(item.parent, [null, null]);
+                      } else if (item.parent === 'hashtag') {
+                        handleDeleteFilter('clearHashtag', []);
+                      } else {
+                        handleDeleteFilter(item.parent, item.value);
+                      }
+                    }}
+                  />
+                ))}
+              </Stack>
+            </ScrollBar>
+          ) : (
+            <Typography>Belum ada filter yang diterapkan</Typography>
+          )}
+          {filterList?.length >= 1 && (
+            <IconButton onClick={() => handleDeleteFilter('clearAll', '')}>
+              <Delete />
+            </IconButton>
+          )}
+        </Stack>
+
+        <Divider orientation="vertical" flexItem />
+
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
           <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Typography>Urutkan berdasarkan</Typography>
@@ -82,139 +124,115 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
         </Stack>
       </Box>
 
-      <Stack direction="row" gap="10px" mb={2}>
-        {filterList?.map((item, key) => (
-          <Chip
-            key={key}
-            label={item.value}
-            onDelete={() => {
-              if (
-                item.parent === 'description' ||
-                item.parent === 'pemilik' ||
-                item.parent === 'min_price' ||
-                item.parent === 'max_price'
-              ) {
-                handleDeleteFilter(item.parent, '');
-              } else if (item.parent === 'category') {
-                handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
-              } else if (item.parent === 'createdAt') {
-                handleDeleteFilter(item.parent, [null, null]);
-              } else {
-                handleDeleteFilter(item.parent, item.value);
-              }
-            }}
-          />
-        ))}
-      </Stack>
-
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left" style={{ maxWidth: 150 }}>
-                Konten
-              </TableCell>
-              <TableCell align="left" style={{ maxWidth: 100 }}>
-                Pemilik
-              </TableCell>
-              <TableCell align="left">Tipe</TableCell>
-              <TableCell align="left">Kategori</TableCell>
-              <TableCell align="left">Kepemilikan</TableCell>
-              <TableCell align="left">Penjualan</TableCell>
-              <TableCell align="left">Harga</TableCell>
-              <TableCell align="left" style={{ maxWidth: 100 }}>
-                Tanggal
-              </TableCell>
-            </TableRow>
-          </TableHead>
+        <ScrollBar>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Tanggal Post</TableCell>
+                <TableCell align="left">Konten</TableCell>
+                <TableCell align="left">Pemilik</TableCell>
+                <TableCell align="left">Tipe</TableCell>
+                <TableCell align="left">Kategori</TableCell>
+                <TableCell align="left">Hashtag</TableCell>
+                <TableCell align="left">Kepemilikan</TableCell>
+                <TableCell align="left">Penjualan</TableCell>
+                <TableCell align="left">Harga</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {loading ? (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
-            ) : listTickets?.data?.length >= 1 ? (
-              listTickets?.data?.map((item, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  hover
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => router.push(`/database/content/${item?._id}`)}>
-                  <TableCell align="left" style={{ maxWidth: 150 }}>
-                    <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getImage(item)} variant="rounded" />
+            <TableBody>
+              {loading ? (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              ) : listTickets?.data?.length >= 1 ? (
+                listTickets?.data?.map((item, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    hover
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => router.push(`/database/content/${item?._id}`)}>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                        {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" alignItems="center" gap="15px" width={220}>
+                        <Avatar src={getImage(item)} variant="rounded" />
+                        <Typography
+                          variant="body1"
+                          style={{ fontSize: '14px', color: '#00000099' }}
+                          className={classes.textTruncate}
+                          title={item?.description || '-'}>
+                          {item?.description || '-'}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left">
                       <Typography
                         variant="body1"
-                        style={{ fontSize: '14px', color: '#00000099' }}
-                        className={classes.textTruncate}
-                        title={item?.description || '-'}>
-                        {item?.description || '-'}
+                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 100, overflow: 'hidden' }}>
+                        {item?.username || '-'}
                       </Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 100 }}>
-                    <Typography
-                      variant="body1"
-                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 80, overflow: 'hidden' }}>
-                      {item?.username || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.type || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography
-                      variant="body1"
-                      style={{
-                        fontSize: '12px',
-                        textOverflow: 'ellipsis',
-                        width: 70,
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                      }}
-                      title={item?.kategori?.map((item) => item?.interestName).join(', ')}>
-                      {item?.kategori?.map((item) => item?.interestName).join(', ') || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.kepemilikan === 'TIDAK' ? 'Tidak Terdaftar' : 'Terdaftar'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.statusJual === 'TIDAK' ? 'Tidak Dijual' : 'Dijual'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography
-                      variant="body1"
-                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 90, overflow: 'hidden' }}>
-                      Rp {numberWithCommas(item?.saleAmount || 0)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 100 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
-                </Stack>
-              </TableCell>
-            )}
-          </TableBody>
-        </Table>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 100 }}>
+                        {item?.type || '-'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography
+                        variant="body1"
+                        className={classes.textTruncate}
+                        style={{ fontSize: '12px' }}
+                        title={item?.kategori?.map((item) => item?.interestName).join(', ')}>
+                        {item?.kategori?.map((item) => item?.interestName).join(', ') || '-'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography
+                        variant="body1"
+                        className={classes.textTruncate}
+                        style={{ fontSize: '12px' }}
+                        title={item?.tags?.map((item) => item).join(', ')}>
+                        {item?.tags?.map((item) => item).join(', ') || '-'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                        {item?.kepemilikan === 'TIDAK' ? 'Tidak Terdaftar' : 'Terdaftar'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                        {item?.statusJual === 'TIDAK' ? 'Tidak Dijual' : 'Dijual'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 100, overflow: 'hidden' }}>
+                        Rp {numberWithCommas(item?.saleAmount || 0)}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Pembuatan Konten</Typography>
+                  </Stack>
+                </TableCell>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollBar>
       </TableContainer>
       {listTickets?.data?.length >= 10 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>

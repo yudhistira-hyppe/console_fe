@@ -7,6 +7,11 @@ import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetListContentQuery } from 'api/console/database/content';
 import moment from 'moment';
+import { CSVLink } from 'react-csv';
+import { LoadingButton } from '@mui/lab';
+import { Typography } from '@material-ui/core';
+import { GetApp } from '@material-ui/icons';
+import { toast } from 'react-hot-toast';
 
 const DatabaseTabContentComponent = () => {
   const [filter, setFilter] = useState({
@@ -22,6 +27,7 @@ const DatabaseTabContentComponent = () => {
     min_price: '',
     max_price: '',
     createdAt: [null, null],
+    hashtag: [],
   });
   const [filterList, setFilterList] = useState([]);
   const router = useRouter();
@@ -35,9 +41,6 @@ const DatabaseTabContentComponent = () => {
     });
     filter.pemilik !== '' && Object.assign(params, { username: filter.pemilik });
     filter.description !== '' && Object.assign(params, { description: filter.description });
-    // filter.theme.length >= 1 && params.push(`theme=${filter.theme.map((item) => item._id).join(',')}`);
-    // filter.genre.length >= 1 && params.push(`genre=${filter.genre.map((item) => item._id).join(',')}`);
-    // filter.mood.length >= 1 && params.push(`mood=${filter.mood.map((item) => item._id).join(',')}`);
     filter.status.length >= 1 &&
       Object.assign(params, { kepemilikan: filter.status.map((item) => (item === 'terdaftar' ? 'YA' : 'TIDAK')) });
     filter.type.length >= 1 && Object.assign(params, { postType: filter.type });
@@ -48,11 +51,22 @@ const DatabaseTabContentComponent = () => {
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.min_price && Object.assign(params, { startmount: Number(filter.min_price) });
     filter.max_price && Object.assign(params, { endmount: Number(filter.max_price) });
+    filter.hashtag.length >= 1 && Object.assign(params, { hashtag: filter.hashtag });
 
     return params;
   };
 
   const { data: listContent, isFetching: loadingContent } = useGetListContentQuery(getParams());
+
+  const {
+    data: listExport,
+    isFetching: loadingExport,
+    isError,
+  } = useGetListContentQuery({
+    ...getParams(),
+    limit: 100000000,
+    page: 0,
+  });
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -73,6 +87,86 @@ const DatabaseTabContentComponent = () => {
   };
 
   const handleSearchChange = (kind, value) => {
+    setFilter((prevVal) => {
+      switch (kind) {
+        case 'description':
+          return { ...prevVal, description: value, page: 0 };
+        case 'pemilik':
+          return { ...prevVal, pemilik: value, page: 0 };
+        case 'status':
+          return {
+            ...prevVal,
+            status: filter.status.find((item) => item === value)
+              ? filter.status.filter((item) => item !== value)
+              : [...filter.status, value],
+            page: 0,
+          };
+        case 'type':
+          return {
+            ...prevVal,
+            type: filter.type.find((item) => item === value)
+              ? filter.type.filter((item) => item !== value)
+              : [...filter.type, value],
+            page: 0,
+          };
+        case 'category':
+          return {
+            ...prevVal,
+            category: filter.category.find((item) => item?.name === JSON.parse(value)?.name)
+              ? filter.category.filter((item) => item?.name !== JSON.parse(value)?.name)
+              : [...filter.category, JSON.parse(value)],
+            page: 0,
+          };
+        case 'is_sell':
+          return {
+            ...prevVal,
+            is_sell: filter.is_sell.find((item) => item === value)
+              ? filter.is_sell.filter((item) => item !== value)
+              : [...filter.is_sell, value],
+            page: 0,
+          };
+        case 'min_price':
+          return { ...prevVal, min_price: value, page: 0 };
+        case 'max_price':
+          return { ...prevVal, max_price: value, page: 0 };
+        case 'createdAt':
+          return { ...prevVal, createdAt: value, page: 0 };
+        case 'ownedAt':
+          return { ...prevVal, ownedAt: value, page: 0 };
+        case 'hashtag':
+          return {
+            ...prevVal,
+            hashtag: filter.hashtag?.find((item) => item === value)
+              ? filter.hashtag?.filter((item) => item !== value)
+              : [...filter.hashtag, value],
+            page: 0,
+          };
+        case 'clearHashtag':
+          return {
+            ...prevVal,
+            hashtag: value,
+            page: 0,
+          };
+        case 'clearAll':
+          return {
+            page: 0,
+            limit: 10,
+            descending: 'true',
+            description: '',
+            pemilik: '',
+            status: [],
+            type: [],
+            category: [],
+            is_sell: [],
+            min_price: '',
+            max_price: '',
+            createdAt: [null, null],
+            hashtag: [],
+          };
+        default:
+          return { ...prevVal };
+      }
+    });
     setFilterList((prevVal) => {
       switch (kind) {
         case 'description':
@@ -121,62 +215,31 @@ const DatabaseTabContentComponent = () => {
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
             ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'clearAll':
+          return [];
+        case 'hashtag':
+          return value.length >= 1
+            ? prevVal?.find((item) => item.parent === kind)
+              ? [...prevVal]
+              : [...prevVal, { parent: kind, value: 'Hashtag' }]
+            : [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)];
+        case 'clearHashtag':
+          return [...prevVal.filter((item) => item.parent !== 'hashtag')];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
             : [...prevVal, { parent: kind, value: value }];
       }
     });
-    setFilter((prevVal) => {
-      switch (kind) {
-        case 'description':
-          return { ...prevVal, description: value };
-        case 'pemilik':
-          return { ...prevVal, pemilik: value };
-        case 'status':
-          return {
-            ...prevVal,
-            status: filter.status.find((item) => item === value)
-              ? filter.status.filter((item) => item !== value)
-              : [...filter.status, value],
-            page: 0,
-          };
-        case 'type':
-          return {
-            ...prevVal,
-            type: filter.type.find((item) => item === value)
-              ? filter.type.filter((item) => item !== value)
-              : [...filter.type, value],
-            page: 0,
-          };
-        case 'category':
-          return {
-            ...prevVal,
-            category: filter.category.find((item) => item?.name === JSON.parse(value)?.name)
-              ? filter.category.filter((item) => item?.name !== JSON.parse(value)?.name)
-              : [...filter.category, JSON.parse(value)],
-            page: 0,
-          };
-        case 'is_sell':
-          return {
-            ...prevVal,
-            is_sell: filter.is_sell.find((item) => item === value)
-              ? filter.is_sell.filter((item) => item !== value)
-              : [...filter.is_sell, value],
-            page: 0,
-          };
-        case 'min_price':
-          return { ...prevVal, min_price: value };
-        case 'max_price':
-          return { ...prevVal, max_price: value };
-        case 'createdAt':
-          return { ...prevVal, createdAt: value };
-        case 'ownedAt':
-          return { ...prevVal, ownedAt: value };
-        default:
-          return { ...prevVal };
-      }
-    });
+  };
+
+  const handleExport = () => {
+    const toastId = toast.loading('Generate pdf...');
+    if (isError) {
+      toast.error('Terjadi kesalahan saat generate pdf, silahkan coba lagi.', { id: toastId, duration: 2000 });
+    } else {
+      toast.success('Berhasil generate pdf', { id: toastId });
+    }
   };
 
   return (
@@ -185,17 +248,38 @@ const DatabaseTabContentComponent = () => {
         <title key="title">Hyppe-Console :: Database Konten</title>
       </Head>
       <PageContainer heading="">
-        <Stack direction={'row'} spacing={3}>
-          <SearchSection filter={filter} handleChange={handleSearchChange} />
-          <TableSection
-            filterList={filterList}
-            handleDeleteFilter={handleSearchChange}
-            filter={filter}
-            loading={loadingContent}
-            listTickets={listContent}
-            handlePageChange={handlePageChange}
-            handleOrder={onOrderChange}
-          />
+        <Stack direction={'row'} style={{ position: 'relative' }}>
+          <Stack position="absolute" top="-60px" right="0px">
+            {!loadingExport && (
+              <CSVLink
+                data={listExport?.data}
+                filename="History-Transaction.csv"
+                onClick={() => (listExport?.data?.length < 1 ? {} : handleExport())}>
+                <LoadingButton
+                  color="secondary"
+                  variant="outlined"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                  disabled={listExport?.data?.length < 1}>
+                  <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                    Unduh
+                  </Typography>
+                  <GetApp style={{ fontSize: 18 }} />
+                </LoadingButton>
+              </CSVLink>
+            )}
+          </Stack>
+          <Stack direction="row" spacing={3} width="100%">
+            <SearchSection filter={filter} handleChange={handleSearchChange} />
+            <TableSection
+              filterList={filterList}
+              handleDeleteFilter={handleSearchChange}
+              filter={filter}
+              loading={loadingContent}
+              listTickets={listContent}
+              handlePageChange={handlePageChange}
+              handleOrder={onOrderChange}
+            />
+          </Stack>
         </Stack>
       </PageContainer>
     </>

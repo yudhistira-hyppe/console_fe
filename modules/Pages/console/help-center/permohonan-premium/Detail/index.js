@@ -26,13 +26,13 @@ import ModalReject from '../Modal/ModalReject';
 import ModalLampiran from '../Modal/ModalLampiran';
 import { useApproveKYCMutation, useGetDetailKYCQuery } from 'api/console/helpCenter/kyc';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
-import moment from 'moment';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
+import moment from 'moment/moment';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -60,7 +60,7 @@ const DetailPermohonanPremium = () => {
     setInputValue({
       name: detail?.data[0]?.nama || '',
       noKtp: detail?.data[0]?.idcardnumber || '',
-      gender: detail?.data[0]?.jenisKelamin || '',
+      gender: detail?.data[0]?.jenisKelamin?.toUpperCase() || '',
       dateBirth: detail?.data[0]?.tglLahir ? moment(detail?.data[0]?.tglLahir) : null,
       placeBirth: detail?.data[0]?.tempatLahir || '',
     });
@@ -120,8 +120,6 @@ const DetailPermohonanPremium = () => {
     return viewer.toggle();
   };
 
-  console.log(detail?.data[0]);
-
   return (
     <>
       <Head>
@@ -174,7 +172,10 @@ const DetailPermohonanPremium = () => {
       ) : (
         <PageContainer heading="">
           <Stack direction="row" alignItems="center" gap="25px" mb="24px">
-            <Avatar src={getAvatar(detail?.data[0]?.avatar?.mediaEndpoint)} sx={{ width: 70, height: 70 }} />
+            <Avatar
+              src={getAvatar(detail?.data[0]?.avatar?.mediaEndpoint?.replace('.jpeg', ''))}
+              sx={{ width: 70, height: 70 }}
+            />
             <Stack direction="column">
               <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>{detail?.data[0]?.username || '-'}</Typography>
               <Typography>{detail?.data[0]?.nama || '-'}</Typography>
@@ -256,9 +257,9 @@ const DetailPermohonanPremium = () => {
 
                   <Stack>
                     <Typography variant="subtitle2" style={{ color: '#00000099' }}>
-                      Waktu Pendaftaran
+                      Tanggal Pengajuan
                     </Typography>
-                    <Typography>{moment(detail?.data[0]?.createdAt).format('DD/MM/YYYY - HH:mm')}</Typography>
+                    <Typography>{moment(detail?.data[0]?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB</Typography>
                   </Stack>
                 </Stack>
 
@@ -327,7 +328,11 @@ const DetailPermohonanPremium = () => {
                           Jenis Kelamin
                         </Typography>
                         <Typography>
-                          {detail?.data[0]?.jenisKelamin === 'MALE' ? 'Laki - laki' : 'Perempuan' || '-'}
+                          {detail?.data[0]?.jenisKelamin?.toUpperCase() === 'MALE' && 'Laki-laki'}
+                          {detail?.data[0]?.jenisKelamin?.toUpperCase() === 'FEMALE' && 'Perempuan'}
+                          {detail?.data[0]?.jenisKelamin?.toUpperCase() === 'LAKI-LAKI' && 'Laki-laki'}
+                          {detail?.data[0]?.jenisKelamin?.toUpperCase() === 'PEREMPUAN' && 'Perempuan'}
+                          {!detail?.data[0]?.jenisKelamin && '-'}
                         </Typography>
                       </Stack>
                     </Stack>
@@ -351,14 +356,18 @@ const DetailPermohonanPremium = () => {
                       </Stack>
                     </Stack>
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={8}>
                     <Stack direction="row" alignItems="center" gap="12px" height="100%">
                       <LocationCity style={{ fontSize: 36, color: '#666666' }} />
                       <Stack direction="column">
                         <Typography style={{ fontSize: 12, color: '#00000099', fontWeight: 'bold' }}>Lokasi</Typography>
-                        <Typography>
-                          {detail?.data[0]?.cities || '-'}, {detail?.data[0]?.area || '-'}
-                        </Typography>
+                        {detail?.data[0]?.cities ? (
+                          <Typography>
+                            {detail?.data[0]?.cities}, {detail?.data[0]?.area}
+                          </Typography>
+                        ) : (
+                          <Typography>-</Typography>
+                        )}
                       </Stack>
                     </Stack>
                   </Grid>
@@ -430,7 +439,7 @@ const DetailPermohonanPremium = () => {
                   <Typography style={{ color: '#00000099' }}>Nomor KTP</Typography>
                   <TextField
                     name="noKtp"
-                    type="number"
+                    type="text"
                     size="small"
                     placeholder="Masukan nomor KTP"
                     color="secondary"
@@ -440,6 +449,15 @@ const DetailPermohonanPremium = () => {
                       detail?.data[0]?.status !== 'BARU' ||
                       !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
                     }
+                    inputProps={{
+                      min: 0,
+                      onKeyPress: (event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      },
+                      maxLength: 16,
+                    }}
                   />
                 </Stack>
                 <Stack direction="column" gap="5px">
@@ -462,12 +480,12 @@ const DetailPermohonanPremium = () => {
                     <MenuItem value={'MALE'}>Laki - laki</MenuItem>
                     <MenuItem value="FEMALE">Perempuan</MenuItem>
                     <MenuItem
-                      value={'Laki-laki'}
+                      value={'LAKI-LAKI'}
                       style={{ display: detail?.data[0]?.status === 'DISETUJUI' ? 'block' : 'none' }}>
                       Laki - laki
                     </MenuItem>
                     <MenuItem
-                      value="Perempuan"
+                      value="PEREMPUAN"
                       style={{ display: detail?.data[0]?.status === 'DISETUJUI' ? 'block' : 'none' }}>
                       Perempuan
                     </MenuItem>

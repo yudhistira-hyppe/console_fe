@@ -286,21 +286,32 @@ const SearchSection = ({ filter, handleChange }) => {
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
-                label={'Baru'}
-                value="BARU"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('BARU')} />}
-              />
-              <FormControlLabel
-                label={'Disetujui'}
-                value="DISETUJUI"
+                label={'Permintaan Baru'}
+                value="Permintaan Baru"
                 control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DISETUJUI')} />
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('Permintaan Baru')} />
                 }
               />
               <FormControlLabel
-                label={'Ditolak'}
-                value="DITOLAK"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DITOLAK')} />}
+                label={'Disetujui Admin'}
+                value="Disetujui Admin"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('Disetujui Admin')} />
+                }
+              />
+              <FormControlLabel
+                label={'Disetujui Sistem'}
+                value="Disetujui Sistem"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('Disetujui Sistem')} />
+                }
+              />
+              <FormControlLabel
+                label={'Ditolak Admin'}
+                value="Ditolak Admin"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('Ditolak Admin')} />
+                }
               />
             </FormGroup>
           </AccordionDetails>
