@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../../../help-center/bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { Divider, IconButton, InputAdornment, Popover, Radio, RadioGroup, Stack } from '@mui/material';
+import { Autocomplete, Divider, IconButton, InputAdornment, Popover, Radio, RadioGroup, Stack } from '@mui/material';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import { DateRange as DateRangePicker } from 'react-date-range';
 import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
@@ -156,6 +156,58 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Hashtag Konten</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <Autocomplete
+              multiple
+              options={[]}
+              value={filter.hashtag}
+              onChange={(e) => {
+                if (e.code === 'Enter') {
+                  handleChangeDelay({ target: { name: 'hashtag', value: e.target.value } });
+                } else if (e.type === 'click') {
+                  handleChangeDelay({ target: { name: 'clearHashtag', value: [] } });
+                } else {
+                  return;
+                }
+              }}
+              freeSolo
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    variant="outlined"
+                    label={option}
+                    onDelete={() => {
+                      if (value?.length <= 1) {
+                        handleChangeDelay({ target: { name: 'clearHashtag', value: [] } });
+                      } else {
+                        handleChangeDelay({ target: { name: 'hashtag', value: option } });
+                      }
+                    }}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <DelayedTextField
+                  {...params}
+                  fullWidth
+                  waitForInput={true}
+                  filterValue={''}
+                  placeholder="Cari Hashtag"
+                  name="hashtag"
+                  onChange={(e) => {}}
+                  color="secondary"
+                />
+              )}
+            />
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Nama Pemilik</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
@@ -174,7 +226,7 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Pembuatan</Typography>
+            <Typography style={{ fontSize: '13px' }}>Tanggal Post</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <Stack direction="row" alignItems="center" spacing={1}>
