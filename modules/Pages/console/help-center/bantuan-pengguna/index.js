@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import SearchSection from './SearchSection';
@@ -10,6 +10,7 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useRouter } from 'next/router';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna';
 import moment from 'moment';
+import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -45,7 +46,18 @@ const ConsoleBantuanPenggunaComponent = () => {
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.sumber.length >= 1 && Object.assign(params, { sumber: filter.sumber.map((item) => item._id) });
-    filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    filter.status.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status?.map((item) => {
+          if (item === 'Baru') {
+            return 'new';
+          } else if (item === 'Dalam Proses') {
+            return 'onprogress';
+          } else if (item === 'Selesai') {
+            return 'close';
+          }
+        }),
+      });
     filter.kategori.length >= 1 && Object.assign(params, { kategori: filter.kategori.map((item) => item._id) });
     filter.level.length >= 1 && Object.assign(params, { level: filter.level.map((item) => item._id) });
 
@@ -53,6 +65,18 @@ const ConsoleBantuanPenggunaComponent = () => {
   };
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listTickets?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: 0,
+        };
+      });
+    }
+  }, [filter, loadingTicket]);
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {

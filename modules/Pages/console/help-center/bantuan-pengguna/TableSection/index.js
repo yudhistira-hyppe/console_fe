@@ -27,7 +27,6 @@ import ScrollBar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles((theme) => ({
   ticketHover: {
-    width: 180,
     '&:hover': {
       cursor: 'pointer',
       '& p': {
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TableSection = ({ filterList, handleDeleteFilter, filter, handleOrder, handlePageChange, listTickets, loading }) => {
+const TableSection = ({ filterList, filter, loading, listTickets, handlePageChange, handleOrder, handleDeleteFilter }) => {
   const [isModal, setModal] = React.useState(false);
   const [selectedEmail, setSelectedEmail] = React.useState('');
   const { authUser } = useAuth();
@@ -128,125 +127,139 @@ const TableSection = ({ filterList, handleDeleteFilter, filter, handleOrder, han
         </Box>
 
         <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>Nomor Tiket</TableCell>
-                <TableCell align="left" style={{ width: 120 }}>
-                  Tanggal Tiket
-                </TableCell>
-                <TableCell align="left" style={{ width: 80 }}>
-                  Sumber
-                </TableCell>
-                <TableCell align="left" style={{ width: 140 }}>
-                  Kategori
-                </TableCell>
-                <TableCell align="left">Level</TableCell>
-                <TableCell align="left">Status</TableCell>
-                <TableCell align="left">Penerima</TableCell>
-              </TableRow>
-            </TableHead>
+          <ScrollBar>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Tanggal Tiket</TableCell>
+                  <TableCell align="left">Nomor Tiket</TableCell>
+                  <TableCell align="left">Sumber</TableCell>
+                  <TableCell align="left">Kategori</TableCell>
+                  <TableCell align="left">Level</TableCell>
+                  <TableCell align="left">Status</TableCell>
+                  <TableCell align="left">Penerima</TableCell>
+                </TableRow>
+              </TableHead>
 
-            <TableBody>
-              {loading ? (
-                <TableCell colSpan={7}>
-                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <CircularProgress color="secondary" />
-                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                  </Stack>
-                </TableCell>
-              ) : listTickets?.data?.length >= 1 ? (
-                listTickets?.data?.map((item, key) => (
-                  <TableRow hover key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      className={classes.ticketHover}
-                      onClick={() => router.push(`/help-center/bantuan-pengguna/detail/${item?._id}`)}
-                      style={{ maxWidth: 150 }}
-                      title={item?.nomortiket}>
-                      <Typography variant="body1" style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {item?.nomortiket}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
-                        {moment(item?.datetime).utc().format('DD/MM/YY - HH:mm')} WIB
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
-                        {item?.sourceName || '-'}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
-                        {item?.nameCategory || '-'}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', textAlign: 'center' }}>
-                        {item?.nameLevel || '-'}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      {item?.status === 'onprogress' && (
-                        <Chip
-                          label="Dalam Proses"
-                          style={{ backgroundColor: 'rgba(255, 140, 0, 0.15)', color: '#FF8C00D9' }}
-                        />
-                      )}
-                      {item?.status === 'close' && (
-                        <Chip label="Selesai" style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9' }} />
-                      )}
-                      {item?.status === 'new' && (
-                        <Chip label="Baru" style={{ backgroundColor: '#E6094B1A', color: 'red' }} />
-                      )}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 10,
-                      }}>
-                      {item?.penerima ? (
-                        <Avatar
-                          src={getMediaUri(item?.avatar?.mediaEndpoint)}
-                          onClick={() => {
-                            setSelectedEmail(item?.penerima);
-                            setModal(!isModal);
-                          }}
-                          style={{ cursor: 'pointer' }}
-                          alt={item?.penerima}
-                        />
-                      ) : (
-                        <Avatar src={new Error()} alt="X" />
-                      )}
-                      <Typography
-                        style={{
-                          fontSize: 12,
-                          width: 120,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}>
-                        {item?.penerima || '-'}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableCell colSpan={8}>
-                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Bantuan Pengguna</Typography>
-                  </Stack>
-                </TableCell>
-              )}
-            </TableBody>
-          </Table>
+              <TableBody>
+                {loading ? (
+                  <TableCell colSpan={7}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <CircularProgress color="secondary" />
+                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                    </Stack>
+                  </TableCell>
+                ) : listTickets?.data?.length >= 1 ? (
+                  listTickets?.data?.map((item, key) => (
+                    <TableRow hover key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                          {moment(item?.datetime).utc().format('DD/MM/YY - HH:mm')} WIB
+                        </Typography>
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        className={classes.ticketHover}
+                        onClick={() => router.push(`/help-center/bantuan-pengguna/detail/${item?._id}`)}
+                        title={item?.nomortiket}>
+                        <Typography variant="body1" style={{ overflow: 'hidden', textOverflow: 'ellipsis', width: 200 }}>
+                          {item?.nomortiket}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                          {item?.sourceName || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 160 }}>
+                          {item?.nameCategory || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 60 }}>
+                          {item?.nameLevel || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Stack direction="row" width={140}>
+                          {item?.status === 'onprogress' && (
+                            <Chip
+                              label="Dalam Proses"
+                              style={{
+                                backgroundColor: 'rgba(255, 140, 0, 0.15)',
+                                color: '#FF8C00D9',
+                                fontWeight: 'bold',
+                                fontFamily: 'Normal',
+                              }}
+                            />
+                          )}
+                          {item?.status === 'close' && (
+                            <Chip
+                              label="Selesai"
+                              style={{
+                                backgroundColor: '#71A5001A',
+                                color: '#71A500D9',
+                                fontWeight: 'bold',
+                                fontFamily: 'Normal',
+                              }}
+                            />
+                          )}
+                          {item?.status === 'new' && (
+                            <Chip
+                              label="Baru"
+                              style={{
+                                backgroundColor: '#E6094B1A',
+                                color: 'red',
+                                fontWeight: 'bold',
+                                fontFamily: 'Normal',
+                              }}
+                            />
+                          )}
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Stack direction="row" alignItems="center" gap={2} width={200}>
+                          {item?.penerima ? (
+                            <Avatar
+                              src={getMediaUri(item?.avatar?.mediaEndpoint)}
+                              onClick={() => {
+                                setSelectedEmail(item?.penerima);
+                                setModal(!isModal);
+                              }}
+                              style={{ cursor: 'pointer' }}
+                              alt={item?.penerima}
+                            />
+                          ) : (
+                            <Avatar src={new Error()} alt="X" />
+                          )}
+                          <Typography
+                            style={{
+                              fontSize: 12,
+                              width: 120,
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}>
+                            {item?.penerima || '-'}
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableCell colSpan={8}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Bantuan Pengguna</Typography>
+                    </Stack>
+                  </TableCell>
+                )}
+              </TableBody>
+            </Table>
+          </ScrollBar>
         </TableContainer>
-        {listTickets?.data?.length >= 1 && !loading && (
+        {!loading && (
           <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
             <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
               <NavigateBefore />
