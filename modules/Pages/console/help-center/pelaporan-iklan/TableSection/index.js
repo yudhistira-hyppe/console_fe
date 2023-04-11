@@ -95,138 +95,134 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ width: 100 }}>Waktu</TableCell>
-              <TableCell align="left" style={{ maxWidth: 170 }}>
-                Konten Iklan
-              </TableCell>
-              <TableCell align="left" style={{ width: 120 }}>
-                Tipe
-              </TableCell>
-              <TableCell align="left" style={{ width: 150 }}>
-                Jumlah Pelaporan
-              </TableCell>
-              <TableCell align="left" style={{ width: 230 }}>
-                Alasan
-              </TableCell>
-              <TableCell align="left">Status</TableCell>
-            </TableRow>
-          </TableHead>
+        <ScrollBar>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Waktu</TableCell>
+                <TableCell align="left">Konten Iklan</TableCell>
+                <TableCell align="left">Tipe</TableCell>
+                <TableCell align="left">Jumlah Pelaporan</TableCell>
+                <TableCell align="left">Status</TableCell>
+                <TableCell align="left">Alasan</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {loading ? (
-              <TableCell colSpan={6}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
-            ) : listTickets?.totalsearch >= 1 ? (
-              listTickets?.arrdata?.map((item, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  hover
-                  onClick={() =>
-                    router.push({
-                      pathname: '/help-center/pelaporan-iklan/detail',
-                      query: {
-                        _id: item?._id,
-                      },
-                    })
-                  }
-                  style={{ cursor: 'pointer' }}>
-                  <TableCell align="left" style={{ width: 100 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAtReportLast).utc().format('DD/MM/YY-HH:mm')} WIB
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 170 }}>
-                    <Stack direction="row" alignItems="center" gap="12px">
-                      <Avatar src={item?.media?.VideoList?.[0]?.CoverURL} variant="rounded" />
-                      <Typography
-                        variant="body1"
-                        className={classes.textTruncate}
-                        title={item?.name}
-                        style={{ fontSize: '12px' }}>
-                        {item?.name || '-'}
+            <TableBody>
+              {loading ? (
+                <TableCell colSpan={6}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              ) : listTickets?.arrdata?.length >= 1 ? (
+                listTickets?.arrdata?.map((item, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    hover
+                    onClick={() =>
+                      router.push({
+                        pathname: '/help-center/pelaporan-iklan/detail',
+                        query: {
+                          _id: item?._id,
+                        },
+                      })
+                    }
+                    style={{ cursor: 'pointer' }}>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                        {moment(item?.createdAtReportLast).utc().format('DD/MM/YY - HH:mm')} WIB
                       </Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 120 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.nameType || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 150 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.reportedUserCount} Kali
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 230 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.reasonLast || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    {item?.reportStatusLast === 'BARU' && (
-                      <Chip
-                        label="Baru"
-                        style={{
-                          backgroundColor: '#E6094B1A',
-                          color: '#E6094BD9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
-                      <Chip
-                        label="Tidak Ditangguhkan"
-                        style={{
-                          backgroundColor: '#71A5001A',
-                          color: '#71A500D9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.reportStatusLast === 'DITANGGUHKAN' && (
-                      <Chip
-                        label="Ditangguhkan"
-                        style={{
-                          backgroundColor: 'rgba(103, 103, 103, 0.1)',
-                          color: '#676767',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.reportStatusLast === 'FLAGING' && (
-                      <Chip
-                        label="Ditandai Sensitif"
-                        style={{
-                          backgroundColor: '#B457F61A',
-                          color: '#B457F6D9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Pelaporan Iklan</Typography>
-                </Stack>
-              </TableCell>
-            )}
-          </TableBody>
-        </Table>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" alignItems="center" gap="12px" width={220}>
+                        <Avatar src={item?.media?.VideoList?.[0]?.CoverURL} variant="rounded" />
+                        <Typography
+                          variant="body1"
+                          className={classes.textTruncate}
+                          title={item?.name}
+                          style={{ fontSize: '12px' }}>
+                          {item?.name || '-'}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 100 }}>
+                        {item?.nameType || '-'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                        {item?.reportedUserCount || 0} Kali
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" width={160}>
+                        {item?.reportStatusLast === 'BARU' && (
+                          <Chip
+                            label="Baru"
+                            style={{
+                              backgroundColor: '#E6094B1A',
+                              color: '#E6094BD9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
+                          <Chip
+                            label="Tidak Ditangguhkan"
+                            style={{
+                              backgroundColor: '#71A5001A',
+                              color: '#71A500D9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.reportStatusLast === 'DITANGGUHKAN' && (
+                          <Chip
+                            label="Ditangguhkan"
+                            style={{
+                              backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                              color: '#676767',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.reportStatusLast === 'FLAGING' && (
+                          <Chip
+                            label="Ditandai Sensitif"
+                            style={{
+                              backgroundColor: '#B457F61A',
+                              color: '#B457F6D9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 230 }}>
+                        {item?.reasonLast || '-'}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Pelaporan Iklan</Typography>
+                  </Stack>
+                </TableCell>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollBar>
       </TableContainer>
       {listTickets?.arrdata?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>

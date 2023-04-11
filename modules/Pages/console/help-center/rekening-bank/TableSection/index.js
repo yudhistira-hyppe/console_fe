@@ -104,10 +104,8 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
             <TableRow>
-              <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 2180 }}>
-                Pemohon Akun
-              </TableCell>
+              <TableCell>Tanggal Pengajuan</TableCell>
+              <TableCell align="left">Akun Pemohon</TableCell>
               <TableCell align="left">Status</TableCell>
             </TableRow>
           </TableHead>
