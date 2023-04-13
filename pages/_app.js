@@ -59,6 +59,7 @@ const MainApp = (props) => {
       }
     } else {
       toast('Browser ini tidak memiliki akses notifikasi', {
+        id: 'non-support',
         icon: <Info />,
       });
     }
