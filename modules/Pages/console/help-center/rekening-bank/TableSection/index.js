@@ -205,7 +205,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.data?.length >= 1 && !loading && (
+      {!loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
           <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
             <NavigateBefore />
