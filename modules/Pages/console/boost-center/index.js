@@ -24,9 +24,9 @@ const BoostCenter = () => {
         {loadingAnalytic ? (
           <PageLoader />
         ) : (
-          <GridContainer>
+          <Grid container spacing={6}>
             {access.map((item) => item?.nameModule).includes('boost_statistic') && (
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={4} style={{ width: '100%' }}>
                 <ChartPost
                   totalPost={analyticBoost?.data?.totalpost}
                   persenJangkauan={analyticBoost?.data?.persenjangkauan}
@@ -46,16 +46,16 @@ const BoostCenter = () => {
               </Grid>
             )}
             {access.map((item) => item?.nameModule).includes('boost_engagement') && (
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={8} style={{ width: '100%' }}>
                 <TopBoosted data={analyticBoost?.data?.post} loading={loadingAnalytic} />
               </Grid>
             )}
             {access.map((item) => item?.nameModule).includes('boost_table') && (
-              <Grid item xs={12}>
+              <Grid item xs={12} style={{ width: '100%' }}>
                 <TableList />
               </Grid>
             )}
-          </GridContainer>
+          </Grid>
         )}
       </PageContainer>
     </>

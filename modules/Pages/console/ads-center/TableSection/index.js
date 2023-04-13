@@ -116,166 +116,156 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left" style={{ width: 120 }}>
-                Waktu Buat
-              </TableCell>
-              <TableCell align="left" style={{ width: 150 }}>
-                Iklan
-              </TableCell>
-              <TableCell align="left" style={{ width: 120 }}>
-                Tipe
-              </TableCell>
-              <TableCell align="left" style={{ width: 130 }}>
-                Penempatan
-              </TableCell>
-              <TableCell align="left" style={{ width: 130 }}>
-                Kredit Terpakai
-              </TableCell>
-              <TableCell align="left" style={{ width: 130 }}>
-                Kredit Tersisa
-              </TableCell>
-              <TableCell align="left" style={{ width: 130 }}>
-                Status
-              </TableCell>
-            </TableRow>
-          </TableHead>
+        <ScrollBar>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Waktu Buat</TableCell>
+                <TableCell align="left">Iklan</TableCell>
+                <TableCell align="left">Tipe</TableCell>
+                <TableCell align="left">Penempatan</TableCell>
+                <TableCell align="left">Kredit Terpakai</TableCell>
+                <TableCell align="left">Kredit Tersisa</TableCell>
+                <TableCell align="left">Status</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {loading ? (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
-            ) : listTickets?.data?.length >= 1 ? (
-              listTickets?.data?.map((item, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  hover
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => router.push({ pathname: `/ads-center/detail`, query: { _id: item?._id } })}>
-                  <TableCell align="left" style={{ width: 120 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm')} WIB
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 150 }}>
-                    <Stack direction="row" gap="15px">
-                      <Avatar src={getImage(item)} variant="rounded" alt="X" />
-                      {/* {JSON.stringify(getImage(item))} */}
-                      <Stack direction="column" gap="2px">
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}>
-                          {item?.name || '-'}
-                        </Typography>
+            <TableBody>
+              {loading ? (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              ) : listTickets?.data?.length >= 1 ? (
+                listTickets?.data?.map((item, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    hover
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => router.push({ pathname: `/ads-center/detail`, query: { _id: item?._id } })}>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                        {moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm')}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left" style={{ width: 150 }}>
+                      <Stack direction="row" gap="15px">
+                        <Avatar src={getImage(item)} variant="rounded" alt="X" />
+                        {/* {JSON.stringify(getImage(item))} */}
+                        <Stack direction="column" gap="2px">
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: '14px', color: '#00000099' }}
+                            className={classes.textTruncate}>
+                            {item?.name || '-'}
+                          </Typography>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 120 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.type_data || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 130 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.type_data === 'In App Ads'
-                        ? '-'
-                        : item.type_data === 'Sponsor Ads'
-                        ? item.place_data
-                        : item.place_data}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 130 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {numberWithCommas(item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1) || 0)} Kredit
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 130 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {numberWithCommas(item?.totalCredit - item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1))}{' '}
-                      Kredit
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ width: 130 }}>
-                    {item?.status === 'DRAFT' && (
-                      <Chip
-                        label="Tinjau"
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: 'Lato',
-                          color: '#E6094BD9',
-                          backgroundColor: '#E6094B1A',
-                        }}
-                      />
-                    )}
-                    {item?.status === 'APPROVE' && item?.isActive && (
-                      <Chip
-                        label="Dijadwalkan"
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: 'Lato',
-                          color: '#71A500D9',
-                          backgroundColor: '#71A5001A',
-                        }}
-                      />
-                    )}
-                    {item?.status === 'FINISH' && (
-                      <Chip
-                        label="Habis"
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: 'Lato',
-                          color: '#FF8C00D9',
-                          backgroundColor: '#FF8C0026',
-                        }}
-                      />
-                    )}
-                    {item?.status === 'REPORTED' && (
-                      <Chip
-                        label="Ditangguhkan"
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: 'Lato',
-                          color: '#676767D9',
-                          backgroundColor: '#6767671A',
-                        }}
-                      />
-                    )}
-                    {item?.status === 'APPROVE' && !item?.isActive && (
-                      <Chip
-                        label="Dinonaktifkan"
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: 'Lato',
-                          color: '#676767D9',
-                          backgroundColor: '#6767671A',
-                        }}
-                      />
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Iklan yang sedang berjalan</Typography>
-                </Stack>
-              </TableCell>
-            )}
-          </TableBody>
-        </Table>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                        {item?.type_data || '-'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 130 }}>
+                        {item?.type_data === 'In App Ads'
+                          ? '-'
+                          : item.type_data === 'Sponsor Ads'
+                          ? item.place_data
+                          : item.place_data}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 130 }}>
+                        {numberWithCommas(item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1) || 0)} Kredit
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 130 }}>
+                        {numberWithCommas(item?.totalCredit - item?.totalView * (item?.type_data === 'In App Ads' ? 2 : 1))}{' '}
+                        Kredit
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" width={130}>
+                        {item?.status === 'DRAFT' && (
+                          <Chip
+                            label="Tinjau"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#E6094BD9',
+                              backgroundColor: '#E6094B1A',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'APPROVE' && item?.isActive && (
+                          <Chip
+                            label="Dijadwalkan"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#71A500D9',
+                              backgroundColor: '#71A5001A',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'FINISH' && (
+                          <Chip
+                            label="Habis"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#FF8C00D9',
+                              backgroundColor: '#FF8C0026',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'REPORTED' && (
+                          <Chip
+                            label="Ditangguhkan"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#676767D9',
+                              backgroundColor: '#6767671A',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'APPROVE' && !item?.isActive && (
+                          <Chip
+                            label="Dinonaktifkan"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#676767D9',
+                              backgroundColor: '#6767671A',
+                            }}
+                          />
+                        )}
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Iklan yang sedang berjalan</Typography>
+                  </Stack>
+                </TableCell>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollBar>
       </TableContainer>
       {listTickets?.data?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>

@@ -42,12 +42,7 @@ const CmtAdvCardContent = ({
     <Box className={clsx(classes.advCardContent, 'Cmt-card-content', 'CmtAdvCard-Content', className)} {...rest}>
       {extraContentRender || icon || avatar || title || subTitle ? (
         <Grid container spacing={6}>
-          <Grid
-            item
-            xs={alignCenter ? 12 : 12}
-            sm={alignCenter ? 12 : columnSizes[0] === 12 ? 12 : 6}
-            md={alignCenter ? 12 : columnSizes[0]}
-            className={clsx(blockFirst, alignCenterClass)}>
+          <Grid item xs={6} className={clsx(blockFirst, alignCenterClass)}>
             <Box>
               <CmtContentHead
                 icon={icon}
@@ -61,12 +56,7 @@ const CmtAdvCardContent = ({
             {extraContentRender && <Box>{extraContentRender}</Box>}
           </Grid>
           {children && (
-            <Grid
-              item
-              xs={alignCenter ? 12 : columnSizes[1] === 0 ? 0 : 12}
-              sm={alignCenter ? 12 : columnSizes[1] === 0 ? 0 : 6}
-              md={alignCenter ? 12 : columnSizes[1]}
-              className={blockSecond}>
+            <Grid item xs={6} className={blockSecond}>
               <Box>{children}</Box>
             </Grid>
           )}

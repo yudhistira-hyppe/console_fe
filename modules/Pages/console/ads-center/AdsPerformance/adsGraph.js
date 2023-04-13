@@ -21,7 +21,7 @@ const AdsGraph = ({ data }) => {
   const classes = useStyles();
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height="100%" minHeight={189}>
       <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
         <Tooltip
           labelStyle={{ color: 'black' }}

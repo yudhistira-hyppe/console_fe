@@ -15,24 +15,24 @@ const ConsoleAdsCenterComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Pusat Iklan</title>
       </Head>
-      <PageContainer className="mt-3">
-        <GridContainer>
+      <PageContainer>
+        <Grid container spacing={6}>
           {access.map((item) => item?.nameModule).includes('ads_performance') && (
-            <Grid item xs={12} md={12} lg={4} xl={4}>
+            <Grid item xs={4} style={{ width: '100%' }}>
               <AdsPerformaceComponents />
             </Grid>
           )}
           {access.map((item) => item?.nameModule).includes('ads_demografis') && (
-            <Grid item xs={12} md={12} lg={8} xl={8}>
+            <Grid item xs={8} style={{ width: '100%' }}>
               <AdsDemographyComponent />
             </Grid>
           )}
           {access.map((item) => item?.nameModule).includes('ads_table') && (
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{ width: '100%' }}>
               <TableList />
             </Grid>
           )}
-        </GridContainer>
+        </Grid>
       </PageContainer>
     </>
   );

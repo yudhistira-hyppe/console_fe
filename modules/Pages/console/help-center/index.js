@@ -63,8 +63,9 @@ const ConsoleHelpCenterComponent = () => {
       <Head>
         <title key="title">Hyppe-Console :: Pusat Bantuan</title>
       </Head>
+
       <PageContainer>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4} mt="-25px">
+        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
           <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>Bantuan Pengguna</Typography>
           <Card style={{ padding: 10 }}>
             <Stack direction="row" alignItems="center" spacing={1}>
@@ -132,7 +133,7 @@ const ConsoleHelpCenterComponent = () => {
         </Stack>
 
         <GridContainer>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} lg={4}>
             {access.map((item) => item?.nameModule).includes('help_consumer') ? (
               <CardWithIndicator
                 headTitle="Bantuan Pengguna"
@@ -153,7 +154,7 @@ const ConsoleHelpCenterComponent = () => {
               </Card>
             )}
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} lg={4}>
             {access.map((item) => item?.nameModule).includes('help_kyc') ? (
               <CardWithIndicator
                 headTitle="Permohonan Akun Premium"
@@ -174,7 +175,7 @@ const ConsoleHelpCenterComponent = () => {
               </Card>
             )}
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} lg={4}>
             {access.map((item) => item?.nameModule).includes('help_bank') ? (
               <CardWithIndicator
                 headTitle="Rekening Bank"
@@ -196,7 +197,7 @@ const ConsoleHelpCenterComponent = () => {
             )}
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} lg={4}>
             {access.map((item) => item?.nameModule).includes('help_konten') ? (
               <CardWithIndicator
                 headTitle="Laporan Konten"
@@ -218,7 +219,7 @@ const ConsoleHelpCenterComponent = () => {
               </Card>
             )}
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} lg={4}>
             {access.map((item) => item?.nameModule).includes('help_appeal_konten') ? (
               <CardWithIndicator
                 headTitle="Banding Konten"
@@ -240,7 +241,7 @@ const ConsoleHelpCenterComponent = () => {
               </Card>
             )}
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6} lg={4}>
             {access.map((item) => item?.nameModule).includes('help_fingerprint') ? (
               <CardWithIndicator
                 headTitle="Fingerprint Combat"
