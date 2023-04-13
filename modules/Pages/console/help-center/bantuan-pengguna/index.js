@@ -72,7 +72,7 @@ const ConsoleBantuanPenggunaComponent = () => {
       setFilter((prevVal) => {
         return {
           ...prevVal,
-          page: 0,
+          page: prevVal.page - 1,
         };
       });
     }
