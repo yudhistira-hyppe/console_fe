@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
@@ -10,6 +10,7 @@ import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetListKYCQuery } from 'api/console/helpCenter/kyc';
 import moment from 'moment';
+import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -56,6 +57,18 @@ const PermohonanPremium = () => {
   };
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListKYCQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listTickets?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingTicket]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
