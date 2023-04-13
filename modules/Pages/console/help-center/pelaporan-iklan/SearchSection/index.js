@@ -107,31 +107,29 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
                 label={'Baru'}
-                value="BARU"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('BARU')} />}
+                value="Baru"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Baru')} />}
               />
               <FormControlLabel
                 label={'Dipulihkan'}
-                value="TIDAK DITANGGUHKAN"
+                value="Dipulihkan"
                 control={
-                  <Checkbox
-                    defaultChecked={false}
-                    color="secondary"
-                    checked={filter.status?.includes('TIDAK DITANGGUHKAN')}
-                  />
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Dipulihkan')} />
                 }
               />
               <FormControlLabel
                 label={'Ditangguhkan'}
-                value="DITANGGUHKAN"
+                value="Ditangguhkan"
                 control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DITANGGUHKAN')} />
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Ditangguhkan')} />
                 }
               />
               <FormControlLabel
                 label={'Ditandai Sensitif'}
-                value="FLAGING"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('FLAGING')} />}
+                value="Ditandai Sensitif"
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Ditandai Sensitif')} />
+                }
               />
             </FormGroup>
           </AccordionDetails>

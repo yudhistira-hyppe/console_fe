@@ -104,10 +104,8 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
           <TableHead>
             <TableRow>
-              <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 2180 }}>
-                Pemohon Akun
-              </TableCell>
+              <TableCell>Tanggal Pengajuan</TableCell>
+              <TableCell align="left">Akun Pemohon</TableCell>
               <TableCell align="left">Status</TableCell>
             </TableRow>
           </TableHead>
@@ -207,7 +205,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.data?.length >= 1 && !loading && (
+      {!loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
           <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
             <NavigateBefore />

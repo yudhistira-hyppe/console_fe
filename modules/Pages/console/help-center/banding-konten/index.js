@@ -42,7 +42,20 @@ const BandingKonten = () => {
     filter.search !== '' && Object.assign(params, { username: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    filter.status.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status.map((item) => {
+          if (item === 'Baru') {
+            return 'BARU';
+          } else if (item === 'Dipulihkan') {
+            return 'TIDAK DITANGGUHKAN';
+          } else if (item === 'Ditangguhkan') {
+            return 'DITANGGUHKAN';
+          } else if (item === 'Ditandai Sensitif') {
+            return 'FLAGING';
+          }
+        }),
+      });
     filter.reason.length >= 1 && Object.assign(params, { reasonAppeal: filter.reason });
 
     return params;

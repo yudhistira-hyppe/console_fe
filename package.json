@@ -26,6 +26,7 @@
     "axios": "^0.19.2",
     "axios-mock-adapter": "^1.18.2",
     "boostrap": "^2.0.0",
+    "caniuse-lite": "^1.0.30001477",
     "chart.js": "^2.9.3",
     "clipboard-copy": "^3.1.0",
     "clsx": "latest",

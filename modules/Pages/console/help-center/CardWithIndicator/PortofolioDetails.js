@@ -27,6 +27,7 @@ const PortfolioDetails = ({ data }) => {
   const sensitif = data?.find((item) => item._id === 'DITANDAI SENSITIF');
   const disetujui = data?.find((item) => item._id === 'DISETUJUI');
   const ditolak = data?.find((item) => item._id === 'DITOLAK');
+  const bysistem = data?.find((item) => item._id === 'BYSYSTEM');
 
   return (
     <Box width={1} style={{ zIndex: -1, height: 203 }}>
@@ -113,9 +114,9 @@ const PortfolioDetails = ({ data }) => {
                 <Box display="flex" alignItems="center">
                   <Typography
                     style={{ fontSize: 12, marginRight: 4, textTransform: 'capitalize' }}
-                    title={disetujui?._id || 'DISETUJUI'}
+                    title={disetujui?._id && 'DISETUJUI ADMIN'}
                     fontFamily="Lato">
-                    {disetujui?._id || 'DISETUJUI'}
+                    {disetujui?._id && 'DISETUJUI ADMIN'}
                   </Typography>
                   |
                   <Box pl={1} component="span" color="text.secondary" fontSize={12}>
@@ -129,6 +130,31 @@ const PortfolioDetails = ({ data }) => {
                 return `${value}%`;
               }}
               containedColor={disetujui?.warna || '#AB22AF'}
+              onlyContained
+            />
+          )}
+          {bysistem && (
+            <CmtProgressBar
+              label={
+                <Box display="flex" alignItems="center">
+                  <Typography
+                    style={{ fontSize: 12, marginRight: 4, textTransform: 'capitalize' }}
+                    title={bysistem?._id && 'DISETUJUI SISTEM'}
+                    fontFamily="Lato">
+                    {bysistem?._id && 'DISETUJUI SISTEM'}
+                  </Typography>
+                  |
+                  <Box pl={1} component="span" color="text.secondary" fontSize={12}>
+                    {bysistem?.myCount || 0}
+                  </Box>
+                </Box>
+              }
+              labelPos="top-left"
+              value={Number(bysistem?.persen) || 0}
+              renderValue={(value) => {
+                return `${value}%`;
+              }}
+              containedColor={bysistem?.warna || '#AB22AF'}
               onlyContained
             />
           )}

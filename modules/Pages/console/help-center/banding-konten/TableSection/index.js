@@ -102,143 +102,141 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ maxWidth: 130 }}>Tanggal Pengajuan</TableCell>
-              <TableCell align="left" style={{ maxWidth: 200 }}>
-                Akun Pemohon
-              </TableCell>
-              <TableCell align="left" style={{ maxWidth: 120 }}>
-                Status
-              </TableCell>
-              <TableCell align="left">Status Konten</TableCell>
-              <TableCell align="left" style={{ maxWidth: 150 }}>
-                Alasan Banding
-              </TableCell>
-            </TableRow>
-          </TableHead>
+        <ScrollBar>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Tanggal Pengajuan</TableCell>
+                <TableCell align="left">Akun Pemohon</TableCell>
+                <TableCell align="left">Status</TableCell>
+                <TableCell align="left">Status Konten</TableCell>
+                <TableCell align="left">Alasan Banding</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {loading ? (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
-            ) : listTickets?.arrdata?.length >= 1 ? (
-              listTickets?.arrdata?.map((item, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  hover
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    router.push({
-                      pathname: '/help-center/banding-konten/detail',
-                      query: {
-                        _id: item?._id,
-                      },
-                    })
-                  }>
-                  <TableCell style={{ maxWidth: 130 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAtAppealLast).utc().format('DD/MM/YY - HH:mm')} WIB
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 200 }}>
-                    <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getImage(item?.avatar?.mediaEndpoint)} />
-                      <Stack direction="column" gap="2px" style={{ maxWidth: 180 }}>
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}
-                          title={item?.username}>
-                          {item?.username || '-'}
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '12px', color: '#00000099' }}
-                          className={classes.textTruncate}
-                          title={item?.email}>
-                          {item?.email || '-'}
-                        </Typography>
+            <TableBody>
+              {loading ? (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              ) : listTickets?.arrdata?.length >= 1 ? (
+                listTickets?.arrdata?.map((item, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    hover
+                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      router.push({
+                        pathname: '/help-center/banding-konten/detail',
+                        query: {
+                          _id: item?._id,
+                        },
+                      })
+                    }>
+                    <TableCell>
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                        {moment(item?.createdAtAppealLast).utc().format('DD/MM/YY - HH:mm')} WIB
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" alignItems="center" gap="15px" width={240}>
+                        <Avatar src={getImage(item?.avatar?.mediaEndpoint)} />
+                        <Stack direction="column" gap="2px" style={{ width: 180 }}>
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: '14px', color: '#00000099' }}
+                            className={classes.textTruncate}
+                            title={item?.username}>
+                            {item?.username || '-'}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: '12px', color: '#00000099' }}
+                            className={classes.textTruncate}
+                            title={item?.email}>
+                            {item?.email || '-'}
+                          </Typography>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 120 }}>
-                    {item?.reportStatusLast === 'BARU' && (
-                      <Chip
-                        label="Baru"
-                        style={{
-                          backgroundColor: '#E6094B1A',
-                          color: '#E6094BD9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
-                      <Chip
-                        label="Dipulihkan"
-                        style={{
-                          backgroundColor: '#71A5001A',
-                          color: '#71A500D9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.reportStatusLast === 'FLAGING' && (
-                      <Chip
-                        label="Ditandai Sensitif"
-                        style={{
-                          backgroundColor: '#B457F61A',
-                          color: '#B457F6D9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.reportStatusLast === 'DITANGGUHKAN' && (
-                      <Chip
-                        label="Ditangguhkan"
-                        style={{
-                          backgroundColor: 'rgba(103, 103, 103, 0.1)',
-                          color: '#676767',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {!item?.reportStatusLast && '-'}
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.reportedStatus === 'ALL' && 'Tersedia'}
-                      {item?.reportedStatus === 'OWNED' && 'Ditarik'}
-                      {item?.reportedStatus === 'BLURRED' && 'Ditandai Sensitif'}
-                      {!item?.reportedStatus && '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 150 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.reasonLastAppeal || '-'}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Banding Konten</Typography>
-                </Stack>
-              </TableCell>
-            )}
-          </TableBody>
-        </Table>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" width={140}>
+                        {item?.reportStatusLast === 'BARU' && (
+                          <Chip
+                            label="Baru"
+                            style={{
+                              backgroundColor: '#E6094B1A',
+                              color: '#E6094BD9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.reportStatusLast === 'TIDAK DITANGGUHKAN' && (
+                          <Chip
+                            label="Dipulihkan"
+                            style={{
+                              backgroundColor: '#71A5001A',
+                              color: '#71A500D9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.reportStatusLast === 'FLAGING' && (
+                          <Chip
+                            label="Ditandai Sensitif"
+                            style={{
+                              backgroundColor: '#B457F61A',
+                              color: '#B457F6D9',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {item?.reportStatusLast === 'DITANGGUHKAN' && (
+                          <Chip
+                            label="Ditangguhkan"
+                            style={{
+                              backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                              color: '#676767',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
+                        {!item?.reportStatusLast && '-'}
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                        {item?.reportedStatus === 'ALL' && 'Tersedia'}
+                        {item?.reportedStatus === 'OWNED' && 'Ditarik'}
+                        {item?.reportedStatus === 'BLURRED' && 'Ditandai Sensitif'}
+                        {!item?.reportedStatus && '-'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 240 }}>
+                        {item?.reasonLastAppeal || '-'}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Banding Konten</Typography>
+                  </Stack>
+                </TableCell>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollBar>
       </TableContainer>
       {listTickets?.arrdata?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>

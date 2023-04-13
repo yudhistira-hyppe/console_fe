@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
 import { Link, Typography } from '@material-ui/core';
@@ -10,6 +10,7 @@ import TableSection from './TableSection';
 import SearchSection from './SearchSection';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/konten';
 import moment from 'moment';
+import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -28,6 +29,7 @@ const PelaporanKonten = () => {
     reason: [],
   });
   const [filterList, setFilterList] = useState([]);
+  const [noMorePage, setNoMorePage] = useState(false);
   const router = useRouter();
 
   const getParams = () => {
@@ -42,15 +44,39 @@ const PelaporanKonten = () => {
     filter.search !== '' && Object.assign(params, { key: filter.search });
     filter.rangeReport[0] && Object.assign(params, { startreport: filter.rangeReport[0] });
     filter.rangeReport[1] && Object.assign(params, { endreport: filter.rangeReport[1] });
-    // filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
-    // filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
-    filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    filter.status.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status.map((item) => {
+          if (item === 'Baru') {
+            return 'BARU';
+          } else if (item === 'Dipulihkan') {
+            return 'TIDAK DITANGGUHKAN';
+          } else if (item === 'Ditangguhkan') {
+            return 'DITANGGUHKAN';
+          } else if (item === 'Ditandai Sensitif') {
+            return 'FLAGING';
+          }
+        }),
+      });
     filter.reason.length >= 1 && Object.assign(params, { reason: filter.reason.map((item) => item._id) });
 
     return params;
   };
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listTickets?.arrdata?.length < 1) {
+      toast.success('Semua data sudah ditampilkan, silahkan kembali ke page sebelumnya');
+      setNoMorePage(true);
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: 0,
+        };
+      });
+    }
+  }, [filter, loadingTicket]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -190,8 +216,6 @@ const PelaporanKonten = () => {
     });
   };
 
-  console.log(filterList);
-
   return (
     <>
       <Head>
@@ -223,6 +247,7 @@ const PelaporanKonten = () => {
             filter={filter}
             loading={loadingTicket}
             listTickets={listTickets}
+            noMorePage={noMorePage}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
             handleDeleteFilter={handleSearchChange}

@@ -23,7 +23,8 @@ import { Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { Toaster } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
+import { Info } from '@material-ui/icons';
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
@@ -49,9 +50,17 @@ const MainApp = (props) => {
   }, []);
 
   useEffect(() => {
-    if (Notification.permission === 'granted') {
-      const message = getMessaging(firebaseApp);
-      onMessage(message, (payload) => dispatch(setNotification(payload)));
+    const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+
+    if (isSupported()) {
+      if (Notification.permission === 'granted') {
+        const message = getMessaging(firebaseApp);
+        onMessage(message, (payload) => dispatch(setNotification(payload)));
+      }
+    } else {
+      toast('Browser ini tidak memiliki akses notifikasi', {
+        icon: <Info />,
+      });
     }
   });
 

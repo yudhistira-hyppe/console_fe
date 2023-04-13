@@ -42,9 +42,20 @@ const PelaporanIklan = () => {
     filter.search !== '' && Object.assign(params, { key: filter.search });
     filter.rangeReport[0] && Object.assign(params, { startreport: filter.rangeReport[0] });
     filter.rangeReport[1] && Object.assign(params, { endreport: filter.rangeReport[1] });
-    // filter.startdate !== '' && Object.assign(params, { startdate: filter.startdate });
-    // filter.enddate !== '' && Object.assign(params, { enddate: filter.enddate });
-    filter.status.length >= 1 && Object.assign(params, { status: filter.status });
+    filter.status.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status.map((item) => {
+          if (item === 'Baru') {
+            return 'BARU';
+          } else if (item === 'Dipulihkan') {
+            return 'TIDAK DITANGGUHKAN';
+          } else if (item === 'Ditangguhkan') {
+            return 'DITANGGUHKAN';
+          } else if (item === 'Ditandai Sensitif') {
+            return 'FLAGING';
+          }
+        }),
+      });
     filter.reason.length >= 1 && Object.assign(params, { reason: filter.reason.map((item) => item?._id) });
 
     return params;

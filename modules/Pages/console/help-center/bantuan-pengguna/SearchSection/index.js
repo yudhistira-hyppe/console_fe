@@ -66,13 +66,13 @@ const SearchSection = ({ filter, handleChange }) => {
       <Box className={classes.inBuildAppCard} p={5} pt={2} style={{ width: '100%', maxWidth: 270 }}>
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Pencarian Tiket</Typography>
+            <Typography style={{ fontSize: '13px' }}>Nomor Tiket</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: '0px' }}>
             <DelayedTextField
               fullWidth
               waitForInput={true}
-              placeholder="Cari No. Tiket / Judul Permasalahan"
+              placeholder="Cari No.Tiket"
               name="search"
               filterValue={filter.search}
               onChange={(e) => handleChange(e.target.name, e.target.value)}
@@ -387,39 +387,23 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup>
+            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
                 label={'Baru'}
-                control={
-                  <Checkbox
-                    defaultChecked={false}
-                    color="secondary"
-                    onClick={() => handleChange('status', 'new')}
-                    checked={filter.status.includes('new')}
-                  />
-                }
+                value="Baru"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Baru')} />}
               />
               <FormControlLabel
                 label={'Dalam Proses'}
+                value="Dalam Proses"
                 control={
-                  <Checkbox
-                    defaultChecked={false}
-                    color="secondary"
-                    onClick={() => handleChange('status', 'onprogress')}
-                    checked={filter.status.includes('onprogress')}
-                  />
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Dalam Proses')} />
                 }
               />
               <FormControlLabel
                 label={'Selesai'}
-                control={
-                  <Checkbox
-                    defaultChecked={false}
-                    color="secondary"
-                    onClick={() => handleChange('status', 'close')}
-                    checked={filter.status.includes('close')}
-                  />
-                }
+                value="Selesai"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Selesai')} />}
               />
             </FormGroup>
           </AccordionDetails>
