@@ -65,7 +65,7 @@ const AdsPerformaceComponents = () => {
         </Stack>
 
         {loadingPerformance ? (
-          <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
+          <Stack direction="column" alignItems="center" justifyContent="center" height="100%" minHeight={189} spacing={2}>
             <CircularProgress color="secondary" size={28} />
           </Stack>
         ) : (

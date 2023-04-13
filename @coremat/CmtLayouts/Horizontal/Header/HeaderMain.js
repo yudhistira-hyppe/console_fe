@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: 15,
       width: '100%',
       boxSizing: 'border-box',
-      [theme.breakpoints.up('md')]: {
-        width: 1024,
-      },
       [theme.breakpoints.up('lg')]: {
         width: 1280,
       },

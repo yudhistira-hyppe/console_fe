@@ -4,55 +4,44 @@ import IntlMessages from '../../../utils/IntlMessages';
 
 export const sidebarNavs = [
   {
-    name: <IntlMessages id={'sidebar.main'} />,
+    name: 'Beranda',
     type: 'item',
     link: '/',
   },
   {
-    name: 'Content Management',
+    name: 'Pusat Bantuan',
     type: 'item',
-    link: '/content-management',
+    link: '/help-center',
   },
   {
-    name: 'Ads Center',
-    type: 'collapse',
-    children: [
-      {
-        name: 'Ads Center',
-        type: 'item',
-        link: '/ads',
-      },
-      {
-        name: 'Ads Guideline',
-        type: 'item',
-        link: '/adsGuideline',
-      },
-      {
-        name: 'About Hyppe Ads',
-        type: 'item',
-        link: '/aboutAds',
-      },
-      {
-        name: 'Ads Detail',
-        type: 'item',
-        link: '/ads/details',
-      },
-      {
-        name: 'Create Ads',
-        type: 'item',
-        link: '/ads/create',
-      },
-      {
-        name: 'Buy Voucher',
-        type: 'item',
-        link: '/voucher/buy',
-      },
-    ],
+    name: 'Pusat Iklan',
+    type: 'item',
+    link: '/ads-center',
   },
   {
-    name: 'Transaction',
+    name: 'Boost Post Center',
     type: 'item',
-    link: '/transaction',
+    link: '/boost-center',
+  },
+  {
+    name: 'Database',
+    type: 'item',
+    link: '/database',
+  },
+  {
+    name: 'Engagement',
+    type: 'item',
+    link: '/user-engagement',
+  },
+  {
+    name: 'Monetisasi',
+    type: 'item',
+    link: '/monetize',
+  },
+  {
+    name: 'Anggota',
+    type: 'item',
+    link: '/anggota',
   },
 ];
 
@@ -123,24 +112,11 @@ export const consoleNav = [
     name: 'Beranda',
     type: 'item',
     link: '/',
-    icon: <Home />,
   },
   {
     name: 'Pusat Bantuan',
     type: 'item',
     link: '/help-center',
-    children: [
-      '/console/help-center/bantuan-pengguna',
-      '/console/help-center/bantuan-pengguna/detail',
-      '/console/help-center/keluhan-pengguna',
-      '/console/help-center/keluhan-pengguna/detail',
-      '/console/help-center/pelaporan-akun',
-      '/console/help-center/pelaporan-akun/detail',
-      '/console/help-center/pelaporan-iklan',
-      '/console/help-center/pelaporan-iklan/detail',
-      '/console/help-center/pelaporan-konten',
-      '/console/help-center/pelaporan-konten/detail',
-    ],
   },
   {
     name: 'Pusat Iklan',
@@ -167,23 +143,9 @@ export const consoleNav = [
     type: 'item',
     link: '/monetize',
   },
-  // {
-  //   name: 'Pengumuman',
-  //   type: 'item',
-  //   // link: '/console/pengumuman',
-  //   link: '/pengumuman',
-  // },
-  // {
-  //   name: 'Pedoman',
-  //   type: 'item',
-  //   link: '/pedoman',
-  //   // link: '/console/pedoman',
-  // },
   {
     name: 'Anggota',
     type: 'item',
-    // this is default for tab
-    // link: '/console/anggota?tab=pengguna',
     link: '/anggota',
   },
 ];

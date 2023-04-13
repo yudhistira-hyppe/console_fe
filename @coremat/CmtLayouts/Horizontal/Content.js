@@ -9,7 +9,8 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    [theme.breakpoints.down('sm')]: {
+    overflow: 'auto',
+    [theme.breakpoints.down('md')]: {
       paddingTop: 20,
       paddingBottom: 20,
     },
@@ -22,11 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     paddingLeft: 15,
     paddingRight: 15,
-    width: '100%',
     boxSizing: 'border-box',
-    [theme.breakpoints.up('md')]: {
-      width: 1024,
-    },
     [theme.breakpoints.up('lg')]: {
       width: 1280,
     },

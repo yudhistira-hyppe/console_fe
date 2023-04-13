@@ -60,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     overflow: 'hidden',
     height: '100%',
+    minWidth: 270,
+    // '@media screen and (max-width: 768px)': {
+    //   display: 'none',
+    // },
   },
   inBuildAppHeader: {
     borderBottom: `1px solid ${alpha(theme.palette.common.dark, 0.1)}`,

@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    width: '100%',
   },
   bullets: {
     width: '0.6em',
@@ -148,9 +149,9 @@ const AdsDemographyComponent = () => {
       </Stack>
 
       <Grid container style={{ marginTop: 15 }}>
-        <Grid item sm={12} md={12} lg={7} xl={7} className={classes.borderRightBox}>
+        <Grid item xs={7} className={classes.borderRightBox}>
           {loadingDemographic ? (
-            <Stack direction="column" alignItems="center" justifyContent="center" height={230} spacing={2}>
+            <Stack direction="column" alignItems="center" justifyContent="center" height={230} width="100%" spacing={2}>
               <CircularProgress color="secondary" size={28} />
             </Stack>
           ) : adsDemographic?.data?.daerah?.length >= 1 ? (
@@ -173,53 +174,55 @@ const AdsDemographyComponent = () => {
           )}
         </Grid>
 
-        <Grid item sm={12} md={12} lg={5} xl={5}>
-          {loadingDemographic ? (
-            <Stack direction="column" alignItems="center" justifyContent="center" height={180} spacing={2}>
-              <CircularProgress color="secondary" size={28} />
-            </Stack>
-          ) : adsDemographic?.data?.gender?.map((item) => item.total)?.reduce((a, b) => a + b, 0) >= 1 ? (
-            <PieChart height={180} width={260} margin={{ top: 20, left: 60 }}>
-              <Pie data={adsDemographic?.data?.gender} innerRadius={48} outerRadius={80} paddingAngle={1} dataKey="total">
-                {adsDemographic?.data?.gender?.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry._id === 'MALE' ? '#23036A' : entry._id === 'FEMALE' ? '#AB22AF' : '#0795F4'}
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                labelStyle={{ color: 'black' }}
-                wrapperStyle={{ zIndex: 100 }}
-                cursor={false}
-                content={(data) => {
-                  return data.payload?.[0] ? (
-                    <Box className={classes.tooltip}>
-                      {data.payload?.[0]?.payload?._id === 'MALE'
-                        ? 'Laki-laki'
-                        : data.payload?.[0]?.payload?._id === 'FEMALE'
-                        ? 'Perempuan'
-                        : 'Tidak Diketahui'}{' '}
-                      : {data.payload?.[0]?.payload?.total}
-                    </Box>
-                  ) : null;
-                }}
-              />
-            </PieChart>
-          ) : (
-            <Stack direction="column" alignItems="center" justifyContent="center" gap={2} height={180}>
-              <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
-              <Typography fontFamily="Lato" color="#666666" fontWeight="bold" fontSize={14}>
-                Tidak ada data.
-              </Typography>
-            </Stack>
-          )}
+        <Grid item xs={5} style={{ width: '100%' }}>
+          <Stack direction="column" alignItems="center">
+            {loadingDemographic ? (
+              <Stack direction="column" alignItems="center" justifyContent="center" height={180} spacing={2}>
+                <CircularProgress color="secondary" size={28} />
+              </Stack>
+            ) : adsDemographic?.data?.gender?.map((item) => item.total)?.reduce((a, b) => a + b, 0) >= 1 ? (
+              <PieChart height={180} width={220}>
+                <Pie data={adsDemographic?.data?.gender} innerRadius={48} outerRadius={80} paddingAngle={1} dataKey="total">
+                  {adsDemographic?.data?.gender?.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry._id === 'MALE' ? '#23036A' : entry._id === 'FEMALE' ? '#AB22AF' : '#0795F4'}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip
+                  labelStyle={{ color: 'black' }}
+                  wrapperStyle={{ zIndex: 100 }}
+                  cursor={false}
+                  content={(data) => {
+                    return data.payload?.[0] ? (
+                      <Box className={classes.tooltip}>
+                        {data.payload?.[0]?.payload?._id === 'MALE'
+                          ? 'Laki-laki'
+                          : data.payload?.[0]?.payload?._id === 'FEMALE'
+                          ? 'Perempuan'
+                          : 'Tidak Diketahui'}{' '}
+                        : {data.payload?.[0]?.payload?.total}
+                      </Box>
+                    ) : null;
+                  }}
+                />
+              </PieChart>
+            ) : (
+              <Stack direction="column" alignItems="center" justifyContent="center" gap={2} height={180}>
+                <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
+                <Typography fontFamily="Lato" color="#666666" fontWeight="bold" fontSize={14}>
+                  Tidak ada data.
+                </Typography>
+              </Stack>
+            )}
 
-          <Stack direction="row" justifyContent={'center'} spacing={2} mt={3}>
-            {Array.isArray(data) &&
-              data.map((el, idx) => {
-                return <BulletsText key={idx} title={el.name} color={el.color} />;
-              })}
+            <Stack direction="row" justifyContent={'center'} spacing={2} mt={3}>
+              {Array.isArray(data) &&
+                data.map((el, idx) => {
+                  return <BulletsText key={idx} title={el.name} color={el.color} />;
+                })}
+            </Stack>
           </Stack>
         </Grid>
       </Grid>
