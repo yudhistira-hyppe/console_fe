@@ -119,35 +119,49 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   }, [loadingFCM, error]);
 
   const generateFCMToken = async () => {
-    await Notification.requestPermission().then(async (res) => {
-      if (res === 'granted') {
-        setNotifAllowed(true);
-        await firebaseCloudMessaging
-          .getFCMToken()
-          .then((token) => {
-            setDeviceId(token);
-            setLoadingFCM(false);
-          })
-          .catch(() => {
-            setDeviceId(uuidv4());
-            setLoadingFCM(false);
-          });
-      } else {
-        setNotifAllowed(false);
-        toast.error('Notifikasi browser diwajibkan!', { id: 'signin' });
-      }
-    });
+    const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+
+    if (isSupported()) {
+      await Notification.requestPermission().then(async (res) => {
+        if (res === 'granted') {
+          setNotifAllowed(true);
+          await firebaseCloudMessaging
+            .getFCMToken()
+            .then((token) => {
+              setDeviceId(token);
+              setLoadingFCM(false);
+            })
+            .catch(() => {
+              setDeviceId(uuidv4());
+              setLoadingFCM(false);
+            });
+        } else {
+          setNotifAllowed(false);
+          toast.error('Notifikasi browser diwajibkan!', { id: 'signin' });
+        }
+      });
+    } else {
+      setDeviceId(uuidv4());
+      setNotifAllowed(true);
+      setLoadingFCM(false);
+    }
   };
 
   const getCurrentUserLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-      },
-      () => {
-        setLocation({ latitude: '0', longitude: '0' });
-      },
-    );
+    const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+
+    if (!isSupported()) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+        },
+        () => {
+          setLocation({ latitude: '0', longitude: '0' });
+        },
+      );
+    } else {
+      setLocation({ latitude: '0', longitude: '0' });
+    }
   };
 
   const onSubmit = (e) => {
