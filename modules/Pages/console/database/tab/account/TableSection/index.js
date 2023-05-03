@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { CircularProgress, IconButton, Pagination, Stack } from '@mui/material';
+import { CircularProgress, Divider, IconButton, Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -22,7 +22,8 @@ import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
-import { NavigateBefore, NavigateNext } from '@material-ui/icons';
+import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -49,9 +50,48 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   };
 
   return (
-    <Stack flex={1}>
-      <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={3}>
-        <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}></Box>
+    <Stack flex={1} width="100%" maxWidth={956}>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" mb={5} style={{ gap: 12 }}>
+        <Stack direction="row" gap={2} alignItems="center" width={600}>
+          {filterList?.length >= 1 ? (
+            <ScrollBar style={{ width: 550, height: '100%' }}>
+              <Stack direction="row" gap="10px">
+                {filterList?.map((item, key) => (
+                  <Chip
+                    key={key}
+                    label={item.value}
+                    onDelete={() => {
+                      if (item.parent === 'username') {
+                        handleDeleteFilter(item.parent, '');
+                      } else if (item.parent === 'age') {
+                        handleDeleteFilter('clearAge', '');
+                      } else if (item.parent === 'area') {
+                        handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+                      } else if (item.parent === 'createdAt') {
+                        handleDeleteFilter(item.parent, [null, null]);
+                      } else if (item.parent === 'lastOnline') {
+                        handleDeleteFilter(item.parent, '');
+                        handleDeleteFilter('rangeOnline', []);
+                      } else {
+                        handleDeleteFilter(item.parent, item.value);
+                      }
+                    }}
+                  />
+                ))}
+              </Stack>
+            </ScrollBar>
+          ) : (
+            <Typography>Belum ada filter yang diterapkan</Typography>
+          )}
+          {filterList?.length >= 1 && (
+            <IconButton onClick={() => handleDeleteFilter('clearAll', '')}>
+              <Delete />
+            </IconButton>
+          )}
+        </Stack>
+
+        <Divider orientation="vertical" flexItem />
+
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
           <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Typography>Urutkan berdasarkan</Typography>
@@ -69,31 +109,6 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </FormControl>
         </Stack>
       </Box>
-
-      <Stack direction="row" gap="10px" mb={2}>
-        {filterList?.map((item, key) => (
-          <Chip
-            key={key}
-            label={item.value}
-            onDelete={() => {
-              if (item.parent === 'username') {
-                handleDeleteFilter(item.parent, '');
-              } else if (item.parent === 'age') {
-                handleDeleteFilter('clearAge', '');
-              } else if (item.parent === 'area') {
-                handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
-              } else if (item.parent === 'createdAt') {
-                handleDeleteFilter(item.parent, [null, null]);
-              } else if (item.parent === 'lastOnline') {
-                handleDeleteFilter(item.parent, '');
-                handleDeleteFilter('rangeOnline', []);
-              } else {
-                handleDeleteFilter(item.parent, item.value);
-              }
-            }}
-          />
-        ))}
-      </Stack>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
@@ -211,7 +226,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </TableBody>
         </Table>
       </TableContainer>
-      {listTickets?.data?.length >= 10 && !loading && (
+      {listTickets?.data?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
           <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
             <NavigateBefore />

@@ -56,11 +56,11 @@ const MonetizeJualBeliComponent = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -90,6 +90,8 @@ const MonetizeJualBeliComponent = () => {
           return prevVal.find((item) => item.parent === 'createdAt')
             ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
             : [...prevVal];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -113,6 +115,17 @@ const MonetizeJualBeliComponent = () => {
             : [...filter.payment_status, value],
           page: 0,
         };
+      } else if (kind === 'clearAll') {
+        return {
+          page: 0,
+          limit: 10,
+          descending: 'true',
+          penjual: '',
+          pembeli: '',
+          labelTanggal: '',
+          createdAt: [null, null],
+          payment_status: [],
+        };
       } else {
         return { ...prevVal };
       }
@@ -127,7 +140,7 @@ const MonetizeJualBeliComponent = () => {
           <TableSection
             filterList={filterList}
             listTransaction={listTransaction}
-            order={filter.descending}
+            filter={filter}
             loading={loadingTransaction}
             handleOrder={onOrderChange}
             handlePageChange={handlePageChange}

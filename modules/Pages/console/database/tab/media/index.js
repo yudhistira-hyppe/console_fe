@@ -12,7 +12,7 @@ const DatabaseTabMediaComponent = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    order: 'desc',
+    order: 'true',
     song: '',
     artist: '',
     theme: [],
@@ -52,11 +52,11 @@ const DatabaseTabMediaComponent = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -106,6 +106,8 @@ const DatabaseTabMediaComponent = () => {
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
             ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -152,6 +154,19 @@ const DatabaseTabMediaComponent = () => {
           };
         case 'createdAt':
           return { ...prevVal, createdAt: value, page: 0 };
+        case 'clearAll':
+          return {
+            page: 0,
+            limit: 10,
+            order: 'true',
+            song: '',
+            artist: '',
+            theme: [],
+            genre: [],
+            mood: [],
+            status: [],
+            createdAt: [null, null],
+          };
         default:
           return { ...prevVal };
       }
@@ -172,7 +187,6 @@ const DatabaseTabMediaComponent = () => {
             filter={filter}
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
-            order={filter.order}
             loading={loadingMusic}
             listMusic={listMusic}
             handlePageChange={handlePageChange}

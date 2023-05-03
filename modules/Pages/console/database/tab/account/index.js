@@ -105,6 +105,8 @@ const DatabaseTabAccountComponent = () => {
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
         case 'rangeOnline':
           return [...prevVal];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -179,6 +181,22 @@ const DatabaseTabAccountComponent = () => {
           return { ...prevVal, lastOnline: value, page: 0 };
         case 'rangeOnline':
           return { ...prevVal, rangeOnline: value, page: 0 };
+        case 'clearAll':
+          return {
+            page: 0,
+            limit: 10,
+            descending: 'true',
+            username: '',
+            gender: [],
+            age: '',
+            area: [],
+            rangeAge: [],
+            type: [],
+            labelCreated: '',
+            createdAt: [null, null],
+            lastOnline: '',
+            rangeOnline: [null, null],
+          };
         default:
           return { ...prevVal };
       }
