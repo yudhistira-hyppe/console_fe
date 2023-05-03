@@ -52,11 +52,11 @@ const MonetizeVoucherComponent = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -90,6 +90,8 @@ const MonetizeVoucherComponent = () => {
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
             ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -154,6 +156,21 @@ const MonetizeVoucherComponent = () => {
             : [...filter.voucher_status, value],
           page: 0,
         };
+      } else if (kind === 'clearAll') {
+        return {
+          page: 0,
+          limit: 10,
+          descending: 'true',
+          search: '',
+          labelTanggal: '',
+          createdAt: [null, null],
+          period: '',
+          periodRange: '',
+          voucher_status: [],
+          payment_status: [],
+        };
+      } else {
+        return { ...prevVal };
       }
     });
   };
@@ -166,7 +183,7 @@ const MonetizeVoucherComponent = () => {
           <TableSection
             filterList={filterList}
             listVouchers={listVouchers}
-            order={filter.descending}
+            filter={filter}
             loading={loadingVoucher}
             handleOrder={onOrderChange}
             handlePageChange={handlePageChange}

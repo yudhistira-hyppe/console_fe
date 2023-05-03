@@ -11,7 +11,7 @@ import {
   Paper,
   Chip,
 } from '@material-ui/core';
-import { CircularProgress, Stack } from '@mui/material';
+import { CircularProgress, Divider, IconButton, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -19,65 +19,78 @@ import Pagination from '@mui/material/Pagination';
 import moment from 'moment';
 import ModalDetailTransaction from '../Modal/ModalDetailTransaction';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import ScrollBar from 'react-perfect-scrollbar';
+import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 
-const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, handleOrder, handlePageChange, loading }) => {
+const TableSection = ({ filterList, handleDeleteFilter, listVouchers, filter, handleOrder, handlePageChange, loading }) => {
   // const [isDetail, setDetail] = React.useState(false);
   // const [selectedID, setSelectedID] = React.useState({});
 
   return (
     <>
       {/* <ModalDetailTransaction id={selectedID} showModal={isDetail} onCancel={() => setDetail(!isDetail)} /> */}
-      <Stack flex={1}>
-        <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mb={5}>
-          <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
-            {loading ? (
-              <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+      <Stack flex={1} width="100%" maxWidth={956}>
+        <Box
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={5}
+          style={{ gap: 12 }}>
+          <Stack direction="row" gap={2} alignItems="center" width={600}>
+            {filterList?.length >= 1 ? (
+              <ScrollBar style={{ width: 550, height: '100%' }}>
+                <Stack direction="row" gap="10px">
+                  {filterList?.map((item, key) => (
+                    <Chip
+                      key={key}
+                      label={item.value}
+                      onDelete={() => {
+                        if (item.parent === 'search') {
+                          handleDeleteFilter(item.parent, '');
+                        } else if (item.parent === 'createdAt') {
+                          handleDeleteFilter(item.parent, [null, null]);
+                        } else if (item.parent === 'period') {
+                          handleDeleteFilter('clearRange', []);
+                        } else if (item.parent === 'payment_status') {
+                          handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+                        } else {
+                          handleDeleteFilter(item.parent, item.value);
+                        }
+                      }}
+                    />
+                  ))}
+                </Stack>
+              </ScrollBar>
             ) : (
-              <Typography style={{ fontFamily: 'Normal' }}>
-                Menampilkan {listVouchers?.total} hasil (
-                {listVouchers?.totalsearch >= 1 ? listVouchers?.page * 10 + 1 : listVouchers?.page * 10} -{' '}
-                {listVouchers?.total + listVouchers?.page * 10} dari {listVouchers?.totalsearch})
-              </Typography>
+              <Typography>Belum ada filter yang diterapkan</Typography>
             )}
-          </Box>
+            {filterList?.length >= 1 && (
+              <IconButton onClick={() => handleDeleteFilter('clearAll', '')}>
+                <Delete />
+              </IconButton>
+            )}
+          </Stack>
+
+          <Divider orientation="vertical" flexItem />
+
           <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
             <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
               <Typography>Urutkan berdasarkan</Typography>
             </Box>
             <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
               <Select
+                value={filter.descending}
                 onChange={handleOrder}
-                value={order}
+                displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
-                style={{ backgroundColor: '#FFFFFF' }}>
-                <MenuItem value="true">Terbaru</MenuItem>
-                <MenuItem value="false">Terlama</MenuItem>
+                style={{ backgroundColor: 'white' }}>
+                <MenuItem value={'true'}>Terbaru</MenuItem>
+                <MenuItem value={'false'}>Terlama</MenuItem>
               </Select>
             </FormControl>
           </Stack>
         </Box>
-
-        <Stack direction="row" gap="10px" mb={2}>
-          {filterList?.map((item, key) => (
-            <Chip
-              key={key}
-              label={item.value}
-              onDelete={() => {
-                if (item.parent === 'search') {
-                  handleDeleteFilter(item.parent, '');
-                } else if (item.parent === 'createdAt') {
-                  handleDeleteFilter(item.parent, [null, null]);
-                } else if (item.parent === 'period') {
-                  handleDeleteFilter('clearRange', []);
-                } else if (item.parent === 'payment_status') {
-                  handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
-                } else {
-                  handleDeleteFilter(item.parent, item.value);
-                }
-              }}
-            />
-          ))}
-        </Stack>
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="basic-table">
@@ -173,14 +186,17 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, order, han
             </TableBody>
           </Table>
         </TableContainer>
-        {listVouchers?.totalsearch >= 1 && !loading && (
-          <Stack alignItems={'center'} mt={2}>
-            <Pagination
-              count={Number(listVouchers?.totalpage)}
-              page={listVouchers?.page + 1}
-              size={'small'}
-              onChange={handlePageChange}
-            />
+        {listVouchers?.data?.length >= 1 && !loading && (
+          <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+            <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
+              <NavigateBefore />
+            </IconButton>
+            <IconButton
+              color="secondary"
+              onClick={() => handlePageChange(filter.page + 1)}
+              disabled={listVouchers?.data?.length < 10}>
+              <NavigateNext />
+            </IconButton>
           </Stack>
         )}
       </Stack>
