@@ -93,98 +93,103 @@ const TableSection = ({ filterList, handleDeleteFilter, listVouchers, filter, ha
         </Box>
 
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ width: 100 }}>Waktu Transaksi</TableCell>
-                <TableCell align="left">Nama Voucher</TableCell>
-                <TableCell align="left">Jumlah Kredit</TableCell>
-                <TableCell align="left">Harga</TableCell>
-                <TableCell align="left">Masa Berlaku</TableCell>
-                <TableCell align="left" style={{ width: 100 }}>
-                  Kadaluarsa
-                </TableCell>
-                <TableCell align="left">Status Pembayaran</TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {loading ? (
-                <TableCell colSpan={8}>
-                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <CircularProgress color="secondary" />
-                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                  </Stack>
-                </TableCell>
-              ) : listVouchers?.data?.length >= 1 ? (
-                listVouchers?.data?.map((item, key) =>
-                  item?.vcdata?.map((vc, key) => (
-                    <TableRow key={key}>
-                      {key === 0 && (
-                        <TableCell rowSpan={item?.vcdata?.length} style={{ width: 100 }}>
-                          <Typography variant="body1" style={{ fontSize: '12px' }}>
-                            {moment(item?.timestamp).utc().format('DD/MM/YY-HH:mm')} WIB
-                          </Typography>
-                        </TableCell>
-                      )}
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {vc?.nameAds || '-'}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {numberWithCommas(vc?.creditValue || 0)} Kredit
-                        </Typography>
-                        {vc?.creditPromo && (
-                          <Typography variant="body2" style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.6)' }}>
-                            + Bonus {numberWithCommas(vc?.creditPromo || 0)} Kredit
-                          </Typography>
-                        )}
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          Rp {numberWithCommas(vc?.amount || 0)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {vc?.expiredDay || 0} Hari
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left" style={{ width: 100 }}>
-                        <Typography variant="body1" style={{ fontSize: '12px' }}>
-                          {moment(vc?.expiredAt).utc().format('DD/MM/YYYY-HH:mm')} WIB
-                        </Typography>
-                      </TableCell>
-                      {key === 0 && (
-                        <TableCell align="left" rowSpan={item?.vcdata?.length}>
-                          {item?.status === 'WAITING_PAYMENT' && (
-                            <Chip label="Menunggu Pembayaran" style={{ backgroundColor: '#0356AF1A', color: '#0356AF' }} />
-                          )}
-                          {item?.status === 'Success' && (
-                            <Chip
-                              label="Berhasil"
-                              style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9' }}
-                            />
-                          )}
-                          {item?.status === 'Cancel' && (
-                            <Chip label="Gagal" style={{ backgroundColor: '#E61D371A', color: '#E61D37' }} />
-                          )}
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  )),
-                )
-              ) : (
+          <ScrollBar>
+            <Table>
+              <TableHead>
                 <TableRow>
-                  <TableCell colSpan={7} align="center">
-                    Voucher tidak ditemukan.
-                  </TableCell>
+                  <TableCell>Waktu Transaksi</TableCell>
+                  <TableCell align="left">Nama Voucher</TableCell>
+                  <TableCell align="left">Jumlah Kredit</TableCell>
+                  <TableCell align="left">Harga</TableCell>
+                  <TableCell align="left">Masa Berlaku</TableCell>
+                  <TableCell align="left">Kadaluarsa</TableCell>
+                  <TableCell align="left">Status Pembayaran</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHead>
+
+              <TableBody>
+                {loading ? (
+                  <TableCell colSpan={8}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <CircularProgress color="secondary" />
+                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                    </Stack>
+                  </TableCell>
+                ) : listVouchers?.data?.length >= 1 ? (
+                  listVouchers?.data?.map((item, key) =>
+                    item?.vcdata?.map((vc, key) => (
+                      <TableRow key={key}>
+                        {key === 0 && (
+                          <TableCell rowSpan={item?.vcdata?.length}>
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                              {moment(item?.timestamp).utc().format('DD/MM/YY - HH:mm')} WIB
+                            </Typography>
+                          </TableCell>
+                        )}
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                            {vc?.nameAds || '-'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                            {numberWithCommas(vc?.creditValue || 0)} Kredit
+                          </Typography>
+                          {vc?.creditPromo > 0 && (
+                            <Typography variant="body2" style={{ fontSize: '11px', color: 'rgba(0, 0, 0, 0.6)' }}>
+                              + Bonus {numberWithCommas(vc?.creditPromo || 0)} Kredit
+                            </Typography>
+                          )}
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 160 }}>
+                            Rp {numberWithCommas(vc?.amount || 0)}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 90 }}>
+                            {vc?.expiredDay || 0} Hari
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                            {moment(vc?.expiredAt).utc().format('DD/MM/YYYY-HH:mm')} WIB
+                          </Typography>
+                        </TableCell>
+                        {key === 0 && (
+                          <TableCell align="left" rowSpan={item?.vcdata?.length}>
+                            <Stack direction="row" width={160}>
+                              {item?.status === 'WAITING_PAYMENT' && (
+                                <Chip
+                                  label="Menunggu Pembayaran"
+                                  style={{ backgroundColor: '#0356AF1A', color: '#0356AF' }}
+                                />
+                              )}
+                              {item?.status === 'Success' && (
+                                <Chip
+                                  label="Berhasil"
+                                  style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9' }}
+                                />
+                              )}
+                              {item?.status === 'Cancel' && (
+                                <Chip label="Gagal" style={{ backgroundColor: '#E61D371A', color: '#E61D37' }} />
+                              )}
+                            </Stack>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    )),
+                  )
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} align="center">
+                      Voucher tidak ditemukan.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </ScrollBar>
         </TableContainer>
         {listVouchers?.data?.length >= 1 && !loading && (
           <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
