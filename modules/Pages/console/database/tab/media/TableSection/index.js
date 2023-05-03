@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { Button, Checkbox, CircularProgress, Pagination, Stack, Switch } from '@mui/material';
+import { Button, Checkbox, CircularProgress, Divider, IconButton, Pagination, Stack, Switch } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -22,6 +22,8 @@ import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
 import ModalConfirmation from '../Modal/ModalConfirmation';
+import ScrollBar from 'react-perfect-scrollbar';
+import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -43,16 +45,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({
-  filter,
-  filterList,
-  handleOrder,
-  handlePageChange,
-  handleDeleteFilter,
-  order,
-  loading,
-  listMusic,
-}) => {
+const TableSection = ({ filter, filterList, handleOrder, handlePageChange, handleDeleteFilter, loading, listMusic }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
   const [selected, setSelected] = useState([]);
@@ -173,7 +166,7 @@ const TableSection = ({
   }
 
   return (
-    <Stack flex={1}>
+    <Stack flex={1} width="100%" maxWidth={956}>
       <ModalConfirmation
         showModal={modal.visible}
         onClose={() => {
@@ -202,55 +195,66 @@ const TableSection = ({
         </Button>
       </Stack>
 
-      <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} mt={6} mb={3}>
-        <Box flex={1} flexDirection={'column'} justifyContent={'center'} display={'flex'}>
-          {loading ? (
-            <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        mt={5}
+        mb={5}
+        style={{ gap: 12 }}>
+        <Stack direction="row" gap={2} alignItems="center" width={600}>
+          {filterList?.length >= 1 ? (
+            <ScrollBar style={{ width: 550, height: '100%' }}>
+              <Stack direction="row" gap="10px">
+                {filterList?.map((item, key) => (
+                  <Chip
+                    key={key}
+                    label={item.value}
+                    onDelete={() => {
+                      if (item.parent === 'song' || item.parent === 'artist') {
+                        handleDeleteFilter(item.parent, '');
+                      } else if (item.parent === 'createdAt') {
+                        handleDeleteFilter(item.parent, [null, null]);
+                      } else if (item.parent === 'genre' || item.parent === 'theme' || item.parent === 'mood') {
+                        handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
+                      } else {
+                        handleDeleteFilter(item.parent, item.value);
+                      }
+                    }}
+                  />
+                ))}
+              </Stack>
+            </ScrollBar>
           ) : (
-            <Typography style={{ fontFamily: 'Normal' }}>
-              Menampilkan {listMusic?.totalRow} hasil (
-              {listMusic?.totalRow >= 1 ? filter.page * 10 + 1 : listMusic?.pageNumber_ * 10} -{' '}
-              {listMusic?.pageRow * (filter.page + 1)} dari {listMusic?.totalRow})
-            </Typography>
+            <Typography>Belum ada filter yang diterapkan</Typography>
           )}
-        </Box>
+          {filterList?.length >= 1 && (
+            <IconButton onClick={() => handleDeleteFilter('clearAll', '')}>
+              <Delete />
+            </IconButton>
+          )}
+        </Stack>
+
+        <Divider orientation="vertical" flexItem />
+
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
           <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Typography>Urutkan berdasarkan</Typography>
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={order}
+              value={filter.order}
               onChange={handleOrder}
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'desc'}>Terbaru</MenuItem>
-              <MenuItem value={'asc'}>Terlama</MenuItem>
+              <MenuItem value={'true'}>Terbaru</MenuItem>
+              <MenuItem value={'false'}>Terlama</MenuItem>
             </Select>
           </FormControl>
         </Stack>
       </Box>
-
-      <Stack direction="row" gap="10px" mb={2}>
-        {filterList?.map((item, key) => (
-          <Chip
-            key={key}
-            label={item.value}
-            onDelete={() => {
-              if (item.parent === 'song' || item.parent === 'artist') {
-                handleDeleteFilter(item.parent, '');
-              } else if (item.parent === 'createdAt') {
-                handleDeleteFilter(item.parent, [null, null]);
-              } else if (item.parent === 'genre' || item.parent === 'theme' || item.parent === 'mood') {
-                handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
-              } else {
-                handleDeleteFilter(item.parent, item.value);
-              }
-            }}
-          />
-        ))}
-      </Stack>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="basic-table">
@@ -349,17 +353,17 @@ const TableSection = ({
         </Table>
       </TableContainer>
 
-      {listMusic?.totalRow >= 1 && (
-        <Stack alignItems="center" my={3} mr={3}>
-          <Pagination
-            count={(Number(listMusic?.totalRow) / Number(listMusic?.pageRow)).toFixed(0) || 1}
-            page={Number(filter.page) + 1}
-            size="small"
-            onChange={(e, value) => {
-              handlePageChange(e, value);
-              setSelected([]);
-            }}
-          />
+      {listMusic?.data?.length >= 1 && !loading && (
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+          <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
+            <NavigateBefore />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() => handlePageChange(filter.page + 1)}
+            disabled={listMusic?.data?.length < 10}>
+            <NavigateNext />
+          </IconButton>
         </Stack>
       )}
     </Stack>
