@@ -12,7 +12,7 @@ const DatabaseTabMediaComponent = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    order: 'true',
+    order: 'desc',
     song: '',
     artist: '',
     theme: [],
