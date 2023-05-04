@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Stack } from '@mui/system';
-import React from 'react';
+import React, { useEffect } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import { ModalChangeStatusConfirmation } from 'modules/Pages/console/monetize/components';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
@@ -27,6 +27,8 @@ import moment from 'moment';
 import { CircularProgress, IconButton, Pagination } from '@mui/material';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { toast } from 'react-hot-toast';
+import ScrollBar from 'react-perfect-scrollbar';
+import { NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 const breadcrumbs = [
   { label: 'Monetisasi', link: '/monetize' },
@@ -42,6 +44,18 @@ const KelolaVoucherComponent = () => {
   const router = useRouter();
   const { data: listVouchers, isFetching: loadingVoucher } = useGetVouchersQuery(params);
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+
+  useEffect(() => {
+    if (filter.page >= 1 && listVouchers?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingVoucher]);
 
   const onChangeStatusHandler = (item) => {
     setShowModal(true);
@@ -72,9 +86,9 @@ const KelolaVoucherComponent = () => {
     setModalType(null);
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setParams((prevVal) => {
-      return { ...prevVal, page: value - 1 };
+      return { ...prevVal, page: value };
     });
   };
 
@@ -125,153 +139,155 @@ const KelolaVoucherComponent = () => {
           />
           <CardContent style={{ padding: '0px' }}>
             <TableContainer>
-              <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left" style={{ paddingLeft: 24, maxWidth: 230 }}>
-                      Nama Voucher
-                    </TableCell>
-                    <TableCell align="left" style={{ maxWidth: 100 }}>
-                      Waktu Pembuatan
-                    </TableCell>
-                    <TableCell align="left">Jumlah Kredit</TableCell>
-                    <TableCell align="left">Jumlah Stok</TableCell>
-                    <TableCell align="left">Telah Dibeli</TableCell>
-                    <TableCell align="left">Harga Voucher</TableCell>
-                    <TableCell align="left">Status</TableCell>
-                    <TableCell align="left"></TableCell>
-                  </TableRow>
-                </TableHead>
+              <ScrollBar>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="left" style={{ paddingLeft: 24 }}>
+                        Nama Voucher
+                      </TableCell>
+                      <TableCell align="left">Waktu Pembuatan</TableCell>
+                      <TableCell align="left">Jumlah Kredit</TableCell>
+                      <TableCell align="left">Jumlah Stok</TableCell>
+                      <TableCell align="left">Telah Dibeli</TableCell>
+                      <TableCell align="left">Harga Voucher</TableCell>
+                      <TableCell align="left">Status</TableCell>
+                      <TableCell align="left"></TableCell>
+                    </TableRow>
+                  </TableHead>
 
-                <TableBody>
-                  {loadingVoucher ? (
-                    <TableCell colSpan={8}>
-                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                        <CircularProgress color="secondary" />
-                        <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                      </Stack>
-                    </TableCell>
-                  ) : (
-                    listVouchers?.data?.map((item, key) => {
-                      const now = moment();
-                      const expired = moment(item.expiredAt);
+                  <TableBody>
+                    {loadingVoucher ? (
+                      <TableCell colSpan={8}>
+                        <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                          <CircularProgress color="secondary" />
+                          <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                        </Stack>
+                      </TableCell>
+                    ) : (
+                      listVouchers?.data?.map((item, key) => {
+                        const now = moment();
+                        const expired = moment(item.expiredAt);
 
-                      return (
-                        <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                          <TableCell component="th" scope="row" style={{ paddingLeft: 24, maxWidth: 230 }}>
-                            <Typography
-                              variant="body1"
-                              style={{
-                                fontSize: '14px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                              }}
-                              title={item?.nameAds}>
-                              {item?.nameAds || '-'}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left" style={{ maxWidth: 100 }}>
-                            <Typography
-                              variant="body1"
-                              style={{ fontSize: '12px', width: 80, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {moment(item?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Typography
-                              variant="body1"
-                              style={{
-                                fontSize: '14px',
-                                maxWidth: 150,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-                              title={numberWithCommas(item?.creditValue || 0) + ' Kredit'}>
-                              {numberWithCommas(item?.creditValue || 0)} Kredit
-                            </Typography>
-                            {item?.creditPromo > 0 && (
+                        return (
+                          <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                            <TableCell component="th" scope="row" style={{ paddingLeft: 24 }}>
+                              <Typography
+                                variant="body1"
+                                style={{
+                                  fontSize: '14px',
+                                  fontWeight: 'bold',
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  width: 220,
+                                }}
+                                title={item?.nameAds}>
+                                {item?.nameAds || '-'}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="left">
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 160 }}>
+                                {moment(item?.createdAt).utc().format('DD/MM/YYYY - HH:mm')} WIB
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="left">
                               <Typography
                                 variant="body1"
                                 style={{
                                   fontSize: '12px',
-                                  maxWidth: 150,
+                                  width: 160,
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
                                   whiteSpace: 'nowrap',
                                 }}
-                                title={numberWithCommas(item?.creditPromo) + ' Kredit'}>
-                                + Bonus {numberWithCommas(item?.creditPromo)} Kredit
+                                title={numberWithCommas(item?.creditValue || 0) + ' Kredit'}>
+                                {numberWithCommas(item?.creditValue || 0)} Kredit
                               </Typography>
-                            )}
-                          </TableCell>
-                          <TableCell align="left">
-                            <Typography
-                              variant="body1"
-                              style={{
-                                fontSize: '14px',
-                                maxWidth: 150,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-                              title={numberWithCommas(item?.qty || 0) + ' Voucher'}>
-                              {numberWithCommas(item?.qty || 0)} Voucher
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Typography variant="body1" style={{ fontSize: '14px' }}>
-                              {item?.totalUsed} Voucher
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Typography
-                              variant="body1"
-                              style={{
-                                fontSize: '14px',
-                                maxWidth: 100,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-                              title={'Rp ' + numberWithCommas(item?.amount || 0)}>
-                              Rp {numberWithCommas(item?.amount || 0)}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Switch
-                              color="primary"
-                              onClick={() => onChangeStatusHandler(item)}
-                              checked={item?.isActive}
-                              disabled={
-                                !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
-                              }
-                            />
-                          </TableCell>
-                          <TableCell align="left">
-                            <IconButton onClick={() => router.push(`/monetize/voucher/${item?._id}`)}>
-                              <EditIcon htmlColor="#737373" style={{ cursor: 'pointer' }} />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                  )}
-                </TableBody>
-              </Table>
+                              {item?.creditPromo > 0 && (
+                                <Typography
+                                  variant="body1"
+                                  style={{
+                                    fontSize: '12px',
+                                    width: 160,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                  title={numberWithCommas(item?.creditPromo) + ' Kredit'}>
+                                  + Bonus {numberWithCommas(item?.creditPromo)} Kredit
+                                </Typography>
+                              )}
+                            </TableCell>
+                            <TableCell align="left">
+                              <Typography
+                                variant="body1"
+                                style={{
+                                  fontSize: '12px',
+                                  width: 120,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                title={numberWithCommas(item?.qty || 0) + ' Voucher'}>
+                                {numberWithCommas(item?.qty || 0)} Voucher
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="left">
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                                {item?.totalUsed} Voucher
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="left">
+                              <Typography
+                                variant="body1"
+                                style={{
+                                  fontSize: '12px',
+                                  width: 160,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                title={'Rp ' + numberWithCommas(item?.amount || 0)}>
+                                Rp {numberWithCommas(item?.amount || 0)}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="left">
+                              <Switch
+                                color="primary"
+                                onClick={() => onChangeStatusHandler(item)}
+                                checked={item?.isActive}
+                                disabled={
+                                  !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
+                                }
+                              />
+                            </TableCell>
+                            <TableCell align="left">
+                              <IconButton onClick={() => router.push(`/monetize/voucher/${item?._id}`)}>
+                                <EditIcon htmlColor="#737373" style={{ cursor: 'pointer' }} />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody>
+                </Table>
+              </ScrollBar>
             </TableContainer>
           </CardContent>
         </Card>
-        {listVouchers?.totalsearch >= 1 && !loadingVoucher && (
-          <Stack alignItems={'center'} mt={2}>
-            <Pagination
-              count={Math.round(listVouchers?.totalpage)}
-              page={listVouchers?.page + 1}
-              onChange={handlePageChange}
-              size={'small'}
-            />
+        {listVouchers?.data?.length >= 1 && !loadingVoucher && (
+          <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+            <IconButton color="secondary" onClick={() => handlePageChange(params.page - 1)} disabled={params.page < 1}>
+              <NavigateBefore />
+            </IconButton>
+            <IconButton
+              color="secondary"
+              onClick={() => handlePageChange(params.page + 1)}
+              disabled={listVouchers?.data?.length < 10}>
+              <NavigateNext />
+            </IconButton>
           </Stack>
         )}
       </PageContainer>

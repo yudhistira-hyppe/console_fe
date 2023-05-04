@@ -33,7 +33,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import { useGetAnggotaQuery, useDeleteAnggotaMutation, useUpdateStatusGroupUserMutation } from 'api/console/getUserHyppe';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
-import { Add } from '@material-ui/icons';
+import { Add, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import { toast } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,6 +74,18 @@ const PenggunaComp = () => {
   const open = Boolean(anchorEl);
   const { data: dataAnggota, isFetching } = useGetAnggotaQuery(payload);
 
+  useEffect(() => {
+    if (payload.skip >= 10 && dataAnggota?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setPayload((prevVal) => {
+        return {
+          ...prevVal,
+          skip: 0,
+        };
+      });
+    }
+  }, [payload, isFetching]);
+
   const handeOpenMenu = (event, row) => {
     setUserSelectedEmail(row.email);
     setJabatan(row.group);
@@ -89,12 +101,12 @@ const PenggunaComp = () => {
     setCountPages(Math.ceil(count));
   });
 
-  const handlePagination = (e, value) => {
+  const handlePagination = (value) => {
     setPage(value);
     setPayload((prev) => {
       return {
         ...prev,
-        skip: (value - 1) * 10,
+        skip: value,
       };
     });
   };
@@ -314,9 +326,17 @@ const PenggunaComp = () => {
       {/* // this is only appear when openDialog true end */}
 
       {dataAnggota?.data?.length >= 1 && !isFetching && (
-        <div className="mt-6 flex flex-row justify-content-center">
-          <Pagination page={page} onChange={handlePagination} count={countPages} />
-        </div>
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+          <IconButton color="secondary" onClick={() => handlePagination(payload.skip - 10)} disabled={payload.skip < 10}>
+            <NavigateBefore />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() => handlePagination(payload.skip + 10)}
+            disabled={dataAnggota?.data?.length < 10}>
+            <NavigateNext />
+          </IconButton>
+        </Stack>
       )}
     </>
   );

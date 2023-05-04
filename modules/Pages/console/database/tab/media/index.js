@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
@@ -7,6 +7,7 @@ import TableSection from './TableSection';
 import MediaChart from './media-chart';
 import { useGetListMusicQuery } from 'api/console/database/media';
 import moment from 'moment';
+import { toast } from 'react-hot-toast';
 
 const DatabaseTabMediaComponent = () => {
   const [filter, setFilter] = useState({
@@ -42,6 +43,18 @@ const DatabaseTabMediaComponent = () => {
   };
 
   const { data: listMusic, isFetching: loadingMusic } = useGetListMusicQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listMusic?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingMusic]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {

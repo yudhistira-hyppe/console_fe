@@ -36,16 +36,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({
-  filterList,
-  filter,
-  loading,
-  listTickets,
-  noMorePage,
-  handlePageChange,
-  handleOrder,
-  handleDeleteFilter,
-}) => {
+const TableSection = ({ filterList, filter, loading, listTickets, handlePageChange, handleOrder, handleDeleteFilter }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
 
@@ -269,7 +260,7 @@ const TableSection = ({
           <IconButton
             color="secondary"
             onClick={() => handlePageChange(filter.page + 1)}
-            disabled={noMorePage || listTickets?.arrdata?.length < 10}>
+            disabled={listTickets?.arrdata?.length < 10}>
             <NavigateNext />
           </IconButton>
         </Stack>

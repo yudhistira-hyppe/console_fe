@@ -1,11 +1,12 @@
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Grid, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SearchSection, TableSection } from '../components';
 import { useGetTransactionVouchersQuery } from 'api/console/monetize/voucher';
 import moment from 'moment';
 import { Stack } from '@mui/material';
+import { toast } from 'react-hot-toast';
 
 const MonetizeVoucherComponent = () => {
   const [filter, setFilter] = useState({
@@ -42,6 +43,18 @@ const MonetizeVoucherComponent = () => {
   };
 
   const { data: listVouchers, isFetching: loadingVoucher } = useGetTransactionVouchersQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listVouchers?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingVoucher]);
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
