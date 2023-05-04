@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetListBoostPostQuery } from 'api/console/boost';
+import { toast } from 'react-hot-toast';
 
 const TableList = () => {
   const [filter, setFilter] = useState({
@@ -32,6 +33,18 @@ const TableList = () => {
   };
 
   const { data: listBoost, isFetching: loadingBoost } = useGetListBoostPostQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listBoost?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingBoost]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {

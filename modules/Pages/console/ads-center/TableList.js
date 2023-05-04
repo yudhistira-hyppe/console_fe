@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
@@ -49,6 +49,18 @@ const TableList = () => {
   };
 
   const { data: listAds, isFetching: loadingAds } = useGetListAdsQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listAds?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingAds]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {

@@ -249,8 +249,8 @@ const TableSection = ({ filter, filterList, handleOrder, handlePageChange, handl
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'true'}>Terbaru</MenuItem>
-              <MenuItem value={'false'}>Terlama</MenuItem>
+              <MenuItem value="desc">Terbaru</MenuItem>
+              <MenuItem value="asc">Terlama</MenuItem>
             </Select>
           </FormControl>
         </Stack>

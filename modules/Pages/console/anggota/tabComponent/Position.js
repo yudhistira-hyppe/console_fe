@@ -20,7 +20,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useGetGroupQuery, useDeleteGroupMutation } from 'api/console/group';
 import Link from 'next/link';
 import TableDataSpinner from 'components/common/loading/tableDataSpinner';
-import { Add } from '@material-ui/icons';
+import { Add, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import { toast } from 'react-hot-toast';
 
 const useStyles = makeStyles((theme) => ({
@@ -129,6 +129,18 @@ const Position = () => {
   };
   const { data: dataPosition, isFetching } = useGetGroupQuery(payload);
 
+  useEffect(() => {
+    if (payload.skip >= 10 && dataPosition?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setPayload((prevVal) => {
+        return {
+          ...prevVal,
+          skip: 0,
+        };
+      });
+    }
+  }, [payload, isFetching]);
+
   const count = dataPosition?.totalRow / 10;
   useEffect(() => {
     setCountPages(Math.ceil(count));
@@ -148,12 +160,12 @@ const Position = () => {
     setOpenDialog(false);
   };
 
-  const handlePagination = (e, value) => {
+  const handlePagination = (value) => {
     setPage(value);
     setPayload((prev) => {
       return {
         ...prev,
-        skip: (value - 1) * 10,
+        skip: value,
       };
     });
   };
@@ -358,9 +370,17 @@ const Position = () => {
       </Snackbar>
 
       {dataPosition?.data?.length >= 1 && !isFetching && (
-        <div className="mt-6 flex flex-row justify-content-center">
-          <Pagination page={page} onChange={handlePagination} count={countPages} />
-        </div>
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+          <IconButton color="secondary" onClick={() => handlePagination(payload.skip - 10)} disabled={payload.skip < 10}>
+            <NavigateBefore />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() => handlePagination(payload.skip + 10)}
+            disabled={dataPosition?.data?.length < 10}>
+            <NavigateNext />
+          </IconButton>
+        </Stack>
       )}
     </>
   );

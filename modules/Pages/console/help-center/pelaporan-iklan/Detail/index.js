@@ -170,10 +170,11 @@ const DetailPelaporanIklan = () => {
     return `${STREAM_URL}${mediaEndpoint}${authToken}`;
   };
 
-  const getMediaUri = (mediaUri) => {
+  const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const endpoint = mediaEndpoint?.split('_');
 
-    return `${STREAM_URL}/profilepict/${mediaUri}${authToken}`;
+    return `${STREAM_URL}${endpoint?.[0]}${authToken}`;
   };
 
   const getImage = (item) => {
@@ -455,9 +456,9 @@ const DetailPelaporanIklan = () => {
             </Grid>
             <Grid item xs={12} sm={4}>
               <Stack direction="row" alignItems="center" spacing={3} mb={4}>
-                <Avatar src={getMediaUri(detail?.data[0]?.avatar?.mediaUri)} style={{ width: 80, height: 80 }} />
+                <Avatar src={getMediaUri(detail?.data[0]?.avatar?.mediaEndpoint)} style={{ width: 80, height: 80 }} />
                 <Stack direction="column" gap="5px">
-                  <Typography variant="h1">{detail?.data[0]?.fullName}</Typography>
+                  <Typography variant="h1">{detail?.data[0]?.fullName || '-'}</Typography>
                   <Typography variant="h5" style={{ color: '#00000099' }}>
                     {detail?.data[0]?.username || '-'}
                   </Typography>

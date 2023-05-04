@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetAllUserQuery } from 'api/user/user';
+import { toast } from 'react-hot-toast';
 
 const DatabaseTabAccountComponent = () => {
   const [filter, setFilter] = useState({
@@ -46,6 +47,18 @@ const DatabaseTabAccountComponent = () => {
   };
 
   const { data: listUser, isFetching: loadingUser } = useGetAllUserQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listUser?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingUser]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {

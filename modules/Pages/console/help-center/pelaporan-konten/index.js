@@ -29,7 +29,6 @@ const PelaporanKonten = () => {
     reason: [],
   });
   const [filterList, setFilterList] = useState([]);
-  const [noMorePage, setNoMorePage] = useState(false);
   const router = useRouter();
 
   const getParams = () => {
@@ -67,12 +66,11 @@ const PelaporanKonten = () => {
 
   useEffect(() => {
     if (filter.page >= 1 && listTickets?.arrdata?.length < 1) {
-      toast.success('Semua data sudah ditampilkan, silahkan kembali ke page sebelumnya');
-      setNoMorePage(true);
+      toast.success('Semua data sudah ditampilkan');
       setFilter((prevVal) => {
         return {
           ...prevVal,
-          page: 0,
+          page: prevVal.page - 1,
         };
       });
     }
@@ -247,7 +245,6 @@ const PelaporanKonten = () => {
             filter={filter}
             loading={loadingTicket}
             listTickets={listTickets}
-            noMorePage={noMorePage}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
             handleDeleteFilter={handleSearchChange}

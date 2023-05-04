@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
@@ -57,6 +57,18 @@ const DatabaseTabContentComponent = () => {
   };
 
   const { data: listContent, isFetching: loadingContent } = useGetListContentQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listContent?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingContent]);
 
   const {
     data: listExport,
