@@ -27,6 +27,7 @@ import {
   boostAPI,
   adsApi,
   dashboardMonetizeAPI,
+  interestApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -80,4 +81,5 @@ export default combineReducers({
   [adsApi.reducerPath]: adsApi.reducer,
   [dashboardMonetizeAPI.reducerPath]: dashboardMonetizeAPI.reducer,
   [jualBeliAPI.reducerPath]: jualBeliAPI.reducer,
+  [interestApi.reducerPath]: interestApi.reducer,
 });
