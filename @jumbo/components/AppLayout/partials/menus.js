@@ -148,4 +148,9 @@ export const consoleNav = [
     type: 'item',
     link: '/anggota',
   },
+  {
+    name: 'Utilitas',
+    type: 'item',
+    link: '/utilitas',
+  },
 ];
