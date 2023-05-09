@@ -109,6 +109,9 @@ const SecureConsolePage = ({ children }) => {
       ) {
         setIsRenderChildren(true);
         setLoadingValidate(false);
+      } else if (router.pathname.includes('utilitas')) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
       } else {
         setIsRenderChildren(false);
         setLoadingValidate(false);
