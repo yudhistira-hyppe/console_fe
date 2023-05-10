@@ -8,9 +8,9 @@ export const interestApi = createApi({
   endpoints: (build) => ({
     getListInterest: build.query({
       query: (data) => ({
-        url: '/interestsrepo',
-        method: 'GET',
-        // body: data,
+        url: '/interestsrepo/list',
+        method: 'POST',
+        body: data,
       }),
       providesTags: ['list'],
     }),

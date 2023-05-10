@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
+const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
   const [openModal, setOpenModal] = useState({
     edit: false,
@@ -105,25 +105,6 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               </IconButton>
             )}
           </Stack>
-
-          <Divider orientation="vertical" flexItem />
-
-          <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
-            <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-              <Typography>Urutkan berdasarkan</Typography>
-            </Box>
-            <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
-              <Select
-                value={filter.descending}
-                onChange={handleOrder}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-                style={{ backgroundColor: 'white' }}>
-                <MenuItem value={'true'}>Terbaru</MenuItem>
-                <MenuItem value={'false'}>Terlama</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
         </Box>
 
         <TableContainer component={Paper}>
@@ -146,8 +127,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                     </Stack>
                   </TableCell>
-                ) : listTickets?.length >= 1 ? (
-                  listTickets?.map((item, i) => (
+                ) : listTickets?.data?.length >= 1 ? (
+                  listTickets?.data?.map((item, i) => (
                     <TableRow key={i} hover>
                       <TableCell>
                         <Stack direction="row" gap="15px" width={80}>
@@ -173,13 +154,13 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             }}>
                             <Edit />
                           </IconButton>
-                          <IconButton
+                          {/* <IconButton
                             onClick={() => {
                               setOpenModal({ ...openModal, delete: !openModal.delete });
                               setSelected(item);
                             }}>
                             <Delete />
-                          </IconButton>
+                          </IconButton> */}
                         </Stack>
                       </TableCell>
                     </TableRow>
@@ -195,19 +176,19 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
             </Table>
           </ScrollBar>
         </TableContainer>
-        {/* {listTickets?.data?.length >= 1 && !loading && (
-        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
-          <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
-            <NavigateBefore />
-          </IconButton>
-          <IconButton
-            color="secondary"
-            onClick={() => handlePageChange(filter.page + 1)}
-            disabled={listTickets?.data?.length < 10}>
-            <NavigateNext />
-          </IconButton>
-        </Stack>
-      )} */}
+        {listTickets?.data?.length >= 1 && !loading && (
+          <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+            <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
+              <NavigateBefore />
+            </IconButton>
+            <IconButton
+              color="secondary"
+              onClick={() => handlePageChange(filter.page + 1)}
+              disabled={listTickets?.data?.length < 10}>
+              <NavigateNext />
+            </IconButton>
+          </Stack>
+        )}
       </Stack>
     </>
   );

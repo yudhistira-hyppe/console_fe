@@ -12,7 +12,6 @@ const TableList = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    descending: 'true',
     labelTanggal: '',
     createdAt: [null, null],
     name: '',
@@ -25,10 +24,10 @@ const TableList = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
     });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
+    filter.name !== '' && Object.assign(params, { search: filter.name });
 
     return params;
   };
@@ -46,15 +45,6 @@ const TableList = () => {
       });
     }
   }, [filter, loadingInterest]);
-
-  const onOrderChange = (e, val) => {
-    setFilter((prevVal) => {
-      return {
-        ...prevVal,
-        descending: e.target.value,
-      };
-    });
-  };
 
   const handlePageChange = (value) => {
     setFilter((prevVal) => {
@@ -139,7 +129,6 @@ const TableList = () => {
         loading={loadingInterest}
         listTickets={listInterest}
         handlePageChange={handlePageChange}
-        handleOrder={onOrderChange}
         handleDeleteFilter={handleSearchChange}
       />
     </Stack>
