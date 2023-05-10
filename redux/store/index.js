@@ -37,6 +37,7 @@ import {
   dashboardMonetizeAPI,
   jualBeliAPI,
   interestApi,
+  settingApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -79,6 +80,7 @@ const initStore = () => {
         dashboardMonetizeAPI.middleware,
         jualBeliAPI.middleware,
         interestApi.middleware,
+        settingApi.middleware,
       ]),
   });
   return store;
