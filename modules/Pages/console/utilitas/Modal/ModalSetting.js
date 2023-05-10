@@ -24,9 +24,18 @@ const ModalSetting = ({ open, handleClose }) => {
   const [createSetting, { isLoading }] = useCreateSettingMutation();
 
   const handleSubmit = () => {
+    handleClose();
+    setInputValue({
+      jenis: '',
+      value: '',
+      remark: '',
+    });
     createSetting(inputValue).then((res) => {
-      toast.success('Berhasil menambahkan setting');
-      handleClose();
+      if (res.data) {
+        toast.success('Berhasil menambahkan setting');
+      } else {
+        toast.error(res?.error?.data?.message);
+      }
     });
   };
 
@@ -49,6 +58,14 @@ const ModalSetting = ({ open, handleClose }) => {
               color="secondary"
               value={inputValue.value}
               onChange={(e) => setInputValue({ ...inputValue, value: e.target.value })}
+              inputProps={{
+                min: 0,
+                onKeyPress: (event) => {
+                  if (!/[0-9]/.test(event.key)) {
+                    event.preventDefault();
+                  }
+                },
+              }}
             />
             <TextField
               placeholder="Input Remark Setting"
@@ -65,12 +82,24 @@ const ModalSetting = ({ open, handleClose }) => {
               color="secondary"
               sx={{ height: 40 }}
               onClick={handleSubmit}
-              disabled={isLoading}>
+              disabled={isLoading || !inputValue.jenis || !inputValue.remark || !inputValue.value}>
               <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
                 Tambah
               </Typography>
             </Button>
-            <Button fullWidth variant="outlined" color="secondary" sx={{ height: 40 }} onClick={handleClose}>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              sx={{ height: 40 }}
+              onClick={() => {
+                handleClose();
+                setInputValue({
+                  jenis: '',
+                  value: '',
+                  remark: '',
+                });
+              }}>
               <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
                 Batal
               </Typography>
