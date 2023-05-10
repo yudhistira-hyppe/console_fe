@@ -146,6 +146,14 @@ const TableSection = () => {
                           size="small"
                           color="secondary"
                           placeholder="Input Value Setting"
+                          inputProps={{
+                            min: 0,
+                            onKeyPress: (event) => {
+                              if (!/[0-9]/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            },
+                          }}
                         />
                       </TableCell>
                       <TableCell align="left">

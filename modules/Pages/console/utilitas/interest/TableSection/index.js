@@ -77,9 +77,9 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
           alignItems="center"
           justifyContent="space-between"
           style={{ gap: 12, marginBottom: 20 }}>
-          <Stack direction="row" gap={2} alignItems="center" width={600}>
+          <Stack direction="row" gap={2} alignItems="center" width="100%">
             {filterList?.length >= 1 ? (
-              <ScrollBar style={{ width: 550, height: '100%' }}>
+              <ScrollBar style={{ width: '100%', height: '100%' }}>
                 <Stack direction="row" gap="10px">
                   {filterList?.map((item, key) => (
                     <Chip

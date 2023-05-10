@@ -14,6 +14,22 @@ export const interestApi = createApi({
       }),
       providesTags: ['list'],
     }),
+    createInterest: build.mutation({
+      query: (data) => ({
+        url: '/interestsrepo',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['list'],
+    }),
+    updateInterest: build.mutation({
+      query: (data) => ({
+        url: '/interestsrepo/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['list'],
+    }),
     deleteInterest: build.mutation({
       query: (id) => ({
         url: `/interestsrepo/${id}`,
@@ -24,4 +40,5 @@ export const interestApi = createApi({
   }),
 });
 
-export const { useGetListInterestQuery, useDeleteInterestMutation } = interestApi;
+export const { useGetListInterestQuery, useCreateInterestMutation, useUpdateInterestMutation, useDeleteInterestMutation } =
+  interestApi;

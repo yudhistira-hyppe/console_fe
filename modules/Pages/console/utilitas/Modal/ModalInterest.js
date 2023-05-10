@@ -1,7 +1,11 @@
 import { AddPhotoAlternate } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
+import { LoadingButton } from '@mui/lab';
 import { Avatar, Box, Button, Modal, Stack, TextField, Typography } from '@mui/material';
+import { useCreateInterestMutation, useUpdateInterestMutation } from 'api/console/utilitas/interest';
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 const style = {
   position: 'absolute',
@@ -41,6 +45,8 @@ const ModalInterest = ({ open, handleClose, data }) => {
     interest_id: '',
     interest_en: '',
   });
+  const [createInterest, { isLoading: loadingCreate }] = useCreateInterestMutation();
+  const [updateInterest, { isLoading: loadingUpdate }] = useUpdateInterestMutation();
 
   useEffect(() => {
     setInputValue({
@@ -66,15 +72,47 @@ const ModalInterest = ({ open, handleClose, data }) => {
   const checkDisable = () => {
     let disable = false;
 
-    if (
-      inputValue?.icon === data?.icon &&
-      inputValue?.interest_id === data?.interestNameId &&
-      inputValue?.interest_en === data?.interestName
-    ) {
-      disable = true;
+    if (isEmpty(data)) {
+      if (!inputValue?.icon || !inputValue?.interest_en || !inputValue.interest_id) {
+        disable = true;
+      }
+    } else {
+      if (
+        inputValue?.icon === data?.icon &&
+        inputValue?.interest_id === data?.interestNameId &&
+        inputValue?.interest_en === data?.interestName
+      ) {
+        disable = true;
+      }
     }
 
     return disable;
+  };
+
+  const handleSubmit = () => {
+    let formData = new FormData();
+    formData.append('interestName', inputValue?.interest_en);
+    formData.append('interestNameId', inputValue?.interest_id);
+    formData.append('icon_file', inputValue?.icon?.[0]);
+
+    if (isEmpty(data)) {
+      createInterest(formData).then((res) => {
+        toast.success('Berhasil membuat interest');
+        handleClose();
+      });
+    } else {
+      formData.append('repoID', data?._id);
+      updateInterest(formData).then((res) => {
+        toast.success('Berhasil mengupdate interest');
+        handleClose();
+      });
+    }
+
+    setInputValue({
+      icon: '' || data?.icon,
+      interest_id: data?.interestNameId || '',
+      interest_en: data?.interestName || '',
+    });
   };
 
   return (
@@ -111,11 +149,18 @@ const ModalInterest = ({ open, handleClose, data }) => {
             />
           </Stack>
           <Stack direction="row" gap={2}>
-            <Button fullWidth variant="contained" color="secondary" sx={{ height: 40 }} disabled={checkDisable()}>
+            <LoadingButton
+              fullWidth
+              loading={loadingUpdate || loadingCreate}
+              variant="contained"
+              color="secondary"
+              sx={{ height: 40 }}
+              onClick={handleSubmit}
+              disabled={checkDisable()}>
               <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
                 Simpan Perubahan
               </Typography>
-            </Button>
+            </LoadingButton>
             <Button fullWidth variant="outlined" color="secondary" sx={{ height: 40 }} onClick={handleClose}>
               <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
                 Batal
