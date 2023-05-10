@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import InterestComponent from './interest';
+import FormEdit from './setting';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -39,6 +40,7 @@ const UtilitasComponent = () => {
 
   const handleChange = (event, newValue) => {
     router.push(`${router.pathname}?tab=${newValue}`);
+    setTab(newValue);
   };
 
   return (
@@ -58,7 +60,7 @@ const UtilitasComponent = () => {
           <InterestComponent />
         </TabPanel>
         <TabPanel value="setting" style={{ padding: 0 }}>
-          <p>sheesshhh</p>
+          <FormEdit />
         </TabPanel>
       </div>
     </TabContext>
