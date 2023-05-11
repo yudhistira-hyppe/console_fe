@@ -95,24 +95,30 @@ const ModalInterest = ({ open, handleClose, data }) => {
     formData.append('interestNameId', inputValue?.interest_id);
     formData.append('icon_file', inputValue?.icon?.[0]);
 
-    if (isEmpty(data)) {
-      createInterest(formData).then((res) => {
-        toast.success('Berhasil membuat interest');
-        handleClose();
-      });
-    } else {
-      formData.append('repoID', data?._id);
-      updateInterest(formData).then((res) => {
-        toast.success('Berhasil mengupdate interest');
-        handleClose();
-      });
-    }
-
     setInputValue({
       icon: '' || data?.icon,
       interest_id: data?.interestNameId || '',
       interest_en: data?.interestName || '',
     });
+    handleClose();
+    if (isEmpty(data)) {
+      createInterest(formData).then((res) => {
+        if (res?.data) {
+          toast.success('Berhasil membuat interest');
+        } else {
+          toast.error(res?.error?.data?.message);
+        }
+      });
+    } else {
+      formData.append('repoID', data?._id);
+      updateInterest(formData).then((res) => {
+        if (res?.data) {
+          toast.success('Berhasil mengupdate interest');
+        } else {
+          toast.error(res?.error?.data?.message);
+        }
+      });
+    }
   };
 
   return (

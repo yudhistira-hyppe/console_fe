@@ -7,9 +7,10 @@ export const settingApi = createApi({
   tagTypes: ['list'],
   endpoints: (build) => ({
     getListSettings: build.query({
-      query: () => ({
-        url: '/settings',
-        method: 'GET',
+      query: (data) => ({
+        url: '/settings/list',
+        method: 'POST',
+        body: data,
       }),
       providesTags: ['list'],
     }),

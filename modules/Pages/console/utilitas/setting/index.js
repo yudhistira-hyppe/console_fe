@@ -31,6 +31,7 @@ import { Add, Save } from '@material-ui/icons';
 import { useGetListSettingsQuery, useUpdateSettingMutation } from 'api/console/utilitas/setting';
 import { toast } from 'react-hot-toast';
 import ModalSetting from '../Modal/ModalSetting';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -47,13 +48,16 @@ const useStyles = makeStyles(() => ({
 const TableSection = () => {
   const { authUser } = useAuth();
   const classes = useStyles();
-  const { data: listSettings, isFetching: loadingSetting } = useGetListSettingsQuery();
+  const [query, setQuery] = useState('');
+  const { data: listSettings, isFetching: loadingSetting } = useGetListSettingsQuery(
+    query !== '' ? { jenis: query } : undefined,
+  );
   const [inputValue, setInputValue] = useState([]);
   const [updateSetting] = useUpdateSettingMutation();
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    setInputValue(listSettings?.map((item) => item));
+    setInputValue(listSettings?.data?.map((item) => item));
   }, [loadingSetting]);
 
   const checkDisable = (item) => {
@@ -84,16 +88,33 @@ const TableSection = () => {
       <ModalSetting open={openModal} handleClose={() => setOpenModal(!openModal)} />
 
       <Stack flex={1} width="100%" style={{ position: 'relative' }}>
-        <Button
-          variant="contained"
-          color="secondary"
-          startIcon={<Add />}
-          onClick={() => setOpenModal(!openModal)}
-          sx={{ height: 40, position: 'absolute', top: -70, right: 0 }}>
-          <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
-            Tambah Setting
-          </Typography>
-        </Button>
+        <Stack direction="row" spacing={3} style={{ position: 'absolute', top: -70, right: 0 }}>
+          <DelayedTextField
+            fullWidth
+            waitForInput={true}
+            filterValue={query}
+            color="secondary"
+            placeholder="Cari Jenis"
+            onChange={(e) => setQuery(e.target.value)}
+            sx={{
+              input: {
+                height: 40,
+                padding: '0px 8px',
+              },
+            }}
+          />
+
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<Add />}
+            onClick={() => setOpenModal(!openModal)}
+            sx={{ height: 40, width: '100%' }}>
+            <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
+              Tambah Setting
+            </Typography>
+          </Button>
+        </Stack>
 
         <TableContainer component={Paper}>
           <ScrollBar>
@@ -115,8 +136,8 @@ const TableSection = () => {
                       <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                     </Stack>
                   </TableCell>
-                ) : listSettings?.length >= 1 ? (
-                  listSettings?.map((item, i) => (
+                ) : listSettings?.data?.length >= 1 ? (
+                  listSettings?.data?.map((item, i) => (
                     <TableRow key={i} hover>
                       <TableCell>
                         <TextField
