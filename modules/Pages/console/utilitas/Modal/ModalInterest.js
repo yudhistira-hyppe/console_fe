@@ -145,6 +145,9 @@ const ModalInterest = ({ open, handleClose, data }) => {
               color="secondary"
               value={inputValue.interest_id}
               onChange={(e) => setInputValue({ ...inputValue, interest_id: e.target.value })}
+              inputProps={{
+                maxLength: 30,
+              }}
             />
             <TextField
               placeholder="Input Interest Name (EN)"
@@ -152,6 +155,9 @@ const ModalInterest = ({ open, handleClose, data }) => {
               color="secondary"
               value={inputValue.interest_en}
               onChange={(e) => setInputValue({ ...inputValue, interest_en: e.target.value })}
+              inputProps={{
+                maxLength: 30,
+              }}
             />
           </Stack>
           <Stack direction="row" gap={2}>

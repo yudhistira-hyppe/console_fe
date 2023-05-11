@@ -51,6 +51,9 @@ const ModalSetting = ({ open, handleClose }) => {
               color="secondary"
               value={inputValue.jenis}
               onChange={(e) => setInputValue({ ...inputValue, jenis: e.target.value })}
+              inputProps={{
+                maxLength: 30,
+              }}
             />
             <TextField
               placeholder="Input Value Setting"
@@ -73,6 +76,9 @@ const ModalSetting = ({ open, handleClose }) => {
               color="secondary"
               value={inputValue.remark}
               onChange={(e) => setInputValue({ ...inputValue, remark: e.target.value })}
+              inputProps={{
+                maxLength: 30,
+              }}
             />
           </Stack>
           <Stack direction="row" gap={2}>
