@@ -16,7 +16,7 @@ export const settingApi = createApi({
     }),
     updateSetting: build.mutation({
       query: ({ id, formData }) => ({
-        url: `/settings/${id}`,
+        url: formData?.typedata === 'number' ? `/settings/${id}` : `/settings/${formData?.typedata}/${id}`,
         method: 'PUT',
         body: formData,
       }),
@@ -24,7 +24,7 @@ export const settingApi = createApi({
     }),
     createSetting: build.mutation({
       query: (data) => ({
-        url: '/settings',
+        url: data?.typedata === 'number' ? '/settings' : `/settings/${data?.typedata}`,
         method: 'POST',
         body: data,
       }),
