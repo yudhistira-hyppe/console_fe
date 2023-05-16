@@ -14,6 +14,7 @@ import {
   Divider,
   Button,
   TextField,
+  InputAdornment,
 } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import { CircularProgress, Pagination, Stack } from '@mui/material';
@@ -27,76 +28,63 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import ScrollBar from 'react-perfect-scrollbar';
-import { Add, Save } from '@material-ui/icons';
+import { Add, Delete, Edit, Save } from '@material-ui/icons';
 import { useGetListSettingsQuery, useUpdateSettingMutation } from 'api/console/utilitas/setting';
 import { toast } from 'react-hot-toast';
 import ModalSetting from '../Modal/ModalSetting';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
-const useStyles = makeStyles(() => ({
-  textTruncate: {
-    width: 100,
-    textOverflow: 'ellipsis',
-    display: '-webkit-box',
-    '-webkit-box-orient': 'vertical',
-    '-webkit-line-clamp': 2,
-    lineClamp: 2,
-    overflow: 'hidden',
-  },
-}));
-
 const TableSection = () => {
-  const { authUser } = useAuth();
-  const classes = useStyles();
   const [query, setQuery] = useState('');
-  const { data: listSettings, isFetching: loadingSetting } = useGetListSettingsQuery(
-    query !== '' ? { jenis: query } : undefined,
-  );
-  const [inputValue, setInputValue] = useState([]);
-  const [updateSetting] = useUpdateSettingMutation();
+  const {
+    data: listSettings,
+    isFetching: loadingSetting,
+    refetch,
+  } = useGetListSettingsQuery(query !== '' ? { jenis: query } : undefined);
   const [openModal, setOpenModal] = useState(false);
+  const [kind, setKind] = useState('PPN');
+  const [selected, setSelected] = useState({});
 
-  useEffect(() => {
-    setInputValue(listSettings?.data?.map((item) => item));
-  }, [loadingSetting]);
+  const filteredData = listSettings?.data?.filter((item) => item.jenisdata === kind);
 
-  const checkDisable = (item) => {
-    let disable = false;
+  const categorySetting = () => {
+    let category = ['PPN', 'UMUM', 'PPH', 'ADS', 'SCORING', 'LANDINGPAGE'];
 
-    const specificInput = inputValue?.find((input) => input?._id === item?._id);
-
-    if (specificInput?.jenis === item?.jenis && specificInput?.value === item?.value) {
-      disable = true;
-    }
-
-    return disable;
-  };
-
-  const handleUpdate = (id, jenis, value) => {
-    const formData = {
-      jenis,
-      value,
-    };
-
-    updateSetting({ id, formData }).then((res) => {
-      toast.success('Berhasil mengupdate setting');
-    });
+    return category?.filter((item) => item !== undefined);
   };
 
   return (
     <>
-      <ModalSetting open={openModal} handleClose={() => setOpenModal(!openModal)} />
+      {openModal && (
+        <ModalSetting
+          open={openModal}
+          handleClose={() => {
+            setOpenModal(!openModal);
+            setSelected({});
+          }}
+          selected={selected}
+        />
+      )}
 
-      <Stack flex={1} width="100%" style={{ position: 'relative' }}>
+      <Stack flex={1} width="100%" style={{ position: 'relative', height: '100%' }}>
         <Stack direction="row" spacing={3} style={{ position: 'absolute', top: -70, right: 0 }}>
           <DelayedTextField
-            fullWidth
             waitForInput={true}
             filterValue={query}
             color="secondary"
             placeholder="Cari Jenis"
             onChange={(e) => setQuery(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="toggle password visibility" edge="end" onClick={() => setQuery('')}>
+                    <Delete style={{ fontSize: 20 }} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             sx={{
+              width: 250,
               input: {
                 height: 40,
                 padding: '0px 8px',
@@ -109,109 +97,102 @@ const TableSection = () => {
             color="secondary"
             startIcon={<Add />}
             onClick={() => setOpenModal(!openModal)}
-            sx={{ height: 40, width: '100%' }}>
+            sx={{ height: 40, width: 200 }}>
             <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
               Tambah Setting
             </Typography>
           </Button>
         </Stack>
 
-        <TableContainer component={Paper}>
-          <ScrollBar>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Settings Name</TableCell>
-                  <TableCell align="left">Value</TableCell>
-                  <TableCell align="left">Catatan</TableCell>
-                  <TableCell align="left"></TableCell>
-                </TableRow>
-              </TableHead>
+        <Stack direction="column" spacing={3} mt={2} height="100%">
+          <Stack direction="row" spacing={3}>
+            {categorySetting().map((item) => (
+              <Button
+                variant={kind === item ? 'contained' : 'outlined'}
+                color="secondary"
+                style={{
+                  padding: '12px 4px',
+                  width: 130,
+                }}
+                onClick={() => {
+                  setKind(item);
+                  refetch();
+                }}>
+                <Typography style={{ fontFamily: 'Normal', fontSize: 12 }}>{item}</Typography>
+              </Button>
+            ))}
+          </Stack>
+          {loadingSetting ? (
+            <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
+              <CircularProgress color="secondary" />
+              <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+            </Stack>
+          ) : (
+            <TableContainer component={Paper}>
+              <ScrollBar>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Nama Setting</TableCell>
+                      <TableCell align="left">Value</TableCell>
+                      <TableCell align="left">Tipe Data</TableCell>
+                      <TableCell align="left">Catatan</TableCell>
+                      <TableCell align="left"></TableCell>
+                    </TableRow>
+                  </TableHead>
 
-              <TableBody>
-                {loadingSetting ? (
-                  <TableCell colSpan={8}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                      <CircularProgress color="secondary" />
-                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                    </Stack>
-                  </TableCell>
-                ) : listSettings?.data?.length >= 1 ? (
-                  listSettings?.data?.map((item, i) => (
-                    <TableRow key={i} hover>
-                      <TableCell>
-                        <TextField
-                          id={`jenis-${item?.jenis}`}
-                          defaultValue={item?.jenis || ''}
-                          onChange={(e) =>
-                            setInputValue([
-                              ...inputValue.filter((input) => input?._id !== item?._id),
-                              { ...inputValue.find((input) => input?._id === item?._id), jenis: e.target.value },
-                            ])
-                          }
-                          size="small"
-                          color="secondary"
-                          placeholder="Input Jenis Setting"
-                        />
-                      </TableCell>
-                      <TableCell align="left">
-                        <TextField
-                          id={`value-${item?.jenis}`}
-                          defaultValue={item?.value || ''}
-                          onChange={(e) =>
-                            setInputValue([
-                              ...inputValue.filter((input) => input?._id !== item?._id),
-                              { ...inputValue.find((input) => input?._id === item?._id), value: e.target.value },
-                            ])
-                          }
-                          size="small"
-                          color="secondary"
-                          placeholder="Input Value Setting"
-                          inputProps={{
-                            min: 0,
-                            onKeyPress: (event) => {
-                              if (!/[0-9]/.test(event.key)) {
-                                event.preventDefault();
-                              }
-                            },
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
-                          {item?.remark || '-'}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Stack direction="row" gap={1} width={80}>
-                          <IconButton
-                            id={`button-${item?.jenis}`}
-                            color="secondary"
-                            onClick={() =>
-                              handleUpdate(
-                                item?._id,
-                                document.getElementById(`jenis-${item?.jenis}`).value,
-                                document.getElementById(`value-${item?.jenis}`).value,
-                              )
-                            }
-                            disabled={checkDisable(item)}>
-                            <Save />
-                          </IconButton>
+                  <TableBody>
+                    {filteredData?.length >= 1 ? (
+                      filteredData?.map((item, i) => (
+                        <TableRow key={i} hover>
+                          <TableCell>
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                              {item?.jenis || '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                              {item?.value?.toString() || '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                              {item?.typedata || '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                              {item?.remark || '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Stack direction="row" gap={1} width={80}>
+                              <IconButton
+                                color="secondary"
+                                onClick={() => {
+                                  setSelected(item);
+                                  setOpenModal(!openModal);
+                                }}>
+                                <Edit />
+                              </IconButton>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableCell colSpan={8}>
+                        <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                          <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Settings</Typography>
                         </Stack>
                       </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableCell colSpan={8}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Settings</Typography>
-                    </Stack>
-                  </TableCell>
-                )}
-              </TableBody>
-            </Table>
-          </ScrollBar>
-        </TableContainer>
+                    )}
+                  </TableBody>
+                </Table>
+              </ScrollBar>
+            </TableContainer>
+          )}
+        </Stack>
+
         {/* {listTickets?.data?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
           <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>

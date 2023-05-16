@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import InterestComponent from './interest';
-import FormEdit from './setting';
+import Setting from './setting';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -55,12 +55,12 @@ const UtilitasComponent = () => {
         <Tab label="Interest" value="interest" className={classes.tab} />
         <Tab label="Setting" value="setting" className={classes.tab} />
       </TabList>
-      <div style={{ marginTop: 30 }}>
-        <TabPanel value="interest" style={{ padding: 0 }}>
+      <div style={{ marginTop: 30, height: '100%' }}>
+        <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>
           <InterestComponent />
         </TabPanel>
-        <TabPanel value="setting" style={{ padding: 0 }}>
-          <FormEdit />
+        <TabPanel value="setting" style={{ padding: 0, height: '100%' }}>
+          <Setting />
         </TabPanel>
       </div>
     </TabContext>
