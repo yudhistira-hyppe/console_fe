@@ -147,7 +147,7 @@ const ModalSetting = ({ open, handleClose, selected }) => {
                 label="Pilihan"
                 placeholder="Pilih Status"
                 color="secondary"
-                value={inputValue.value ? inputValue.value.toString() : 'false'}
+                value={inputValue.value ? inputValue.value.toString() : ''}
                 onChange={(e) => setInputValue({ ...inputValue, value: e.target.value.toString() })}>
                 <MenuItem value="true" color="secondary">
                   True
@@ -231,9 +231,9 @@ const ModalSetting = ({ open, handleClose, selected }) => {
                 loadingUpdate ||
                 !inputValue.jenis ||
                 !inputValue.remark ||
-                inputValue.typedata === 'boolean'
-                  ? false
-                  : !inputValue.value
+                !inputValue.jenisdata ||
+                !inputValue.typedata ||
+                !inputValue.value
               }>
               <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
                 {isEmpty(selected) ? 'Tambah' : 'Simpan'}
