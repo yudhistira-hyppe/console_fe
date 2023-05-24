@@ -29,6 +29,7 @@ import {
   dashboardMonetizeAPI,
   interestApi,
   settingApi,
+  masterBankApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -84,4 +85,5 @@ export default combineReducers({
   [jualBeliAPI.reducerPath]: jualBeliAPI.reducer,
   [interestApi.reducerPath]: interestApi.reducer,
   [settingApi.reducerPath]: settingApi.reducer,
+  [masterBankApi.reducerPath]: masterBankApi.reducer,
 });

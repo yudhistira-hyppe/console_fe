@@ -19,7 +19,7 @@ import { transactionAPI } from './transaction';
 import { mediaApi, contentApi } from './database';
 import { boostAPI } from './boost';
 import { adsApi } from './ads';
-import { interestApi, settingApi } from './utilitas';
+import { interestApi, settingApi, masterBankApi } from './utilitas';
 
 export {
   dashboardApi,
@@ -47,4 +47,5 @@ export {
   jualBeliAPI,
   interestApi,
   settingApi,
+  masterBankApi,
 };

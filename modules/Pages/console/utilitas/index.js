@@ -5,7 +5,10 @@ import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import InterestComponent from './interest';
+import MasterBank from './master-bank';
 import Setting from './setting';
+import CreateMasterBank from './master-bank/create';
+import EditMasterBank from './master-bank/edit';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -54,6 +57,7 @@ const UtilitasComponent = () => {
         style={{ marginTop: -20 }}>
         <Tab label="Interest" value="interest" className={classes.tab} />
         <Tab label="Setting" value="setting" className={classes.tab} />
+        <Tab label="Bank" value="bank" className={classes.tab} />
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
         <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>
@@ -61,6 +65,15 @@ const UtilitasComponent = () => {
         </TabPanel>
         <TabPanel value="setting" style={{ padding: 0, height: '100%' }}>
           <Setting />
+        </TabPanel>
+        <TabPanel value="bank" style={{ padding: 0, height: '100%' }}>
+          {router.query?.create ? (
+            <CreateMasterBank />
+          ) : router.query?.bankcode ? (
+            <EditMasterBank bankcode={router.query?.bankcode} />
+          ) : (
+            <MasterBank />
+          )}
         </TabPanel>
       </div>
     </TabContext>

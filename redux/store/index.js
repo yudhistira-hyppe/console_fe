@@ -38,6 +38,7 @@ import {
   jualBeliAPI,
   interestApi,
   settingApi,
+  masterBankApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -81,6 +82,7 @@ const initStore = () => {
         jualBeliAPI.middleware,
         interestApi.middleware,
         settingApi.middleware,
+        masterBankApi.middleware,
       ]),
   });
   return store;
