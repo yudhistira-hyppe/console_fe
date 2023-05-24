@@ -120,10 +120,11 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align="left">Waktu Buat</TableCell>
+                <TableCell align="left">Tanggal Buat</TableCell>
                 <TableCell align="left">Iklan</TableCell>
                 <TableCell align="left">Tipe</TableCell>
                 <TableCell align="left">Penempatan</TableCell>
+                <TableCell align="left">Tanggal Mulai</TableCell>
                 <TableCell align="left">Kredit Terpakai</TableCell>
                 <TableCell align="left">Kredit Tersisa</TableCell>
                 <TableCell align="left">Status</TableCell>
@@ -151,8 +152,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         {moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm')}
                       </Typography>
                     </TableCell>
-                    <TableCell align="left" style={{ width: 150 }}>
-                      <Stack direction="row" gap="15px">
+                    <TableCell align="left">
+                      <Stack direction="row" gap="15px" width={200}>
                         <Avatar src={getImage(item)} variant="rounded" alt="X" />
                         {/* {JSON.stringify(getImage(item))} */}
                         <Stack direction="column" gap="2px">
@@ -177,6 +178,11 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           : item.type_data === 'Sponsor Ads'
                           ? item.place_data
                           : item.place_data}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 100 }}>
+                        {moment(item?.liveAt).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
