@@ -4,11 +4,12 @@ import { Tab } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import InterestComponent from './interest';
+import Interest from './interest';
 import MasterBank from './master-bank';
 import Setting from './setting';
 import CreateMasterBank from './master-bank/create';
 import EditMasterBank from './master-bank/edit';
+import UtilityAds from './ads';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -58,10 +59,11 @@ const UtilitasComponent = () => {
         <Tab label="Interest" value="interest" className={classes.tab} />
         <Tab label="Setting" value="setting" className={classes.tab} />
         <Tab label="Bank" value="bank" className={classes.tab} />
+        <Tab label="Ads Center" value="ads" className={classes.tab} />
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
         <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>
-          <InterestComponent />
+          <Interest />
         </TabPanel>
         <TabPanel value="setting" style={{ padding: 0, height: '100%' }}>
           <Setting />
@@ -74,6 +76,9 @@ const UtilitasComponent = () => {
           ) : (
             <MasterBank />
           )}
+        </TabPanel>
+        <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
+          <UtilityAds />
         </TabPanel>
       </div>
     </TabContext>

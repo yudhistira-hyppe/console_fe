@@ -30,6 +30,7 @@ import {
   interestApi,
   settingApi,
   masterBankApi,
+  adsUtilityApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -86,4 +87,5 @@ export default combineReducers({
   [interestApi.reducerPath]: interestApi.reducer,
   [settingApi.reducerPath]: settingApi.reducer,
   [masterBankApi.reducerPath]: masterBankApi.reducer,
+  [adsUtilityApi.reducerPath]: adsUtilityApi.reducer,
 });

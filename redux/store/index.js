@@ -39,6 +39,7 @@ import {
   interestApi,
   settingApi,
   masterBankApi,
+  adsUtilityApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -83,6 +84,7 @@ const initStore = () => {
         interestApi.middleware,
         settingApi.middleware,
         masterBankApi.middleware,
+        adsUtilityApi.middleware,
       ]),
   });
   return store;
