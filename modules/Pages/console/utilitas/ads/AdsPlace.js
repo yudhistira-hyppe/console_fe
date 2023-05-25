@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import { Edit } from '@material-ui/icons';
+import { Add, Edit, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import {
   Button,
   CircularProgress,
@@ -14,35 +14,55 @@ import {
   TableRow,
 } from '@mui/material';
 import { useGetAdsPlaceListQuery } from 'api/console/utilitas/ads';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import ScrollBar from 'react-perfect-scrollbar';
 
 const AdsPlace = () => {
-  const { data: listPlace, isFetching: loadingUtility, refetch } = useGetAdsPlaceListQuery();
+  const [payload, setPayload] = useState({ limit: 10, page: 0 });
+  const { data: listPlace, isFetching: loadingUtility } = useGetAdsPlaceListQuery(payload);
+
+  useEffect(() => {
+    if (payload.page >= 1 && listPlace?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setPayload((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [payload, loadingUtility]);
 
   return (
     <Stack direction="column" spacing={2} height="100%">
-      <Typography variant='h2'>Ads Place</Typography>
-      {loadingUtility ? (
-        <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
-          <CircularProgress color="secondary" />
-          <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-        </Stack>
-      ) : (
-        <TableContainer component={Paper}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="h2">Ads Place</Typography>
+        <Button variant="contained" color="secondary" startIcon={<Add fontSize="16px" />} style={{ padding: '8px 12px' }}>
+          <Typography variant="subtitle2">Tambah Baru</Typography>
+        </Button>
+      </Stack>
+      <TableContainer component={Paper}>
+        {loadingUtility ? (
+          <Stack direction="column" alignItems="center" justifyContent="center" height={500} spacing={2}>
+            <CircularProgress color="secondary" />
+            <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+          </Stack>
+        ) : (
           <ScrollBar>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Nama</TableCell>
-                  <TableCell align="left">Deskripsi</TableCell>
-                  <TableCell align="left"></TableCell>
+                  <TableCell>Deskripsi</TableCell>
+                  <TableCell>Ads Type</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
-                {listPlace?.length >= 1 ? (
-                  listPlace?.map((item, i) => (
+                {listPlace?.data?.length >= 1 ? (
+                  listPlace?.data?.map((item, i) => (
                     <TableRow key={i} hover>
                       <TableCell>
                         <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
@@ -54,8 +74,13 @@ const AdsPlace = () => {
                           {item?.descPlace || '-'}
                         </Typography>
                       </TableCell>
-                      <TableCell>
-                        <Stack direction="row" gap={1} width={80}>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                          {item?.nameType || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Stack direction="row" justifyContent="flex-end" gap={1} minWidth={80}>
                           <IconButton color="secondary" onClick={() => {}}>
                             <Edit />
                           </IconButton>
@@ -73,7 +98,31 @@ const AdsPlace = () => {
               </TableBody>
             </Table>
           </ScrollBar>
-        </TableContainer>
+        )}
+      </TableContainer>
+      {listPlace?.data?.length >= 1 && !loadingUtility && (
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+          <IconButton
+            color="secondary"
+            onClick={() =>
+              setPayload((prevVal) => {
+                return { ...prevVal, page: prevVal.page - 1 };
+              })
+            }
+            disabled={payload.page < 1}>
+            <NavigateBefore />
+          </IconButton>
+          <IconButton
+            color="secondary"
+            onClick={() =>
+              setPayload((prevVal) => {
+                return { ...prevVal, page: prevVal.page + 1 };
+              })
+            }
+            disabled={listPlace?.data?.length < 10}>
+            <NavigateNext />
+          </IconButton>
+        </Stack>
       )}
     </Stack>
   );

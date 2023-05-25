@@ -4,19 +4,23 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const adsUtilityApi = createApi({
   reducerPath: 'utilitas/ads',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['list'],
+  tagTypes: ['listType', 'listPlace'],
   endpoints: (build) => ({
     getAdsPlaceList: build.query({
-      query: () => ({
-        url: '/adsplaces',
-        method: 'GET',
+      query: (data) => ({
+        url: '/adsplaces/listing',
+        method: 'POST',
+        body: data,
       }),
+      providesTags: ['listPlace'],
     }),
     getAdsTypeList: build.query({
-      query: () => ({
-        url: '/adstypes',
-        method: 'GET',
+      query: (data) => ({
+        url: '/adstypes/listing',
+        method: 'POST',
+        body: data,
       }),
+      providesTags: ['listType'],
     }),
   }),
 });
