@@ -38,8 +38,30 @@ export const adsUtilityApi = createApi({
       }),
       invalidatesTags: ['listType'],
     }),
+    createAdsPlace: build.mutation({
+      query: (data) => ({
+        url: '/adsplaces',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listPlace'],
+    }),
+    updateAdsPlace: build.mutation({
+      query: ({ id, data }) => ({
+        url: `/adsplaces/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['listPlace'],
+    }),
   }),
 });
 
-export const { useGetAdsPlaceListQuery, useGetAdsTypeListQuery, useCreateAdsTypeMutation, useUpdateAdsTypeMutation } =
-  adsUtilityApi;
+export const {
+  useGetAdsPlaceListQuery,
+  useGetAdsTypeListQuery,
+  useCreateAdsTypeMutation,
+  useUpdateAdsTypeMutation,
+  useCreateAdsPlaceMutation,
+  useUpdateAdsPlaceMutation,
+} = adsUtilityApi;

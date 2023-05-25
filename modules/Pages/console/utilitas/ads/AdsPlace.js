@@ -17,9 +17,12 @@ import { useGetAdsPlaceListQuery } from 'api/console/utilitas/ads';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import ScrollBar from 'react-perfect-scrollbar';
+import ModalAdsPlace from '../Modal/ModalAdsPlace';
 
 const AdsPlace = () => {
   const [payload, setPayload] = useState({ limit: 5, page: 0 });
+  const [openModal, setOpenModal] = useState(false);
+  const [selected, setSelected] = useState({});
   const { data: listPlace, isFetching: loadingUtility } = useGetAdsPlaceListQuery(payload);
 
   useEffect(() => {
@@ -38,10 +41,28 @@ const AdsPlace = () => {
     <Stack direction="column" spacing={2} height="100%">
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h2">Penempatan Iklan</Typography>
-        <Button variant="contained" color="secondary" startIcon={<Add fontSize="16px" />} style={{ padding: '8px 12px' }}>
+        <Button
+          variant="contained"
+          color="secondary"
+          startIcon={<Add fontSize="16px" />}
+          onClick={() => {
+            setOpenModal(!openModal);
+            setSelected({});
+          }}
+          style={{ padding: '8px 12px' }}>
           <Typography variant="subtitle2">Tambah</Typography>
         </Button>
       </Stack>
+
+      <ModalAdsPlace
+        open={openModal}
+        handleClose={() => {
+          setOpenModal(!openModal);
+          setSelected({});
+        }}
+        data={selected}
+      />
+
       <TableContainer component={Paper} style={{ minHeight: 422 }}>
         {loadingUtility ? (
           <Stack direction="column" alignItems="center" justifyContent="center" height={422} spacing={2}>
@@ -81,7 +102,12 @@ const AdsPlace = () => {
                       </TableCell>
                       <TableCell align="right">
                         <Stack direction="row" justifyContent="flex-end" gap={1} minWidth={80}>
-                          <IconButton color="secondary" onClick={() => {}}>
+                          <IconButton
+                            color="secondary"
+                            onClick={() => {
+                              setSelected(item);
+                              setOpenModal(!openModal);
+                            }}>
                             <Edit />
                           </IconButton>
                         </Stack>

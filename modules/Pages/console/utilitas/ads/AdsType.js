@@ -55,7 +55,14 @@ const AdsType = () => {
         </Button>
       </Stack>
 
-      <ModalAdsType open={openModal} handleClose={() => setOpenModal(!openModal)} data={selected} />
+      <ModalAdsType
+        open={openModal}
+        handleClose={() => {
+          setOpenModal(!openModal);
+          setSelected({});
+        }}
+        data={selected}
+      />
 
       <TableContainer component={Paper} style={{ minHeight: 422 }}>
         {loadingUtility ? (
