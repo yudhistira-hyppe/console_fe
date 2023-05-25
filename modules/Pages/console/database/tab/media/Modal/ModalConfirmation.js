@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
-import { useUpdateStatusMusicMutation } from 'api/console/database/media';
+import { useDeleteMusicMutation, useUpdateStatusMusicMutation } from 'api/console/database/media';
 import { toast } from 'react-hot-toast';
 
 const style = {
@@ -20,6 +20,7 @@ const style = {
 
 export default function ModalConfirmation({ showModal, status, onClose, onConfirm, data1, data2, isSingle }) {
   const [updateStatus] = useUpdateStatusMusicMutation();
+  const [deleteMusic] = useDeleteMusicMutation();
 
   const handleStatus = () => {
     const data = {
@@ -40,8 +41,20 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
   };
 
   const handleDelete = () => {
-    alert('deleted');
-    onConfirm();
+    const data = {
+      _id: isSingle ? [data2] : [...data1],
+    };
+
+    deleteMusic(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        isSingle
+          ? toast.success('Berhasil mengubah status musik')
+          : toast.success(`Berhasil mengubah ${data1?.length} status musik`);
+      }
+      onConfirm();
+    });
   };
 
   return (

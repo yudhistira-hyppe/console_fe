@@ -72,6 +72,14 @@ export const mediaApi = createApi({
       }),
       invalidatesTags: ['Media'],
     }),
+    deleteMusic: build.mutation({
+      query: (data) => ({
+        url: '/music/delete',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Media'],
+    }),
   }),
 });
 
@@ -85,4 +93,5 @@ export const {
   useUpdateStatusMusicMutation,
   useUpdateMusicMutation,
   useCreateMusicMutation,
+  useDeleteMusicMutation,
 } = mediaApi;
