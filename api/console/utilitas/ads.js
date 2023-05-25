@@ -22,7 +22,24 @@ export const adsUtilityApi = createApi({
       }),
       providesTags: ['listType'],
     }),
+    createAdsType: build.mutation({
+      query: (data) => ({
+        url: '/adstypes',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listType'],
+    }),
+    updateAdsType: build.mutation({
+      query: ({ id, data }) => ({
+        url: `/adstypes/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['listType'],
+    }),
   }),
 });
 
-export const { useGetAdsPlaceListQuery, useGetAdsTypeListQuery } = adsUtilityApi;
+export const { useGetAdsPlaceListQuery, useGetAdsTypeListQuery, useCreateAdsTypeMutation, useUpdateAdsTypeMutation } =
+  adsUtilityApi;

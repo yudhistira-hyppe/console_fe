@@ -59,7 +59,7 @@ const UtilitasComponent = () => {
         <Tab label="Interest" value="interest" className={classes.tab} />
         <Tab label="Setting" value="setting" className={classes.tab} />
         <Tab label="Bank" value="bank" className={classes.tab} />
-        <Tab label="Ads Center" value="ads" className={classes.tab} />
+        <Tab label="Pusat Iklan" value="ads" className={classes.tab} />
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
         <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>

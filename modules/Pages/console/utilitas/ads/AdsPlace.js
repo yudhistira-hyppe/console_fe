@@ -19,7 +19,7 @@ import { toast } from 'react-hot-toast';
 import ScrollBar from 'react-perfect-scrollbar';
 
 const AdsPlace = () => {
-  const [payload, setPayload] = useState({ limit: 10, page: 0 });
+  const [payload, setPayload] = useState({ limit: 5, page: 0 });
   const { data: listPlace, isFetching: loadingUtility } = useGetAdsPlaceListQuery(payload);
 
   useEffect(() => {
@@ -37,14 +37,14 @@ const AdsPlace = () => {
   return (
     <Stack direction="column" spacing={2} height="100%">
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography variant="h2">Ads Place</Typography>
+        <Typography variant="h2">Penempatan Iklan</Typography>
         <Button variant="contained" color="secondary" startIcon={<Add fontSize="16px" />} style={{ padding: '8px 12px' }}>
-          <Typography variant="subtitle2">Tambah Baru</Typography>
+          <Typography variant="subtitle2">Tambah</Typography>
         </Button>
       </Stack>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} style={{ minHeight: 422 }}>
         {loadingUtility ? (
-          <Stack direction="column" alignItems="center" justifyContent="center" height={500} spacing={2}>
+          <Stack direction="column" alignItems="center" justifyContent="center" height={422} spacing={2}>
             <CircularProgress color="secondary" />
             <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
           </Stack>
@@ -55,7 +55,7 @@ const AdsPlace = () => {
                 <TableRow>
                   <TableCell>Nama</TableCell>
                   <TableCell>Deskripsi</TableCell>
-                  <TableCell>Ads Type</TableCell>
+                  <TableCell>Tipe Iklan</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -119,7 +119,7 @@ const AdsPlace = () => {
                 return { ...prevVal, page: prevVal.page + 1 };
               })
             }
-            disabled={listPlace?.data?.length < 10}>
+            disabled={listPlace?.data?.length < 5}>
             <NavigateNext />
           </IconButton>
         </Stack>
