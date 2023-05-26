@@ -38,6 +38,7 @@ const UserPost = (props) => {
     data: [],
   });
   const { data: contentPost, isFetching: loadingContent } = useGetListContentQuery(payload);
+  const { authUser } = useAuth();
 
   useEffect(() => {
     setPosts(() => {
@@ -60,6 +61,12 @@ const UserPost = (props) => {
     });
   };
 
+  const getMediaUri = (val) => {
+    const authToken = `?x-auth-token=${authUser?.token}&x-auth-user=${authUser?.user?.email}`;
+
+    return `${STREAM_URL}${val}${authToken}`;
+  };
+
   const getPostImage = (item) => {
     if (item?.apsara || item?.apsaraId) {
       if (item?.media?.ImageInfo?.length >= 1) {
@@ -70,7 +77,8 @@ const UserPost = (props) => {
         return new Error();
       }
     } else if (item?.mediaEndpoint) {
-      return new Error();
+      // return new Error();
+      return getMediaUri(item?.mediaEndpoint);
     } else {
       return new Error();
     }

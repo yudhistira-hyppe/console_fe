@@ -19,7 +19,7 @@ const InterestComponent = (props) => {
         Minat
         <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
       </Typography>
-      <Stack gap={1.25} direction="row" flexWrap="wrap" height={200}>
+      <Stack columnGap="8px" rowGap="8px" direction="row" flexWrap="wrap">
         {interests?.length >= 1 ? (
           interests?.map((interest, index) => (
             <Box
@@ -31,6 +31,7 @@ const InterestComponent = (props) => {
                 borderRadius: '4px',
                 color: 'rgba(0, 0, 0, 0.6)',
                 padding: '6px 8px',
+                height: 'fit-content',
               }}>
               <Typography variant="h5">{interest.interestName}</Typography>
             </Box>
