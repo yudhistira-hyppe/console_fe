@@ -23,17 +23,17 @@ const AdsDescriptionDetail = ({ detailAds }) => {
               Admin Bertugas:
             </Typography>
 
-            <Typography fontFamily={'Lato'} color="secondary" fontWeight="bold">
-              @{detailAds?.adminfullName || '-'}
+            <Typography fontFamily={'Lato'} color={detailAds?.adminfullName ? 'secondary' : 'black'} fontWeight="bold">
+              {detailAds?.adminfullName ? `@${detailAds?.adminfullName}` : '-'}
             </Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>
             <Typography fontFamily={'Lato'} color="rgba(0, 0, 0, 0.38)">
-              Objektifitas:
+              Durasi Skip Iklan:
             </Typography>
 
-            <Typography fontFamily={'Lato'}>Lalu-lintas</Typography>
+            <Typography fontFamily={'Lato'}>{detailAds?.skipTime || 0} Detik</Typography>
           </Stack>
 
           <Stack direction="row" spacing={1}>
@@ -58,7 +58,7 @@ const AdsDescriptionDetail = ({ detailAds }) => {
           <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>Deskripsi Iklan</Typography>
           <ScrollBar style={{ maxHeight: 120, minHeight: 120, height: '100%' }}>
             <Stack
-              dangerouslySetInnerHTML={{ __html: detailAds?.description }}
+              dangerouslySetInnerHTML={{ __html: detailAds?.description || '-' }}
               style={{ padding: detailAds?.description?.includes('<ul>') ? '0 20px' : 0, whiteSpace: 'pre-line' }}
             />
           </ScrollBar>
