@@ -225,7 +225,7 @@ const TableListPenonton = ({ idAds }) => {
     const exportPDF = new jsPDF('p', 'px', 'a4');
     exportPDF.html(renderToString(<DocumentPDF data={listExport?.data} />), {
       callback: function (exportPDF) {
-        exportPDF.setProperties({ title: 'Laporan Riwayat Transaksi' });
+        exportPDF.setProperties({ title: `List Penonton Iklan "${listExport?.data?.[0]?.name}"` });
         exportPDF.output('dataurlnewwindow');
         setExport(false);
       },
@@ -257,7 +257,7 @@ const TableListPenonton = ({ idAds }) => {
           variant="outlined"
           style={{ display: 'flex', alignItems: 'center', gap: 6 }}
           onClick={handleExport}
-          disabled={isExport}>
+          disabled={listViewers?.data?.length < 1 || isExport}>
           <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>Unduh</Typography>
           <GetApp style={{ fontSize: 18 }} />
         </LoadingButton>
