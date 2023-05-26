@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
   cardHeader: {
     height: '15%',
-    padding: '2em 2em 0',
+    padding: '24px 24px 0',
   },
   historyListContainer: {
     height: 200,
@@ -78,7 +78,7 @@ const AdsDetailComponent = ({ idAds }) => {
       <Card className={classes.cardRoot}>
         <div className={classes.cardHeader}>
           <Typography fontWeight="bold" fontFamily="Lato" variant="h6">
-            Riwayat Iklan
+            Riwayat Aktifitas Iklan
           </Typography>
         </div>
 

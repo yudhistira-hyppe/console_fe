@@ -9,9 +9,9 @@ const DocumentPDF = ({ data }) => {
     <Stack padding="20px" width="800px" spacing={2}>
       <img src="/images/logo-hyppe.png" style={{ width: 100, height: 'auto', backgroundColor: 'white' }} />
       <Stack>
-        <Typography style={{ fontSize: 10 }}>Riwayat Transaksi</Typography>
+        <Typography style={{ fontSize: 10 }}>List Penonton Iklan "{data?.[0]?.name}"</Typography>
         <Typography style={{ fontSize: 8, color: '#737373' }}>
-          Ini merupakan riwayat transaksi, yang kamu lakukan di hyppe
+          Ini merupakan riwayat penonton, dari iklan "{data?.[0]?.name}"
         </Typography>
       </Stack>
       <Table style={{ width: 400 }}>
