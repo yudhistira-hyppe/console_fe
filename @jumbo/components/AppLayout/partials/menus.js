@@ -124,7 +124,7 @@ export const consoleNav = [
     link: '/ads-center',
   },
   {
-    name: 'Boost Post Center',
+    name: 'Pusat Boost',
     type: 'item',
     link: '/boost-center',
   },
@@ -142,6 +142,11 @@ export const consoleNav = [
     name: 'Monetisasi',
     type: 'item',
     link: '/monetize',
+  },
+  {
+    name: 'Challenge',
+    type: 'item',
+    link: '/challenge',
   },
   {
     name: 'Anggota',
