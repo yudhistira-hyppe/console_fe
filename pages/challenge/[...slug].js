@@ -4,12 +4,14 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 import { useAuth } from 'authentication';
+import { Typography } from '@material-ui/core';
+import CreateChallenge from 'modules/Pages/console/challenge/create';
 
 const ChallengeComponent = dynamic(() => import('modules/Pages/console/challenge'), {
   loading: () => <PageLoader />,
 });
 
-const validDatabaseTab = ['main', 'other', 'draft'];
+const validDatabaseTab = ['main', 'other', 'draft', 'create'];
 
 const ChallengeDynamicPage = () => {
   const { authUser } = useAuth();
@@ -33,7 +35,11 @@ const ChallengeDynamicPage = () => {
 
   return (
     <SecureConsolePage>
-      <ChallengeComponent tab={challengeProps.tab} detailId={challengeProps.detailId} />
+      {challengeProps.tab === 'create' ? (
+        <CreateChallenge />
+      ) : (
+        <ChallengeComponent tab={challengeProps.tab} detailId={challengeProps.detailId} />
+      )}
     </SecureConsolePage>
   );
 };
