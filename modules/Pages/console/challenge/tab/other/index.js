@@ -7,6 +7,7 @@ import TableSection from './TableSection';
 import { toast } from 'react-hot-toast';
 import moment from 'moment';
 import { Typography } from '@material-ui/core';
+import Router from 'next/router';
 
 const ChallengeTabOtherComponent = () => {
   const [filter, setFilter] = useState({
@@ -202,7 +203,11 @@ const ChallengeTabOtherComponent = () => {
             <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>50</Typography>
             <Typography style={{ fontWeight: 'bold' }}>Total Challenge</Typography>
           </Stack>
-          <Button variant="contained" color="secondary" style={{ height: 40 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={{ height: 40 }}
+            onClick={() => Router.push('/challenge/create')}>
             <Typography style={{ fontSize: 14 }}>Tambah Challenge Baru</Typography>
           </Button>
         </Stack>

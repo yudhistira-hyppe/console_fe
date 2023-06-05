@@ -29,7 +29,8 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import ScrollBar from 'react-perfect-scrollbar';
-import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext } from '@material-ui/icons';
+import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext, Router } from '@material-ui/icons';
+import ModalConfirmation from '../../../modal/ModalConfirmation';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -48,6 +49,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const classes = useStyles();
   const [openIndex, setOpenIndex] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState({
+    showModal: false,
+    status: '',
+  });
 
   const handleOpenMenu = (event, index) => {
     setAnchorEl(event.currentTarget);
@@ -81,6 +86,17 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
   return (
     <Stack flex={1} width="100%" maxWidth={956}>
+      <ModalConfirmation
+        showModal={openModal.showModal}
+        status={openModal.status}
+        onClose={() => {
+          setOpenModal({
+            showModal: !openModal.showModal,
+            status: '',
+          });
+        }}
+      />
+
       <Box
         display="flex"
         flexDirection="row"
@@ -270,21 +286,39 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           'aria-labelledby': `basic-button-${i}`,
                         }}>
                         {item?.status !== 'Sedang Berjalan' && (
-                          <MenuItem onClick={handleCloseMenu}>
+                          <MenuItem
+                            onClick={() => {
+                              handleCloseMenu();
+                              router.push('#');
+                            }}>
                             <ListItemIcon>
                               <Edit />
                             </ListItemIcon>
                             <ListItemText>Edit</ListItemText>
                           </MenuItem>
                         )}
-                        <MenuItem onClick={handleCloseMenu}>
+                        <MenuItem
+                          onClick={() => {
+                            handleCloseMenu();
+                            setOpenModal({
+                              showModal: !openModal.showModal,
+                              status: 'duplicate',
+                            });
+                          }}>
                           <ListItemIcon>
                             <FileCopy />
                           </ListItemIcon>
                           <ListItemText>Duplikat</ListItemText>
                         </MenuItem>
                         {item?.status !== 'Sedang Berjalan' && (
-                          <MenuItem onClick={handleCloseMenu}>
+                          <MenuItem
+                            onClick={() => {
+                              handleCloseMenu();
+                              setOpenModal({
+                                showModal: !openModal.showModal,
+                                status: 'delete',
+                              });
+                            }}>
                             <ListItemIcon>
                               <Delete />
                             </ListItemIcon>
@@ -306,6 +340,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </Table>
         </ScrollBar>
       </TableContainer>
+
       {listTickets?.data?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
           <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
