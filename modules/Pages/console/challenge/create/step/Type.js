@@ -40,7 +40,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
         </Tooltip>
       </Stack>
       <Grid container spacing={3} mt={3}>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={4}>
           <Stack direction="column" spacing={1}>
             <Typography>Object Challenge</Typography>
             <TextField
@@ -53,25 +53,14 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   handleInputChange('metric', 'activity');
                   handleInputChange('with_hashtag', false);
                   handleInputChange('hashtag', '');
-                  handleInputChange('content_count_like_vid', undefined);
-                  handleInputChange('content_count_like_pic', undefined);
-                  handleInputChange('content_count_like_diary', undefined);
-                  handleInputChange('content_count_view_vid', undefined);
-                  handleInputChange('content_count_view_diary', undefined);
+                  handleInputChange('content_like_vid', undefined);
+                  handleInputChange('content_like_pic', undefined);
+                  handleInputChange('content_like_diary', undefined);
+                  handleInputChange('content_view_vid', undefined);
+                  handleInputChange('content_view_diary', undefined);
                 } else {
-                  handleInputChange('metric', 'activity');
-                  handleInputChange('with_hashtag', false);
-                  handleInputChange('hashtag', '');
-                  handleInputChange('count_referal', undefined);
-                  handleInputChange('count_following', undefined);
-                  handleInputChange('count_create_vid', undefined);
-                  handleInputChange('count_create_pic', undefined);
-                  handleInputChange('count_create_diary', undefined);
-                  handleInputChange('count_like_vid', undefined);
-                  handleInputChange('count_like_pic', undefined);
-                  handleInputChange('count_like_diary', undefined);
-                  handleInputChange('count_view_vid', undefined);
-                  handleInputChange('count_view_diary', undefined);
+                  handleInputChange('activity_referal', undefined);
+                  handleInputChange('activity_following', undefined);
                 }
               }}
               SelectProps={{
@@ -114,17 +103,17 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                 onChange={(e) => {
                   handleInputChange('metric', e.target.value);
                   if (e.target.value === 'activity') {
-                    handleInputChange('count_referal', undefined);
-                    handleInputChange('count_following', undefined);
+                    handleInputChange('activity_referal', undefined);
+                    handleInputChange('activity_following', undefined);
                   } else {
-                    handleInputChange('count_create_vid', undefined);
-                    handleInputChange('count_create_pic', undefined);
-                    handleInputChange('count_create_diary', undefined);
-                    handleInputChange('count_like_vid', undefined);
-                    handleInputChange('count_like_pic', undefined);
-                    handleInputChange('count_like_diary', undefined);
-                    handleInputChange('count_view_vid', undefined);
-                    handleInputChange('count_view_diary', undefined);
+                    handleInputChange('interaction_create_vid', undefined);
+                    handleInputChange('interaction_create_pic', undefined);
+                    handleInputChange('interaction_create_diary', undefined);
+                    handleInputChange('interaction_like_vid', undefined);
+                    handleInputChange('interaction_like_pic', undefined);
+                    handleInputChange('interaction_like_diary', undefined);
+                    handleInputChange('interaction_view_vid', undefined);
+                    handleInputChange('interaction_view_diary', undefined);
                     handleInputChange('with_hashtag', false);
                     handleInputChange('hashtag', undefined);
                   }
@@ -155,19 +144,23 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                       label="Referal"
                       description="Poin"
                       value={inputValue?.activity_referal}
-                      handleCheckbox={() => handleInputChange('activity_referal', 1)}
-                      handleCounter={(val) => handleInputChange('count_referal', val)}
+                      handleCheckbox={() =>
+                        handleInputChange('activity_referal', inputValue?.activity_referal >= 1 ? undefined : 1)
+                      }
+                      handleCounter={(val) => handleInputChange('activity_referal', val)}
                       min={1}
-                      max={100}
+                      max={99}
                     />
                     <CheckboxCounter
                       label="Ikuti"
                       description="Poin"
                       value={inputValue?.activity_following}
-                      handleCheckbox={() => handleInputChange('activity_following', 1)}
-                      handleCounter={(val) => handleInputChange('count_following', val)}
+                      handleCheckbox={() =>
+                        handleInputChange('activity_following', inputValue?.activity_following >= 1 ? undefined : 1)
+                      }
+                      handleCounter={(val) => handleInputChange('activity_following', val)}
                       min={1}
-                      max={100}
+                      max={99}
                     />
                   </FormGroup>
                 )}
@@ -207,7 +200,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                           }}
                         />
                       }
-                      label="Tagar [Opsional]"
+                      label={<Typography style={{ color: '#9B9B9B' }}>Tagar [Opsional]</Typography>}
                       style={{ width: 'fit-content' }}
                     />
                     {inputValue?.with_hashtag && (
@@ -230,28 +223,43 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         label="HyppeVid"
                         description="Poin"
                         value={inputValue?.interaction_create_vid}
-                        handleCheckbox={() => handleInputChange('interaction_create_vid', 1)}
-                        handleCounter={(val) => handleInputChange('count_create_vid', val)}
+                        handleCheckbox={() =>
+                          handleInputChange(
+                            'interaction_create_vid',
+                            inputValue?.interaction_create_vid >= 1 ? undefined : 1,
+                          )
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_create_vid', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                       <CheckboxCounter
                         label="HyppePic"
                         description="Poin"
                         value={inputValue?.interaction_create_pic}
-                        handleCheckbox={() => handleInputChange('interaction_create_pic', 1)}
-                        handleCounter={(val) => handleInputChange('count_create_pic', val)}
+                        handleCheckbox={() =>
+                          handleInputChange(
+                            'interaction_create_pic',
+                            inputValue?.interaction_create_pic >= 1 ? undefined : 1,
+                          )
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_create_pic', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                       <CheckboxCounter
                         label="HyppeDiary"
                         description="Poin"
                         value={inputValue?.interaction_create_diary}
-                        handleCheckbox={() => handleInputChange('interaction_create_diary', 1)}
-                        handleCounter={(val) => handleInputChange('count_create_diary', val)}
+                        handleCheckbox={() =>
+                          handleInputChange(
+                            'interaction_create_diary',
+                            inputValue?.interaction_create_diary >= 1 ? undefined : 1,
+                          )
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_create_diary', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                     </FormGroup>
                     <Typography style={{ fontWeight: 'bold' }}>Suka</Typography>
@@ -260,28 +268,37 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         label="HyppeVid"
                         description="Poin"
                         value={inputValue?.interaction_like_vid}
-                        handleCheckbox={() => handleInputChange('interaction_like_vid', 1)}
-                        handleCounter={(val) => handleInputChange('count_like_vid', val)}
+                        handleCheckbox={() =>
+                          handleInputChange('interaction_like_vid', inputValue?.interaction_like_vid >= 1 ? undefined : 1)
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_like_vid', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                       <CheckboxCounter
                         label="HyppePic"
                         description="Poin"
                         value={inputValue?.interaction_like_pic}
-                        handleCheckbox={() => handleInputChange('interaction_like_pic', 1)}
-                        handleCounter={(val) => handleInputChange('count_like_pic', val)}
+                        handleCheckbox={() =>
+                          handleInputChange('interaction_like_pic', inputValue?.interaction_like_pic >= 1 ? undefined : 1)
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_like_pic', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                       <CheckboxCounter
                         label="HyppeDiary"
                         description="Poin"
                         value={inputValue?.interaction_like_diary}
-                        handleCheckbox={() => handleInputChange('interaction_like_diary', 1)}
-                        handleCounter={(val) => handleInputChange('count_like_diary', val)}
+                        handleCheckbox={() =>
+                          handleInputChange(
+                            'interaction_like_diary',
+                            inputValue?.interaction_like_diary >= 1 ? undefined : 1,
+                          )
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_like_diary', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                     </FormGroup>
                     <Typography style={{ fontWeight: 'bold' }}>Tonton</Typography>
@@ -290,19 +307,26 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         label="HyppeVid"
                         description="Poin"
                         value={inputValue?.interaction_view_vid}
-                        handleCheckbox={() => handleInputChange('interaction_view_vid', 1)}
-                        handleCounter={(val) => handleInputChange('count_view_vid', val)}
+                        handleCheckbox={() =>
+                          handleInputChange('interaction_view_vid', inputValue?.interaction_view_vid >= 1 ? undefined : 1)
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_view_vid', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                       <CheckboxCounter
                         label="HyppeDiary"
                         description="Poin"
                         value={inputValue?.interaction_view_diary}
-                        handleCheckbox={() => handleInputChange('interaction_view_diary', 1)}
-                        handleCounter={(val) => handleInputChange('count_view_diary', val)}
+                        handleCheckbox={() =>
+                          handleInputChange(
+                            'interaction_view_diary',
+                            inputValue?.interaction_view_diary >= 1 ? undefined : 1,
+                          )
+                        }
+                        handleCounter={(val) => handleInputChange('interaction_view_diary', val)}
                         min={1}
-                        max={100}
+                        max={99}
                       />
                     </FormGroup>
                   </Stack>
@@ -329,13 +353,14 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                       }}
                     />
                   }
-                  label="Tagar [Opsional]"
+                  label={<Typography style={{ color: '#9B9B9B' }}>Tagar [Opsional]</Typography>}
                   style={{ width: 'fit-content' }}
                 />
                 {inputValue?.with_hashtag && (
                   <TextField
                     placeholder="Input tagar"
                     color="secondary"
+                    value={inputValue?.hashtag || ''}
                     onChange={(e) => handleInputChange('hashtag', e.target.value)}
                     InputProps={{
                       startAdornment: <InputAdornment style={{ paddingRight: 14, fontWeight: 'bold' }}>#</InputAdornment>,
@@ -350,28 +375,34 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   label="HyppeVid"
                   description="Poin"
                   value={inputValue?.content_like_vid}
-                  handleCheckbox={() => handleInputChange('content_like_vid', 1)}
-                  handleCounter={(val) => handleInputChange('content_count_like_vid', val)}
+                  handleCheckbox={() =>
+                    handleInputChange('content_like_vid', inputValue?.content_like_vid >= 1 ? undefined : 1)
+                  }
+                  handleCounter={(val) => handleInputChange('content_like_vid', val)}
                   min={1}
-                  max={100}
+                  max={99}
                 />
                 <CheckboxCounter
                   label="HyppePic"
                   description="Poin"
                   value={inputValue?.content_like_pic}
-                  handleCheckbox={() => handleInputChange('content_like_pic', 1)}
-                  handleCounter={(val) => handleInputChange('content_count_like_pic', val)}
+                  handleCheckbox={() =>
+                    handleInputChange('content_like_pic', inputValue?.content_like_pic >= 1 ? undefined : 1)
+                  }
+                  handleCounter={(val) => handleInputChange('content_like_pic', val)}
                   min={1}
-                  max={100}
+                  max={99}
                 />
                 <CheckboxCounter
                   label="HyppeDiary"
                   description="Poin"
                   value={inputValue?.content_like_diary}
-                  handleCheckbox={() => handleInputChange('content_like_diary', 1)}
-                  handleCounter={(val) => handleInputChange('content_count_like_diary', val)}
+                  handleCheckbox={() =>
+                    handleInputChange('content_like_diary', inputValue?.content_like_diary >= 1 ? undefined : 1)
+                  }
+                  handleCounter={(val) => handleInputChange('content_like_diary', val)}
                   min={1}
-                  max={100}
+                  max={99}
                 />
               </FormGroup>
               <Typography style={{ fontWeight: 'bold' }}>Tonton</Typography>
@@ -380,19 +411,23 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   label="HyppeVid"
                   description="Poin"
                   value={inputValue?.content_view_vid}
-                  handleCheckbox={() => handleInputChange('content_view_vid', 1)}
-                  handleCounter={(val) => handleInputChange('content_count_view_vid', val)}
+                  handleCheckbox={() =>
+                    handleInputChange('content_view_vid', inputValue?.content_view_vid >= 1 ? undefined : 1)
+                  }
+                  handleCounter={(val) => handleInputChange('content_view_vid', val)}
                   min={1}
-                  max={100}
+                  max={99}
                 />
                 <CheckboxCounter
                   label="HyppeDiary"
                   description="Poin"
                   value={inputValue?.content_view_diary}
-                  handleCheckbox={() => handleInputChange('content_view_diary', 1)}
-                  handleCounter={(val) => handleInputChange('content_count_view_diary', val)}
+                  handleCheckbox={() =>
+                    handleInputChange('content_view_diary', inputValue?.content_view_diary >= 1 ? undefined : 1)
+                  }
+                  handleCounter={(val) => handleInputChange('content_view_diary', val)}
                   min={1}
-                  max={100}
+                  max={99}
                 />
               </FormGroup>
             </Stack>
