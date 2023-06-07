@@ -16,7 +16,7 @@ const CheckboxCounter = ({ label, description, max, min, style, handleCheckbox, 
             }}
           />
         }
-        label={label || 'label here'}
+        label={<Typography style={{ color: '#9B9B9B' }}>{label || 'label here'}</Typography>}
         style={{ width: 100, ...style }}
       />
       {value >= 1 && (
@@ -29,7 +29,7 @@ const CheckboxCounter = ({ label, description, max, min, style, handleCheckbox, 
             size={max || 0}
             min={min || 0}
           />
-          <Typography>{description || 'description here'}</Typography>
+          <Typography style={{ color: '#9B9B9B' }}>{description || 'description here'}</Typography>
         </>
       )}
     </Stack>
