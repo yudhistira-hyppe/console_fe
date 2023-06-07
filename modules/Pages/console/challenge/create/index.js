@@ -10,6 +10,7 @@ import ComponentStepType from './step/Type';
 import ComponentStepParticipant from './step/Participant';
 import ComponentStepInvitation from './step/Invitation';
 import ComponentStepLeaderboard from './step/Leaderboard';
+import ComponentStepRewards from './step/Rewards';
 
 const breadcrumbs = [
   { label: 'Challenge', link: '/challenge' },
@@ -18,7 +19,7 @@ const breadcrumbs = [
 const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
 const CreateChallenge = () => {
-  const [activeStep, setActiveStep] = useState(4);
+  const [activeStep, setActiveStep] = useState(5);
   const [inputValue, setInputValue] = useState({});
 
   const handleNext = () => {
@@ -67,6 +68,7 @@ const CreateChallenge = () => {
         {activeStep === 2 && <ComponentStepParticipant inputValue={inputValue} handleInputChange={handleInputChange} />}
         {activeStep === 3 && <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} />}
         {activeStep === 4 && <ComponentStepLeaderboard inputValue={inputValue} handleInputChange={handleInputChange} />}
+        {activeStep === 5 && <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} />}
       </LocalizationProvider>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">

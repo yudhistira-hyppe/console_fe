@@ -80,7 +80,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               InputProps={{
                 disabled: true,
                 endAdornment: (
-                  <InputAdornment>
+                  <InputAdornment position='end'>
                     <Stack direction="row" spacing={1}>
                       <IconButton
                         onClick={() => handleInputChange('week', (isNumber(inputValue?.week) ? inputValue?.week : 0) - 1)}
