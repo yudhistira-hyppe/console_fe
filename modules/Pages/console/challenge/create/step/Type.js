@@ -51,16 +51,33 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                 handleInputChange('object', e.target.value);
                 if (e.target.value === 'account') {
                   handleInputChange('metric', 'activity');
+                  handleInputChange('activity_referal', 0);
+                  handleInputChange('activity_following', 0);
                   handleInputChange('with_hashtag', false);
                   handleInputChange('hashtag', '');
-                  handleInputChange('content_like_vid', undefined);
-                  handleInputChange('content_like_pic', undefined);
-                  handleInputChange('content_like_diary', undefined);
-                  handleInputChange('content_view_vid', undefined);
-                  handleInputChange('content_view_diary', undefined);
+                  handleInputChange('content_like_vid', 0);
+                  handleInputChange('content_like_pic', 0);
+                  handleInputChange('content_like_diary', 0);
+                  handleInputChange('content_view_vid', 0);
+                  handleInputChange('content_view_diary', 0);
                 } else {
-                  handleInputChange('activity_referal', undefined);
-                  handleInputChange('activity_following', undefined);
+                  handleInputChange('activity_referal', 0);
+                  handleInputChange('activity_following', 0);
+                  handleInputChange('interaction_create_vid', 0);
+                  handleInputChange('interaction_create_pic', 0);
+                  handleInputChange('interaction_create_diary', 0);
+                  handleInputChange('interaction_like_vid', 0);
+                  handleInputChange('interaction_like_pic', 0);
+                  handleInputChange('interaction_like_diary', 0);
+                  handleInputChange('interaction_view_vid', 0);
+                  handleInputChange('interaction_view_diary', 0);
+                  handleInputChange('with_hashtag', false);
+                  handleInputChange('hashtag', 0);
+                  handleInputChange('content_like_vid', 0);
+                  handleInputChange('content_like_pic', 0);
+                  handleInputChange('content_like_diary', 0);
+                  handleInputChange('content_view_vid', 0);
+                  handleInputChange('content_view_diary', 0);
                 }
               }}
               SelectProps={{
@@ -103,19 +120,19 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                 onChange={(e) => {
                   handleInputChange('metric', e.target.value);
                   if (e.target.value === 'activity') {
-                    handleInputChange('activity_referal', undefined);
-                    handleInputChange('activity_following', undefined);
+                    handleInputChange('activity_referal', 0);
+                    handleInputChange('activity_following', 0);
                   } else {
-                    handleInputChange('interaction_create_vid', undefined);
-                    handleInputChange('interaction_create_pic', undefined);
-                    handleInputChange('interaction_create_diary', undefined);
-                    handleInputChange('interaction_like_vid', undefined);
-                    handleInputChange('interaction_like_pic', undefined);
-                    handleInputChange('interaction_like_diary', undefined);
-                    handleInputChange('interaction_view_vid', undefined);
-                    handleInputChange('interaction_view_diary', undefined);
+                    handleInputChange('interaction_create_vid', 0);
+                    handleInputChange('interaction_create_pic', 0);
+                    handleInputChange('interaction_create_diary', 0);
+                    handleInputChange('interaction_like_vid', 0);
+                    handleInputChange('interaction_like_pic', 0);
+                    handleInputChange('interaction_like_diary', 0);
+                    handleInputChange('interaction_view_vid', 0);
+                    handleInputChange('interaction_view_diary', 0);
                     handleInputChange('with_hashtag', false);
-                    handleInputChange('hashtag', undefined);
+                    handleInputChange('hashtag', 0);
                   }
                 }}>
                 <FormControlLabel
@@ -144,9 +161,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                       label="Referal"
                       description="Poin"
                       value={inputValue?.activity_referal}
-                      handleCheckbox={() =>
-                        handleInputChange('activity_referal', inputValue?.activity_referal >= 1 ? undefined : 1)
-                      }
+                      handleCheckbox={() => handleInputChange('activity_referal', inputValue?.activity_referal >= 1 ? 0 : 1)}
                       handleCounter={(val) => handleInputChange('activity_referal', val)}
                       min={1}
                       max={99}
@@ -156,7 +171,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                       description="Poin"
                       value={inputValue?.activity_following}
                       handleCheckbox={() =>
-                        handleInputChange('activity_following', inputValue?.activity_following >= 1 ? undefined : 1)
+                        handleInputChange('activity_following', inputValue?.activity_following >= 1 ? 0 : 1)
                       }
                       handleCounter={(val) => handleInputChange('activity_following', val)}
                       min={1}
@@ -224,10 +239,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_create_vid}
                         handleCheckbox={() =>
-                          handleInputChange(
-                            'interaction_create_vid',
-                            inputValue?.interaction_create_vid >= 1 ? undefined : 1,
-                          )
+                          handleInputChange('interaction_create_vid', inputValue?.interaction_create_vid >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_create_vid', val)}
                         min={1}
@@ -238,10 +250,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_create_pic}
                         handleCheckbox={() =>
-                          handleInputChange(
-                            'interaction_create_pic',
-                            inputValue?.interaction_create_pic >= 1 ? undefined : 1,
-                          )
+                          handleInputChange('interaction_create_pic', inputValue?.interaction_create_pic >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_create_pic', val)}
                         min={1}
@@ -252,10 +261,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_create_diary}
                         handleCheckbox={() =>
-                          handleInputChange(
-                            'interaction_create_diary',
-                            inputValue?.interaction_create_diary >= 1 ? undefined : 1,
-                          )
+                          handleInputChange('interaction_create_diary', inputValue?.interaction_create_diary >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_create_diary', val)}
                         min={1}
@@ -269,7 +275,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_like_vid}
                         handleCheckbox={() =>
-                          handleInputChange('interaction_like_vid', inputValue?.interaction_like_vid >= 1 ? undefined : 1)
+                          handleInputChange('interaction_like_vid', inputValue?.interaction_like_vid >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_like_vid', val)}
                         min={1}
@@ -280,7 +286,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_like_pic}
                         handleCheckbox={() =>
-                          handleInputChange('interaction_like_pic', inputValue?.interaction_like_pic >= 1 ? undefined : 1)
+                          handleInputChange('interaction_like_pic', inputValue?.interaction_like_pic >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_like_pic', val)}
                         min={1}
@@ -291,10 +297,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_like_diary}
                         handleCheckbox={() =>
-                          handleInputChange(
-                            'interaction_like_diary',
-                            inputValue?.interaction_like_diary >= 1 ? undefined : 1,
-                          )
+                          handleInputChange('interaction_like_diary', inputValue?.interaction_like_diary >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_like_diary', val)}
                         min={1}
@@ -308,7 +311,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_view_vid}
                         handleCheckbox={() =>
-                          handleInputChange('interaction_view_vid', inputValue?.interaction_view_vid >= 1 ? undefined : 1)
+                          handleInputChange('interaction_view_vid', inputValue?.interaction_view_vid >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_view_vid', val)}
                         min={1}
@@ -319,10 +322,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         description="Poin"
                         value={inputValue?.interaction_view_diary}
                         handleCheckbox={() =>
-                          handleInputChange(
-                            'interaction_view_diary',
-                            inputValue?.interaction_view_diary >= 1 ? undefined : 1,
-                          )
+                          handleInputChange('interaction_view_diary', inputValue?.interaction_view_diary >= 1 ? 0 : 1)
                         }
                         handleCounter={(val) => handleInputChange('interaction_view_diary', val)}
                         min={1}
@@ -363,7 +363,11 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                     value={inputValue?.hashtag || ''}
                     onChange={(e) => handleInputChange('hashtag', e.target.value)}
                     InputProps={{
-                      startAdornment: <InputAdornment style={{ paddingRight: 14, fontWeight: 'bold' }}>#</InputAdornment>,
+                      startAdornment: (
+                        <InputAdornment position="start" style={{ paddingRight: 14, fontWeight: 'bold' }}>
+                          #
+                        </InputAdornment>
+                      ),
                     }}
                     style={{ width: 200 }}
                   />
@@ -375,9 +379,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   label="HyppeVid"
                   description="Poin"
                   value={inputValue?.content_like_vid}
-                  handleCheckbox={() =>
-                    handleInputChange('content_like_vid', inputValue?.content_like_vid >= 1 ? undefined : 1)
-                  }
+                  handleCheckbox={() => handleInputChange('content_like_vid', inputValue?.content_like_vid >= 1 ? 0 : 1)}
                   handleCounter={(val) => handleInputChange('content_like_vid', val)}
                   min={1}
                   max={99}
@@ -386,9 +388,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   label="HyppePic"
                   description="Poin"
                   value={inputValue?.content_like_pic}
-                  handleCheckbox={() =>
-                    handleInputChange('content_like_pic', inputValue?.content_like_pic >= 1 ? undefined : 1)
-                  }
+                  handleCheckbox={() => handleInputChange('content_like_pic', inputValue?.content_like_pic >= 1 ? 0 : 1)}
                   handleCounter={(val) => handleInputChange('content_like_pic', val)}
                   min={1}
                   max={99}
@@ -397,9 +397,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   label="HyppeDiary"
                   description="Poin"
                   value={inputValue?.content_like_diary}
-                  handleCheckbox={() =>
-                    handleInputChange('content_like_diary', inputValue?.content_like_diary >= 1 ? undefined : 1)
-                  }
+                  handleCheckbox={() => handleInputChange('content_like_diary', inputValue?.content_like_diary >= 1 ? 0 : 1)}
                   handleCounter={(val) => handleInputChange('content_like_diary', val)}
                   min={1}
                   max={99}
@@ -411,9 +409,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   label="HyppeVid"
                   description="Poin"
                   value={inputValue?.content_view_vid}
-                  handleCheckbox={() =>
-                    handleInputChange('content_view_vid', inputValue?.content_view_vid >= 1 ? undefined : 1)
-                  }
+                  handleCheckbox={() => handleInputChange('content_view_vid', inputValue?.content_view_vid >= 1 ? 0 : 1)}
                   handleCounter={(val) => handleInputChange('content_view_vid', val)}
                   min={1}
                   max={99}
@@ -422,9 +418,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   label="HyppeDiary"
                   description="Poin"
                   value={inputValue?.content_view_diary}
-                  handleCheckbox={() =>
-                    handleInputChange('content_view_diary', inputValue?.content_view_diary >= 1 ? undefined : 1)
-                  }
+                  handleCheckbox={() => handleInputChange('content_view_diary', inputValue?.content_view_diary >= 1 ? 0 : 1)}
                   handleCounter={(val) => handleInputChange('content_view_diary', val)}
                   min={1}
                   max={99}
