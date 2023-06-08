@@ -11,7 +11,8 @@ import ComponentStepParticipant from './step/Participant';
 import ComponentStepInvitation from './step/Invitation';
 import ComponentStepLeaderboard from './step/Leaderboard';
 import ComponentStepRewards from './step/Rewards';
-import Axios from 'axios';
+import ComponentStepNotification from './step/Notification';
+import { isEmpty } from 'lodash';
 
 const breadcrumbs = [
   { label: 'Challenge', link: '/challenge' },
@@ -20,16 +21,17 @@ const breadcrumbs = [
 const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
 const CreateChallenge = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(5);
   const [inputValue, setInputValue] = useState({});
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    console.log(inputValue);
+    window.scroll({ top: 0, behavior: 'smooth' });
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    window.scroll({ top: 0, behavior: 'smooth' });
   };
 
   const handleInputChange = (kind, value) => {
@@ -39,6 +41,81 @@ const CreateChallenge = () => {
           return { ...prevVal, [kind]: value };
       }
     });
+  };
+
+  const checkDisabled = () => {
+    let disabled = false;
+
+    if (
+      activeStep == 0 &&
+      (!inputValue?.name ||
+        !inputValue?.kind ||
+        !inputValue?.cycle_day ||
+        !inputValue?.startdate ||
+        !inputValue?.starthour ||
+        !inputValue?.description)
+    ) {
+      disabled = true;
+    } else if (
+      activeStep == 1 &&
+      (!inputValue?.object ||
+        (inputValue?.object === 'account' &&
+          inputValue?.metric === 'activity' &&
+          inputValue?.activity_referal < 1 &&
+          inputValue?.activity_following < 1) ||
+        (inputValue?.object === 'account' &&
+          inputValue?.metric === 'interaction' &&
+          inputValue?.interaction_create_vid < 1 &&
+          inputValue?.interaction_create_pic < 1 &&
+          inputValue?.interaction_create_diary < 1 &&
+          inputValue?.interaction_like_vid < 1 &&
+          inputValue?.interaction_like_pic < 1 &&
+          inputValue?.interaction_like_diary < 1 &&
+          inputValue?.interaction_view_vid < 1 &&
+          inputValue?.interaction_view_diary < 1) ||
+        (inputValue?.object === 'content' &&
+          inputValue?.content_like_vid < 1 &&
+          inputValue?.content_like_pic < 1 &&
+          inputValue?.content_like_diary < 1 &&
+          inputValue?.content_view_vid < 1 &&
+          inputValue?.content_view_diary < 1))
+    ) {
+      disabled = true;
+    } else if (
+      activeStep == 2 &&
+      (isEmpty(inputValue?.account_type) ||
+        isEmpty(inputValue?.age_range) ||
+        isEmpty(inputValue?.gender) ||
+        isEmpty(inputValue?.area))
+    ) {
+      disabled = true;
+    } else if (
+      activeStep == 3 &&
+      (!inputValue?.type_invitation || (inputValue?.type_invitation === 'invitation' && isEmpty(inputValue?.invited_people)))
+    ) {
+      disabled = true;
+    } else if (activeStep == 4 && (!inputValue?.banner_leaderboard || !inputValue?.banner_background_color)) {
+      disabled = true;
+    } else if (
+      activeStep == 5 &&
+      ((!inputValue?.winner_rewards && !inputValue?.winner_badges) ||
+        (inputValue?.winner_rewards &&
+          inputValue?.winner_rewards_type === 'ranking' &&
+          isEmpty(inputValue?.winner_ranking_price)) ||
+        (inputValue?.winner_rewards &&
+          inputValue?.winner_rewards_type === 'poin' &&
+          !inputValue?.max_reward &&
+          !inputValue?.point_reward) ||
+        (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)))
+    ) {
+      disabled = true;
+    } else if (
+      activeStep == 6 &&
+      (!inputValue?.banner_search || !inputValue?.banner_popup || isEmpty(inputValue?.notification_push))
+    ) {
+      disabled = true;
+    }
+    return disabled;
   };
 
   console.log(inputValue);
@@ -70,6 +147,7 @@ const CreateChallenge = () => {
         {activeStep === 3 && <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} />}
         {activeStep === 4 && <ComponentStepLeaderboard inputValue={inputValue} handleInputChange={handleInputChange} />}
         {activeStep === 5 && <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} />}
+        {activeStep === 6 && <ComponentStepNotification inputValue={inputValue} handleInputChange={handleInputChange} />}
       </LocalizationProvider>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -84,7 +162,12 @@ const CreateChallenge = () => {
         ) : (
           <Box />
         )}
-        <Button variant="contained" color="secondary" style={{ borderRadius: 6, padding: '10px 20px' }} onClick={handleNext}>
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ borderRadius: 6, padding: '10px 20px' }}
+          onClick={handleNext}
+          disabled={checkDisabled()}>
           <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Next</Typography>
         </Button>
       </Stack>
