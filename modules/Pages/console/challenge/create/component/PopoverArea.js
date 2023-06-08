@@ -33,8 +33,6 @@ const PopoverArea = ({ anchorEl, handleClose, inputValue, handleInputChange }) =
 
   const filteredArea = areas?.filter((item) => item?.stateName.toLowerCase()?.includes(search.toLowerCase()));
 
-  console.log(selectedArea);
-
   return (
     <Popover
       open={open}
