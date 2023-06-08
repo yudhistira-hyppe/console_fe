@@ -9,6 +9,7 @@ import { Typography } from '@material-ui/core';
 import ChallengeTabMainComponent from './main';
 import ChallengeTabOtherComponent from './other';
 import ChallengeTabDraftComponent from './draft';
+import { useGetListChallengeQuery } from 'api/console/challenge';
 
 const ChallengeTabComponent = (props) => {
   const classes = useStyles();
@@ -20,6 +21,8 @@ const ChallengeTabComponent = (props) => {
     router.replace(`/challenge/${selectedTab}`);
   };
 
+  const { data: listChallenge, isLoading: loadingChallenge } = useGetListChallengeQuery({ page: 0, limit: 10 });
+
   return (
     <>
       <Head>
@@ -27,25 +30,19 @@ const ChallengeTabComponent = (props) => {
       </Head>
       <TabContext value={tab}>
         <TabList onChange={onTabChange} textColor="secondary" indicatorColor="secondary" style={{ marginTop: -20 }}>
-          {access.map((item) => item?.nameModule) && <Tab className={classes.tab} label="Challenge Utama" value="main" />}
-          {access.map((item) => item?.nameModule) && <Tab className={classes.tab} label="Challenge Lainnya" value="other" />}
-          {access.map((item) => item?.nameModule) && <Tab className={classes.tab} label="Draft" value="draft" />}
+          <Tab className={classes.tab} label="Challenge Utama" value="main" />
+          <Tab className={classes.tab} label="Challenge Lainnya" value="other" />
+          <Tab className={classes.tab} label="Draft" value="draft" />
         </TabList>
-        {access.map((item) => item?.nameModule) && (
-          <TabPanel className={classes.tabPanel} value="main">
-            <ChallengeTabMainComponent />
-          </TabPanel>
-        )}
-        {access.map((item) => item?.nameModule) && (
-          <TabPanel className={classes.tabPanel} value="other">
-            <ChallengeTabOtherComponent />
-          </TabPanel>
-        )}
-        {access.map((item) => item?.nameModule) && (
-          <TabPanel className={classes.tabPanel} value="draft">
-            <ChallengeTabDraftComponent />
-          </TabPanel>
-        )}
+        <TabPanel className={classes.tabPanel} value="main">
+          <ChallengeTabMainComponent />
+        </TabPanel>
+        <TabPanel className={classes.tabPanel} value="other">
+          <ChallengeTabOtherComponent />
+        </TabPanel>
+        <TabPanel className={classes.tabPanel} value="draft">
+          <ChallengeTabDraftComponent />
+        </TabPanel>
       </TabContext>
     </>
   );

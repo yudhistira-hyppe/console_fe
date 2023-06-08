@@ -5,11 +5,7 @@ import ChallengeTabComponent from './tab';
 const ChallengeComponent = (props) => {
   const { tab, detailId } = props;
 
-  return (
-    <Fragment>
-      <ChallengeTabComponent tab={tab} />
-    </Fragment>
-  );
+  return <ChallengeTabComponent tab={tab} />;
 };
 
 ChallengeComponent.propTypes = {

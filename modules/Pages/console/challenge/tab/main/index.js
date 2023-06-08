@@ -7,6 +7,7 @@ import TableSection from './TableSection';
 import { toast } from 'react-hot-toast';
 import moment from 'moment';
 import { Typography } from '@material-ui/core';
+import { useGetListChallengeQuery } from 'api/console/challenge';
 
 const ChallengeTabMainComponent = () => {
   const [filter, setFilter] = useState({
@@ -27,6 +28,7 @@ const ChallengeTabMainComponent = () => {
       page: filter.page,
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
+      menuChallenge: 'UTAMA',
     });
 
     filter.search !== '' && Object.assign(params, { search: filter.search });
@@ -64,10 +66,16 @@ const ChallengeTabMainComponent = () => {
       });
     filter.createdAt[0] && params.push(`startdate=${filter.createdAt[0]}`);
     filter.createdAt[1] && params.push(`enddate=${filter.createdAt[1]}`);
+
+    return params;
   };
 
+  console.log(getParams());
+
+  // const { data: listChallenge, isLoading: loadingChallenge } = useGetListChallengeQuery(getParams());
+
   useEffect(() => {
-    if (filter.page >= 1 && listMusic?.data?.length < 1) {
+    if (filter.page >= 1 && listChallenge?.data?.length < 1) {
       toast.success('Semua data sudah ditampilkan');
       setFilter((prevVal) => {
         return {

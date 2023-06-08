@@ -181,12 +181,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
             <TableBody>
               {loading ? (
-                <TableCell colSpan={8}>
-                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <CircularProgress color="secondary" />
-                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                  </Stack>
-                </TableCell>
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <CircularProgress color="secondary" />
+                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
               ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
