@@ -75,6 +75,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
             control={
               <Checkbox
                 color="secondary"
+                checked={inputValue?.winner_badges || false}
                 onChange={() => {
                   handleInputChange('winner_badges', !inputValue.winner_badges);
                   handleInputChange('winner_ranking_badge', undefined);
@@ -94,21 +95,22 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                         <Checkbox
                           color="secondary"
                           checked={
-                            inputValue?.winner_ranking_badge?.length >= 1
-                              ? inputValue?.winner_ranking_badge?.map((item) => item?.ranking)?.includes(key + 1)
-                              : false
+                            inputValue?.winner_ranking_badge?.map((item) => item?.ranking)?.includes(key + 1) || false
                           }
                           onChange={() => {
-                            if (inputValue?.winner_ranking_badge?.length > key + 1) {
-                              handleInputChange('winner_ranking_badge', undefined);
+                            if (inputValue?.winner_ranking_badge?.length > key) {
+                              handleInputChange(
+                                'winner_ranking_badge',
+                                inputValue?.winner_ranking_badge?.filter((item) => item?.ranking <= key),
+                              );
                             } else {
                               handleInputChange(
                                 'winner_ranking_badge',
                                 inputValue?.winner_ranking_badge?.length >= 1
                                   ? inputValue?.winner_ranking_badge?.find((item) => item?.ranking == key + 1)
                                     ? inputValue?.winner_ranking_badge?.filter((item) => item?.ranking != key + 1)
-                                    : [...inputValue?.winner_ranking_badge, { ranking: key + 1, profile: null, other: null }]
-                                  : [{ ranking: key + 1, profile: null, other: null }],
+                                    : [...inputValue?.winner_ranking_badge, { ranking: key + 1 }]
+                                  : [{ ranking: key + 1 }],
                               );
                             }
                           }}
@@ -220,6 +222,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
             control={
               <Checkbox
                 color="secondary"
+                checked={inputValue?.winner_rewards || false}
                 onChange={() => {
                   handleInputChange('winner_rewards', !inputValue.winner_rewards);
                   handleInputChange('winner_rewards_type', inputValue.winner_rewards ? undefined : 'ranking');
@@ -273,21 +276,22 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                           <Checkbox
                             color="secondary"
                             checked={
-                              inputValue?.winner_ranking_price?.length >= 1
-                                ? inputValue?.winner_ranking_price?.map((item) => item?.ranking)?.includes(key + 1)
-                                : false
+                              inputValue?.winner_ranking_price?.map((item) => item?.ranking)?.includes(key + 1) || false
                             }
                             onChange={() => {
-                              if (inputValue?.winner_ranking_price?.length > key + 1) {
-                                handleInputChange('winner_ranking_price', undefined);
+                              if (inputValue?.winner_ranking_price?.length > key) {
+                                handleInputChange(
+                                  'winner_ranking_price',
+                                  inputValue?.winner_ranking_price?.filter((item) => item?.ranking <= key),
+                                );
                               } else {
                                 handleInputChange(
                                   'winner_ranking_price',
                                   inputValue?.winner_ranking_price?.length >= 1
                                     ? inputValue?.winner_ranking_price?.find((item) => item?.ranking == key + 1)
                                       ? inputValue?.winner_ranking_price?.filter((item) => item?.ranking != key + 1)
-                                      : [...inputValue?.winner_ranking_price, { ranking: key + 1, price: '' }]
-                                    : [{ ranking: key + 1, price: '' }],
+                                      : [...inputValue?.winner_ranking_price, { ranking: key + 1, price: 0 }]
+                                    : [{ ranking: key + 1, price: 0 }],
                                 );
                               }
                             }}
@@ -317,6 +321,13 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 <Typography style={{ fontWeight: 'bold' }}>Rp</Typography>
                               </InputAdornment>
                             ),
+                          }}
+                          inputProps={{
+                            onKeyPress: (event) => {
+                              if (!/[0-9]/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            },
                           }}
                           sx={{ '& input': { height: 32 } }}
                           style={{ width: 250 }}
