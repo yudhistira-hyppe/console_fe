@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
 import { Card, Grid, IconButton, InputAdornment, MenuItem, Stack, Switch, TextField, Tooltip } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { isNumber } from 'lodash';
 import React from 'react';
@@ -33,7 +33,8 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               value={inputValue?.kind || ''}
               onChange={(e) => {
                 handleInputChange('kind', e.target.value);
-                handleInputChange('week', 0);
+                handleInputChange('cycle', 0);
+                handleInputChange('cycle_day', 0);
               }}
               SelectProps={{
                 renderValue: (selected) => (
@@ -64,53 +65,44 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         </Grid>
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography>Durasi</Typography>
-              <Tooltip
-                title={
-                  <Typography style={{ fontSize: 12, padding: 8 }}>Atur durasi challenge yang akan berlangsung</Typography>
-                }
-                arrow>
-                <InfoOutlined style={{ fontSize: 14 }} />
-              </Tooltip>
-            </Stack>
+            <Typography>Siklus Perulangan</Typography>
             <TextField
               color="secondary"
-              value={`${inputValue?.week || 0} Minggu`}
+              value={inputValue?.cycle || 0}
               InputProps={{
                 disabled: true,
                 endAdornment: (
-                  <InputAdornment position='end'>
+                  <InputAdornment position="end">
                     <Stack direction="row" spacing={1}>
                       <IconButton
-                        onClick={() => handleInputChange('week', (isNumber(inputValue?.week) ? inputValue?.week : 0) - 1)}
+                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) - 1)}
                         size="small"
                         style={{
                           width: 24,
                           height: 24,
                           fontSize: 28,
                           paddingBottom: 8,
-                          border: !inputValue?.week || inputValue?.week < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
+                          border: !inputValue?.cycle || inputValue?.cycle < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
                         }}
-                        disabled={!inputValue?.week || inputValue?.week < 1}>
+                        disabled={!inputValue?.cycle || inputValue?.cycle < 1}>
                         -
                       </IconButton>
                       <IconButton
-                        onClick={() => handleInputChange('week', (isNumber(inputValue?.week) ? inputValue?.week : 0) + 1)}
+                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) + 1)}
                         size="small"
                         style={{
                           width: 24,
                           height: 24,
                           fontSize: 24,
                           border:
-                            (inputValue?.kind === 'main' && inputValue?.week >= 104) ||
-                            (inputValue?.kind === 'other' && inputValue?.week >= 54)
+                            (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
+                            (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
                               ? '1px solid #C9C9C9'
                               : '1px solid #3F3F3F',
                         }}
                         disabled={
-                          (inputValue?.kind === 'main' && inputValue?.week >= 104) ||
-                          (inputValue?.kind === 'other' && inputValue?.week >= 54)
+                          (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
+                          (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
                         }>
                         +
                       </IconButton>
@@ -119,38 +111,120 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 ),
               }}
             />
-            <small style={{ color: '#9B9B9B' }}>Challenge akan di reset setiap 7 hari</small>
+            <small style={{ color: '#9B9B9B' }}>Berapa kali leaderboard akan direset</small>
           </Stack>
         </Grid>
-        <Grid item xs={12} md={2.5}>
+        <Grid item xs={12} md={7}></Grid>
+        <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Typography>Tanggal Mulai</Typography>
-            <DatePicker
-              value={inputValue?.startdate || null}
-              minDate={dayjs().add(1, 'day').toDate()}
-              onChange={(newValue) => {
-                handleInputChange('startdate', newValue);
+            <Typography>Lama Siklus</Typography>
+            <TextField
+              color="secondary"
+              value={`${inputValue?.cycle_day || 0} Hari`}
+              InputProps={{
+                disabled: true,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Stack direction="row" spacing={1}>
+                      <IconButton
+                        onClick={() =>
+                          handleInputChange('cycle_day', (isNumber(inputValue?.cycle_day) ? inputValue?.cycle_day : 0) - 1)
+                        }
+                        size="small"
+                        style={{
+                          width: 24,
+                          height: 24,
+                          fontSize: 28,
+                          paddingBottom: 8,
+                          border:
+                            !inputValue?.cycle_day || inputValue?.cycle_day < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
+                        }}
+                        disabled={!inputValue?.cycle_day || inputValue?.cycle_day < 1}>
+                        -
+                      </IconButton>
+                      <IconButton
+                        onClick={() =>
+                          handleInputChange('cycle_day', (isNumber(inputValue?.cycle_day) ? inputValue?.cycle_day : 0) + 1)
+                        }
+                        size="small"
+                        style={{
+                          width: 24,
+                          height: 24,
+                          fontSize: 24,
+                          border:
+                            (inputValue?.kind === 'main' && inputValue?.cycle_day >= 104) ||
+                            (inputValue?.kind === 'other' && inputValue?.cycle_day >= 54)
+                              ? '1px solid #C9C9C9'
+                              : '1px solid #3F3F3F',
+                        }}
+                        disabled={
+                          (inputValue?.kind === 'main' && inputValue?.cycle_day >= 104) ||
+                          (inputValue?.kind === 'other' && inputValue?.cycle_day >= 54)
+                        }>
+                        +
+                      </IconButton>
+                    </Stack>
+                  </InputAdornment>
+                ),
               }}
-              renderInput={(params) => <TextField {...params} />}
             />
+            <small style={{ color: '#9B9B9B' }}>
+              Leaderboad pada challenge akan direset berdasarakan hari yang ditetukan
+            </small>
+          </Stack>
+
+          {inputValue?.cycle_day >= 1 && (
+            <Typography style={{ color: '#FC5555', fontWeight: 'bold', marginTop: 24 }}>
+              Durasi challenge akan berlangsung selama{' '}
+              {((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day} hari
+            </Typography>
+          )}
+        </Grid>
+        <Grid item xs={12} md={7}></Grid>
+        <Grid item xs={12} md={5}>
+          <Stack direction="row">
+            <Stack direction="column" spacing={1}>
+              <Typography>Tanggal Mulai</Typography>
+              <DatePicker
+                value={inputValue?.startdate || null}
+                minDate={dayjs().add(1, 'day').toDate()}
+                onChange={(newValue) => {
+                  handleInputChange('startdate', newValue);
+                }}
+                inputFormat="DD/MM/YYYY"
+                renderInput={(params) => <TextField color="secondary" {...params} />}
+              />
+            </Stack>
+            <Stack direction="column" spacing={1}>
+              <Typography>Tanggal Berakhir</Typography>
+              <DatePicker
+                value={
+                  inputValue?.startdate
+                    ? inputValue?.cycle_day
+                      ? inputValue?.startdate
+                          .add(((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day, 'day')
+                          .toDate()
+                      : null
+                    : null
+                }
+                inputFormat="DD/MM/YYYY"
+                renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#E0E0E0' }} disabled />}
+                disabled
+              />
+            </Stack>
           </Stack>
         </Grid>
-        <Grid item xs={12} md={2.5}>
+        <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Typography>Tanggal Berakhir</Typography>
-            <DatePicker
-              value={
-                inputValue?.startdate
-                  ? inputValue?.week
-                    ? inputValue?.startdate.add(inputValue?.week * 7, 'day').toDate()
-                    : null
-                  : null
-              }
+            <Typography>Waktu Mulai</Typography>
+            <DateTimePicker
+              value={inputValue?.starthour || null}
               onChange={(newValue) => {
-                handleInputChange('startdate', newValue);
+                handleInputChange('starthour', newValue);
               }}
-              renderInput={(params) => <TextField {...params} disabled />}
-              disabled
+              inputFormat="HH:mm WIB"
+              views={['hours', 'minutes']}
+              renderInput={(params) => <TextField color="secondary" {...params} />}
             />
           </Stack>
         </Grid>

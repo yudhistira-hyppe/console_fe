@@ -11,6 +11,7 @@ import ComponentStepParticipant from './step/Participant';
 import ComponentStepInvitation from './step/Invitation';
 import ComponentStepLeaderboard from './step/Leaderboard';
 import ComponentStepRewards from './step/Rewards';
+import Axios from 'axios';
 
 const breadcrumbs = [
   { label: 'Challenge', link: '/challenge' },
@@ -19,7 +20,7 @@ const breadcrumbs = [
 const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
 const CreateChallenge = () => {
-  const [activeStep, setActiveStep] = useState(5);
+  const [activeStep, setActiveStep] = useState(0);
   const [inputValue, setInputValue] = useState({});
 
   const handleNext = () => {
