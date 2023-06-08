@@ -15,9 +15,13 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
+import { useGetListBadgeQuery } from 'api/console/utilitas/badge';
 import React from 'react';
 
 const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
+  const { data } = useGetListBadgeQuery({ page: 0, limit: 10 });
+  console.log(data);
+
   function formatBytes(bytes) {
     return (bytes / Math.pow(1024, 2)).toFixed(1);
   }

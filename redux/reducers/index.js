@@ -31,6 +31,8 @@ import {
   settingApi,
   masterBankApi,
   adsUtilityApi,
+  badgeApi,
+  challengeApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -88,4 +90,6 @@ export default combineReducers({
   [settingApi.reducerPath]: settingApi.reducer,
   [masterBankApi.reducerPath]: masterBankApi.reducer,
   [adsUtilityApi.reducerPath]: adsUtilityApi.reducer,
+  [badgeApi.reducerPath]: badgeApi.reducer,
+  [challengeApi.reducerPath]: challengeApi.reducer,
 });
