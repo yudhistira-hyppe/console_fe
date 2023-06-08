@@ -53,11 +53,41 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
           <Typography>Tipe Akun</Typography>
           <FormGroup row style={{ gap: 16 }}>
             <FormControlLabel
-              control={<Checkbox color="secondary" />}
+              control={
+                <Checkbox
+                  checked={inputValue?.account_type?.includes('unverified') || false}
+                  onChange={() =>
+                    handleInputChange(
+                      'account_type',
+                      inputValue?.account_type
+                        ? inputValue?.account_type?.find((item) => item === 'unverified')
+                          ? inputValue?.account_type?.filter((item) => item !== 'unverified')
+                          : [...inputValue?.account_type, 'unverified']
+                        : ['unverified'],
+                    )
+                  }
+                  color="secondary"
+                />
+              }
               label={<Typography style={{ color: '#9B9B9B' }}>Tidak Terverifikasi</Typography>}
             />
             <FormControlLabel
-              control={<Checkbox color="secondary" />}
+              control={
+                <Checkbox
+                  checked={inputValue?.account_type?.includes('verified') || false}
+                  onChange={() =>
+                    handleInputChange(
+                      'account_type',
+                      inputValue?.account_type
+                        ? inputValue?.account_type?.find((item) => item === 'verified')
+                          ? inputValue?.account_type?.filter((item) => item !== 'verified')
+                          : [...inputValue?.account_type, 'verified']
+                        : ['verified'],
+                    )
+                  }
+                  color="secondary"
+                />
+              }
               label={<Typography style={{ color: '#9B9B9B' }}>Terverifikasi</Typography>}
             />
           </FormGroup>
@@ -66,26 +96,28 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
         <Stack direction="column" spacing={1}>
           <Typography>Rentang Umur</Typography>
           <FormGroup row style={{ gap: 16 }}>
-            <FormControlLabel
-              control={<Checkbox color="secondary" />}
-              label={<Typography style={{ color: '#9B9B9B' }}>{`< 14`}</Typography>}
-            />
-            <FormControlLabel
-              control={<Checkbox color="secondary" />}
-              label={<Typography style={{ color: '#9B9B9B' }}>14 - 28</Typography>}
-            />
-            <FormControlLabel
-              control={<Checkbox color="secondary" />}
-              label={<Typography style={{ color: '#9B9B9B' }}>29 - 43</Typography>}
-            />
-            <FormControlLabel
-              control={<Checkbox color="secondary" />}
-              label={<Typography style={{ color: '#9B9B9B' }}>{`> 44`}</Typography>}
-            />
-            <FormControlLabel
-              control={<Checkbox color="secondary" />}
-              label={<Typography style={{ color: '#9B9B9B' }}>Lainnya</Typography>}
-            />
+            {['<14', '14-28', '29-43', '>44', 'lainnya'].map((item, key) => (
+              <FormControlLabel
+                key={key}
+                control={
+                  <Checkbox
+                    color="secondary"
+                    checked={inputValue?.age_range?.includes(item) || false}
+                    onChange={() =>
+                      handleInputChange(
+                        'age_range',
+                        inputValue?.age_range
+                          ? inputValue?.age_range?.find((val) => val === item)
+                            ? inputValue?.age_range?.filter((val) => val !== item)
+                            : [...inputValue?.age_range, item]
+                          : [item],
+                      )
+                    }
+                  />
+                }
+                label={<Typography style={{ color: '#9B9B9B', textTransform: 'capitalize' }}>{item}</Typography>}
+              />
+            ))}
           </FormGroup>
         </Stack>
 
@@ -93,15 +125,60 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
           <Typography>Jenis Kelamin</Typography>
           <FormGroup row style={{ gap: 16 }}>
             <FormControlLabel
-              control={<Checkbox color="secondary" />}
+              control={
+                <Checkbox
+                  color="secondary"
+                  checked={inputValue?.gender?.includes('L') || false}
+                  onChange={() =>
+                    handleInputChange(
+                      'gender',
+                      inputValue?.gender
+                        ? inputValue?.gender?.find((val) => val === 'L')
+                          ? inputValue?.gender?.filter((val) => val !== 'L')
+                          : [...inputValue?.gender, 'L']
+                        : ['L'],
+                    )
+                  }
+                />
+              }
               label={<Typography style={{ color: '#9B9B9B' }}>Laki-laki</Typography>}
             />
             <FormControlLabel
-              control={<Checkbox color="secondary" />}
+              control={
+                <Checkbox
+                  color="secondary"
+                  checked={inputValue?.gender?.includes('P') || false}
+                  onChange={() =>
+                    handleInputChange(
+                      'gender',
+                      inputValue?.gender
+                        ? inputValue?.gender?.find((val) => val === 'P')
+                          ? inputValue?.gender?.filter((val) => val !== 'P')
+                          : [...inputValue?.gender, 'P']
+                        : ['P'],
+                    )
+                  }
+                />
+              }
               label={<Typography style={{ color: '#9B9B9B' }}>Perempuan</Typography>}
             />
             <FormControlLabel
-              control={<Checkbox color="secondary" />}
+              control={
+                <Checkbox
+                  color="secondary"
+                  checked={inputValue?.gender?.includes('O') || false}
+                  onChange={() =>
+                    handleInputChange(
+                      'gender',
+                      inputValue?.gender
+                        ? inputValue?.gender?.find((val) => val === 'O')
+                          ? inputValue?.gender?.filter((val) => val !== 'O')
+                          : [...inputValue?.gender, 'O']
+                        : ['O'],
+                    )
+                  }
+                />
+              }
               label={<Typography style={{ color: '#9B9B9B' }}>Lainnya</Typography>}
             />
           </FormGroup>
