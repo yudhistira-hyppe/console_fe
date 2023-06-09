@@ -155,6 +155,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               value={filter.descending}
               onChange={handleOrder}
               displayEmpty
+              color="secondary"
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: 'white' }}>
               <MenuItem value={'true'}>Terbaru</MenuItem>
@@ -211,7 +212,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          {item?.description || 'Hyppers of The Week'}
+                          {item?.nameChallenge || 'Hyppers of The Week'}
                         </Typography>
                       </Stack>
                     </TableCell>
@@ -256,23 +257,23 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 110 }}>
-                        {item?.join || 'Dengan Undangan'}
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 130, textTransform: 'capitalize' }}>
+                        {item?.caragabung || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 50 }}>
-                        {item?.join || 'Konten'}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 80 }}>
-                        {moment().format('DD/MM/YYYY')}
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 50, textTransform: 'capitalize' }}>
+                        {item?.objectChallenge || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '14px', width: 80 }}>
-                        {moment().format('DD/MM/YYYY')}
+                        {moment(item?.startChallenge).format('DD/MM/YYYY')}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 80 }}>
+                        {moment(item?.endChallenge).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">

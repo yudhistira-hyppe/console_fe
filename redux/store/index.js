@@ -87,7 +87,7 @@ const initStore = () => {
         settingApi.middleware,
         masterBankApi.middleware,
         adsUtilityApi.middleware,
-        badgeApi.middleware,
+        // badgeApi.middleware,
         challengeApi.middleware,
       ]),
   });

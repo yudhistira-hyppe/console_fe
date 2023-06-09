@@ -90,6 +90,6 @@ export default combineReducers({
   [settingApi.reducerPath]: settingApi.reducer,
   [masterBankApi.reducerPath]: masterBankApi.reducer,
   [adsUtilityApi.reducerPath]: adsUtilityApi.reducer,
-  [badgeApi.reducerPath]: badgeApi.reducer,
+  // [badgeApi.reducerPath]: badgeApi.reducer,
   [challengeApi.reducerPath]: challengeApi.reducer,
 });
