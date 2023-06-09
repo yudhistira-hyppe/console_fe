@@ -212,7 +212,7 @@ const ChallengeTabOtherComponent = () => {
       <PageContainer heading="">
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>50</Typography>
+            <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>{listChallenge?.total || 0}</Typography>
             <Typography style={{ fontWeight: 'bold' }}>Total Challenge</Typography>
           </Stack>
           <Button

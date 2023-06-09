@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import moment from 'moment';
 import { Typography } from '@material-ui/core';
 import { useGetListChallengeQuery } from 'api/console/challenge';
+import Router from 'next/router';
 
 const ChallengeTabDraftComponent = () => {
   const [filter, setFilter] = useState({
@@ -211,10 +212,14 @@ const ChallengeTabDraftComponent = () => {
       <PageContainer heading="">
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>50</Typography>
+            <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>{listChallenge?.total || 0}</Typography>
             <Typography style={{ fontWeight: 'bold' }}>Total Challenge</Typography>
           </Stack>
-          <Button variant="contained" color="secondary" style={{ height: 40 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={{ height: 40 }}
+            onClick={() => Router.push('/challenge/create')}>
             <Typography style={{ fontSize: 14 }}>Tambah Challenge Baru</Typography>
           </Button>
         </Stack>
