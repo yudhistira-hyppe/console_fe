@@ -86,7 +86,6 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 1) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
-                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -116,7 +115,6 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 2) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
-                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -145,7 +143,6 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 4) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
-                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -174,7 +171,6 @@ const SearchSection = ({ filter, handleChange }) => {
                   if (week === 12) {
                     setWeek(null);
                     handleChange('createdAt', ['', '']);
-                    handleChange('labelTanggal', '');
                     setDate(false);
                   } else {
                     setDate(true);
@@ -277,12 +273,12 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label="Konten"
                 value="Konten"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter?.type?.includes('Konten')} />}
+                control={<Checkbox color="secondary" checked={filter?.type?.includes('Konten')} />}
               />
               <FormControlLabel
                 label="Akun"
                 value="Akun"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter?.type?.includes('Akun')} />}
+                control={<Checkbox color="secondary" checked={filter?.type?.includes('Akun')} />}
               />
             </FormGroup>
           </AccordionDetails>
@@ -298,21 +294,17 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label="Sedang Berjalan"
                 value="Sedang Berjalan"
-                control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter?.status?.includes('Sedang Berjalan')} />
-                }
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Sedang Berjalan')} />}
               />
               <FormControlLabel
                 label="Akan Datang"
                 value="Akan Datang"
-                control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter?.status?.includes('Akan Datang')} />
-                }
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Akan Datang')} />}
               />
               <FormControlLabel
                 label="Selesai"
                 value="Selesai"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter?.status?.includes('Selesai')} />}
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Selesai')} />}
               />
             </FormGroup>
           </AccordionDetails>
@@ -328,16 +320,12 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label="Semua Pengguna"
                 value="Semua Pengguna"
-                control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter?.join?.includes('Semua Pengguna')} />
-                }
+                control={<Checkbox color="secondary" checked={filter?.join?.includes('Semua Pengguna')} />}
               />
               <FormControlLabel
                 label="Dengan Undangan"
                 value="Dengan Undangan"
-                control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter?.join?.includes('Dengan Undangan')} />
-                }
+                control={<Checkbox color="secondary" checked={filter?.join?.includes('Dengan Undangan')} />}
               />
             </FormGroup>
           </AccordionDetails>
