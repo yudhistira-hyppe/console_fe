@@ -3,6 +3,7 @@ import { CloudUpload, InfoOutlined } from '@material-ui/icons';
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Checkbox,
   Divider,
@@ -15,12 +16,21 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import { useGetListBadgeQuery } from 'api/console/utilitas/badge';
-import React from 'react';
+import React, { useState } from 'react';
+import PopoverBadge from '../component/PopoverBadge';
 
 const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
-  const { data } = useGetListBadgeQuery({ page: 0, limit: 10 });
-  console.log(data);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popupKey, setPopupKey] = useState(null);
+
+  const handleClick = (event, value) => {
+    setAnchorEl(event.currentTarget);
+    setPopupKey(value);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   function formatBytes(bytes) {
     return (bytes / Math.pow(1024, 2)).toFixed(1);
@@ -127,7 +137,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                       }
                     />
                     {inputValue?.winner_ranking_badge?.map((item) => item?.ranking)?.includes(key + 1) && (
-                      <Stack direction="row" spacing={2}>
+                      <Stack direction="row" alignItems="center" spacing={2}>
                         <Stack direction="column" spacing={1}>
                           <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>Badge Profile {key}</Typography>
                           <label htmlFor={`badge-profile-${key}`}>
@@ -206,6 +216,25 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                           </label>
                           <Typography style={{ color: '#737373', fontSize: 14 }}>Bentuk Badge: Bulat</Typography>
                         </Stack>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          style={{ height: '100%', padding: '12px 16px' }}
+                          onClick={(e) => {
+                            handleClick(e, key);
+                          }}>
+                          <Typography style={{ textTransform: 'capitalize', fontSize: 14 }}>
+                            Pilih dari penyimpanan badge
+                          </Typography>
+                        </Button>
+
+                        <PopoverBadge
+                          anchorEl={anchorEl}
+                          handleClose={handleClose}
+                          inputValue={inputValue}
+                          handleInputChange={handleInputChange}
+                          itemKey={popupKey}
+                        />
                       </Stack>
                     )}
                   </Stack>
