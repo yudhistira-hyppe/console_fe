@@ -40,8 +40,8 @@ import {
   settingApi,
   masterBankApi,
   adsUtilityApi,
-  badgeApi,
   challengeApi,
+  masterBadgeApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -61,17 +61,17 @@ const initStore = () => {
         bantuanPenggunaApi.middleware,
         contentAPI.middleware,
         notificationAPI.middleware,
-        commentAPI.middleware,
+        // commentAPI.middleware,
         insightAPI.middleware,
-        contentManagementAPI.middleware,
-        accountBalancesAPI.middleware,
-        userFriendAPI.middleware,
+        // contentManagementAPI.middleware,
+        // accountBalancesAPI.middleware,
+        // userFriendAPI.middleware,
         getUserHyppe.middleware,
         group.middleware,
         moduleAPI.middleware,
         divisiAPI.middleware,
         voucherApi.middleware,
-        adAPI.middleware,
+        // adAPI.middleware,
         transactionAPI.middleware,
         kontenApi.middleware,
         iklanApi.middleware,
@@ -87,8 +87,8 @@ const initStore = () => {
         settingApi.middleware,
         masterBankApi.middleware,
         adsUtilityApi.middleware,
-        // badgeApi.middleware,
         challengeApi.middleware,
+        masterBadgeApi.middleware,
       ]),
   });
   return store;

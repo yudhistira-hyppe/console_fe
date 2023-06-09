@@ -31,8 +31,8 @@ import {
   settingApi,
   masterBankApi,
   adsUtilityApi,
-  badgeApi,
   challengeApi,
+  masterBadgeApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -63,10 +63,10 @@ export default combineReducers({
   [ticketApi.reducerPath]: ticketApi.reducer,
   [contentAPI.reducerPath]: contentAPI.reducer,
   [notificationAPI.reducerPath]: notificationAPI.reducer,
-  [commentAPI.reducerPath]: commentAPI.reducer,
-  [insightAPI.reducerPath]: insightAPI.reducer,
-  [contentManagementAPI.reducerPath]: contentManagementAPI.reducer,
-  [accountBalancesAPI.reducerPath]: accountBalancesAPI.reducer,
+  // [commentAPI.reducerPath]: commentAPI.reducer,
+  // [insightAPI.reducerPath]: insightAPI.reducer,
+  // [contentManagementAPI.reducerPath]: contentManagementAPI.reducer,
+  // [accountBalancesAPI.reducerPath]: accountBalancesAPI.reducer,
   [userFriendAPI.reducerPath]: userFriendAPI.reducer,
   [voucherApi.reducerPath]: voucherApi.reducer,
   [getUserHyppe.reducerPath]: getUserHyppe.reducer,
@@ -90,6 +90,6 @@ export default combineReducers({
   [settingApi.reducerPath]: settingApi.reducer,
   [masterBankApi.reducerPath]: masterBankApi.reducer,
   [adsUtilityApi.reducerPath]: adsUtilityApi.reducer,
-  // [badgeApi.reducerPath]: badgeApi.reducer,
   [challengeApi.reducerPath]: challengeApi.reducer,
+  [masterBadgeApi.reducerPath]: masterBadgeApi.reducer,
 });
