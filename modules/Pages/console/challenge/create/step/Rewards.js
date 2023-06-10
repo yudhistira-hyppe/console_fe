@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import { CloudUpload, InfoOutlined } from '@material-ui/icons';
+import { Close, CloudUpload, Delete, InfoOutlined } from '@material-ui/icons';
 import {
   Avatar,
   Box,
@@ -9,6 +9,7 @@ import {
   Divider,
   FormControlLabel,
   FormGroup,
+  IconButton,
   InputAdornment,
   Radio,
   RadioGroup,
@@ -18,6 +19,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import PopoverBadge from '../component/PopoverBadge';
+import { isEmpty } from 'lodash';
 
 const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -138,8 +140,8 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                     />
                     {inputValue?.winner_ranking_badge?.map((item) => item?.ranking)?.includes(key + 1) && (
                       <Stack direction="row" alignItems="center" spacing={2}>
-                        <Stack direction="column" spacing={1}>
-                          <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>Badge Profile {key}</Typography>
+                        <Stack direction="column" spacing={1} style={{ position: 'relative' }}>
+                          <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>Badge Profile</Typography>
                           <label htmlFor={`badge-profile-${key}`}>
                             <Box
                               style={{
@@ -148,7 +150,12 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 border: '1px dashed #9B9B9B',
                                 borderRadius: 4,
                                 backgroundColor: '#F0F0F0',
-                                cursor: 'pointer',
+                                cursor:
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                    inputValue?.winner_ranking_badge[key]?.other &&
+                                  !isEmpty(inputValue?.winner_ranking_badge[key]?.profile)
+                                    ? 'default'
+                                    : 'pointer',
                               }}>
                               {inputValue?.winner_ranking_badge[key]?.profile ? (
                                 <Avatar
@@ -172,12 +179,42 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 type="file"
                                 accept="image/png"
                                 onChange={(e) => handleUploadImage(e, key, 'profile')}
+                                disabled={
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                    inputValue?.winner_ranking_badge[key]?.other &&
+                                  !isEmpty(inputValue?.winner_ranking_badge[key]?.profile)
+                                }
                               />
                             </Box>
                           </label>
+                          {inputValue?.winner_ranking_badge[key]?.profile && (
+                            <IconButton
+                              style={{ position: 'absolute', top: 26, right: 6, border: '1px solid #737373' }}
+                              size="small"
+                              onClick={() => {
+                                let prevVal = inputValue?.winner_ranking_badge;
+
+                                if (
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                  inputValue?.winner_ranking_badge[key]?.other
+                                ) {
+                                  prevVal[key]['profile'] = undefined;
+                                  prevVal[key][`url_profile`] = undefined;
+                                  prevVal[key]['other'] = undefined;
+                                  prevVal[key][`url_other`] = undefined;
+                                } else {
+                                  prevVal[key]['profile'] = undefined;
+                                  prevVal[key][`url_profile`] = undefined;
+                                }
+
+                                handleInputChange('winner_ranking_badge', prevVal);
+                              }}>
+                              <Close style={{ fontSize: 16 }} />
+                            </IconButton>
+                          )}
                           <Typography style={{ color: '#737373', fontSize: 14 }}>Bentuk Badge: Kotak</Typography>
                         </Stack>
-                        <Stack direction="column" spacing={1}>
+                        <Stack direction="column" spacing={1} style={{ position: 'relative' }}>
                           <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>Badge Lainnya</Typography>
                           <label htmlFor={`badge-other-${key}`}>
                             <Box
@@ -187,7 +224,12 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 border: '1px dashed #9B9B9B',
                                 borderRadius: 4,
                                 backgroundColor: '#F0F0F0',
-                                cursor: 'pointer',
+                                cursor:
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                    inputValue?.winner_ranking_badge[key]?.other &&
+                                  !isEmpty(inputValue?.winner_ranking_badge[key]?.other)
+                                    ? 'default'
+                                    : 'pointer',
                               }}>
                               {inputValue?.winner_ranking_badge[key]?.other ? (
                                 <Avatar
@@ -211,9 +253,39 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 type="file"
                                 accept="image/png"
                                 onChange={(e) => handleUploadImage(e, key, 'other')}
+                                disabled={
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                    inputValue?.winner_ranking_badge[key]?.other &&
+                                  !isEmpty(inputValue?.winner_ranking_badge[key]?.other)
+                                }
                               />
                             </Box>
                           </label>
+                          {inputValue?.winner_ranking_badge[key]?.other && (
+                            <IconButton
+                              style={{ position: 'absolute', top: 26, right: 6, border: '1px solid #737373' }}
+                              size="small"
+                              onClick={() => {
+                                let prevVal = inputValue?.winner_ranking_badge;
+
+                                if (
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                  inputValue?.winner_ranking_badge[key]?.other
+                                ) {
+                                  prevVal[key]['profile'] = undefined;
+                                  prevVal[key][`url_profile`] = undefined;
+                                  prevVal[key]['other'] = undefined;
+                                  prevVal[key][`url_other`] = undefined;
+                                } else {
+                                  prevVal[key]['other'] = undefined;
+                                  prevVal[key][`url_other`] = undefined;
+                                }
+
+                                handleInputChange('winner_ranking_badge', prevVal);
+                              }}>
+                              <Close style={{ fontSize: 16 }} />
+                            </IconButton>
+                          )}
                           <Typography style={{ color: '#737373', fontSize: 14 }}>Bentuk Badge: Bulat</Typography>
                         </Stack>
                         <Button
