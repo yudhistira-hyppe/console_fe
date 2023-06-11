@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
-import { Card, Grid, MenuItem, Stack, TextField, Tooltip } from '@mui/material';
+import { Button, Card, Grid, MenuItem, Stack, TextField, Tooltip } from '@mui/material';
 import React from 'react';
 
 const ComponentStepInvitation = ({ inputValue, handleInputChange }) => {
@@ -65,21 +65,29 @@ const ComponentStepInvitation = ({ inputValue, handleInputChange }) => {
           </Stack>
         </Grid>
         {inputValue?.type_invitation === 'invitation' && (
-          <Grid item xs={12} md={2}>
-            <Stack direction="column" spacing={1}>
-              <Typography>Total Partisipan</Typography>
-              <Typography
-                style={{
-                  width: 118,
-                  padding: '15px 0',
-                  textAlign: 'center',
-                  backgroundColor: '#EEEEEE',
-                  borderRadius: 6,
-                }}>
-                0
-              </Typography>
-            </Stack>
-          </Grid>
+          <>
+            <Grid item xs={12} md={2}>
+              <Stack direction="column" spacing={1}>
+                <Typography>Total Partisipan</Typography>
+                <Typography
+                  style={{
+                    width: 118,
+                    padding: '15px 0',
+                    textAlign: 'center',
+                    backgroundColor: '#EEEEEE',
+                    borderRadius: 6,
+                  }}>
+                  0
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={6} />
+            <Grid item xs={12}>
+              <Button variant="contained" color="secondary" style={{ height: 40, width: 527 }}>
+                <Typography style={{ textTransform: 'capitalize', fontSize: 14 }}>Pilih Partisipan Challenge</Typography>
+              </Button>
+            </Grid>
+          </>
         )}
       </Grid>
     </Card>
