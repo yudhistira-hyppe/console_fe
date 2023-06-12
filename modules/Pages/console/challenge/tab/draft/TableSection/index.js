@@ -52,6 +52,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const [openModal, setOpenModal] = useState({
     showModal: false,
     status: '',
+    selected: {},
   });
 
   const handleOpenMenu = (event, index) => {
@@ -89,10 +90,12 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       <ModalConfirmation
         showModal={openModal.showModal}
         status={openModal.status}
+        selectedItem={openModal.selected}
         onClose={() => {
           setOpenModal({
             showModal: !openModal.showModal,
             status: '',
+            selected: {},
           });
         }}
       />
@@ -205,7 +208,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       // onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}
                     >
                       <Stack direction="row" alignItems="center" gap="15px" width={130}>
-                        <Avatar src={''} variant="rounded" alt="X" />
+                        <Avatar src={item?.bannerLeaderboard} variant="rounded" alt="X" />
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
@@ -215,7 +218,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 130, textTransform: 'capitalize' }}>
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 160, textTransform: 'capitalize' }}>
                         {item?.caragabung || '-'}
                       </Typography>
                     </TableCell>
@@ -258,6 +261,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             setOpenModal({
                               showModal: !openModal.showModal,
                               status: 'delete-draft',
+                              selected: item?._id,
                             });
                           }}>
                           <ListItemIcon>

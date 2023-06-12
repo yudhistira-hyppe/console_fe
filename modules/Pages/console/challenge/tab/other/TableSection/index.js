@@ -52,6 +52,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const [openModal, setOpenModal] = useState({
     showModal: false,
     status: '',
+    selected: {},
   });
 
   const handleOpenMenu = (event, index) => {
@@ -89,10 +90,12 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       <ModalConfirmation
         showModal={openModal.showModal}
         status={openModal.status}
+        selectedItem={openModal.selected}
         onClose={() => {
           setOpenModal({
             showModal: !openModal.showModal,
             status: '',
+            selected: {},
           });
         }}
       />
@@ -206,7 +209,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       // onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}
                     >
                       <Stack direction="row" alignItems="center" gap="15px" width={130}>
-                        <Avatar src={''} variant="rounded" alt="X" />
+                        <Avatar src={item?.bannerLeaderboard} variant="rounded" alt="X" />
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
@@ -217,7 +220,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width={130}>
-                        {item?.status === 'Sedang Berjalan' && (
+                        {item?.statuscurrentChallenge === 'SEDANG BERJALAN' && (
                           <Chip
                             label="Sedang Berjalan"
                             style={{
@@ -229,7 +232,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             }}
                           />
                         )}
-                        {item?.status === 'Akan Datang' && (
+                        {item?.statuscurrentChallenge === 'AKAN DATANG' && (
                           <Chip
                             label="Akan Datang"
                             style={{
@@ -241,7 +244,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             }}
                           />
                         )}
-                        {item?.status === 'Selesai' && (
+                        {item?.statuscurrentChallenge === 'SELESAI' && (
                           <Chip
                             label="Selesai"
                             style={{
@@ -256,7 +259,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 130, textTransform: 'capitalize' }}>
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 160, textTransform: 'capitalize' }}>
                         {item?.caragabung || '-'}
                       </Typography>
                     </TableCell>
@@ -287,7 +290,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         MenuListProps={{
                           'aria-labelledby': `basic-button-${i}`,
                         }}>
-                        {item?.status !== 'Sedang Berjalan' && (
+                        {item?.statuscurrentChallenge !== 'SEDANG BERJALAN' && (
                           <MenuItem
                             onClick={() => {
                               handleCloseMenu();
@@ -305,6 +308,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             setOpenModal({
                               showModal: !openModal.showModal,
                               status: 'duplicate',
+                              selected: item?._id,
                             });
                           }}>
                           <ListItemIcon>
@@ -312,13 +316,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           </ListItemIcon>
                           <ListItemText>Duplikat</ListItemText>
                         </MenuItem>
-                        {item?.status !== 'Sedang Berjalan' && (
+                        {item?.statuscurrentChallenge !== 'SEDANG BERJALAN' && (
                           <MenuItem
                             onClick={() => {
                               handleCloseMenu();
                               setOpenModal({
                                 showModal: !openModal.showModal,
                                 status: 'delete',
+                                selected: item?._id,
                               });
                             }}>
                             <ListItemIcon>
