@@ -64,7 +64,7 @@ export default combineReducers({
   [contentAPI.reducerPath]: contentAPI.reducer,
   [notificationAPI.reducerPath]: notificationAPI.reducer,
   // [commentAPI.reducerPath]: commentAPI.reducer,
-  // [insightAPI.reducerPath]: insightAPI.reducer,
+  [insightAPI.reducerPath]: insightAPI.reducer,
   // [contentManagementAPI.reducerPath]: contentManagementAPI.reducer,
   // [accountBalancesAPI.reducerPath]: accountBalancesAPI.reducer,
   [userFriendAPI.reducerPath]: userFriendAPI.reducer,
