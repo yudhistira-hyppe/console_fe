@@ -13,16 +13,25 @@ import ComponentStepLeaderboard from './step/Leaderboard';
 import ComponentStepRewards from './step/Rewards';
 import ComponentStepNotification from './step/Notification';
 import { isEmpty } from 'lodash';
+import ChooseParticipant from './step/ChooseParticipant';
+import { ArrowLeft, ChevronLeft } from '@material-ui/icons';
+import Router from 'next/router';
 
-const breadcrumbs = [
-  { label: 'Challenge', link: '/challenge' },
-  { label: 'Buat Challenge', isActive: true },
-];
 const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
-const CreateChallenge = () => {
-  const [activeStep, setActiveStep] = useState(5);
+const CreateChallenge = ({ moreSlug }) => {
+  const [activeStep, setActiveStep] = useState(3);
   const [inputValue, setInputValue] = useState({});
+  const breadcrumbs = moreSlug
+    ? [
+        { label: 'Challenge', link: '/challenge' },
+        { label: 'Buat Challenge', link: '/challenge/create' },
+        { label: 'Pilih Partisipan', isActive: true },
+      ]
+    : [
+        { label: 'Challenge', link: '/challenge' },
+        { label: 'Buat Challenge', isActive: true },
+      ];
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -123,54 +132,77 @@ const CreateChallenge = () => {
   return (
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Buat Challenge</Typography>
-        <ScrollBar style={{ width: 950 }}>
-          <Stepper style={{ backgroundColor: 'transparent', padding: 0 }} activeStep={activeStep}>
-            {steps.map((label, index) => {
-              return (
-                <Step key={label}>
-                  <StepLabel>
-                    <Typography style={{ whiteSpace: 'nowrap', fontSize: 14, fontFamily: 'normal' }}>{label}</Typography>
-                  </StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-        </ScrollBar>
-      </Stack>
+      {moreSlug ? (
+        <Stack
+          direction="row"
+          alignItems="center"
+          gap={1}
+          onClick={() => Router.replace('/challenge/create')}
+          sx={{
+            width: 'fit-content',
+            '&:hover': {
+              cursor: 'pointer',
+            },
+          }}>
+          <ChevronLeft style={{ fontSize: 28 }} />
+          <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Pilih Partisipan</Typography>
+        </Stack>
+      ) : (
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Buat Challenge</Typography>
+          <ScrollBar style={{ width: 950 }}>
+            <Stepper style={{ backgroundColor: 'transparent', padding: 0 }} activeStep={activeStep}>
+              {steps.map((label, index) => {
+                return (
+                  <Step key={label}>
+                    <StepLabel>
+                      <Typography style={{ whiteSpace: 'nowrap', fontSize: 14, fontFamily: 'normal' }}>{label}</Typography>
+                    </StepLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>
+          </ScrollBar>
+        </Stack>
+      )}
 
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        {activeStep === 0 && <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} />}
-        {activeStep === 1 && <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} />}
-        {activeStep === 2 && <ComponentStepParticipant inputValue={inputValue} handleInputChange={handleInputChange} />}
-        {activeStep === 3 && <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} />}
-        {activeStep === 4 && <ComponentStepLeaderboard inputValue={inputValue} handleInputChange={handleInputChange} />}
-        {activeStep === 5 && <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} />}
-        {activeStep === 6 && <ComponentStepNotification inputValue={inputValue} handleInputChange={handleInputChange} />}
-      </LocalizationProvider>
+      {moreSlug ? (
+        <ChooseParticipant inputValue={inputValue} handleInputChange={handleInputChange} />
+      ) : (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {activeStep === 0 && <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 1 && <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 2 && <ComponentStepParticipant inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 3 && <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 4 && <ComponentStepLeaderboard inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 5 && <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 6 && <ComponentStepNotification inputValue={inputValue} handleInputChange={handleInputChange} />}
+        </LocalizationProvider>
+      )}
 
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        {activeStep > 0 ? (
+      {!moreSlug && (
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          {activeStep > 0 ? (
+            <Button
+              variant="outlined"
+              color="secondary"
+              style={{ borderRadius: 6, padding: '10px 20px' }}
+              onClick={handleBack}>
+              <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Back</Typography>
+            </Button>
+          ) : (
+            <Box />
+          )}
           <Button
-            variant="outlined"
+            variant="contained"
             color="secondary"
             style={{ borderRadius: 6, padding: '10px 20px' }}
-            onClick={handleBack}>
-            <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Back</Typography>
+            onClick={handleNext}
+            disabled={checkDisabled()}>
+            <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Next</Typography>
           </Button>
-        ) : (
-          <Box />
-        )}
-        <Button
-          variant="contained"
-          color="secondary"
-          style={{ borderRadius: 6, padding: '10px 20px' }}
-          onClick={handleNext}
-          disabled={checkDisabled()}>
-          <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Next</Typography>
-        </Button>
-      </Stack>
+        </Stack>
+      )}
     </Stack>
   );
 };
