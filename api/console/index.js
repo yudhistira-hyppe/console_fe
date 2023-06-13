@@ -19,7 +19,7 @@ import { transactionAPI } from './transaction';
 import { mediaApi, contentApi } from './database';
 import { boostAPI } from './boost';
 import { adsApi } from './ads';
-import { interestApi, settingApi, masterBankApi, adsUtilityApi, masterBadgeApi } from './utilitas';
+import { interestApi, settingApi, masterBankApi, adsUtilityApi, masterBadgeApi, challengeUtilityApi } from './utilitas';
 import { challengeApi } from './challenge';
 
 export {
@@ -52,4 +52,5 @@ export {
   adsUtilityApi,
   challengeApi,
   masterBadgeApi,
+  challengeUtilityApi,
 };

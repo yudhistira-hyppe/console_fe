@@ -33,6 +33,7 @@ import {
   adsUtilityApi,
   challengeApi,
   masterBadgeApi,
+  challengeUtilityApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 import { contentAPI } from 'api/user/content';
@@ -67,7 +68,7 @@ export default combineReducers({
   [insightAPI.reducerPath]: insightAPI.reducer,
   // [contentManagementAPI.reducerPath]: contentManagementAPI.reducer,
   // [accountBalancesAPI.reducerPath]: accountBalancesAPI.reducer,
-  [userFriendAPI.reducerPath]: userFriendAPI.reducer,
+  // [userFriendAPI.reducerPath]: userFriendAPI.reducer,
   [voucherApi.reducerPath]: voucherApi.reducer,
   [getUserHyppe.reducerPath]: getUserHyppe.reducer,
   [group.reducerPath]: group.reducer,
@@ -77,7 +78,7 @@ export default combineReducers({
   [iklanApi.reducerPath]: iklanApi.reducer,
   [kontenApi.reducerPath]: kontenApi.reducer,
   [transactionAPI.reducerPath]: transactionAPI.reducer,
-  [adAPI.reducerPath]: adAPI.reducer,
+  // [adAPI.reducerPath]: adAPI.reducer,
   [mediaApi.reducerPath]: mediaApi.reducer,
   [contentApi.reducerPath]: contentApi.reducer,
   [kycApi.reducerPath]: kycApi.reducer,
@@ -92,4 +93,5 @@ export default combineReducers({
   [adsUtilityApi.reducerPath]: adsUtilityApi.reducer,
   [challengeApi.reducerPath]: challengeApi.reducer,
   [masterBadgeApi.reducerPath]: masterBadgeApi.reducer,
+  [challengeUtilityApi.reducerPath]: challengeUtilityApi.reducer,
 });

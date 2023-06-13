@@ -42,6 +42,7 @@ import {
   adsUtilityApi,
   challengeApi,
   masterBadgeApi,
+  challengeUtilityApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -89,6 +90,7 @@ const initStore = () => {
         adsUtilityApi.middleware,
         challengeApi.middleware,
         masterBadgeApi.middleware,
+        challengeUtilityApi.middleware,
       ]),
   });
   return store;
