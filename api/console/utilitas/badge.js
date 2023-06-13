@@ -14,7 +14,23 @@ export const masterBadgeApi = createApi({
       }),
       providesTags: ['list'],
     }),
+    createBadgeChallenge: build.mutation({
+      query: (data) => ({
+        url: '/badge',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['list'],
+    }),
+    updateBadgeChallenge: build.mutation({
+      query: ({ id, formData }) => ({
+        url: `/badge/update/${id}`,
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: ['list'],
+    }),
   }),
 });
 
-export const { useGetListBadgeQuery } = masterBadgeApi;
+export const { useGetListBadgeQuery, useCreateBadgeChallengeMutation, useUpdateBadgeChallengeMutation } = masterBadgeApi;
