@@ -260,22 +260,30 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 160, textTransform: 'capitalize' }}>
-                        {item?.caragabung || '-'}
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '14px', width: 110, textTransform: 'capitalize', color: '#00000099' }}>
+                        {item?.caragabung === 'DENGAN UNDANGAN' && 'Dengan Undangan'}
+                        {item?.caragabung === 'SEMUA PENGGUNA' && 'Semua Pengguna'}
+                        {!item?.caragabung && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 50, textTransform: 'capitalize' }}>
-                        {item?.objectChallenge || '-'}
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '14px', width: 80, textTransform: 'capitalize', color: '#00000099' }}>
+                        {item?.objectChallenge === 'AKUN' && 'Akun'}
+                        {item?.objectChallenge === 'KONTEN' && 'Konten'}
+                        {!item?.objectChallenge && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 80 }}>
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 120, color: '#00000099' }}>
                         {moment(item?.startChallenge).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 80 }}>
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 120, color: '#00000099' }}>
                         {moment(item?.endChallenge).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
