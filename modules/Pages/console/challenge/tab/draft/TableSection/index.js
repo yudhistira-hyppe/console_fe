@@ -159,6 +159,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               onChange={handleOrder}
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
+              color="secondary"
               style={{ backgroundColor: 'white' }}>
               <MenuItem value={'true'}>Terbaru</MenuItem>
               <MenuItem value={'false'}>Terlama</MenuItem>

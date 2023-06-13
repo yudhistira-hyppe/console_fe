@@ -95,7 +95,7 @@ const ChallengeTabOtherComponent = () => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        order: e.target.value,
+        descending: e.target.value,
       };
     });
   };
