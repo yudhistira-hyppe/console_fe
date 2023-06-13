@@ -28,7 +28,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       if (res?.error) {
         toast.error(res?.error?.data?.message?.info[0], { duration: 3000 });
       } else {
-        toast.success('berhasil menduplikat challenge', { duration: 3000 });
+        toast.success('Berhasil Duplikasi Challenge', { duration: 3000 });
       }
       onClose();
     });
@@ -42,7 +42,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       if (res?.error) {
         toast.error(res?.error?.data?.message?.info[0], { duration: 3000 });
       } else {
-        toast.success('berhasil mendelete challenge', { duration: 3000 });
+        toast.success('Berhasil Menghapus Challenge', { duration: 3000 });
       }
       onClose();
     });
