@@ -10,6 +10,7 @@ import Setting from './setting';
 import CreateMasterBank from './master-bank/create';
 import EditMasterBank from './master-bank/edit';
 import UtilityAds from './ads';
+import JenisChallenge from './jenis-challenge';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -60,6 +61,7 @@ const UtilitasComponent = () => {
         <Tab label="Setting" value="setting" className={classes.tab} />
         <Tab label="Bank" value="bank" className={classes.tab} />
         <Tab label="Pusat Iklan" value="ads" className={classes.tab} />
+        <Tab label="Challenge" value="challenge" className={classes.tab} />
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
         <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>
@@ -79,6 +81,9 @@ const UtilitasComponent = () => {
         </TabPanel>
         <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
           <UtilityAds />
+        </TabPanel>
+        <TabPanel value="challenge" style={{ padding: 0, height: '100%' }}>
+          <JenisChallenge />
         </TabPanel>
       </div>
     </TabContext>
