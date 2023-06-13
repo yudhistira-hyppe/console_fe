@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
@@ -7,6 +7,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { makeStyles } from '@material-ui/styles';
 import { Add, Check, Remove } from '@material-ui/icons';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const style = {
   position: 'absolute',
@@ -37,6 +38,7 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
   const { authUser } = useAuth();
   const classes = useStyles();
   const [hoverRemove, setHoverRemove] = useState({ show: false, id: null });
+  const [listItem, setListItem] = useState(selectedItem);
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -44,6 +46,29 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
 
     return `${STREAM_URL}${endpoint?.[0]}${authToken}`;
   };
+
+  useEffect(() => {
+    setListItem(selectedItem);
+  }, [showModal]);
+
+  const handleClick = (event, id) => {
+    const selectedIndex = listItem?.map((item) => item?.iduser).indexOf(id?.iduser);
+
+    let newListItem = [];
+
+    if (selectedIndex === -1) {
+      newListItem = newListItem.concat(listItem, id);
+    } else if (selectedIndex === 0) {
+      newListItem = newListItem.concat(listItem.slice(1));
+    } else if (selectedIndex === listItem.length - 1) {
+      newListItem = newListItem.concat(listItem.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newListItem = newListItem.concat(listItem.slice(0, selectedIndex), listItem.slice(selectedIndex + 1));
+    }
+    setListItem(newListItem);
+  };
+
+  console.log(listItem);
 
   return (
     <div>
@@ -53,10 +78,10 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <Stack direction="column" gap={1}>
-            <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>List Partisipan</Typography>
-            <TableContainer>
-              <Table>
+          <Stack direction="column" gap={2}>
+            <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>List Partisipan Challenge</Typography>
+            <TableContainer style={{ maxHeight: 540 }}>
+              <Table stickyHeader>
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Nama</TableCell>
@@ -126,12 +151,10 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
                         </TableCell>
                         <TableCell>
                           <Button
-                            variant={
-                              selectedItem?.map((item) => item?.iduser).includes(item?.iduser) ? 'outlined' : 'contained'
-                            }
+                            variant={listItem?.map((item) => item?.iduser).includes(item?.iduser) ? 'outlined' : 'contained'}
                             color={hoverRemove.show && item?.iduser === hoverRemove?.id ? 'error' : 'secondary'}
                             endIcon={
-                              selectedItem?.map((item) => item?.iduser).includes(item?.iduser) ? (
+                              listItem?.map((item) => item?.iduser).includes(item?.iduser) ? (
                                 hoverRemove.show && item?.iduser === hoverRemove?.id ? (
                                   <Remove style={{ fontSize: 20 }} />
                                 ) : (
@@ -142,21 +165,22 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
                               )
                             }
                             onClick={(event) => {
+                              handleClick(event, item);
                               setHoverRemove({ show: false, id: null });
                             }}
                             onMouseEnter={() => {
-                              if (selectedItem?.map((item) => item?.iduser).includes(item?.iduser)) {
+                              if (listItem?.map((item) => item?.iduser).includes(item?.iduser)) {
                                 setHoverRemove({ show: true, id: item?.iduser });
                               }
                             }}
                             onMouseLeave={() => {
-                              if (selectedItem?.map((item) => item?.iduser).includes(item?.iduser)) {
+                              if (listItem?.map((item) => item?.iduser).includes(item?.iduser)) {
                                 setHoverRemove({ show: false, id: null });
                               }
                             }}
                             style={{ width: 120 }}>
                             <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
-                              {selectedItem?.map((item) => item?.iduser).includes(item?.iduser)
+                              {listItem?.map((item) => item?.iduser).includes(item?.iduser)
                                 ? hoverRemove.show && item?.iduser === hoverRemove?.id
                                   ? 'Batalkan'
                                   : 'Diundang'
@@ -167,11 +191,13 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
                       </TableRow>
                     ))
                   ) : (
-                    <TableCell colSpan={8}>
-                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                        <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
-                      </Stack>
-                    </TableCell>
+                    <TableRow>
+                      <TableCell colSpan={8}>
+                        <Stack direction="column" alignItems="center" justifyContent="center" height={440} spacing={2}>
+                          <Typography style={{ fontFamily: 'Normal' }}>Belum ada partisipan yang dipilih</Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
                   )}
                 </TableBody>
               </Table>
@@ -184,14 +210,15 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
               color="secondary"
               style={{ borderRadius: 6, padding: '10px 20px' }}
               onClick={() => {
-                handleInputChange('invited_people', selected);
+                handleInputChange('invited_people', listItem);
                 onClose();
-              }}>
+              }}
+              disabled={selectedItem?.length === listItem?.length}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                 Terapkan Perubahan
               </Typography>
             </Button>
-            <Button variant="outlined" color="secondary" style={{ borderRadius: 6, padding: '10px 20px' }}>
+            <Button variant="outlined" color="secondary" style={{ borderRadius: 6, padding: '10px 20px' }} onClick={onClose}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Kembali</Typography>
             </Button>
           </Stack>
