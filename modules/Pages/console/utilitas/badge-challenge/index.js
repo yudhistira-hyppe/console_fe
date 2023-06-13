@@ -5,8 +5,8 @@ import TableSection from './TableSection';
 import { toast } from 'react-hot-toast';
 import { Typography } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import { useGetJenisChallengeQuery } from 'api/console/utilitas/challenge';
-import ModalJenis from '../Modal/ModalJenis';
+import { useGetListBadgeQuery } from 'api/console/utilitas/badge';
+import ModalBadge from '../Modal/ModalBadge';
 
 const TableList = () => {
   const [filter, setFilter] = useState({
@@ -33,10 +33,10 @@ const TableList = () => {
     return params;
   };
 
-  const { data: listJenis, isFetching: loadingJenis } = useGetJenisChallengeQuery(getParams());
+  const { data: listBadge, isFetching: loadingBadge } = useGetListBadgeQuery(getParams());
 
   useEffect(() => {
-    if (filter.page >= 1 && listJenis?.length < 1) {
+    if (filter.page >= 1 && listBadge?.length < 1) {
       toast.success('Semua data sudah ditampilkan');
       setFilter((prevVal) => {
         return {
@@ -45,7 +45,7 @@ const TableList = () => {
         };
       });
     }
-  }, [filter, loadingJenis]);
+  }, [filter, loadingBadge]);
 
   const handlePageChange = (value) => {
     setFilter((prevVal) => {
@@ -109,7 +109,7 @@ const TableList = () => {
 
   return (
     <Stack direction={'row'} spacing={3}>
-      <ModalJenis open={openModal} handleClose={() => setOpenModal(!openModal)} />
+      <ModalBadge open={openModal} handleClose={() => setOpenModal(!openModal)} />
 
       <Stack direction="column" height="100%" gap={3}>
         <SearchSection filter={filter} handleChange={handleSearchChange} />
@@ -120,15 +120,15 @@ const TableList = () => {
           onClick={() => setOpenModal(!openModal)}
           sx={{ height: 40 }}>
           <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
-            Tambah Jenis
+            Tambah Badge
           </Typography>
         </Button>
       </Stack>
       <TableSection
         filterList={filterList}
         filter={filter}
-        loading={loadingJenis}
-        listTickets={listJenis}
+        loading={loadingBadge}
+        listTickets={listBadge}
         handlePageChange={handlePageChange}
         handleDeleteFilter={handleSearchChange}
       />

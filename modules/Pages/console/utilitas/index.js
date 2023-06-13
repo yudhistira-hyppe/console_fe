@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Tab } from '@mui/material';
+import { Divider, Stack, Tab } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -11,6 +11,8 @@ import CreateMasterBank from './master-bank/create';
 import EditMasterBank from './master-bank/edit';
 import UtilityAds from './ads';
 import JenisChallenge from './jenis-challenge';
+import BadgeChallenge from './badge-challenge';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -81,7 +83,19 @@ const UtilitasComponent = () => {
           <UtilityAds />
         </TabPanel>
         <TabPanel value="challenge" style={{ padding: 0, height: '100%' }}>
-          <JenisChallenge />
+          <Stack direction="column" gap={3}>
+            <Stack direction="column" gap={2}>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Jenis Challenge</Typography>
+              <JenisChallenge />
+            </Stack>
+
+            <Divider flexItem />
+
+            <Stack direction="column" gap={2}>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Badge Challenge</Typography>
+              <BadgeChallenge />
+            </Stack>
+          </Stack>
         </TabPanel>
       </div>
     </TabContext>
