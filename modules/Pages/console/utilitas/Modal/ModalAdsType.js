@@ -127,7 +127,9 @@ const ModalAdsType = ({ open, handleClose, data }) => {
     <Modal open={open} disableEscapeKeyDown>
       <Box sx={style}>
         <Stack direction="column" gap={3}>
-          <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>Penambahan Tipe Iklan Baru</Typography>
+          <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>
+            {!isEmpty(data) ? 'Perubahan Tipe Iklan' : 'Penambahan Tipe Iklan Baru'}
+          </Typography>
           <Stack direction="column" gap={2}>
             <TextField
               placeholder="Input Nama Tipe"

@@ -125,6 +125,10 @@ const ModalInterest = ({ open, handleClose, data }) => {
     <Modal open={open} disableEscapeKeyDown>
       <Box sx={style}>
         <Stack direction="column" gap={3}>
+          <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>
+            {data ? 'Perubahan Interest' : 'Penambahan Interest Baru'}
+          </Typography>
+
           <label htmlFor="upload_icon" style={{ width: 170 }}>
             <Box className={classes.uploadBox} style={{ width: 170 }}>
               {inputValue?.icon ? (

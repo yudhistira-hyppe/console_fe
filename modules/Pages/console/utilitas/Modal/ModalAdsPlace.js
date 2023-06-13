@@ -106,7 +106,9 @@ const ModalAdsPlace = ({ open, handleClose, data }) => {
     <Modal open={open} disableEscapeKeyDown>
       <Box sx={style}>
         <Stack direction="column" gap={3}>
-          <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>Penambahan Penempatan Iklan Baru</Typography>
+          <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>
+            {!isEmpty(data) ? 'Perubahan Penempatan Iklan' : 'Penambahan Penempatan Iklan Baru'}
+          </Typography>
           <Stack direction="column" gap={2}>
             <TextField
               placeholder="Input Nama Penempatan"

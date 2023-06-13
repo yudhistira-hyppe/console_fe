@@ -106,8 +106,9 @@ const TableSection = () => {
 
         <Stack direction="column" spacing={3} mt={2} height="100%">
           <Stack direction="row" spacing={3}>
-            {categorySetting().map((item) => (
+            {categorySetting().map((item, key) => (
               <Button
+                key={key}
                 variant={kind === item ? 'contained' : 'outlined'}
                 color="secondary"
                 style={{
@@ -180,11 +181,13 @@ const TableSection = () => {
                         </TableRow>
                       ))
                     ) : (
-                      <TableCell colSpan={8}>
-                        <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                          <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Settings</Typography>
-                        </Stack>
-                      </TableCell>
+                      <TableRow>
+                        <TableCell colSpan={8}>
+                          <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                            <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Settings</Typography>
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
                     )}
                   </TableBody>
                 </Table>

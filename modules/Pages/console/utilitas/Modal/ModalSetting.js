@@ -62,7 +62,9 @@ const ModalSetting = ({ open, handleClose, selected }) => {
     <Modal open={open} disableEscapeKeyDown>
       <Box sx={style}>
         <Stack direction="column" gap={3}>
-          <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>Penambahan Setting Baru</Typography>
+          <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>
+            {!isEmpty(selected) ? 'Perubahan Setting' : 'Penambahan Setting Baru'}
+          </Typography>
           <Stack direction="column" gap={2}>
             <TextField
               placeholder="Input Nama Setting"

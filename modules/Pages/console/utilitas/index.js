@@ -31,15 +31,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UtilitasComponent = () => {
-  const [tab, setTab] = useState('');
+  const [tab, setTab] = useState('interest');
   const classes = useStyles();
   const router = useRouter();
 
   useEffect(() => {
     if (!isEmpty(router.query)) {
       setTab(router.query?.tab);
-    } else {
-      setTab('interest');
     }
   }, [router]);
 
