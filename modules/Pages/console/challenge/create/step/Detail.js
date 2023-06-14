@@ -188,9 +188,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               <DatePicker
                 value={inputValue?.startdate || null}
                 minDate={dayjs().add(1, 'day').toDate()}
-                onChange={(newValue) => {
-                  handleInputChange('startdate', newValue);
-                }}
+                onChange={(newValue) => handleInputChange('startdate', newValue)}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => <TextField color="secondary" {...params} />}
               />
@@ -207,6 +205,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                       : null
                     : null
                 }
+                onChange={() => {}}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#E0E0E0' }} disabled />}
                 disabled

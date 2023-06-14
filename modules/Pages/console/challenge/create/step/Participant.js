@@ -37,10 +37,7 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             title={
               <Stack direction="column" p="8px">
                 <Typography style={{ fontSize: 12 }}>
-                  <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-                </Typography>
-                <Typography style={{ fontSize: 12 }}>
-                  <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
+                  Tentukan tipe partisipan yang sesuai dengan ketentuan challenge yang dibuat.
                 </Typography>
               </Stack>
             }

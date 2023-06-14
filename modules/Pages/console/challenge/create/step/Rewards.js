@@ -74,10 +74,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
             title={
               <Stack direction="column" p="8px">
                 <Typography style={{ fontSize: 12 }}>
-                  <strong>Akun</strong>: Merupakan metrics yang mengukur aktivitas akun pengguna
-                </Typography>
-                <Typography style={{ fontSize: 12 }}>
-                  <strong>Konten</strong>: Merupakan metrics yang mengukur aktivitas dari konten pengguna
+                  Partisipan akan menerima hadiah sesuai dengan ketentuan yang sudah ditetapkan.
                 </Typography>
               </Stack>
             }
@@ -361,8 +358,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                     <Tooltip
                       title={
                         <Typography style={{ fontSize: 12, padding: 8 }}>
-                          Metrik ini diukur berdasarkan aktivitas dari sebuah akun partisipasi, terhadap interaksi atau
-                          pengembangan akun tersebut
+                          Partisipan akan menerima hadiah berdasarkan peringkat terakhir yang mereka.
                         </Typography>
                       }
                       arrow>
@@ -452,8 +448,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                     <Tooltip
                       title={
                         <Typography style={{ fontSize: 12, padding: 8 }}>
-                          Metrik ini diukur berdasarkan aktivitas dari sebuah akun partisipasi, terhadap interaksi atau
-                          pengembangan akun tersebut
+                          Partisipan akan menerima hadiah berdasarkan jumlah poin yang sudah ditentukan.
                         </Typography>
                       }
                       arrow>

@@ -28,10 +28,8 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
           title={
             <Stack direction="column" p="8px">
               <Typography style={{ fontSize: 12 }}>
-                <strong>Akun</strong>: Merupakan metrics yang mengukur aktivitas akun pengguna
-              </Typography>
-              <Typography style={{ fontSize: 12 }}>
-                <strong>Konten</strong>: Merupakan metrics yang mengukur aktivitas dari konten pengguna
+                Metrik Akun mengukur aktivitas pengguna, sedangkan Metrik Konten mengukur aktivitas konten yang dihasilkan
+                oleh pengguna.
               </Typography>
             </Stack>
           }
@@ -144,8 +142,8 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                       <Tooltip
                         title={
                           <Typography style={{ fontSize: 12, padding: 8 }}>
-                            Metrik ini diukur berdasarkan aktivitas dari sebuah akun partisipasi, terhadap interaksi atau
-                            pengembangan akun tersebut
+                            Metrik ini diukur berdasarkan aktivitas akun partisipasi, termasuk interaksi dan perkembangan
+                            akun tersebut.
                           </Typography>
                         }
                         arrow>
@@ -191,8 +189,8 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                       <Tooltip
                         title={
                           <Typography style={{ fontSize: 12, padding: 8 }}>
-                            Metrik ini diukur melalui aktivitas dari sebuah akun partisipasi, terhadap interaksi konten yang
-                            dia miliki
+                            Metrik ini diukur melalui aktivitas akun partisipasi terkait interaksi dengan konten yang
+                            dimilikinya.
                           </Typography>
                         }
                         arrow>
