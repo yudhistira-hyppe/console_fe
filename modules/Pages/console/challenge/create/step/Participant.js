@@ -47,7 +47,9 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
         </Stack>
 
         <Stack direction="column" spacing={1}>
-          <Typography>Tipe Akun</Typography>
+          <Typography>
+            Tipe Akun<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <FormGroup row style={{ gap: 16 }}>
             <FormControlLabel
               control={
@@ -91,7 +93,9 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
         </Stack>
 
         <Stack direction="column" spacing={1}>
-          <Typography>Rentang Umur</Typography>
+          <Typography>
+            Rentang Umur<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <FormGroup row style={{ gap: 16 }}>
             {['<14', '14-28', '29-43', '>44', 'lainnya'].map((item, key) => (
               <FormControlLabel
@@ -119,7 +123,9 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
         </Stack>
 
         <Stack direction="column" spacing={1}>
-          <Typography>Jenis Kelamin</Typography>
+          <Typography>
+            Jenis Kelamin<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <FormGroup row style={{ gap: 16 }}>
             <FormControlLabel
               control={

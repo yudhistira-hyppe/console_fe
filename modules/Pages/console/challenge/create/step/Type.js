@@ -40,7 +40,9 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
       <Grid container spacing={3} mt={3}>
         <Grid item xs={12} md={4}>
           <Stack direction="column" spacing={1}>
-            <Typography>Object Challenge</Typography>
+            <Typography>
+              Object Challenge<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <TextField
               select
               color="secondary"
@@ -111,16 +113,15 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
         {inputValue?.object === 'account' && (
           <Grid item xs={12}>
             <Stack direction="column" spacing={3}>
-              <Typography>Pilih Metrik</Typography>
+              <Typography>
+                Pilih Metrik<span style={{ color: 'red' }}>*</span>
+              </Typography>
 
               <RadioGroup
                 value={inputValue?.metric}
                 onChange={(e) => {
                   handleInputChange('metric', e.target.value);
                   if (e.target.value === 'activity') {
-                    handleInputChange('activity_referal', 0);
-                    handleInputChange('activity_following', 0);
-                  } else {
                     handleInputChange('interaction_create_vid', 0);
                     handleInputChange('interaction_create_pic', 0);
                     handleInputChange('interaction_create_diary', 0);
@@ -131,6 +132,9 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                     handleInputChange('interaction_view_diary', 0);
                     handleInputChange('with_hashtag', false);
                     handleInputChange('hashtag', 0);
+                  } else {
+                    handleInputChange('activity_referal', 0);
+                    handleInputChange('activity_following', 0);
                   }
                 }}>
                 <FormControlLabel
@@ -224,7 +228,9 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                         onChange={(e) => handleInputChange('hashtag', e.target.value)}
                         InputProps={{
                           startAdornment: (
-                            <InputAdornment style={{ paddingRight: 14, fontWeight: 'bold' }}>#</InputAdornment>
+                            <InputAdornment position="start" style={{ paddingRight: 14, fontWeight: 'bold' }}>
+                              #
+                            </InputAdornment>
                           ),
                         }}
                         style={{ width: 200 }}
@@ -337,7 +343,9 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
         {inputValue?.object === 'content' && (
           <Grid item xs={12}>
             <Stack direction="column" spacing={1}>
-              <Typography>Pilih Metrik</Typography>
+              <Typography>
+                Pilih Metrik<span style={{ color: 'red' }}>*</span>
+              </Typography>
 
               <FormGroup>
                 <FormControlLabel

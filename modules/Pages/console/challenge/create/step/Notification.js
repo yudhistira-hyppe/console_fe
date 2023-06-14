@@ -114,7 +114,9 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
         </Stack>
         <Stack direction="column" spacing={1}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Banner Search</Typography>
+            <Typography>
+              Banner Search<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <Tooltip
               title={
                 <Stack direction="column" p="8px">
@@ -168,7 +170,9 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
         <Divider flexItem />
         <Stack direction="column" spacing={1}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Pop-Up</Typography>
+            <Typography>
+              Pop-Up<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <Tooltip
               title={
                 <Stack direction="column" p="8px">
@@ -222,7 +226,9 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
         <Divider flexItem />
         <Stack direction="column" spacing={1}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Notifikasi Push</Typography>
+            <Typography>
+              Notifikasi Push<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <Tooltip
               title={
                 <Stack direction="column" p="8px">

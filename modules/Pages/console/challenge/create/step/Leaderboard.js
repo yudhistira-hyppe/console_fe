@@ -72,7 +72,9 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
           />
         </Stack>
         <Stack direction="column" spacing={1}>
-          <Typography>Banner Leaderboard</Typography>
+          <Typography>
+            Banner Leaderboard<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <Stack direction="row" spacing={3}>
             <label htmlFor="banner-background">
               <Box
@@ -114,7 +116,9 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
           </Stack>
         </Stack>
         <Stack direction="column" spacing={1}>
-          <Typography>Warna Background</Typography>
+          <Typography>
+            Warna Background<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <Stack direction="row" spacing={2}>
             <Box
               style={{

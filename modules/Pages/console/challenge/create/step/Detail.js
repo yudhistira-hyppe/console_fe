@@ -13,7 +13,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
       <Grid container spacing={3} mt={3}>
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Typography>Nama Challenge</Typography>
+            <Typography>
+              Nama Challenge<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <TextField
               placeholder="Tulis Nama Challenge"
               color="secondary"
@@ -26,7 +28,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         </Grid>
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Typography>Jenis Challenge</Typography>
+            <Typography>
+              Jenis Challenge<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <TextField
               select
               color="secondary"
@@ -65,7 +69,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         </Grid>
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Typography>Siklus Perulangan</Typography>
+            <Typography>
+              Siklus Perulangan<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <TextField
               color="secondary"
               value={inputValue?.cycle || 0}
@@ -117,7 +123,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         <Grid item xs={12} md={7}></Grid>
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Typography>Lama Siklus</Typography>
+            <Typography>
+              Lama Siklus<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <TextField
               color="secondary"
               value={`${inputValue?.cycle_day || 0} Hari`}
@@ -174,17 +182,23 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
           </Stack>
 
           {inputValue?.cycle_day >= 1 && (
-            <Typography style={{ color: '#FC5555', fontWeight: 'bold', marginTop: 24 }}>
-              Durasi challenge akan berlangsung selama{' '}
-              {((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day} hari
-            </Typography>
+            <Stack direction="row" mt={3} style={{ padding: 12, backgroundColor: '#EDEDED', borderRadius: 6 }}>
+              <Typography style={{ color: '#737373' }}>
+                Total Durasi Kompetisi akan berlangsung selama{' '}
+                <strong style={{ color: '#3F3F3F' }}>
+                  {((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day} hari
+                </strong>
+              </Typography>
+            </Stack>
           )}
         </Grid>
         <Grid item xs={12} md={7}></Grid>
         <Grid item xs={12} md={5}>
           <Stack direction="row">
             <Stack direction="column" spacing={1}>
-              <Typography>Tanggal Mulai</Typography>
+              <Typography>
+                Tanggal Mulai<span style={{ color: 'red' }}>*</span>
+              </Typography>
               <DatePicker
                 value={inputValue?.startdate || null}
                 minDate={dayjs().add(1, 'day').toDate()}
@@ -215,7 +229,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         </Grid>
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
-            <Typography>Waktu Mulai</Typography>
+            <Typography>
+              Waktu Mulai<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <DateTimePicker
               value={inputValue?.starthour || null}
               onChange={(newValue) => {
@@ -229,7 +245,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         </Grid>
         <Grid item xs={12} md={10}>
           <Stack direction="column" spacing={1}>
-            <Typography>Deskripsi Challenge</Typography>
+            <Typography>
+              Deskripsi Challenge<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <TextField
               placeholder="Tulis Nama Challenge"
               color="secondary"
@@ -249,7 +267,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               <Tooltip
                 title={
                   <Typography style={{ fontSize: 12, padding: 8 }}>
-                    Status pengguna (poin) yang telah dikumpulkan dihalaman leaderboard challenge
+                    Banner ini akan muncul pada halaman search, dan digunakan pada halaman detail challenge.
                   </Typography>
                 }
                 arrow>

@@ -138,7 +138,9 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                     {inputValue?.winner_ranking_badge?.map((item) => item?.ranking)?.includes(key + 1) && (
                       <Stack direction="row" alignItems="center" spacing={2}>
                         <Stack direction="column" spacing={1} style={{ position: 'relative' }}>
-                          <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>Badge Profile</Typography>
+                          <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>
+                            Badge Profile<span style={{ color: 'red' }}>*</span>
+                          </Typography>
                           <label htmlFor={`badge-profile-${key}`}>
                             <Box
                               style={{
@@ -212,7 +214,9 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                           <Typography style={{ color: '#737373', fontSize: 14 }}>Bentuk Badge: Kotak</Typography>
                         </Stack>
                         <Stack direction="column" spacing={1} style={{ position: 'relative' }}>
-                          <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>Badge Lainnya</Typography>
+                          <Typography style={{ fontWeight: 'bold', fontSize: 14 }}>
+                            Badge Lainnya<span style={{ color: 'red' }}>*</span>
+                          </Typography>
                           <label htmlFor={`badge-other-${key}`}>
                             <Box
                               style={{
@@ -310,7 +314,9 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                 ))}
               </FormGroup>
               <Stack direction="column" spacing={1}>
-                <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Ketentuan Gambar</Typography>
+                <Typography style={{ fontWeight: 'bold', color: '#737373' }}>
+                  Ketentuan Gambar<span style={{ color: 'red' }}>*</span>
+                </Typography>
                 <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran Gambar : 80px x 80px</Typography>
                 <Typography style={{ color: '#737373', fontSize: 14 }}>Format Gambar : PNG</Typography>
                 <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Min 800kb - Max 2mb</Typography>
@@ -391,8 +397,8 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                   inputValue?.winner_ranking_price?.length >= 1
                                     ? inputValue?.winner_ranking_price?.find((item) => item?.ranking == key + 1)
                                       ? inputValue?.winner_ranking_price?.filter((item) => item?.ranking != key + 1)
-                                      : [...inputValue?.winner_ranking_price, { ranking: key + 1, price: 0 }]
-                                    : [{ ranking: key + 1, price: 0 }],
+                                      : [...inputValue?.winner_ranking_price, { ranking: key + 1, price: '' }]
+                                    : [{ ranking: key + 1, price: '' }],
                                 );
                               }
                             }}
@@ -461,7 +467,9 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
               {inputValue?.winner_rewards_type === 'poin' && (
                 <Stack direction="column" spacing={2} mt={1}>
                   <Stack direction="column" spacing={1}>
-                    <Typography>Set Hadiah Per-poin</Typography>
+                    <Typography>
+                      Set Hadiah Per-poin<span style={{ color: 'red' }}>*</span>
+                    </Typography>
                     <TextField
                       placeholder="0"
                       color="secondary"
@@ -487,7 +495,9 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                     />
                   </Stack>
                   <Stack direction="column" spacing={1}>
-                    <Typography>Set Maximal Hadiah</Typography>
+                    <Typography>
+                      Set Maximal Hadiah<span style={{ color: 'red' }}>*</span>
+                    </Typography>
                     <TextField
                       placeholder="0"
                       color="secondary"
