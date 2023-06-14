@@ -20,7 +20,7 @@ import Router from 'next/router';
 const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
 const CreateChallenge = ({ moreSlug }) => {
-  const [activeStep, setActiveStep] = useState(3);
+  const [activeStep, setActiveStep] = useState(0);
   const [inputValue, setInputValue] = useState({});
   const breadcrumbs = moreSlug
     ? [
@@ -33,14 +33,16 @@ const CreateChallenge = ({ moreSlug }) => {
         { label: 'Buat Challenge', isActive: true },
       ];
 
+  useEffect(() => {
+    window.scroll({ top: 0, behavior: 'smooth' });
+  }, [activeStep]);
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    window.scroll({ top: 0, behavior: 'smooth' });
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    window.scroll({ top: 0, behavior: 'smooth' });
   };
 
   const handleInputChange = (kind, value) => {
