@@ -7,6 +7,8 @@ import TableSection from './TableSection';
 import { toast } from 'react-hot-toast';
 import moment from 'moment';
 import { Typography } from '@material-ui/core';
+import { useGetListChallengeQuery } from 'api/console/challenge';
+import Router from 'next/router';
 
 const ChallengeTabDraftComponent = () => {
   const [filter, setFilter] = useState({
@@ -26,48 +28,59 @@ const ChallengeTabDraftComponent = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
+      ascending: filter.descending === 'true' ? true : false,
+      menuChallenge: 'DRAFT',
     });
 
-    filter.search !== '' && Object.assign(params, { search: filter.search });
+    filter.search !== '' && Object.assign(params, { nameChallenge: filter.search });
     filter.type.length >= 1 &&
       Object.assign(params, {
-        type: filter.type.map((item) => {
-          if (item === 'Konten') {
-            return 'content';
-          } else if (item === 'Akun') {
-            return 'account';
-          }
-        }),
+        objectChallenge: filter.type
+          .map((item) => {
+            if (item === 'Konten') {
+              return 'KONTEN';
+            } else if (item === 'Akun') {
+              return 'AKUN';
+            }
+          })
+          ?.join(','),
       });
     filter.status.length >= 1 &&
       Object.assign(params, {
-        status: filter.status.map((item) => {
-          if (item === 'Sedang Berjalan') {
-            return 'ONGOING';
-          } else if (item === 'Akan Datang') {
-            return 'UPCOMING';
-          } else if (item === 'Selesai') {
-            return 'FINISH';
-          }
-        }),
+        statusChallenge: filter.status
+          .map((item) => {
+            if (item === 'Sedang Berjalan') {
+              return 'SEDANG BERJALAN';
+            } else if (item === 'Akan Datang') {
+              return 'AKAN DATANG';
+            } else if (item === 'Selesai') {
+              return 'SELESAI';
+            }
+          })
+          ?.join(','),
       });
     filter.join.length >= 1 &&
       Object.assign(params, {
-        join: filter.join.map((item) => {
-          if (item === 'Semua Pengguna') {
-            return 'ALL';
-          } else if (item === 'Dengan Undangan') {
-            return 'INVITE';
-          }
-        }),
+        caraGabung: filter.join
+          .map((item) => {
+            if (item === 'Semua Pengguna') {
+              return 'SEMUA PENGGUNA';
+            } else if (item === 'Dengan Undangan') {
+              return 'DENGAN UNDANGAN';
+            }
+          })
+          ?.join(','),
       });
-    filter.createdAt[0] && params.push(`startdate=${filter.createdAt[0]}`);
-    filter.createdAt[1] && params.push(`enddate=${filter.createdAt[1]}`);
+    filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
+
+    return params;
   };
 
+  const { data: listChallenge, isFetching: loadingChallenge } = useGetListChallengeQuery(getParams());
+
   useEffect(() => {
-    if (filter.page >= 1 && listMusic?.data?.length < 1) {
+    if (filter.page >= 1 && listChallenge?.data?.length < 1) {
       toast.success('Semua data sudah ditampilkan');
       setFilter((prevVal) => {
         return {
@@ -76,13 +89,13 @@ const ChallengeTabDraftComponent = () => {
         };
       });
     }
-  }, [filter]);
+  }, [filter, loadingChallenge]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        order: e.target.value,
+        descending: e.target.value,
       };
     });
   };
@@ -199,10 +212,14 @@ const ChallengeTabDraftComponent = () => {
       <PageContainer heading="">
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>50</Typography>
+            <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>{listChallenge?.total || 0}</Typography>
             <Typography style={{ fontWeight: 'bold' }}>Total Challenge</Typography>
           </Stack>
-          <Button variant="contained" color="secondary" style={{ height: 40 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={{ height: 40 }}
+            onClick={() => Router.push('/challenge/create')}>
             <Typography style={{ fontSize: 14 }}>Tambah Challenge Baru</Typography>
           </Button>
         </Stack>
@@ -212,10 +229,8 @@ const ChallengeTabDraftComponent = () => {
             filter={filter}
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
-            loading={false}
-            listTickets={{
-              data: [{}, {}, {}],
-            }}
+            loading={loadingChallenge}
+            listTickets={listChallenge}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
           />

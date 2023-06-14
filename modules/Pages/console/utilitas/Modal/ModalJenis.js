@@ -2,7 +2,7 @@ import { AddPhotoAlternate } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
 import { LoadingButton } from '@mui/lab';
 import { Avatar, Box, Button, Modal, Stack, TextField, Typography } from '@mui/material';
-import { useCreateInterestMutation, useUpdateInterestMutation } from 'api/console/utilitas/interest';
+import { useCreateJenisChallengeMutation, useUpdateJenisChallengeMutation } from 'api/console/utilitas/challenge';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -37,51 +37,32 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ModalInterest = ({ open, handleClose, data }) => {
+const ModalJenis = ({ open, handleClose, data }) => {
   const classes = useStyles();
   const [urlImage, setUrlImage] = useState('');
   const [inputValue, setInputValue] = useState({
-    icon: '',
-    interest_id: '',
-    interest_en: '',
+    name: '',
+    description: '',
   });
-  const [createInterest, { isLoading: loadingCreate }] = useCreateInterestMutation();
-  const [updateInterest, { isLoading: loadingUpdate }] = useUpdateInterestMutation();
+  const [createJenis, { isLoading: loadingCreate }] = useCreateJenisChallengeMutation();
+  const [updateJenis, { isLoading: loadingUpdate }] = useUpdateJenisChallengeMutation();
 
   useEffect(() => {
     setInputValue({
-      icon: '' || data?.icon,
-      interest_id: data?.interestNameId || '',
-      interest_en: data?.interestName || '',
+      name: '' || data?.name,
+      description: '' || data?.description,
     });
-    setUrlImage(data?.icon);
   }, [data]);
-
-  const handleUploadImage = (e) => {
-    if (e.target.files[0]?.type !== 'image/png') {
-      alert('salah format woyy 🤬');
-      return;
-    } else {
-      const blob = new Blob(e.target.files, { type: 'image/png' });
-      const url = URL.createObjectURL(blob);
-      setInputValue({ ...inputValue, icon: e.target.files });
-      setUrlImage(url);
-    }
-  };
 
   const checkDisable = () => {
     let disable = false;
 
     if (isEmpty(data)) {
-      if (!inputValue?.icon || !inputValue?.interest_en || !inputValue.interest_id) {
+      if (!inputValue?.name || !inputValue?.description) {
         disable = true;
       }
     } else {
-      if (
-        inputValue?.icon === data?.icon &&
-        inputValue?.interest_id === data?.interestNameId &&
-        inputValue?.interest_en === data?.interestName
-      ) {
+      if (inputValue?.name === data?.name && inputValue?.description === data?.description) {
         disable = true;
       }
     }
@@ -90,30 +71,28 @@ const ModalInterest = ({ open, handleClose, data }) => {
   };
 
   const handleSubmit = () => {
-    let formData = new FormData();
-    formData.append('interestName', inputValue?.interest_en);
-    formData.append('interestNameId', inputValue?.interest_id);
-    formData.append('icon_file', inputValue?.icon?.[0]);
+    let formData = {
+      name: inputValue?.name,
+      description: inputValue?.description,
+    };
 
     setInputValue({
-      icon: '' || data?.icon,
-      interest_id: data?.interestNameId || '',
-      interest_en: data?.interestName || '',
+      name: '' || data?.name,
+      description: '' || data?.description,
     });
     handleClose();
     if (isEmpty(data)) {
-      createInterest(formData).then((res) => {
+      createJenis(formData).then((res) => {
         if (res?.data) {
-          toast.success('Berhasil membuat interest');
+          toast.success('Berhasil menambahkan jenis challenge');
         } else {
           toast.error(res?.error?.data?.message);
         }
       });
     } else {
-      formData.append('repoID', data?._id);
-      updateInterest(formData).then((res) => {
+      updateJenis({ id: data?._id, formData }).then((res) => {
         if (res?.data) {
-          toast.success('Berhasil mengupdate interest');
+          toast.success('Berhasil mengupdate jenis challenge');
         } else {
           toast.error(res?.error?.data?.message);
         }
@@ -121,44 +100,32 @@ const ModalInterest = ({ open, handleClose, data }) => {
     }
   };
 
+  console.log(data);
+
   return (
     <Modal open={open} disableEscapeKeyDown>
       <Box sx={style}>
         <Stack direction="column" gap={3}>
           <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>
-            {data ? 'Perubahan Interest' : 'Penambahan Interest Baru'}
+            {data ? 'Perubahan Jenis Challenge' : 'Penambahan Jenis Challenge Baru'}
           </Typography>
-
-          <label htmlFor="upload_icon" style={{ width: 170 }}>
-            <Box className={classes.uploadBox} style={{ width: 170 }}>
-              {inputValue?.icon ? (
-                <Avatar src={urlImage} alt="Thumbnail Music" variant="square" style={{ width: '100%', height: '100%' }} />
-              ) : (
-                <>
-                  <AddPhotoAlternate style={{ fontSize: 64, color: '#DADADA' }} />
-                  <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Thumbnail</Typography>
-                </>
-              )}
-              <input hidden id="upload_icon" type="file" accept="image/png" onChange={handleUploadImage} />
-            </Box>
-          </label>
           <Stack direction="column" gap={2}>
             <TextField
-              placeholder="Input Interest Name (ID)"
-              label="Interest Name (ID)"
+              placeholder="Input Jenis Challenge"
+              label="Jenis Challenge"
               color="secondary"
-              value={inputValue.interest_id}
-              onChange={(e) => setInputValue({ ...inputValue, interest_id: e.target.value })}
+              value={inputValue.name}
+              onChange={(e) => setInputValue({ ...inputValue, name: e.target.value })}
               inputProps={{
                 maxLength: 30,
               }}
             />
             <TextField
-              placeholder="Input Interest Name (EN)"
-              label="Interest Name (EN)"
+              placeholder="Input Deskripsi"
+              label="Deskripsi"
               color="secondary"
-              value={inputValue.interest_en}
-              onChange={(e) => setInputValue({ ...inputValue, interest_en: e.target.value })}
+              value={inputValue.description}
+              onChange={(e) => setInputValue({ ...inputValue, description: e.target.value })}
               inputProps={{
                 maxLength: 30,
               }}
@@ -174,7 +141,7 @@ const ModalInterest = ({ open, handleClose, data }) => {
               onClick={handleSubmit}
               disabled={checkDisable()}>
               <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
-                Simpan Perubahan
+                {data ? 'Simpan Perubahan' : 'Tambah'}
               </Typography>
             </LoadingButton>
             <Button fullWidth variant="outlined" color="secondary" sx={{ height: 40 }} onClick={handleClose}>
@@ -189,4 +156,4 @@ const ModalInterest = ({ open, handleClose, data }) => {
   );
 };
 
-export default ModalInterest;
+export default ModalJenis;

@@ -17,7 +17,7 @@ const uploadImageApsara = async (req, res) => {
           FileName: 'filename.jpg',
           RegionId: 'ap-southeast-5',
           ImageType: 'default',
-          StorageLocation: 'vod-staging.oss-ap-southeast-5.aliyuncs.com',
+          StorageLocation: process.env.NEXT_PUBLIC_APSARA_URL,
         },
         { method: 'POST' },
       )

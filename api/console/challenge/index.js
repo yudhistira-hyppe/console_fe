@@ -14,7 +14,22 @@ export const challengeApi = createApi({
       }),
       providesTags: ['list'],
     }),
+    duplicateChallenge: build.mutation({
+      query: (id) => ({
+        url: `/challenge/duplicate/${id}`,
+        method: 'GET',
+      }),
+      invalidatesTags: ['list'],
+    }),
+    updateChallenge: build.mutation({
+      query: ({ id, formData }) => ({
+        url: `/challenge/update/${id}`,
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: ['list'],
+    }),
   }),
 });
 
-export const { useGetListChallengeQuery } = challengeApi;
+export const { useGetListChallengeQuery, useDuplicateChallengeMutation, useUpdateChallengeMutation } = challengeApi;

@@ -9,7 +9,6 @@ import { Typography } from '@material-ui/core';
 import ChallengeTabMainComponent from './main';
 import ChallengeTabOtherComponent from './other';
 import ChallengeTabDraftComponent from './draft';
-import { useGetListChallengeQuery } from 'api/console/challenge';
 
 const ChallengeTabComponent = (props) => {
   const classes = useStyles();
@@ -20,8 +19,6 @@ const ChallengeTabComponent = (props) => {
   const onTabChange = (_, selectedTab) => {
     router.replace(`/challenge/${selectedTab}`);
   };
-
-  const { data: listChallenge, isLoading: loadingChallenge } = useGetListChallengeQuery({ page: 0, limit: 10 });
 
   return (
     <>

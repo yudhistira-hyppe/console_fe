@@ -36,7 +36,7 @@ const ChallengeDynamicPage = () => {
   return (
     <SecureConsolePage>
       {challengeProps.tab === 'create' ? (
-        <CreateChallenge />
+        <CreateChallenge moreSlug={slug[1]} />
       ) : (
         <ChallengeComponent tab={challengeProps.tab} detailId={challengeProps.detailId} />
       )}

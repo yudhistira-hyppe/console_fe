@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Tab } from '@mui/material';
+import { Divider, Stack, Tab } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -10,6 +10,9 @@ import Setting from './setting';
 import CreateMasterBank from './master-bank/create';
 import EditMasterBank from './master-bank/edit';
 import UtilityAds from './ads';
+import JenisChallenge from './jenis-challenge';
+import BadgeChallenge from './badge-challenge';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -30,15 +33,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UtilitasComponent = () => {
-  const [tab, setTab] = useState('');
+  const [tab, setTab] = useState('interest');
   const classes = useStyles();
   const router = useRouter();
 
   useEffect(() => {
     if (!isEmpty(router.query)) {
       setTab(router.query?.tab);
-    } else {
-      setTab('interest');
     }
   }, [router]);
 
@@ -60,6 +61,7 @@ const UtilitasComponent = () => {
         <Tab label="Setting" value="setting" className={classes.tab} />
         <Tab label="Bank" value="bank" className={classes.tab} />
         <Tab label="Pusat Iklan" value="ads" className={classes.tab} />
+        <Tab label="Challenge" value="challenge" className={classes.tab} />
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
         <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>
@@ -79,6 +81,21 @@ const UtilitasComponent = () => {
         </TabPanel>
         <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
           <UtilityAds />
+        </TabPanel>
+        <TabPanel value="challenge" style={{ padding: 0, height: '100%' }}>
+          <Stack direction="column" gap={3}>
+            <Stack direction="column" gap={2}>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Jenis Challenge</Typography>
+              <JenisChallenge />
+            </Stack>
+
+            <Divider flexItem />
+
+            <Stack direction="column" gap={2}>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Badge Challenge</Typography>
+              <BadgeChallenge />
+            </Stack>
+          </Stack>
         </TabPanel>
       </div>
     </TabContext>

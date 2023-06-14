@@ -1,31 +1,31 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQueryWithHandleReauth } from 'api';
 
-export const masterBadgeApi = createApi({
-  reducerPath: 'utilitas/badge',
+export const challengeUtilityApi = createApi({
+  reducerPath: 'utilitas/challenge',
   baseQuery: customBaseQueryWithHandleReauth,
   tagTypes: ['list'],
   endpoints: (build) => ({
-    getListBadge: build.query({
+    getJenisChallenge: build.query({
       query: (data) => ({
-        url: '/badge/listing',
+        url: '/jenischallenge/listing',
         method: 'POST',
         body: data,
       }),
       providesTags: ['list'],
     }),
-    createBadgeChallenge: build.mutation({
+    createJenisChallenge: build.mutation({
       query: (data) => ({
-        url: '/badge',
+        url: '/jenischallenge',
         method: 'POST',
         body: data,
       }),
       invalidatesTags: ['list'],
     }),
-    updateBadgeChallenge: build.mutation({
+    updateJenisChallenge: build.mutation({
       query: ({ id, formData }) => ({
-        url: `/badge/update/${id}`,
-        method: 'POST',
+        url: `/jenischallenge/${id}`,
+        method: 'PUT',
         body: formData,
       }),
       invalidatesTags: ['list'],
@@ -33,4 +33,5 @@ export const masterBadgeApi = createApi({
   }),
 });
 
-export const { useGetListBadgeQuery, useCreateBadgeChallengeMutation, useUpdateBadgeChallengeMutation } = masterBadgeApi;
+export const { useGetJenisChallengeQuery, useCreateJenisChallengeMutation, useUpdateJenisChallengeMutation } =
+  challengeUtilityApi;

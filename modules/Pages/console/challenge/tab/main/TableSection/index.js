@@ -52,6 +52,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const [openModal, setOpenModal] = useState({
     showModal: false,
     status: '',
+    selected: {},
   });
 
   const handleOpenMenu = (event, index) => {
@@ -89,10 +90,12 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       <ModalConfirmation
         showModal={openModal.showModal}
         status={openModal.status}
+        selectedItem={openModal.selected}
         onClose={() => {
           setOpenModal({
             showModal: !openModal.showModal,
             status: '',
+            selected: {},
           });
         }}
       />
@@ -155,6 +158,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               value={filter.descending}
               onChange={handleOrder}
               displayEmpty
+              color="secondary"
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: 'white' }}>
               <MenuItem value={'true'}>Terbaru</MenuItem>
@@ -206,12 +210,12 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       // onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}
                     >
                       <Stack direction="row" alignItems="center" gap="15px" width={130}>
-                        <Avatar src={''} variant="rounded" alt="X" />
+                        <Avatar src={item?.bannerLeaderboard} variant="rounded" alt="X" />
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          {item?.description || 'Hyppers of The Week'}
+                          {item?.nameChallenge || 'Hyppers of The Week'}
                         </Typography>
                       </Stack>
                     </TableCell>
@@ -256,23 +260,31 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 110 }}>
-                        {item?.join || 'Dengan Undangan'}
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '14px', width: 110, textTransform: 'capitalize', color: '#00000099' }}>
+                        {item?.caragabung === 'DENGAN UNDANGAN' && 'Dengan Undangan'}
+                        {item?.caragabung === 'SEMUA PENGGUNA' && 'Semua Pengguna'}
+                        {!item?.caragabung && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 50 }}>
-                        {item?.join || 'Konten'}
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '14px', width: 80, textTransform: 'capitalize', color: '#00000099' }}>
+                        {item?.objectChallenge === 'AKUN' && 'Akun'}
+                        {item?.objectChallenge === 'KONTEN' && 'Konten'}
+                        {!item?.objectChallenge && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 80 }}>
-                        {moment().format('DD/MM/YYYY')}
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 120, color: '#00000099' }}>
+                        {moment(item?.startChallenge).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '14px', width: 80 }}>
-                        {moment().format('DD/MM/YYYY')}
+                      <Typography variant="body1" style={{ fontSize: '14px', width: 120, color: '#00000099' }}>
+                        {moment(item?.endChallenge).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -287,7 +299,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         MenuListProps={{
                           'aria-labelledby': `basic-button-${i}`,
                         }}>
-                        {item?.status !== 'Sedang Berjalan' && (
+                        {item?.statuscurrentChallenge !== 'SEDANG BERJALAN' && (
                           <MenuItem
                             onClick={() => {
                               handleCloseMenu();
@@ -305,6 +317,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             setOpenModal({
                               showModal: !openModal.showModal,
                               status: 'duplicate',
+                              selected: item?._id,
                             });
                           }}>
                           <ListItemIcon>
@@ -312,13 +325,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           </ListItemIcon>
                           <ListItemText>Duplikat</ListItemText>
                         </MenuItem>
-                        {item?.status !== 'Sedang Berjalan' && (
+                        {item?.statuscurrentChallenge !== 'SEDANG BERJALAN' && (
                           <MenuItem
                             onClick={() => {
                               handleCloseMenu();
                               setOpenModal({
                                 showModal: !openModal.showModal,
                                 status: 'delete',
+                                selected: item?._id,
                               });
                             }}>
                             <ListItemIcon>

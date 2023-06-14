@@ -10,15 +10,17 @@ const ChallengePage = () => {
     if (authUser) {
       const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
-      if (access.map((item) => item?.nameModule)) {
-        router.replace('/challenge/main');
-      } else if (access.map((item) => item?.nameModule)) {
-        router.replace('/challenge/competition');
-      } else if (access.map((item) => item?.nameModule)) {
-        router.replace('/challenge/draft');
-      } else {
-        router.replace('/');
-      }
+      router.replace('/challenge/main');
+
+      // if (access.map((item) => item?.nameModule)) {
+      //   router.replace('/challenge/main');
+      // } else if (access.map((item) => item?.nameModule)) {
+      //   router.replace('/challenge/competition');
+      // } else if (access.map((item) => item?.nameModule)) {
+      //   router.replace('/challenge/draft');
+      // } else {
+      //   router.replace('/');
+      // }
     } else {
       router.replace('/signin');
     }

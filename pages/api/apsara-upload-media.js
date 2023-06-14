@@ -16,7 +16,7 @@ const uploadMediaApsara = async (req, res) => {
           Title: 'this is a sample',
           FileName: 'filename.mp4',
           RegionId: 'ap-southeast-5',
-          StorageLocation: 'vod-staging.oss-ap-southeast-5.aliyuncs.com',
+          StorageLocation: process.env.NEXT_PUBLIC_APSARA_URL,
         },
         { method: 'POST' },
       )

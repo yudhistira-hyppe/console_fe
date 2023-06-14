@@ -4,6 +4,8 @@ import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
 import { toast } from 'react-hot-toast';
+import { useDuplicateChallengeMutation, useUpdateChallengeMutation } from 'api/console/challenge';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -17,10 +19,34 @@ const style = {
   borderRadius: '12px',
 };
 
-export default function ModalConfirmation({ showModal, status, onClose, onConfirm }) {
-  const handleStatus = () => {};
+export default function ModalConfirmation({ showModal, status, onClose, selectedItem }) {
+  const [duplicateChallenge, { isLoading: loadingDuplicate }] = useDuplicateChallengeMutation();
+  const [updateChallenge, { isLoading: loadingUpdate }] = useUpdateChallengeMutation();
 
-  const handleDelete = () => {};
+  const handleDuplicate = () => {
+    duplicateChallenge(selectedItem).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message?.info[0], { duration: 3000 });
+      } else {
+        toast.success('Berhasil Duplikasi Challenge', { duration: 3000 });
+      }
+      onClose();
+    });
+  };
+
+  const handleDelete = () => {
+    let formData = new FormData();
+    formData.append('statusChallenge', 'NONACTIVE');
+
+    updateChallenge({ id: selectedItem, formData }).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message?.info[0], { duration: 3000 });
+      } else {
+        toast.success('Berhasil Menghapus Challenge', { duration: 3000 });
+      }
+      onClose();
+    });
+  };
 
   return (
     <div>
@@ -45,14 +71,21 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button
+            <LoadingButton
+              loading={loadingDuplicate || loadingUpdate}
               variant="contained"
-              color="primary"
-              onClick={() => (status === 'delete' ? handleDelete() : handleStatus())}>
+              color="secondary"
+              onClick={() => {
+                if (status === 'delete' || status === 'delete-draft') {
+                  handleDelete();
+                } else if (status === 'duplicate') {
+                  handleDuplicate();
+                }
+              }}>
               {status === 'duplicate' && 'Duplikasi'}
               {status === 'delete' && 'Hapus'}
               {status === 'delete-draft' && 'Konfirmasi'}
-            </Button>
+            </LoadingButton>
             <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>

@@ -1,9 +1,13 @@
 import { Typography } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
-import { Card, Grid, MenuItem, Stack, TextField, Tooltip } from '@mui/material';
-import React from 'react';
+import { Button, Card, Grid, MenuItem, Stack, TextField, Tooltip } from '@mui/material';
+import Router from 'next/router';
+import React, { useState } from 'react';
+import ModalSelectedPeople from '../component/ModalSelectedPeople';
 
 const ComponentStepInvitation = ({ inputValue, handleInputChange }) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <Card sx={{ padding: 3 }}>
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -34,6 +38,9 @@ const ComponentStepInvitation = ({ inputValue, handleInputChange }) => {
               value={inputValue?.type_invitation || ''}
               onChange={(e) => {
                 handleInputChange('type_invitation', e.target.value);
+                if (e.target.value === 'all') {
+                  handleInputChange('invited_people', undefined);
+                }
               }}
               SelectProps={{
                 renderValue: (selected) => (
@@ -65,23 +72,45 @@ const ComponentStepInvitation = ({ inputValue, handleInputChange }) => {
           </Stack>
         </Grid>
         {inputValue?.type_invitation === 'invitation' && (
-          <Grid item xs={12} md={2}>
-            <Stack direction="column" spacing={1}>
-              <Typography>Total Partisipan</Typography>
-              <Typography
-                style={{
-                  width: 118,
-                  padding: '15px 0',
-                  textAlign: 'center',
-                  backgroundColor: '#EEEEEE',
-                  borderRadius: 6,
-                }}>
-                0
-              </Typography>
-            </Stack>
-          </Grid>
+          <>
+            <Grid item xs={12} md={2}>
+              <Stack direction="column" spacing={1} onClick={() => setShowModal(!showModal)}>
+                <Typography variant="body1" style={{ cursor: 'pointer' }}>
+                  Total Partisipan
+                </Typography>
+                <Typography
+                  style={{
+                    width: 118,
+                    padding: '15px 0',
+                    textAlign: 'center',
+                    backgroundColor: '#EEEEEE',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                  }}>
+                  {inputValue?.invited_people?.length || 0}
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={6} />
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ height: 40, width: 527 }}
+                onClick={() => Router.push('/challenge/create/participant')}>
+                <Typography style={{ textTransform: 'capitalize', fontSize: 14 }}>Pilih Partisipan Challenge</Typography>
+              </Button>
+            </Grid>
+          </>
         )}
       </Grid>
+
+      <ModalSelectedPeople
+        showModal={showModal}
+        onClose={() => setShowModal(!showModal)}
+        selectedItem={inputValue?.invited_people}
+        handleInputChange={handleInputChange}
+      />
     </Card>
   );
 };
