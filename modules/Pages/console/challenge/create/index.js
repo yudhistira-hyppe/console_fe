@@ -114,10 +114,17 @@ const CreateChallenge = ({ moreSlug }) => {
           inputValue?.winner_rewards_type === 'ranking' &&
           isEmpty(inputValue?.winner_ranking_price)) ||
         (inputValue?.winner_rewards &&
+          inputValue?.winner_rewards_type === 'ranking' &&
+          inputValue?.winner_ranking_price?.map((item) => item?.price)?.filter((item) => item !== '')?.length < 1) ||
+        (inputValue?.winner_rewards &&
           inputValue?.winner_rewards_type === 'poin' &&
           !inputValue?.max_reward &&
           !inputValue?.point_reward) ||
-        (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)))
+        (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)) ||
+        (inputValue?.winner_badges &&
+          (inputValue?.winner_ranking_badge?.map((item) => item?.profile)?.filter((item) => item !== undefined)?.length <
+            1 ||
+            inputValue?.winner_ranking_badge?.map((item) => item?.other)?.filter((item) => item !== undefined)?.length < 1)))
     ) {
       disabled = true;
     } else if (
@@ -195,14 +202,30 @@ const CreateChallenge = ({ moreSlug }) => {
           ) : (
             <Box />
           )}
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{ borderRadius: 6, padding: '10px 20px' }}
-            onClick={handleNext}
-            disabled={checkDisabled()}>
-            <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Next</Typography>
-          </Button>
+          <Stack direction="row" gap={2}>
+            {activeStep === 6 && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                style={{ borderRadius: 6, padding: '10px 20px' }}
+                onClick={handleNext}
+                disabled={checkDisabled()}>
+                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                  Simpan Draft
+                </Typography>
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{ borderRadius: 6, padding: '10px 20px' }}
+              onClick={handleNext}
+              disabled={checkDisabled()}>
+              <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                {activeStep === 6 ? 'Buat Challenge' : 'Next'}
+              </Typography>
+            </Button>
+          </Stack>
         </Stack>
       )}
     </Stack>
