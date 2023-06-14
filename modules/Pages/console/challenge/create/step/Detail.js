@@ -2,11 +2,25 @@ import { Typography } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
 import { Card, Grid, IconButton, InputAdornment, MenuItem, Stack, Switch, TextField, Tooltip } from '@mui/material';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
+import { useGetJenisChallengeQuery } from 'api/console/utilitas/challenge';
 import dayjs from 'dayjs';
 import { isNumber } from 'lodash';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
+  const { data: listJenis, isLoading: loadingJenis } = useGetJenisChallengeQuery({ limit: 100, page: 0 });
+
+  useEffect(() => {
+    handleInputChange(
+      'enddate',
+      inputValue?.startdate
+        ? inputValue?.cycle_day
+          ? inputValue?.startdate.add(((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day, 'day')
+          : null
+        : null,
+    );
+  }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
+
   return (
     <Card sx={{ padding: 3 }}>
       <Typography style={{ fontWeight: 'bold' }}>Detail Challenge</Typography>
@@ -34,36 +48,35 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
             <TextField
               select
               color="secondary"
-              value={inputValue?.kind || ''}
+              value={inputValue?.kind?.name || ''}
               onChange={(e) => {
                 handleInputChange('kind', e.target.value);
                 handleInputChange('cycle', 0);
                 handleInputChange('cycle_day', 0);
               }}
               SelectProps={{
-                renderValue: (selected) => (
-                  <Typography>
-                    {selected === '' && 'Pilih Jenis Challenge'}
-                    {selected === 'main' && 'Challenge Utama'}
-                    {selected === 'other' && 'Challenge Lainnya'}
-                  </Typography>
-                ),
+                renderValue: (selected) => <Typography>{selected === '' ? 'Pilih Jenis Challenge' : selected}</Typography>,
                 displayEmpty: true,
+                MenuProps: {
+                  PaperProps: {
+                    style: {
+                      maxHeight: 280,
+                    },
+                  },
+                },
               }}>
-              <MenuItem value="main">
-                <Stack direction="column">
-                  <Typography>Challenge Utama</Typography>
-                  <Typography style={{ fontSize: 12, color: '#9B9B9B' }}>Challenge yang tidak bisa dihapus</Typography>
-                </Stack>
-              </MenuItem>
-              <MenuItem value="other">
-                <Stack direction="column">
-                  <Typography>Challenge Lainnya</Typography>
-                  <Typography style={{ fontSize: 12, color: '#9B9B9B' }}>
-                    Challenge yang bisa selesai atau dihapus
-                  </Typography>
-                </Stack>
-              </MenuItem>
+              {loadingJenis ? (
+                <MenuItem>Loading data...</MenuItem>
+              ) : (
+                listJenis?.data?.map((item, key) => (
+                  <MenuItem value={item} key={key}>
+                    <Stack direction="column">
+                      <Typography>{item?.name || '-'}</Typography>
+                      <Typography style={{ fontSize: 12, color: '#9B9B9B' }}>{item?.description || '-'}</Typography>
+                    </Stack>
+                  </MenuItem>
+                ))
+              )}
             </TextField>
           </Stack>
         </Grid>
@@ -202,7 +215,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               <DatePicker
                 value={inputValue?.startdate || null}
                 minDate={dayjs().add(1, 'day').toDate()}
-                onChange={(newValue) => handleInputChange('startdate', newValue)}
+                onChange={(newValue) => {
+                  handleInputChange('startdate', newValue);
+                }}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => <TextField color="secondary" {...params} />}
               />
@@ -210,15 +225,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
             <Stack direction="column" spacing={1}>
               <Typography>Tanggal Berakhir</Typography>
               <DatePicker
-                value={
-                  inputValue?.startdate
-                    ? inputValue?.cycle_day
-                      ? inputValue?.startdate
-                          .add(((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day, 'day')
-                          .toDate()
-                      : null
-                    : null
-                }
+                value={inputValue?.enddate || null}
                 onChange={() => {}}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#E0E0E0' }} disabled />}

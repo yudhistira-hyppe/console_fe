@@ -54,15 +54,15 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={inputValue?.account_type?.includes('unverified') || false}
+                  checked={inputValue?.account_type?.includes('TIDAKTERVERIFIKASI') || false}
                   onChange={() =>
                     handleInputChange(
                       'account_type',
                       inputValue?.account_type
-                        ? inputValue?.account_type?.find((item) => item === 'unverified')
-                          ? inputValue?.account_type?.filter((item) => item !== 'unverified')
-                          : [...inputValue?.account_type, 'unverified']
-                        : ['unverified'],
+                        ? inputValue?.account_type?.find((item) => item === 'TIDAKTERVERIFIKASI')
+                          ? inputValue?.account_type?.filter((item) => item !== 'TIDAKTERVERIFIKASI')
+                          : [...inputValue?.account_type, 'TIDAKTERVERIFIKASI']
+                        : ['TIDAKTERVERIFIKASI'],
                     )
                   }
                   color="secondary"
@@ -73,15 +73,15 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={inputValue?.account_type?.includes('verified') || false}
+                  checked={inputValue?.account_type?.includes('TERVERIFIKASI') || false}
                   onChange={() =>
                     handleInputChange(
                       'account_type',
                       inputValue?.account_type
-                        ? inputValue?.account_type?.find((item) => item === 'verified')
-                          ? inputValue?.account_type?.filter((item) => item !== 'verified')
-                          : [...inputValue?.account_type, 'verified']
-                        : ['verified'],
+                        ? inputValue?.account_type?.find((item) => item === 'TERVERIFIKASI')
+                          ? inputValue?.account_type?.filter((item) => item !== 'TERVERIFIKASI')
+                          : [...inputValue?.account_type, 'TERVERIFIKASI']
+                        : ['TERVERIFIKASI'],
                     )
                   }
                   color="secondary"

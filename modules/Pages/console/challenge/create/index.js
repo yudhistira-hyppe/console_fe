@@ -16,6 +16,7 @@ import { isEmpty } from 'lodash';
 import ChooseParticipant from './step/ChooseParticipant';
 import { ArrowLeft, ChevronLeft } from '@material-ui/icons';
 import Router from 'next/router';
+import ModalConfirmation from '../modal/ModalConfirmation';
 
 const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
@@ -32,6 +33,11 @@ const CreateChallenge = ({ moreSlug }) => {
         { label: 'Challenge', link: '/challenge' },
         { label: 'Buat Challenge', isActive: true },
       ];
+  const [openModal, setOpenModal] = useState({
+    showModal: false,
+    status: '',
+    selected: {},
+  });
 
   useEffect(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
@@ -208,7 +214,13 @@ const CreateChallenge = ({ moreSlug }) => {
                 variant="outlined"
                 color="secondary"
                 style={{ borderRadius: 6, padding: '10px 20px' }}
-                onClick={handleNext}
+                onClick={() => {
+                  setOpenModal({
+                    showModal: !openModal.showModal,
+                    status: 'create-draft',
+                    selected: inputValue,
+                  });
+                }}
                 disabled={checkDisabled()}>
                 <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                   Simpan Draft
@@ -219,7 +231,17 @@ const CreateChallenge = ({ moreSlug }) => {
               variant="contained"
               color="secondary"
               style={{ borderRadius: 6, padding: '10px 20px' }}
-              onClick={handleNext}
+              onClick={() => {
+                if (activeStep < 6) {
+                  handleNext();
+                } else {
+                  setOpenModal({
+                    showModal: !openModal.showModal,
+                    status: 'create',
+                    selected: inputValue,
+                  });
+                }
+              }}
               disabled={checkDisabled()}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                 {activeStep === 6 ? 'Buat Challenge' : 'Next'}
@@ -228,6 +250,19 @@ const CreateChallenge = ({ moreSlug }) => {
           </Stack>
         </Stack>
       )}
+
+      <ModalConfirmation
+        showModal={openModal.showModal}
+        status={openModal.status}
+        selectedItem={openModal.selected}
+        onClose={() => {
+          setOpenModal({
+            showModal: !openModal.showModal,
+            status: '',
+            selected: {},
+          });
+        }}
+      />
     </Stack>
   );
 };

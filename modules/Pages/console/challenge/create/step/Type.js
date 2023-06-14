@@ -54,13 +54,14 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   handleInputChange('activity_referal', 0);
                   handleInputChange('activity_following', 0);
                   handleInputChange('with_hashtag', false);
-                  handleInputChange('hashtag', '');
+                  handleInputChange('hashtag', undefined);
                   handleInputChange('content_like_vid', 0);
                   handleInputChange('content_like_pic', 0);
                   handleInputChange('content_like_diary', 0);
                   handleInputChange('content_view_vid', 0);
                   handleInputChange('content_view_diary', 0);
                 } else {
+                  handleInputChange('metric', undefined);
                   handleInputChange('activity_referal', 0);
                   handleInputChange('activity_following', 0);
                   handleInputChange('interaction_create_vid', 0);
@@ -72,7 +73,7 @@ const ComponentStepType = ({ inputValue, handleInputChange }) => {
                   handleInputChange('interaction_view_vid', 0);
                   handleInputChange('interaction_view_diary', 0);
                   handleInputChange('with_hashtag', false);
-                  handleInputChange('hashtag', 0);
+                  handleInputChange('hashtag', undefined);
                   handleInputChange('content_like_vid', 0);
                   handleInputChange('content_like_pic', 0);
                   handleInputChange('content_like_diary', 0);
