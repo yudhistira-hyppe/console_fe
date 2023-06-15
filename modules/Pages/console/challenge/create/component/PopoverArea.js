@@ -120,7 +120,8 @@ const PopoverArea = ({ anchorEl, handleClose, inputValue, handleInputChange }) =
             onClick={() => {
               handleClose();
               handleInputChange('area', selectedArea);
-            }}>
+            }}
+            disabled={selectedArea?.length < 1}>
             <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Terapkan</Typography>
           </Button>
         </Stack>
