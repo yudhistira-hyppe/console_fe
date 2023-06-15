@@ -56,17 +56,17 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Perempuan'}
                 value="Perempuan"
-                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('Perempuan')} color="secondary" />}
+                control={<Checkbox checked={filter.gender.includes('Perempuan')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Laki-laki'}
                 value="Laki-laki"
-                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('Laki-laki')} color="secondary" />}
+                control={<Checkbox checked={filter.gender.includes('Laki-laki')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Lainnya'}
                 value="Lainnya"
-                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('Lainnya')} color="secondary" />}
+                control={<Checkbox checked={filter.gender.includes('Lainnya')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
@@ -82,22 +82,22 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'< 14'}
                 value="< 14"
-                control={<Radio defaultChecked={false} checked={filter.age === '< 14'} color="secondary" />}
+                control={<Radio checked={filter.age === '< 14'} color="secondary" />}
               />
               <FormControlLabel
                 label={'15 - 28'}
                 value="15 - 28"
-                control={<Radio defaultChecked={false} checked={filter.age === '15 - 28'} color="secondary" />}
+                control={<Radio checked={filter.age === '15 - 28'} color="secondary" />}
               />
               <FormControlLabel
                 label={'29 - 43'}
                 value="29 - 43"
-                control={<Radio defaultChecked={false} checked={filter.age === '29 - 43'} color="secondary" />}
+                control={<Radio checked={filter.age === '29 - 43'} color="secondary" />}
               />
               <FormControlLabel
                 label={'> 44'}
                 value="> 44"
-                control={<Radio defaultChecked={false} checked={filter.age === '> 44'} color="secondary" />}
+                control={<Radio checked={filter.age === '> 44'} color="secondary" />}
               />
             </RadioGroup>
           </AccordionDetails>
@@ -136,7 +136,6 @@ const SearchSection = ({ filter, handleChange }) => {
                       value={JSON.stringify({ _id: item?._id, name: item?.stateName })}
                       control={
                         <Checkbox
-                          defaultChecked={false}
                           color="secondary"
                           checked={filter.area?.map((item) => item?.name).includes(item?.stateName)}
                         />
@@ -159,12 +158,12 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Tidak Terverifikasi'}
                 value="BASIC"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('BASIC')} color="secondary" />}
+                control={<Checkbox checked={filter.type.includes('BASIC')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Terverifikasi'}
                 value="PREMIUM"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('PREMIUM')} color="secondary" />}
+                control={<Checkbox checked={filter.type.includes('PREMIUM')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
