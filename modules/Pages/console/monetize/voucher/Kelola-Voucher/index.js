@@ -46,7 +46,7 @@ const KelolaVoucherComponent = () => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   useEffect(() => {
-    if (filter.page >= 1 && listVouchers?.data?.length < 1) {
+    if (listVouchers?.data?.length < 1) {
       toast.success('Semua data sudah ditampilkan');
       setFilter((prevVal) => {
         return {
@@ -55,7 +55,7 @@ const KelolaVoucherComponent = () => {
         };
       });
     }
-  }, [filter, loadingVoucher]);
+  }, [loadingVoucher]);
 
   const onChangeStatusHandler = (item) => {
     setShowModal(true);
