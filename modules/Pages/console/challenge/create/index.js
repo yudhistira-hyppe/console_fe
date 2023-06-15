@@ -67,6 +67,7 @@ const CreateChallenge = ({ moreSlug }) => {
       activeStep == 0 &&
       (!inputValue?.name ||
         !inputValue?.kind ||
+        !inputValue?.cycle ||
         !inputValue?.cycle_day ||
         !inputValue?.startdate ||
         !inputValue?.starthour ||
@@ -261,6 +262,7 @@ const CreateChallenge = ({ moreSlug }) => {
             status: '',
             selected: {},
           });
+          Router.replace('/challenge/main');
         }}
       />
     </Stack>

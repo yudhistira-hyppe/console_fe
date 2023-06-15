@@ -29,7 +29,20 @@ export const challengeApi = createApi({
       }),
       invalidatesTags: ['list'],
     }),
+    createChallenge: build.mutation({
+      query: (data) => ({
+        url: '/challenge',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['list'],
+    }),
   }),
 });
 
-export const { useGetListChallengeQuery, useDuplicateChallengeMutation, useUpdateChallengeMutation } = challengeApi;
+export const {
+  useGetListChallengeQuery,
+  useDuplicateChallengeMutation,
+  useUpdateChallengeMutation,
+  useCreateChallengeMutation,
+} = challengeApi;

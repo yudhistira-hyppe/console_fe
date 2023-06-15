@@ -342,22 +342,22 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
                         <Typography>{item?.type === 'update' ? 'Pilih Frekuensi' : 'Atur Waktu'}</Typography>
                       </MenuItem>
                       {(item?.type === 'upcoming' || item?.type === 'will_end') && (
-                        <MenuItem value="48">
+                        <MenuItem value="-48">
                           <Typography>48 Jam Sebelumnya</Typography>
                         </MenuItem>
                       )}
                       {(item?.type === 'upcoming' || item?.type === 'will_end') && (
-                        <MenuItem value="36">
+                        <MenuItem value="-36">
                           <Typography>36 Jam Sebelumnya</Typography>
                         </MenuItem>
                       )}
                       {(item?.type === 'upcoming' || item?.type === 'will_end') && (
-                        <MenuItem value="24">
+                        <MenuItem value="-24">
                           <Typography>24 Jam Sebelumnya</Typography>
                         </MenuItem>
                       )}
                       {(item?.type === 'upcoming' || item?.type === 'will_end') && (
-                        <MenuItem value="12">
+                        <MenuItem value="-12">
                           <Typography>12 Jam Sebelumnya</Typography>
                         </MenuItem>
                       )}
@@ -377,17 +377,17 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
                         </MenuItem>
                       )}
                       {item?.type === 'update' && (
-                        <MenuItem value="update-1">
+                        <MenuItem value="12">
                           <Typography>1x update: 12 jam setelah jam aktif challenge</Typography>
                         </MenuItem>
                       )}
                       {item?.type === 'update' && (
-                        <MenuItem value="update-2">
+                        <MenuItem value="8,16">
                           <Typography>2x update: 8 dan 16 jam setelah jam aktif challenge</Typography>
                         </MenuItem>
                       )}
                       {item?.type === 'update' && (
-                        <MenuItem value="update-3">
+                        <MenuItem value="6,12,18">
                           <Typography>3x update: 6,12,&18 jam setelah jam aktif challenge</Typography>
                         </MenuItem>
                       )}

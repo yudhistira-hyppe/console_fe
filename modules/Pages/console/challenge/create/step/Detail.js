@@ -15,7 +15,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
       'enddate',
       inputValue?.startdate
         ? inputValue?.cycle_day
-          ? inputValue?.startdate.add(((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day, 'day')
+          ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day, 'day')
           : null
         : null,
     );
@@ -83,67 +83,25 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
             <Typography>
-              Siklus Perulangan<span style={{ color: 'red' }}>*</span>
-            </Typography>
-            <TextField
-              color="secondary"
-              value={inputValue?.cycle || 0}
-              InputProps={{
-                disabled: true,
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Stack direction="row" spacing={1}>
-                      <IconButton
-                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) - 1)}
-                        size="small"
-                        style={{
-                          width: 24,
-                          height: 24,
-                          fontSize: 28,
-                          paddingBottom: 8,
-                          border: !inputValue?.cycle || inputValue?.cycle < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
-                        }}
-                        disabled={!inputValue?.cycle || inputValue?.cycle < 1}>
-                        -
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) + 1)}
-                        size="small"
-                        style={{
-                          width: 24,
-                          height: 24,
-                          fontSize: 24,
-                          border:
-                            (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
-                            (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
-                              ? '1px solid #C9C9C9'
-                              : '1px solid #3F3F3F',
-                        }}
-                        disabled={
-                          (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
-                          (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
-                        }>
-                        +
-                      </IconButton>
-                    </Stack>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <small style={{ color: '#9B9B9B' }}>Berapa kali leaderboard akan direset</small>
-          </Stack>
-        </Grid>
-        <Grid item xs={12} md={7}></Grid>
-        <Grid item xs={12} md={5}>
-          <Stack direction="column" spacing={1}>
-            <Typography>
               Lama Siklus<span style={{ color: 'red' }}>*</span>
             </Typography>
             <TextField
               color="secondary"
-              value={`${inputValue?.cycle_day || 0} Hari`}
+              value={inputValue?.cycle_day || 0}
+              sx={{
+                '> div': {
+                  paddingLeft: 0,
+                },
+              }}
               InputProps={{
                 disabled: true,
+                startAdornment: (
+                  <InputAdornment
+                    position="start"
+                    style={{ backgroundColor: '#E0E0E0', height: 56, maxHeight: 56, width: 100 }}>
+                    <Typography style={{ width: '100%', textAlign: 'center' }}>Hari</Typography>
+                  </InputAdornment>
+                ),
                 endAdornment: (
                   <InputAdornment position="end">
                     <Stack direction="row" spacing={1}>
@@ -189,9 +147,73 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 ),
               }}
             />
-            <small style={{ color: '#9B9B9B' }}>
-              Leaderboad pada challenge akan direset berdasarakan hari yang ditetukan
-            </small>
+            <small style={{ color: '#9B9B9B' }}>Tentukan per-berapa hari siklus leaderboard akan direset</small>
+          </Stack>
+        </Grid>
+        <Grid item xs={12} md={7}></Grid>
+        <Grid item xs={12} md={5}>
+          <Stack direction="column" spacing={1}>
+            <Typography>
+              Siklus Perulangan<span style={{ color: 'red' }}>*</span>
+            </Typography>
+            <TextField
+              color="secondary"
+              value={inputValue?.cycle || 0}
+              sx={{
+                '> div': {
+                  paddingLeft: 0,
+                },
+              }}
+              InputProps={{
+                disabled: true,
+                startAdornment: (
+                  <InputAdornment
+                    position="start"
+                    style={{ backgroundColor: '#E0E0E0', height: 56, maxHeight: 56, width: 100 }}>
+                    <Typography style={{ width: '100%', textAlign: 'center' }}>Siklus</Typography>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Stack direction="row" spacing={1}>
+                      <IconButton
+                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) - 1)}
+                        size="small"
+                        style={{
+                          width: 24,
+                          height: 24,
+                          fontSize: 28,
+                          paddingBottom: 8,
+                          border: !inputValue?.cycle || inputValue?.cycle < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
+                        }}
+                        disabled={!inputValue?.cycle || inputValue?.cycle < 1}>
+                        -
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) + 1)}
+                        size="small"
+                        style={{
+                          width: 24,
+                          height: 24,
+                          fontSize: 24,
+                          border:
+                            (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
+                            (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
+                              ? '1px solid #C9C9C9'
+                              : '1px solid #3F3F3F',
+                        }}
+                        disabled={
+                          (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
+                          (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
+                        }>
+                        +
+                      </IconButton>
+                    </Stack>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <small style={{ color: '#9B9B9B' }}>Berapa kali leaderboard akan direset</small>
           </Stack>
 
           {inputValue?.cycle_day >= 1 && (
@@ -199,7 +221,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               <Typography style={{ color: '#737373' }}>
                 Total Durasi Kompetisi akan berlangsung selama{' '}
                 <strong style={{ color: '#3F3F3F' }}>
-                  {((inputValue?.cycle ? inputValue?.cycle : 0) + 1) * inputValue?.cycle_day} hari
+                  {(inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day} hari
                 </strong>
               </Typography>
             </Stack>
