@@ -53,22 +53,22 @@ const EditChallenge = () => {
   return (
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      {/* <Stack
-        direction="row"
-        alignItems="center"
-        gap={1}
-        onClick={() => Router.replace('/challenge/')}
-        sx={{
-          width: 'fit-content',
-          '&:hover': {
-            cursor: 'pointer',
-          },
-        }}>
-        <ChevronLeft style={{ fontSize: 28 }} />
-        <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Kembali</Typography>
-      </Stack> */}
+
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Edit Challenge</Typography>
+        <Stack
+          direction="row"
+          alignItems="center"
+          gap={1}
+          onClick={() => Router.back()}
+          sx={{
+            width: 'fit-content',
+            '&:hover': {
+              cursor: 'pointer',
+            },
+          }}>
+          <ChevronLeft style={{ fontSize: 28 }} />
+          <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Kembali</Typography>
+        </Stack>
         <ScrollBar style={{ width: 950 }}>
           <Stepper style={{ backgroundColor: 'transparent', padding: 0 }} activeStep={activeStep}>
             {steps.map((label, index) => {
