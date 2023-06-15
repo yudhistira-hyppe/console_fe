@@ -11,7 +11,7 @@ const ChallengeComponent = dynamic(() => import('modules/Pages/console/challenge
   loading: () => <PageLoader />,
 });
 
-const validDatabaseTab = ['main', 'other', 'draft', 'create', 'detail'];
+const validDatabaseTab = ['main', 'other', 'draft', 'create', 'detail', 'edit'];
 
 const ChallengeDynamicPage = () => {
   const { authUser } = useAuth();

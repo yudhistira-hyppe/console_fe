@@ -206,7 +206,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             textDecoration: 'underline',
                           },
                         },
-                      }}>
+                      }}
+                      onClick={() => Router.push(`/challenge/detail/${item?._id}`)}>
                       <Stack direction="row" alignItems="center" gap="15px" width={130}>
                         <Avatar src={item?.bannerLeaderboard} variant="rounded" alt="X" />
                         <Typography
@@ -301,7 +302,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           <MenuItem
                             onClick={() => {
                               handleCloseMenu();
-                              Router.push(`/challenge/detail/${item?._id}`);
+                              Router.push(`/challenge/edit/${item?._id}`);
                             }}>
                             <ListItemIcon>
                               <Edit />

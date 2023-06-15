@@ -26,10 +26,10 @@ import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
-import router from 'next/router';
+import Router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import ScrollBar from 'react-perfect-scrollbar';
-import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext, Router } from '@material-ui/icons';
+import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ModalConfirmation from '../../../modal/ModalConfirmation';
 
 const useStyles = makeStyles(() => ({
@@ -207,8 +207,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           },
                         },
                       }}
-                      // onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}
-                    >
+                      onClick={() => Router.push(`/challenge/detail/${item?._id}`)}>
                       <Stack direction="row" alignItems="center" gap="15px" width={130}>
                         <Avatar src={item?.bannerLeaderboard} variant="rounded" alt="X" />
                         <Typography
@@ -303,7 +302,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           <MenuItem
                             onClick={() => {
                               handleCloseMenu();
-                              router.push('#');
+                              Router.push(`/challenge/edit/${item?._id}`);
                             }}>
                             <ListItemIcon>
                               <Edit />

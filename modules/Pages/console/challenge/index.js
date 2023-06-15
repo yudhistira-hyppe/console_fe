@@ -7,8 +7,10 @@ const ChallengeComponent = (props) => {
   const { tab, detailId } = props;
   console.log(detailId);
 
-  if (detailId) {
+  if (tab === 'edit') {
     return <EditChallenge />;
+  } else if (tab === 'detail') {
+    return <p>detail</p>;
   } else {
     return <ChallengeTabComponent tab={tab} />;
   }
