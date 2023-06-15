@@ -11,6 +11,7 @@ import {
 } from 'api/console/challenge';
 import { LoadingButton } from '@mui/lab';
 import { map } from 'lodash';
+import Router from 'next/router';
 
 const style = {
   position: 'absolute',
@@ -229,6 +230,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         toast.success('Berhasil Membuat Challenge', { duration: 3000 });
       }
       onClose();
+      Router.replace('/challenge/main');
     });
   };
 
@@ -245,7 +247,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
               {status === 'duplicate' && `Duplikasi Challenge`}
               {status === 'delete' && `Hapus Challenge`}
               {status === 'delete-draft' && `Hapus Draft Challenge ?`}
-              {status === 'create' && 'Simpan & Buat Challenge ?'}
+              {(status === 'create' || status === 'update') && 'Simpan & Buat Challenge ?'}
               {status === 'create-draft' && 'Simpan Sebagai Draft ?'}
             </Typography>
             {status !== 'create-draft' && (
@@ -254,7 +256,8 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
                   `Jika Anda melakukan duplikasi, kompetisi yang Anda buat secara otomatis akan terimpan sebagai draf.`}
                 {status === 'delete' && `Jika Anda menghapus kompetisi. Challenge akan dihapus secara permanen`}
                 {status === 'delete-draft' && `Apakah Anda yakin ingin menghapus draft kompetisi ini ?`}
-                {status === 'create' && 'Anda akan menyimpan kompetisi ini. Challenge akan tersedia pada aplikasi Hyppe'}
+                {(status === 'create' || status === 'update') &&
+                  'Anda akan menyimpan kompetisi ini. Challenge akan tersedia pada aplikasi Hyppe'}
               </Typography>
             )}
           </Stack>
@@ -275,7 +278,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
               }}>
               {status === 'duplicate' && 'Duplikasi'}
               {status === 'delete' && 'Hapus'}
-              {(status === 'delete-draft' || status === 'create') && 'Konfirmasi'}
+              {(status === 'delete-draft' || status === 'create' || status === 'update') && 'Konfirmasi'}
               {status === 'create-draft' && 'Simpan'}
             </LoadingButton>
             <Button onClick={onClose}>Batal</Button>
