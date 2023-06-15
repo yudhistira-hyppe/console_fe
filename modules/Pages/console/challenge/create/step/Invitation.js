@@ -15,12 +15,7 @@ const ComponentStepInvitation = ({ inputValue, handleInputChange }) => {
         <Tooltip
           title={
             <Stack direction="column" p="8px">
-              <Typography style={{ fontSize: 12 }}>
-                <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-              </Typography>
-              <Typography style={{ fontSize: 12 }}>
-                <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
-              </Typography>
+              <Typography style={{ fontSize: 12 }}>Cara partisipan untuk bergabung challenge.</Typography>
             </Stack>
           }
           arrow>

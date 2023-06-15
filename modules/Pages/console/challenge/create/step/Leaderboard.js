@@ -2,13 +2,17 @@ import { Typography } from '@material-ui/core';
 import { Add, CloudUpload, InfoOutlined } from '@material-ui/icons';
 import { Avatar, Box, Card, Stack, Switch, Tooltip } from '@mui/material';
 import { debounce } from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
-  const [selectedColor, setSelectedColor] = useState('');
-  const [customColor, setCustomColor] = useState(false);
-  const [image, setImage] = useState();
-  const [urlImage, setUrlImage] = useState();
+  // useEffect(() => {
+  //   setinputValue?.banner_background_color(inputValue?.banner_background_color);
+  //   if (inputValue?.banner_background_color) {
+  //     setCustomColor(true);
+  //   } else {
+  //
+  //   }
+  // }, [handleInputChange]);
 
   function formatBytes(bytes) {
     return (bytes / Math.pow(1024, 2)).toFixed(1);
@@ -36,9 +40,7 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
         if (formatBytes(e.target.files[0].size) >= 2) {
           alert('size filenya kegedean woyy 🤬');
         } else {
-          setImage(e.target.files[0]);
-          setUrlImage(url);
-          handleInputChange('banner_leaderboard', e.target.files[0]);
+          handleInputChange('banner_leaderboard', { file: e.target.files[0], url: url });
         }
       };
     }
@@ -53,10 +55,7 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
             title={
               <Stack direction="column" p="8px">
                 <Typography style={{ fontSize: 12 }}>
-                  <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-                </Typography>
-                <Typography style={{ fontSize: 12 }}>
-                  <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
+                  Upload desain dan atur warna background leaderboard yang sesuai.
                 </Typography>
               </Stack>
             }
@@ -73,7 +72,9 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
           />
         </Stack>
         <Stack direction="column" spacing={1}>
-          <Typography>Banner Leaderboard</Typography>
+          <Typography>
+            Banner Leaderboard<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <Stack direction="row" spacing={3}>
             <label htmlFor="banner-background">
               <Box
@@ -85,8 +86,12 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                   backgroundColor: '#F0F0F0',
                   cursor: 'pointer',
                 }}>
-                {image ? (
-                  <Avatar src={urlImage} style={{ width: '100%', height: '100%' }} variant="rounded" />
+                {inputValue?.banner_leaderboard ? (
+                  <Avatar
+                    src={inputValue?.banner_leaderboard?.url}
+                    style={{ width: '100%', height: '100%' }}
+                    variant="rounded"
+                  />
                 ) : (
                   <Stack direction="column" alignItems="center" justifyContent="center" spacing={1} height="100%">
                     <CloudUpload style={{ fontSize: 36, color: '#9B9B9B' }} />
@@ -111,7 +116,9 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
           </Stack>
         </Stack>
         <Stack direction="column" spacing={1}>
-          <Typography>Warna Background</Typography>
+          <Typography>
+            Warna Background<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <Stack direction="row" spacing={2}>
             <Box
               style={{
@@ -119,11 +126,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#AB22AF' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#AB22AF' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#AB22AF');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#AB22AF', custom: false });
               }}
             />
             <Box
@@ -132,11 +138,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#3D4C9B' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#3D4C9B' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#3D4C9B');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#3D4C9B', custom: false });
               }}
             />
             <Box
@@ -145,11 +150,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#455DD8' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#455DD8' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#455DD8');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#455DD8', custom: false });
               }}
             />
             <Box
@@ -158,11 +162,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#23ADC0' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#23ADC0' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#23ADC0');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#23ADC0', custom: false });
               }}
             />
             <Box
@@ -171,11 +174,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#8019D8' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#8019D8' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#8019D8');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#8019D8', custom: false });
               }}
             />
             <Box
@@ -184,11 +186,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#FF8C00' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#FF8C00' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#FF8C00');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#FF8C00', custom: false });
               }}
             />
             <Box
@@ -197,11 +198,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#01864E' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#01864E' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#01864E');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#01864E', custom: false });
               }}
             />
             <Box
@@ -210,11 +210,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#FFC700' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#FFC700' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#FFC700');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#FFC700', custom: false });
               }}
             />
             <Box
@@ -223,11 +222,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#E6094B' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#E6094B' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#E6094B');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#E6094B', custom: false });
               }}
             />
             <Box
@@ -236,11 +234,10 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 height: 40,
                 width: 40,
                 cursor: 'pointer',
-                border: inputValue?.banner_background_color === '#A358E7' ? '3px inset black' : 'none',
+                border: inputValue?.banner_background_color?.color === '#A358E7' ? '3px inset black' : 'none',
               }}
               onClick={() => {
-                handleInputChange('banner_background_color', '#A358E7');
-                setCustomColor(false);
+                handleInputChange('banner_background_color', { color: '#A358E7', custom: false });
               }}
             />
             <label
@@ -248,21 +245,21 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
               style={{
                 height: 40,
                 width: 40,
-                border: customColor ? '3px inset black' : '1px dashed #9B9B9B',
+                border: inputValue?.banner_background_color?.custom ? '3px inset black' : '1px dashed #9B9B9B',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: selectedColor,
+                backgroundColor: inputValue?.banner_background_color?.custom && inputValue?.banner_background_color?.color,
               }}>
-              {!selectedColor && <Add style={{ color: '#9B9B9B' }} />}
+              {(!inputValue?.banner_background_color?.custom || !inputValue?.banner_background_color?.color) && (
+                <Add style={{ color: '#9B9B9B' }} />
+              )}
               <input
                 id="input-color"
                 type="color"
                 style={{ opacity: 0, position: 'absolute' }}
                 onChange={debounce((e) => {
-                  setSelectedColor(e.target.value);
-                  setCustomColor(true);
-                  handleInputChange('banner_background_color', e.target.value);
+                  handleInputChange('banner_background_color', { color: e.target.value, custom: true });
                 }, 200)}
               />
             </label>

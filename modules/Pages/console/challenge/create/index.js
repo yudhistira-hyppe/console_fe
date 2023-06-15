@@ -16,11 +16,12 @@ import { isEmpty } from 'lodash';
 import ChooseParticipant from './step/ChooseParticipant';
 import { ArrowLeft, ChevronLeft } from '@material-ui/icons';
 import Router from 'next/router';
+import ModalConfirmation from '../modal/ModalConfirmation';
 
 const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
 const CreateChallenge = ({ moreSlug }) => {
-  const [activeStep, setActiveStep] = useState(3);
+  const [activeStep, setActiveStep] = useState(0);
   const [inputValue, setInputValue] = useState({});
   const breadcrumbs = moreSlug
     ? [
@@ -32,15 +33,22 @@ const CreateChallenge = ({ moreSlug }) => {
         { label: 'Challenge', link: '/challenge' },
         { label: 'Buat Challenge', isActive: true },
       ];
+  const [openModal, setOpenModal] = useState({
+    showModal: false,
+    status: '',
+    selected: {},
+  });
+
+  useEffect(() => {
+    window.scroll({ top: 0, behavior: 'smooth' });
+  }, [activeStep]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    window.scroll({ top: 0, behavior: 'smooth' });
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    window.scroll({ top: 0, behavior: 'smooth' });
   };
 
   const handleInputChange = (kind, value) => {
@@ -112,10 +120,17 @@ const CreateChallenge = ({ moreSlug }) => {
           inputValue?.winner_rewards_type === 'ranking' &&
           isEmpty(inputValue?.winner_ranking_price)) ||
         (inputValue?.winner_rewards &&
+          inputValue?.winner_rewards_type === 'ranking' &&
+          inputValue?.winner_ranking_price?.map((item) => item?.price)?.filter((item) => item !== '')?.length < 1) ||
+        (inputValue?.winner_rewards &&
           inputValue?.winner_rewards_type === 'poin' &&
           !inputValue?.max_reward &&
           !inputValue?.point_reward) ||
-        (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)))
+        (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)) ||
+        (inputValue?.winner_badges &&
+          (inputValue?.winner_ranking_badge?.map((item) => item?.profile)?.filter((item) => item !== undefined)?.length <
+            1 ||
+            inputValue?.winner_ranking_badge?.map((item) => item?.other)?.filter((item) => item !== undefined)?.length < 1)))
     ) {
       disabled = true;
     } else if (
@@ -193,16 +208,61 @@ const CreateChallenge = ({ moreSlug }) => {
           ) : (
             <Box />
           )}
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{ borderRadius: 6, padding: '10px 20px' }}
-            onClick={handleNext}
-            disabled={checkDisabled()}>
-            <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Next</Typography>
-          </Button>
+          <Stack direction="row" gap={2}>
+            {activeStep === 6 && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                style={{ borderRadius: 6, padding: '10px 20px' }}
+                onClick={() => {
+                  setOpenModal({
+                    showModal: !openModal.showModal,
+                    status: 'create-draft',
+                    selected: inputValue,
+                  });
+                }}
+                disabled={checkDisabled()}>
+                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                  Simpan Draft
+                </Typography>
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{ borderRadius: 6, padding: '10px 20px' }}
+              onClick={() => {
+                if (activeStep < 6) {
+                  handleNext();
+                } else {
+                  setOpenModal({
+                    showModal: !openModal.showModal,
+                    status: 'create',
+                    selected: inputValue,
+                  });
+                }
+              }}
+              disabled={checkDisabled()}>
+              <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                {activeStep === 6 ? 'Buat Challenge' : 'Next'}
+              </Typography>
+            </Button>
+          </Stack>
         </Stack>
       )}
+
+      <ModalConfirmation
+        showModal={openModal.showModal}
+        status={openModal.status}
+        selectedItem={openModal.selected}
+        onClose={() => {
+          setOpenModal({
+            showModal: !openModal.showModal,
+            status: '',
+            selected: {},
+          });
+        }}
+      />
     </Stack>
   );
 };

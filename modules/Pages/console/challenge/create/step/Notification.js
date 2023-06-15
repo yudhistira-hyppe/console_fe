@@ -114,15 +114,14 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
         </Stack>
         <Stack direction="column" spacing={1}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Banner Search</Typography>
+            <Typography>
+              Banner Search<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <Tooltip
               title={
                 <Stack direction="column" p="8px">
                   <Typography style={{ fontSize: 12 }}>
-                    <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-                  </Typography>
-                  <Typography style={{ fontSize: 12 }}>
-                    <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
+                    Banner ini akan muncul pada halaman search, dan digunakan pada halaman detail challenge.
                   </Typography>
                 </Stack>
               }
@@ -171,15 +170,14 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
         <Divider flexItem />
         <Stack direction="column" spacing={1}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Pop-Up</Typography>
+            <Typography>
+              Pop-Up<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <Tooltip
               title={
                 <Stack direction="column" p="8px">
                   <Typography style={{ fontSize: 12 }}>
-                    <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-                  </Typography>
-                  <Typography style={{ fontSize: 12 }}>
-                    <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
+                    Pop-Up ini akan muncul sebelum pengguna mengakses halaman beranda aplikasi Hyppe.
                   </Typography>
                 </Stack>
               }
@@ -228,15 +226,14 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
         <Divider flexItem />
         <Stack direction="column" spacing={1}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Notifikasi Push</Typography>
+            <Typography>
+              Notifikasi Push<span style={{ color: 'red' }}>*</span>
+            </Typography>
             <Tooltip
               title={
                 <Stack direction="column" p="8px">
                   <Typography style={{ fontSize: 12 }}>
-                    <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-                  </Typography>
-                  <Typography style={{ fontSize: 12 }}>
-                    <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
+                    Push notifikasi akan dikirimkan secara otomatis sesuai dengan waktu yang telah ditentukan.
                   </Typography>
                 </Stack>
               }

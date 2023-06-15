@@ -37,10 +37,7 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             title={
               <Stack direction="column" p="8px">
                 <Typography style={{ fontSize: 12 }}>
-                  <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-                </Typography>
-                <Typography style={{ fontSize: 12 }}>
-                  <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
+                  Tentukan tipe partisipan yang sesuai dengan ketentuan challenge yang dibuat.
                 </Typography>
               </Stack>
             }
@@ -50,20 +47,22 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
         </Stack>
 
         <Stack direction="column" spacing={1}>
-          <Typography>Tipe Akun</Typography>
+          <Typography>
+            Tipe Akun<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <FormGroup row style={{ gap: 16 }}>
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={inputValue?.account_type?.includes('unverified') || false}
+                  checked={inputValue?.account_type?.includes('TIDAKTERVERIFIKASI') || false}
                   onChange={() =>
                     handleInputChange(
                       'account_type',
                       inputValue?.account_type
-                        ? inputValue?.account_type?.find((item) => item === 'unverified')
-                          ? inputValue?.account_type?.filter((item) => item !== 'unverified')
-                          : [...inputValue?.account_type, 'unverified']
-                        : ['unverified'],
+                        ? inputValue?.account_type?.find((item) => item === 'TIDAKTERVERIFIKASI')
+                          ? inputValue?.account_type?.filter((item) => item !== 'TIDAKTERVERIFIKASI')
+                          : [...inputValue?.account_type, 'TIDAKTERVERIFIKASI']
+                        : ['TIDAKTERVERIFIKASI'],
                     )
                   }
                   color="secondary"
@@ -74,15 +73,15 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={inputValue?.account_type?.includes('verified') || false}
+                  checked={inputValue?.account_type?.includes('TERVERIFIKASI') || false}
                   onChange={() =>
                     handleInputChange(
                       'account_type',
                       inputValue?.account_type
-                        ? inputValue?.account_type?.find((item) => item === 'verified')
-                          ? inputValue?.account_type?.filter((item) => item !== 'verified')
-                          : [...inputValue?.account_type, 'verified']
-                        : ['verified'],
+                        ? inputValue?.account_type?.find((item) => item === 'TERVERIFIKASI')
+                          ? inputValue?.account_type?.filter((item) => item !== 'TERVERIFIKASI')
+                          : [...inputValue?.account_type, 'TERVERIFIKASI']
+                        : ['TERVERIFIKASI'],
                     )
                   }
                   color="secondary"
@@ -94,7 +93,9 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
         </Stack>
 
         <Stack direction="column" spacing={1}>
-          <Typography>Rentang Umur</Typography>
+          <Typography>
+            Rentang Umur<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <FormGroup row style={{ gap: 16 }}>
             {['<14', '14-28', '29-43', '>44', 'lainnya'].map((item, key) => (
               <FormControlLabel
@@ -122,7 +123,9 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
         </Stack>
 
         <Stack direction="column" spacing={1}>
-          <Typography>Jenis Kelamin</Typography>
+          <Typography>
+            Jenis Kelamin<span style={{ color: 'red' }}>*</span>
+          </Typography>
           <FormGroup row style={{ gap: 16 }}>
             <FormControlLabel
               control={
