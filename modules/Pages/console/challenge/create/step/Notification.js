@@ -101,10 +101,8 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
             title={
               <Stack direction="column" p="8px">
                 <Typography style={{ fontSize: 12 }}>
-                  <strong>Dengan Undangan</strong>: Hanya user yang diundang yang dapat mengikuti challenge
-                </Typography>
-                <Typography style={{ fontSize: 12 }}>
-                  <strong>Semua Pengguna</strong>: Semua user dapat mengikuti challenge
+                  Pilih jenis notifikasi challenge (banner atau pop-up). Notifikasi ini akan muncul di aplikasi Hyppe sesuai
+                  dengan pilihan yang Anda tentukan
                 </Typography>
               </Stack>
             }
