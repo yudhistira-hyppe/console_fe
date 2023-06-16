@@ -10,7 +10,7 @@ import { Typography } from '@material-ui/core';
 import { useGetListChallengeQuery } from 'api/console/challenge';
 import Router from 'next/router';
 
-const ChallengeTabMainComponent = () => {
+const ChallengeTabMainComponent = ({ kind }) => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -29,7 +29,7 @@ const ChallengeTabMainComponent = () => {
       page: filter.page,
       limit: filter.limit,
       ascending: filter.descending === 'true' ? true : false,
-      menuChallenge: 'UTAMA',
+      menuChallenge: kind,
     });
 
     filter.search !== '' && Object.assign(params, { nameChallenge: filter.search });
