@@ -11,6 +11,8 @@ const DetailChallenge = ({ detailId }) => {
     { label: 'Detail Challenge', isActive: true },
   ];
 
+  console.log(Router.route);
+
   return (
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -19,7 +21,7 @@ const DetailChallenge = ({ detailId }) => {
           direction="row"
           alignItems="center"
           gap={1}
-          onClick={() => Router.replace('/challenge')}
+          onClick={() => Router.back()}
           sx={{
             width: 'fit-content',
             '&:hover': {

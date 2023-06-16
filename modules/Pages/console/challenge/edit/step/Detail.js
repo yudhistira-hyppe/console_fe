@@ -10,17 +10,6 @@ import React, { useEffect } from 'react';
 const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
   const { data: listJenis, isLoading: loadingJenis } = useGetJenisChallengeQuery({ limit: 100, page: 0 });
 
-  useEffect(() => {
-    handleInputChange(
-      'enddate',
-      inputValue?.startdate
-        ? inputValue?.cycle_day
-          ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day, 'day')
-          : null
-        : null,
-    );
-  }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
-
   return (
     <Card sx={{ padding: 3 }}>
       <Typography style={{ fontWeight: 'bold' }}>Detail Challenge</Typography>
@@ -50,14 +39,16 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
             <TextField
               select
               color="secondary"
-              value={inputValue?.kind?.name || ''}
+              value={inputValue?.kind || ''}
               onChange={(e) => {
                 handleInputChange('kind', e.target.value);
                 handleInputChange('cycle', 0);
                 handleInputChange('cycle_day', 0);
               }}
               SelectProps={{
-                renderValue: (selected) => <Typography>{selected === '' ? 'Pilih Jenis Challenge' : selected}</Typography>,
+                renderValue: (selected) => (
+                  <Typography>{listJenis?.data?.find((item) => item?._id === selected)?.name}</Typography>
+                ),
                 displayEmpty: true,
                 MenuProps: {
                   PaperProps: {
@@ -74,7 +65,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 <MenuItem>Loading data...</MenuItem>
               ) : (
                 listJenis?.data?.map((item, key) => (
-                  <MenuItem value={item} key={key}>
+                  <MenuItem value={item?._id} key={key}>
                     <Stack direction="column">
                       <Typography>{item?.name || '-'}</Typography>
                       <Typography style={{ fontSize: 12, color: '#9B9B9B' }}>{item?.description || '-'}</Typography>

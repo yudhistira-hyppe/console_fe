@@ -46,7 +46,7 @@ const ChallengeDynamicPage = () => {
       {challengeProps.tab === 'create' ? (
         <CreateChallenge moreSlug={slug[1]} />
       ) : challengeProps.tab === 'edit' ? (
-        <EditChallenge />
+        <EditChallenge detailId={challengeProps.detailId} />
       ) : challengeProps.tab === 'detail' ? (
         <DetailChallenge detailId={challengeProps.detailId} />
       ) : (

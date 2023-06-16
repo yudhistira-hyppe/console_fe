@@ -161,6 +161,7 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
                     width: 28,
                     borderRadius: '100px',
                     cursor: 'pointer',
+                    backgroundColor: 'white',
                   }}
                   size="small">
                   <Edit style={{ fontSize: 16 }} />
@@ -235,6 +236,7 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
                     width: 28,
                     borderRadius: '100px',
                     cursor: 'pointer',
+                    backgroundColor: 'white',
                   }}
                   size="small">
                   <Edit style={{ fontSize: 16 }} />

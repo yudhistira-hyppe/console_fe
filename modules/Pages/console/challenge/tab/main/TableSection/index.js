@@ -345,11 +345,13 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   </TableRow>
                 ))
               ) : (
-                <TableCell colSpan={8}>
-                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Challenge</Typography>
-                  </Stack>
-                </TableCell>
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Challenge</Typography>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import { Add, CloudUpload, InfoOutlined } from '@material-ui/icons';
+import { Add, CloudUpload, Edit, InfoOutlined } from '@material-ui/icons';
 import { Avatar, Box, Card, Stack, Switch, Tooltip } from '@mui/material';
 import { debounce } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -68,7 +68,7 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
             Banner Leaderboard<span style={{ color: 'red' }}>*</span>
           </Typography>
           <Stack direction="row" spacing={3}>
-            <label htmlFor="banner-background">
+            <label htmlFor="banner-background" style={{ position: 'relative' }}>
               <Box
                 style={{
                   width: 375,
@@ -98,6 +98,25 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                   onChange={handleUploadImage}
                 />
               </Box>
+              {inputValue?.banner_leaderboard && (
+                <Stack
+                  alignItems="center"
+                  justifyContent="center"
+                  style={{
+                    position: 'absolute',
+                    top: 6,
+                    right: 6,
+                    border: '1px solid #737373',
+                    height: 28,
+                    width: 28,
+                    borderRadius: '100px',
+                    cursor: 'pointer',
+                    backgroundColor: 'white',
+                  }}
+                  size="small">
+                  <Edit style={{ fontSize: 16 }} />
+                </Stack>
+              )}
             </label>
             <Stack direction="column" spacing={1}>
               <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Ketentuan Gambar</Typography>
@@ -133,6 +152,7 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 onChange={debounce((e) => {
                   handleInputChange('banner_background_color', { color: e.target.value, custom: true });
                 }, 200)}
+                disabled
               />
             </label>
           </Stack>

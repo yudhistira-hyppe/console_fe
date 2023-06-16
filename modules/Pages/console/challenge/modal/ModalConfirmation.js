@@ -33,7 +33,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
   const handleDuplicate = () => {
     duplicateChallenge(selectedItem).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message?.info[0], { duration: 3000 });
+        toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
         toast.success('Berhasil Duplikasi Challenge', { duration: 3000 });
       }
@@ -47,7 +47,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
 
     updateChallenge({ id: selectedItem, formData }).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message?.info[0], { duration: 3000 });
+        toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
         toast.success('Berhasil Menghapus Challenge', { duration: 3000 });
       }
@@ -225,12 +225,36 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
 
     createChallenge(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message?.info?.[0], { duration: 3000 });
+        toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
         toast.success('Berhasil Membuat Challenge', { duration: 3000 });
+        Router.replace('/challenge');
       }
       onClose();
-      Router.replace('/challenge/main');
+    });
+  };
+
+  const handleUpdate = () => {
+    let formData = new FormData();
+    formData.append('description', selectedItem?.description);
+    if (typeof selectedItem?.banner_leaderboard?.file !== 'string') {
+      formData.append('bannerBoard', selectedItem?.banner_leaderboard?.file);
+    }
+    if (typeof selectedItem?.banner_search?.file !== 'string') {
+      formData.append('bannerSearch', selectedItem?.banner_search?.file);
+    }
+    if (typeof selectedItem?.banner_popup?.file !== 'string') {
+      formData.append('popUpnotif', selectedItem?.banner_popup?.file);
+    }
+
+    updateChallenge({ id: selectedItem?._id, formData }).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else {
+        toast.success('Berhasil Menghapus Challenge', { duration: 3000 });
+        Router.replace('/challenge');
+      }
+      onClose();
     });
   };
 
@@ -274,6 +298,8 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
                   handleDuplicate();
                 } else if (status === 'create' || status === 'create-draft') {
                   handleCreate();
+                } else if (status === 'update') {
+                  handleUpdate();
                 }
               }}>
               {status === 'duplicate' && 'Duplikasi'}
