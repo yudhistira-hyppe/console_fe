@@ -36,6 +36,8 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               value={inputValue?.name || ''}
               inputProps={{ maxLength: 30 }}
               onChange={(e) => handleInputChange('name', e.target.value)}
+              style={{ backgroundColor: '#EAEAEA' }}
+              disabled
             />
             <small style={{ color: '#9B9B9B' }}>{inputValue?.name?.length || 0}/30 Karakter</small>
           </Stack>
@@ -64,7 +66,10 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                     },
                   },
                 },
-              }}>
+                disabled: true,
+              }}
+              disabled
+              style={{ backgroundColor: '#EAEAEA' }}>
               {loadingJenis ? (
                 <MenuItem>Loading data...</MenuItem>
               ) : (
@@ -83,12 +88,13 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
             <Typography>
-              Durasi Siklus Challenge<span style={{ color: 'red' }}>*</span>
+              Lama Siklus<span style={{ color: 'red' }}>*</span>
             </Typography>
             <TextField
               color="secondary"
               value={inputValue?.cycle_day || 0}
               sx={{
+                backgroundColor: '#EAEAEA',
                 '> div': {
                   paddingLeft: 0,
                 },
@@ -98,7 +104,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 startAdornment: (
                   <InputAdornment
                     position="start"
-                    style={{ backgroundColor: '#E0E0E0', height: 56, maxHeight: 56, width: 100 }}>
+                    style={{ backgroundColor: '#EAEAEA', height: 56, maxHeight: 56, width: 100 }}>
                     <Typography style={{ width: '100%', textAlign: 'center' }}>Hari</Typography>
                   </InputAdornment>
                 ),
@@ -115,10 +121,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                           height: 24,
                           fontSize: 28,
                           paddingBottom: 8,
-                          border:
-                            !inputValue?.cycle_day || inputValue?.cycle_day < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
+                          border: '1px solid #C9C9C9',
                         }}
-                        disabled={!inputValue?.cycle_day || inputValue?.cycle_day < 1}>
+                        disabled>
                         -
                       </IconButton>
                       <IconButton
@@ -130,16 +135,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                           width: 24,
                           height: 24,
                           fontSize: 24,
-                          border:
-                            (inputValue?.kind === 'main' && inputValue?.cycle_day >= 104) ||
-                            (inputValue?.kind === 'other' && inputValue?.cycle_day >= 54)
-                              ? '1px solid #C9C9C9'
-                              : '1px solid #3F3F3F',
+                          border: '1px solid #C9C9C9',
                         }}
-                        disabled={
-                          (inputValue?.kind === 'main' && inputValue?.cycle_day >= 104) ||
-                          (inputValue?.kind === 'other' && inputValue?.cycle_day >= 54)
-                        }>
+                        disabled>
                         +
                       </IconButton>
                     </Stack>
@@ -154,12 +152,13 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
             <Typography>
-              Tentukan Jumlah Siklus Challenge<span style={{ color: 'red' }}>*</span>
+              Siklus Perulangan<span style={{ color: 'red' }}>*</span>
             </Typography>
             <TextField
               color="secondary"
               value={inputValue?.cycle || 0}
               sx={{
+                backgroundColor: '#EAEAEA',
                 '> div': {
                   paddingLeft: 0,
                 },
@@ -169,7 +168,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 startAdornment: (
                   <InputAdornment
                     position="start"
-                    style={{ backgroundColor: '#E0E0E0', height: 56, maxHeight: 56, width: 100 }}>
+                    style={{ backgroundColor: '#EAEAEA', height: 56, maxHeight: 56, width: 100 }}>
                     <Typography style={{ width: '100%', textAlign: 'center' }}>Siklus</Typography>
                   </InputAdornment>
                 ),
@@ -184,9 +183,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                           height: 24,
                           fontSize: 28,
                           paddingBottom: 8,
-                          border: !inputValue?.cycle || inputValue?.cycle < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
+                          border: '1px solid #C9C9C9',
                         }}
-                        disabled={!inputValue?.cycle || inputValue?.cycle < 1}>
+                        disabled>
                         -
                       </IconButton>
                       <IconButton
@@ -196,16 +195,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                           width: 24,
                           height: 24,
                           fontSize: 24,
-                          border:
-                            (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
-                            (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
-                              ? '1px solid #C9C9C9'
-                              : '1px solid #3F3F3F',
+                          border: '1px solid #C9C9C9',
                         }}
-                        disabled={
-                          (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
-                          (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
-                        }>
+                        disabled>
                         +
                       </IconButton>
                     </Stack>
@@ -213,7 +205,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 ),
               }}
             />
-            <small style={{ color: '#9B9B9B' }}>Tentukan berapa kali siklus challenge akan diputar</small>
+            <small style={{ color: '#9B9B9B' }}>Berapa kali leaderboard akan direset</small>
           </Stack>
 
           {inputValue?.cycle_day >= 1 && (
@@ -241,7 +233,10 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                   handleInputChange('startdate', newValue);
                 }}
                 inputFormat="DD/MM/YYYY"
-                renderInput={(params) => <TextField color="secondary" {...params} />}
+                renderInput={(params) => (
+                  <TextField color="secondary" {...params} style={{ backgroundColor: '#EAEAEA' }} disabled />
+                )}
+                disabled
               />
             </Stack>
             <Stack direction="column" spacing={1}>
@@ -250,7 +245,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 value={inputValue?.enddate || null}
                 onChange={() => {}}
                 inputFormat="DD/MM/YYYY"
-                renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#E0E0E0' }} disabled />}
+                renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#EAEAEA' }} disabled />}
                 disabled
               />
             </Stack>
@@ -268,7 +263,10 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               }}
               inputFormat="HH:mm WIB"
               views={['hours', 'minutes']}
-              renderInput={(params) => <TextField color="secondary" {...params} />}
+              renderInput={(params) => (
+                <TextField color="secondary" {...params} style={{ backgroundColor: '#EAEAEA' }} disabled />
+              )}
+              disabled
             />
           </Stack>
         </Grid>
@@ -307,6 +305,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               checked={inputValue?.show_status_user || false}
               color="secondary"
               onChange={() => handleInputChange('show_status_user', !inputValue?.show_status_user)}
+              disabled
             />
           </Stack>
         </Grid>

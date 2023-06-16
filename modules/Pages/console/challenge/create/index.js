@@ -67,6 +67,7 @@ const CreateChallenge = ({ moreSlug }) => {
       activeStep == 0 &&
       (!inputValue?.name ||
         !inputValue?.kind ||
+        !inputValue?.cycle ||
         !inputValue?.cycle_day ||
         !inputValue?.startdate ||
         !inputValue?.starthour ||
@@ -141,8 +142,6 @@ const CreateChallenge = ({ moreSlug }) => {
     }
     return disabled;
   };
-
-  console.log(inputValue);
 
   return (
     <Stack direction="column" gap={3}>

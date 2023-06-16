@@ -14,6 +14,13 @@ export const challengeApi = createApi({
       }),
       providesTags: ['list'],
     }),
+    getDetailChallenge: build.query({
+      query: (data) => ({
+        url: '',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     duplicateChallenge: build.mutation({
       query: (id) => ({
         url: `/challenge/duplicate/${id}`,
@@ -29,7 +36,21 @@ export const challengeApi = createApi({
       }),
       invalidatesTags: ['list'],
     }),
+    createChallenge: build.mutation({
+      query: (data) => ({
+        url: '/challenge',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['list'],
+    }),
   }),
 });
 
-export const { useGetListChallengeQuery, useDuplicateChallengeMutation, useUpdateChallengeMutation } = challengeApi;
+export const {
+  useGetListChallengeQuery,
+  useGetDetailChallengeQuery,
+  useDuplicateChallengeMutation,
+  useUpdateChallengeMutation,
+  useCreateChallengeMutation,
+} = challengeApi;
