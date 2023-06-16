@@ -83,7 +83,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
             <Typography>
-              Lama Siklus<span style={{ color: 'red' }}>*</span>
+              Durasi Siklus Challenge<span style={{ color: 'red' }}>*</span>
             </Typography>
             <TextField
               color="secondary"
@@ -154,7 +154,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         <Grid item xs={12} md={5}>
           <Stack direction="column" spacing={1}>
             <Typography>
-              Siklus Perulangan<span style={{ color: 'red' }}>*</span>
+              Tentukan Jumlah Siklus Challenge<span style={{ color: 'red' }}>*</span>
             </Typography>
             <TextField
               color="secondary"
@@ -213,7 +213,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 ),
               }}
             />
-            <small style={{ color: '#9B9B9B' }}>Berapa kali leaderboard akan direset</small>
+            <small style={{ color: '#9B9B9B' }}>Tentukan berapa kali siklus challenge akan diputar</small>
           </Stack>
 
           {inputValue?.cycle_day >= 1 && (
