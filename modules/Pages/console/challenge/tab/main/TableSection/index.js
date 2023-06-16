@@ -220,7 +220,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width={130}>
-                        {item?.status === 'Sedang Berjalan' && (
+                        {item?.statuscurrentChallenge === 'SEDANG BERJALAN' && (
                           <Chip
                             label="Sedang Berjalan"
                             style={{
@@ -232,7 +232,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             }}
                           />
                         )}
-                        {item?.status === 'Akan Datang' && (
+                        {item?.statuscurrentChallenge === 'AKAN DATANG' && (
                           <Chip
                             label="Akan Datang"
                             style={{
@@ -244,7 +244,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             }}
                           />
                         )}
-                        {item?.status === 'Selesai' && (
+                        {item?.statuscurrentChallenge === 'SELESAI' && (
                           <Chip
                             label="Selesai"
                             style={{
@@ -347,7 +347,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               ) : (
                 <TableCell colSpan={8}>
                   <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Challenge Utama</Typography>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Challenge</Typography>
                   </Stack>
                 </TableCell>
               )}
