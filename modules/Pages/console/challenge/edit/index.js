@@ -43,6 +43,7 @@ const EditChallenge = ({ detailId }) => {
       startdate: dayjs(detail?.startChallenge).toDate(),
       enddate: dayjs(detail?.endChallenge).toDate(),
       starthour: detail?.startTime,
+      durasi: detail?.durasi,
       show_status_user: detail?.tampilStatusPengguna,
       show_badge_leaderboard: detail?.leaderBoard?.[0]?.tampilBadge,
       banner_leaderboard: {
@@ -54,6 +55,9 @@ const EditChallenge = ({ detailId }) => {
         custom: true,
       },
       winner_rewards: detail?.hadiahPemenang?.length >= 1,
+      winner_rewards_type: detail?.hadiahPemenang?.[0]?.typeHadiah === 'POINT' ? 'poin' : 'ranking',
+      reward_poin: detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPrice,
+      max_reward: detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPriceMax,
       winner_ranking_price: detail?.hadiahPemenang?.map((item, key) => {
         return {
           ranking: key + 1,
@@ -61,6 +65,15 @@ const EditChallenge = ({ detailId }) => {
         };
       }),
       winner_badges: detail?.ketentuanHadiah?.[0]?.badgePemenang,
+      winner_ranking_badge:
+        detail?.ketentuanHadiah &&
+        Object.keys(detail?.ketentuanHadiah?.[0].badge?.[0]).map((item, key) => {
+          return {
+            ranking: key + 1,
+            profile: item,
+            other: item,
+          };
+        }),
       banner_search: {
         file: detail?.bannerSearch?.[0]?.image,
         url: detail?.bannerSearch?.[0]?.image,
@@ -71,8 +84,6 @@ const EditChallenge = ({ detailId }) => {
       },
     });
   }, [loadingDetail]);
-
-  console.log(inputValue);
 
   useEffect(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
