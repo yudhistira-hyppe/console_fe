@@ -39,6 +39,8 @@ const CreateChallenge = ({ moreSlug }) => {
     selected: {},
   });
 
+  console.log(inputValue);
+
   useEffect(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
   }, [activeStep]);

@@ -17,29 +17,31 @@ const ChallengeComponent = dynamic(() => import('modules/Pages/console/challenge
 let validDatabaseTab = ['draft', 'create', 'detail', 'edit'];
 
 const ChallengeDynamicPage = () => {
-  const { authUser } = useAuth();
+  const { authUser, isLoading } = useAuth();
   const router = useRouter();
   const { slug } = router.query;
   const [challengeProps, setChallengeProps] = useState({});
-  const { data: listJenis, isLoading: loadingJenis } = useGetJenisChallengeQuery({ limit: 100, page: 0 });
+  const { data: listJenis, isLoading: loadingJenis } = authUser ? useGetJenisChallengeQuery({ limit: 100, page: 0 }) : {};
 
   useEffect(() => {
-    listJenis?.data?.map((item) => validDatabaseTab.push(item?.name));
-
-    if (!loadingJenis) {
+    if (!isLoading) {
       if (slug) {
-        if (slug.length > 2 || !validDatabaseTab.includes(slug[0])) {
-          router.replace(listJenis?.data?.[0]?.name);
-          return;
-        }
-        if (!authUser?.user) {
+        if (authUser) {
+          listJenis?.data?.map((item) => validDatabaseTab.push(item?.name));
+          if (!loadingJenis) {
+            if (slug.length > 2 || !validDatabaseTab.includes(slug[0])) {
+              router.replace(listJenis?.data?.[0]?.name);
+              return;
+            }
+            setChallengeProps({ tab: slug[0], detailId: slug[1] });
+          }
+        } else {
           router.push({ pathname: '/signin', query: { redirect: router.asPath } });
           return;
         }
-        setChallengeProps({ tab: slug[0], detailId: slug[1] });
       }
     }
-  }, [slug, loadingJenis]);
+  }, [slug, loadingJenis, isLoading]);
 
   return (
     <SecureConsolePage>

@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import { InfoOutlined } from '@material-ui/icons';
+import { Event, InfoOutlined } from '@material-ui/icons';
 import { Card, Grid, IconButton, InputAdornment, MenuItem, Stack, Switch, TextField, Tooltip } from '@mui/material';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useGetJenisChallengeQuery } from 'api/console/utilitas/challenge';
@@ -77,138 +77,12 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
           </Stack>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Stack direction="column" spacing={1}>
-            <Typography>
-              Lama Siklus<span style={{ color: 'red' }}>*</span>
+          <Stack direction="row" style={{ padding: 12, backgroundColor: '#EDEDED', borderRadius: 6 }}>
+            <Typography style={{ color: '#737373' }}>
+              Total Durasi Kompetisi akan berlangsung selama{' '}
+              <strong style={{ color: '#3F3F3F' }}>{inputValue?.durasi} hari</strong>
             </Typography>
-            <TextField
-              color="secondary"
-              value={inputValue?.cycle_day || 0}
-              sx={{
-                backgroundColor: '#EAEAEA',
-                '> div': {
-                  paddingLeft: 0,
-                },
-              }}
-              InputProps={{
-                disabled: true,
-                startAdornment: (
-                  <InputAdornment
-                    position="start"
-                    style={{ backgroundColor: '#EAEAEA', height: 56, maxHeight: 56, width: 100 }}>
-                    <Typography style={{ width: '100%', textAlign: 'center' }}>Hari</Typography>
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Stack direction="row" spacing={1}>
-                      <IconButton
-                        onClick={() =>
-                          handleInputChange('cycle_day', (isNumber(inputValue?.cycle_day) ? inputValue?.cycle_day : 0) - 1)
-                        }
-                        size="small"
-                        style={{
-                          width: 24,
-                          height: 24,
-                          fontSize: 28,
-                          paddingBottom: 8,
-                          border: '1px solid #C9C9C9',
-                        }}
-                        disabled>
-                        -
-                      </IconButton>
-                      <IconButton
-                        onClick={() =>
-                          handleInputChange('cycle_day', (isNumber(inputValue?.cycle_day) ? inputValue?.cycle_day : 0) + 1)
-                        }
-                        size="small"
-                        style={{
-                          width: 24,
-                          height: 24,
-                          fontSize: 24,
-                          border: '1px solid #C9C9C9',
-                        }}
-                        disabled>
-                        +
-                      </IconButton>
-                    </Stack>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <small style={{ color: '#9B9B9B' }}>Tentukan per-berapa hari siklus leaderboard akan direset</small>
           </Stack>
-        </Grid>
-        <Grid item xs={12} md={7}></Grid>
-        <Grid item xs={12} md={5}>
-          <Stack direction="column" spacing={1}>
-            <Typography>
-              Siklus Perulangan<span style={{ color: 'red' }}>*</span>
-            </Typography>
-            <TextField
-              color="secondary"
-              value={inputValue?.cycle || 0}
-              sx={{
-                backgroundColor: '#EAEAEA',
-                '> div': {
-                  paddingLeft: 0,
-                },
-              }}
-              InputProps={{
-                disabled: true,
-                startAdornment: (
-                  <InputAdornment
-                    position="start"
-                    style={{ backgroundColor: '#EAEAEA', height: 56, maxHeight: 56, width: 100 }}>
-                    <Typography style={{ width: '100%', textAlign: 'center' }}>Siklus</Typography>
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Stack direction="row" spacing={1}>
-                      <IconButton
-                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) - 1)}
-                        size="small"
-                        style={{
-                          width: 24,
-                          height: 24,
-                          fontSize: 28,
-                          paddingBottom: 8,
-                          border: '1px solid #C9C9C9',
-                        }}
-                        disabled>
-                        -
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleInputChange('cycle', (isNumber(inputValue?.cycle) ? inputValue?.cycle : 0) + 1)}
-                        size="small"
-                        style={{
-                          width: 24,
-                          height: 24,
-                          fontSize: 24,
-                          border: '1px solid #C9C9C9',
-                        }}
-                        disabled>
-                        +
-                      </IconButton>
-                    </Stack>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <small style={{ color: '#9B9B9B' }}>Berapa kali leaderboard akan direset</small>
-          </Stack>
-
-          {inputValue?.cycle_day >= 1 && (
-            <Stack direction="row" mt={3} style={{ padding: 12, backgroundColor: '#EDEDED', borderRadius: 6 }}>
-              <Typography style={{ color: '#737373' }}>
-                Total Durasi Kompetisi akan berlangsung selama{' '}
-                <strong style={{ color: '#3F3F3F' }}>
-                  {(inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day} hari
-                </strong>
-              </Typography>
-            </Stack>
-          )}
         </Grid>
         <Grid item xs={12} md={7}></Grid>
         <Grid item xs={12} md={5}>
@@ -247,7 +121,21 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
             <Typography>
               Waktu Mulai<span style={{ color: 'red' }}>*</span>
             </Typography>
-            <DateTimePicker
+            <TextField
+              color="secondary"
+              value={`${inputValue?.starthour?.slice(0, 5)} WIB`}
+              style={{ backgroundColor: '#EAEAEA' }}
+              InputProps={{
+                disabled: true,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Event />
+                  </InputAdornment>
+                ),
+              }}
+              disabled
+            />
+            {/* <DateTimePicker
               value={inputValue?.starthour || null}
               onChange={(newValue) => {
                 handleInputChange('starthour', newValue);
@@ -258,7 +146,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 <TextField color="secondary" {...params} style={{ backgroundColor: '#EAEAEA' }} disabled />
               )}
               disabled
-            />
+            /> */}
           </Stack>
         </Grid>
         <Grid item xs={12} md={10}>
