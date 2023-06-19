@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import { InfoOutlined } from '@material-ui/icons';
+import { Event, InfoOutlined } from '@material-ui/icons';
 import { Card, Grid, IconButton, InputAdornment, MenuItem, Stack, Switch, TextField, Tooltip } from '@mui/material';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useGetJenisChallengeQuery } from 'api/console/utilitas/challenge';
@@ -247,7 +247,21 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
             <Typography>
               Waktu Mulai<span style={{ color: 'red' }}>*</span>
             </Typography>
-            <DateTimePicker
+            <TextField
+              color="secondary"
+              value={`${inputValue?.starthour?.slice(0, 5)} WIB`}
+              style={{ backgroundColor: '#EAEAEA' }}
+              InputProps={{
+                disabled: true,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Event />
+                  </InputAdornment>
+                ),
+              }}
+              disabled
+            />
+            {/* <DateTimePicker
               value={inputValue?.starthour || null}
               onChange={(newValue) => {
                 handleInputChange('starthour', newValue);
@@ -258,7 +272,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 <TextField color="secondary" {...params} style={{ backgroundColor: '#EAEAEA' }} disabled />
               )}
               disabled
-            />
+            /> */}
           </Stack>
         </Grid>
         <Grid item xs={12} md={10}>
