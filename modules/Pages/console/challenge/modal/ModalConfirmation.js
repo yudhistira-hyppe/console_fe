@@ -62,7 +62,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     formData.append('description', selectedItem?.description);
     formData.append('startChallenge', selectedItem?.startdate?.format('YYYY-MM-DD'));
     formData.append('endChallenge', selectedItem?.enddate?.format('YYYY-MM-DD'));
-    formData.append('durasi', ((selectedItem?.cycle ? selectedItem?.cycle : 0) + 1) * selectedItem?.cycle_day);
+    formData.append('durasi', (selectedItem?.cycle ? selectedItem?.cycle : 0) * selectedItem?.cycle_day);
     formData.append('jenisDurasi', 'DAY');
     formData.append('startTime', selectedItem?.starthour?.format('HH:mm:ss'));
     formData.append('tampilStatusPengguna', selectedItem?.show_status_user ? true : false);
@@ -124,10 +124,10 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     formData.append('leaderboard_formatFile', selectedItem?.banner_leaderboard?.file?.type?.replace('image/', ''));
     formData.append('bannerBoard', selectedItem?.banner_leaderboard?.file);
 
-    formData.append('ketentuanHadiah_tampilbadge', selectedItem?.winner_badges ? true : false);
-    formData.append('ketentuanHadiah_Height', 80);
-    formData.append('ketentuanHadiah_Width', 80);
-    formData.append('ketentuanHadiah_formatFile', 'png');
+    formData.append('ketentuanhadiah_tampilbadge', selectedItem?.winner_badges ? true : false);
+    formData.append('ketentuanhadiah_Height', 80);
+    formData.append('ketentuanhadiah_Width', 80);
+    formData.append('ketentuanhadiah_formatFile', 'png');
     if (selectedItem?.winner_ranking_badge?.length >= 1) {
       formData.append(
         'listbadge',
@@ -157,12 +157,18 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     formData.append('popUpnotif', selectedItem?.banner_popup?.file);
 
     formData.append('hadiah_set_hadiahpemenang', selectedItem?.winner_rewards ? true : false);
+    formData.append('hadiah_jenispemenang', selectedItem?.winner_rewards_type === 'ranking' ? 'RANKING' : 'POINT');
     formData.append('hadiah_currency', 'RUPIAH');
-    if (selectedItem?.winner_ranking_price?.length >= 1) {
-      formData.append(
-        'hadiah_juara',
-        selectedItem?.winner_ranking_price?.map((item) => item?.price),
-      );
+    if (selectedItem?.winner_rewards_type === 'ranking') {
+      if (selectedItem?.winner_ranking_price?.length >= 1) {
+        formData.append(
+          'hadiah_juara',
+          selectedItem?.winner_ranking_price?.map((item) => item?.price),
+        );
+      }
+    } else {
+      formData.append('point_price', Number(selectedItem?.reward_poin));
+      formData.append('point_price_max', Number(selectedItem?.max_reward));
     }
 
     if (selectedItem?.notification_push?.length >= 1) {
@@ -228,7 +234,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
         toast.success('Berhasil Membuat Challenge', { duration: 3000 });
-        Router.replace('/challenge');
+        Router.back();
       }
       onClose();
     });
@@ -251,8 +257,8 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
-        toast.success('Berhasil Menghapus Challenge', { duration: 3000 });
-        Router.replace('/challenge');
+        toast.success('Berhasil Mengupdate Challenge', { duration: 3000 });
+        Router.back();
       }
       onClose();
     });
