@@ -66,7 +66,7 @@ const EditChallenge = ({ detailId }) => {
       }),
       winner_badges: detail?.ketentuanHadiah?.[0]?.badgePemenang,
       winner_ranking_badge:
-        detail?.ketentuanHadiah &&
+        detail?.ketentuanHadiah?.[0]?.badgePemenang &&
         Object.keys(detail?.ketentuanHadiah?.[0].badge?.[0]).map((item, key) => {
           return {
             ranking: key + 1,
