@@ -46,7 +46,7 @@ const DetailChallengeComponent = ({ detail }) => {
   }, []);
 
   return (
-    <Card sx={{ p: 3 }}>
+    <Card sx={{ p: 3, height: 'auto' }}>
       <Stack direction="column" gap={2}>
         <Stack direction="column" gap={1}>
           <Typography style={{ fontSize: 24, fontWeight: 'bold', fontSize: 24 }}>{detail?.nameChallenge}</Typography>
