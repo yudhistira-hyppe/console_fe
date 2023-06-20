@@ -35,6 +35,8 @@ const EditChallenge = ({ detailId }) => {
   const { data: detail, isLoading: loadingDetail } = useGetDetailChallengeQuery(detailId);
 
   useEffect(() => {
+    let dataBadge = [];
+
     setInputValue({
       _id: detail?._id,
       name: detail?.nameChallenge,
@@ -45,7 +47,7 @@ const EditChallenge = ({ detailId }) => {
       starthour: detail?.startTime,
       durasi: detail?.durasi,
       show_status_user: detail?.tampilStatusPengguna,
-      show_badge_leaderboard: detail?.leaderBoard?.[0]?.tampilBadge,
+      show_badge_leaderboard: detail?.leaderBoard?.[0]?.tampilBadge ? true : false,
       banner_leaderboard: {
         file: detail?.leaderBoard?.[0]?.bannerLeaderboard,
         url: detail?.leaderBoard?.[0]?.bannerLeaderboard,
@@ -68,12 +70,34 @@ const EditChallenge = ({ detailId }) => {
       winner_ranking_badge:
         detail?.ketentuanHadiah?.[0]?.badgePemenang &&
         Object.keys(detail?.ketentuanHadiah?.[0].badge?.[0]).map((item, key) => {
-          return {
-            ranking: key + 1,
-            profile: item,
-            other: item,
-          };
-        }),
+          if (item === 'juara1') {
+            dataBadge.push({
+              ranking: 1,
+              profile: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara1,
+              url_profile: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara1_profile,
+              other: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara1,
+              url_other: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara1_general,
+            });
+          } else if (item === 'juara2') {
+            dataBadge.push({
+              ranking: 2,
+              profile: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara2,
+              url_profile: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara2_profile,
+              other: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara2,
+              url_other: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara2_general,
+            });
+          } else if (item === 'juara3') {
+            dataBadge.push({
+              ranking: 3,
+              profile: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara3,
+              url_profile: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara3_profile,
+              other: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara3,
+              url_other: detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara3_general,
+            });
+          }
+
+          return dataBadge;
+        })[0],
       banner_search: {
         file: detail?.bannerSearch?.[0]?.image,
         url: detail?.bannerSearch?.[0]?.image,
@@ -105,6 +129,8 @@ const EditChallenge = ({ detailId }) => {
       }
     });
   };
+
+  console.log(inputValue);
 
   return (
     <Stack direction="column" gap={3}>

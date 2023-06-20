@@ -239,7 +239,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
         toast.success('Berhasil Membuat Challenge', { duration: 3000 });
-        Router.back();
+        Router.replace('/challenge/huehue');
       }
       onClose();
     });
@@ -257,13 +257,30 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     if (typeof selectedItem?.banner_popup?.file !== 'string') {
       formData.append('popUpnotif', selectedItem?.banner_popup?.file);
     }
+    if (selectedItem?.winner_ranking_badge?.length >= 1) {
+      formData.append(
+        'listbadge',
+        selectedItem?.winner_ranking_badge?.map((item) => {
+          if (typeof item?.other === 'string') {
+            return item?.other;
+          } else {
+            return 'new';
+          }
+        }),
+      );
+
+      selectedItem?.winner_ranking_badge?.map((item) => {
+        typeof item?.other !== 'string' && formData.append(`badge_general_${item?.ranking}`, item?.other);
+        typeof item?.profile !== 'string' && formData.append(`badge_profile_${item?.ranking}`, item?.profile);
+      });
+    }
 
     updateChallenge({ id: selectedItem?._id, formData }).then((res) => {
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
         toast.success('Berhasil Mengupdate Challenge', { duration: 3000 });
-        Router.back();
+        Router.replace('/challenge/huehue');
       }
       onClose();
     });
