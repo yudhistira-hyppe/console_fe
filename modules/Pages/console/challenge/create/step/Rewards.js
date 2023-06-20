@@ -48,7 +48,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 80 && img.height > 80) {
+        if (img.width > 80 || img.height > 80) {
           alert('ukuran imagenya kegedean woyy 🤬');
           return;
         }

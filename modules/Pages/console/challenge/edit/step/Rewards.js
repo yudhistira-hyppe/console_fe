@@ -177,7 +177,11 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 type="file"
                                 accept="image/png"
                                 onChange={(e) => handleUploadImage(e, key, 'profile')}
-                                disabled
+                                disabled={
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                    inputValue?.winner_ranking_badge[key]?.other &&
+                                  !isEmpty(inputValue?.winner_ranking_badge[key]?.profile)
+                                }
                               />
                             </Box>
                           </label>
@@ -202,8 +206,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 }
 
                                 handleInputChange('winner_ranking_badge', prevVal);
-                              }}
-                              disabled>
+                              }}>
                               <Close style={{ fontSize: 16 }} />
                             </IconButton>
                           )}
@@ -250,7 +253,11 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 type="file"
                                 accept="image/png"
                                 onChange={(e) => handleUploadImage(e, key, 'other')}
-                                disabled
+                                disabled={
+                                  inputValue?.winner_ranking_badge[key]?.profile ===
+                                    inputValue?.winner_ranking_badge[key]?.other &&
+                                  !isEmpty(inputValue?.winner_ranking_badge[key]?.other)
+                                }
                               />
                             </Box>
                           </label>
@@ -275,13 +282,31 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                                 }
 
                                 handleInputChange('winner_ranking_badge', prevVal);
-                              }}
-                              disabled>
+                              }}>
                               <Close style={{ fontSize: 16 }} />
                             </IconButton>
                           )}
                           <Typography style={{ color: '#737373', fontSize: 14 }}>Bentuk Badge: Bulat</Typography>
                         </Stack>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          style={{ height: '100%', padding: '12px 16px' }}
+                          onClick={(e) => {
+                            handleClick(e, key);
+                          }}>
+                          <Typography style={{ textTransform: 'capitalize', fontSize: 14 }}>
+                            Pilih dari penyimpanan badge
+                          </Typography>
+                        </Button>
+
+                        <PopoverBadge
+                          anchorEl={anchorEl}
+                          handleClose={handleClose}
+                          inputValue={inputValue}
+                          handleInputChange={handleInputChange}
+                          itemKey={popupKey}
+                        />
                       </Stack>
                     )}
                   </Stack>

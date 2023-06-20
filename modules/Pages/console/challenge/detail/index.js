@@ -13,6 +13,8 @@ import AreaComponent from './component/Area';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from '../tab/index.style';
 import ModalConfirmation from '../modal/ModalConfirmation';
+import NotifikasiComponent from './component/Notifikasi';
+import ParticipantComponent from './component/participant';
 
 const breadcrumbs = [
   { label: 'Challenge', link: '/challenge' },
@@ -94,19 +96,20 @@ const DetailChallenge = ({ detailId }) => {
             onChange={(e, val) => setTab(val)}
             textColor="secondary"
             indicatorColor="secondary"
-            style={{ marginTop: -20 }}>
-            <Tab className={classes.tab} label="Challenge" value="challenge" />
-            <Tab className={classes.tab} label="Partisipan" value="partisipan" />
+            style={{ marginTop: -15 }}>
+            <Tab className={classes.tab} label="Challenge" value="challenge" style={{ padding: '0 0 8px' }} />
+            <Tab className={classes.tab} label="Partisipan" value="partisipan" style={{ padding: '0 0 8px' }} />
           </TabList>
           <TabPanel value="challenge" style={{ padding: 0 }}>
-            <Grid container spacing={3} mt="-24px">
+            <Grid container spacing={3}>
               <Grid item xs={12} md={7}>
-                <Stack direction="column" gap={2}>
+                <Stack direction="column" gap={2} style={{ height: '100%' }}>
                   <DetailChallengeComponent detail={detail} />
+                  <NotifikasiComponent detail={detail} />
                 </Stack>
               </Grid>
               <Grid item xs={12} md={5}>
-                <Stack direction="column" gap={2}>
+                <Stack direction="column" gap={2} style={{ height: '100%' }}>
                   <LeaderboardComponent detail={detail} />
                   <RewardsComponent detail={detail} />
                   <AreaComponent detail={detail} />
@@ -115,7 +118,7 @@ const DetailChallenge = ({ detailId }) => {
             </Grid>
           </TabPanel>
           <TabPanel value="partisipan" style={{ padding: 0 }}>
-            <Typography>Partisipan</Typography>
+            <ParticipantComponent />
           </TabPanel>
         </TabContext>
       )}

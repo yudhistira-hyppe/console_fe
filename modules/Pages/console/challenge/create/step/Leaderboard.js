@@ -33,7 +33,7 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 375 && img.height > 176) {
+        if (img.width > 375 || img.height > 176) {
           alert('ukuran imagenya kegedean woyy 🤬');
           return;
         }

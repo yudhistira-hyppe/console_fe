@@ -97,7 +97,7 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             Rentang Umur<span style={{ color: 'red' }}>*</span>
           </Typography>
           <FormGroup row style={{ gap: 16 }}>
-            {['<14', '14-28', '29-43', '>44', 'lainnya'].map((item, key) => (
+            {['<14', '14-28', '29-43', '44<', 'LAINNYA'].map((item, key) => (
               <FormControlLabel
                 key={key}
                 control={

@@ -23,6 +23,11 @@ const DetailChallengeComponent = ({ detail }) => {
         return [...prevVal, 'Lainnya'];
       });
     }
+    if (detail?.peserta?.[0]?.rentangUmur?.[0]['<14'] === 'YES') {
+      setAge((prevVal) => {
+        return [...prevVal, '< 14'];
+      });
+    }
     if (detail?.peserta?.[0]?.rentangUmur?.[0]['14-28'] === 'YES') {
       setAge((prevVal) => {
         return [...prevVal, '14-28 Tahun'];
@@ -38,15 +43,10 @@ const DetailChallengeComponent = ({ detail }) => {
         return [...prevVal, '44 >'];
       });
     }
-    if (detail?.peserta?.[0]?.rentangUmur?.[0]['<14'] === 'YES') {
-      setAge((prevVal) => {
-        return [...prevVal, '< 14'];
-      });
-    }
   }, []);
 
   return (
-    <Card sx={{ p: 3 }}>
+    <Card sx={{ p: 3, height: 'auto' }}>
       <Stack direction="column" gap={2}>
         <Stack direction="column" gap={1}>
           <Typography style={{ fontSize: 24, fontWeight: 'bold', fontSize: 24 }}>{detail?.nameChallenge}</Typography>
@@ -72,7 +72,9 @@ const DetailChallengeComponent = ({ detail }) => {
         <Stack direction="column" gap="12px">
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Leaderboard Cycle:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>70 Hari</Typography>
+            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+              {detail?.durasi || 0} Hari
+            </Typography>
           </Stack>
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Cycle Frequency:</Typography>
@@ -86,7 +88,11 @@ const DetailChallengeComponent = ({ detail }) => {
           </Stack>
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Hastag:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>-</Typography>
+            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+              {detail?.objectChallenge === 'KONTEN'
+                ? detail?.metrik?.[0]?.InteraksiKonten?.tagar || '-'
+                : detail?.metrik?.[0]?.AktivitasAkun?.tagar || '-'}
+            </Typography>
           </Stack>
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Metrik:</Typography>
@@ -94,35 +100,65 @@ const DetailChallengeComponent = ({ detail }) => {
               {detail?.objectChallenge === 'AKUN' && detail?.metrik?.[0]?.Aktivitas && (
                 <>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Aktivitas Akun</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>Referal: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>Mengikuti: -</Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    Referal: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Referal || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    Mengikuti: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Ikuti || 0}
+                  </Typography>
                 </>
               )}
               {detail?.objectChallenge === 'AKUN' && detail?.metrik?.[0]?.Interaksi && (
                 <>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Interaksi Konten</Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Buat</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeVid: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppePic: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeDiary: -</Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeVid: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.buatKonten?.[0]?.HyppeVid || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppePic: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.buatKonten?.[0]?.HyppePic || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeDiary: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.buatKonten?.[0]?.HyppeDiary || 0}
+                  </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Suka</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeVid: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppePic: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeDiary: -</Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeVid: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.suka?.[0]?.HyppeVid || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppePic: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.suka?.[0]?.HyppePic || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeDiary: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.suka?.[0]?.HyppeDiary || 0}
+                  </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Tonton</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeVid: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeDiary: -</Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeVid: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.tonton?.[0]?.HyppeVid || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeDiary: {detail?.metrik?.[0]?.AktivitasAkun?.[0]?.tonton?.[0]?.HyppeDiary || 0}
+                  </Typography>
                 </>
               )}
               {detail?.objectChallenge === 'KONTEN' && (
                 <>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Tonton</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeVid: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeDiary: -</Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeVid || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeDiary || 0}
+                  </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Suka</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeVid: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppePic: -</Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>HyppeDiary: -</Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeVid || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppePic || 0}
+                  </Typography>
+                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
+                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeDiary || 0}
+                  </Typography>
                 </>
               )}
             </Stack>

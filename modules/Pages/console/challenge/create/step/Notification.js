@@ -45,7 +45,7 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 343 && img.height > 103) {
+        if (img.width > 343 || img.height > 103) {
           alert('ukuran imagenya kegedean woyy 🤬');
           return;
         }
@@ -76,7 +76,7 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 326 && img.height > 326) {
+        if (img.width > 326 || img.height > 326) {
           alert('ukuran imagenya kegedean woyy 🤬');
           return;
         }
