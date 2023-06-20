@@ -9,51 +9,60 @@ const RewardsComponent = ({ detail }) => {
       <Stack direction="column" gap={2}>
         <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>Ketentuan Hadiah</Typography>
         <Stack direction="row" justifyContent="space-between">
-          <Stack direction="column" gap={2} justifyContent="center" alignItems="center">
-            <Typography style={{ fontWeight: 'bold', color: '#00000099', fontSize: 14 }}>Juara#1</Typography>
-            <Stack direction="row" gap={1}>
-              <Avatar
-                src={detail?.leaderBoard?.[0]?.bannerLeaderboard}
-                style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
-                variant="rounded"
-              />
-              <Avatar
-                src={detail?.leaderBoard?.[0]?.bannerLeaderboard}
-                style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
-                variant="rounded"
-              />
-            </Stack>
-          </Stack>
-          <Stack direction="column" gap={2} justifyContent="center" alignItems="center">
-            <Typography style={{ fontWeight: 'bold', color: '#00000099', fontSize: 14 }}>Juara#2</Typography>
-            <Stack direction="row" gap={1}>
-              <Avatar
-                src={detail?.leaderBoard?.[0]?.bannerLeaderboard}
-                style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
-                variant="rounded"
-              />
-              <Avatar
-                src={detail?.leaderBoard?.[0]?.bannerLeaderboard}
-                style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
-                variant="rounded"
-              />
-            </Stack>
-          </Stack>
-          <Stack direction="column" gap={2} justifyContent="center" alignItems="center">
-            <Typography style={{ fontWeight: 'bold', color: '#00000099', fontSize: 14 }}>Juara#3</Typography>
-            <Stack direction="row" gap={1}>
-              <Avatar
-                src={detail?.leaderBoard?.[0]?.bannerLeaderboard}
-                style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
-                variant="rounded"
-              />
-              <Avatar
-                src={detail?.leaderBoard?.[0]?.bannerLeaderboard}
-                style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
-                variant="rounded"
-              />
-            </Stack>
-          </Stack>
+          {detail?.ketentuanHadiah?.[0]?.badgePemenang &&
+            Object.keys(detail?.ketentuanHadiah?.[0]?.badge?.[0]).includes('juara1') && (
+              <Stack direction="column" gap={2} justifyContent="center" alignItems="center">
+                <Typography style={{ fontWeight: 'bold', color: '#00000099', fontSize: 14 }}>Juara#1</Typography>
+                <Stack direction="row" gap={1}>
+                  <Avatar
+                    src={detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara1_profile}
+                    style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
+                    variant="rounded"
+                  />
+                  <Avatar
+                    src={detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara1_general}
+                    style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
+                    variant="rounded"
+                  />
+                </Stack>
+              </Stack>
+            )}
+          {detail?.ketentuanHadiah?.[0]?.badgePemenang &&
+            Object.keys(detail?.ketentuanHadiah?.[0]?.badge?.[0]).includes('juara2') && (
+              <Stack direction="column" gap={2} justifyContent="center" alignItems="center">
+                <Typography style={{ fontWeight: 'bold', color: '#00000099', fontSize: 14 }}>Juara#2</Typography>
+                <Stack direction="row" gap={1}>
+                  <Avatar
+                    src={detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara2_profile}
+                    style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
+                    variant="rounded"
+                  />
+                  <Avatar
+                    src={detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara2_general}
+                    style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
+                    variant="rounded"
+                  />
+                </Stack>
+              </Stack>
+            )}
+          {detail?.ketentuanHadiah?.[0]?.badgePemenang &&
+            Object.keys(detail?.ketentuanHadiah?.[0]?.badge?.[0]).includes('juara3') && (
+              <Stack direction="column" gap={2} justifyContent="center" alignItems="center">
+                <Typography style={{ fontWeight: 'bold', color: '#00000099', fontSize: 14 }}>Juara#3</Typography>
+                <Stack direction="row" gap={1}>
+                  <Avatar
+                    src={detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara3_profile}
+                    style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
+                    variant="rounded"
+                  />
+                  <Avatar
+                    src={detail?.ketentuanHadiah?.[0]?.badge?.[0]?.juara3_general}
+                    style={{ width: 64, height: 64, border: '1px solid #dddddd' }}
+                    variant="rounded"
+                  />
+                </Stack>
+              </Stack>
+            )}
         </Stack>
         <Stack direction="row" gap={1}>
           <Typography style={{ color: '#00000061', width: '100%', maxWidth: 130, fontSize: 14 }}>Penempatan:</Typography>
@@ -93,8 +102,8 @@ const RewardsComponent = ({ detail }) => {
               Sesuai Poin:
             </Typography>
             <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-              {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.point_reward || 0)} Poin [Rp
-              {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.max_reward || 0)}]
+              {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPrice || 0)} Poin [Rp
+              {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPriceMax || 0)}]
             </Typography>
           </Stack>
         )}
