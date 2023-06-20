@@ -14,6 +14,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from '../tab/index.style';
 import ModalConfirmation from '../modal/ModalConfirmation';
 import NotifikasiComponent from './component/Notifikasi';
+import ParticipantComponent from './component/participant';
 
 const breadcrumbs = [
   { label: 'Challenge', link: '/challenge' },
@@ -117,7 +118,7 @@ const DetailChallenge = ({ detailId }) => {
             </Grid>
           </TabPanel>
           <TabPanel value="partisipan" style={{ padding: 0 }}>
-            <Typography>Partisipan</Typography>
+            <ParticipantComponent />
           </TabPanel>
         </TabContext>
       )}
