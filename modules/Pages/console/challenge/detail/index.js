@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Breadcrumbs from 'modules/Pages/console/help-center/bantuan-pengguna/BreadCrumb';
-import { Button, Grid, Stack, Tab } from '@mui/material';
+import { Button, Grid, Stack, Tab, Tooltip } from '@mui/material';
 import { ChevronLeft } from '@material-ui/icons';
 import { Typography } from '@material-ui/core';
 import Router from 'next/router';
@@ -15,6 +15,7 @@ import useStyles from '../tab/index.style';
 import ModalConfirmation from '../modal/ModalConfirmation';
 import NotifikasiComponent from './component/Notifikasi';
 import ParticipantComponent from './component/participant';
+import dayjs from 'dayjs';
 
 const breadcrumbs = [
   { label: 'Challenge', link: '/challenge' },
@@ -49,43 +50,90 @@ const DetailChallenge = ({ detailId }) => {
           <ChevronLeft style={{ fontSize: 28 }} />
           <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Kembali</Typography>
         </Stack>
-        <Stack direction="row" spacing={2}>
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{ borderRadius: 6, padding: '10px 20px' }}
-            onClick={() => Router.push(`/challenge/edit/${detailId}`)}>
-            <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Edit Challenge</Typography>
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            style={{ borderRadius: 6, padding: '10px 20px' }}
-            onClick={() =>
-              setOpenModal({
-                showModal: !openModal.showModal,
-                status: 'delete',
-                selected: detail?._id,
-              })
-            }>
-            <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
-              Hapus Challenge
-            </Typography>
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            style={{ borderRadius: 6, padding: '10px 20px' }}
-            onClick={() =>
-              setOpenModal({
-                showModal: !openModal.showModal,
-                status: 'duplicate',
-                selected: detail?._id,
-              })
-            }>
-            <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Duplikasi</Typography>
-          </Button>
-        </Stack>
+        {!loadingDetail && (
+          <Stack direction="row" spacing={2}>
+            {(detail?.statusChallenge === 'DRAFT' || detail?.statuscurrentChallenge !== 'SEDANG BERJALAN') && (
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ borderRadius: 6, padding: '10px 20px' }}
+                onClick={() => Router.push(`/challenge/edit/${detailId}`)}>
+                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                  Edit Challenge
+                </Typography>
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              color="error"
+              style={{ borderRadius: 6, padding: '10px 20px' }}
+              onClick={() =>
+                setOpenModal({
+                  showModal: !openModal.showModal,
+                  status: 'delete',
+                  selected: detail?._id,
+                })
+              }>
+              <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                Hapus Challenge
+              </Typography>
+            </Button>
+            {detail?.statusChallenge === 'DRAFT' ? (
+              dayjs(detail?.startChallenge).isBefore(dayjs()) ? (
+                <Tooltip title="Tanggal Mulai Challenge sudah melewati dari batas waktu sekarang, ubah dahulu Tanggal Mulai Challenge untuk mempublikasi.">
+                  <span>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      style={{ borderRadius: 6, padding: '10px 20px' }}
+                      onClick={() =>
+                        setOpenModal({
+                          showModal: !openModal.showModal,
+                          status: 'duplicate',
+                          selected: detail?._id,
+                        })
+                      }
+                      disabled>
+                      <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                        Publikasi
+                      </Typography>
+                    </Button>
+                  </span>
+                </Tooltip>
+              ) : (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  style={{ borderRadius: 6, padding: '10px 20px' }}
+                  onClick={() =>
+                    setOpenModal({
+                      showModal: !openModal.showModal,
+                      status: 'duplicate',
+                      selected: detail?._id,
+                    })
+                  }>
+                  <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                    Publikasi
+                  </Typography>
+                </Button>
+              )
+            ) : (
+              <Button
+                variant="outlined"
+                color="secondary"
+                style={{ borderRadius: 6, padding: '10px 20px' }}
+                onClick={() =>
+                  setOpenModal({
+                    showModal: !openModal.showModal,
+                    status: 'duplicate',
+                    selected: detail?._id,
+                  })
+                }>
+                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Duplikasi</Typography>
+              </Button>
+            )}
+          </Stack>
+        )}
       </Stack>
 
       {loadingDetail ? (

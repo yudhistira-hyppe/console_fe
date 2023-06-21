@@ -79,19 +79,19 @@ const RewardsComponent = ({ detail }) => {
             <Stack direction="row" gap={1}>
               <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 1:</Typography>
               <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                Rp{formatCurrency(100000000)}
+                Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara1 || 0)}
               </Typography>
             </Stack>
             <Stack direction="row" gap={1}>
               <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 2:</Typography>
               <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                Rp{formatCurrency(75000000)}
+                Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara2 || 0)}
               </Typography>
             </Stack>
             <Stack direction="row" gap={1}>
               <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 3:</Typography>
               <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                Rp{formatCurrency(50000000)}
+                Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara3 || 0)}
               </Typography>
             </Stack>
           </Stack>
