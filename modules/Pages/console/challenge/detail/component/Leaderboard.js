@@ -29,7 +29,7 @@ const LeaderboardComponent = ({ detail }) => {
         <Stack direction="row" gap={1}>
           <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Dengan Badge:</Typography>
           <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-            {detail?.leaderBoard?.[0]?.tampilBadge ? 'Ya' : 'tidak'}
+            {detail?.leaderBoard?.[0]?.tampilBadge ? 'Ya' : 'Tidak'}
           </Typography>
         </Stack>
         <Stack direction="row" gap={1}>
