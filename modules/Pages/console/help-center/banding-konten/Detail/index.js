@@ -78,14 +78,14 @@ const DetailBandingKonten = () => {
   };
 
   const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
+    if (item?.apsara || item?.apsaraId) {
       if (item?.media?.ImageInfo) {
         return item?.media?.ImageInfo?.[0]?.URL;
       } else {
         return item?.media?.VideoList?.[0]?.CoverURL;
       }
     } else if (item?.mediaEndpoint) {
-      return getMediaEndpoint(item?.mediaEndpoint);
+      return getMediaEndpoint(item?.mediaEndpoint?.replace('.jpg', '')?.replace('.jpeg', ''));
     } else {
       return '/images/dashboard/content_image.png';
     }
@@ -278,7 +278,7 @@ const DetailBandingKonten = () => {
         <PageLoader />
       ) : (
         <PageContainer heading="">
-          <GridContainer>
+          <Grid container spacing={3}>
             <Grid item xs={12} sm={8}>
               <Typography style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 8 }}>
                 {detail?.data[0]?.reasonLastAppeal || '-'}
@@ -689,7 +689,7 @@ const DetailBandingKonten = () => {
                 </CardContent>
               </Paper>
             </Grid>
-          </GridContainer>
+          </Grid>
         </PageContainer>
       )}
     </>
