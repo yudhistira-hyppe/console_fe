@@ -36,6 +36,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
         toast.success('Berhasil Duplikasi Challenge', { duration: 3000 });
+        Router.push('/challenge/draft');
       }
       onClose();
     });
@@ -51,7 +52,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       } else {
         toast.success('Berhasil Menghapus Challenge', { duration: 3000 });
       }
-      onClose();
+      onClose('redirect');
     });
   };
 
@@ -301,6 +302,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
               {status === 'delete-draft' && `Hapus Draft Challenge ?`}
               {(status === 'create' || status === 'update') && 'Simpan & Buat Challenge ?'}
               {status === 'create-draft' && 'Simpan Sebagai Draft ?'}
+              {status === 'publish' && 'Publikasi Draft Challenge ?'}
             </Typography>
             {status !== 'create-draft' && (
               <Typography style={{ textAlign: 'center', fontSize: 16, lineHeight: 1.2 }}>
@@ -310,6 +312,8 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
                 {status === 'delete-draft' && `Apakah Anda yakin ingin menghapus draft kompetisi ini ?`}
                 {(status === 'create' || status === 'update') &&
                   'Anda akan menyimpan kompetisi ini. Challenge akan tersedia pada aplikasi Hyppe'}
+                {status === 'publish' &&
+                  'Anda akan mempublikasikan draft kompetisi ini. Challenge akan tersedia pada aplikasi Hyppe'}
               </Typography>
             )}
           </Stack>
@@ -328,11 +332,14 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
                   handleCreate();
                 } else if (status === 'update') {
                   handleUpdate();
+                } else if (status === 'publish') {
+                  toast.error('Blom ready cuy 😔😔');
                 }
               }}>
               {status === 'duplicate' && 'Duplikasi'}
               {status === 'delete' && 'Hapus'}
-              {(status === 'delete-draft' || status === 'create' || status === 'update') && 'Konfirmasi'}
+              {(status === 'delete-draft' || status === 'create' || status === 'update' || status === 'publish') &&
+                'Konfirmasi'}
               {status === 'create-draft' && 'Simpan'}
             </LoadingButton>
             <Button onClick={onClose}>Batal</Button>

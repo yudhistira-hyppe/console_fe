@@ -89,7 +89,7 @@ const DetailChallenge = ({ detailId }) => {
                       onClick={() =>
                         setOpenModal({
                           showModal: !openModal.showModal,
-                          status: 'duplicate',
+                          status: 'publish',
                           selected: detail?._id,
                         })
                       }
@@ -108,7 +108,7 @@ const DetailChallenge = ({ detailId }) => {
                   onClick={() =>
                     setOpenModal({
                       showModal: !openModal.showModal,
-                      status: 'duplicate',
+                      status: 'publish',
                       selected: detail?._id,
                     })
                   }>
@@ -175,10 +175,8 @@ const DetailChallenge = ({ detailId }) => {
         showModal={openModal.showModal}
         status={openModal.status}
         selectedItem={openModal.selected}
-        onClose={() => {
-          if (openModal?.status === 'duplicate') {
-            Router.replace('/challenge/draft');
-          } else {
+        onClose={(value) => {
+          if (value === 'redirect') {
             Router.back();
           }
           setOpenModal({
