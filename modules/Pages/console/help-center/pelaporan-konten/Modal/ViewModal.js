@@ -98,7 +98,7 @@ export default function ViewModal({ showModal, onClose, userReports }) {
                   </Grid>
                   <Grid item xs={3}>
                     <Stack direction={'column'} justifyContent={'center'} height={'100%'}>
-                      <Typography>{moment(item?.createdAt)?.format('DD/MM/YY-HH:mm')} WIB</Typography>
+                      <Typography>{moment(item?.createdAt)?.utc().format('DD/MM/YY-HH:mm')} WIB</Typography>
                     </Stack>
                   </Grid>
                   <Grid item xs={4}>

@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 import PopoverBadge from '../../create/component/PopoverBadge';
 import { isEmpty } from 'lodash';
 
-const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
+const ComponentStepRewards = ({ inputValue, handleInputChange, isDraft }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [popupKey, setPopupKey] = useState(null);
 
@@ -93,7 +93,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                   handleInputChange('winner_badges', !inputValue.winner_badges);
                   handleInputChange('winner_ranking_badge', undefined);
                 }}
-                disabled
+                disabled={!isDraft}
               />
             }
             label={<Typography style={{ color: '#737373' }}>Badge Pemenang</Typography>}
@@ -132,7 +132,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                       }
                       label={<Typography style={{ color: '#737373' }}>Juara {`#${key + 1}`}</Typography>}
                       style={{ width: 'fit-content' }}
-                      disabled
+                      disabled={!isDraft}
                     />
                     {inputValue?.winner_ranking_badge?.map((item) => item?.ranking)?.includes(key + 1) && (
                       <Stack direction="row" alignItems="center" spacing={2}>
@@ -335,7 +335,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                   handleInputChange('winner_rewards_type', inputValue.winner_rewards ? undefined : 'ranking');
                   handleInputChange('winner_ranking_price', undefined);
                 }}
-                disabled
+                disabled={!isDraft}
               />
             }
             label={<Typography style={{ color: '#737373' }}>Hadiah Pemenang</Typography>}
@@ -373,7 +373,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                   </Stack>
                 }
                 style={{ width: 'fit-content' }}
-                disabled
+                disabled={!isDraft}
               />
               {inputValue?.winner_rewards_type === 'ranking' && (
                 <FormGroup style={{ marginBottom: 24, gap: 12 }}>
@@ -407,7 +407,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                         }
                         label={<Typography style={{ color: '#737373' }}>Juara {`#${key + 1}`}</Typography>}
                         style={{ width: 'fit-content' }}
-                        disabled
+                        disabled={!isDraft}
                       />
                       {inputValue?.winner_ranking_price?.map((item) => item?.ranking)?.includes(key + 1) && (
                         <TextField
@@ -437,7 +437,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                           }}
                           sx={{ '& input': { height: 32 } }}
                           style={{ width: 250 }}
-                          disabled
+                          disabled={!isDraft}
                         />
                       )}
                     </Stack>
@@ -463,7 +463,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                   </Stack>
                 }
                 style={{ width: 'fit-content' }}
-                disabled
+                disabled={!isDraft}
               />
               {inputValue?.winner_rewards_type === 'poin' && (
                 <Stack direction="column" spacing={2} mt={1}>
@@ -493,7 +493,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                       }}
                       sx={{ '& input': { height: 32 } }}
                       style={{ width: 250 }}
-                      disabled
+                      disabled={!isDraft}
                     />
                   </Stack>
                   <Stack direction="column" spacing={1}>
@@ -522,7 +522,7 @@ const ComponentStepRewards = ({ inputValue, handleInputChange }) => {
                       }}
                       sx={{ '& input': { height: 32 } }}
                       style={{ width: 250 }}
-                      disabled
+                      disabled={!isDraft}
                     />
                   </Stack>
                 </Stack>

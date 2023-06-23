@@ -413,7 +413,9 @@ const DetailPelaporanIklan = () => {
                 <CardContent style={{ paddingBottom: 16 }}>
                   <Stack direction="row" alignItems="center" spacing={2}>
                     <Chip
-                      label={`${detail?.data[0]?.place}-Hyppe${detail?.data[0]?.type === 'video' ? 'Vid' : 'Pict'}`}
+                      label={`${detail?.data[0]?.place ? detail?.data[0]?.place + '-' : ''}Hyppe${
+                        detail?.data[0]?.type === 'video' ? 'Vid' : 'Pict'
+                      }`}
                       style={{ borderRadius: 4, fontFamily: 'Lato', fontSize: 12, color: '#00000099', fontWeight: 'bold' }}
                       size="small"
                     />
@@ -426,11 +428,26 @@ const DetailPelaporanIklan = () => {
                     <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.18)' }}>
                       {detail?.data[0]?.name}
                     </Typography>
-                    <Stack direction={'row'} spacing={1} mt={2}>
-                      {detail?.data[0]?.interest?.map((item, key) => (
+                    <Stack direction={'row'} spacing={1} mt={2} gap="8px" flexWrap="wrap">
+                      {detail?.data[0]?.interest?.map(
+                        (item, key) =>
+                          key < 3 && (
+                            <Chip
+                              label={item?.interestName}
+                              key={key}
+                              style={{
+                                borderRadius: 4,
+                                fontFamily: 'Lato',
+                                fontSize: 12,
+                                color: '#00000099',
+                                fontWeight: 'bold',
+                              }}
+                            />
+                          ),
+                      )}
+                      {detail?.data[0]?.interest?.length - 3 > 0 && (
                         <Chip
-                          label={item?.interestName}
-                          key={key}
+                          label={`+ ${detail?.data[0]?.interest?.length - 3} Interest Lainnya`}
                           style={{
                             borderRadius: 4,
                             fontFamily: 'Lato',
@@ -439,7 +456,7 @@ const DetailPelaporanIklan = () => {
                             fontWeight: 'bold',
                           }}
                         />
-                      ))}
+                      )}
                     </Stack>
                   </Stack>
                   <Stack direction="column" spacing={2} mt={3}>

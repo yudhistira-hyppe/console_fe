@@ -27,7 +27,7 @@ export default function ViewModal({ showModal, onClose, userReports }) {
   const getMediaEndpoint = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
-    return `${STREAM_URL}/profilepict/${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
   };
 
   return (
@@ -98,7 +98,7 @@ export default function ViewModal({ showModal, onClose, userReports }) {
                   </Grid>
                   <Grid item xs={3}>
                     <Stack direction={'column'} justifyContent={'center'} height={'100%'}>
-                      <Typography>{moment(item?.createdAt)?.format('DD/MM/YY-HH:mm')} WIB</Typography>
+                      <Typography>{moment(item?.createdAt)?.utc().format('DD/MM/YY-HH:mm')} WIB</Typography>
                     </Stack>
                   </Grid>
                   <Grid item xs={4}>

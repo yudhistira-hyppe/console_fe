@@ -4,7 +4,7 @@ import { Avatar, Box, Card, Stack, Switch, Tooltip } from '@mui/material';
 import { debounce } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
-const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
+const ComponentStepLeaderboard = ({ inputValue, handleInputChange, isDraft }) => {
   function formatBytes(bytes) {
     return (bytes / Math.pow(1024, 2)).toFixed(1);
   }
@@ -60,7 +60,7 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
             checked={inputValue?.show_badge_leaderboard || false}
             color="secondary"
             onChange={() => handleInputChange('show_badge_leaderboard', !inputValue?.show_badge_leaderboard)}
-            disabled
+            disabled={!isDraft}
           />
         </Stack>
         <Stack direction="column" spacing={1}>
@@ -131,6 +131,170 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
             Warna Background<span style={{ color: 'red' }}>*</span>
           </Typography>
           <Stack direction="row" spacing={2}>
+            {isDraft && (
+              <>
+                <Box
+                  style={{
+                    backgroundColor: '#AB22AF',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#AB22AF' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#AB22AF', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#3D4C9B',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#3D4C9B' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#3D4C9B', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#455DD8',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#455DD8' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#455DD8', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#23ADC0',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#23ADC0' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#23ADC0', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#8019D8',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#8019D8' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#8019D8', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#FF8C00',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#FF8C00' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#FF8C00', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#01864E',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#01864E' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#01864E', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#FFC700',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#FFC700' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#FFC700', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#E6094B',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#E6094B' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#E6094B', custom: false });
+                  }}
+                />
+                <Box
+                  style={{
+                    backgroundColor: '#A358E7',
+                    height: 40,
+                    width: 40,
+                    cursor: 'pointer',
+                    border:
+                      inputValue?.banner_background_color?.color === '#A358E7' &&
+                      !inputValue?.banner_background_color?.custom
+                        ? '3px inset black'
+                        : 'none',
+                  }}
+                  onClick={() => {
+                    handleInputChange('banner_background_color', { color: '#A358E7', custom: false });
+                  }}
+                />
+              </>
+            )}
             <label
               htmlFor="input-color"
               style={{
@@ -152,7 +316,6 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange }) => {
                 onChange={debounce((e) => {
                   handleInputChange('banner_background_color', { color: e.target.value, custom: true });
                 }, 200)}
-                disabled
               />
             </label>
           </Stack>

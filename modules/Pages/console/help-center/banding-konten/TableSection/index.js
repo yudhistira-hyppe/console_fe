@@ -44,7 +44,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const endpoint = mediaEndpoint?.split('_');
 
-    return `${STREAM_URL}${endpoint?.[0]}${authToken}`;
+    return `${STREAM_URL}${endpoint?.[0]?.replace('.jpeg', '')}${authToken}`;
   };
 
   return (
@@ -108,6 +108,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
               <TableRow>
                 <TableCell>Tanggal Pengajuan</TableCell>
                 <TableCell align="left">Akun Pemohon</TableCell>
+                <TableCell align="left">Jumlah Laporan</TableCell>
                 <TableCell align="left">Status</TableCell>
                 <TableCell align="left">Status Konten</TableCell>
                 <TableCell align="left">Alasan Banding</TableCell>
@@ -162,6 +163,11 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                           </Typography>
                         </Stack>
                       </Stack>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 100 }}>
+                        {item?.reportedUserCount || 0} Kali
+                      </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width={140}>
