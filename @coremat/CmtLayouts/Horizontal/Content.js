@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'auto',
     [theme.breakpoints.down('md')]: {
       paddingTop: 20,
       paddingBottom: 20,
