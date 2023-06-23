@@ -180,16 +180,16 @@ const DetailPelaporanKonten = () => {
   };
 
   const getImage = (item) => {
-    if (item?.apsara && item?.apsaraId) {
+    if (item?.apsara || item?.apsaraId) {
       if (item?.media?.ImageInfo) {
-        return item?.media?.ImageInfo?.[0]?.URL;
+        return item?.media?.ImageInfo?.[0]?.URL || new Error();
       } else {
-        return item?.media?.VideoList?.[0]?.CoverURL;
+        return item?.media?.VideoList?.[0]?.CoverURL || new Error();
       }
     } else if (item?.mediaEndpoint) {
-      return getMediaEndpoint(item?.mediaEndpoint);
+      return getMediaUri(item?.mediaEndpoint?.replace('.jpg', '')?.replace('.jpeg', '')) || new Error();
     } else {
-      return '/images/dashboard/content_image.png';
+      return new Error();
     }
   };
 
