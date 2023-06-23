@@ -18,7 +18,16 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
+let notificationItem = [
+  { type: 'upcoming', label: 'Akan Datang' },
+  { type: 'start', label: 'Challenge Dimulai' },
+  { type: 'update', label: 'Update Leaderboard' },
+  { type: 'will_end', label: 'Challenge Akan Berakhir' },
+  { type: 'end', label: 'Challenge Berakhir' },
+  { type: 'winner', label: 'Untuk Pemenang' },
+];
+
+const ComponentStepNotification = ({ inputValue, handleInputChange, isDraft }) => {
   function formatBytes(bytes) {
     return (bytes / Math.pow(1024, 2)).toFixed(1);
   }
@@ -251,6 +260,185 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
             </Stack>
           </Stack>
         </Stack>
+        {isDraft && (
+          <>
+            <Divider flexItem />
+            <Stack direction="column" spacing={1}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography>
+                  Notifikasi Push<span style={{ color: 'red' }}>*</span>
+                </Typography>
+                <Tooltip
+                  title={
+                    <Stack direction="column" p="8px">
+                      <Typography style={{ fontSize: 12 }}>
+                        Push notifikasi akan dikirimkan secara otomatis sesuai dengan waktu yang telah ditentukan.
+                      </Typography>
+                    </Stack>
+                  }
+                  arrow>
+                  <InfoOutlined style={{ fontSize: 14 }} />
+                </Tooltip>
+              </Stack>
+              <FormGroup>
+                {notificationItem?.map((item, key) => (
+                  <Stack direction="column" key={key}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          color="secondary"
+                          checked={inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type) || false}
+                          onChange={() =>
+                            handleInputChange(
+                              'notification_push',
+                              inputValue?.notification_push
+                                ? inputValue?.notification_push?.find((notif) => notif?.type === item?.type)
+                                  ? inputValue?.notification_push?.filter((notif) => notif?.type !== item?.type)
+                                  : [...inputValue?.notification_push, { type: item?.type, title: '', body: '' }]
+                                : [{ type: item?.type, title: '', body: '' }],
+                            )
+                          }
+                        />
+                      }
+                      label={item?.label}
+                      style={{ width: 'fit-content' }}
+                    />
+                    <Stack direction="column" my={2}>
+                      <TextField
+                        placeholder="Tulis Judul Notifikasi"
+                        color="secondary"
+                        value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title || ''}
+                        onChange={(e) => {
+                          let prevVal = inputValue?.notification_push;
+                          let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
+                          prevVal[indexItem].title = e.target.value;
+
+                          handleInputChange('notification_push', prevVal);
+                        }}
+                        style={{
+                          width: 600,
+                          backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
+                            ? ''
+                            : '#EAEAEA',
+                        }}
+                        inputProps={{ maxLength: 48 }}
+                        disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
+                      />
+                      <small style={{ color: '#9B9B9B', marginTop: 6 }}>
+                        {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title?.length || 0}/48
+                        Karakter
+                      </small>
+
+                      <TextField
+                        multiline
+                        placeholder="Tulis Deskripsi Notifikasi"
+                        color="secondary"
+                        value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body || ''}
+                        rows={4}
+                        onChange={(e) => {
+                          let prevVal = inputValue?.notification_push;
+                          let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
+                          prevVal[indexItem].body = e.target.value;
+
+                          handleInputChange('notification_push', prevVal);
+                        }}
+                        style={{
+                          width: 600,
+                          marginTop: 16,
+                          backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
+                            ? ''
+                            : '#EAEAEA',
+                        }}
+                        inputProps={{ maxLength: 100 }}
+                        disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
+                      />
+                      <small style={{ color: '#9B9B9B', marginTop: 6 }}>
+                        {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body?.length || 0}/100
+                        Karakter
+                      </small>
+
+                      {item?.type !== 'start' && (
+                        <Select
+                          value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.blast || ''}
+                          color="secondary"
+                          onChange={(e) => {
+                            let prevVal = inputValue?.notification_push;
+                            let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
+                            prevVal[indexItem].blast = e.target.value;
+
+                            handleInputChange('notification_push', prevVal);
+                          }}
+                          style={{
+                            width: 600,
+                            marginTop: 16,
+                            backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
+                              ? ''
+                              : '#EAEAEA',
+                          }}
+                          disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
+                          displayEmpty>
+                          <MenuItem value="" disabled>
+                            <Typography>{item?.type === 'update' ? 'Pilih Frekuensi' : 'Atur Waktu'}</Typography>
+                          </MenuItem>
+                          {(item?.type === 'upcoming' || item?.type === 'will_end') && (
+                            <MenuItem value="-48">
+                              <Typography>48 Jam Sebelumnya</Typography>
+                            </MenuItem>
+                          )}
+                          {(item?.type === 'upcoming' || item?.type === 'will_end') && (
+                            <MenuItem value="-36">
+                              <Typography>36 Jam Sebelumnya</Typography>
+                            </MenuItem>
+                          )}
+                          {(item?.type === 'upcoming' || item?.type === 'will_end') && (
+                            <MenuItem value="-24">
+                              <Typography>24 Jam Sebelumnya</Typography>
+                            </MenuItem>
+                          )}
+                          {(item?.type === 'upcoming' || item?.type === 'will_end') && (
+                            <MenuItem value="-12">
+                              <Typography>12 Jam Sebelumnya</Typography>
+                            </MenuItem>
+                          )}
+                          {(item?.type === 'winner' || item?.type === 'end') && (
+                            <MenuItem value="1">
+                              <Typography>1 Jam Setelahnya</Typography>
+                            </MenuItem>
+                          )}
+                          {(item?.type === 'winner' || item?.type === 'end') && (
+                            <MenuItem value="2">
+                              <Typography>2 Jam Setelahnya</Typography>
+                            </MenuItem>
+                          )}
+                          {(item?.type === 'winner' || item?.type === 'end') && (
+                            <MenuItem value="3">
+                              <Typography>3 Jam Setelahnya</Typography>
+                            </MenuItem>
+                          )}
+                          {item?.type === 'update' && (
+                            <MenuItem value="12">
+                              <Typography>1x update: 12 jam setelah jam aktif challenge</Typography>
+                            </MenuItem>
+                          )}
+                          {item?.type === 'update' && (
+                            <MenuItem value="8,16">
+                              <Typography>2x update: 8 dan 16 jam setelah jam aktif challenge</Typography>
+                            </MenuItem>
+                          )}
+                          {item?.type === 'update' && (
+                            <MenuItem value="6,12,18">
+                              <Typography>3x update: 6,12,&18 jam setelah jam aktif challenge</Typography>
+                            </MenuItem>
+                          )}
+                        </Select>
+                      )}
+                    </Stack>
+                  </Stack>
+                ))}
+              </FormGroup>
+            </Stack>
+          </>
+        )}
       </Stack>
     </Card>
   );
