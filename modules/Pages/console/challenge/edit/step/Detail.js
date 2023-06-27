@@ -10,6 +10,19 @@ import React, { useEffect } from 'react';
 const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
   const { data: listJenis, isLoading: loadingJenis } = useGetJenisChallengeQuery({ limit: 100, page: 0 });
 
+  useEffect(() => {
+    if (isDraft) {
+      handleInputChange(
+        'enddate',
+        inputValue?.startdate
+          ? inputValue?.cycle_day
+            ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day - 1, 'day')
+            : null
+          : null,
+      );
+    }
+  }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
+
   return (
     <Card sx={{ padding: 3 }}>
       <Typography style={{ fontWeight: 'bold' }}>Detail Challenge</Typography>
@@ -244,7 +257,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
             <Stack direction="row" style={{ padding: 12, backgroundColor: '#EDEDED', borderRadius: 6 }}>
               <Typography style={{ color: '#737373' }}>
                 Total Durasi Kompetisi akan berlangsung selama{' '}
-                <strong style={{ color: '#3F3F3F' }}>{inputValue?.durasi} hari</strong>
+                <strong style={{ color: '#3F3F3F' }}>{inputValue?.cycle * inputValue?.cycle_day} hari</strong>
               </Typography>
             </Stack>
           </Grid>
@@ -287,7 +300,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                     disabled={!isDraft}
                   />
                 )}
-                disabled={!isDraft}
+                disabled
               />
             </Stack>
           </Stack>

@@ -237,7 +237,7 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
                 style={{ borderRadius: 6, padding: '10px 20px' }}
                 onClick={() => {
                   handleInputChange('invited_people', selected);
-                  Router.replace('/challenge/create');
+                  Router.back();
                 }}>
                 <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                   Terapkan Undangan

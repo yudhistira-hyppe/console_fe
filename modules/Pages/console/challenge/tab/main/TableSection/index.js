@@ -209,7 +209,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       }}
                       onClick={() => Router.push(`/challenge/detail/${item?._id}`)}>
                       <Stack direction="row" alignItems="center" gap="15px" width={130}>
-                        <Avatar src={item?.bannerLeaderboard} variant="rounded" alt="X" />
+                        <Avatar src={item?.bannerLeaderboard + '?m=' + new Date().getTime()} variant="rounded" alt="X" />
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}

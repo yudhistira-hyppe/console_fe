@@ -25,12 +25,12 @@ const CreateChallenge = ({ moreSlug }) => {
   const [inputValue, setInputValue] = useState({});
   const breadcrumbs = moreSlug
     ? [
-        { label: 'Challenge', link: '/challenge' },
+        { label: 'Challenge', link: '/challenge/huehue' },
         { label: 'Buat Challenge', link: '/challenge/create' },
         { label: 'Pilih Partisipan', isActive: true },
       ]
     : [
-        { label: 'Challenge', link: '/challenge' },
+        { label: 'Challenge', link: '/challenge/huehue' },
         { label: 'Buat Challenge', isActive: true },
       ];
   const [openModal, setOpenModal] = useState({

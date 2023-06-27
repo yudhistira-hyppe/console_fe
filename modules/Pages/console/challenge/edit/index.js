@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import ComponentStepInvitation from './step/Invitation';
 import ComponentStepType from './step/Type';
 import ComponentStepParticipant from './step/Participant';
+import { isEmpty } from 'lodash';
 
 const EditChallenge = ({ detailId }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -29,7 +30,7 @@ const EditChallenge = ({ detailId }) => {
   });
 
   const breadcrumbs = [
-    { label: 'Challenge', link: '/challenge' },
+    { label: 'Challenge', link: '/challenge/huehue' },
     { label: 'Edit Challenge', isActive: true },
   ];
 
@@ -52,10 +53,12 @@ const EditChallenge = ({ detailId }) => {
       name: detail?.nameChallenge,
       description: detail?.description,
       kind: detail?.jenisChallenge,
-      startdate: detail?.startChallenge ? dayjs(detail?.startChallenge).toDate() : null,
-      enddate: detail?.endChallenge ? dayjs(detail?.endChallenge).toDate() : null,
-      starthour: detail?.startTime,
+      startdate: detail?.startChallenge ? dayjs(detail?.startChallenge) : null,
+      enddate: detail?.endChallenge ? dayjs(detail?.endChallenge) : null,
+      starthour: dayjs(detail?.startTime),
       durasi: detail?.durasi,
+      cycle: detail?.jumlahSiklusdurasi,
+      cycle_day: detail?.durasi,
 
       object: detail?.objectChallenge === 'AKUN' ? 'account' : 'content',
       metric: detail?.metrik?.[0]?.Aktivitas ? 'activity' : 'interaction',
@@ -101,18 +104,14 @@ const EditChallenge = ({ detailId }) => {
             return dataGender;
           })[0]
         : [],
-      area: detail?.peserta?.[0]?.lokasiPengguna?.map((item) => {
-        return {
-          _id: item,
-        };
-      }),
+      area: detail?.peserta?.[0]?.lokasiPengguna,
       type_invitation: detail?.peserta?.[0]?.caraGabung === 'SEMUA PENGGUNA' ? 'all' : 'invitation',
 
       show_status_user: detail?.tampilStatusPengguna,
       show_badge_leaderboard: detail?.leaderBoard?.[0]?.tampilBadge ? true : false,
       banner_leaderboard: {
-        file: detail?.leaderBoard?.[0]?.bannerLeaderboard,
-        url: detail?.leaderBoard?.[0]?.bannerLeaderboard,
+        file: detail?.leaderBoard?.[0]?.bannerLeaderboard + '?m=' + new Date().getTime(),
+        url: detail?.leaderBoard?.[0]?.bannerLeaderboard + '?m=' + new Date().getTime(),
       },
       banner_background_color: {
         color: detail?.leaderBoard?.[0]?.warnaBackground,
@@ -163,12 +162,12 @@ const EditChallenge = ({ detailId }) => {
         : [],
 
       banner_search: {
-        file: detail?.bannerSearch?.[0]?.image,
-        url: detail?.bannerSearch?.[0]?.image,
+        file: detail?.bannerSearch?.[0]?.image + '?m=' + new Date().getTime(),
+        url: detail?.bannerSearch?.[0]?.image + '?m=' + new Date().getTime(),
       },
       banner_popup: {
-        file: detail?.popUp?.[0]?.image,
-        url: detail?.popUp?.[0]?.image,
+        file: detail?.popUp?.[0]?.image + '?m=' + new Date().getTime(),
+        url: detail?.popUp?.[0]?.image + '?m=' + new Date().getTime(),
       },
       notification_push: detail?.notifikasiPush
         ? Object.keys(detail?.notifikasiPush?.[0]).map((item) => {
@@ -187,7 +186,7 @@ const EditChallenge = ({ detailId }) => {
                     ? 'end'
                     : 'winner',
                 title: detail?.notifikasiPush?.[0][item]?.[0]?.title,
-                description: detail?.notifikasiPush?.[0][item]?.[0]?.body,
+                body: detail?.notifikasiPush?.[0][item]?.[0]?.description,
                 blast: detail?.notifikasiPush?.[0][item]?.[0]?.aturWaktu,
               });
             }
@@ -343,26 +342,65 @@ const EditChallenge = ({ detailId }) => {
       ) : (
         <>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            {activeStep === 0 && (
-              <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 1 && (
-              <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 2 && (
-              <ComponentStepParticipant inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 3 && (
-              <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 4 && (
-              <ComponentStepLeaderboard inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 5 && (
-              <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 6 && (
-              <ComponentStepNotification inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+            {isDraft ? (
+              <>
+                {activeStep === 0 && (
+                  <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                )}
+                {activeStep === 1 && (
+                  <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                )}
+                {activeStep === 2 && (
+                  <ComponentStepParticipant
+                    inputValue={inputValue}
+                    handleInputChange={handleInputChange}
+                    isDraft={isDraft}
+                  />
+                )}
+                {activeStep === 3 && (
+                  <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                )}
+                {activeStep === 4 && (
+                  <ComponentStepLeaderboard
+                    inputValue={inputValue}
+                    handleInputChange={handleInputChange}
+                    isDraft={isDraft}
+                  />
+                )}
+                {activeStep === 5 && (
+                  <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                )}
+                {activeStep === 6 && (
+                  <ComponentStepNotification
+                    inputValue={inputValue}
+                    handleInputChange={handleInputChange}
+                    isDraft={isDraft}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                {activeStep === 0 && (
+                  <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                )}
+                {activeStep === 1 && (
+                  <ComponentStepLeaderboard
+                    inputValue={inputValue}
+                    handleInputChange={handleInputChange}
+                    isDraft={isDraft}
+                  />
+                )}
+                {activeStep === 2 && (
+                  <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                )}
+                {activeStep === 3 && (
+                  <ComponentStepNotification
+                    inputValue={inputValue}
+                    handleInputChange={handleInputChange}
+                    isDraft={isDraft}
+                  />
+                )}
+              </>
             )}
           </LocalizationProvider>
 
@@ -413,7 +451,7 @@ const EditChallenge = ({ detailId }) => {
                     });
                   }
                 }}
-                disabled={checkDisabled()}>
+                disabled={isDraft ? checkDisabled() : false}>
                 <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                   {activeStep === (isDraft ? 6 : 3) ? 'Simpan Challenge' : 'Next'}
                 </Typography>
