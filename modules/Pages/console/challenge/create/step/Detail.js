@@ -15,7 +15,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
       'enddate',
       inputValue?.startdate
         ? inputValue?.cycle_day
-          ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day, 'day')
+          ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day - 1, 'day')
           : null
         : null,
     );
@@ -266,7 +266,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               onChange={(newValue) => {
                 handleInputChange('starthour', newValue);
               }}
-              inputFormat="HH:mm WIB"
+              inputFormat="HH:mm"
               views={['hours', 'minutes']}
               renderInput={(params) => <TextField color="secondary" {...params} />}
             />

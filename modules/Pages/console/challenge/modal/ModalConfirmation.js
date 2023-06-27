@@ -63,10 +63,11 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     formData.append('description', selectedItem?.description);
     formData.append('startChallenge', selectedItem?.startdate?.format('YYYY-MM-DD'));
     formData.append('endChallenge', selectedItem?.enddate?.format('YYYY-MM-DD'));
-    formData.append('durasi', (selectedItem?.cycle ? selectedItem?.cycle : 0) * selectedItem?.cycle_day);
-    formData.append('jenisDurasi', 'DAY');
-    formData.append('startTime', selectedItem?.starthour?.format('HH:mm:ss'));
+    formData.append('startTime', selectedItem?.starthour?.format('YYYY-MM-DD HH:mm:ss'));
+    formData.append('durasi', selectedItem?.cycle_day);
+    formData.append('jumlahSiklusdurasi', selectedItem?.cycle);
     formData.append('tampilStatusPengguna', selectedItem?.show_status_user ? true : false);
+    formData.append('statusChallenge', status === 'create-draft' ? 'DRAFT' : 'PUBLISH');
 
     formData.append('objectChallenge', selectedItem?.object === 'account' ? 'AKUN' : 'KONTEN');
     selectedItem?.object === 'account' &&
@@ -110,18 +111,16 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     }
 
     formData.append('tipeAkun', selectedItem?.account_type?.join(','));
-    formData.append('rentangumur', selectedItem?.age_range?.join(','));
-    formData.append('jenis_kelamin', selectedItem?.gender?.join(','));
-    formData.append('lokasi', selectedItem?.area?.map((item) => item?._id)?.join(','));
-
     formData.append('caraGabung', selectedItem?.type_invitation === 'all' ? 'SEMUA PENGGUNA' : 'DENGAN UNDANGAN');
-
     formData.append(
       'list_partisipan_challenge',
       selectedItem?.type_invitation === 'invitation'
         ? selectedItem?.invited_people?.map((item) => item?.iduser)?.join(',')
         : 'ALL',
     );
+    formData.append('jenis_kelamin', selectedItem?.gender?.join(','));
+    formData.append('lokasi', selectedItem?.area?.map((item) => item?._id)?.join(','));
+    formData.append('rentangumur', selectedItem?.age_range?.join(','));
 
     formData.append('leaderboard_tampilbadge_dileaderboard', selectedItem?.show_badge_leaderboard ? true : false);
     formData.append('leaderboard_Height', 176);
@@ -164,7 +163,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
 
     formData.append('hadiah_set_hadiahpemenang', selectedItem?.winner_rewards ? true : false);
     formData.append('hadiah_jenispemenang', selectedItem?.winner_rewards_type === 'ranking' ? 'RANKING' : 'POINT');
-    formData.append('hadiah_currency', 'RUPIAH');
+    formData.append('hadiah_currency', 'Rp');
     if (selectedItem?.winner_rewards_type === 'ranking') {
       if (selectedItem?.winner_ranking_price?.length >= 1) {
         formData.append(
@@ -232,8 +231,6 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('notifikasiPush_untukPemenang_aturWaktu', Number(specificNotification('winner')?.blast));
       }
     }
-
-    formData.append('statusChallenge', status === 'create-draft' ? 'DRAFT' : 'PUBLISH');
 
     createChallenge(formData).then((res) => {
       if (res?.error) {
