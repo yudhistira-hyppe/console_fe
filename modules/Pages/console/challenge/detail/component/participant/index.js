@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Chip, Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
-import { useGetAllUserQuery } from 'api/user/user';
 import { toast } from 'react-hot-toast';
 import { Typography } from '@material-ui/core';
 import Router from 'next/router';
 import { isEmpty } from 'lodash';
+import { useGetListUserChallengeQuery } from 'api/console/challenge';
 
-const ParticipantComponent = () => {
+const ParticipantComponent = ({ detail }) => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -22,13 +22,16 @@ const ParticipantComponent = () => {
     type: [],
   });
   const [filterList, setFilterList] = useState([]);
+  const [session, setSession] = useState('BERLANGSUNG');
 
   const getParams = () => {
     let params = {};
     Object.assign(params, {
+      challengeId: detail?._id,
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
+      ascending: filter.descending === 'true' ? true : false,
+      pilihansession: session,
     });
     filter.username !== '' && Object.assign(params, { username: filter.username });
     filter.gender.length >= 1 &&
@@ -49,7 +52,7 @@ const ParticipantComponent = () => {
     return params;
   };
 
-  const { data: listUser, isFetching: loadingUser } = useGetAllUserQuery(getParams());
+  const { data: listUser, isFetching: loadingUser } = useGetListUserChallengeQuery(getParams());
 
   useEffect(() => {
     if (filter.page >= 1 && listUser?.data?.length < 1) {
@@ -68,6 +71,7 @@ const ParticipantComponent = () => {
       return {
         ...prevVal,
         descending: e.target.value,
+        page: 0,
       };
     });
   };
@@ -182,15 +186,54 @@ const ParticipantComponent = () => {
         <Stack direction="column" spacing={3} style={{ position: 'relative' }}>
           <Stack direction={'row'} spacing={3} mt={3} mb={12}>
             <SearchSection filter={filter} handleChange={handleSearchChange} />
-            <TableSection
-              filterList={filterList}
-              handleDeleteFilter={handleSearchChange}
-              filter={filter}
-              loading={false}
-              listTickets={{ data: [{}, {}] }}
-              handlePageChange={handlePageChange}
-              handleOrder={onOrderChange}
-            />
+            <Stack direction="column" spacing={3}>
+              {detail?.statusChallenge === 'PUBLISH' && detail?.statuscurrentChallenge !== 'AKAN DATANG' && (
+                <Stack direction="row" alignItems="center" gap={2}>
+                  <Chip
+                    label={
+                      <Typography style={{ color: session === 'BERLANGSUNG' ? '#AB22AF' : '#00000099', fontSize: 14 }}>
+                        Berlangsung
+                      </Typography>
+                    }
+                    sx={{
+                      padding: '0 6px',
+                      height: 40,
+                      backgroundColor: session === 'BERLANGSUNG' ? '#AB22AF14' : 'transparent',
+                      borderRadius: 5,
+                      border: session === 'BERLANGSUNG' ? '1px solid #AB22AF' : '1px solid #0000001F',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setSession('BERLANGSUNG')}
+                  />
+                  <Chip
+                    label={
+                      <Typography style={{ color: session === 'BERAKHIR' ? '#AB22AF' : '#00000099', fontSize: 14 }}>
+                        Berakhir
+                      </Typography>
+                    }
+                    sx={{
+                      padding: '0 6px',
+                      height: 40,
+                      backgroundColor: session === 'BERAKHIR' ? '#AB22AF14' : 'transparent',
+                      borderRadius: 5,
+                      border: session === 'BERAKHIR' ? '1px solid #AB22AF' : '1px solid #0000001F',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setSession('BERAKHIR')}
+                  />
+                </Stack>
+              )}
+              <TableSection
+                filterList={filterList}
+                handleDeleteFilter={handleSearchChange}
+                filter={filter}
+                loading={loadingUser}
+                listTickets={listUser}
+                handlePageChange={handlePageChange}
+                session={session}
+                handleOrder={onOrderChange}
+              />
+            </Stack>
           </Stack>
         </Stack>
       </PageContainer>
