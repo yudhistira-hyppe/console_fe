@@ -43,6 +43,11 @@ const DetailChallengeComponent = ({ detail }) => {
         return [...prevVal, '> 44'];
       });
     }
+    if (detail?.peserta?.[0]?.rentangUmur?.[0]['LAINNYA'] === 'YES') {
+      setAge((prevVal) => {
+        return [...prevVal, 'Lainnya'];
+      });
+    }
   }, []);
 
   return (
@@ -83,9 +88,13 @@ const DetailChallengeComponent = ({ detail }) => {
             )}
           </Stack>
           <Typography style={{ fontSize: 14 }}>
-            {detail?.objectChallenge === 'KONTEN' ? 'Konten' : 'Akun'} | {detail?.durasi || 0}{' '}
-            {detail?.jenisDurasi === 'DAY' && 'Hari'} ({dayjs(detail?.startChallenge).format('DD/MM/YYYY')} -{' '}
-            {dayjs(detail?.endChallenge).format('DD/MM/YYYY')}) - {detail?.startTime?.slice(0, 5)} WIB
+            {detail?.objectChallenge === 'KONTEN' ? 'Konten' : 'Akun'} | {detail?.durasi * detail?.jumlahSiklusdurasi || 0}{' '}
+            Hari{' '}
+            {detail?.startChallenge &&
+              `(${dayjs(detail?.startChallenge).format('DD/MM/YYYY')} - ${dayjs(detail?.endChallenge).format(
+                'DD/MM/YYYY',
+              )}) - 
+            ${dayjs(detail?.startTime).format('HH:mm')} WIB`}
           </Typography>
           <Typography style={{ fontSize: 14 }}>{detail?.description}</Typography>
           <Chip
@@ -110,7 +119,9 @@ const DetailChallengeComponent = ({ detail }) => {
           </Stack>
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Cycle Frequency:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>7</Typography>
+            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+              {detail?.jumlahSiklusdurasi || 0}
+            </Typography>
           </Stack>
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Status Pengguna:</Typography>

@@ -29,13 +29,13 @@ const NotifikasiComponent = ({ detail }) => {
             <Stack direction="column" gap={2} justifyContent="flex-end" style={{ height: '100%' }}>
               <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Banner Search</Typography>
               <Avatar
-                src={detail?.bannerSearch?.[0]?.image}
+                src={detail?.bannerSearch?.[0]?.image + '?m=' + new Date().getTime()}
                 style={{ width: 343, height: 103, border: '1px solid #dddddd' }}
                 variant="rounded"
               />
               <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Pop Up</Typography>
               <Avatar
-                src={detail?.popUp?.[0]?.image}
+                src={detail?.popUp?.[0]?.image + '?m=' + new Date().getTime()}
                 style={{ width: 326, height: 326, border: '1px solid #dddddd' }}
                 variant="rounded"
               />

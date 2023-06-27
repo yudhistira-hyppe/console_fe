@@ -18,7 +18,7 @@ import ParticipantComponent from './component/participant';
 import dayjs from 'dayjs';
 
 const breadcrumbs = [
-  { label: 'Challenge', link: '/challenge' },
+  { label: 'Challenge', link: '/challenge/huehue' },
   { label: 'Detail Challenge', isActive: true },
 ];
 
@@ -79,7 +79,7 @@ const DetailChallenge = ({ detailId }) => {
               </Typography>
             </Button>
             {detail?.statusChallenge === 'DRAFT' ? (
-              dayjs(detail?.startChallenge).isBefore(dayjs()) ? (
+              !detail?.startChallenge || dayjs(detail?.startChallenge).isBefore(dayjs()) ? (
                 <Tooltip title="Tanggal Mulai Challenge sudah melewati dari batas waktu sekarang, ubah dahulu Tanggal Mulai Challenge untuk mempublikasi.">
                   <span>
                     <Button
@@ -166,7 +166,7 @@ const DetailChallenge = ({ detailId }) => {
             </Grid>
           </TabPanel>
           <TabPanel value="partisipan" style={{ padding: 0 }}>
-            <ParticipantComponent />
+            <ParticipantComponent detail={detail} />
           </TabPanel>
         </TabContext>
       )}
