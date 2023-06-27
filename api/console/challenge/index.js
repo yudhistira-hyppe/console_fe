@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const challengeApi = createApi({
   reducerPath: 'console/challenge',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['list', 'detail'],
+  tagTypes: ['list', 'detail', 'listUser'],
   endpoints: (build) => ({
     getListChallenge: build.query({
       query: (data) => ({
@@ -20,6 +20,14 @@ export const challengeApi = createApi({
         method: 'GET',
       }),
       providesTags: ['detail'],
+    }),
+    getListUserChallenge: build.query({
+      query: (data) => ({
+        url: `/challenge/listing/userchallenge`,
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['listUser'],
     }),
     duplicateChallenge: build.mutation({
       query: (id) => ({
@@ -50,6 +58,7 @@ export const challengeApi = createApi({
 export const {
   useGetListChallengeQuery,
   useGetDetailChallengeQuery,
+  useGetListUserChallengeQuery,
   useDuplicateChallengeMutation,
   useUpdateChallengeMutation,
   useCreateChallengeMutation,
