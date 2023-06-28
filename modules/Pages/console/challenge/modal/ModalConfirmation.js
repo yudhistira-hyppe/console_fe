@@ -243,7 +243,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     });
   };
 
-  const handleUpdate = () => {
+  const handleUpdateDraft = () => {
     let formData = new FormData();
     formData.append('nameChallenge', selectedItem?.name);
     formData.append('jenisChallenge', selectedItem?.kind);
@@ -254,7 +254,10 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     formData.append('durasi', selectedItem?.cycle_day);
     formData.append('jumlahSiklusdurasi', selectedItem?.cycle);
     formData.append('tampilStatusPengguna', selectedItem?.show_status_user ? true : false);
-    formData.append('statusChallenge', status === 'create-draft' ? 'DRAFT' : 'PUBLISH');
+    formData.append(
+      'statusChallenge',
+      selectedItem?.statusChallenge ? selectedItem?.statusChallenge : status === 'create-draft' ? 'DRAFT' : 'PUBLISH',
+    );
 
     formData.append('objectChallenge', selectedItem?.object === 'account' ? 'AKUN' : 'KONTEN');
     selectedItem?.object === 'account' &&
@@ -428,6 +431,62 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     });
   };
 
+  const handleUpdate = () => {
+    let formData = new FormData();
+    formData.append('description', selectedItem?.description);
+    formData.append(
+      'statusChallenge',
+      selectedItem?.statusChallenge ? selectedItem?.statusChallenge : status === 'create-draft' ? 'DRAFT' : 'PUBLISH',
+    );
+
+    formData.append('leaderboard_Height', 176);
+    formData.append('leaderboard_Width', 375);
+    formData.append('leaderboard_warnaBackground', selectedItem?.banner_background_color?.color);
+    formData.append('leaderboard_formatFile', selectedItem?.banner_leaderboard?.file?.type?.replace('image/', ''));
+    formData.append('bannerBoard', selectedItem?.banner_leaderboard?.file);
+
+    formData.append('ketentuanhadiah_Height', 80);
+    formData.append('ketentuanhadiah_Width', 80);
+    formData.append('ketentuanhadiah_formatFile', 'png');
+    if (selectedItem?.winner_ranking_badge?.length >= 1) {
+      formData.append(
+        'listbadge',
+        selectedItem?.winner_ranking_badge?.map((item) => {
+          if (typeof item?.other === 'string') {
+            return item?.other;
+          } else {
+            return 'new';
+          }
+        }),
+      );
+
+      selectedItem?.winner_ranking_badge?.map((item) => {
+        typeof item?.other !== 'string' && formData.append(`badge_general_${item?.ranking}`, item?.other);
+        typeof item?.profile !== 'string' && formData.append(`badge_profile_${item?.ranking}`, item?.profile);
+      });
+    }
+
+    formData.append('bannersearch_Height', 343);
+    formData.append('bannersearch_Width', 103);
+    formData.append('bannersearch_formatFile', selectedItem?.banner_search?.file?.type?.replace('image/', ''));
+    formData.append('bannerSearch', selectedItem?.banner_search?.file);
+
+    formData.append('popup_Height', 326);
+    formData.append('popup_Width', 326);
+    formData.append('popup_formatFile', selectedItem?.banner_popup?.file?.type?.replace('image/', ''));
+    formData.append('popUpnotif', selectedItem?.banner_popup?.file);
+
+    updateChallenge({ id: selectedItem?._id, formData }).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { duration: 3000 });
+      } else {
+        toast.success('Berhasil Mengupdate Challenge', { duration: 3000 });
+        Router.replace('/challenge/huehue');
+      }
+      onClose();
+    });
+  };
+
   return (
     <div>
       <Modal
@@ -440,9 +499,10 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>
               {status === 'duplicate' && `Duplikasi Challenge`}
               {status === 'delete' && `Hapus Challenge`}
-              {status === 'delete-draft' && `Hapus Draft Challenge ?`}
               {(status === 'create' || status === 'update') && 'Simpan & Buat Challenge ?'}
               {status === 'create-draft' && 'Simpan Sebagai Draft ?'}
+              {status === 'delete-draft' && `Hapus Draft Challenge ?`}
+              {status === 'update-draft' && `Simpan Draft Challenge ?`}
               {status === 'publish' && 'Publikasi Draft Challenge ?'}
             </Typography>
             {status !== 'create-draft' && (
@@ -453,6 +513,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
                 {status === 'delete-draft' && `Apakah Anda yakin ingin menghapus draft kompetisi ini ?`}
                 {(status === 'create' || status === 'update') &&
                   'Anda akan menyimpan kompetisi ini. Challenge akan tersedia pada aplikasi Hyppe'}
+                {status === 'update-draft' && 'Anda akan menyimpan kompetisi ini dalam kondisi draft'}
                 {status === 'publish' &&
                   'Anda akan mempublikasikan draft kompetisi ini. Challenge akan tersedia pada aplikasi Hyppe'}
               </Typography>
@@ -473,6 +534,8 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
                   handleCreate();
                 } else if (status === 'update') {
                   handleUpdate();
+                } else if (status === 'update-draft') {
+                  handleUpdateDraft();
                 } else if (status === 'publish') {
                   toast.error('Blom ready cuy 😔😔');
                 }
@@ -481,7 +544,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
               {status === 'delete' && 'Hapus'}
               {(status === 'delete-draft' || status === 'create' || status === 'update' || status === 'publish') &&
                 'Konfirmasi'}
-              {status === 'create-draft' && 'Simpan'}
+              {(status === 'create-draft' || status === 'update-draft') && 'Simpan'}
             </LoadingButton>
             <Button onClick={onClose}>Batal</Button>
           </Stack>

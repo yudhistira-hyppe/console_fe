@@ -257,7 +257,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
             <Stack direction="row" style={{ padding: 12, backgroundColor: '#EDEDED', borderRadius: 6 }}>
               <Typography style={{ color: '#737373' }}>
                 Total Durasi Kompetisi akan berlangsung selama{' '}
-                <strong style={{ color: '#3F3F3F' }}>{inputValue?.cycle * inputValue?.cycle_day} hari</strong>
+                <strong style={{ color: '#3F3F3F' }}>{inputValue?.cycle || 1 * inputValue?.cycle_day || 1} hari</strong>
               </Typography>
             </Stack>
           </Grid>

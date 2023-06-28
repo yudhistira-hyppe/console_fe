@@ -59,6 +59,7 @@ const EditChallenge = ({ detailId }) => {
       durasi: detail?.durasi,
       cycle: detail?.jumlahSiklusdurasi,
       cycle_day: detail?.durasi,
+      statusChallenge: detail?.statusChallenge,
 
       object: detail?.objectChallenge === 'AKUN' ? 'account' : 'content',
       metric: detail?.metrik?.[0]?.Aktivitas ? 'activity' : 'interaction',
@@ -446,7 +447,7 @@ const EditChallenge = ({ detailId }) => {
                   } else {
                     setOpenModal({
                       showModal: !openModal.showModal,
-                      status: 'update',
+                      status: 'update-draft',
                       selected: inputValue,
                     });
                   }
