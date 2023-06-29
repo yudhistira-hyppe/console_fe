@@ -92,7 +92,7 @@ const ComponentStepInvitation = ({ inputValue, handleInputChange }) => {
                 variant="contained"
                 color="secondary"
                 style={{ height: 40, width: 527 }}
-                onClick={() => Router.push('/challenge/create/participant')}>
+                onClick={() => Router.push(`/challenge/edit/${inputValue?._id}/participant`)}>
                 <Typography style={{ textTransform: 'capitalize', fontSize: 14 }}>Pilih Partisipan Challenge</Typography>
               </Button>
             </Grid>

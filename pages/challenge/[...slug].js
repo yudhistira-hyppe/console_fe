@@ -29,7 +29,7 @@ const ChallengeDynamicPage = () => {
         if (authUser) {
           listJenis?.data?.map((item) => validDatabaseTab.push(item?.name));
           if (!loadingJenis) {
-            if (slug.length > 2 || !validDatabaseTab.includes(slug[0])) {
+            if (slug.length > 3 || !validDatabaseTab.includes(slug[0])) {
               router.replace(listJenis?.data?.[0]?.name);
               return;
             }
@@ -48,7 +48,7 @@ const ChallengeDynamicPage = () => {
       {challengeProps.tab === 'create' ? (
         <CreateChallenge moreSlug={slug[1]} />
       ) : challengeProps.tab === 'edit' ? (
-        <EditChallenge detailId={challengeProps.detailId} />
+        <EditChallenge moreSlug={slug[2]} detailId={challengeProps.detailId} />
       ) : challengeProps.tab === 'detail' ? (
         <DetailChallenge detailId={challengeProps.detailId} />
       ) : (
