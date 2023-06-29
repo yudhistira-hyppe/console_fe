@@ -210,8 +210,6 @@ const DetailChallenge = ({ detailId }) => {
     });
   }, [loadingDetail]);
 
-  console.log(inputValue);
-
   return (
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />

@@ -229,8 +229,6 @@ const EditChallenge = ({ detailId, moreSlug }) => {
     });
   }, [loadingDetail]);
 
-  console.log(inputValue);
-
   useEffect(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
   }, [activeStep]);
