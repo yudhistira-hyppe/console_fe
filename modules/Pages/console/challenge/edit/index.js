@@ -38,6 +38,7 @@ const EditChallenge = ({ detailId, moreSlug }) => {
           label: 'Challenge',
           link: detail?.statusChallenge === 'DRAFT' ? '/challenge/draft' : `/challenge/${detail?.jenisChallengeName}`,
         },
+        { label: 'Detail Challenge', link: `/challenge/detail/${detailId}` },
         { label: 'Edit Challenge', link: `/challenge/edit/${detailId}` },
         { label: 'Pilih Partisipan', isActive: true },
       ]
@@ -46,6 +47,7 @@ const EditChallenge = ({ detailId, moreSlug }) => {
           label: 'Challenge',
           link: detail?.statusChallenge === 'DRAFT' ? '/challenge/draft' : `/challenge/${detail?.jenisChallengeName}`,
         },
+        { label: 'Detail Challenge', link: `/challenge/detail/${detailId}` },
         { label: 'Edit Challenge', isActive: true },
       ];
 
@@ -80,7 +82,8 @@ const EditChallenge = ({ detailId, moreSlug }) => {
       metric: detail?.metrik?.[0]?.Aktivitas ? 'activity' : 'interaction',
       activity_referal: detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Referal,
       activity_following: detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Ikuti,
-      with_hashtag: detail?.metrik?.[0]?.InteraksiKonten?.tagar !== '' ? true : false,
+      with_hashtag:
+        detail?.metrik?.[0]?.InteraksiKonten?.tagar && detail?.metrik?.[0]?.InteraksiKonten?.tagar !== '' ? true : false,
       hashtag: detail?.metrik?.[0]?.InteraksiKonten?.tagar?.replace('#', ''),
       interaction_create_vid: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppeVid,
       interaction_create_pic: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppePic,
