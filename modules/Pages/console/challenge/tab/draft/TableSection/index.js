@@ -31,6 +31,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ModalConfirmation from '../../../modal/ModalConfirmation';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -173,6 +174,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell align="left">Tanggal Buat</TableCell>
                 <TableCell align="left">Nama Challenge</TableCell>
                 <TableCell align="left">Cara Bergabung</TableCell>
                 <TableCell align="left">Tipe</TableCell>
@@ -195,6 +197,11 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 130 }}>
+                        {dayjs(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
+                      </Typography>
+                    </TableCell>
                     <TableCell
                       align="left"
                       sx={{
