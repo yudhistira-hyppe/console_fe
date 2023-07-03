@@ -44,6 +44,14 @@ export const challengeApi = createApi({
       }),
       invalidatesTags: ['list', 'detail'],
     }),
+    deleteChallenge: build.mutation({
+      query: ({ id, formData }) => ({
+        url: `/challenge/setstatuschallenge/${id}`,
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: ['list', 'detail'],
+    }),
     createChallenge: build.mutation({
       query: (data) => ({
         url: '/challenge',
@@ -61,5 +69,6 @@ export const {
   useGetListUserChallengeQuery,
   useDuplicateChallengeMutation,
   useUpdateChallengeMutation,
+  useDeleteChallengeMutation,
   useCreateChallengeMutation,
 } = challengeApi;

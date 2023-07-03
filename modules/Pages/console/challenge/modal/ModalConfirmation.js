@@ -6,6 +6,7 @@ import { Stack } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import {
   useCreateChallengeMutation,
+  useDeleteChallengeMutation,
   useDuplicateChallengeMutation,
   useUpdateChallengeMutation,
 } from 'api/console/challenge';
@@ -29,6 +30,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
   const [duplicateChallenge, { isLoading: loadingDuplicate }] = useDuplicateChallengeMutation();
   const [updateChallenge, { isLoading: loadingUpdate }] = useUpdateChallengeMutation();
   const [createChallenge, { isLoading: loadingCreate }] = useCreateChallengeMutation();
+  const [deleteChallenge, { isLoading: loadingDelete }] = useDeleteChallengeMutation();
 
   const handleDuplicate = () => {
     duplicateChallenge(selectedItem).then((res) => {
@@ -43,10 +45,11 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
   };
 
   const handleDelete = () => {
-    let formData = new FormData();
-    formData.append('statusChallenge', 'NONACTIVE');
+    const formData = {
+      statusChallenge: 'NONACTIVE',
+    };
 
-    updateChallenge({ id: selectedItem, formData }).then((res) => {
+    deleteChallenge({ id: selectedItem, formData }).then((res) => {
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
@@ -719,7 +722,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
             <LoadingButton
-              loading={loadingDuplicate || loadingUpdate || loadingCreate}
+              loading={loadingDuplicate || loadingUpdate || loadingCreate || loadingDelete}
               variant="contained"
               color="secondary"
               onClick={() => {
