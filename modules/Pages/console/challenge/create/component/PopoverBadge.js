@@ -14,7 +14,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { useGetListBadgeQuery } from 'api/console/utilitas/badge';
+import { useGetListBadgeByTypeQuery } from 'api/console/utilitas/badge';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import React, { useEffect, useState } from 'react';
 import ScrollBar from 'react-perfect-scrollbar';
@@ -22,11 +22,8 @@ import ScrollBar from 'react-perfect-scrollbar';
 const PopoverBadge = ({ anchorEl, handleClose, itemKey, inputValue, handleInputChange }) => {
   const open = Boolean(anchorEl);
   const [search, setSearch] = useState('');
-  const { data: listBadge, isFetching: loadingBadge } = useGetListBadgeQuery({
-    page: 0,
-    limit: 40,
-    ascending: false,
-    search: search,
+  const { data: listBadge, isFetching: loadingBadge } = useGetListBadgeByTypeQuery({
+    juara: itemKey + 1,
   });
 
   useEffect(() => {
@@ -83,7 +80,7 @@ const PopoverBadge = ({ anchorEl, handleClose, itemKey, inputValue, handleInputC
           <ScrollBar style={{ height: 350, padding: '0 24px 16px 16px' }}>
             <Grid container spacing={2}>
               {listBadge?.data
-                ?.filter((item) => item?.type === `JUARA${itemKey + 1}`)
+                ?.filter((item) => item?.name?.toLowerCase().includes(search?.toLowerCase()))
                 ?.map((item, key) => (
                   <Grid
                     key={key}
