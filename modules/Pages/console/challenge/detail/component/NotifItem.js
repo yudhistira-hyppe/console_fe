@@ -5,7 +5,7 @@ import ScrollBar from 'react-perfect-scrollbar';
 
 const NotifItem = () => {
   return (
-    <ScrollBar style={{ height: 572, marginTop: 16 }}>
+    <ScrollBar style={{ height: 572, display: 'flex', marginTop: 16 }}>
       <Stack direction="column" gap={2} style={{ width: '100%', paddingRight: 16 }}>
         {['done', 'upcoming', 'ongoing', 'upcoming', 'upcoming', 'upcoming'].map((item, key) => (
           <>

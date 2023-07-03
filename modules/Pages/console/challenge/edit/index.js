@@ -18,8 +18,10 @@ import dayjs from 'dayjs';
 import ComponentStepInvitation from './step/Invitation';
 import ComponentStepType from './step/Type';
 import ComponentStepParticipant from './step/Participant';
+import { isEmpty } from 'lodash';
+import ChooseParticipant from './step/ChooseParticipant';
 
-const EditChallenge = ({ detailId }) => {
+const EditChallenge = ({ detailId, moreSlug }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [inputValue, setInputValue] = useState({});
   const [openModal, setOpenModal] = useState({
@@ -28,12 +30,26 @@ const EditChallenge = ({ detailId }) => {
     selected: {},
   });
 
-  const breadcrumbs = [
-    { label: 'Challenge', link: '/challenge' },
-    { label: 'Edit Challenge', isActive: true },
-  ];
-
   const { data: detail, isLoading: loadingDetail } = useGetDetailChallengeQuery(detailId);
+
+  const breadcrumbs = moreSlug
+    ? [
+        {
+          label: 'Challenge',
+          link: detail?.statusChallenge === 'DRAFT' ? '/challenge/draft' : `/challenge/${detail?.jenisChallengeName}`,
+        },
+        { label: 'Detail Challenge', link: `/challenge/detail/${detailId}` },
+        { label: 'Edit Challenge', link: `/challenge/edit/${detailId}` },
+        { label: 'Pilih Partisipan', isActive: true },
+      ]
+    : [
+        {
+          label: 'Challenge',
+          link: detail?.statusChallenge === 'DRAFT' ? '/challenge/draft' : `/challenge/${detail?.jenisChallengeName}`,
+        },
+        { label: 'Detail Challenge', link: `/challenge/detail/${detailId}` },
+        { label: 'Edit Challenge', isActive: true },
+      ];
 
   const isDraft = detail?.statusChallenge === 'DRAFT';
 
@@ -46,23 +62,29 @@ const EditChallenge = ({ detailId }) => {
     let dataAge = [];
     let dataGender = [];
     let dataNotif = [];
+    let dataPrice = [];
 
     setInputValue({
       _id: detail?._id,
       name: detail?.nameChallenge,
       description: detail?.description,
       kind: detail?.jenisChallenge,
-      startdate: detail?.startChallenge ? dayjs(detail?.startChallenge).toDate() : null,
-      enddate: detail?.endChallenge ? dayjs(detail?.endChallenge).toDate() : null,
-      starthour: detail?.startTime,
+      kind_name: detail?.jenisChallengeName,
+      startdate: detail?.startChallenge ? dayjs(detail?.startChallenge) : null,
+      enddate: detail?.endChallenge ? dayjs(detail?.endChallenge) : null,
+      starthour: detail?.startTime ? dayjs(detail?.startTime) : null,
       durasi: detail?.durasi,
+      cycle: detail?.jumlahSiklusdurasi,
+      cycle_day: detail?.durasi,
+      statusChallenge: detail?.statusChallenge,
 
       object: detail?.objectChallenge === 'AKUN' ? 'account' : 'content',
       metric: detail?.metrik?.[0]?.Aktivitas ? 'activity' : 'interaction',
       activity_referal: detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Referal,
       activity_following: detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Ikuti,
-      with_hashtag: detail?.metrik?.[0]?.InteraksiKonten?.tagar !== '' ? true : false,
-      hashtag: detail?.metrik?.[0]?.InteraksiKonten?.tagar,
+      with_hashtag:
+        detail?.metrik?.[0]?.InteraksiKonten?.tagar && detail?.metrik?.[0]?.InteraksiKonten?.tagar !== '' ? true : false,
+      hashtag: detail?.metrik?.[0]?.InteraksiKonten?.tagar?.replace('#', ''),
       interaction_create_vid: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppeVid,
       interaction_create_pic: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppePic,
       interaction_create_diary: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppeDiary,
@@ -101,18 +123,14 @@ const EditChallenge = ({ detailId }) => {
             return dataGender;
           })[0]
         : [],
-      area: detail?.peserta?.[0]?.lokasiPengguna?.map((item) => {
-        return {
-          _id: item,
-        };
-      }),
+      area: detail?.peserta?.[0]?.lokasiPengguna,
       type_invitation: detail?.peserta?.[0]?.caraGabung === 'SEMUA PENGGUNA' ? 'all' : 'invitation',
 
       show_status_user: detail?.tampilStatusPengguna,
       show_badge_leaderboard: detail?.leaderBoard?.[0]?.tampilBadge ? true : false,
       banner_leaderboard: {
-        file: detail?.leaderBoard?.[0]?.bannerLeaderboard,
-        url: detail?.leaderBoard?.[0]?.bannerLeaderboard,
+        file: detail?.leaderBoard?.[0]?.bannerLeaderboard + '?m=' + new Date().getTime(),
+        url: detail?.leaderBoard?.[0]?.bannerLeaderboard + '?m=' + new Date().getTime(),
       },
       banner_background_color: {
         color: detail?.leaderBoard?.[0]?.warnaBackground,
@@ -123,12 +141,28 @@ const EditChallenge = ({ detailId }) => {
       winner_rewards_type: detail?.hadiahPemenang?.[0]?.typeHadiah === 'POINT' ? 'poin' : 'ranking',
       reward_poin: detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPrice,
       max_reward: detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPriceMax,
-      winner_ranking_price: detail?.hadiahPemenang?.map((item, key) => {
-        return {
-          ranking: key + 1,
-          price: item[`juara${key + 1}`],
-        };
-      }),
+      winner_ranking_price:
+        detail?.hadiahPemenang?.[0]?.ranking &&
+        Object.keys(detail?.hadiahPemenang?.[0]?.ranking?.[0])?.map((item, key) => {
+          if (item === 'juara1') {
+            dataPrice.push({
+              ranking: 1,
+              price: detail?.hadiahPemenang?.[0]?.ranking?.[0]['juara1'],
+            });
+          } else if (item === 'juara2') {
+            dataPrice.push({
+              ranking: 2,
+              price: detail?.hadiahPemenang?.[0]?.ranking?.[0]['juara2'],
+            });
+          } else if (item === 'juara3') {
+            dataPrice.push({
+              ranking: 3,
+              price: detail?.hadiahPemenang?.[0]?.ranking?.[0]['juara3'],
+            });
+          }
+
+          return dataPrice;
+        })[0],
       winner_badges: detail?.ketentuanHadiah?.[0]?.badgePemenang,
       winner_ranking_badge: detail?.ketentuanHadiah?.[0]?.badgePemenang
         ? Object.keys(detail?.ketentuanHadiah?.[0].badge?.[0]).map((item, key) => {
@@ -163,12 +197,12 @@ const EditChallenge = ({ detailId }) => {
         : [],
 
       banner_search: {
-        file: detail?.bannerSearch?.[0]?.image,
-        url: detail?.bannerSearch?.[0]?.image,
+        file: detail?.bannerSearch?.[0]?.image + '?m=' + new Date().getTime(),
+        url: detail?.bannerSearch?.[0]?.image + '?m=' + new Date().getTime(),
       },
       banner_popup: {
-        file: detail?.popUp?.[0]?.image,
-        url: detail?.popUp?.[0]?.image,
+        file: detail?.popUp?.[0]?.image + '?m=' + new Date().getTime(),
+        url: detail?.popUp?.[0]?.image + '?m=' + new Date().getTime(),
       },
       notification_push: detail?.notifikasiPush
         ? Object.keys(detail?.notifikasiPush?.[0]).map((item) => {
@@ -187,7 +221,7 @@ const EditChallenge = ({ detailId }) => {
                     ? 'end'
                     : 'winner',
                 title: detail?.notifikasiPush?.[0][item]?.[0]?.title,
-                description: detail?.notifikasiPush?.[0][item]?.[0]?.body,
+                body: detail?.notifikasiPush?.[0][item]?.[0]?.description,
                 blast: detail?.notifikasiPush?.[0][item]?.[0]?.aturWaktu,
               });
             }
@@ -197,8 +231,6 @@ const EditChallenge = ({ detailId }) => {
         : [],
     });
   }, [loadingDetail]);
-
-  console.log(inputValue);
 
   useEffect(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
@@ -232,6 +264,7 @@ const EditChallenge = ({ detailId }) => {
         !inputValue?.cycle_day ||
         !inputValue?.startdate ||
         !inputValue?.starthour ||
+        inputValue?.starthour?.isValid() === false ||
         !inputValue?.description)
     ) {
       disabled = true;
@@ -308,12 +341,12 @@ const EditChallenge = ({ detailId }) => {
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
+      {moreSlug ? (
         <Stack
           direction="row"
           alignItems="center"
           gap={1}
-          onClick={() => Router.back()}
+          onClick={() => Router.replace(`/challenge/edit/${detailId}`)}
           sx={{
             width: 'fit-content',
             '&:hover': {
@@ -321,105 +354,183 @@ const EditChallenge = ({ detailId }) => {
             },
           }}>
           <ChevronLeft style={{ fontSize: 28 }} />
-          <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Kembali</Typography>
+          <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Pilih Partisipan</Typography>
         </Stack>
-        <ScrollBar style={{ width: 950 }}>
-          <Stepper style={{ backgroundColor: 'transparent', padding: 0 }} activeStep={activeStep}>
-            {steps.map((label, index) => {
-              return (
-                <Step key={label}>
-                  <StepLabel>
-                    <Typography style={{ whiteSpace: 'nowrap', fontSize: 14, fontFamily: 'normal' }}>{label}</Typography>
-                  </StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-        </ScrollBar>
-      </Stack>
+      ) : (
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack
+            direction="row"
+            alignItems="center"
+            gap={1}
+            onClick={() =>
+              detail?.statusChallenge === 'DRAFT'
+                ? Router.replace('/challenge/draft')
+                : Router.replace(`/challenge/${detail?.jenisChallengeName}`)
+            }
+            sx={{
+              width: 'fit-content',
+              '&:hover': {
+                cursor: 'pointer',
+              },
+            }}>
+            <ChevronLeft style={{ fontSize: 28 }} />
+            <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Kembali</Typography>
+          </Stack>
+          <ScrollBar style={{ width: 950 }}>
+            <Stepper style={{ backgroundColor: 'transparent', padding: 0 }} activeStep={activeStep}>
+              {steps.map((label, index) => {
+                return (
+                  <Step key={label}>
+                    <StepLabel>
+                      <Typography style={{ whiteSpace: 'nowrap', fontSize: 14, fontFamily: 'normal' }}>{label}</Typography>
+                    </StepLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>
+          </ScrollBar>
+        </Stack>
+      )}
 
       {loadingDetail ? (
         <PageLoader />
       ) : (
         <>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            {activeStep === 0 && (
-              <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 1 && (
-              <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 2 && (
-              <ComponentStepParticipant inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 3 && (
-              <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 4 && (
-              <ComponentStepLeaderboard inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 5 && (
-              <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-            {activeStep === 6 && (
-              <ComponentStepNotification inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
-            )}
-          </LocalizationProvider>
+          {moreSlug ? (
+            <ChooseParticipant inputValue={inputValue} handleInputChange={handleInputChange} />
+          ) : (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {isDraft ? (
+                <>
+                  {activeStep === 0 && (
+                    <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                  )}
+                  {activeStep === 1 && (
+                    <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                  )}
+                  {activeStep === 2 && (
+                    <ComponentStepParticipant
+                      inputValue={inputValue}
+                      handleInputChange={handleInputChange}
+                      isDraft={isDraft}
+                    />
+                  )}
+                  {activeStep === 3 && (
+                    <ComponentStepInvitation
+                      inputValue={inputValue}
+                      handleInputChange={handleInputChange}
+                      isDraft={isDraft}
+                    />
+                  )}
+                  {activeStep === 4 && (
+                    <ComponentStepLeaderboard
+                      inputValue={inputValue}
+                      handleInputChange={handleInputChange}
+                      isDraft={isDraft}
+                    />
+                  )}
+                  {activeStep === 5 && (
+                    <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                  )}
+                  {activeStep === 6 && (
+                    <ComponentStepNotification
+                      inputValue={inputValue}
+                      handleInputChange={handleInputChange}
+                      isDraft={isDraft}
+                    />
+                  )}
+                </>
+              ) : (
+                <>
+                  {activeStep === 0 && (
+                    <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                  )}
+                  {activeStep === 1 && (
+                    <ComponentStepLeaderboard
+                      inputValue={inputValue}
+                      handleInputChange={handleInputChange}
+                      isDraft={isDraft}
+                    />
+                  )}
+                  {activeStep === 2 && (
+                    <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
+                  )}
+                  {activeStep === 3 && (
+                    <ComponentStepNotification
+                      inputValue={inputValue}
+                      handleInputChange={handleInputChange}
+                      isDraft={isDraft}
+                    />
+                  )}
+                </>
+              )}
+            </LocalizationProvider>
+          )}
 
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            {activeStep > 0 ? (
-              <Button
-                variant="outlined"
-                color="secondary"
-                style={{ borderRadius: 6, padding: '10px 20px' }}
-                onClick={handleBack}>
-                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Back</Typography>
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="error"
-                style={{ borderRadius: 6, padding: '10px 20px' }}
-                onClick={() => Router.replace('/challenge')}>
-                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
-                  Batalkan Perubahan
-                </Typography>
-              </Button>
-            )}
-            <Stack direction="row" spacing={2}>
-              {activeStep > 0 && (
+          {!moreSlug && (
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              {activeStep > 0 ? (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  style={{ borderRadius: 6, padding: '10px 20px' }}
+                  onClick={handleBack}>
+                  <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Back</Typography>
+                </Button>
+              ) : (
                 <Button
                   variant="contained"
                   color="error"
                   style={{ borderRadius: 6, padding: '10px 20px' }}
-                  onClick={() => Router.back()}>
+                  onClick={() =>
+                    detail?.statusChallenge === 'DRAFT'
+                      ? Router.replace('/challenge/draft')
+                      : Router.replace(`/challenge/${detail?.jenisChallengeName}`)
+                  }>
                   <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                     Batalkan Perubahan
                   </Typography>
                 </Button>
               )}
-              <Button
-                variant="contained"
-                color="secondary"
-                style={{ borderRadius: 6, padding: '10px 20px' }}
-                onClick={() => {
-                  if (activeStep < (isDraft ? 6 : 3)) {
-                    handleNext();
-                  } else {
-                    setOpenModal({
-                      showModal: !openModal.showModal,
-                      status: 'update',
-                      selected: inputValue,
-                    });
-                  }
-                }}
-                disabled={checkDisabled()}>
-                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
-                  {activeStep === (isDraft ? 6 : 3) ? 'Simpan Challenge' : 'Next'}
-                </Typography>
-              </Button>
+              <Stack direction="row" spacing={2}>
+                {activeStep > 0 && (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    style={{ borderRadius: 6, padding: '10px 20px' }}
+                    onClick={() =>
+                      detail?.statusChallenge === 'DRAFT'
+                        ? Router.replace('/challenge/draft')
+                        : Router.replace(`/challenge/${detail?.jenisChallengeName}`)
+                    }>
+                    <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                      Batalkan Perubahan
+                    </Typography>
+                  </Button>
+                )}
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ borderRadius: 6, padding: '10px 20px' }}
+                  onClick={() => {
+                    if (activeStep < (isDraft ? 6 : 3)) {
+                      handleNext();
+                    } else {
+                      setOpenModal({
+                        showModal: !openModal.showModal,
+                        status: isDraft ? 'update-draft' : 'update',
+                        selected: inputValue,
+                      });
+                    }
+                  }}
+                  disabled={checkDisabled()}>
+                  <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                    {activeStep === (isDraft ? 6 : 3) ? 'Simpan Challenge' : 'Next'}
+                  </Typography>
+                </Button>
+              </Stack>
             </Stack>
-          </Stack>
+          )}
         </>
       )}
 

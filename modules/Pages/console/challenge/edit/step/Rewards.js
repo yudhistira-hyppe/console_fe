@@ -18,8 +18,8 @@ import {
   Tooltip,
 } from '@mui/material';
 import React, { useState } from 'react';
-import PopoverBadge from '../../create/component/PopoverBadge';
 import { isEmpty } from 'lodash';
+import PopoverBadge from '../component/PopoverBadge';
 
 const ComponentStepRewards = ({ inputValue, handleInputChange, isDraft }) => {
   const [anchorEl, setAnchorEl] = useState(null);

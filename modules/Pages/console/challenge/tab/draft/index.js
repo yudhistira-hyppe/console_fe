@@ -14,7 +14,7 @@ const ChallengeTabDraftComponent = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    descending: 'true',
+    ascending: 'false',
     search: '',
     createdAt: [null, null],
     type: [],
@@ -28,7 +28,7 @@ const ChallengeTabDraftComponent = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      ascending: filter.descending === 'true' ? true : false,
+      ascending: filter.ascending === 'true' ? true : false,
       menuChallenge: 'DRAFT',
     });
 
@@ -95,7 +95,7 @@ const ChallengeTabDraftComponent = () => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        descending: e.target.value,
+        ascending: e.target.value,
       };
     });
   };
@@ -191,7 +191,7 @@ const ChallengeTabDraftComponent = () => {
           return {
             page: 0,
             limit: 10,
-            descending: 'true',
+            ascending: 'true',
             search: '',
             createdAt: [null, null],
             type: [],

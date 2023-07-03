@@ -1,9 +1,10 @@
 import { Typography } from '@material-ui/core';
-import { CheckBox, Close, Search } from '@material-ui/icons';
+import { CheckBox, Close, Delete, Search } from '@material-ui/icons';
 import {
   Avatar,
   Button,
   Checkbox,
+  CircularProgress,
   Divider,
   FormControlLabel,
   Grid,
@@ -13,14 +14,21 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { useGetListBadgeQuery } from 'api/console/utilitas/badge';
+import { useGetListBadgeByTypeQuery } from 'api/console/utilitas/badge';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import React, { useEffect, useState } from 'react';
 import ScrollBar from 'react-perfect-scrollbar';
 
 const PopoverBadge = ({ anchorEl, handleClose, itemKey, inputValue, handleInputChange }) => {
   const open = Boolean(anchorEl);
   const [search, setSearch] = useState('');
-  const { data: listBadge, isLoading: loadingBadge } = useGetListBadgeQuery({ page: 0, limit: 10 });
+  const { data: listBadge, isFetching: loadingBadge } = useGetListBadgeByTypeQuery({
+    juara: itemKey + 1,
+  });
+
+  useEffect(() => {
+    setTimeout(() => setSearch(''), 200);
+  }, [anchorEl]);
 
   return (
     <Popover
@@ -44,55 +52,92 @@ const PopoverBadge = ({ anchorEl, handleClose, itemKey, inputValue, handleInputC
           </IconButton>
         </Stack>
 
-        <ScrollBar style={{ height: 350, padding: '0 24px 16px 16px' }}>
-          <Grid container spacing={2}>
-            {loadingBadge ? (
-              <Typography>Loading data...</Typography>
-            ) : (
-              listBadge?.data?.map((item, key) => (
-                <Grid
-                  key={key}
-                  item
-                  xs={6}
-                  onClick={() => {
-                    let prevVal = inputValue?.winner_ranking_badge;
-                    prevVal[itemKey]['profile'] = item?._id;
-                    prevVal[itemKey][`url_profile`] = item?.badgeProfile;
-                    prevVal[itemKey]['other'] = item?._id;
-                    prevVal[itemKey][`url_other`] = item?.badgeOther;
+        <DelayedTextField
+          fullWidth
+          waitForInput={true}
+          placeholder="Cari berdasarkan nama badge"
+          filterValue={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{ padding: '0 24px 16px 16px' }}
+          InputProps={{
+            endAdornment: search?.length >= 1 && (
+              <InputAdornment position="start">
+                <IconButton aria-label="toggle password visibility" edge="end" onClick={() => setSearch('')}>
+                  <Delete style={{ fontSize: 16 }} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          color="secondary"
+        />
 
-                    handleInputChange('winner_ranking_badge', prevVal);
-                    handleClose();
-                  }}>
-                  <Stack
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    spacing={2}
-                    sx={{
-                      height: '165px',
-                      border: '2px solid #737373',
-                      borderRadius: '8px',
-                      padding: '12px',
-                      '&:hover': {
-                        borderColor: '#AB22AF',
-                        cursor: 'pointer',
-                        backgroundColor: '#ab22af1c',
-                      },
+        {loadingBadge ? (
+          <Stack direction="column" alignItems="center" justifyContent="center" height={350} spacing={2}>
+            <CircularProgress color="secondary" />
+            <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+          </Stack>
+        ) : (
+          <ScrollBar style={{ height: 350, padding: '0 24px 16px 16px' }}>
+            <Grid container spacing={2}>
+              {listBadge?.data
+                ?.filter((item) => item?.name?.toLowerCase().includes(search?.toLowerCase()))
+                ?.map((item, key) => (
+                  <Grid
+                    key={key}
+                    item
+                    xs={6}
+                    onClick={() => {
+                      if (!inputValue?.winner_ranking_badge?.map((item) => item?.profile).includes(item?._id)) {
+                        let prevVal = inputValue?.winner_ranking_badge;
+                        prevVal[itemKey]['profile'] = item?._id;
+                        prevVal[itemKey][`url_profile`] = item?.badgeProfile;
+                        prevVal[itemKey]['other'] = item?._id;
+                        prevVal[itemKey][`url_other`] = item?.badgeOther;
+
+                        handleInputChange('winner_ranking_badge', prevVal);
+                        handleClose();
+                      }
                     }}>
-                    <Typography style={{ fontWeight: 'bold', fontSize: 14, height: 42, overflow: 'hidden' }}>
-                      {item?.name || '-'}
-                    </Typography>
-                    <Stack direction="row" spacing={2}>
-                      <Avatar src={item?.badgeProfile} alt="" style={{ height: 80, width: 80 }} />
-                      <Avatar src={item?.badgeOther} alt="" style={{ height: 80, width: 80 }} />
+                    <Stack
+                      direction="column"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      spacing={2}
+                      sx={{
+                        height: '165px',
+                        border: inputValue?.winner_ranking_badge?.map((item) => item?.profile).includes(item?._id)
+                          ? '2px solid #DDDDDD'
+                          : '2px solid #737373',
+                        background: inputValue?.winner_ranking_badge?.map((item) => item?.profile).includes(item?._id)
+                          ? '#EEEEEE'
+                          : 'transparent',
+                        borderRadius: '8px',
+                        padding: '12px',
+                        '&:hover': {
+                          borderColor: inputValue?.winner_ranking_badge?.map((item) => item?.profile).includes(item?._id)
+                            ? ''
+                            : '#AB22AF',
+                          cursor: inputValue?.winner_ranking_badge?.map((item) => item?.profile).includes(item?._id)
+                            ? 'not-allowed'
+                            : 'pointer',
+                          backgroundColor: inputValue?.winner_ranking_badge?.map((item) => item?.profile).includes(item?._id)
+                            ? ''
+                            : '#ab22af1c',
+                        },
+                      }}>
+                      <Typography style={{ fontWeight: 'bold', fontSize: 14, height: 42, overflow: 'hidden' }}>
+                        {item?.name || '-'}
+                      </Typography>
+                      <Stack direction="row" spacing={2}>
+                        <Avatar src={item?.badgeProfile} alt="" style={{ height: 80, width: 80 }} />
+                        <Avatar src={item?.badgeOther} alt="" style={{ height: 80, width: 80 }} />
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </Grid>
-              ))
-            )}
-          </Grid>
-        </ScrollBar>
+                  </Grid>
+                ))}
+            </Grid>
+          </ScrollBar>
+        )}
       </Stack>
     </Popover>
   );

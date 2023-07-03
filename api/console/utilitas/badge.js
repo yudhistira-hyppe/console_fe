@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const masterBadgeApi = createApi({
   reducerPath: 'utilitas/badge',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['list'],
+  tagTypes: ['list', 'listType'],
   endpoints: (build) => ({
     getListBadge: build.query({
       query: (data) => ({
@@ -13,6 +13,14 @@ export const masterBadgeApi = createApi({
         body: data,
       }),
       providesTags: ['list'],
+    }),
+    getListBadgeByType: build.query({
+      query: (data) => ({
+        url: '/badge/findall',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['listType'],
     }),
     createBadgeChallenge: build.mutation({
       query: (data) => ({
@@ -33,4 +41,9 @@ export const masterBadgeApi = createApi({
   }),
 });
 
-export const { useGetListBadgeQuery, useCreateBadgeChallengeMutation, useUpdateBadgeChallengeMutation } = masterBadgeApi;
+export const {
+  useGetListBadgeQuery,
+  useGetListBadgeByTypeQuery,
+  useCreateBadgeChallengeMutation,
+  useUpdateBadgeChallengeMutation,
+} = masterBadgeApi;

@@ -31,6 +31,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ModalConfirmation from '../../../modal/ModalConfirmation';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -155,14 +156,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={filter.descending}
+              value={filter.ascending}
               onChange={handleOrder}
               displayEmpty
               color="secondary"
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'true'}>Terbaru</MenuItem>
-              <MenuItem value={'false'}>Terlama</MenuItem>
+              <MenuItem value={'false'}>Terbaru</MenuItem>
+              <MenuItem value={'true'}>Terlama</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -173,6 +174,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell align="left">Tanggal Buat</TableCell>
                 <TableCell align="left">Nama Challenge</TableCell>
                 <TableCell align="left">Status</TableCell>
                 <TableCell align="left">Cara Bergabung</TableCell>
@@ -196,6 +198,11 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                        {dayjs(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
+                      </Typography>
+                    </TableCell>
                     <TableCell
                       align="left"
                       sx={{
@@ -209,7 +216,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       }}
                       onClick={() => Router.push(`/challenge/detail/${item?._id}`)}>
                       <Stack direction="row" alignItems="center" gap="15px" width={130}>
-                        <Avatar src={item?.bannerLeaderboard} variant="rounded" alt="X" />
+                        <Avatar src={item?.bannerLeaderboard + '?m=' + new Date().getTime()} variant="rounded" alt="X" />
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}

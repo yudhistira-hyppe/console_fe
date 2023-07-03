@@ -10,7 +10,7 @@ const LeaderboardComponent = ({ detail }) => {
         <Stack direction="column" gap={2}>
           <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>Banner</Typography>
           <Avatar
-            src={detail?.leaderBoard?.[0]?.bannerLeaderboard}
+            src={detail?.leaderBoard?.[0]?.bannerLeaderboard + '?m=' + new Date().getTime()}
             style={{ width: 375, height: 176, border: '1px solid #dddddd' }}
             variant="rounded"
           />

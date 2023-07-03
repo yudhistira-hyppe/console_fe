@@ -5,21 +5,25 @@ import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useGetJenisChallengeQuery } from 'api/console/utilitas/challenge';
 import dayjs from 'dayjs';
 import { isNumber } from 'lodash';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import ModalStartHour from '../component/ModalStartHour';
 
 const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
   const { data: listJenis, isLoading: loadingJenis } = useGetJenisChallengeQuery({ limit: 100, page: 0 });
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     handleInputChange(
       'enddate',
       inputValue?.startdate
         ? inputValue?.cycle_day
-          ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day, 'day')
+          ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day - 1, 'day')
           : null
         : null,
     );
   }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
+
+  console.log(inputValue);
 
   return (
     <Card sx={{ padding: 3 }}>
@@ -266,7 +270,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               onChange={(newValue) => {
                 handleInputChange('starthour', newValue);
               }}
-              inputFormat="HH:mm WIB"
+              open={false}
+              onOpen={() => setOpenModal(true)}
+              inputFormat="HH:mm"
               views={['hours', 'minutes']}
               renderInput={(params) => <TextField color="secondary" {...params} />}
             />
@@ -311,6 +317,16 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
           </Stack>
         </Grid>
       </Grid>
+
+      <ModalStartHour
+        showModal={openModal}
+        selectedItem={inputValue?.starthour}
+        onClose={() => setOpenModal(false)}
+        onSubmit={(val) => {
+          handleInputChange('starthour', dayjs().hour(val.hour).minute(val.minute));
+          setOpenModal(false);
+        }}
+      />
     </Card>
   );
 };

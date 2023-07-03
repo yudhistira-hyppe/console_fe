@@ -25,12 +25,12 @@ const CreateChallenge = ({ moreSlug }) => {
   const [inputValue, setInputValue] = useState({});
   const breadcrumbs = moreSlug
     ? [
-        { label: 'Challenge', link: '/challenge' },
+        { label: 'Challenge', link: '/challenge/huehue' },
         { label: 'Buat Challenge', link: '/challenge/create' },
         { label: 'Pilih Partisipan', isActive: true },
       ]
     : [
-        { label: 'Challenge', link: '/challenge' },
+        { label: 'Challenge', link: '/challenge/huehue' },
         { label: 'Buat Challenge', isActive: true },
       ];
   const [openModal, setOpenModal] = useState({
@@ -38,8 +38,6 @@ const CreateChallenge = ({ moreSlug }) => {
     status: '',
     selected: {},
   });
-
-  console.log(inputValue);
 
   useEffect(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
@@ -73,6 +71,7 @@ const CreateChallenge = ({ moreSlug }) => {
         !inputValue?.cycle_day ||
         !inputValue?.startdate ||
         !inputValue?.starthour ||
+        inputValue?.starthour?.isValid() === false ||
         !inputValue?.description)
     ) {
       disabled = true;

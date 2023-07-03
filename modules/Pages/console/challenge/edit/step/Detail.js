@@ -5,10 +5,25 @@ import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useGetJenisChallengeQuery } from 'api/console/utilitas/challenge';
 import dayjs from 'dayjs';
 import { isNumber } from 'lodash';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import ModalStartHour from '../component/ModalStartHour';
 
 const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
   const { data: listJenis, isLoading: loadingJenis } = useGetJenisChallengeQuery({ limit: 100, page: 0 });
+  const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    if (isDraft) {
+      handleInputChange(
+        'enddate',
+        inputValue?.startdate
+          ? inputValue?.cycle_day
+            ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day - 1, 'day')
+            : null
+          : null,
+      );
+    }
+  }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
 
   return (
     <Card sx={{ padding: 3 }}>
@@ -244,7 +259,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
             <Stack direction="row" style={{ padding: 12, backgroundColor: '#EDEDED', borderRadius: 6 }}>
               <Typography style={{ color: '#737373' }}>
                 Total Durasi Kompetisi akan berlangsung selama{' '}
-                <strong style={{ color: '#3F3F3F' }}>{inputValue?.durasi} hari</strong>
+                <strong style={{ color: '#3F3F3F' }}>{inputValue?.cycle || 1 * inputValue?.cycle_day || 1} hari</strong>
               </Typography>
             </Stack>
           </Grid>
@@ -287,7 +302,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                     disabled={!isDraft}
                   />
                 )}
-                disabled={!isDraft}
+                disabled
               />
             </Stack>
           </Stack>
@@ -302,6 +317,8 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
               onChange={(newValue) => {
                 handleInputChange('starthour', newValue);
               }}
+              open={false}
+              onOpen={() => setOpenModal(true)}
               inputFormat="HH:mm"
               views={['hours', 'minutes']}
               renderInput={(params) => (
@@ -357,6 +374,16 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
           </Stack>
         </Grid>
       </Grid>
+
+      <ModalStartHour
+        showModal={openModal}
+        selectedItem={inputValue?.starthour}
+        onClose={() => setOpenModal(false)}
+        onSubmit={(val) => {
+          handleInputChange('starthour', dayjs().hour(val.hour).minute(val.minute));
+          setOpenModal(false);
+        }}
+      />
     </Card>
   );
 };
