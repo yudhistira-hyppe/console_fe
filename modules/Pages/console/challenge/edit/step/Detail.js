@@ -5,10 +5,12 @@ import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useGetJenisChallengeQuery } from 'api/console/utilitas/challenge';
 import dayjs from 'dayjs';
 import { isNumber } from 'lodash';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import ModalStartHour from '../component/ModalStartHour';
 
 const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
   const { data: listJenis, isLoading: loadingJenis } = useGetJenisChallengeQuery({ limit: 100, page: 0 });
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (isDraft) {
@@ -315,6 +317,8 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
               onChange={(newValue) => {
                 handleInputChange('starthour', newValue);
               }}
+              open={false}
+              onOpen={() => setOpenModal(true)}
               inputFormat="HH:mm"
               views={['hours', 'minutes']}
               renderInput={(params) => (
@@ -370,6 +374,16 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
           </Stack>
         </Grid>
       </Grid>
+
+      <ModalStartHour
+        showModal={openModal}
+        selectedItem={inputValue?.starthour}
+        onClose={() => setOpenModal(false)}
+        onSubmit={(val) => {
+          handleInputChange('starthour', dayjs().hour(val.hour).minute(val.minute));
+          setOpenModal(false);
+        }}
+      />
     </Card>
   );
 };
