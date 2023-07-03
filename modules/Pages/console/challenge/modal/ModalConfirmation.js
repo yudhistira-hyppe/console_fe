@@ -313,11 +313,13 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     formData.append('rentangumur', selectedItem?.age_range?.join(','));
 
     formData.append('leaderboard_tampilbadge_dileaderboard', selectedItem?.show_badge_leaderboard ? true : false);
-    formData.append('leaderboard_Height', 176);
-    formData.append('leaderboard_Width', 375);
     formData.append('leaderboard_warnaBackground', selectedItem?.banner_background_color?.color);
-    formData.append('leaderboard_formatFile', selectedItem?.banner_leaderboard?.file?.type?.replace('image/', ''));
-    formData.append('bannerBoard', selectedItem?.banner_leaderboard?.file);
+    if (typeof selectedItem?.banner_leaderboard?.file !== 'string') {
+      formData.append('leaderboard_Height', 176);
+      formData.append('leaderboard_Width', 375);
+      formData.append('leaderboard_formatFile', selectedItem?.banner_leaderboard?.file?.type?.replace('image/', ''));
+      formData.append('bannerBoard', selectedItem?.banner_leaderboard?.file);
+    }
 
     formData.append('ketentuanhadiah_tampilbadge', selectedItem?.winner_badges ? true : false);
     formData.append('ketentuanhadiah_Height', 80);
@@ -341,15 +343,19 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       });
     }
 
-    formData.append('bannersearch_Height', 343);
-    formData.append('bannersearch_Width', 103);
-    formData.append('bannersearch_formatFile', selectedItem?.banner_search?.file?.type?.replace('image/', ''));
-    formData.append('bannerSearch', selectedItem?.banner_search?.file);
+    if (typeof selectedItem?.banner_search?.file !== 'string') {
+      formData.append('bannersearch_Height', 343);
+      formData.append('bannersearch_Width', 103);
+      formData.append('bannersearch_formatFile', selectedItem?.banner_search?.file?.type?.replace('image/', ''));
+      formData.append('bannerSearch', selectedItem?.banner_search?.file);
+    }
 
-    formData.append('popup_Height', 326);
-    formData.append('popup_Width', 326);
-    formData.append('popup_formatFile', selectedItem?.banner_popup?.file?.type?.replace('image/', ''));
-    formData.append('popUpnotif', selectedItem?.banner_popup?.file);
+    if (typeof selectedItem?.banner_popup?.file !== 'string') {
+      formData.append('popup_Height', 326);
+      formData.append('popup_Width', 326);
+      formData.append('popup_formatFile', selectedItem?.banner_popup?.file?.type?.replace('image/', ''));
+      formData.append('popUpnotif', selectedItem?.banner_popup?.file);
+    }
 
     formData.append('hadiah_set_hadiahpemenang', selectedItem?.winner_rewards ? true : false);
     formData.append('hadiah_jenispemenang', selectedItem?.winner_rewards_type === 'ranking' ? 'RANKING' : 'POINT');
@@ -439,11 +445,13 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       selectedItem?.statusChallenge ? selectedItem?.statusChallenge : status === 'create-draft' ? 'DRAFT' : 'PUBLISH',
     );
 
-    formData.append('leaderboard_Height', 176);
-    formData.append('leaderboard_Width', 375);
     formData.append('leaderboard_warnaBackground', selectedItem?.banner_background_color?.color);
-    formData.append('leaderboard_formatFile', selectedItem?.banner_leaderboard?.file?.type?.replace('image/', ''));
-    formData.append('bannerBoard', selectedItem?.banner_leaderboard?.file);
+    if (typeof selectedItem?.banner_leaderboard?.file !== 'string') {
+      formData.append('leaderboard_Height', 176);
+      formData.append('leaderboard_Width', 375);
+      formData.append('leaderboard_formatFile', selectedItem?.banner_leaderboard?.file?.type?.replace('image/', ''));
+      formData.append('bannerBoard', selectedItem?.banner_leaderboard?.file);
+    }
 
     formData.append('ketentuanhadiah_Height', 80);
     formData.append('ketentuanhadiah_Width', 80);
@@ -466,15 +474,19 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       });
     }
 
-    formData.append('bannersearch_Height', 343);
-    formData.append('bannersearch_Width', 103);
-    formData.append('bannersearch_formatFile', selectedItem?.banner_search?.file?.type?.replace('image/', ''));
-    formData.append('bannerSearch', selectedItem?.banner_search?.file);
+    if (typeof selectedItem?.banner_search?.file !== 'string') {
+      formData.append('bannersearch_Height', 343);
+      formData.append('bannersearch_Width', 103);
+      formData.append('bannersearch_formatFile', selectedItem?.banner_search?.file?.type?.replace('image/', ''));
+      formData.append('bannerSearch', selectedItem?.banner_search?.file);
+    }
 
-    formData.append('popup_Height', 326);
-    formData.append('popup_Width', 326);
-    formData.append('popup_formatFile', selectedItem?.banner_popup?.file?.type?.replace('image/', ''));
-    formData.append('popUpnotif', selectedItem?.banner_popup?.file);
+    if (typeof selectedItem?.banner_popup?.file !== 'string') {
+      formData.append('popup_Height', 326);
+      formData.append('popup_Width', 326);
+      formData.append('popup_formatFile', selectedItem?.banner_popup?.file?.type?.replace('image/', ''));
+      formData.append('popUpnotif', selectedItem?.banner_popup?.file);
+    }
 
     updateChallenge({ id: selectedItem?._id, formData }).then((res) => {
       if (res?.error) {
