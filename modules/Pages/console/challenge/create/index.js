@@ -71,6 +71,7 @@ const CreateChallenge = ({ moreSlug }) => {
         !inputValue?.cycle_day ||
         !inputValue?.startdate ||
         !inputValue?.starthour ||
+        inputValue?.starthour?.isValid() === false ||
         !inputValue?.description)
     ) {
       disabled = true;
