@@ -155,14 +155,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={filter.descending}
+              value={filter.ascending}
               onChange={handleOrder}
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
               color="secondary"
               style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'true'}>Terbaru</MenuItem>
-              <MenuItem value={'false'}>Terlama</MenuItem>
+              <MenuItem value={'false'}>Terbaru</MenuItem>
+              <MenuItem value={'true'}>Terlama</MenuItem>
             </Select>
           </FormControl>
         </Stack>

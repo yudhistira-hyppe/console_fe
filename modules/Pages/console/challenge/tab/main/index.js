@@ -14,7 +14,7 @@ const ChallengeTabMainComponent = ({ kind }) => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    descending: 'true',
+    ascending: 'false',
     search: '',
     createdAt: [null, null],
     type: [],
@@ -28,7 +28,7 @@ const ChallengeTabMainComponent = ({ kind }) => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      ascending: filter.descending === 'true' ? true : false,
+      ascending: filter.ascending === 'true' ? true : false,
       menuChallenge: kind,
     });
 
@@ -95,7 +95,7 @@ const ChallengeTabMainComponent = ({ kind }) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        descending: e.target.value,
+        ascending: e.target.value,
         page: 0,
       };
     });
@@ -192,7 +192,7 @@ const ChallengeTabMainComponent = ({ kind }) => {
           return {
             page: 0,
             limit: 10,
-            descending: 'true',
+            ascending: 'true',
             search: '',
             createdAt: [null, null],
             type: [],
