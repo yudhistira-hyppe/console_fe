@@ -64,10 +64,9 @@ export const useProvideAuth = () => {
   const consoleLoginWithEmail = (user, isRememberUser) => {
     fetchStart();
     login(user)
-      .unwrap()
       .then((result) => {
-        if (result.data.roles.includes('ROLE_ADMIN')) {
-          onHandleSuccessLogin(user, result, isRememberUser);
+        if (result?.data?.data?.roles?.includes('ROLE_ADMIN')) {
+          onHandleSuccessLogin(user, result?.data, isRememberUser);
           return toast.success('Login Berhasil', { id: 'signin' });
         } else {
           fetchError('Akun yang digunakan tidak memiliki akses!');
