@@ -5,7 +5,7 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import { useRouter } from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
-import { useGetListContentQuery } from 'api/console/database/content';
+import { useGetListContentQuery } from 'api/console/database';
 import moment from 'moment';
 import { CSVLink } from 'react-csv';
 import { LoadingButton } from '@mui/lab';

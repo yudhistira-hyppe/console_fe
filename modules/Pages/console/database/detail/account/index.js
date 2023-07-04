@@ -15,12 +15,12 @@ import Interest from './interest';
 import UserPost from './user-post';
 import Transaction from './transaction';
 import AdsCampaign from './ads-campaign';
-import { useGetProfileByUserEmailQuery, useGetUserBasicsQuery, useGetuserDatabaseDetailQuery } from 'api/user/user';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { useUserListFriendQuery } from 'api/user/friend';
 import ActiveTime from './active-time';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import { useGetuserDatabaseDetailQuery } from 'api/console/database';
 
 const breadcrumbs = [
   { label: 'Database Akun', link: '/database/account' },

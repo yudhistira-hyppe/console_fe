@@ -39,7 +39,7 @@ import ModalApprove from '../Modal/ModalApprove';
 import ModalReject from '../Modal/ModalReject';
 import ModalLampiran from '../Modal/ModalLampiran';
 import { useGetDetailBankQuery, useUpdateStatusBankMutation } from 'api/console/helpCenter/bank';
-import { useGetuserDatabaseDetailQuery } from 'api/user/user';
+import { useGetuserDatabaseDetailQuery } from 'api/console/database';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';

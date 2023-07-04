@@ -12,24 +12,27 @@ const DatabaseComponent = dynamic(() => import('modules/Pages/console/database')
 const validDatabaseTab = ['account', 'content', 'music', 'effect', 'sticker'];
 
 const DatabaseDynamicPage = () => {
-  const { authUser } = useAuth();
+  const { authUser, isLoading } = useAuth();
   const router = useRouter();
   const { slug } = router.query;
   const [databaseProps, setDatabaseProps] = useState({});
 
   useEffect(() => {
-    if (slug) {
-      if (slug.length > 2 || !validDatabaseTab.includes(slug[0])) {
-        router.replace('/database/account');
-        return;
+    if (!isLoading) {
+      if (slug) {
+        if (authUser) {
+          if (slug.length > 2 || !validDatabaseTab.includes(slug[0])) {
+            router.replace('/database/account');
+            return;
+          }
+          setDatabaseProps({ tab: slug[0], detailId: slug[1] });
+        } else {
+          router.push({ pathname: '/signin', query: { redirect: router.asPath } });
+          return;
+        }
       }
-      if (!authUser?.user) {
-        router.push({ pathname: '/signin', query: { redirect: router.asPath } });
-        return;
-      }
-      setDatabaseProps({ tab: slug[0], detailId: slug[1] });
     }
-  }, [slug]);
+  }, [slug, isLoading]);
 
   return (
     <SecureConsolePage>

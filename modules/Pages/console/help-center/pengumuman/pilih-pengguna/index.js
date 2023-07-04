@@ -5,7 +5,7 @@ import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import TablePilihPengguna from './TablePilihPengguna';
 import FilterTableAkunPengguna from '../../../users/FilterTableAkunPengguna';
-import { useGetAllUserQuery } from 'api/user/user';
+import { useGetAllUserQuery } from 'api/console/database';
 import { useRouter } from 'next/router';
 
 const breadcrumbs = [

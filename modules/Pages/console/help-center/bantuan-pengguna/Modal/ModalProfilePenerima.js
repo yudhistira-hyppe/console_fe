@@ -2,7 +2,7 @@ import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { Box, Button, Modal } from '@material-ui/core';
 import { Avatar, Divider, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useGetProfileByUserEmailQuery } from 'api/user/user';
+import { useGetProfileByUserEmailQuery } from 'api/console/database';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import React from 'react';

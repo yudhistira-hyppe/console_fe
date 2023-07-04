@@ -4,8 +4,8 @@ import { Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
-import { useGetAllUserQuery } from 'api/user/user';
 import { toast } from 'react-hot-toast';
+import { useGetAllUserQuery } from 'api/console/database';
 
 const DatabaseTabAccountComponent = () => {
   const [filter, setFilter] = useState({

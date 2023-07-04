@@ -4,7 +4,7 @@ import { Box, Button, Stack } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
-import { useGetAllUserQuery } from 'api/user/user';
+import { useGetAllUserQuery } from 'api/console/database';
 import { toast } from 'react-hot-toast';
 import { Typography } from '@material-ui/core';
 import Router from 'next/router';

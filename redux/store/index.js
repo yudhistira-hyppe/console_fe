@@ -3,7 +3,6 @@ import { createWrapper } from 'next-redux-wrapper';
 import reducers from '../reducers';
 import {
   authApi,
-  userApi,
   accountBalancesAPI,
   commentAPI,
   userFriendAPI,
@@ -28,8 +27,6 @@ import {
   transactionAPI,
   kontenApi,
   iklanApi,
-  mediaApi,
-  contentApi,
   kycApi,
   bankApi,
   boostAPI,
@@ -43,6 +40,7 @@ import {
   challengeApi,
   masterBadgeApi,
   challengeUtilityApi,
+  databaseApi,
 } from 'api/console';
 import { utilsApi } from 'api/utils';
 
@@ -53,10 +51,9 @@ const initStore = () => {
       getDefaultMiddleware().concat([
         utilsApi.middleware,
         authApi.middleware,
-        userApi.middleware,
         dashboardApi.middleware,
         engagementApi.middleware,
-        faqAndInfoApi.middleware,
+        // faqAndInfoApi.middleware,
         announcementApi.middleware,
         ticketApi.middleware,
         bantuanPenggunaApi.middleware,
@@ -76,8 +73,7 @@ const initStore = () => {
         transactionAPI.middleware,
         kontenApi.middleware,
         iklanApi.middleware,
-        mediaApi.middleware,
-        contentApi.middleware,
+        databaseApi.middleware,
         kycApi.middleware,
         bankApi.middleware,
         boostAPI.middleware,

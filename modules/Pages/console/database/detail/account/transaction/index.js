@@ -20,8 +20,7 @@ import moment from 'moment';
 import { formatCurrency, formatTransactionStatus } from 'helpers/stringHelper';
 import useStyles from './index.style';
 import { LoadingButton } from '@mui/lab';
-import { useGetAccountBalanceQuery } from 'api/user/user';
-
+import { useGetAccountBalanceQuery } from 'api/console/database';
 const TransactionComponent = (props) => {
   const classes = useStyles();
   const { email } = props;

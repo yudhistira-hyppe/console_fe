@@ -12,8 +12,8 @@ import useStyles from './index.style';
 import CmtMediaObject from '@coremat/CmtMediaObject';
 import CmtImage from '@coremat/CmtImage';
 import { fakeDb } from 'modules/FakeDb/fake-db';
-import { useGetListContentQuery } from 'api/console/database/content';
 import { NavigateBefore, NavigateNext } from '@material-ui/icons';
+import { useGetListContentQuery } from 'api/console/database';
 
 const postsConfig = [
   { key: 'all', label: 'ALL' },
@@ -147,7 +147,7 @@ const UserPost = (props) => {
                       </Box>
                     </Box>
                     <Typography style={{ color: '#737373', fontSize: 12, marginTop: 10 }}>
-                      {moment(post?.createdAt).format('DD/MM/YY - HH:mm')} WIB
+                      {moment(post?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
                     </Typography>
                   </Stack>
                 </CmtMediaObject>
