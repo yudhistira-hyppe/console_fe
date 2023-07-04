@@ -7,22 +7,11 @@ import userReducers from './userReducers';
 import monetizeReducers from './monetizeReducers';
 import helpCenterReducers from './helpCenterReducers';
 import Campaign from './Campaign';
-import {
-  authApi,
-  contentAPI,
-  notificationAPI,
-  commentAPI,
-  insightAPI,
-  accountBalancesAPI,
-  contentManagementAPI,
-  userFriendAPI,
-} from 'api/user';
+import { authApi, insightAPI, userFriendAPI } from 'api/user';
 import {
   databaseApi,
   dashboardApi,
   engagementApi,
-  faqAndInfoApi,
-  announcementApi,
   ticketApi,
   getUserHyppe,
   group,
@@ -48,7 +37,6 @@ import {
   bankApi,
   kycApi,
 } from 'api/console';
-import { utilsApi } from 'api/utils';
 
 export default combineReducers({
   common: Common,
@@ -58,19 +46,11 @@ export default combineReducers({
   monetizeReducers,
   helpCenterReducers,
   campaignReducer: Campaign,
-  [utilsApi.reducerPath]: utilsApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [engagementApi.reducerPath]: engagementApi.reducer,
-  // [faqAndInfoApi.reducerPath]: faqAndInfoApi.reducer,
-  [announcementApi.reducerPath]: announcementApi.reducer,
   [ticketApi.reducerPath]: ticketApi.reducer,
-  [contentAPI.reducerPath]: contentAPI.reducer,
-  [notificationAPI.reducerPath]: notificationAPI.reducer,
-  // [commentAPI.reducerPath]: commentAPI.reducer,
   [insightAPI.reducerPath]: insightAPI.reducer,
-  [contentManagementAPI.reducerPath]: contentManagementAPI.reducer,
-  [accountBalancesAPI.reducerPath]: accountBalancesAPI.reducer,
   // [userFriendAPI.reducerPath]: userFriendAPI.reducer,
   [voucherApi.reducerPath]: voucherApi.reducer,
   [getUserHyppe.reducerPath]: getUserHyppe.reducer,
