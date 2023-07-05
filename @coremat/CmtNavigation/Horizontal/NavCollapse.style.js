@@ -13,11 +13,43 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 0,
     },
   },
+  navMenuLink: {
+    display: 'flex',
+    alignItems: 'center',
+    flex: 1,
+    height: '100%',
+    padding: '0px 20px',
+    color: '#FFFFFF',
+    '&:hover, &:focus': {
+      opacity: '1 !important',
+      color: theme.palette.horizontalNav.textDarkColor,
+      backgroundColor: theme.palette.horizontalNav.menuHoverBgColor,
+      '& .Cmt-icon-root': {
+        color: theme.palette.horizontalNav.textDarkColor,
+      },
+    },
+    '&.active': {
+      color: theme.palette.horizontalNav.textActiveColor,
+      backgroundColor: theme.palette.horizontalNav.menuActiveBgColor,
+      '& .Cmt-icon-root': {
+        color: theme.palette.horizontalNav.textActiveColor,
+      },
+      '&:hover, &:focus': {
+        '& .Cmt-icon-root': {
+          color: theme.palette.horizontalNav.textActiveColor,
+        },
+      },
+    },
+  },
   navCollapse: {
     position: 'relative',
 
     '&.active > .Cmt-navCollapseBtn': {
       color: theme.palette.horizontalNav.navigationActiveColor,
+      '& > span': {
+        opacity: 1,
+        fontWeight: 'bold',
+      },
     },
 
     '&.active > .Cmt-navCollapseBtn $subCollapse .Cmt-navCollapseBtn.active': {
@@ -64,7 +96,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover, &:focus': {
       color: theme.palette.horizontalNav.navigationActiveColor,
     },
-
     '&:hover > $navCollapseItem': {
       display: 'block',
       top: '100%',
@@ -74,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
       animationTimingFunction: 'ease, ease',
       animationDuration: '0.4s, 0.4s',
       // edited by vicky
-      background:"rgb(170, 34, 175)"
+      background: 'rgb(170, 34, 175)',
     },
 
     '& > $navCollapseItem $navCollapseBtn:hover > $navCollapseItem': {
@@ -91,6 +122,15 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
+    opacity: 0.6,
+    fontFamily: 'Lato',
+    '&:hover': {
+      opacity: 0.8,
+    },
+    '&.active': {
+      opacity: '1 !important',
+      fontWeight: 'bold',
+    },
   },
   navText: {
     flex: 1,
@@ -102,7 +142,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
   },
   subCollapse: {
-    backgroundColor: theme.palette.background.paper,
     color: theme.palette.horizontalNav.textColor,
     '& .Cmt-navCollapseBtn': {
       color: theme.palette.horizontalNav.textColor,

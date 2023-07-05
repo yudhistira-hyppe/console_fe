@@ -136,11 +136,13 @@ const HorizontalDefault = ({ className, children }) => {
               {/* <CmtHorizontal menuItems={router.pathname.includes('/console') ? consoleNav : horizontalDefaultNavs} /> */}
               {loadingValidate ? (
                 <Stack direction="row" spacing={3} alignItems="center" margin="13px 0">
-                  <Skeleton variant="rounded" height={20} width={80} />
-                  <Skeleton variant="rounded" height={20} width={120} />
+                  <Skeleton variant="rounded" height={20} width={50} />
+                  <Skeleton variant="rounded" height={20} width={90} />
                   <Skeleton variant="rounded" height={20} width={80} />
                   <Skeleton variant="rounded" height={20} width={100} />
                   <Skeleton variant="rounded" height={20} width={120} />
+                  <Skeleton variant="rounded" height={20} width={80} />
+                  <Skeleton variant="rounded" height={20} width={100} />
                   <Skeleton variant="rounded" height={20} width={80} />
                   <Skeleton variant="rounded" height={20} width={100} />
                 </Stack>

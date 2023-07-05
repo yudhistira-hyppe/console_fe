@@ -1,4 +1,4 @@
-import React, { cloneElement, isValidElement, useEffect, useMemo } from 'react';
+import React, { cloneElement, isValidElement, useEffect, useMemo, useState } from 'react';
 import { List, ListItem } from '@material-ui/core';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -15,7 +15,8 @@ const NavCollapse = (props) => {
 
   const { name, icon, className, children = [] } = props;
   const isExpandable = useMemo(() => children.length, [children]);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [hoverIcon, setHover] = useState(false);
 
   useEffect(() => {
     if (isUrlInChildren(props, router.pathname)) {
@@ -42,7 +43,7 @@ const NavCollapse = (props) => {
           case 'collapse':
             return <NavCollapse {...item} key={index} className={classes.subCollapse} />;
           case 'item':
-            return <NavMenuItem {...item} key={index} />;
+            return <NavMenuItem {...item} key={index} className={classes.navMenuLink} />;
           default:
             return null;
         }
@@ -52,6 +53,9 @@ const NavCollapse = (props) => {
 
   const MenuCollapse = (
     <ListItem
+      onMouseOver={() => setHover(true)}
+      onMouseOut={() => setHover(false)}
+      id="menu-collapse"
       component="div"
       disableGutters
       className={clsx(classes.navCollapseBtn, `${open ? 'active' : ''}`, 'Cmt-navCollapseBtn')}>
@@ -61,8 +65,8 @@ const NavCollapse = (props) => {
           {name}
         </Box>
         {/* Display the expand menu if the item has children */}
-        {isExpandable && !open && <ArrowDropDownIcon className={classes.navArrow} />}
-        {isExpandable && open && <ArrowDropUpIcon className={classes.navArrow} />}
+        {isExpandable && !hoverIcon && <ArrowDropDownIcon className={classes.navArrow} />}
+        {isExpandable && hoverIcon && <ArrowDropUpIcon className={classes.navArrow} />}
         {/* Display an icon if any */}
       </Box>
       {MenuItemChildren}

@@ -120,8 +120,19 @@ export const consoleNav = [
   },
   {
     name: 'Pusat Iklan',
-    type: 'item',
-    link: '/ads-center',
+    type: 'collapse',
+    children: [
+      {
+        name: 'Pengaturan Iklan',
+        type: 'item',
+        link: '/ads-center/setting',
+      },
+      {
+        name: 'Kelola Advertiser',
+        type: 'item',
+        link: '/ads-center/manage',
+      },
+    ],
   },
   {
     name: 'Pusat Boost',
