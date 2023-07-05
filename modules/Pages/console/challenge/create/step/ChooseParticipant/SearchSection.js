@@ -14,7 +14,6 @@ import { DateRange, RemoveCircleOutline, Search } from '@material-ui/icons';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
-import { useGetInterestContentQuery } from 'api/console/database/content';
 import { useGetAreasQuery } from 'api/user/insight';
 import ScrollBar from 'react-perfect-scrollbar';
 
