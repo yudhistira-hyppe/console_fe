@@ -63,7 +63,7 @@ const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData }) 
                 </Stack>
               ) : (
                 <Stack direction="row" width="100%" height="100%" style={{ padding: '8px 20px' }}>
-                  <Stack direction="column" width="30%" mt='10px'>
+                  <Stack direction="column" width="30%" mt="10px">
                     <Typography style={{ fontSize: 20 }}>{totalData}</Typography>
                     <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Total Iklan</Typography>
                   </Stack>
@@ -71,7 +71,7 @@ const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData }) 
                     <CmtProgressBar
                       label={
                         <Box display="flex" alignItems="center">
-                          Draft
+                          Draft | {findStatusAds('DRAFT')?.count || 0}
                         </Box>
                       }
                       labelPos="top-left"
@@ -89,7 +89,7 @@ const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData }) 
                     <CmtProgressBar
                       label={
                         <Box display="flex" alignItems="center">
-                          Ditinjau
+                          Ditinjau | {findStatusAds('UNDER_REVIEW')?.count || 0}
                         </Box>
                       }
                       labelPos="top-left"
@@ -107,7 +107,7 @@ const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData }) 
                     <CmtProgressBar
                       label={
                         <Box display="flex" alignItems="center">
-                          Aktif
+                          Aktif | {findStatusAds('ACTIVE')?.count || 0}
                         </Box>
                       }
                       labelPos="top-left"
@@ -125,12 +125,12 @@ const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData }) 
                     <CmtProgressBar
                       label={
                         <Box display="flex" alignItems="center">
-                          Tidak Aktif
+                          Tidak Aktif | {findStatusAds('IN_ACTIVE')?.count || 0}
                         </Box>
                       }
                       labelPos="top-left"
                       value={
-                        (findStatusAds('INACTIVE')?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0) ||
+                        (findStatusAds('IN_ACTIVE')?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0) ||
                           0) * 100
                       }
                       renderValue={(value) => {
