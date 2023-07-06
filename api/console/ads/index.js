@@ -66,6 +66,15 @@ export const adsApi = createApi({
       }),
       invalidatesTags: ['ads', 'detail'],
     }),
+
+    //Ads V2
+    getDashboardAdsSetting: build.query({
+      query: (data) => ({
+        url: '/adsv2/ads/dashboard',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -78,4 +87,7 @@ export const {
   useGetVideoFromApsaraQuery,
   useGetViewerAdsQuery,
   useApproveAdsMutation,
+
+  // Ads V2
+  useGetDashboardAdsSettingQuery,
 } = adsApi;
