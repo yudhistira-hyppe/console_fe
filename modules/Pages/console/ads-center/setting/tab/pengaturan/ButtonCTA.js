@@ -1,9 +1,14 @@
 import { Typography } from '@material-ui/core';
 import { Button, Card, CircularProgress, Stack } from '@mui/material';
 import { useGetButtonCTAAdsQuery } from 'api/console/ads';
-import React from 'react';
+import React, { useState } from 'react';
+import ModalButtonCTA from './ModalButtonCTA';
 
 const ButtonCTAComponent = () => {
+  const [showModal, setShowModal] = useState({
+    open: false,
+    data: [],
+  });
   const { data: dataButton, isFetching: loadingData } = useGetButtonCTAAdsQuery();
 
   return (
@@ -28,13 +33,28 @@ const ButtonCTAComponent = () => {
                 ))}
               </Stack>
               <Stack direction="row" justifyContent="flex-end" alignItems="center" mt="auto">
-                <Button variant="contained" color="secondary" style={{ borderRadius: 6, padding: '10px 20px' }}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ borderRadius: 6, padding: '10px 20px' }}
+                  onClick={() => setShowModal({ open: true, data: dataButton?.data })}>
                   <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Kelola</Typography>
                 </Button>
               </Stack>
             </>
           )}
         </Stack>
+
+        <ModalButtonCTA
+          open={showModal?.open}
+          data={showModal?.data}
+          onClose={() =>
+            setShowModal({
+              open: false,
+              data: [],
+            })
+          }
+        />
       </Stack>
     </Card>
   );
