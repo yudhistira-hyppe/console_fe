@@ -131,10 +131,11 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                               height: 24,
                               fontSize: 28,
                               paddingBottom: 8,
+                              color: !inputValue?.cycle_day || inputValue?.cycle_day < 1 ? '#C9C9C9' : '#AB22AF',
                               border:
                                 !inputValue?.cycle_day || inputValue?.cycle_day < 1
                                   ? '1px solid #C9C9C9'
-                                  : '1px solid #3F3F3F',
+                                  : '1px solid #AB22AF',
                             }}
                             disabled={!inputValue?.cycle_day || inputValue?.cycle_day < 1}>
                             -
@@ -151,16 +152,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                               width: 24,
                               height: 24,
                               fontSize: 24,
-                              border:
-                                (inputValue?.kind === 'main' && inputValue?.cycle_day >= 104) ||
-                                (inputValue?.kind === 'other' && inputValue?.cycle_day >= 54)
-                                  ? '1px solid #C9C9C9'
-                                  : '1px solid #3F3F3F',
-                            }}
-                            disabled={
-                              (inputValue?.kind === 'main' && inputValue?.cycle_day >= 104) ||
-                              (inputValue?.kind === 'other' && inputValue?.cycle_day >= 54)
-                            }>
+                              color: '#AB22AF',
+                              border: '1px solid #AB22AF',
+                            }}>
                             +
                           </IconButton>
                         </Stack>
@@ -207,8 +201,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                               height: 24,
                               fontSize: 28,
                               paddingBottom: 8,
+                              color: !inputValue?.cycle || inputValue?.cycle < 1 ? '#C9C9C9' : '#AB22AF',
                               border:
-                                !inputValue?.cycle || inputValue?.cycle < 1 ? '1px solid #C9C9C9' : '1px solid #3F3F3F',
+                                !inputValue?.cycle || inputValue?.cycle < 1 ? '1px solid #C9C9C9' : '1px solid #AB22AF',
                             }}
                             disabled={!inputValue?.cycle || inputValue?.cycle < 1}>
                             -
@@ -222,16 +217,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                               width: 24,
                               height: 24,
                               fontSize: 24,
-                              border:
-                                (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
-                                (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
-                                  ? '1px solid #C9C9C9'
-                                  : '1px solid #3F3F3F',
-                            }}
-                            disabled={
-                              (inputValue?.kind === 'main' && inputValue?.cycle >= 104) ||
-                              (inputValue?.kind === 'other' && inputValue?.cycle >= 54)
-                            }>
+                              color: '#AB22AF',
+                              border: '1px solid #AB22AF',
+                            }}>
                             +
                           </IconButton>
                         </Stack>
