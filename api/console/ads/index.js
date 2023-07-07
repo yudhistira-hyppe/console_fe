@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const adsApi = createApi({
   reducerPath: 'ads-center',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['ads', 'detail'],
+  tagTypes: ['ads', 'detail', 'notif-ads'],
   endpoints: (build) => ({
     getPerformanceAds: build.query({
       query: (data) => ({
@@ -75,6 +75,27 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
+    getNotificationAds: build.query({
+      query: () => ({
+        url: '/adsv2/setting/notification',
+        method: 'GET',
+      }),
+      providesTags: ['notif-ads'],
+    }),
+    getButtonCTAAds: build.query({
+      query: () => ({
+        url: '/adsv2/setting/cta',
+        method: 'GET',
+      }),
+    }),
+    updateAdsNotificationPush: build.mutation({
+      query: (data) => ({
+        url: '/adsv2/setting/notification/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['notif-ads'],
+    }),
   }),
 });
 
@@ -90,4 +111,7 @@ export const {
 
   // Ads V2
   useGetDashboardAdsSettingQuery,
+  useGetNotificationAdsQuery,
+  useGetButtonCTAAdsQuery,
+  useUpdateAdsNotificationPushMutation,
 } = adsApi;

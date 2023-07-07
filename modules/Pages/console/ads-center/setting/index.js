@@ -4,6 +4,7 @@ import { Stack, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './index.style';
 import AdsSettingDashboard from './tab/dashboard';
+import AdsSettingPengaturan from './tab/pengaturan';
 
 const AdsCenterSettingComponent = () => {
   const classes = useStyles();
@@ -26,7 +27,7 @@ const AdsCenterSettingComponent = () => {
           <AdsSettingDashboard />
         </TabPanel>
         <TabPanel className={classes.tabPanel} value="2">
-          <Typography>pengaturan</Typography>
+          <AdsSettingPengaturan />
         </TabPanel>
       </TabContext>
     </Stack>
