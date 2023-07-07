@@ -3,6 +3,7 @@ import { Grid } from '@mui/material';
 import React from 'react';
 import NotifikasiComponent from './Notifikasi';
 import ButtonCTAComponent from './ButtonCTA';
+import TableSettingAds from './TableSettingAds';
 
 const AdsSettingPengaturan = () => {
   return (
@@ -13,6 +14,9 @@ const AdsSettingPengaturan = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <ButtonCTAComponent />
+        </Grid>
+        <Grid item xs={12}>
+          <TableSettingAds />
         </Grid>
       </Grid>
     </PageContainer>

@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const adsApi = createApi({
   reducerPath: 'ads-center',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['ads', 'detail', 'notif-ads', 'btn-ads'],
+  tagTypes: ['ads', 'detail', 'notif-ads', 'btn-ads', 'setting-ads'],
   endpoints: (build) => ({
     getPerformanceAds: build.query({
       query: (data) => ({
@@ -105,6 +105,21 @@ export const adsApi = createApi({
       }),
       invalidatesTags: ['btn-ads'],
     }),
+    getListAdsSetting: build.query({
+      query: () => ({
+        url: '/adsv2/setting',
+        method: 'GET',
+      }),
+      providesTags: ['setting-ads'],
+    }),
+    updateAdsSetting: build.mutation({
+      query: (data) => ({
+        url: '/adsv2/setting/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['setting-ads'],
+    }),
   }),
 });
 
@@ -124,4 +139,6 @@ export const {
   useGetButtonCTAAdsQuery,
   useUpdateAdsNotificationPushMutation,
   useUpdateAdsButtonMutation,
+  useGetListAdsSettingQuery,
+  useUpdateAdsSettingMutation,
 } = adsApi;
