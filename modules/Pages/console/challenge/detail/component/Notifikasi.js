@@ -11,7 +11,7 @@ const NotifikasiComponent = ({ detail }) => {
   const classes = useStyles();
 
   return (
-    <Card sx={{ p: 3,  height: 735 }}>
+    <Card sx={{ p: 3, height: 735 }}>
       <Stack direction="column" gap={2} style={{ width: '100%' }}>
         <Typography style={{ fontWeight: 'bold' }}>Pengumuman dan Notifikasi</Typography>
 
@@ -48,7 +48,7 @@ const NotifikasiComponent = ({ detail }) => {
             </Stack>
           </TabPanel>
           <TabPanel value="notif" style={{ padding: 0, height: '100%', width: '100%' }}>
-            <NotifItem />
+            <NotifItem listData={detail?.notifikasiPush?.[0]} />
           </TabPanel>
           <TabPanel value="activity" style={{ padding: 0, height: '100%', width: '100%' }}>
             <ActivityItem />
