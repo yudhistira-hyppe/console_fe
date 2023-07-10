@@ -1,12 +1,12 @@
 import CmtList from '@coremat/CmtList';
 import CmtProgressBar from '@coremat/CmtProgressBar';
 import { Typography } from '@material-ui/core';
-import { Box, Card, Divider, Stack } from '@mui/material';
+import { Box, Card, CircularProgress, Divider, Stack } from '@mui/material';
 import { formatCurrency } from 'helpers/stringHelper';
 import { isEmpty } from 'lodash';
 import React from 'react';
 
-const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData }) => {
+const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData, isLoading }) => {
   const findStatusAds = (name) => data?.find((item) => item?.name === name);
 
   const ProgressIndicator = (props) => {
@@ -39,128 +39,136 @@ const CardItem = ({ title, type, data = [], pengiklan, pendapatan, totalData }) 
         <Typography style={{ padding: '18px 20px', fontWeight: 'bold' }}>{title || 'Title Here'}</Typography>
         <Divider flexItem />
         <Box height={225}>
-          {type === 'pengiklan' && (
-            <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%" gap="4px">
-              <Typography style={{ color: '#3F3F3FDE', fontSize: 32, fontWeight: 'bold' }}>{pengiklan}</Typography>
-              <Typography style={{ color: '#737373' }}>Total Pengiklan</Typography>
+          {isLoading ? (
+            <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%">
+              <CircularProgress color="secondary" size={28} />
             </Stack>
-          )}
-          {type === 'pendapatan' && (
-            <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%" gap="4px">
-              <Typography style={{ color: '#3F3F3FDE', fontSize: 32, fontWeight: 'bold' }}>
-                Rp{formatCurrency(pendapatan)}
-              </Typography>
-              <Typography style={{ color: '#737373' }}>Total Pendapatan</Typography>
-            </Stack>
-          )}
-          {type === 'iklan' && (
+          ) : (
             <>
-              {isEmpty(data) ? (
-                <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%">
-                  <Typography style={{ width: '55%', textAlign: 'center', color: '#666666' }}>
-                    Belum ada informasi yang bisa ditampilkan.
-                  </Typography>
-                </Stack>
-              ) : (
-                <Stack direction="row" width="100%" height="100%" style={{ padding: '8px 20px' }}>
-                  <Stack direction="column" width="30%" mt="10px">
-                    <Typography style={{ fontSize: 20 }}>{totalData}</Typography>
-                    <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Total Iklan</Typography>
-                  </Stack>
-                  <Stack direction="column" width="70%">
-                    <CmtProgressBar
-                      label={
-                        <Box display="flex" alignItems="center">
-                          Draft | {findStatusAds('DRAFT')?.count || 0}
-                        </Box>
-                      }
-                      labelPos="top-left"
-                      value={
-                        (findStatusAds('DRAFT')?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0) || 0) *
-                        100
-                      }
-                      renderValue={(value) => {
-                        return `${value?.toFixed(2)}%`;
-                      }}
-                      containedColor="#E6094B"
-                      thickness={5}
-                      onlyContained
-                    />
-                    <CmtProgressBar
-                      label={
-                        <Box display="flex" alignItems="center">
-                          Ditinjau | {findStatusAds('UNDER_REVIEW')?.count || 0}
-                        </Box>
-                      }
-                      labelPos="top-left"
-                      value={
-                        (findStatusAds('UNDER_REVIEW')?.count /
-                          data?.map((item) => item?.count).reduce((a, b) => a + b, 0) || 0) * 100
-                      }
-                      renderValue={(value) => {
-                        return `${value?.toFixed(2)}%`;
-                      }}
-                      containedColor="#FF8C00"
-                      thickness={5}
-                      onlyContained
-                    />
-                    <CmtProgressBar
-                      label={
-                        <Box display="flex" alignItems="center">
-                          Aktif | {findStatusAds('ACTIVE')?.count || 0}
-                        </Box>
-                      }
-                      labelPos="top-left"
-                      value={
-                        (findStatusAds('ACTIVE')?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0) || 0) *
-                        100
-                      }
-                      renderValue={(value) => {
-                        return `${value?.toFixed(2)}%`;
-                      }}
-                      containedColor="#8DCD03"
-                      thickness={5}
-                      onlyContained
-                    />
-                    <CmtProgressBar
-                      label={
-                        <Box display="flex" alignItems="center">
-                          Tidak Aktif | {findStatusAds('IN_ACTIVE')?.count || 0}
-                        </Box>
-                      }
-                      labelPos="top-left"
-                      value={
-                        (findStatusAds('IN_ACTIVE')?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0) ||
-                          0) * 100
-                      }
-                      renderValue={(value) => {
-                        return `${value?.toFixed(2)}%`;
-                      }}
-                      containedColor="#7C7C7C"
-                      thickness={5}
-                      onlyContained
-                    />
-                  </Stack>
+              {type === 'pengiklan' && (
+                <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%" gap="4px">
+                  <Typography style={{ color: '#3F3F3FDE', fontSize: 32, fontWeight: 'bold' }}>{pengiklan}</Typography>
+                  <Typography style={{ color: '#737373' }}>Total Pengiklan</Typography>
                 </Stack>
               )}
-            </>
-          )}
-          {type === 'progress' && (
-            <>
-              {isEmpty(data) ? (
-                <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%">
-                  <Typography style={{ width: '55%', textAlign: 'center', color: '#666666' }}>
-                    Belum ada informasi yang bisa ditampilkan.
+              {type === 'pendapatan' && (
+                <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%" gap="4px">
+                  <Typography style={{ color: '#3F3F3FDE', fontSize: 32, fontWeight: 'bold' }}>
+                    Rp{formatCurrency(pendapatan)}
                   </Typography>
+                  <Typography style={{ color: '#737373' }}>Total Pendapatan</Typography>
                 </Stack>
-              ) : (
-                <Stack direction="column" width="100%" height="100%" style={{ padding: '18px 20px' }}>
-                  <CmtList
-                    data={data}
-                    renderRow={(item, index) => <ProgressIndicator key={index} item={item} />}
-                    sx={{ display: 'flex !important', flexDirection: 'column !important', gap: 12 }}
-                  />
-                </Stack>
+              )}
+              {type === 'iklan' && (
+                <>
+                  {isEmpty(data) ? (
+                    <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%">
+                      <Typography style={{ width: '55%', textAlign: 'center', color: '#666666' }}>
+                        Belum ada informasi yang bisa ditampilkan.
+                      </Typography>
+                    </Stack>
+                  ) : (
+                    <Stack direction="row" width="100%" height="100%" style={{ padding: '8px 20px' }}>
+                      <Stack direction="column" width="30%" mt="10px">
+                        <Typography style={{ fontSize: 20 }}>{totalData}</Typography>
+                        <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Total Iklan</Typography>
+                      </Stack>
+                      <Stack direction="column" width="70%">
+                        <CmtProgressBar
+                          label={
+                            <Box display="flex" alignItems="center">
+                              Draft | {findStatusAds('DRAFT')?.count || 0}
+                            </Box>
+                          }
+                          labelPos="top-left"
+                          value={
+                            (findStatusAds('DRAFT')?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0) ||
+                              0) * 100
+                          }
+                          renderValue={(value) => {
+                            return `${value?.toFixed(2)}%`;
+                          }}
+                          containedColor="#E6094B"
+                          thickness={5}
+                          onlyContained
+                        />
+                        <CmtProgressBar
+                          label={
+                            <Box display="flex" alignItems="center">
+                              Ditinjau | {findStatusAds('UNDER_REVIEW')?.count || 0}
+                            </Box>
+                          }
+                          labelPos="top-left"
+                          value={
+                            (findStatusAds('UNDER_REVIEW')?.count /
+                              data?.map((item) => item?.count).reduce((a, b) => a + b, 0) || 0) * 100
+                          }
+                          renderValue={(value) => {
+                            return `${value?.toFixed(2)}%`;
+                          }}
+                          containedColor="#FF8C00"
+                          thickness={5}
+                          onlyContained
+                        />
+                        <CmtProgressBar
+                          label={
+                            <Box display="flex" alignItems="center">
+                              Aktif | {findStatusAds('ACTIVE')?.count || 0}
+                            </Box>
+                          }
+                          labelPos="top-left"
+                          value={
+                            (findStatusAds('ACTIVE')?.count / data?.map((item) => item?.count).reduce((a, b) => a + b, 0) ||
+                              0) * 100
+                          }
+                          renderValue={(value) => {
+                            return `${value?.toFixed(2)}%`;
+                          }}
+                          containedColor="#8DCD03"
+                          thickness={5}
+                          onlyContained
+                        />
+                        <CmtProgressBar
+                          label={
+                            <Box display="flex" alignItems="center">
+                              Tidak Aktif | {findStatusAds('IN_ACTIVE')?.count || 0}
+                            </Box>
+                          }
+                          labelPos="top-left"
+                          value={
+                            (findStatusAds('IN_ACTIVE')?.count /
+                              data?.map((item) => item?.count).reduce((a, b) => a + b, 0) || 0) * 100
+                          }
+                          renderValue={(value) => {
+                            return `${value?.toFixed(2)}%`;
+                          }}
+                          containedColor="#7C7C7C"
+                          thickness={5}
+                          onlyContained
+                        />
+                      </Stack>
+                    </Stack>
+                  )}
+                </>
+              )}
+              {type === 'progress' && (
+                <>
+                  {isEmpty(data) ? (
+                    <Stack direction="column" alignItems="center" justifyContent="center" width="100%" height="100%">
+                      <Typography style={{ width: '55%', textAlign: 'center', color: '#666666' }}>
+                        Belum ada informasi yang bisa ditampilkan.
+                      </Typography>
+                    </Stack>
+                  ) : (
+                    <Stack direction="column" width="100%" height="100%" style={{ padding: '18px 20px' }}>
+                      <CmtList
+                        data={data}
+                        renderRow={(item, index) => <ProgressIndicator key={index} item={item} />}
+                        sx={{ display: 'flex !important', flexDirection: 'column !important', gap: 12 }}
+                      />
+                    </Stack>
+                  )}
+                </>
               )}
             </>
           )}

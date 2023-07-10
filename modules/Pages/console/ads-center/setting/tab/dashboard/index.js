@@ -87,35 +87,52 @@ const AdsSettingDashboard = () => {
           }}
         />
       </Stack>
-      {loadingData ? (
-        <PageLoader />
-      ) : (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <CardItem title="Jumlah Pengiklan" type="pengiklan" pengiklan={dashboardData?.[0]?.totalAdvertisers || 0} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <CardItem
-              title="Jumlah Iklan"
-              type="iklan"
-              totalData={dashboardData?.[0]?.totalAds || 0}
-              data={dashboardData?.[0]?.statusAds}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <CardItem title="Jumlah Pendapatan" type="pendapatan" pendapatan={dashboardData?.[0]?.totalIncome || 0} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <CardItem title="Tipe Iklan Populer" type="progress" data={dashboardData?.[0]?.adsType} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <CardItem title="Tujuan Iklan Populer" type="progress" data={dashboardData?.[0]?.adsObjectivitas} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <CardItem title="Tayangan Populer" type="progress" data={dashboardData?.[0]?.adsPlanShows} />
-          </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <CardItem
+            isLoading={loadingData}
+            title="Jumlah Pengiklan"
+            type="pengiklan"
+            pengiklan={dashboardData?.[0]?.totalAdvertisers || 0}
+          />
         </Grid>
-      )}
+        <Grid item xs={12} md={4}>
+          <CardItem
+            isLoading={loadingData}
+            title="Jumlah Iklan"
+            type="iklan"
+            totalData={dashboardData?.[0]?.totalAds || 0}
+            data={dashboardData?.[0]?.statusAds}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <CardItem
+            isLoading={loadingData}
+            title="Jumlah Pendapatan"
+            type="pendapatan"
+            pendapatan={dashboardData?.[0]?.totalIncome || 0}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <CardItem isLoading={loadingData} title="Tipe Iklan Populer" type="progress" data={dashboardData?.[0]?.adsType} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <CardItem
+            isLoading={loadingData}
+            title="Tujuan Iklan Populer"
+            type="progress"
+            data={dashboardData?.[0]?.adsObjectivitas}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <CardItem
+            isLoading={loadingData}
+            title="Tayangan Populer"
+            type="progress"
+            data={dashboardData?.[0]?.adsPlanShows}
+          />
+        </Grid>
+      </Grid>
     </PageContainer>
   );
 };
