@@ -120,6 +120,13 @@ export const adsApi = createApi({
       }),
       invalidatesTags: ['setting-ads'],
     }),
+    getDashboardAdsManage: build.query({
+      query: (data) => ({
+        url: '/adsv2/ads/campaign/dashboard',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -141,4 +148,5 @@ export const {
   useUpdateAdsButtonMutation,
   useGetListAdsSettingQuery,
   useUpdateAdsSettingMutation,
+  useGetDashboardAdsManageQuery,
 } = adsApi;
