@@ -14,7 +14,7 @@ import CardSummary from './CardSummary';
 const AdsManageDashboard = () => {
   const [payload, setPayload] = useState([
     {
-      startDate: dayjs().subtract(6, 'day').toDate(),
+      startDate: new Date(),
       endDate: new Date(),
       key: 'selection',
     },
@@ -22,8 +22,8 @@ const AdsManageDashboard = () => {
   const [isDate, setDate] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const { data: dashboardData, isFetching: loadingData } = useGetDashboardAdsManageQuery({
-    start_date: dayjs(payload[0]?.startDate).format('YYYY-MM-DD'),
-    end_date: dayjs(payload[0]?.endDate).format('YYYY-MM-DD'),
+    start_date: isDate ? dayjs(payload[0]?.startDate).format('YYYY-MM-DD') : dayjs().subtract(6, 'day').format('YYYY-MM-DD'),
+    end_date: isDate ? dayjs(payload[0]?.endDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
   });
 
   const handleClick = (event) => {
@@ -35,8 +35,6 @@ const AdsManageDashboard = () => {
   };
 
   const open = Boolean(anchorEl);
-
-  console.log(dashboardData);
 
   return (
     <PageContainer>
