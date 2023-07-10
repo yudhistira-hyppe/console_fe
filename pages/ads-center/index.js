@@ -1,16 +1,28 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import { useAuth } from 'authentication';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const ConsoleAdsCenterComponent = dynamic(() => import('modules/Pages/console/ads-center'), {
-  loading: () => <PageLoader />,
-});
+const AdsCenterPage = () => {
+  const { authUser, isLoading } = useAuth();
+  const router = useRouter();
 
-const ConsoleAdsCenterPage = () => (
-  <SecureConsolePage>
-    <ConsoleAdsCenterComponent />
-  </SecureConsolePage>
-);
+  useEffect(() => {
+    if (!isLoading) {
+      if (authUser) {
+        router.replace('/ads-center/setting');
+      } else {
+        router.replace('/signin');
+      }
+    }
+  }, [isLoading]);
 
-export default ConsoleAdsCenterPage;
+  return (
+    <SecureConsolePage>
+      <PageLoader />
+    </SecureConsolePage>
+  );
+};
+
+export default AdsCenterPage;

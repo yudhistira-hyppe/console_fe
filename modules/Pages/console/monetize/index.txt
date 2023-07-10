@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 // import { useRouter } from 'next/router';
 import { Grid } from '@material-ui/core';
-import { useGetAccountBalanceQuery } from 'api/user/user';
+import { useGetAccountBalanceQuery } from 'api/console/database';
 import { formatCurrency } from 'helpers/stringHelper';
 import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';

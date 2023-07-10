@@ -14,7 +14,7 @@ import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
-import { useGetInterestContentQuery } from 'api/console/database/content';
+import { useGetInterestContentQuery } from 'api/console/database';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();

@@ -60,7 +60,7 @@ const UtilitasComponent = () => {
         <Tab label="Interest" value="interest" className={classes.tab} />
         <Tab label="Setting" value="setting" className={classes.tab} />
         <Tab label="Bank" value="bank" className={classes.tab} />
-        <Tab label="Pusat Iklan" value="ads" className={classes.tab} />
+        {/* <Tab label="Pusat Iklan" value="ads" className={classes.tab} /> */}
         <Tab label="Challenge" value="challenge" className={classes.tab} />
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
@@ -79,9 +79,9 @@ const UtilitasComponent = () => {
             <MasterBank />
           )}
         </TabPanel>
-        <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
+        {/* <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
           <UtilityAds />
-        </TabPanel>
+        </TabPanel> */}
         <TabPanel value="challenge" style={{ padding: 0, height: '100%' }}>
           <Stack direction="column" gap={3}>
             <Stack direction="column" gap={2}>

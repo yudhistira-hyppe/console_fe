@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
-import { useUpdateStatusMusicMutation } from 'api/console/database/media';
+import { useUpdateStatusMusicMutation } from 'api/console/database';
 import router from 'next/router';
 import { toast } from 'react-hot-toast';
 

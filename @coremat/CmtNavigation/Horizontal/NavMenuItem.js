@@ -31,20 +31,20 @@ const useStyles = makeStyles((theme) => ({
 
 const NavMenuItem = (props) => {
   const { authUser } = useAuth();
-  const { name, icon, link, handleClick, children } = props;
+  const { name, icon, link, handleClick, className, children } = props;
   const classes = useStyles();
   const router = useRouter();
   const path = router.pathname.split('/');
 
-  // const renderIcon = () => {
-  //   if (icon && isValidElement(icon)) {
-  //     return cloneElement(icon, {
-  //       className: clsx(classes.iconRoot, 'Cmt-icon-root'),
-  //     });
-  //   }
+  const renderIcon = () => {
+    if (icon && isValidElement(icon)) {
+      return cloneElement(icon, {
+        className: clsx(classes.iconRoot, 'Cmt-icon-root'),
+      });
+    }
 
-  //   return null;
-  // };
+    return null;
+  };
 
   // please dont remove the code
 
@@ -59,7 +59,7 @@ const NavMenuItem = (props) => {
   // ];
   // const [upgradeUser, { isSuccess, isLoading, isError }] = useUpgradeUserMutation();
   // const handleUpgradePremium = (e) => {
-  //   if (!authUser.user.roles.includes('ROLE_PREMIUM')) {
+  //   if (!authUser.user?.roles.includes('ROLE_PREMIUM')) {
   //     if (PREMIUM_ROUTES.includes(link)) {
   //       e.preventDefault();
   //       Swal.fire({
@@ -93,7 +93,7 @@ const NavMenuItem = (props) => {
   // };
 
   return (
-    <List component="div" disablePadding onClick={handleClick} style={{ height: '100%' }}>
+    <List component="div" disablePadding onClick={handleClick}>
       <Link href={link}>
         <a
           // onClick={handleUpgradePremium}
@@ -103,7 +103,10 @@ const NavMenuItem = (props) => {
               active: link === `/${path[1]}` || children?.includes(router.pathname),
             },
             'Cmt-nav-menu-link',
+            className,
           )}>
+          {/* Display an icon if any */}
+          {renderIcon()}
           <span className={clsx(classes.navText, 'Cmt-nav-text')}>{name}</span>
         </a>
       </Link>

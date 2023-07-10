@@ -11,7 +11,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import CardWithIndicator from './card-with-indicator';
 import Interest from './interest';
 import FormMusic from './form-music';
-import { useGetDetailMusicQuery } from 'api/console/database/media';
+import { useGetDetailMusicQuery } from 'api/console/database';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const dummyData = [

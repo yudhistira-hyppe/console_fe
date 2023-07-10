@@ -5,7 +5,7 @@ import Contact from './Contact';
 import About from './About';
 import Header from './Header';
 import { useAuth } from 'authentication';
-import { useGetProfileByUserEmailQuery } from 'api/user/user';
+import { useGetProfileByUserEmailQuery } from 'api/console/database';
 import { Avatar, Card, Stack } from '@mui/material';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';

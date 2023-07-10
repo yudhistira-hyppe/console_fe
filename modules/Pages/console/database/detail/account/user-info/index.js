@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Card, Divider, Grid, ImageList, ImageListItem, Stack, SvgIcon, Tab } from '@mui/material';
 import { Box, Typography } from '@material-ui/core';
 import { AccountBalance, Cake, CheckCircle, LocationCity, LocationOn, PhoneIphone, Wc } from '@material-ui/icons';
-import { useGetBankAccountByUserEmailQuery } from 'api/user/user';
 import { capitalizeEachWord, formatGender, maskCharacterExceptLastN } from 'helpers/stringHelper';
 import moment from 'moment';
 import useStyles from './index.style';

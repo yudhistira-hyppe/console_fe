@@ -403,7 +403,9 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('notifikasiPush_updateLeaderboard_unit', 'JAM');
         formData.append(
           'notifikasiPush_updateLeaderboard_aturWaktu',
-          specificNotification('update')?.blast?.map((item) => Number(item)),
+          specificNotification('update')
+            ?.blast?.split(',')
+            ?.map((item) => Number(item)),
         );
       }
       if (type?.includes('will_end')) {

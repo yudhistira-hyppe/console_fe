@@ -12,7 +12,7 @@ import {
   useGetMoodMusicQuery,
   useGetThemeMusicQuery,
   useUpdateMusicMutation,
-} from 'api/console/database/media';
+} from 'api/console/database';
 import moment from 'moment';
 import router from 'next/router';
 import UploadMedia from '../upload-media';

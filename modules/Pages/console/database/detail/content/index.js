@@ -16,7 +16,7 @@ import Engagement from './engagement';
 import Comment from './comment';
 import CardWithIndicator from './card-with-indicator';
 import WaktuTayang from './waktu-tayang';
-import { useGetDetailContentQuery } from 'api/console/database/content';
+import { useGetDetailContentQuery } from 'api/console/database';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [

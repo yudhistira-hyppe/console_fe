@@ -16,7 +16,7 @@ import { moduleAPI } from './module';
 import { divisiAPI } from './divisi';
 import { voucherApi, adAPI, dashboardMonetizeAPI, jualBeliAPI } from './monetize';
 import { transactionAPI } from './transaction';
-import { mediaApi, contentApi } from './database';
+import { databaseApi } from './database';
 import { boostAPI } from './boost';
 import { adsApi } from './ads';
 import { interestApi, settingApi, masterBankApi, adsUtilityApi, masterBadgeApi, challengeUtilityApi } from './utilitas';
@@ -38,8 +38,7 @@ export {
   voucherApi,
   adAPI,
   transactionAPI,
-  mediaApi,
-  contentApi,
+  databaseApi,
   kycApi,
   bankApi,
   boostAPI,

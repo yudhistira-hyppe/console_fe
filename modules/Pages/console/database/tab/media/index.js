@@ -5,7 +5,7 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import MediaChart from './media-chart';
-import { useGetListMusicQuery } from 'api/console/database/media';
+import { useGetListMusicQuery } from 'api/console/database';
 import moment from 'moment';
 import { toast } from 'react-hot-toast';
 

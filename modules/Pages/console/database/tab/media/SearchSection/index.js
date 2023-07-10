@@ -14,7 +14,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
-import { useGetGenreMusicQuery, useGetMoodMusicQuery, useGetThemeMusicQuery } from 'api/console/database/media';
+import { useGetGenreMusicQuery, useGetMoodMusicQuery, useGetThemeMusicQuery } from 'api/console/database';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();

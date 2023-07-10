@@ -2,7 +2,7 @@ import React from 'react';
 import GridContainer from '@jumbo/components/GridContainer';
 import { Grid } from '@mui/material';
 import CardPopular from '../card-populer';
-import { useGetMediaChartQuery } from 'api/console/database/media';
+import { useGetMediaChartQuery } from 'api/console/database';
 
 const MediaChart = () => {
   const { data: mediaChart, isFetching: loadingChart } = useGetMediaChartQuery();

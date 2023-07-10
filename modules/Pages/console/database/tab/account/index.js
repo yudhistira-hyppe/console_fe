@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { Stack } from '@mui/material';
+import { Stack, Tooltip } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
-import { useGetAllUserQuery } from 'api/user/user';
 import { toast } from 'react-hot-toast';
+import { useGetAllUserQuery } from 'api/console/database';
+import { CSVLink } from 'react-csv';
+import { LoadingButton } from '@mui/lab';
+import { Typography } from '@material-ui/core';
+import { GetApp } from '@material-ui/icons';
 
 const DatabaseTabAccountComponent = () => {
   const [filter, setFilter] = useState({
@@ -59,6 +63,12 @@ const DatabaseTabAccountComponent = () => {
       });
     }
   }, [filter, loadingUser]);
+
+  const {
+    data: listExport,
+    isFetching: loadingExport,
+    isError,
+  } = useGetAllUserQuery({ ...getParams(), limit: 100000000, page: 0 });
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -216,23 +226,68 @@ const DatabaseTabAccountComponent = () => {
     });
   };
 
+  const handleExport = () => {
+    const toastId = toast.loading('Generate pdf...');
+    if (isError) {
+      toast.error('Terjadi kesalahan saat generate pdf, silahkan coba lagi.', { id: toastId, duration: 2000 });
+    } else {
+      toast.success('Berhasil generate pdf', { id: toastId });
+    }
+  };
+
+  console.log(loadingExport);
+
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Database Konten</title>
       </Head>
       <PageContainer heading="">
-        <Stack direction={'row'} spacing={3}>
-          <SearchSection filter={filter} handleChange={handleSearchChange} />
-          <TableSection
-            filterList={filterList}
-            handleDeleteFilter={handleSearchChange}
-            filter={filter}
-            loading={loadingUser}
-            listTickets={listUser}
-            handlePageChange={handlePageChange}
-            handleOrder={onOrderChange}
-          />
+        <Stack direction={'row'} style={{ position: 'relative' }}>
+          <Stack position="absolute" top="-60px" right="0px">
+            {loadingExport ? (
+              <Tooltip title="Loading fetching data...">
+                <LoadingButton
+                  color="secondary"
+                  variant="outlined"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                  disabled>
+                  <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                    Unduh
+                  </Typography>
+                  <GetApp style={{ fontSize: 18 }} />
+                </LoadingButton>
+              </Tooltip>
+            ) : (
+              <CSVLink
+                data={listExport?.data}
+                filename="Database-Account.csv"
+                onClick={() => (listExport?.data?.length < 1 ? {} : handleExport())}>
+                <LoadingButton
+                  color="secondary"
+                  variant="outlined"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                  disabled={listExport?.data?.length < 1}>
+                  <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                    Unduh
+                  </Typography>
+                  <GetApp style={{ fontSize: 18 }} />
+                </LoadingButton>
+              </CSVLink>
+            )}
+          </Stack>
+          <Stack direction={'row'} spacing={3} width="100%">
+            <SearchSection filter={filter} handleChange={handleSearchChange} />
+            <TableSection
+              filterList={filterList}
+              handleDeleteFilter={handleSearchChange}
+              filter={filter}
+              loading={loadingUser}
+              listTickets={listUser}
+              handlePageChange={handlePageChange}
+              handleOrder={onOrderChange}
+            />
+          </Stack>
         </Stack>
       </PageContainer>
     </>
