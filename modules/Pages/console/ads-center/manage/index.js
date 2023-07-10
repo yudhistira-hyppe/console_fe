@@ -4,6 +4,7 @@ import { Stack, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './index.style';
 import AdsManageDashboard from './tab/dashboard';
+import AdsManageTableList from './tab/iklan';
 
 const AdsCenterManageComponent = () => {
   const classes = useStyles();
@@ -26,7 +27,7 @@ const AdsCenterManageComponent = () => {
           <AdsManageDashboard />
         </TabPanel>
         <TabPanel className={classes.tabPanel} value="2">
-          <Typography>Iklan</Typography>
+          <AdsManageTableList />
         </TabPanel>
       </TabContext>
     </Stack>

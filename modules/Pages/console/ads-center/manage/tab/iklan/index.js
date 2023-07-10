@@ -4,15 +4,17 @@ import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetListAdsQuery } from 'api/console/ads';
 
-const TableList = () => {
+const AdsManageTableList = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
     descending: 'true',
+    search: '',
     labelTanggal: '',
     createdAt: [null, null],
-    labelCredit: '',
-    rangeCredit: [],
+    labelPlan: '',
+    rangePlan: '',
+    type: [],
     status: [],
   });
   const [filterList, setFilterList] = useState([]);
@@ -22,25 +24,24 @@ const TableList = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
+      sorting: filter.descending === 'true' ? true : false,
     });
-    filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
-    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.rangeCredit[0] >= 0 && Object.assign(params, { mincredit: filter.rangeCredit[0] });
-    filter.rangeCredit[1] && Object.assign(params, { maxcredit: filter.rangeCredit[1] });
+    filter.search !== '' && Object.assign(params, { name_ads: filter.search });
+    filter.createdAt[0] && Object.assign(params, { start_date: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { end_date: filter.createdAt[1] });
+    filter.rangePlan !== '' && Object.assign(params, { plan_ads: [filter.rangePlan] });
+    filter.type.length >= 1 && Object.assign(params, { type_ads: filter.type?.map((item) => item?._id) });
     filter.status.length >= 1 &&
       Object.assign(params, {
-        status: filter.status?.map((item) => {
-          if (item === 'Dijadwalkan') {
-            return 'APPROVE';
-          } else if (item === 'Tinjau') {
+        status_list: filter.status?.map((item) => {
+          if (item === 'Aktif') {
+            return 'ACTIVE';
+          } else if (item === 'Tidak Aktif') {
+            return 'IN_ACTIVE';
+          } else if (item === 'Ditinjau') {
+            return 'UNDER_REVIEW';
+          } else if (item === 'Draf') {
             return 'DRAFT';
-          } else if (item === 'Habis') {
-            return 'FINISH';
-          } else if (item === 'Ditangguhkan') {
-            return 'REPORTED';
-          } else if (item === 'Dinonaktifkan') {
-            return 'NONACTIVE';
           }
         }),
       });
@@ -83,22 +84,32 @@ const TableList = () => {
   const handleSearchChange = (kind, value) => {
     setFilterList((prevVal) => {
       switch (kind) {
+        case 'search':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Nama (${value})` }]
+              : [...prevVal, { parent: kind, value: `Nama (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Waktu Transaksi' }]
-              : [...prevVal, { parent: kind, value: 'Waktu Transaksi' }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Waktu Mulai' }]
+              : [...prevVal, { parent: kind, value: 'Waktu Mulai' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'labelTanggal':
           return prevVal.find((item) => item.parent === 'createdAt')
             ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
             : [...prevVal];
-        case 'rangeCredit':
-          return prevVal.find((item) => item.parent === 'rangeCredit')
+        case 'rangePlan':
+          return prevVal.find((item) => item.parent === 'rangePlan')
             ? value === ''
-              ? [...prevVal.filter((item) => item.parent !== 'rangeCredit')]
-              : [...prevVal.filter((item) => item.parent !== 'rangeCredit'), { parent: 'rangeCredit', value: value }]
+              ? [...prevVal.filter((item) => item.parent !== 'rangePlan')]
+              : [...prevVal.filter((item) => item.parent !== 'rangePlan'), { parent: 'rangePlan', value: value }]
             : [...prevVal, { parent: kind, value: value }];
+        case 'type':
+          return prevVal.find((item) => item.value === JSON.parse(value).name)
+            ? [...prevVal.filter((item) => item.value !== JSON.parse(value).name)]
+            : [...prevVal, { parent: kind, value: JSON.parse(value).name }];
         case 'clearAll':
           return [];
         default:
@@ -108,41 +119,43 @@ const TableList = () => {
       }
     });
     setFilter((prevVal) => {
-      if (kind === 'createdAt') {
+      if (kind === 'search') {
+        return { ...prevVal, search: value, page: 0 };
+      } else if (kind === 'createdAt') {
         return { ...prevVal, createdAt: value, page: 0 };
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
-      } else if (kind === 'rangeCredit') {
-        if (value === '<= 200 Kredit') {
+      } else if (kind === 'rangePlan') {
+        if (value === '< 50') {
           return {
             ...prevVal,
-            labelCredit: value,
-            rangeCredit: [0, 200],
+            labelPlan: value,
+            rangePlan: 'show_smaller_than_50',
             page: 0,
           };
-        } else if (value === '201 - 500 Kredit') {
+        } else if (value === '50 - 99') {
           return {
             ...prevVal,
-            labelCredit: value,
-            rangeCredit: [201, 500],
+            labelPlan: value,
+            rangePlan: 'show_50_smaller_than_90',
             page: 0,
           };
-        } else if (value === '501 - 750 Kredit') {
+        } else if (value === '100 - 500') {
           return {
             ...prevVal,
-            labelCredit: value,
-            rangeCredit: [501, 750],
+            labelPlan: value,
+            rangePlan: 'show_100_smaller_than_500',
             page: 0,
           };
-        } else if (value === '751 - 1000 Kredit') {
+        } else if (value === '> 500') {
           return {
             ...prevVal,
-            labelCredit: value,
-            rangeCredit: [751, 1000],
+            labelPlan: value,
+            rangePlan: 'show_greater_than_500',
             page: 0,
           };
         } else {
-          return { ...prevVal, labelCredit: '', rangeCredit: [], page: 0 };
+          return { ...prevVal, labelPlan: '', rangePlan: '', page: 0 };
         }
       } else if (kind === 'status') {
         return {
@@ -152,15 +165,25 @@ const TableList = () => {
             : [...filter.status, value],
           page: 0,
         };
+      } else if (kind === 'type') {
+        return {
+          ...prevVal,
+          type: filter.type.find((item) => item?.name === JSON.parse(value)?.name)
+            ? filter.type.filter((item) => item?.name !== JSON.parse(value)?.name)
+            : [...filter.type, JSON.parse(value)],
+          page: 0,
+        };
       } else if (kind === 'clearAll') {
         return {
           page: 0,
           limit: 10,
           descending: 'true',
+          search: '',
           labelTanggal: '',
           createdAt: [null, null],
-          labelCredit: '',
-          rangeCredit: [],
+          labelPlan: '',
+          rangePlan: '',
+          type: [],
           status: [],
         };
       } else {
@@ -185,4 +208,4 @@ const TableList = () => {
   );
 };
 
-export default TableList;
+export default AdsManageTableList;

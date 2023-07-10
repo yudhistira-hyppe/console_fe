@@ -20,14 +20,14 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
-    getListAds: build.query({
-      query: (data) => ({
-        url: '/ads/console/adscenter/listads',
-        method: 'POST',
-        body: data,
-      }),
-      providesTags: ['ads'],
-    }),
+    // getListAds: build.query({
+    //   query: (data) => ({
+    //     url: '/ads/console/adscenter/listads',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   providesTags: ['ads'],
+    // }),
     getDetailAds: build.query({
       query: (data) => ({
         url: '/ads/management/adscenter/details',
@@ -126,6 +126,14 @@ export const adsApi = createApi({
         method: 'POST',
         body: data,
       }),
+    }),
+    getListAds: build.query({
+      query: (data) => ({
+        url: '/adsv2/ads/list',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['ads'],
     }),
   }),
 });
