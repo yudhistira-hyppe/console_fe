@@ -7,8 +7,6 @@ import dayjs from 'dayjs';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { Typography } from '@material-ui/core';
 import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
 import ModalChooseDate from './ModalChooseDate';
 
 const AdsSettingDashboard = () => {

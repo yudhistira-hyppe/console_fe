@@ -4,6 +4,8 @@ import { Box, Button, Divider, IconButton, ListItemText, MenuItem, MenuList, Mod
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { DateRange as DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 const style = {
   position: 'absolute',
