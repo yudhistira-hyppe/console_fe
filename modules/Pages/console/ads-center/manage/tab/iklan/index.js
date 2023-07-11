@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Stack } from '@mui/material';
+import { Stack, Tooltip } from '@mui/material';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetListAdsQuery } from 'api/console/ads';
+import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
+import { LoadingButton } from '@mui/lab';
+import { Typography } from '@material-ui/core';
+import { GetApp } from '@material-ui/icons';
+import { CSVLink } from 'react-csv';
+import { toast } from 'react-hot-toast';
 
 const AdsManageTableList = () => {
   const [filter, setFilter] = useState({
@@ -62,6 +68,12 @@ const AdsManageTableList = () => {
       });
     }
   }, [filter, loadingAds]);
+
+  const {
+    data: listExport,
+    isFetching: loadingExport,
+    isError,
+  } = useGetListAdsQuery({ ...getParams(), limit: 1000000, page: 0 });
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -192,19 +204,64 @@ const AdsManageTableList = () => {
     });
   };
 
+  const handleExport = () => {
+    const toastId = toast.loading('Generate pdf...');
+    if (isError) {
+      toast.error('Terjadi kesalahan saat generate pdf, silahkan coba lagi.', { id: toastId, duration: 2000 });
+    } else {
+      toast.success('Berhasil generate pdf', { id: toastId });
+    }
+  };
+
   return (
-    <Stack direction={'row'} gap={3} overflow="hidden">
-      <SearchSection filter={filter} handleChange={handleSearchChange} />
-      <TableSection
-        filterList={filterList}
-        filter={filter}
-        loading={loadingAds}
-        listTickets={listAds}
-        handlePageChange={handlePageChange}
-        handleOrder={onOrderChange}
-        handleDeleteFilter={handleSearchChange}
-      />
-    </Stack>
+    <PageContainer>
+      <Stack direction="row" position="relative">
+        <Stack position="absolute" top="-60px" right="0px">
+          {loadingExport ? (
+            <Tooltip title="Loading fetching data...">
+              <LoadingButton
+                color="secondary"
+                variant="contained"
+                style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                disabled>
+                <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                  Download CSV
+                </Typography>
+                <GetApp style={{ fontSize: 18 }} />
+              </LoadingButton>
+            </Tooltip>
+          ) : (
+            <CSVLink
+              data={listExport?.data}
+              filename="List Ads.csv"
+              onClick={() => (listExport?.data?.length < 1 ? {} : handleExport())}>
+              <LoadingButton
+                color="secondary"
+                variant="contained"
+                style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                disabled={listExport?.data?.length < 1}>
+                <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                  Download CSV
+                </Typography>
+                <GetApp style={{ fontSize: 18 }} />
+              </LoadingButton>
+            </CSVLink>
+          )}
+        </Stack>
+        <Stack direction={'row'} gap={3} overflow="hidden">
+          <SearchSection filter={filter} handleChange={handleSearchChange} />
+          <TableSection
+            filterList={filterList}
+            filter={filter}
+            loading={loadingAds}
+            listTickets={listAds}
+            handlePageChange={handlePageChange}
+            handleOrder={onOrderChange}
+            handleDeleteFilter={handleSearchChange}
+          />
+        </Stack>
+      </Stack>
+    </PageContainer>
   );
 };
 
