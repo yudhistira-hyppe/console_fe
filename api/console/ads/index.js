@@ -106,9 +106,10 @@ export const adsApi = createApi({
       invalidatesTags: ['btn-ads'],
     }),
     getListAdsSetting: build.query({
-      query: () => ({
+      query: (data) => ({
         url: '/adsv2/setting',
-        method: 'GET',
+        method: 'POST',
+        body: data,
       }),
       providesTags: ['setting-ads'],
     }),

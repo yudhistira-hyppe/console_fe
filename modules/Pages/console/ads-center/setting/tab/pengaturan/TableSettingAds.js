@@ -37,16 +37,16 @@ const useStyles = makeStyles(() => ({
 
 const TableSettingAds = () => {
   const [payload, setPayload] = useState({
-    type: 'jenis',
+    type: 'JENIS',
     search: '',
-    descending: 'true',
+    sort: 'A-Z',
   });
   const [showModal, setShowModal] = useState({
     open: false,
     data: {},
   });
 
-  const { data: listSetting, isFetching: loadingSetting } = useGetListAdsSettingQuery();
+  const { data: listSetting, isFetching: loadingSetting } = useGetListAdsSettingQuery(payload);
 
   return (
     <Stack flex={1} width="100%">
@@ -68,8 +68,8 @@ const TableSettingAds = () => {
                 color="secondary"
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: 'white' }}>
-                <MenuItem value="jenis">Jenis</MenuItem>
-                <MenuItem value="deskripsi">Deskripsi</MenuItem>
+                <MenuItem value="JENIS">Jenis</MenuItem>
+                <MenuItem value="DESKRIPSI">Deskripsi</MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -86,14 +86,14 @@ const TableSettingAds = () => {
             </Box>
             <FormControl sx={{ minWidth: 100 }} size="small">
               <Select
-                value={payload.descending}
-                onChange={(e) => setPayload({ ...payload, descending: e.target.value })}
+                value={payload.sort}
+                onChange={(e) => setPayload({ ...payload, sort: e.target.value })}
                 displayEmpty
                 color="secondary"
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: 'white' }}>
-                <MenuItem value={'false'}>A - Z</MenuItem>
-                <MenuItem value={'true'}>Z - A</MenuItem>
+                <MenuItem value='A-Z'>A - Z</MenuItem>
+                <MenuItem value='Z-A'>Z - A</MenuItem>
               </Select>
             </FormControl>
           </Stack>
@@ -127,12 +127,12 @@ const TableSettingAds = () => {
                 listSetting?.data?.adsSetting?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 180 }}>
                         {item?.Jenis || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 30 }}>
                         {item?.Nilai || '-'}
                       </Typography>
                     </TableCell>
@@ -144,7 +144,7 @@ const TableSettingAds = () => {
                     <TableCell align="left">
                       <Stack direction="row" width="100%" justifyContent="space-between">
                         <Typography variant="body1" style={{ fontSize: '12px', width: 350 }}>
-                          {item?.description || '-'}
+                          {item?.Desc || '-'}
                         </Typography>
                         <Button
                           variant="contained"
