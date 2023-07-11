@@ -22,6 +22,7 @@ import ScrollBar from 'react-perfect-scrollbar';
 import dayjs from 'dayjs';
 import { useGetListAdsSettingQuery } from 'api/console/ads';
 import ModalSetting from './ModalSetting';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -72,12 +73,15 @@ const TableSettingAds = () => {
                 <MenuItem value="DESKRIPSI">Deskripsi</MenuItem>
               </Select>
             </FormControl>
-            <TextField
+            <DelayedTextField
+              fullWidth
               size="small"
-              color="secondary"
-              placeholder="Cari jenis setting ads"
+              waitForInput={true}
+              placeholder="Cari Nama Iklan"
+              filterValue={payload.search}
               onChange={(e) => setPayload({ ...payload, search: e.target.value })}
               sx={{ input: { backgroundColor: 'white', width: 450 } }}
+              color="secondary"
             />
           </Stack>
           <Stack direction={'row'} spacing={2} style={{ flex: 1 }}>
@@ -92,8 +96,8 @@ const TableSettingAds = () => {
                 color="secondary"
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: 'white' }}>
-                <MenuItem value='A-Z'>A - Z</MenuItem>
-                <MenuItem value='Z-A'>Z - A</MenuItem>
+                <MenuItem value="A-Z">A - Z</MenuItem>
+                <MenuItem value="Z-A">Z - A</MenuItem>
               </Select>
             </FormControl>
           </Stack>
