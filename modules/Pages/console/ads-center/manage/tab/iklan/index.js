@@ -216,7 +216,7 @@ const AdsManageTableList = () => {
   return (
     <PageContainer>
       <Stack direction="row" position="relative">
-        <Stack position="absolute" top="-60px" right="0px">
+        <Stack position="absolute" top="-70px" right="0px">
           {loadingExport ? (
             <Tooltip title="Loading fetching data...">
               <LoadingButton

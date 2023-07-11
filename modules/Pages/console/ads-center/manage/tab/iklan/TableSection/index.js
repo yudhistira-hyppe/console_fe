@@ -25,6 +25,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import { formatCurrency } from 'helpers/stringHelper';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -35,6 +36,14 @@ const useStyles = makeStyles(() => ({
     '-webkit-line-clamp': 2,
     lineClamp: 2,
     overflow: 'hidden',
+  },
+  hoverCell: {
+    '&:hover': {
+      '& .MuiTypography-body1': {
+        textDecoration: 'underline',
+        color: '#AB22AF !important',
+      },
+    },
   },
 }));
 
@@ -179,15 +188,17 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     key={i}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     hover
-                    style={{ cursor: 'pointer', height: 65 }}
-                    // onClick={() => router.push({ pathname: `/ads-center/detail`, query: { _id: item?._id } })}
-                  >
+                    style={{ cursor: 'pointer', height: 65 }}>
                     <TableCell align="left" style={{ paddingRight: 0 }}>
                       <Typography variant="body1" style={{ fontSize: 14, width: 150 }}>
                         {item?.campaignId || '-'}
                       </Typography>
                     </TableCell>
-                    <TableCell align="left" style={{ padding: '0 16px 0 0' }}>
+                    <TableCell
+                      align="left"
+                      style={{ padding: '0 16px 0 0' }}
+                      className={classes.hoverCell}
+                      onClick={() => router.push({ pathname: `/ads-center/manage/detail`, query: { _id: item?._id } })}>
                       <Stack direction="row" alignItems="center" gap="15px" width={150}>
                         {/* <Avatar src={getImage(item)} variant="rounded" alt="X" /> */}
                         <Stack direction="column" gap="2px">
@@ -225,11 +236,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
                 <TableBody>
                   {listTickets?.data?.map((item, i) => (
-                    <TableRow
-                      key={i}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                      hover
-                      style={{ cursor: 'pointer', height: 65 }}>
+                    <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} style={{ height: 65 }}>
                       <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: 14, width: 100 }}>
                           {moment(item?.liveAt).format('DD/MM/YYYY')}

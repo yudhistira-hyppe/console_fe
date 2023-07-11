@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from '@material-ui/core';
 import { Typography, Stack, Avatar, Chip } from '@mui/material';
-import { ButtonDropdown } from '../';
+import { ButtonDropdown } from '../../../../../components';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
@@ -62,7 +62,7 @@ const AdsContentDetailComponent = ({ status, setShowModal, showModal, buttonColo
 
         <div className="my-4">
           <Avatar
-            src={getImage(detailAds)}
+            src={getImage(detailAds) || ''}
             variant="rounded"
             style={{ cursor: 'pointer', width: '100%', height: 280, border: '1px solid #eeeeee' }}
             onClick={() => {

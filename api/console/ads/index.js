@@ -50,14 +50,14 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
-    getViewerAds: build.query({
-      query: (data) => ({
-        url: '/userads/console/adscenter/listpenonton',
-        method: 'POST',
-        body: data,
-      }),
-      providesTags: ['ads'],
-    }),
+    // getViewerAds: build.query({
+    //   query: (data) => ({
+    //     url: '/userads/console/adscenter/listpenonton',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   providesTags: ['ads'],
+    // }),
     approveAds: build.mutation({
       query: (data) => ({
         url: '/ads/approve',
@@ -131,6 +131,14 @@ export const adsApi = createApi({
     getListAds: build.query({
       query: (data) => ({
         url: '/adsv2/ads/list',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['ads'],
+    }),
+    getViewerAds: build.query({
+      query: (data) => ({
+        url: '/adsv2/ads/list/reward',
         method: 'POST',
         body: data,
       }),
