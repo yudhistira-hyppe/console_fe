@@ -60,8 +60,8 @@ const ModalBadge = ({ open, handleClose, data }) => {
       type: data?.type || '',
     });
     setUrlImage({
-      profile: data?.badgeProfile || '',
-      other: data?.badgeOther || '',
+      profile: data?.badgeProfile + '?m=' + new Date().getTime() || '',
+      other: data?.badgeOther + '?m=' + new Date().getTime() || '',
     });
   }, [data]);
 
@@ -136,7 +136,7 @@ const ModalBadge = ({ open, handleClose, data }) => {
     if (isEmpty(data)) {
       createBadge(formData).then((res) => {
         if (res?.data) {
-          toast.success('Berhasil membuat interest');
+          toast.success('Berhasil membuat badge challenge');
         } else {
           toast.error(res?.error?.data?.message);
         }
@@ -144,7 +144,7 @@ const ModalBadge = ({ open, handleClose, data }) => {
     } else {
       updateBadge({ id: data?._id, formData }).then((res) => {
         if (res?.data) {
-          toast.success('Berhasil mengupdate interest');
+          toast.success('Berhasil mengupdate badge challenge');
         } else {
           toast.error(res?.error?.data?.message);
         }
