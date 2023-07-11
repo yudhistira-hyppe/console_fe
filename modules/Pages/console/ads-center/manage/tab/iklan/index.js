@@ -217,38 +217,27 @@ const AdsManageTableList = () => {
     <PageContainer>
       <Stack direction="row" position="relative">
         <Stack position="absolute" top="-70px" right="0px">
-          {loadingExport ? (
+          {loadingExport || listExport?.data?.length < 1 ? (
             <Tooltip title="Loading fetching data...">
-              <LoadingButton
-                color="secondary"
-                variant="contained"
-                style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-                disabled>
-                <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
-                  Download CSV
-                </Typography>
-                <GetApp style={{ fontSize: 18 }} />
-              </LoadingButton>
+              <span>
+                <LoadingButton color="secondary" variant="contained" disabled>
+                  <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                    Download CSV
+                  </Typography>
+                </LoadingButton>
+              </span>
             </Tooltip>
           ) : (
-            <CSVLink
-              data={listExport?.data}
-              filename="List Ads.csv"
-              onClick={() => (listExport?.data?.length < 1 ? {} : handleExport())}>
-              <LoadingButton
-                color="secondary"
-                variant="contained"
-                style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-                disabled={listExport?.data?.length < 1}>
+            <CSVLink data={listExport?.data} filename="List Ads.csv" onClick={() => handleExport()}>
+              <LoadingButton color="secondary" variant="contained">
                 <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                   Download CSV
                 </Typography>
-                <GetApp style={{ fontSize: 18 }} />
               </LoadingButton>
             </CSVLink>
           )}
         </Stack>
-        <Stack direction={'row'} gap={3} overflow="hidden">
+        <Stack direction={'row'} gap={3} overflow="hidden" width="100%">
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
             filterList={filterList}

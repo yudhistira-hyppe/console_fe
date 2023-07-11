@@ -221,14 +221,16 @@ const TableRewardsParticipant = ({ idAds }) => {
           <Stack direction="row" spacing={2}>
             {loadingExport || listExport?.data?.length < 1 ? (
               <Tooltip title="Loading fetching data...">
-                <LoadingButton color="secondary" variant="contained" disabled>
-                  <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
-                    Download CSV
-                  </Typography>
-                </LoadingButton>
+                <span>
+                  <LoadingButton color="secondary" variant="contained" disabled>
+                    <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                      Download CSV
+                    </Typography>
+                  </LoadingButton>
+                </span>
               </Tooltip>
             ) : (
-              <CSVLink data={listExport?.data} filename="List Ads.csv" onClick={() => handleExport()}>
+              <CSVLink data={listExport?.data} filename="List Rewards Participant.csv" onClick={() => handleExport()}>
                 <LoadingButton color="secondary" variant="contained">
                   <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                     Download CSV

@@ -235,8 +235,6 @@ const DatabaseTabAccountComponent = () => {
     }
   };
 
-  console.log(loadingExport);
-
   return (
     <>
       <Head>
@@ -245,33 +243,22 @@ const DatabaseTabAccountComponent = () => {
       <PageContainer heading="">
         <Stack direction={'row'} style={{ position: 'relative' }}>
           <Stack position="absolute" top="-60px" right="0px">
-            {loadingExport ? (
+            {loadingExport || listExport?.data?.length < 1 ? (
               <Tooltip title="Loading fetching data...">
-                <LoadingButton
-                  color="secondary"
-                  variant="outlined"
-                  style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-                  disabled>
-                  <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
-                    Unduh
-                  </Typography>
-                  <GetApp style={{ fontSize: 18 }} />
-                </LoadingButton>
+                <span>
+                  <LoadingButton color="secondary" variant="contained" disabled>
+                    <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                      Download CSV
+                    </Typography>
+                  </LoadingButton>
+                </span>
               </Tooltip>
             ) : (
-              <CSVLink
-                data={listExport?.data}
-                filename="Database-Account.csv"
-                onClick={() => (listExport?.data?.length < 1 ? {} : handleExport())}>
-                <LoadingButton
-                  color="secondary"
-                  variant="outlined"
-                  style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-                  disabled={listExport?.data?.length < 1}>
+              <CSVLink data={listExport?.data} filename="Database Account.csv" onClick={() => handleExport()}>
+                <LoadingButton color="secondary" variant="contained">
                   <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
-                    Unduh
+                    Download CSV
                   </Typography>
-                  <GetApp style={{ fontSize: 18 }} />
                 </LoadingButton>
               </CSVLink>
             )}
