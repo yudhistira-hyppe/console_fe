@@ -46,7 +46,7 @@ const ModalSetting = ({ open, onClose, data }) => {
               <Close />
             </IconButton>
           </Stack>
-          <Typography>{data?.description || '-'}</Typography>
+          <Typography style={{ fontSize: 12 }}>{data?.Desc || '-'}</Typography>
 
           <Stack direction="row" justifyContent="center" width="100%">
             <TextField
