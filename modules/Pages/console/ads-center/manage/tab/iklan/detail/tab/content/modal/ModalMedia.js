@@ -19,7 +19,7 @@ const style = {
   justifyContent: 'center',
 };
 
-export default function AdsModalMedia({ showModal, onClose, idApsara }) {
+export default function ModalMedia({ showModal, onClose, idApsara }) {
   const { data: adsVideo } = useGetVideoFromApsaraQuery({ apsaraId: idApsara });
 
   return (
