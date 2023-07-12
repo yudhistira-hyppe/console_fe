@@ -8,6 +8,7 @@ import CardContent from './CardContent';
 import CardSummary from '../../../../dashboard/CardSummary';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import CardStatus from './CardStatus';
+import CardItem from './CardItem';
 
 const DetailAdsContentComponent = ({ idAds }) => {
   const [payload, setPayload] = useState([
@@ -109,6 +110,95 @@ const DetailAdsContentComponent = ({ idAds }) => {
               dataCTA={summary?.data?.summary?.CTA || []}
               dataImpresi={summary?.data?.summary?.impresi || []}
               dataJangkauan={summary?.data?.summary?.reach || []}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <CardItem
+              title="Impresi"
+              type="number"
+              description="Total Impresi"
+              amount={summary?.data?.summary?.Totalimpresi || 0}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <CardItem
+              title="Jangkauan"
+              type="number"
+              description="Total Jangkauan"
+              amount={summary?.data?.summary?.Totalreach || 0}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <CardItem
+              title="Call To Action (CTA)"
+              type="number"
+              description="Total Iklan Diklik"
+              amount={summary?.data?.summary?.TotalCTA || 0}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <CardItem
+              title="Click Through Rate (CTR)"
+              type="number"
+              description="Total Rasio Iklan"
+              amount={summary?.data?.summary?.CTR}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <CardItem
+              title="Kredit Iklan"
+              description="Total Penggunaan Kredit Iklan"
+              type="number"
+              size="big"
+              height={300}
+              amount={summary?.data?.saldoKredit || 0}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <CardItem
+              title="Rentang Umur"
+              type="progress"
+              size="big"
+              height={300}
+              data={summary?.data?.userAdsAge || []}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <CardItem
+              title="Jenis Kelamin"
+              type="pie"
+              size="big"
+              height={300}
+              data={summary?.data?.userAdsGender || []}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <CardItem
+              title="Wilayah"
+              type="progress"
+              size="big"
+              column={2}
+              height={230}
+              data={summary?.data?.userAdsArea || []}
+              isLoading={loadingSummary}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <CardItem
+              title="Minat"
+              type="progress"
+              size="big"
+              column={2}
+              height={230}
+              data={summary?.data?.userAdsInterest || []}
+              isLoading={loadingSummary}
             />
           </Grid>
         </Grid>
