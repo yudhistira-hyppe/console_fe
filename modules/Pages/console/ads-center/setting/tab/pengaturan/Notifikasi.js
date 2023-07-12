@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import { Button, Card, CircularProgress, Stack } from '@mui/material';
 import { useGetNotificationAdsQuery } from 'api/console/ads';
 import React, { useState } from 'react';
-import ModalNotifikasi from './ModalNotifikasi';
+import ModalNotifikasi from './modal/ModalNotifikasi';
 
 const NotifikasiComponent = () => {
   const [showModal, setShowModal] = useState({
