@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './index.style';
 import TableRewardsParticipant from './tab/participant';
+import DetailAdsContentComponent from './tab/content';
 
 const AdsDetailComponent = () => {
   const router = useRouter();
@@ -16,11 +17,11 @@ const AdsDetailComponent = () => {
   const breadcrumbs =
     tab == 1
       ? [
-          { label: 'Pusat Iklan', link: '/ads-center/manage' },
+          { label: 'Pusat Iklan', link: { pathname: '/ads-center/manage', query: { tab: 2 } } },
           { label: 'Detail Iklan', isActive: true },
         ]
       : [
-          { label: 'Pusat Iklan', link: '/ads-center/manage' },
+          { label: 'Pusat Iklan', link: { pathname: '/ads-center/manage', query: { tab: 2 } } },
           { label: 'Rewards Partisipan', isActive: true },
         ];
 
@@ -42,7 +43,7 @@ const AdsDetailComponent = () => {
           </TabList>
 
           <TabPanel className={classes.tabPanel} value="1">
-            <Typography>Detail Section</Typography>
+            <DetailAdsContentComponent idAds={router.query._id} />
           </TabPanel>
           <TabPanel className={classes.tabPanel} value="2">
             <TableRewardsParticipant idAds={router.query._id} />
