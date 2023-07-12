@@ -34,7 +34,10 @@ const CardStatus = ({ details }) => {
         toast.error(res?.error?.data?.messages?.info[0], { id: 'approve-ads', duration: 3000 });
       } else {
         Router.replace({ pathname: '/ads-center/manage', query: { tab: 2 } });
-        toast.success('Berhasil menjadwalkan ads', { id: 'approve-ads', duration: 3000 });
+        toast.success(value?.status === 'ACTIVE' ? 'Berhasil menjadwalkan iklan' : 'Berhasil menolak iklan', {
+          id: 'approve-ads',
+          duration: 3000,
+        });
       }
       handleClose();
     });
@@ -48,7 +51,7 @@ const CardStatus = ({ details }) => {
           variant="contained"
           color="secondary"
           onClick={() => setShowModal({ show: true, type: 'approve' })}
-          disabled={details?.status !== 'DRAFT'}>
+          disabled={details?.status !== 'UNDER_REVIEW'}>
           <Typography style={{ fontWeight: 'bold' }}>Setujui</Typography>
         </Button>
         <Button
@@ -56,7 +59,7 @@ const CardStatus = ({ details }) => {
           variant="outlined"
           color="secondary"
           onClick={() => setShowModal({ show: true, type: 'decline' })}
-          disabled={details?.status !== 'DRAFT'}>
+          disabled={details?.status !== 'UNDER_REVIEW'}>
           <Typography style={{ fontWeight: 'bold' }}>Tidak Disetujui</Typography>
         </Button>
         <Stack direction="row" style={{ backgroundColor: '#00000005', padding: '8px 16px' }}>

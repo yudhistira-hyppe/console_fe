@@ -330,8 +330,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: 14, width: 100 }}>
-                          {'-'}
+                        <Typography variant="body1" style={{ fontSize: 14, width: 200 }}>
+                          {item?.remark || '-'}
                         </Typography>
                       </TableCell>
                     </TableRow>
