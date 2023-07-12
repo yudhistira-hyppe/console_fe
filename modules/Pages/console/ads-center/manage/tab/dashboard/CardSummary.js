@@ -3,6 +3,7 @@ import { Typography } from '@material-ui/core';
 import { Card, CircularProgress, Stack } from '@mui/material';
 import { formatCurrency } from 'helpers/stringHelper';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import dayjs from 'dayjs';
 
 const LabelStatus = ({ title, amount, color }) => {
   return (
@@ -50,7 +51,7 @@ const CardSummary = ({ totalCTA, totalImpresi, totalJangkauan, dataCTA, dataImpr
       });
     });
 
-    return data;
+    return data.sort((a, b) => dayjs(a.date).toDate() - dayjs(b.date).toDate());
   };
 
   return (
