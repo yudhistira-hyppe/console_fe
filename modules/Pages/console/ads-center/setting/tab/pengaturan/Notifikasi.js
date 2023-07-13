@@ -19,8 +19,7 @@ const NotifikasiComponent = () => {
         <Stack direction="column" height={200}>
           {loadingData ? (
             <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
-              <CircularProgress color="secondary" />
-              <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+              <CircularProgress color="secondary" size={28} />
             </Stack>
           ) : (
             <>

@@ -1,5 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, IconButton, InputAdornment, Modal, Stack, TextField } from '@mui/material';
 import { useUpdateAdsNotificationPushMutation } from 'api/console/ads';
 import React, { useEffect, useState } from 'react';
@@ -22,7 +23,7 @@ const ModalNotifikasi = ({ open, onClose, data }) => {
     title: data?.title_id || '',
     body: data?.body_id?.replace('Rp. ${rewards}', '') || '',
   });
-  const [updateNotif] = useUpdateAdsNotificationPushMutation();
+  const [updateNotif, { isLoading: loadingUpdate }] = useUpdateAdsNotificationPushMutation();
 
   console.log(data);
 
@@ -45,7 +46,7 @@ const ModalNotifikasi = ({ open, onClose, data }) => {
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
-        toast.success('Berhasil Mengupdate Notifikasi Push', { duration: 3000 });
+        toast.success('Berhasil mengupdate notifikasi push', { duration: 3000 });
       }
       onClose();
     });
@@ -105,17 +106,23 @@ const ModalNotifikasi = ({ open, onClose, data }) => {
           </Stack>
 
           <Stack direction="row" justifyContent="center" alignItems="center" gap={2}>
-            <Button variant="outlined" color="secondary" style={{ borderRadius: 6, padding: '10px 20px' }} onClick={onClose}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              style={{ borderRadius: 6, padding: '10px 20px' }}
+              onClick={onClose}
+              disabled={loadingUpdate}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Batal</Typography>
             </Button>
-            <Button
+            <LoadingButton
+              loading={loadingUpdate}
               variant="contained"
               color="secondary"
               style={{ borderRadius: 6, padding: '10px 20px' }}
               onClick={handleUpdate}
               disabled={!inputValue?.title || !inputValue?.body}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Simpan</Typography>
-            </Button>
+            </LoadingButton>
           </Stack>
         </Stack>
       </Box>
