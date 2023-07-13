@@ -1,5 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, Modal, Stack, TextField } from '@mui/material';
 import { useUpdateAdsButtonMutation, useUpdateAdsNotificationPushMutation } from 'api/console/ads';
 import { isEmpty } from 'lodash';
@@ -20,7 +21,7 @@ const style = {
 
 const ModalButtonCTA = ({ open, onClose, data }) => {
   const [inputValue, setInputValue] = useState([]);
-  const [updateButton] = useUpdateAdsButtonMutation();
+  const [updateButton, { isLoading: loadingUpdate }] = useUpdateAdsButtonMutation();
 
   useEffect(() => {
     setInputValue(
@@ -49,7 +50,7 @@ const ModalButtonCTA = ({ open, onClose, data }) => {
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
-        toast.success('Berhasil Mengupdate Text Button Ads', { duration: 3000 });
+        toast.success('Berhasil mengupdate text button ads', { duration: 3000 });
       }
       onClose();
     });
@@ -114,10 +115,16 @@ const ModalButtonCTA = ({ open, onClose, data }) => {
           </Stack>
 
           <Stack direction="row" justifyContent="center" alignItems="center" gap={2}>
-            <Button variant="outlined" color="secondary" style={{ borderRadius: 6, padding: '10px 20px' }} onClick={onClose}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              style={{ borderRadius: 6, padding: '10px 20px' }}
+              onClick={onClose}
+              disabled={loadingUpdate}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Batal</Typography>
             </Button>
-            <Button
+            <LoadingButton
+              loading={loadingUpdate}
               variant="contained"
               color="secondary"
               style={{ borderRadius: 6, padding: '10px 20px' }}
@@ -126,7 +133,7 @@ const ModalButtonCTA = ({ open, onClose, data }) => {
                 isEmpty(inputValue?.map((item) => item?.index)) || inputValue?.map((item) => item?.text)?.includes('')
               }>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Simpan</Typography>
-            </Button>
+            </LoadingButton>
           </Stack>
         </Stack>
       </Box>
