@@ -59,6 +59,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                 handleInputChange('kind', e.target.value);
                 handleInputChange('cycle', 0);
                 handleInputChange('cycle_day', 0);
+                handleInputChange('startdate', null);
               }}
               SelectProps={{
                 renderValue: (selected) => (
@@ -346,7 +347,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
               <Tooltip
                 title={
                   <Typography style={{ fontSize: 12, padding: 8 }}>
-                    Banner ini akan muncul pada halaman search, dan digunakan pada halaman detail challenge.
+                    Gunakan opsi ini untuk menampilkan peringkat partisipan pada leaderboard.
                   </Typography>
                 }
                 arrow>
