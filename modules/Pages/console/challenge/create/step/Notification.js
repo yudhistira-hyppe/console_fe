@@ -253,8 +253,11 @@ const ComponentStepNotification = ({ inputValue, handleInputChange }) => {
                           inputValue?.notification_push
                             ? inputValue?.notification_push?.find((notif) => notif?.type === item?.type)
                               ? inputValue?.notification_push?.filter((notif) => notif?.type !== item?.type)
-                              : [...inputValue?.notification_push, { type: item?.type, title: '', body: '' }]
-                            : [{ type: item?.type, title: '', body: '' }],
+                              : [
+                                  ...inputValue?.notification_push,
+                                  { type: item?.type, title: '', body: '', blast: item?.type === 'start' ? 0 : undefined },
+                                ]
+                            : [{ type: item?.type, title: '', body: '', blast: item?.type === 'start' ? 0 : undefined }],
                         )
                       }
                     />

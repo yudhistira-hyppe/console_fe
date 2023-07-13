@@ -28,14 +28,14 @@ export const adsApi = createApi({
     //   }),
     //   providesTags: ['ads'],
     // }),
-    getDetailAds: build.query({
-      query: (data) => ({
-        url: '/ads/management/adscenter/details',
-        method: 'POST',
-        body: data,
-      }),
-      providesTags: ['detail'],
-    }),
+    // getDetailAds: build.query({
+    //   query: (data) => ({
+    //     url: '/ads/management/adscenter/details',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   providesTags: ['detail'],
+    // }),
     getLogDetailAds: build.query({
       query: (id) => ({
         url: `/ads/console/adscenter/historydetail/${id}`,
@@ -50,22 +50,22 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
-    getViewerAds: build.query({
-      query: (data) => ({
-        url: '/userads/console/adscenter/listpenonton',
-        method: 'POST',
-        body: data,
-      }),
-      providesTags: ['ads'],
-    }),
-    approveAds: build.mutation({
-      query: (data) => ({
-        url: '/ads/approve',
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: ['ads', 'detail'],
-    }),
+    // getViewerAds: build.query({
+    //   query: (data) => ({
+    //     url: '/userads/console/adscenter/listpenonton',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   providesTags: ['ads'],
+    // }),
+    // approveAds: build.mutation({
+    //   query: (data) => ({
+    //     url: '/ads/approve',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   invalidatesTags: ['ads', 'detail'],
+    // }),
 
     //Ads V2
     getDashboardAdsSetting: build.query({
@@ -106,9 +106,10 @@ export const adsApi = createApi({
       invalidatesTags: ['btn-ads'],
     }),
     getListAdsSetting: build.query({
-      query: () => ({
+      query: (data) => ({
         url: '/adsv2/setting',
-        method: 'GET',
+        method: 'POST',
+        body: data,
       }),
       providesTags: ['setting-ads'],
     }),
@@ -135,6 +136,38 @@ export const adsApi = createApi({
       }),
       providesTags: ['ads'],
     }),
+    getViewerAds: build.query({
+      query: (data) => ({
+        url: '/adsv2/ads/list/reward',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['ads'],
+    }),
+    getDetailAds: build.query({
+      query: (data) => ({
+        url: '/adsv2/ads/campaign/detail',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['detail'],
+    }),
+    getSummaryDetailAds: build.query({
+      query: (data) => ({
+        url: '/adsv2/ads/campaign/detail/all',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['detail'],
+    }),
+    approveAds: build.mutation({
+      query: (data) => ({
+        url: '/adsv2/ads/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['ads', 'detail'],
+    }),
   }),
 });
 
@@ -157,4 +190,5 @@ export const {
   useGetListAdsSettingQuery,
   useUpdateAdsSettingMutation,
   useGetDashboardAdsManageQuery,
+  useGetSummaryDetailAdsQuery,
 } = adsApi;

@@ -125,10 +125,10 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Avatar src={item?.badgeProfile} style={{ width: 80, height: 80 }} />
+                        <Avatar src={item?.badgeProfile + '?m=' + new Date().getTime()} style={{ width: 80, height: 80 }} />
                       </TableCell>
                       <TableCell align="left">
-                        <Avatar src={item?.badgeOther} style={{ width: 80, height: 80 }} />
+                        <Avatar src={item?.badgeOther + '?m=' + new Date().getTime()} style={{ width: 80, height: 80 }} />
                       </TableCell>
                       <TableCell align="right">
                         <Stack direction="row" justifyContent="flex-end" gap={1} minWidth={80}>

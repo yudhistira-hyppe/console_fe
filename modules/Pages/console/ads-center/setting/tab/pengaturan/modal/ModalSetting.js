@@ -1,5 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, IconButton, InputAdornment, Modal, Stack, TextField } from '@mui/material';
 import { useUpdateAdsNotificationPushMutation, useUpdateAdsSettingMutation } from 'api/console/ads';
 import React, { useEffect, useState } from 'react';
@@ -19,7 +20,7 @@ const style = {
 
 const ModalSetting = ({ open, onClose, data }) => {
   const [inputValue, setInputValue] = useState({});
-  const [updateSetting] = useUpdateAdsSettingMutation();
+  const [updateSetting, { isLoading: loadingUpdate }] = useUpdateAdsSettingMutation();
 
   useEffect(() => {
     setInputValue({ [data?.Jenis]: data?.Nilai });
@@ -30,11 +31,13 @@ const ModalSetting = ({ open, onClose, data }) => {
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
-        toast.success('Berhasil Mengupdate Setting Ads', { duration: 3000 });
+        toast.success('Berhasil mengupdate setting ads', { duration: 3000 });
       }
       onClose();
     });
   };
+
+  console.log(data);
 
   return (
     <Modal open={open} disableEscapeKeyDown>
@@ -46,7 +49,7 @@ const ModalSetting = ({ open, onClose, data }) => {
               <Close />
             </IconButton>
           </Stack>
-          <Typography>{data?.description || '-'}</Typography>
+          <Typography style={{ fontSize: 12 }}>{data?.Desc || '-'}</Typography>
 
           <Stack direction="row" justifyContent="center" width="100%">
             <TextField
@@ -98,9 +101,13 @@ const ModalSetting = ({ open, onClose, data }) => {
                           width: 24,
                           height: 24,
                           fontSize: 24,
-                          color: '#AB22AF',
-                          border: '1px solid #AB22AF',
-                        }}>
+                          color: data?.Unit === 'Persen' && inputValue?.[data?.Jenis] >= 100 ? '#C9C9C9' : '#AB22AF',
+                          border:
+                            data?.Unit === 'Persen' && inputValue?.[data?.Jenis] >= 100
+                              ? '1px solid #C9C9C9'
+                              : '1px solid #AB22AF',
+                        }}
+                        disabled={data?.Unit === 'Persen' && inputValue?.[data?.Jenis] >= 100}>
                         +
                       </IconButton>
                     </Stack>
@@ -111,16 +118,22 @@ const ModalSetting = ({ open, onClose, data }) => {
           </Stack>
 
           <Stack direction="row" justifyContent="center" alignItems="center" gap={2} mt="20px">
-            <Button variant="outlined" color="secondary" style={{ borderRadius: 6, padding: '10px 20px' }} onClick={onClose}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              style={{ borderRadius: 6, padding: '10px 20px' }}
+              onClick={onClose}
+              disabled={loadingUpdate}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Batal</Typography>
             </Button>
-            <Button
+            <LoadingButton
+              loading={loadingUpdate}
               variant="contained"
               color="secondary"
               style={{ borderRadius: 6, padding: '10px 20px' }}
               onClick={handleUpdate}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Konfirmasi</Typography>
-            </Button>
+            </LoadingButton>
           </Stack>
         </Stack>
       </Box>

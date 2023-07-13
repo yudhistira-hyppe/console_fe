@@ -61,7 +61,7 @@ const ModalStartHour = ({ showModal, onClose, onSubmit, selectedItem }) => {
                 placeholder="00"
                 color="secondary"
                 size="small"
-                value={startTime.hour ? (startTime.hour >= 10 ? startTime.hour : `0${startTime.hour}`) : ''}
+                value={startTime.hour >= 0 ? (startTime.hour >= 10 ? startTime.hour : `0${startTime.hour}`) : ''}
                 onChange={(e) => setStartTime({ ...startTime, hour: Number(e.target.value) })}
                 inputProps={{
                   onKeyPress: (event) => {
@@ -74,7 +74,7 @@ const ModalStartHour = ({ showModal, onClose, onSubmit, selectedItem }) => {
                 }}
                 sx={{ '& input': { height: 70, fontSize: 64, backgroundColor: '#21212114' } }}
                 style={{ width: 100 }}
-                error={startTime.hour >= 24 || startTime.minute >= 60 || startTime.hour < 1 || startTime.minute < 0}
+                error={startTime.hour >= 24 || startTime.minute >= 60 || startTime.hour < 0 || startTime.minute < 0}
               />
               <Typography style={{ fontSize: 72, lineHeight: 1, marginBottom: 20 }}>:</Typography>
               <TextField
@@ -94,7 +94,7 @@ const ModalStartHour = ({ showModal, onClose, onSubmit, selectedItem }) => {
                 }}
                 sx={{ '& input': { height: 70, fontSize: 64, backgroundColor: '#21212114' } }}
                 style={{ width: 100 }}
-                error={startTime.hour >= 24 || startTime.minute >= 60 || startTime.hour < 1 || startTime.minute < 0}
+                error={startTime.hour >= 24 || startTime.minute >= 60 || startTime.hour < 0 || startTime.minute < 0}
               />
             </Stack>
 
@@ -106,7 +106,7 @@ const ModalStartHour = ({ showModal, onClose, onSubmit, selectedItem }) => {
                 variant="text"
                 color="secondary"
                 onClick={() => onSubmit(startTime)}
-                disabled={startTime.hour >= 24 || startTime.minute >= 60 || startTime.hour < 1 || startTime.minute < 0}>
+                disabled={startTime.hour >= 24 || startTime.minute >= 60 || startTime.hour < 0 || startTime.minute < 0}>
                 <Typography>Oke</Typography>
               </Button>
             </Stack>

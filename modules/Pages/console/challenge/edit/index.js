@@ -263,6 +263,7 @@ const EditChallenge = ({ detailId, moreSlug }) => {
         !inputValue?.cycle ||
         !inputValue?.cycle_day ||
         !inputValue?.startdate ||
+        inputValue?.startdate?.isBefore() ||
         !inputValue?.starthour ||
         inputValue?.starthour?.isValid() === false ||
         !inputValue?.description)
@@ -316,7 +317,7 @@ const EditChallenge = ({ detailId, moreSlug }) => {
           isEmpty(inputValue?.winner_ranking_price)) ||
         (inputValue?.winner_rewards &&
           inputValue?.winner_rewards_type === 'ranking' &&
-          inputValue?.winner_ranking_price?.map((item) => item?.price)?.filter((item) => item !== '')?.length < 1) ||
+          inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('')) ||
         (inputValue?.winner_rewards &&
           inputValue?.winner_rewards_type === 'poin' &&
           !inputValue?.max_reward &&
@@ -330,7 +331,14 @@ const EditChallenge = ({ detailId, moreSlug }) => {
       disabled = true;
     } else if (
       activeStep == 6 &&
-      (!inputValue?.banner_search || !inputValue?.banner_popup || isEmpty(inputValue?.notification_push))
+      (!inputValue?.banner_search ||
+        !inputValue?.banner_popup ||
+        isEmpty(inputValue?.notification_push) ||
+        (!isEmpty(inputValue?.notification_push) &&
+          (inputValue?.notification_push?.map((item) => item?.body)?.includes('') ||
+            inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
+            inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
+              inputValue?.notification_push?.length)))
     ) {
       disabled = true;
     }

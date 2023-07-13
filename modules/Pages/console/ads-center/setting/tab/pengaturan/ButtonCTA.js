@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import { Button, Card, CircularProgress, Stack } from '@mui/material';
 import { useGetButtonCTAAdsQuery } from 'api/console/ads';
 import React, { useState } from 'react';
-import ModalButtonCTA from './ModalButtonCTA';
+import ModalButtonCTA from './modal/ModalButton';
 
 const ButtonCTAComponent = () => {
   const [showModal, setShowModal] = useState({
@@ -19,8 +19,7 @@ const ButtonCTAComponent = () => {
         <Stack direction="column" height={200}>
           {loadingData ? (
             <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
-              <CircularProgress color="secondary" />
-              <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+              <CircularProgress color="secondary" size={28} />
             </Stack>
           ) : (
             <>

@@ -93,7 +93,7 @@ const AdsSettingDashboard = () => {
             isLoading={loadingData}
             title="Jumlah Pengiklan"
             type="pengiklan"
-            pengiklan={dashboardData?.[0]?.totalAdvertisers || 0}
+            pengiklan={dashboardData?.data?.[0]?.totalAdvertisers || 0}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -101,8 +101,8 @@ const AdsSettingDashboard = () => {
             isLoading={loadingData}
             title="Jumlah Iklan"
             type="iklan"
-            totalData={dashboardData?.[0]?.totalAds || 0}
-            data={dashboardData?.[0]?.statusAds}
+            totalData={dashboardData?.data?.[0]?.totalAds || 0}
+            data={dashboardData?.data?.[0]?.statusAds}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -110,18 +110,18 @@ const AdsSettingDashboard = () => {
             isLoading={loadingData}
             title="Jumlah Pendapatan"
             type="pendapatan"
-            pendapatan={dashboardData?.[0]?.totalIncome || 0}
+            pendapatan={dashboardData?.data?.[0]?.totalIncome || 0}
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          <CardItem isLoading={loadingData} title="Tipe Iklan Populer" type="progress" data={dashboardData?.[0]?.adsType} />
+          <CardItem isLoading={loadingData} title="Tipe Iklan Populer" type="progress" data={dashboardData?.data?.[0]?.adsType} />
         </Grid>
         <Grid item xs={12} md={4}>
           <CardItem
             isLoading={loadingData}
             title="Tujuan Iklan Populer"
             type="progress"
-            data={dashboardData?.[0]?.adsObjectivitas}
+            data={dashboardData?.data?.[0]?.adsObjectivitas}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -129,7 +129,7 @@ const AdsSettingDashboard = () => {
             isLoading={loadingData}
             title="Tayangan Populer"
             type="progress"
-            data={dashboardData?.[0]?.adsPlanShows}
+            data={dashboardData?.data?.[0]?.adsPlanShows}
           />
         </Grid>
       </Grid>

@@ -23,8 +23,6 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
     );
   }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
 
-  console.log(inputValue);
-
   return (
     <Card sx={{ padding: 3 }}>
       <Typography style={{ fontWeight: 'bold' }}>Detail Challenge</Typography>
@@ -57,6 +55,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 handleInputChange('kind', e.target.value);
                 handleInputChange('cycle', 0);
                 handleInputChange('cycle_day', 0);
+                handleInputChange('startdate', null);
               }}
               SelectProps={{
                 renderValue: (selected) => <Typography>{selected === '' ? 'Pilih Jenis Challenge' : selected}</Typography>,
@@ -290,7 +289,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               <Tooltip
                 title={
                   <Typography style={{ fontSize: 12, padding: 8 }}>
-                    Banner ini akan muncul pada halaman search, dan digunakan pada halaman detail challenge.
+                    Gunakan opsi ini untuk menampilkan peringkat partisipan pada leaderboard.
                   </Typography>
                 }
                 arrow>

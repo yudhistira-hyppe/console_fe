@@ -21,7 +21,9 @@ import { useAuth } from 'authentication';
 import ScrollBar from 'react-perfect-scrollbar';
 import dayjs from 'dayjs';
 import { useGetListAdsSettingQuery } from 'api/console/ads';
-import ModalSetting from './ModalSetting';
+import ModalSetting from './modal/ModalSetting';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
+import ModalCharacteristic from './modal/ModalCharacteristic';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -37,20 +39,33 @@ const useStyles = makeStyles(() => ({
 
 const TableSettingAds = () => {
   const [payload, setPayload] = useState({
-    type: 'jenis',
+    type: 'JENIS',
     search: '',
-    descending: 'true',
+    sort: 'A-Z',
   });
   const [showModal, setShowModal] = useState({
     open: false,
+    type: '',
     data: {},
   });
 
-  const { data: listSetting, isFetching: loadingSetting } = useGetListAdsSettingQuery();
+  const { data: listSetting, isFetching: loadingSetting } = useGetListAdsSettingQuery(payload);
 
   return (
     <Stack flex={1} width="100%">
-      <ModalSetting open={showModal.open} data={showModal.data} onClose={() => setShowModal({ open: false, data: {} })} />
+      <ModalSetting
+        open={showModal.open && showModal.type === 'normal'}
+        data={showModal.data}
+        onClose={() => setShowModal({ open: false, data: {} })}
+      />
+
+      {showModal.open && showModal.type === 'characteristic' && (
+        <ModalCharacteristic
+          open={showModal.open && showModal.type === 'characteristic'}
+          data={showModal.data}
+          onClose={() => setShowModal({ open: false, data: {} })}
+        />
+      )}
 
       <Box
         display="flex"
@@ -68,16 +83,19 @@ const TableSettingAds = () => {
                 color="secondary"
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: 'white' }}>
-                <MenuItem value="jenis">Jenis</MenuItem>
-                <MenuItem value="deskripsi">Deskripsi</MenuItem>
+                <MenuItem value="JENIS">Jenis</MenuItem>
+                <MenuItem value="DESKRIPSI">Deskripsi</MenuItem>
               </Select>
             </FormControl>
-            <TextField
+            <DelayedTextField
+              fullWidth
               size="small"
-              color="secondary"
-              placeholder="Cari jenis setting ads"
+              waitForInput={true}
+              placeholder="Cari Nama Iklan"
+              filterValue={payload.search}
               onChange={(e) => setPayload({ ...payload, search: e.target.value })}
               sx={{ input: { backgroundColor: 'white', width: 450 } }}
+              color="secondary"
             />
           </Stack>
           <Stack direction={'row'} spacing={2} style={{ flex: 1 }}>
@@ -86,14 +104,14 @@ const TableSettingAds = () => {
             </Box>
             <FormControl sx={{ minWidth: 100 }} size="small">
               <Select
-                value={payload.descending}
-                onChange={(e) => setPayload({ ...payload, descending: e.target.value })}
+                value={payload.sort}
+                onChange={(e) => setPayload({ ...payload, sort: e.target.value })}
                 displayEmpty
                 color="secondary"
                 inputProps={{ 'aria-label': 'Without label' }}
                 style={{ backgroundColor: 'white' }}>
-                <MenuItem value={'false'}>A - Z</MenuItem>
-                <MenuItem value={'true'}>Z - A</MenuItem>
+                <MenuItem value="A-Z">A - Z</MenuItem>
+                <MenuItem value="Z-A">Z - A</MenuItem>
               </Select>
             </FormControl>
           </Stack>
@@ -123,28 +141,29 @@ const TableSettingAds = () => {
                     </Stack>
                   </TableCell>
                 </TableRow>
-              ) : listSetting?.data?.adsSetting?.length >= 1 ? (
-                listSetting?.data?.adsSetting?.map((item, i) => (
-                  <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+              ) : listSetting?.data?.adsSetting?.filter((item) => !item?.Jenis?.toLowerCase()?.includes('weight'))?.length >=
+                1 ? (
+                <>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
-                        {item?.Jenis || '-'}
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 180 }}>
+                        Characteristic Weight
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 30 }}>
+                        100
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
-                        {item?.Nilai || '-'}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
-                        {item?.Unit || '-'}
+                        Persen
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width="100%" justifyContent="space-between">
                         <Typography variant="body1" style={{ fontSize: '12px', width: 350 }}>
-                          {item?.description || '-'}
+                          Bobot tiap jenis dalam karakteristik audiens
                         </Typography>
                         <Button
                           variant="contained"
@@ -155,7 +174,15 @@ const TableSettingAds = () => {
                             border: '1px solid transparent',
                             '&:hover': { boxShadow: 'none', border: '1px solid #AB22AF' },
                           }}
-                          onClick={() => setShowModal({ open: true, data: item })}>
+                          onClick={() =>
+                            setShowModal({
+                              open: true,
+                              type: 'characteristic',
+                              data: listSetting?.data?.adsSetting?.filter((item) =>
+                                item?.Jenis?.toLowerCase()?.includes('weight'),
+                              ),
+                            })
+                          }>
                           <Typography style={{ fontWeight: 'bold', textTransform: 'capitalize', fontSize: 12 }}>
                             Ubah Nilai
                           </Typography>
@@ -167,15 +194,74 @@ const TableSettingAds = () => {
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', width: 150, color: '#AB22AF', fontWeight: 'bold' }}>
-                          {item?.Aktifitas || '-'}
+                          {listSetting?.data?.adsSetting?.find((item) => item?.Jenis === 'AgeCharacteristicWeight')
+                            ?.Aktifitas || '-'}
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
-                          {dayjs(item?.Date).format('DD/MM/YYYY - HH:mm')} WIB
+                          {dayjs(
+                            listSetting?.data?.adsSetting?.find((item) => item?.Jenis === 'AgeCharacteristicWeight')
+                              ?.Date,
+                          ).format('DD/MM/YYYY - HH:mm')}{' '}
+                          WIB
                         </Typography>
                       </Stack>
                     </TableCell>
                   </TableRow>
-                ))
+                  {listSetting?.data?.adsSetting
+                    ?.filter((item) => !item?.Jenis?.toLowerCase()?.includes('weight'))
+                    ?.map((item, i) => (
+                      <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 180 }}>
+                            {item?.Jenis || '-'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 30 }}>
+                            {item?.Nilai || '-'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                            {item?.Unit || '-'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Stack direction="row" width="100%" justifyContent="space-between">
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 350 }}>
+                              {item?.Desc || '-'}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              color="inherit"
+                              size="small"
+                              sx={{
+                                boxShadow: 'none',
+                                border: '1px solid transparent',
+                                '&:hover': { boxShadow: 'none', border: '1px solid #AB22AF' },
+                              }}
+                              onClick={() => setShowModal({ open: true, type: 'normal', data: item })}>
+                              <Typography style={{ fontWeight: 'bold', textTransform: 'capitalize', fontSize: 12 }}>
+                                Ubah Nilai
+                              </Typography>
+                            </Button>
+                          </Stack>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Stack direction="column">
+                            <Typography
+                              variant="body1"
+                              style={{ fontSize: '14px', width: 150, color: '#AB22AF', fontWeight: 'bold' }}>
+                              {item?.Aktifitas || '-'}
+                            </Typography>
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                              {dayjs(item?.Date).format('DD/MM/YYYY - HH:mm')} WIB
+                            </Typography>
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </>
               ) : (
                 <TableRow>
                   <TableCell colSpan={8}>

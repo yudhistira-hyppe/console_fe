@@ -186,6 +186,7 @@ const SearchSection = ({ filter, handleChange }) => {
               )}
             </FormGroup>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
         <Accordion elevation={0} defaultExpanded disableGutters>
