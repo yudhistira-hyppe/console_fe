@@ -11,7 +11,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import CardWithIndicator from './card-with-indicator';
 import Interest from './interest';
 import FormMusic from './form-music';
-import { useGetDetailMusicQuery } from 'api/console/database';
+import { useGetDetailGeographicMusicQuery, useGetDetailMusicQuery } from 'api/console/database';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const dummyData = [
@@ -51,6 +51,8 @@ const DatabaseDetailMediaComponent = (props) => {
   ];
 
   const { data: detailMusic, isFetching: loadingDetail } = detailId !== 'create' ? useGetDetailMusicQuery(detailId) : {};
+  const { data: geographicMusic, isFetching: loadingGeographic } =
+    detailId !== 'create' ? useGetDetailGeographicMusicQuery(detailId) : {};
 
   return (
     <>
@@ -100,13 +102,25 @@ const DatabaseDetailMediaComponent = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CardWithIndicator title="Jenis Kelamin Penonton" data={detailMusic?.data[0]?.gender} />
+                  <CardWithIndicator
+                    title="Jenis Kelamin Penonton"
+                    loading={loadingGeographic}
+                    data={geographicMusic?.data?.[0]?.gender}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CardWithIndicator title="Rentang Umur Penonton" data={detailMusic?.data[0]?.age} />
+                  <CardWithIndicator
+                    title="Rentang Umur Penonton"
+                    loading={loadingGeographic}
+                    data={geographicMusic?.data?.[0]?.age}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CardWithIndicator title="Wilayah Penonton" data={detailMusic?.data[0]?.wilayah} />
+                  <CardWithIndicator
+                    title="Wilayah Penonton"
+                    loading={loadingGeographic}
+                    data={geographicMusic?.data?.[0]?.wilayah}
+                  />
                 </Grid>
                 {/* <Grid item xs={12} sm={6}>
                   <Interest data={[]} />

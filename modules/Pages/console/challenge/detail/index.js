@@ -213,7 +213,7 @@ const DetailChallenge = ({ detailId }) => {
   return (
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mt="-6px">
+      <Stack direction="row" height={43} justifyContent="space-between" alignItems="center" mt="-6px">
         <Stack
           direction="row"
           alignItems="center"
@@ -245,21 +245,23 @@ const DetailChallenge = ({ detailId }) => {
                 </Typography>
               </Button>
             )}
-            <Button
-              variant="contained"
-              color="error"
-              style={{ borderRadius: 6, padding: '10px 20px' }}
-              onClick={() =>
-                setOpenModal({
-                  showModal: !openModal.showModal,
-                  status: 'delete',
-                  selected: detail?._id,
-                })
-              }>
-              <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
-                Hapus Challenge
-              </Typography>
-            </Button>
+            {(detail?.statusChallenge === 'DRAFT' || detail?.statuscurrentChallenge !== 'SEDANG BERJALAN') && (
+              <Button
+                variant="contained"
+                color="error"
+                style={{ borderRadius: 6, padding: '10px 20px' }}
+                onClick={() =>
+                  setOpenModal({
+                    showModal: !openModal.showModal,
+                    status: 'delete',
+                    selected: detail?._id,
+                  })
+                }>
+                <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
+                  Hapus Challenge
+                </Typography>
+              </Button>
+            )}
             {detail?.statusChallenge === 'DRAFT' ? (
               !detail?.startChallenge || dayjs(detail?.startChallenge).isBefore(dayjs()) ? (
                 <Tooltip title="Tanggal Mulai Challenge sudah melewati dari batas waktu sekarang, ubah dahulu Tanggal Mulai Challenge untuk mempublikasi.">

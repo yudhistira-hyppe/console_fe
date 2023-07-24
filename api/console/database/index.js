@@ -113,6 +113,13 @@ export const databaseApi = createApi({
       }),
       providesTags: ['Detail-Media'],
     }),
+    getDetailGeographicMusic: build.query({
+      query: (id) => ({
+        url: `/music/used/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Detail-Media'],
+    }),
     getMediaChart: build.query({
       query: () => ({
         url: '/musiccard',
@@ -174,6 +181,7 @@ export const {
   useGetThemeMusicQuery,
   useGetListMusicQuery,
   useGetDetailMusicQuery,
+  useGetDetailGeographicMusicQuery,
   useGetMediaChartQuery,
   useUpdateStatusMusicMutation,
   useUpdateMusicMutation,
