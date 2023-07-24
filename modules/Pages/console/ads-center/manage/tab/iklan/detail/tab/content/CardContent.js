@@ -24,7 +24,8 @@ const CardContent = ({ details }) => {
     <Card sx={{ p: 3 }}>
       <Stack direction="row" spacing={3}>
         <Avatar
-          src={details?.media ? details?.media?.CoverURL : new Error()}
+          // src={details?.media ? details?.media?.CoverURL : new Error()}
+          src={details?.media ? details?.media?.VideoList?.[0]?.CoverURL : new Error()}
           style={{ width: 300, height: 230, cursor: 'pointer' }}
           variant="rounded"
           onClick={() => setShowModal(true)}
@@ -32,7 +33,8 @@ const CardContent = ({ details }) => {
         />
 
         {showModal && (
-          <ModalMedia showModal={showModal} onClose={() => setShowModal(false)} idApsara={details?.media?.VideoId} />
+          // <ModalMedia showModal={showModal} onClose={() => setShowModal(false)} idApsara={details?.media?.VideoId} />
+          <ModalMedia showModal={showModal} onClose={() => setShowModal(false)} idApsara={details?.media?.VideoList?.[0]?.VideoId} />
         )}
 
         <Stack direction="column" width="100%">

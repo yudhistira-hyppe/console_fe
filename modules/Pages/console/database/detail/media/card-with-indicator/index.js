@@ -22,7 +22,8 @@ const CardWithIndicator = (props) => {
                 ? 'Laki-laki'
                 : item?._id === 'FEMALE'
                 ? 'Perempuan'
-                : item?._id || 'Lainnya'}
+                : item?._id || 'Lainnya'}{' '}
+              | {item?.count || 0}
             </Box>
           }
           labelPos="top-left"
@@ -42,12 +43,16 @@ const CardWithIndicator = (props) => {
       <Stack direction="column" gap="24px">
         <Typography style={{ fontSize: 18, fontWeight: 'bold' }}>{title}</Typography>
         {loading ? (
-          <Stack direction="column" alignItems="center" justifyContent="center" height={210}>
+          <Stack direction="column" alignItems="center" justifyContent="center" height={210} gap={2}>
             <CircularProgress color="secondary" size={32} />
+            <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Loading data...</Typography>
           </Stack>
         ) : data?.length >= 1 ? (
           <ScrollBar style={{ height: 210 }}>
-            <CmtList data={data} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} />
+            <CmtList
+              data={[...data]?.sort((a, b) => b?.count - a?.count)}
+              renderRow={(item, index) => <ProgressIndicator key={index} item={item} />}
+            />
           </ScrollBar>
         ) : (
           <Stack direction="column" alignItems="center" justifyContent="center" gap="20px" textAlign="center" height={210}>

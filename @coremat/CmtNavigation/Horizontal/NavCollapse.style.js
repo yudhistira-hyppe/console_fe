@@ -74,13 +74,13 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
     opacity: 0,
     visibility: 'hidden',
-    minWidth: 200,
-    paddingTop: 10,
-    paddingBottom: 10,
-    backgroundColor: theme.palette.background.paper,
-    color: theme.palette.horizontalNav.textColor,
+    minWidth: 300,
+    paddingTop: 12,
+    paddingBottom: 12,
+    backgroundColor: '#FFFFFF',
+    color: '#FFFFFF',
     borderRadius: theme.shape.borderRadius,
-    boxShadow: '0px 16px 24px rgba(0, 0, 0, 0.14), 0px 6px 30px rgba(0, 0, 0, 0.12), 0px 8px 10px rgba(0, 0, 0, 0.2)',
+    boxShadow: '0px 16px 24px rgba(0, 0, 0, 0.14)',
 
     '& $navCollapseItem': {
       top: 50,
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     padding: '11px 14px',
     cursor: 'pointer',
-    color: theme.palette.horizontalNav.navigationColor,
+    color: theme.palette.horizontalNav.navigationActiveColor,
     '&:hover, &:focus': {
       color: theme.palette.horizontalNav.navigationActiveColor,
     },
@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
       animationTimingFunction: 'ease, ease',
       animationDuration: '0.4s, 0.4s',
       // edited by vicky
-      background: 'rgb(170, 34, 175)',
+      background: '#FFFFFF',
     },
 
     '& > $navCollapseItem $navCollapseBtn:hover > $navCollapseItem': {

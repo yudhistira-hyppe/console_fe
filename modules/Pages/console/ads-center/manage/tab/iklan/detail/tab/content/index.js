@@ -20,7 +20,12 @@ const DetailAdsContentComponent = ({ idAds }) => {
   ]);
   const [isDate, setDate] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const { data: details, isFetching: loadingDetail } = useGetDetailAdsQuery({ adsId: idAds });
+  const { data: details, isFetching: loadingDetail } = useGetDetailAdsQuery({
+    // adsId: idAds
+    id: idAds,
+    startdate: dayjs().subtract(6, 'day').format('YYYY-MM-DD'),
+    enddate: dayjs().format('YYYY-MM-DD'),
+  });
   const { data: summary, isFetching: loadingSummary } = useGetSummaryDetailAdsQuery({
     start_date: isDate ? dayjs(payload[0]?.startDate).format('YYYY-MM-DD') : dayjs().subtract(6, 'day').format('YYYY-MM-DD'),
     end_date: isDate ? dayjs(payload[0]?.endDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
@@ -96,10 +101,12 @@ const DetailAdsContentComponent = ({ idAds }) => {
       ) : (
         <Grid container spacing={3}>
           <Grid item xs={12} md={9}>
-            <CardContent details={details?.data} />
+            {/* <CardContent details={details?.data} /> */}
+            <CardContent details={details?.data?.[0]} />
           </Grid>
           <Grid item xs={12} md={3}>
-            <CardStatus details={details?.data} />
+            {/* <CardStatus details={details?.data} /> */}
+            <CardStatus details={details?.data?.[0]} />
           </Grid>
           <Grid item xs={12}>
             <CardSummary

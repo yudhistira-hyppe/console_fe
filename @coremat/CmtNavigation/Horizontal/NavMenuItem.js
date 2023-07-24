@@ -21,6 +21,40 @@ const useStyles = makeStyles((theme) => ({
     '&.active': {
       opacity: 1,
       fontWeight: 'bold',
+      color: '#FFFFFF',
+      '& .Cmt-icon-root': {
+        color: '#FFFFFF',
+      },
+      '&:hover, &:focus': {
+        '& .Cmt-icon-root': {
+          color: theme.palette.horizontalNav.textActiveColor,
+        },
+      },
+    },
+  },
+  navMenuLinkChild: {
+    display: 'flex',
+    alignItems: 'center',
+    color: '#3F3F3F',
+    fontFamily: 'Lato',
+    height: '100%',
+    padding: '9px 15px',
+    transition: 'all .2s ease-in',
+    fontWeight: 'bold',
+    '&:hover': {
+      color: theme.palette.horizontalNav.textActiveColor,
+    },
+    '&.active': {
+      color: theme.palette.horizontalNav.textActiveColor,
+      backgroundColor: theme.palette.horizontalNav.menuActiveBgColor,
+      '& .Cmt-icon-root': {
+        color: theme.palette.horizontalNav.textActiveColor,
+      },
+      '&:hover, &:focus': {
+        '& .Cmt-icon-root': {
+          color: theme.palette.horizontalNav.textActiveColor,
+        },
+      },
     },
   },
   iconRoot: {
@@ -31,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NavMenuItem = (props) => {
   const { authUser } = useAuth();
-  const { name, icon, link, handleClick, className, children } = props;
+  const { name, icon, link, handleClick, className, children, isChild } = props;
   const classes = useStyles();
   const router = useRouter();
   const path = router.pathname.split('/');
@@ -97,14 +131,9 @@ const NavMenuItem = (props) => {
       <Link href={link}>
         <a
           // onClick={handleUpgradePremium}
-          className={clsx(
-            classes.navMenuLink,
-            {
-              active: link === `/${path[1]}` || children?.includes(router.pathname),
-            },
-            'Cmt-nav-menu-link',
-            className,
-          )}>
+          className={clsx(isChild ? classes.navMenuLinkChild : classes.navMenuLink, {
+            active: link === `/${path[1]}` || link === router.pathname,
+          })}>
           {/* Display an icon if any */}
           {renderIcon()}
           <span className={clsx(classes.navText, 'Cmt-nav-text')}>{name}</span>

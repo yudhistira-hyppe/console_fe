@@ -43,7 +43,7 @@ const NavCollapse = (props) => {
           case 'collapse':
             return <NavCollapse {...item} key={index} className={classes.subCollapse} />;
           case 'item':
-            return <NavMenuItem {...item} key={index} className={classes.navMenuLink} />;
+            return <NavMenuItem {...item} key={index} isChild={isExpandable} />;
           default:
             return null;
         }
@@ -59,7 +59,7 @@ const NavCollapse = (props) => {
       component="div"
       disableGutters
       className={clsx(classes.navCollapseBtn, `${open ? 'active' : ''}`, 'Cmt-navCollapseBtn')}>
-      <Box component="span" className={classes.navCollapseBtnInner}>
+      <Box component="span" className={`${classes.navCollapseBtnInner}`}>
         {renderIcon()}
         <Box component="span" className={classes.navText}>
           {name}
