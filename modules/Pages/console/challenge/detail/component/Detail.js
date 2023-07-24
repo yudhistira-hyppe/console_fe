@@ -133,7 +133,7 @@ const DetailChallengeComponent = ({ detail }) => {
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Hastag:</Typography>
             <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
               {detail?.metrik?.[0]?.Interaksi
-                ? detail?.metrik?.[0]?.InteraksiKonten?.tagar || '-'
+                ? detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tagar || '-'
                 : detail?.metrik?.[0]?.AktivitasAkun?.tagar || '-'}
             </Typography>
           </Stack>
@@ -156,30 +156,30 @@ const DetailChallengeComponent = ({ detail }) => {
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Interaksi Konten</Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Buat</Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppeVid || 0}
+                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppeVid || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppePic || 0}
+                    HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppePic || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppeDiary || 0}
+                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppeDiary || 0}
                   </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Suka</Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeVid || 0}
+                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeVid || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppePic || 0}
+                    HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppePic || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeDiary || 0}
+                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeDiary || 0}
                   </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Tonton</Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeVid || 0}
+                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeVid || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeDiary || 0}
+                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeDiary || 0}
                   </Typography>
                 </>
               )}
@@ -187,20 +187,20 @@ const DetailChallengeComponent = ({ detail }) => {
                 <>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Tonton</Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeVid || 0}
+                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeVid || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeDiary || 0}
+                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeDiary || 0}
                   </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Suka</Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeVid || 0}
+                    HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeVid || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppePic || 0}
+                    HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppePic || 0}
                   </Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeDiary || 0}
+                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeDiary || 0}
                   </Typography>
                 </>
               )}
