@@ -2,11 +2,11 @@ import React from 'react';
 import CmtList from '@coremat/CmtList';
 import CmtProgressBar from '@coremat/CmtProgressBar';
 import { Typography } from '@material-ui/core';
-import { Box, Card, Stack } from '@mui/material';
+import { Box, Card, CircularProgress, Stack } from '@mui/material';
 import ScrollBar from 'react-perfect-scrollbar';
 
 const CardWithIndicator = (props) => {
-  const { title, data } = props;
+  const { title, data, loading } = props;
 
   const ProgressIndicator = (props) => {
     const { item, ...rest } = props;
@@ -16,7 +16,13 @@ const CardWithIndicator = (props) => {
         <CmtProgressBar
           label={
             <Box display="flex" alignItems="center">
-              {item?._id || 'Other'}
+              {item?._id === 'OTHER'
+                ? 'Lainnya'
+                : item?._id === 'MALE'
+                ? 'Laki-laki'
+                : item?._id === 'FEMALE'
+                ? 'Perempuan'
+                : item?._id || 'Lainnya'}
             </Box>
           }
           labelPos="top-left"
@@ -35,7 +41,11 @@ const CardWithIndicator = (props) => {
     <Card style={{ padding: 24 }}>
       <Stack direction="column" gap="24px">
         <Typography style={{ fontSize: 18, fontWeight: 'bold' }}>{title}</Typography>
-        {data?.length >= 1 ? (
+        {loading ? (
+          <Stack direction="column" alignItems="center" justifyContent="center" height={210}>
+            <CircularProgress color="secondary" size={32} />
+          </Stack>
+        ) : data?.length >= 1 ? (
           <ScrollBar style={{ height: 210 }}>
             <CmtList data={data} renderRow={(item, index) => <ProgressIndicator key={index} item={item} />} />
           </ScrollBar>
