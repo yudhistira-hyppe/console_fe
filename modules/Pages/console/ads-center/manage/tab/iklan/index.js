@@ -30,7 +30,8 @@ const AdsManageTableList = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      sorting: filter.descending === 'true' ? true : false,
+      // sorting: filter.descending === 'true' ? true : false,
+      descending: filter.descending === 'true' ? true : false,
     });
     filter.search !== '' && Object.assign(params, { name_ads: filter.search });
     filter.createdAt[0] && Object.assign(params, { start_date: filter.createdAt[0] });

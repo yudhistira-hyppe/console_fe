@@ -20,22 +20,22 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
-    // getListAds: build.query({
-    //   query: (data) => ({
-    //     url: '/ads/console/adscenter/listads',
-    //     method: 'POST',
-    //     body: data,
-    //   }),
-    //   providesTags: ['ads'],
-    // }),
-    // getDetailAds: build.query({
-    //   query: (data) => ({
-    //     url: '/ads/management/adscenter/details',
-    //     method: 'POST',
-    //     body: data,
-    //   }),
-    //   providesTags: ['detail'],
-    // }),
+    getListAds: build.query({
+      query: (data) => ({
+        url: '/ads/console/adscenter/listads',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['ads'],
+    }),
+    getDetailAds: build.query({
+      query: (data) => ({
+        url: '/ads/management/adscenter/details',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['detail'],
+    }),
     getLogDetailAds: build.query({
       query: (id) => ({
         url: `/ads/console/adscenter/historydetail/${id}`,
@@ -58,14 +58,14 @@ export const adsApi = createApi({
     //   }),
     //   providesTags: ['ads'],
     // }),
-    // approveAds: build.mutation({
-    //   query: (data) => ({
-    //     url: '/ads/approve',
-    //     method: 'POST',
-    //     body: data,
-    //   }),
-    //   invalidatesTags: ['ads', 'detail'],
-    // }),
+    approveAds: build.mutation({
+      query: (data) => ({
+        url: '/ads/approve',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['ads', 'detail'],
+    }),
 
     //Ads V2
     getDashboardAdsSetting: build.query({
@@ -128,14 +128,14 @@ export const adsApi = createApi({
         body: data,
       }),
     }),
-    getListAds: build.query({
-      query: (data) => ({
-        url: '/adsv2/ads/list',
-        method: 'POST',
-        body: data,
-      }),
-      providesTags: ['ads'],
-    }),
+    // getListAds: build.query({
+    //   query: (data) => ({
+    //     url: '/adsv2/ads/list',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   providesTags: ['ads'],
+    // }),
     getViewerAds: build.query({
       query: (data) => ({
         url: '/adsv2/ads/list/reward',
@@ -144,14 +144,14 @@ export const adsApi = createApi({
       }),
       providesTags: ['ads'],
     }),
-    getDetailAds: build.query({
-      query: (data) => ({
-        url: '/adsv2/ads/campaign/detail',
-        method: 'POST',
-        body: data,
-      }),
-      providesTags: ['detail'],
-    }),
+    // getDetailAds: build.query({
+    //   query: (data) => ({
+    //     url: '/adsv2/ads/campaign/detail',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   providesTags: ['detail'],
+    // }),
     getSummaryDetailAds: build.query({
       query: (data) => ({
         url: '/adsv2/ads/campaign/detail/all',
@@ -160,14 +160,14 @@ export const adsApi = createApi({
       }),
       providesTags: ['detail'],
     }),
-    approveAds: build.mutation({
-      query: (data) => ({
-        url: '/adsv2/ads/update',
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: ['ads', 'detail'],
-    }),
+    // approveAds: build.mutation({
+    //   query: (data) => ({
+    //     url: '/adsv2/ads/update',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   invalidatesTags: ['ads', 'detail'],
+    // }),
   }),
 });
 

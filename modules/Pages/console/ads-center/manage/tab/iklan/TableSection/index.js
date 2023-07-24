@@ -190,8 +190,13 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     hover
                     style={{ cursor: 'pointer', height: 65 }}>
                     <TableCell align="left" style={{ paddingRight: 0 }}>
-                      <Typography variant="body1" style={{ fontSize: 14, width: 150 }}>
+                      {/* <Typography variant="body1" style={{ fontSize: 14, width: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {item?.campaignId || '-'}
+                      </Typography> */}
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: 14, width: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {item?._id || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell
@@ -221,6 +226,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell align="left">Tanggal Buat</TableCell>
                     <TableCell align="left">Tanggal Mulai</TableCell>
                     <TableCell align="left">Tanggal Selesai</TableCell>
                     <TableCell align="left">Tipe Iklan</TableCell>
@@ -238,18 +244,24 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   {listTickets?.data?.map((item, i) => (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} style={{ height: 65 }}>
                       <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: 14, width: 170 }}>
+                          {moment(item?.timestamp).format('DD/MM/YYYY - HH:mm')} WIB
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: 14, width: 100 }}>
                           {moment(item?.liveAt).format('DD/MM/YYYY')}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: 14, width: 100 }}>
-                          {moment(item?.liveEnd).format('DD/MM/YYYY')}
+                          {/* {moment(item?.liveEnd).format('DD/MM/YYYY')} */} -
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: 14, width: 130 }}>
-                          {item?.adstypes || '-'}
+                          {/* {item?.adstypes || '-'} */}
+                          {item?.type_data || '-'}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
@@ -291,7 +303,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                               }}
                             />
                           )}
-                          {item?.status === 'ACTIVE' && (
+                          {(item?.status === 'ACTIVE' || item?.status === 'APPROVE') && (
                             <Chip
                               label="Aktif"
                               style={{
