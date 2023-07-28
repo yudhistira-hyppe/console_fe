@@ -90,14 +90,14 @@ const DatabaseDetailMediaComponent = (props) => {
                 <Grid item xs={12} sm={6}>
                   <CardWithDivider
                     title="Dilihat"
-                    value={numberWithCommas(detailMusic?.data[0]?.view || 0)}
+                    value={numberWithCommas(geographicMusic?.data?.[0]?.view || 0)}
                     description="Kali"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <CardWithDivider
                     title="Digunakan"
-                    value={numberWithCommas(detailMusic?.data[0]?.used || 0)}
+                    value={numberWithCommas(geographicMusic?.data?.[0]?.used || 0)}
                     description="Kali"
                   />
                 </Grid>
