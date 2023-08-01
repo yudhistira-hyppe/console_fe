@@ -4,9 +4,13 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import ModalMedia from './modal/ModalMedia';
+import { STREAM_URL } from 'authentication/auth-provider/config';
+import { useAuth } from 'authentication';
 
 const CardContent = ({ details }) => {
   const [showModal, setShowModal] = useState(false);
+  const { authUser } = useAuth();
+
   const checkDayAds = () => {
     let day = [];
 
@@ -20,21 +24,25 @@ const CardContent = ({ details }) => {
     return day?.length === 7 ? 'Setiap Hari' : day?.join(', ');
   };
 
+  const getImage = (idAds) => {
+    const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+
+    return `${STREAM_URL}/api/adsv2/ads/image/read/${idAds}${authToken}`;
+  };
+
   return (
     <Card sx={{ p: 3 }}>
       <Stack direction="row" spacing={3}>
         <Avatar
-          // src={details?.media ? details?.media?.CoverURL : new Error()}
-          src={details?.media ? details?.media?.VideoList?.[0]?.CoverURL : new Error()}
-          style={{ width: 300, height: 230, cursor: 'pointer' }}
+          src={details?.media ? details?.media?.CoverURL : getImage(details?._id)}
+          style={{ width: 300, height: 230, cursor: details?.media ? 'pointer' : 'initial' }}
           variant="rounded"
-          onClick={() => setShowModal(true)}
+          onClick={() => (details?.media ? setShowModal(true) : {})}
           alt="X"
         />
 
         {showModal && (
-          // <ModalMedia showModal={showModal} onClose={() => setShowModal(false)} idApsara={details?.media?.VideoId} />
-          <ModalMedia showModal={showModal} onClose={() => setShowModal(false)} idApsara={details?.media?.VideoList?.[0]?.VideoId} />
+          <ModalMedia showModal={showModal} onClose={() => setShowModal(false)} idApsara={details?.media?.VideoId} />
         )}
 
         <Stack direction="column" width="100%">
@@ -106,7 +114,7 @@ const CardContent = ({ details }) => {
             <Stack direction="row" gap={1}>
               <Typography style={{ color: '#00000061', width: 120, fontSize: 14 }}>ID Iklan:</Typography>
               <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                {details?.campaignId || ''}
+                {details?.campaignId || details?.adsIdNumber || '-'}
               </Typography>
             </Stack>
             <Stack direction="row" gap={1}>
