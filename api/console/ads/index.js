@@ -58,14 +58,14 @@ export const adsApi = createApi({
     //   }),
     //   providesTags: ['ads'],
     // }),
-    approveAds: build.mutation({
-      query: (data) => ({
-        url: '/ads/approve',
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: ['ads', 'detail'],
-    }),
+    // approveAds: build.mutation({
+    //   query: (data) => ({
+    //     url: '/ads/approve',
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   invalidatesTags: ['ads', 'detail'],
+    // }),
 
     //Ads V2
     getDashboardAdsSetting: build.query({
@@ -160,14 +160,14 @@ export const adsApi = createApi({
       }),
       providesTags: ['detail'],
     }),
-    // approveAds: build.mutation({
-    //   query: (data) => ({
-    //     url: '/adsv2/ads/update',
-    //     method: 'POST',
-    //     body: data,
-    //   }),
-    //   invalidatesTags: ['ads', 'detail'],
-    // }),
+    approveAds: build.mutation({
+      query: (data) => ({
+        url: '/adsv2/ads/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['ads', 'detail'],
+    }),
   }),
 });
 
