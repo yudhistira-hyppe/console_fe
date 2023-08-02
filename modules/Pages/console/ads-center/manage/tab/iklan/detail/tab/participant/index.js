@@ -34,6 +34,7 @@ const TableRewardsParticipant = ({ idAds }) => {
       page: filter.page,
       limit: filter.limit,
       sorting: filter.descending === 'true' ? true : false,
+      adsId: idAds || '',
     });
     filter.search !== '' && Object.assign(params, { name: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
