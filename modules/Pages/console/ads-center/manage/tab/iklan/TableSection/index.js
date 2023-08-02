@@ -345,7 +345,15 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: 14, width: 200 }}>
+                        <Typography
+                          variant="body1"
+                          style={{
+                            fontSize: 14,
+                            width: 220,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>
                           {item?.remark || '-'}
                         </Typography>
                       </TableCell>
