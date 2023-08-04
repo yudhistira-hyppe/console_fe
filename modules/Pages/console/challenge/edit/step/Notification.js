@@ -312,58 +312,125 @@ const ComponentStepNotification = ({ inputValue, handleInputChange, isDraft }) =
                       style={{ width: 'fit-content' }}
                     />
                     <Stack direction="column" my={2}>
-                      <TextField
-                        placeholder="Tulis Judul Notifikasi"
-                        color="secondary"
-                        value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title || ''}
-                        onChange={(e) => {
-                          let prevVal = inputValue?.notification_push;
-                          let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
-                          prevVal[indexItem].title = e.target.value;
+                      <Stack direction="row" gap={2}>
+                        <Stack direction="column">
+                          <TextField
+                            placeholder="Tulis Judul Notifikasi (ID)"
+                            color="secondary"
+                            value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title || ''}
+                            onChange={(e) => {
+                              let prevVal = inputValue?.notification_push;
+                              let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
+                              prevVal[indexItem].title = e.target.value;
 
-                          handleInputChange('notification_push', prevVal);
-                        }}
-                        style={{
-                          width: 600,
-                          backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
-                            ? ''
-                            : '#EAEAEA',
-                        }}
-                        inputProps={{ maxLength: 48 }}
-                        disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
-                      />
-                      <small style={{ color: '#9B9B9B', marginTop: 6 }}>
-                        {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title?.length || 0}/48
-                        Karakter
-                      </small>
+                              handleInputChange('notification_push', prevVal);
+                            }}
+                            style={{
+                              width: 600,
+                              backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
+                                ? ''
+                                : '#EAEAEA',
+                            }}
+                            inputProps={{ maxLength: 48 }}
+                            disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
+                          />
+                          <small style={{ color: '#9B9B9B', marginTop: 6 }}>
+                            {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title?.length || 0}
+                            /48 Karakter
+                          </small>
+                        </Stack>
+                        <Stack direction="column">
+                          <TextField
+                            placeholder="Tulis Judul Notifikasi (EN)"
+                            color="secondary"
+                            value={
+                              inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title_en || ''
+                            }
+                            onChange={(e) => {
+                              let prevVal = inputValue?.notification_push;
+                              let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
+                              prevVal[indexItem].title_en = e.target.value;
 
-                      <TextField
-                        multiline
-                        placeholder="Tulis Deskripsi Notifikasi"
-                        color="secondary"
-                        value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body || ''}
-                        rows={4}
-                        onChange={(e) => {
-                          let prevVal = inputValue?.notification_push;
-                          let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
-                          prevVal[indexItem].body = e.target.value;
+                              handleInputChange('notification_push', prevVal);
+                            }}
+                            style={{
+                              width: 600,
+                              backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
+                                ? ''
+                                : '#EAEAEA',
+                            }}
+                            inputProps={{ maxLength: 48 }}
+                            disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
+                          />
+                          <small style={{ color: '#9B9B9B', marginTop: 6 }}>
+                            {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.title_en?.length ||
+                              0}
+                            /48 Karakter
+                          </small>
+                        </Stack>
+                      </Stack>
 
-                          handleInputChange('notification_push', prevVal);
-                        }}
-                        style={{
-                          width: 600,
-                          marginTop: 16,
-                          backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
-                            ? ''
-                            : '#EAEAEA',
-                        }}
-                        inputProps={{ maxLength: 100 }}
-                        disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
-                      />
-                      <small style={{ color: '#9B9B9B', marginTop: 6 }}>
-                        {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body?.length || 0}/100
-                        Karakter
-                      </small>
+                      <Stack direction="row" gap={2}>
+                        <Stack direction="column">
+                          <TextField
+                            multiline
+                            placeholder="Tulis Deskripsi Notifikasi (ID)"
+                            color="secondary"
+                            value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body || ''}
+                            rows={4}
+                            onChange={(e) => {
+                              let prevVal = inputValue?.notification_push;
+                              let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
+                              prevVal[indexItem].body = e.target.value;
+
+                              handleInputChange('notification_push', prevVal);
+                            }}
+                            style={{
+                              width: 600,
+                              marginTop: 16,
+                              backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
+                                ? ''
+                                : '#EAEAEA',
+                            }}
+                            inputProps={{ maxLength: 100 }}
+                            disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
+                          />
+                          <small style={{ color: '#9B9B9B', marginTop: 6 }}>
+                            {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body?.length || 0}
+                            /100 Karakter
+                          </small>
+                        </Stack>
+                        <Stack direction="column">
+                          <TextField
+                            multiline
+                            placeholder="Tulis Deskripsi Notifikasi (EN)"
+                            color="secondary"
+                            value={inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body_en || ''}
+                            rows={4}
+                            onChange={(e) => {
+                              let prevVal = inputValue?.notification_push;
+                              let indexItem = prevVal?.findIndex((val) => val?.type === item?.type);
+                              prevVal[indexItem].body_en = e.target.value;
+
+                              handleInputChange('notification_push', prevVal);
+                            }}
+                            style={{
+                              width: 600,
+                              marginTop: 16,
+                              backgroundColor: inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)
+                                ? ''
+                                : '#EAEAEA',
+                            }}
+                            inputProps={{ maxLength: 100 }}
+                            disabled={!inputValue?.notification_push?.map((item) => item?.type)?.includes(item?.type)}
+                          />
+                          <small style={{ color: '#9B9B9B', marginTop: 6 }}>
+                            {inputValue?.notification_push?.find((notif) => notif?.type === item?.type)?.body_en?.length ||
+                              0}
+                            /100 Karakter
+                          </small>
+                        </Stack>
+                      </Stack>
 
                       {item?.type !== 'start' && (
                         <Select

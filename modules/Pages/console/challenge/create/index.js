@@ -60,8 +60,6 @@ const CreateChallenge = ({ moreSlug }) => {
     });
   };
 
-  console.log(inputValue);
-
   const checkDisabled = () => {
     let disabled = false;
 
@@ -125,11 +123,14 @@ const CreateChallenge = ({ moreSlug }) => {
           isEmpty(inputValue?.winner_ranking_price)) ||
         (inputValue?.winner_rewards &&
           inputValue?.winner_rewards_type === 'ranking' &&
-          inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('')) ||
+          (inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('') ||
+            inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('0') ||
+            Number(inputValue?.winner_ranking_price?.[0]?.price) <= Number(inputValue?.winner_ranking_price?.[1]?.price) ||
+            Number(inputValue?.winner_ranking_price?.[1]?.price) <= Number(inputValue?.winner_ranking_price?.[2]?.price))) ||
         (inputValue?.winner_rewards &&
           inputValue?.winner_rewards_type === 'poin' &&
-          !inputValue?.max_reward &&
-          !inputValue?.point_reward) ||
+          (!inputValue?.max_reward || !inputValue?.reward_poin || Number(inputValue?.reward_poin) < 1)) ||
+        Number(inputValue?.max_reward) < Number(inputValue?.reward_poin) ||
         (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)) ||
         (inputValue?.winner_badges &&
           (inputValue?.winner_ranking_badge?.map((item) => item?.profile)?.filter((item) => item !== undefined)?.length <
@@ -144,9 +145,11 @@ const CreateChallenge = ({ moreSlug }) => {
         isEmpty(inputValue?.notification_push) ||
         (!isEmpty(inputValue?.notification_push) &&
           (inputValue?.notification_push?.map((item) => item?.body)?.includes('') ||
+            inputValue?.notification_push?.map((item) => item?.body_en)?.includes('') ||
             inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
+            inputValue?.notification_push?.map((item) => item?.title_en)?.includes('') ||
             inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
-              inputValue?.notification_push?.length)))
+              inputValue?.notification_push?.length - 1)))
     ) {
       disabled = true;
     }

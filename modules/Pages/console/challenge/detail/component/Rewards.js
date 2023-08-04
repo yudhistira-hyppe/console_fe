@@ -1,6 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { Avatar, Box, Card, Stack } from '@mui/material';
 import { formatCurrency } from 'helpers/stringHelper';
+import { isEmpty } from 'lodash';
 import React from 'react';
 
 const RewardsComponent = ({ detail }) => {
@@ -71,42 +72,48 @@ const RewardsComponent = ({ detail }) => {
             </Stack>
           </>
         )}
-        <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Hadiah Pemenang</Typography>
-        {detail?.hadiahPemenang?.[0]?.typeHadiah === 'RANKING' && (
-          <Stack direction="column">
-            <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14, marginBottom: 8 }}>
-              Sesuai Ranking
-            </Typography>
-            <Stack direction="row" gap={1}>
-              <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 1:</Typography>
-              <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara1 || 0)}
-              </Typography>
-            </Stack>
-            <Stack direction="row" gap={1}>
-              <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 2:</Typography>
-              <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara2 || 0)}
-              </Typography>
-            </Stack>
-            <Stack direction="row" gap={1}>
-              <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 3:</Typography>
-              <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara3 || 0)}
-              </Typography>
-            </Stack>
-          </Stack>
-        )}
-        {detail?.hadiahPemenang?.[0]?.typeHadiah === 'POINT' && (
-          <Stack direction="row" gap={1}>
-            <Typography style={{ color: '#00000061', fontWeight: 'bold', width: 130, fontSize: 14 }}>
-              Sesuai Poin:
-            </Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-              {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPrice || 0)} Poin [Rp
-              {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPriceMax || 0)}]
-            </Typography>
-          </Stack>
+        {!isEmpty(detail?.hadiahPemenang?.[0]) && (
+          <>
+            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Hadiah Pemenang</Typography>
+
+            {detail?.hadiahPemenang?.[0]?.typeHadiah === 'RANKING' && (
+              <Stack direction="column">
+                <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14, marginBottom: 8 }}>
+                  Sesuai Ranking
+                </Typography>
+                <Stack direction="row" gap={1}>
+                  <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 1:</Typography>
+                  <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+                    Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara1 || 0)}
+                  </Typography>
+                </Stack>
+                <Stack direction="row" gap={1}>
+                  <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 2:</Typography>
+                  <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+                    Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara2 || 0)}
+                  </Typography>
+                </Stack>
+                <Stack direction="row" gap={1}>
+                  <Typography style={{ color: '#00000061', width: 130, fontSize: 14 }}>Juara 3:</Typography>
+                  <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+                    Rp{formatCurrency(detail?.hadiahPemenang?.[0]?.ranking?.[0]?.juara3 || 0)}
+                  </Typography>
+                </Stack>
+              </Stack>
+            )}
+
+            {detail?.hadiahPemenang?.[0]?.typeHadiah === 'POINT' && (
+              <Stack direction="row" gap={1}>
+                <Typography style={{ color: '#00000061', fontWeight: 'bold', width: 130, fontSize: 14 }}>
+                  Sesuai Poin:
+                </Typography>
+                <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+                  {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPrice || 0)} Poin [Rp
+                  {formatCurrency(detail?.hadiahPemenang?.[0]?.point?.[0]?.pointPriceMax || 0)}]
+                </Typography>
+              </Stack>
+            )}
+          </>
         )}
       </Stack>
     </Card>
