@@ -83,21 +83,23 @@ const EditChallenge = ({ detailId, moreSlug }) => {
       activity_referal: detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Referal,
       activity_following: detail?.metrik?.[0]?.AktivitasAkun?.[0]?.Ikuti,
       with_hashtag:
-        detail?.metrik?.[0]?.InteraksiKonten?.tagar && detail?.metrik?.[0]?.InteraksiKonten?.tagar !== '' ? true : false,
-      hashtag: detail?.metrik?.[0]?.InteraksiKonten?.tagar?.replace('#', ''),
-      interaction_create_vid: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppeVid,
-      interaction_create_pic: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppePic,
-      interaction_create_diary: detail?.metrik?.[0]?.InteraksiKonten?.buatKonten?.[0]?.HyppeDiary,
-      interaction_like_vid: detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeVid,
-      interaction_like_pic: detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppePic,
-      interaction_like_diary: detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeDiary,
-      interaction_view_vid: detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeVid,
-      interaction_view_diary: detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeDiary,
-      content_like_vid: detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeVid,
-      content_like_pic: detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppePic,
-      content_like_diary: detail?.metrik?.[0]?.InteraksiKonten?.suka?.[0]?.HyppeDiary,
-      content_view_vid: detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeVid,
-      content_view_diary: detail?.metrik?.[0]?.InteraksiKonten?.tonton?.[0]?.HyppeDiary,
+        detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tagar && detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tagar !== ''
+          ? true
+          : false,
+      hashtag: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tagar?.replace('#', ''),
+      interaction_create_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppeVid,
+      interaction_create_pic: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppePic,
+      interaction_create_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppeDiary,
+      interaction_like_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeVid,
+      interaction_like_pic: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppePic,
+      interaction_like_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeDiary,
+      interaction_view_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeVid,
+      interaction_view_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeDiary,
+      content_like_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeVid,
+      content_like_pic: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppePic,
+      content_like_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeDiary,
+      content_view_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeVid,
+      content_view_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeDiary,
 
       account_type:
         detail?.peserta?.[0]?.tipeAkunTerverikasi === 'ALL'
@@ -220,8 +222,10 @@ const EditChallenge = ({ detailId, moreSlug }) => {
                     : item === 'challengeBerakhir'
                     ? 'end'
                     : 'winner',
-                title: detail?.notifikasiPush?.[0][item]?.[0]?.title,
-                body: detail?.notifikasiPush?.[0][item]?.[0]?.description,
+                title: detail?.notifikasiPush?.[0][item]?.[0]?.title || '',
+                title_en: detail?.notifikasiPush?.[0][item]?.[0]?.titleEN || '',
+                body: detail?.notifikasiPush?.[0][item]?.[0]?.description || '',
+                body_en: detail?.notifikasiPush?.[0][item]?.[0]?.descriptionEN || '',
                 blast: detail?.notifikasiPush?.[0][item]?.[0]?.aturWaktu,
               });
             }
@@ -256,94 +260,163 @@ const EditChallenge = ({ detailId, moreSlug }) => {
   const checkDisabled = () => {
     let disabled = false;
 
-    if (
-      activeStep == 0 &&
-      (!inputValue?.name ||
-        !inputValue?.kind ||
-        !inputValue?.cycle ||
-        !inputValue?.cycle_day ||
-        !inputValue?.startdate ||
-        inputValue?.startdate?.isBefore() ||
-        !inputValue?.starthour ||
-        inputValue?.starthour?.isValid() === false ||
-        !inputValue?.description)
-    ) {
-      disabled = true;
-    } else if (
-      activeStep == 1 &&
-      (!inputValue?.object ||
-        (inputValue?.object === 'account' &&
-          inputValue?.metric === 'activity' &&
-          inputValue?.activity_referal < 1 &&
-          inputValue?.activity_following < 1) ||
-        (inputValue?.object === 'account' &&
-          inputValue?.metric === 'interaction' &&
-          inputValue?.interaction_create_vid < 1 &&
-          inputValue?.interaction_create_pic < 1 &&
-          inputValue?.interaction_create_diary < 1 &&
-          inputValue?.interaction_like_vid < 1 &&
-          inputValue?.interaction_like_pic < 1 &&
-          inputValue?.interaction_like_diary < 1 &&
-          inputValue?.interaction_view_vid < 1 &&
-          inputValue?.interaction_view_diary < 1) ||
-        (inputValue?.object === 'content' &&
-          inputValue?.content_like_vid < 1 &&
-          inputValue?.content_like_pic < 1 &&
-          inputValue?.content_like_diary < 1 &&
-          inputValue?.content_view_vid < 1 &&
-          inputValue?.content_view_diary < 1))
-    ) {
-      disabled = true;
-    } else if (
-      activeStep == 2 &&
-      (isEmpty(inputValue?.account_type) ||
-        isEmpty(inputValue?.age_range) ||
-        isEmpty(inputValue?.gender) ||
-        isEmpty(inputValue?.area))
-    ) {
-      disabled = true;
-    } else if (
-      activeStep == 3 &&
-      (!inputValue?.type_invitation || (inputValue?.type_invitation === 'invitation' && isEmpty(inputValue?.invited_people)))
-    ) {
-      disabled = true;
-    } else if (activeStep == 4 && (!inputValue?.banner_leaderboard || !inputValue?.banner_background_color)) {
-      disabled = true;
-    } else if (
-      activeStep == 5 &&
-      ((!inputValue?.winner_rewards && !inputValue?.winner_badges) ||
-        (inputValue?.winner_rewards &&
-          inputValue?.winner_rewards_type === 'ranking' &&
-          isEmpty(inputValue?.winner_ranking_price)) ||
-        (inputValue?.winner_rewards &&
-          inputValue?.winner_rewards_type === 'ranking' &&
-          inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('')) ||
-        (inputValue?.winner_rewards &&
-          inputValue?.winner_rewards_type === 'poin' &&
-          !inputValue?.max_reward &&
-          !inputValue?.point_reward) ||
-        (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)) ||
-        (inputValue?.winner_badges &&
-          (inputValue?.winner_ranking_badge?.map((item) => item?.profile)?.filter((item) => item !== undefined)?.length <
-            1 ||
-            inputValue?.winner_ranking_badge?.map((item) => item?.other)?.filter((item) => item !== undefined)?.length < 1)))
-    ) {
-      disabled = true;
-    } else if (
-      activeStep == 6 &&
-      (!inputValue?.banner_search ||
-        !inputValue?.banner_popup ||
-        isEmpty(inputValue?.notification_push) ||
-        (!isEmpty(inputValue?.notification_push) &&
-          (inputValue?.notification_push?.map((item) => item?.body)?.includes('') ||
-            inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
-            inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
-              inputValue?.notification_push?.length)))
-    ) {
-      disabled = true;
+    if (isDraft) {
+      if (
+        activeStep == 0 &&
+        (!inputValue?.name ||
+          !inputValue?.kind ||
+          !inputValue?.cycle ||
+          !inputValue?.cycle_day ||
+          !inputValue?.startdate ||
+          inputValue?.startdate?.isBefore() ||
+          !inputValue?.starthour ||
+          inputValue?.starthour?.isValid() === false ||
+          !inputValue?.description)
+      ) {
+        disabled = true;
+      } else if (
+        activeStep == 1 &&
+        (!inputValue?.object ||
+          (inputValue?.object === 'account' &&
+            inputValue?.metric === 'activity' &&
+            inputValue?.activity_referal < 1 &&
+            inputValue?.activity_following < 1) ||
+          (inputValue?.object === 'account' &&
+            inputValue?.metric === 'interaction' &&
+            inputValue?.interaction_create_vid < 1 &&
+            inputValue?.interaction_create_pic < 1 &&
+            inputValue?.interaction_create_diary < 1 &&
+            inputValue?.interaction_like_vid < 1 &&
+            inputValue?.interaction_like_pic < 1 &&
+            inputValue?.interaction_like_diary < 1 &&
+            inputValue?.interaction_view_vid < 1 &&
+            inputValue?.interaction_view_diary < 1) ||
+          (inputValue?.object === 'content' &&
+            inputValue?.content_like_vid < 1 &&
+            inputValue?.content_like_pic < 1 &&
+            inputValue?.content_like_diary < 1 &&
+            inputValue?.content_view_vid < 1 &&
+            inputValue?.content_view_diary < 1))
+      ) {
+        disabled = true;
+      } else if (
+        activeStep == 2 &&
+        (isEmpty(inputValue?.account_type) ||
+          isEmpty(inputValue?.age_range) ||
+          isEmpty(inputValue?.gender) ||
+          isEmpty(inputValue?.area))
+      ) {
+        disabled = true;
+      } else if (
+        activeStep == 3 &&
+        (!inputValue?.type_invitation ||
+          (inputValue?.type_invitation === 'invitation' && isEmpty(inputValue?.invited_people)))
+      ) {
+        disabled = true;
+      } else if (activeStep == 4 && (!inputValue?.banner_leaderboard || !inputValue?.banner_background_color)) {
+        disabled = true;
+      } else if (
+        activeStep == 5 &&
+        ((!inputValue?.winner_rewards && !inputValue?.winner_badges) ||
+          (inputValue?.winner_rewards &&
+            inputValue?.winner_rewards_type === 'ranking' &&
+            isEmpty(inputValue?.winner_ranking_price)) ||
+          (inputValue?.winner_rewards &&
+            inputValue?.winner_rewards_type === 'ranking' &&
+            (inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('') ||
+              inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('0') ||
+              Number(inputValue?.winner_ranking_price?.[0]?.price) <= Number(inputValue?.winner_ranking_price?.[1]?.price) ||
+              Number(inputValue?.winner_ranking_price?.[1]?.price) <=
+                Number(inputValue?.winner_ranking_price?.[2]?.price))) ||
+          (inputValue?.winner_rewards &&
+            inputValue?.winner_rewards_type === 'poin' &&
+            (!inputValue?.max_reward || !inputValue?.reward_poin || Number(inputValue?.reward_poin) < 1)) ||
+          Number(inputValue?.max_reward) < Number(inputValue?.reward_poin) ||
+          (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)) ||
+          (inputValue?.winner_badges &&
+            (inputValue?.winner_ranking_badge?.map((item) => item?.profile)?.filter((item) => item !== undefined)?.length <
+              1 ||
+              inputValue?.winner_ranking_badge?.map((item) => item?.other)?.filter((item) => item !== undefined)?.length <
+                1)))
+      ) {
+        disabled = true;
+      } else if (
+        activeStep == 6 &&
+        (!inputValue?.banner_search ||
+          !inputValue?.banner_popup ||
+          isEmpty(inputValue?.notification_push) ||
+          (!isEmpty(inputValue?.notification_push) &&
+            (inputValue?.notification_push?.map((item) => item?.body)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.body_en)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.title_en)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
+                inputValue?.notification_push?.length - 1)))
+      ) {
+        disabled = true;
+      }
+    } else {
+      if (
+        activeStep == 0 &&
+        (!inputValue?.name ||
+          !inputValue?.kind ||
+          !inputValue?.cycle ||
+          !inputValue?.cycle_day ||
+          !inputValue?.startdate ||
+          inputValue?.startdate?.isBefore() ||
+          !inputValue?.starthour ||
+          inputValue?.starthour?.isValid() === false ||
+          !inputValue?.description)
+      ) {
+        disabled = true;
+      } else if (activeStep == 1 && (!inputValue?.banner_leaderboard || !inputValue?.banner_background_color)) {
+        disabled = true;
+      } else if (
+        activeStep == 2 &&
+        ((!inputValue?.winner_rewards && !inputValue?.winner_badges) ||
+          (inputValue?.winner_rewards &&
+            inputValue?.winner_rewards_type === 'ranking' &&
+            isEmpty(inputValue?.winner_ranking_price)) ||
+          (inputValue?.winner_rewards &&
+            inputValue?.winner_rewards_type === 'ranking' &&
+            (inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('') ||
+              inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('0') ||
+              Number(inputValue?.winner_ranking_price?.[0]?.price) <= Number(inputValue?.winner_ranking_price?.[1]?.price) ||
+              Number(inputValue?.winner_ranking_price?.[1]?.price) <=
+                Number(inputValue?.winner_ranking_price?.[2]?.price))) ||
+          (inputValue?.winner_rewards &&
+            inputValue?.winner_rewards_type === 'poin' &&
+            (!inputValue?.max_reward || !inputValue?.reward_poin || Number(inputValue?.reward_poin) < 1)) ||
+          Number(inputValue?.max_reward) < Number(inputValue?.reward_poin) ||
+          (inputValue?.winner_badges && isEmpty(inputValue?.winner_ranking_badge)) ||
+          (inputValue?.winner_badges &&
+            (inputValue?.winner_ranking_badge?.map((item) => item?.profile)?.filter((item) => item !== undefined)?.length <
+              1 ||
+              inputValue?.winner_ranking_badge?.map((item) => item?.other)?.filter((item) => item !== undefined)?.length <
+                1)))
+      ) {
+        disabled = true;
+      } else if (
+        activeStep == 3 &&
+        (!inputValue?.banner_search ||
+          !inputValue?.banner_popup ||
+          isEmpty(inputValue?.notification_push) ||
+          (!isEmpty(inputValue?.notification_push) &&
+            (inputValue?.notification_push?.map((item) => item?.body)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.body_en)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.title_en)?.includes('') ||
+              inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
+                inputValue?.notification_push?.length - 1)))
+      ) {
+        disabled = true;
+      }
     }
+
     return disabled;
   };
+
+  console.log(inputValue);
 
   return (
     <Stack direction="column" gap={3}>
