@@ -300,10 +300,10 @@ const ComponentStepNotification = ({ inputValue, handleInputChange, isDraft }) =
                                         type: item?.type,
                                         title: '',
                                         body: '',
-                                        blast: item?.type === 'start' ? 0 : undefined,
+                                        blast: undefined,
                                       },
                                     ]
-                                : [{ type: item?.type, title: '', body: '', blast: item?.type === 'start' ? 0 : undefined }],
+                                : [{ type: item?.type, title: '', body: '', blast: undefined }],
                             )
                           }
                         />

@@ -54,7 +54,8 @@ const ModalSetting = ({ open, onClose, data }) => {
           <Stack direction="row" justifyContent="center" width="100%">
             <TextField
               color="secondary"
-              value={inputValue?.[data?.Jenis] || 0}
+              value={inputValue?.[data?.Jenis] || ''}
+              placeholder="0"
               sx={{
                 '> div': {
                   paddingLeft: 0,
@@ -71,8 +72,14 @@ const ModalSetting = ({ open, onClose, data }) => {
                   },
                 },
               }}
+              onChange={(e) => {
+                if (e.target.value > 100) {
+                  setInputValue({ [data?.Jenis]: 100 });
+                } else {
+                  setInputValue({ [data?.Jenis]: Number(e.target.value) });
+                }
+              }}
               InputProps={{
-                disabled: true,
                 startAdornment: (
                   <InputAdornment position="end">
                     <IconButton

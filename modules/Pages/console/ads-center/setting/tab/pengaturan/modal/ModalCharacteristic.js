@@ -57,7 +57,8 @@ const ModalCharacteristic = ({ open, onClose, data }) => {
             <TextField
               key={key}
               color="secondary"
-              value={inputValue[item] || 0}
+              value={inputValue[item] || ''}
+              placeholder="0"
               sx={{
                 '> div': {
                   paddingLeft: 0,
@@ -66,8 +67,14 @@ const ModalCharacteristic = ({ open, onClose, data }) => {
                   width: 'auto',
                 },
               }}
+              onChange={(e) => {
+                if (e.target.value > 100) {
+                  setInputValue({ ...inputValue, [item]: '' });
+                } else {
+                  setInputValue({ ...inputValue, [item]: Number(e.target.value) });
+                }
+              }}
               InputProps={{
-                disabled: true,
                 startAdornment: (
                   <InputAdornment
                     position="start"

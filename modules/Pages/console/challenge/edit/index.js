@@ -351,7 +351,9 @@ const EditChallenge = ({ detailId, moreSlug }) => {
               inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
               inputValue?.notification_push?.map((item) => item?.title_en)?.includes('') ||
               inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
-                inputValue?.notification_push?.length - 1)))
+                (inputValue?.notification_push?.find((item) => item?.type === 'start')
+                  ? inputValue?.notification_push?.length - 1
+                  : inputValue?.notification_push?.length))))
       ) {
         disabled = true;
       }
@@ -407,7 +409,9 @@ const EditChallenge = ({ detailId, moreSlug }) => {
               inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
               inputValue?.notification_push?.map((item) => item?.title_en)?.includes('') ||
               inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
-                inputValue?.notification_push?.length - 1)))
+                (inputValue?.notification_push?.find((item) => item?.type === 'start')
+                  ? inputValue?.notification_push?.length - 1
+                  : inputValue?.notification_push?.length))))
       ) {
         disabled = true;
       }
