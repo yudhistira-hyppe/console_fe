@@ -60,8 +60,6 @@ const CreateChallenge = ({ moreSlug }) => {
     });
   };
 
-  console.log(inputValue);
-
   const checkDisabled = () => {
     let disabled = false;
 
@@ -151,7 +149,7 @@ const CreateChallenge = ({ moreSlug }) => {
             inputValue?.notification_push?.map((item) => item?.title)?.includes('') ||
             inputValue?.notification_push?.map((item) => item?.title_en)?.includes('') ||
             inputValue?.notification_push?.map((item) => item?.blast)?.filter((item) => item !== undefined)?.length <
-              inputValue?.notification_push?.length)))
+              inputValue?.notification_push?.length - 1)))
     ) {
       disabled = true;
     }
