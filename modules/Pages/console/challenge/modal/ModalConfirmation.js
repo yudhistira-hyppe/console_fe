@@ -189,21 +189,27 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       if (type?.includes('upcoming')) {
         formData.append('notifikasiPush_akanDatang_include', 'YES');
         formData.append('notifikasiPush_akanDatang_title', specificNotification('upcoming')?.title);
+        formData.append('notifikasiPush_akanDatang_titleEN', specificNotification('upcoming')?.title_en);
         formData.append('notifikasiPush_akanDatang_description', specificNotification('upcoming')?.body);
+        formData.append('notifikasiPush_akanDatang_descriptionEN', specificNotification('upcoming')?.body_en);
         formData.append('notifikasiPush_akanDatang_unit', 'JAM');
         formData.append('notifikasiPush_akanDatang_aturWaktu', Number(specificNotification('upcoming')?.blast));
       }
       if (type?.includes('start')) {
         formData.append('notifikasiPush_challengeDimulai_include', 'YES');
         formData.append('notifikasiPush_challengeDimulai_title', specificNotification('start')?.title);
+        formData.append('notifikasiPush_challengeDimulai_titleEN', specificNotification('start')?.title_en);
         formData.append('notifikasiPush_challengeDimulai_description', specificNotification('start')?.body);
+        formData.append('notifikasiPush_challengeDimulai_descriptionEN', specificNotification('start')?.body_en);
         formData.append('notifikasiPush_challengeDimulai_unit', 'JAM');
         formData.append('notifikasiPush_challengeDimulai_aturWaktu', Number(specificNotification('start')?.blast));
       }
       if (type?.includes('update')) {
         formData.append('notifikasiPush_updateLeaderboard_include', 'YES');
         formData.append('notifikasiPush_updateLeaderboard_title', specificNotification('update')?.title);
+        formData.append('notifikasiPush_updateLeaderboard_titleEN', specificNotification('update')?.title_en);
         formData.append('notifikasiPush_updateLeaderboard_description', specificNotification('update')?.body);
+        formData.append('notifikasiPush_updateLeaderboard_descriptionEN', specificNotification('update')?.body_en);
         formData.append('notifikasiPush_updateLeaderboard_unit', 'JAM');
         formData.append(
           'notifikasiPush_updateLeaderboard_aturWaktu',
@@ -215,21 +221,27 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
       if (type?.includes('will_end')) {
         formData.append('notifikasiPush_challengeAkanBerakhir_include', 'YES');
         formData.append('notifikasiPush_challengeAkanBerakhir_title', specificNotification('will_end')?.title);
+        formData.append('notifikasiPush_challengeAkanBerakhir_titleEN', specificNotification('will_end')?.title_en);
         formData.append('notifikasiPush_challengeAkanBerakhir_description', specificNotification('will_end')?.body);
+        formData.append('notifikasiPush_challengeAkanBerakhir_descriptionEN', specificNotification('will_end')?.body_en);
         formData.append('notifikasiPush_challengeAkanBerakhir_unit', 'JAM');
         formData.append('notifikasiPush_challengeAkanBerakhir_aturWaktu', Number(specificNotification('will_end')?.blast));
       }
       if (type?.includes('end')) {
         formData.append('notifikasiPush_challengeBerakhir_include', 'YES');
         formData.append('notifikasiPush_challengeBerakhir_title', specificNotification('end')?.title);
+        formData.append('notifikasiPush_challengeBerakhir_titleEN', specificNotification('end')?.title_en);
         formData.append('notifikasiPush_challengeBerakhir_description', specificNotification('end')?.body);
+        formData.append('notifikasiPush_challengeBerakhir_descriptionEN', specificNotification('end')?.body_en);
         formData.append('notifikasiPush_challengeBerakhir_unit', 'JAM');
         formData.append('notifikasiPush_challengeBerakhir_aturWaktu', Number(specificNotification('end')?.blast));
       }
       if (type?.includes('winner')) {
         formData.append('notifikasiPush_untukPemenang_include', 'YES');
         formData.append('notifikasiPush_untukPemenang_title', specificNotification('winner')?.title);
+        formData.append('notifikasiPush_untukPemenang_titleEN', specificNotification('winner')?.title_en);
         formData.append('notifikasiPush_untukPemenang_description', specificNotification('winner')?.body);
+        formData.append('notifikasiPush_untukPemenang_descriptionEN', specificNotification('winner')?.body_en);
         formData.append('notifikasiPush_untukPemenang_unit', 'JAM');
         formData.append('notifikasiPush_untukPemenang_aturWaktu', Number(specificNotification('winner')?.blast));
       }
