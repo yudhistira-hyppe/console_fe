@@ -74,6 +74,7 @@ const FormMusic = (props) => {
     const uploadFileImage = new File([inputValue.apsaraThumnail], inputValue.apsaraThumnail?.name, { type: 'image/png' });
 
     setLoading(true);
+    const toastId = toast.loading('Loading create...', { id: 'create' });
     handleApsaraMedia().then((res) => {
       onMediaUpload(
         res,
@@ -88,23 +89,23 @@ const FormMusic = (props) => {
                 bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
                 createMusic(bodyData).then((res) => {
                   if (res?.error) {
-                    toast.error(res?.error?.data?.message);
+                    toast.error(res?.error?.data?.message, { id: toastId });
                   } else if (res?.data) {
                     router.push('/database/music');
-                    toast.success('Berhasil membuat musik');
+                    toast.success('Berhasil membuat musik', { id: toastId });
                   }
                   setLoading(false);
                 });
               },
               () => {
-                alert('upload thumnail ke apsara gagal');
+                toast.error('upload thumnail ke apsara gagal', { id: toastId });
                 setLoading(false);
               },
             );
           });
         },
         () => {
-          alert('upload media ke apsara gagal');
+          toast.error('upload media ke apsara gagal', { id: toastId });
           setLoading(false);
         },
       );
@@ -118,7 +119,7 @@ const FormMusic = (props) => {
     const uploadFileImage = new File([inputValue.apsaraThumnail], inputValue.apsaraThumnail?.name, { type: 'image/png' });
 
     setLoading(true);
-    toast.loading('Loading update...', { id: 'update' });
+    const toastId = toast.loading('Loading update...', { id: 'update' });
     if (bodyData.apsaraThumnail !== data?.apsaraThumnail) {
       handleApsaraImage().then((res) => {
         onImageUpload(
@@ -128,16 +129,16 @@ const FormMusic = (props) => {
             bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
             updateMusic(bodyData).then((res) => {
               if (res?.error) {
-                toast.error(res?.error?.data?.message, { id: 'update' });
+                toast.error(res?.error?.data?.message, { id: toastId });
               } else if (res?.data) {
                 router.push('/database/music');
-                toast.success('Berhasil memperbarui musik', { id: 'update' });
+                toast.success('Berhasil memperbarui musik', { id: toastId });
               }
               setLoading(false);
             });
           },
           () => {
-            alert('upload thumnail ke apsara gagal');
+            toast.error('upload thumnail ke apsara gagal', { id: toastId });
             setLoading(false);
           },
         );
@@ -145,10 +146,10 @@ const FormMusic = (props) => {
     } else {
       updateMusic(bodyData).then((res) => {
         if (res?.error) {
-          toast.error(res?.error?.data?.message);
+          toast.error(res?.error?.data?.message, { id: toastId });
         } else if (res?.data) {
           router.push('/database/music');
-          toast.success('Berhasil memperbarui musik');
+          toast.success('Berhasil memperbarui musik', { id: toastId });
         }
         setLoading(false);
       });
@@ -159,7 +160,7 @@ const FormMusic = (props) => {
 
   return (
     <>
-      <ModalDelete showModal={modal.delete} onClose={() => setModal({ ...modal, delete: !modal.delete })} />
+      <ModalDelete showModal={modal.delete} onClose={() => setModal({ ...modal, delete: !modal.delete })} id={id} />
       <ModalSave
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}

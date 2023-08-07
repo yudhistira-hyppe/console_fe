@@ -1,9 +1,11 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Button } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
+import { useDeleteMusicMutation } from 'api/console/database';
+import { toast } from 'react-hot-toast';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -17,7 +19,24 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalDelete({ showModal, onClose, onConfirm }) {
+export default function ModalDelete({ showModal, onClose, id }) {
+  const [deleteMusic, { isLoading }] = useDeleteMusicMutation();
+
+  const handleDelete = () => {
+    const data = {
+      _id: [id],
+    };
+
+    deleteMusic(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menghapus musik');
+      }
+      onClose();
+    });
+  };
+
   return (
     <div>
       <Modal
@@ -33,10 +52,12 @@ export default function ModalDelete({ showModal, onClose, onConfirm }) {
           </Stack>
 
           <Stack direction={'row'} mt={3} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
+            <LoadingButton loading={isLoading} variant="contained" color="secondary" onClick={handleDelete}>
               Konfirmasi
+            </LoadingButton>
+            <Button variant="text" color="secondary" onClick={onClose} disabled={isLoading}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>

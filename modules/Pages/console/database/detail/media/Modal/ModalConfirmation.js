@@ -1,11 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { useUpdateStatusMusicMutation } from 'api/console/database';
 import router from 'next/router';
 import { toast } from 'react-hot-toast';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -20,7 +21,7 @@ const style = {
 };
 
 export default function ModalConfirmation({ showModal, status, id, onClose }) {
-  const [updateStatus] = useUpdateStatusMusicMutation();
+  const [updateStatus, { isLoading }] = useUpdateStatusMusicMutation();
 
   const handleStatus = () => {
     const data = {
@@ -56,10 +57,12 @@ export default function ModalConfirmation({ showModal, status, id, onClose }) {
           </Stack>
 
           <Stack direction={'row'} mt={3} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={handleStatus}>
+            <LoadingButton loading={isLoading} variant="contained" color="secondary" onClick={handleStatus}>
               Konfirmasi
+            </LoadingButton>
+            <Button variant="text" color="secondary" onClick={onClose} disabled={isLoading}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>
