@@ -50,8 +50,8 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
         toast.error(res?.error?.data?.message);
       } else if (res?.data) {
         isSingle
-          ? toast.success('Berhasil mengubah status musik')
-          : toast.success(`Berhasil mengubah ${data1?.length} status musik`);
+          ? toast.success('Berhasil menghapus musik')
+          : toast.success(`Berhasil menghapus ${data1?.length} status musik`);
       }
       onConfirm();
     });
