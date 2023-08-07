@@ -90,6 +90,7 @@ const DatabaseDetailMediaComponent = (props) => {
                 <Grid item xs={12} sm={6}>
                   <CardWithDivider
                     title="Dilihat"
+                    loading={loadingGeographic}
                     value={numberWithCommas(geographicMusic?.data?.[0]?.view || 0)}
                     description="Kali"
                   />
@@ -97,6 +98,7 @@ const DatabaseDetailMediaComponent = (props) => {
                 <Grid item xs={12} sm={6}>
                   <CardWithDivider
                     title="Digunakan"
+                    loading={loadingGeographic}
                     value={numberWithCommas(geographicMusic?.data?.[0]?.used || 0)}
                     description="Kali"
                   />
