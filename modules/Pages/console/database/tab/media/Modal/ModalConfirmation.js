@@ -1,10 +1,11 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { useDeleteMusicMutation, useUpdateStatusMusicMutation } from 'api/console/database';
 import { toast } from 'react-hot-toast';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -19,8 +20,8 @@ const style = {
 };
 
 export default function ModalConfirmation({ showModal, status, onClose, onConfirm, data1, data2, isSingle }) {
-  const [updateStatus] = useUpdateStatusMusicMutation();
-  const [deleteMusic] = useDeleteMusicMutation();
+  const [updateStatus, { isLoading: loadingUpdate }] = useUpdateStatusMusicMutation();
+  const [deleteMusic, { isLoading: loadingDelete }] = useDeleteMusicMutation();
 
   const handleStatus = () => {
     const data = {
@@ -50,8 +51,8 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
         toast.error(res?.error?.data?.message);
       } else if (res?.data) {
         isSingle
-          ? toast.success('Berhasil mengubah status musik')
-          : toast.success(`Berhasil mengubah ${data1?.length} status musik`);
+          ? toast.success('Berhasil menghapus musik')
+          : toast.success(`Berhasil menghapus ${data1?.length} status musik`);
       }
       onConfirm();
     });
@@ -81,13 +82,16 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
           </Stack>
 
           <Stack direction={'row'} mt={3} justifyContent={'center'} spacing={3}>
-            <Button
+            <LoadingButton
+              loading={loadingDelete || loadingUpdate}
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={() => (status === 'delete' ? handleDelete() : handleStatus())}>
               Konfirmasi
+            </LoadingButton>
+            <Button variant="text" color="secondary" onClick={onClose}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>

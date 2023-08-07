@@ -45,7 +45,6 @@ const CardWithIndicator = (props) => {
         {loading ? (
           <Stack direction="column" alignItems="center" justifyContent="center" height={210} gap={2}>
             <CircularProgress color="secondary" size={32} />
-            <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Loading data...</Typography>
           </Stack>
         ) : data?.length >= 1 ? (
           <ScrollBar style={{ height: 210 }}>
