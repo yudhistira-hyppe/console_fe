@@ -44,18 +44,49 @@ const HorizontalDefault = ({ className, children }) => {
     let newMenu = consoleNav;
 
     if (
-      !accessModule.includes('ads_performance') &&
-      !accessModule.includes('ads_demografis') &&
-      !accessModule.includes('ads_table')
+      !accessModule.includes('ads_setting_dashboard') &&
+      !accessModule.includes('ads_setting_list') &&
+      !accessModule.includes('ads_manage_dashboard') &&
+      !accessModule.includes('ads_manage_list')
     ) {
       newMenu = newMenu.filter((item) => item.name !== 'Pusat Iklan');
+    }
+    if (!accessModule.includes('ads_setting_dashboard') && !accessModule.includes('ads_setting_list')) {
+      const indexAds = newMenu?.findIndex((item) => item?.name === 'Pusat Iklan');
+
+      newMenu = newMenu?.map((item, key) => {
+        if (key == indexAds) {
+          return {
+            name: item?.name,
+            type: item?.type,
+            children: item?.children?.filter((child) => child?.name !== 'Pengaturan Iklan'),
+          };
+        } else {
+          return item;
+        }
+      });
+    }
+    if (!accessModule.includes('ads_manage_dashboard') && !accessModule.includes('ads_manage_list')) {
+      const indexAds = newMenu?.findIndex((item) => item?.name === 'Pusat Iklan');
+
+      newMenu = newMenu?.map((item, key) => {
+        if (key == indexAds) {
+          return {
+            name: item?.name,
+            type: item?.type,
+            children: item?.children?.filter((child) => child?.name !== 'Kelola Advertiser'),
+          };
+        } else {
+          return item;
+        }
+      });
     }
     if (
       !accessModule.includes('boost_statistic') &&
       !accessModule.includes('boost_engagement') &&
       !accessModule.includes('boost_table')
     ) {
-      newMenu = newMenu.filter((item) => item.name !== 'Boost Post Center');
+      newMenu = newMenu.filter((item) => item.name !== 'Pusat Boost');
     }
     if (
       !accessModule.includes('database_account') &&
@@ -106,10 +137,23 @@ const HorizontalDefault = ({ className, children }) => {
     ) {
       newMenu = newMenu.filter((item) => item.name !== 'Anggota');
     }
+    if (!accessModule.includes('challenge')) {
+      newMenu = newMenu.filter((item) => item.name !== 'Challenge');
+    }
+    if (
+      !accessModule.includes('utilitas_interest') &&
+      !accessModule.includes('utilitas_setting') &&
+      !accessModule.includes('utilitas_bank') &&
+      !accessModule.includes('utilitas_challenge')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Utilitas');
+    }
 
     setAccessModule(newMenu);
     setLoadingValidate(false);
   };
+
+  console.log(accessModule);
 
   useEffect(() => {
     if (!isLoading) {
