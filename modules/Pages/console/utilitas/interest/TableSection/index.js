@@ -50,6 +50,7 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
   });
   const [selected, setSelected] = useState({});
   const classes = useStyles();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   return (
     <>
@@ -146,22 +147,24 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Stack direction="row" gap={1} width={80}>
-                          <IconButton
-                            onClick={() => {
-                              setOpenModal({ ...openModal, edit: !openModal.edit });
-                              setSelected(item);
-                            }}>
-                            <Edit />
-                          </IconButton>
-                          {/* <IconButton
+                        {access?.find((item) => item?.nameModule === 'utilitas_interest')?.acces?.updateAcces && (
+                          <Stack direction="row" justifyContent="flex-end" gap={1} width="100%">
+                            <IconButton
+                              onClick={() => {
+                                setOpenModal({ ...openModal, edit: !openModal.edit });
+                                setSelected(item);
+                              }}>
+                              <Edit />
+                            </IconButton>
+                            {/* <IconButton
                             onClick={() => {
                               setOpenModal({ ...openModal, delete: !openModal.delete });
                               setSelected(item);
                             }}>
                             <Delete />
                           </IconButton> */}
-                        </Stack>
+                          </Stack>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
