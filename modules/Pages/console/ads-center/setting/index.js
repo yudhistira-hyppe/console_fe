@@ -23,7 +23,9 @@ const AdsCenterSettingComponent = () => {
           {access.map((item) => item?.nameModule).includes('ads_setting_dashboard') && (
             <Tab className={classes.tab} label="Dasbor" value="1" />
           )}
-          {access.map((item) => item?.nameModule).includes('ads_setting_list') && (
+          {(access.map((item) => item?.nameModule).includes('ads_setting_list') ||
+            access.map((item) => item?.nameModule).includes('ads_setting_notif') ||
+            access.map((item) => item?.nameModule).includes('ads_setting_cta')) && (
             <Tab className={classes.tab} label="Pengaturan" value="2" />
           )}
         </TabList>
@@ -33,7 +35,9 @@ const AdsCenterSettingComponent = () => {
             <AdsSettingDashboard />
           </TabPanel>
         )}
-        {access.map((item) => item?.nameModule).includes('ads_setting_list') && (
+        {(access.map((item) => item?.nameModule).includes('ads_setting_list') ||
+          access.map((item) => item?.nameModule).includes('ads_setting_notif') ||
+          access.map((item) => item?.nameModule).includes('ads_setting_cta')) && (
           <TabPanel className={classes.tabPanel} value="2">
             <AdsSettingPengaturan />
           </TabPanel>

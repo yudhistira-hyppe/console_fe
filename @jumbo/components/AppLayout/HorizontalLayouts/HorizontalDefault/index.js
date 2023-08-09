@@ -51,7 +51,12 @@ const HorizontalDefault = ({ className, children }) => {
     ) {
       newMenu = newMenu.filter((item) => item.name !== 'Pusat Iklan');
     }
-    if (!accessModule.includes('ads_setting_dashboard') && !accessModule.includes('ads_setting_list')) {
+    if (
+      !accessModule.includes('ads_setting_dashboard') &&
+      !accessModule.includes('ads_setting_list') &&
+      !accessModule.includes('ads_setting_notif') &&
+      !accessModule.includes('ads_setting_cta')
+    ) {
       const indexAds = newMenu?.findIndex((item) => item?.name === 'Pusat Iklan');
 
       newMenu = newMenu?.map((item, key) => {
@@ -152,8 +157,6 @@ const HorizontalDefault = ({ className, children }) => {
     setAccessModule(newMenu);
     setLoadingValidate(false);
   };
-
-  console.log(accessModule);
 
   useEffect(() => {
     if (!isLoading) {
