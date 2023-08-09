@@ -26,6 +26,8 @@ const DetailChallenge = ({ detailId }) => {
     selected: {},
   });
   const classes = useStyles();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+
   const { data: detail, isLoading: loadingDetail } = useGetDetailChallengeQuery(detailId);
 
   const breadcrumbs = [
@@ -239,7 +241,8 @@ const DetailChallenge = ({ detailId }) => {
                 variant="contained"
                 color="secondary"
                 style={{ borderRadius: 6, padding: '10px 20px' }}
-                onClick={() => Router.push(`/challenge/edit/${detailId}`)}>
+                onClick={() => Router.push(`/challenge/edit/${detailId}`)}
+                disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
                 <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                   Edit Challenge
                 </Typography>
@@ -256,7 +259,8 @@ const DetailChallenge = ({ detailId }) => {
                     status: 'delete',
                     selected: detail?._id,
                   })
-                }>
+                }
+                disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.deleteAcces}>
                 <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                   Hapus Challenge
                 </Typography>
@@ -295,7 +299,8 @@ const DetailChallenge = ({ detailId }) => {
                       status: 'publish',
                       selected: inputValue,
                     })
-                  }>
+                  }
+                  disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
                   <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                     Publikasi
                   </Typography>
@@ -312,7 +317,8 @@ const DetailChallenge = ({ detailId }) => {
                     status: 'duplicate',
                     selected: detail?._id,
                   })
-                }>
+                }
+                disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
                 <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Duplikasi</Typography>
               </Button>
             )}
@@ -330,7 +336,9 @@ const DetailChallenge = ({ detailId }) => {
             indicatorColor="secondary"
             style={{ marginTop: -15 }}>
             <Tab className={classes.tab} label="Challenge" value="challenge" style={{ padding: '0 0 8px' }} />
-            <Tab className={classes.tab} label="Partisipan" value="partisipan" style={{ padding: '0 0 8px' }} />
+            {access?.map((item) => item?.nameModule)?.includes('challenge_participant') && (
+              <Tab className={classes.tab} label="Partisipan" value="partisipan" style={{ padding: '0 0 8px' }} />
+            )}
           </TabList>
           <TabPanel value="challenge" style={{ padding: 0 }}>
             <Grid container spacing={3}>
@@ -349,9 +357,11 @@ const DetailChallenge = ({ detailId }) => {
               </Grid>
             </Grid>
           </TabPanel>
-          <TabPanel value="partisipan" style={{ padding: 0 }}>
-            <ParticipantComponent detail={detail} />
-          </TabPanel>
+          {access?.map((item) => item?.nameModule)?.includes('challenge_participant') && (
+            <TabPanel value="partisipan" style={{ padding: 0 }}>
+              <ParticipantComponent detail={detail} />
+            </TabPanel>
+          )}
         </TabContext>
       )}
 
