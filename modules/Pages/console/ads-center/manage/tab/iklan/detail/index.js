@@ -13,6 +13,7 @@ const AdsDetailComponent = () => {
   const router = useRouter();
   const classes = useStyles();
   const [tab, setTab] = useState('1');
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const breadcrumbs =
     tab == 1
@@ -39,15 +40,19 @@ const AdsDetailComponent = () => {
             indicatorColor="secondary"
             style={{ margin: '5px 0' }}>
             <Tab className={classes.tab} label="Iklan" value="1" />
-            <Tab className={classes.tab} label="Economy Sharing" value="2" />
+            {access?.map((item) => item?.nameModule)?.includes('ads_manage_list_economy') && (
+              <Tab className={classes.tab} label="Economy Sharing" value="2" />
+            )}
           </TabList>
 
           <TabPanel className={classes.tabPanel} value="1">
             <DetailAdsContentComponent idAds={router.query._id} />
           </TabPanel>
-          <TabPanel className={classes.tabPanel} value="2">
-            <TableRewardsParticipant idAds={router.query._id} />
-          </TabPanel>
+          {access?.map((item) => item?.nameModule)?.includes('ads_manage_list_economy') && (
+            <TabPanel className={classes.tabPanel} value="2">
+              <TableRewardsParticipant idAds={router.query._id} />
+            </TabPanel>
+          )}
         </TabContext>
       </Stack>
     </>

@@ -8,6 +8,8 @@ import Router from 'next/router';
 
 const CardStatus = ({ details }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' });
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+
   const [approveAds, { isLoading }] = useApproveAdsMutation();
 
   const handleClose = () => {
@@ -51,7 +53,10 @@ const CardStatus = ({ details }) => {
           variant="contained"
           color="secondary"
           onClick={() => setShowModal({ show: true, type: 'approve' })}
-          disabled={details?.status !== 'UNDER_REVIEW'}>
+          disabled={
+            details?.status !== 'UNDER_REVIEW' ||
+            !access?.find((item) => item?.nameModule === 'ads_manage_list')?.acces?.updateAcces
+          }>
           <Typography style={{ fontWeight: 'bold' }}>Setujui</Typography>
         </Button>
         <Button
@@ -59,7 +64,10 @@ const CardStatus = ({ details }) => {
           variant="outlined"
           color="secondary"
           onClick={() => setShowModal({ show: true, type: 'decline' })}
-          disabled={details?.status !== 'UNDER_REVIEW'}>
+          disabled={
+            details?.status !== 'UNDER_REVIEW' ||
+            !access?.find((item) => item?.nameModule === 'ads_manage_list')?.acces?.updateAcces
+          }>
           <Typography style={{ fontWeight: 'bold' }}>Tidak Disetujui</Typography>
         </Button>
         <Stack direction="row" style={{ backgroundColor: '#00000005', padding: '8px 16px' }}>
