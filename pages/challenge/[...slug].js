@@ -30,7 +30,11 @@ const ChallengeDynamicPage = () => {
           listJenis?.data?.map((item) => validDatabaseTab.push(item?.name));
           if (!loadingJenis) {
             if (slug.length > 3 || !validDatabaseTab.includes(slug[0])) {
-              router.replace(listJenis?.data?.[0]?.name);
+              if (listJenis?.data?.length >= 1) {
+                router.replace(listJenis?.data?.[0]?.name);
+              } else {
+                router.replace('draft');
+              }
               return;
             }
             setChallengeProps({ tab: slug[0], detailId: slug[1] });

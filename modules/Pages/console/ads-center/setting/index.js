@@ -9,6 +9,7 @@ import AdsSettingPengaturan from './tab/pengaturan';
 const AdsCenterSettingComponent = () => {
   const classes = useStyles();
   const [tab, setTab] = useState('1');
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   return (
     <Stack direction="column">
@@ -19,16 +20,28 @@ const AdsCenterSettingComponent = () => {
           textColor="secondary"
           indicatorColor="secondary"
           style={{ margin: '5px 0' }}>
-          <Tab className={classes.tab} label="Dasbor" value="1" />
-          <Tab className={classes.tab} label="Pengaturan" value="2" />
+          {access.map((item) => item?.nameModule).includes('ads_setting_dashboard') && (
+            <Tab className={classes.tab} label="Dasbor" value="1" />
+          )}
+          {(access.map((item) => item?.nameModule).includes('ads_setting_list') ||
+            access.map((item) => item?.nameModule).includes('ads_setting_notif') ||
+            access.map((item) => item?.nameModule).includes('ads_setting_cta')) && (
+            <Tab className={classes.tab} label="Pengaturan" value="2" />
+          )}
         </TabList>
 
-        <TabPanel className={classes.tabPanel} value="1">
-          <AdsSettingDashboard />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="2">
-          <AdsSettingPengaturan />
-        </TabPanel>
+        {access.map((item) => item?.nameModule).includes('ads_setting_dashboard') && (
+          <TabPanel className={classes.tabPanel} value="1">
+            <AdsSettingDashboard />
+          </TabPanel>
+        )}
+        {(access.map((item) => item?.nameModule).includes('ads_setting_list') ||
+          access.map((item) => item?.nameModule).includes('ads_setting_notif') ||
+          access.map((item) => item?.nameModule).includes('ads_setting_cta')) && (
+          <TabPanel className={classes.tabPanel} value="2">
+            <AdsSettingPengaturan />
+          </TabPanel>
+        )}
       </TabContext>
     </Stack>
   );

@@ -44,6 +44,7 @@ const useStyles = makeStyles(() => ({
 const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   return (
     <Stack flex={1} width="100%" maxWidth={956}>
@@ -127,11 +128,13 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Stack direction="row" gap={1} width={80}>
-                        <IconButton onClick={() => Router.replace(`/utilitas?tab=bank&bankcode=${item?.bankcode}`)}>
-                          <Edit />
-                        </IconButton>
-                      </Stack>
+                      {access?.find((item) => item?.nameModule === 'utilitas_bank')?.acces?.updateAcces && (
+                        <Stack direction="row" justifyContent="flex-end" gap={1} width="100%">
+                          <IconButton onClick={() => Router.replace(`/utilitas?tab=bank&bankcode=${item?.bankcode}`)}>
+                            <Edit />
+                          </IconButton>
+                        </Stack>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))

@@ -48,6 +48,7 @@ const TableSettingAds = () => {
     type: '',
     data: {},
   });
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: listSetting, isFetching: loadingSetting } = useGetListAdsSettingQuery(payload);
 
@@ -132,141 +133,154 @@ const TableSettingAds = () => {
             </TableHead>
 
             <TableBody>
-              {loadingSetting ? (
-                <TableRow>
-                  <TableCell colSpan={8}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                      <CircularProgress color="secondary" />
-                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ) : listSetting?.data?.adsSetting?.filter((item) => !item?.Jenis?.toLowerCase()?.includes('weight'))?.length >=
-                1 ? (
-                <>
-                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 180 }}>
-                        Characteristic Weight
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 30 }}>
-                        100
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
-                        Persen
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Stack direction="row" width="100%" justifyContent="space-between">
-                        <Typography variant="body1" style={{ fontSize: '12px', width: 350 }}>
-                          Bobot tiap jenis dalam karakteristik audiens
-                        </Typography>
-                        <Button
-                          variant="contained"
-                          color="inherit"
-                          size="small"
-                          sx={{
-                            boxShadow: 'none',
-                            border: '1px solid transparent',
-                            '&:hover': { boxShadow: 'none', border: '1px solid #AB22AF' },
-                          }}
-                          onClick={() =>
-                            setShowModal({
-                              open: true,
-                              type: 'characteristic',
-                              data: listSetting?.data?.adsSetting?.filter((item) =>
-                                item?.Jenis?.toLowerCase()?.includes('weight'),
-                              ),
-                            })
-                          }>
-                          <Typography style={{ fontWeight: 'bold', textTransform: 'capitalize', fontSize: 12 }}>
-                            Ubah Nilai
-                          </Typography>
-                        </Button>
-                      </Stack>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Stack direction="column">
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '14px', width: 150, color: '#AB22AF', fontWeight: 'bold' }}>
-                          {listSetting?.data?.adsSetting?.find((item) => item?.Jenis === 'AgeCharacteristicWeight')
-                            ?.Aktifitas || '-'}
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
-                          {dayjs(
-                            listSetting?.data?.adsSetting?.find((item) => item?.Jenis === 'AgeCharacteristicWeight')
-                              ?.Date,
-                          ).format('DD/MM/YYYY - HH:mm')}{' '}
-                          WIB
-                        </Typography>
+              {access?.map((item) => item?.nameModule)?.includes('ads_setting_list') ? (
+                loadingSetting ? (
+                  <TableRow>
+                    <TableCell colSpan={8}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                        <CircularProgress color="secondary" />
+                        <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                       </Stack>
                     </TableCell>
                   </TableRow>
-                  {listSetting?.data?.adsSetting
-                    ?.filter((item) => !item?.Jenis?.toLowerCase()?.includes('weight'))
-                    ?.map((item, i) => (
-                      <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '12px', width: 180 }}>
-                            {item?.Jenis || '-'}
+                ) : listSetting?.data?.adsSetting?.filter((item) => !item?.Jenis?.toLowerCase()?.includes('weight'))
+                    ?.length >= 1 ? (
+                  <>
+                    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 180 }}>
+                          Characteristic Weight
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 30 }}>
+                          100
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                          Persen
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Stack direction="row" width="100%" justifyContent="space-between">
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 350 }}>
+                            Bobot tiap jenis dalam karakteristik audiens
                           </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '12px', width: 30 }}>
-                            {item?.Nilai || '-'}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
-                            {item?.Unit || '-'}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Stack direction="row" width="100%" justifyContent="space-between">
-                            <Typography variant="body1" style={{ fontSize: '12px', width: 350 }}>
-                              {item?.Desc || '-'}
+                          <Button
+                            variant="contained"
+                            color="inherit"
+                            size="small"
+                            sx={{
+                              boxShadow: 'none',
+                              border: '1px solid transparent',
+                              '&:hover': { boxShadow: 'none', border: '1px solid #AB22AF' },
+                            }}
+                            onClick={() =>
+                              setShowModal({
+                                open: true,
+                                type: 'characteristic',
+                                data: listSetting?.data?.adsSetting?.filter((item) =>
+                                  item?.Jenis?.toLowerCase()?.includes('weight'),
+                                ),
+                              })
+                            }
+                            disabled={!access?.find((item) => item?.nameModule === 'ads_setting_list')?.acces?.updateAcces}>
+                            <Typography style={{ fontWeight: 'bold', textTransform: 'capitalize', fontSize: 12 }}>
+                              Ubah Nilai
                             </Typography>
-                            <Button
-                              variant="contained"
-                              color="inherit"
-                              size="small"
-                              sx={{
-                                boxShadow: 'none',
-                                border: '1px solid transparent',
-                                '&:hover': { boxShadow: 'none', border: '1px solid #AB22AF' },
-                              }}
-                              onClick={() => setShowModal({ open: true, type: 'normal', data: item })}>
-                              <Typography style={{ fontWeight: 'bold', textTransform: 'capitalize', fontSize: 12 }}>
-                                Ubah Nilai
+                          </Button>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Stack direction="column">
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: '14px', width: 150, color: '#AB22AF', fontWeight: 'bold' }}>
+                            {listSetting?.data?.adsSetting?.find((item) => item?.Jenis === 'AgeCharacteristicWeight')
+                              ?.Aktifitas || '-'}
+                          </Typography>
+                          <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                            {dayjs(
+                              listSetting?.data?.adsSetting?.find((item) => item?.Jenis === 'AgeCharacteristicWeight')?.Date,
+                            ).format('DD/MM/YYYY - HH:mm')}{' '}
+                            WIB
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                    {listSetting?.data?.adsSetting
+                      ?.filter((item) => !item?.Jenis?.toLowerCase()?.includes('weight'))
+                      ?.map((item, i) => (
+                        <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 180 }}>
+                              {item?.Jenis || '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 30 }}>
+                              {item?.Nilai || '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                              {item?.Unit || '-'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Stack direction="row" width="100%" justifyContent="space-between">
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 350 }}>
+                                {item?.Desc || '-'}
                               </Typography>
-                            </Button>
-                          </Stack>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Stack direction="column">
-                            <Typography
-                              variant="body1"
-                              style={{ fontSize: '14px', width: 150, color: '#AB22AF', fontWeight: 'bold' }}>
-                              {item?.Aktifitas || '-'}
-                            </Typography>
-                            <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
-                              {dayjs(item?.Date).format('DD/MM/YYYY - HH:mm')} WIB
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </>
+                              <Button
+                                variant="contained"
+                                color="inherit"
+                                size="small"
+                                sx={{
+                                  boxShadow: 'none',
+                                  border: '1px solid transparent',
+                                  '&:hover': { boxShadow: 'none', border: '1px solid #AB22AF' },
+                                }}
+                                onClick={() => setShowModal({ open: true, type: 'normal', data: item })}
+                                disabled={
+                                  !access?.find((item) => item?.nameModule === 'ads_setting_list')?.acces?.updateAcces
+                                }>
+                                <Typography style={{ fontWeight: 'bold', textTransform: 'capitalize', fontSize: 12 }}>
+                                  Ubah Nilai
+                                </Typography>
+                              </Button>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Stack direction="column">
+                              <Typography
+                                variant="body1"
+                                style={{ fontSize: '14px', width: 150, color: '#AB22AF', fontWeight: 'bold' }}>
+                                {item?.Aktifitas || '-'}
+                              </Typography>
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
+                                {dayjs(item?.Date).format('DD/MM/YYYY - HH:mm')} WIB
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </>
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                        <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data setting ads</Typography>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                )
               ) : (
                 <TableRow>
                   <TableCell colSpan={8}>
                     <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data setting ads</Typography>
+                      <Typography style={{ fontFamily: 'Normal' }}>Kamu tidak memiliki akses untuk fitur ini!</Typography>
                     </Stack>
                   </TableCell>
                 </TableRow>

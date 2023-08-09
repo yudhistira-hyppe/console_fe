@@ -55,6 +55,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
     status: '',
     selected: {},
   });
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const handleOpenMenu = (event, index) => {
     setAnchorEl(event.currentTarget);
@@ -268,7 +269,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           onClick={() => {
                             handleCloseMenu();
                             Router.push(`/challenge/edit/${item?._id}`);
-                          }}>
+                          }}
+                          disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
                           <ListItemIcon>
                             <Edit />
                           </ListItemIcon>
@@ -282,7 +284,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                               status: 'delete-draft',
                               selected: item?._id,
                             });
-                          }}>
+                          }}
+                          disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.deleteAcces}>
                           <ListItemIcon>
                             <Delete />
                           </ListItemIcon>

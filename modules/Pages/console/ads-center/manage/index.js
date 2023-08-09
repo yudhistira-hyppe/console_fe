@@ -10,6 +10,7 @@ import Router from 'next/router';
 const AdsCenterManageComponent = () => {
   const classes = useStyles();
   const [tab, setTab] = useState('1');
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   useEffect(() => {
     if (Router.query?.tab) {
@@ -31,16 +32,24 @@ const AdsCenterManageComponent = () => {
           textColor="secondary"
           indicatorColor="secondary"
           style={{ margin: '5px 0' }}>
-          <Tab className={classes.tab} label="Dasbor" value="1" />
-          <Tab className={classes.tab} label="Iklan" value="2" />
+          {access.map((item) => item?.nameModule).includes('ads_manage_dashboard') && (
+            <Tab className={classes.tab} label="Dasbor" value="1" />
+          )}
+          {access.map((item) => item?.nameModule).includes('ads_manage_list') && (
+            <Tab className={classes.tab} label="Iklan" value="2" />
+          )}
         </TabList>
 
-        <TabPanel className={classes.tabPanel} value="1">
-          <AdsManageDashboard />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="2">
-          <AdsManageTableList />
-        </TabPanel>
+        {access.map((item) => item?.nameModule).includes('ads_manage_dashboard') && (
+          <TabPanel className={classes.tabPanel} value="1">
+            <AdsManageDashboard />
+          </TabPanel>
+        )}
+        {access.map((item) => item?.nameModule).includes('ads_manage_list') && (
+          <TabPanel className={classes.tabPanel} value="2">
+            <AdsManageTableList />
+          </TabPanel>
+        )}
       </TabContext>
     </Stack>
   );

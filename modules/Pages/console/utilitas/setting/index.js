@@ -44,6 +44,7 @@ const TableSection = () => {
   const [openModal, setOpenModal] = useState(false);
   const [kind, setKind] = useState('PPN');
   const [selected, setSelected] = useState({});
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const filteredData = listSettings?.data?.filter((item) => item.jenisdata === kind);
 
@@ -75,7 +76,7 @@ const TableSection = () => {
             placeholder="Cari Jenis"
             onChange={(e) => setQuery(e.target.value)}
             InputProps={{
-              endAdornment: (
+              endAdornment: query?.length >= 1 && (
                 <InputAdornment position="end">
                   <IconButton aria-label="toggle password visibility" edge="end" onClick={() => setQuery('')}>
                     <Delete style={{ fontSize: 20 }} />
@@ -97,7 +98,8 @@ const TableSection = () => {
             color="secondary"
             startIcon={<Add />}
             onClick={() => setOpenModal(!openModal)}
-            sx={{ height: 40, width: 200 }}>
+            sx={{ height: 40, width: 200 }}
+            disabled={!access?.find((item) => item?.nameModule === 'utilitas_setting')?.acces?.createAcces}>
             <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
               Tambah Setting
             </Typography>
@@ -145,7 +147,7 @@ const TableSection = () => {
                   <TableBody>
                     {filteredData?.length >= 1 ? (
                       filteredData?.map((item, i) => (
-                        <TableRow key={i} hover>
+                        <TableRow key={i} hover style={{ height: 73 }}>
                           <TableCell>
                             <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
                               {item?.jenis || '-'}
@@ -167,16 +169,17 @@ const TableSection = () => {
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            <Stack direction="row" gap={1} width={80}>
-                              <IconButton
-                                color="secondary"
-                                onClick={() => {
-                                  setSelected(item);
-                                  setOpenModal(!openModal);
-                                }}>
-                                <Edit />
-                              </IconButton>
-                            </Stack>
+                            {access?.find((item) => item?.nameModule === 'utilitas_setting')?.acces?.updateAcces && (
+                              <Stack direction="row" justifyContent="flex-end" gap={1} width="100%">
+                                <IconButton
+                                  onClick={() => {
+                                    setSelected(item);
+                                    setOpenModal(!openModal);
+                                  }}>
+                                  <Edit />
+                                </IconButton>
+                              </Stack>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))

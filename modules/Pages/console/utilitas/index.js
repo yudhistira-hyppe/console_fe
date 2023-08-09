@@ -36,6 +36,7 @@ const UtilitasComponent = () => {
   const [tab, setTab] = useState('interest');
   const classes = useStyles();
   const router = useRouter();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   useEffect(() => {
     if (!isEmpty(router.query)) {
@@ -57,46 +58,69 @@ const UtilitasComponent = () => {
         indicatorColor="secondary"
         variant="scrollable"
         style={{ marginTop: -20 }}>
-        <Tab label="Interest" value="interest" className={classes.tab} />
-        <Tab label="Setting" value="setting" className={classes.tab} />
-        <Tab label="Bank" value="bank" className={classes.tab} />
+        {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
+          <Tab label="Interest" value="interest" className={classes.tab} />
+        )}
+        {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
+          <Tab label="Setting" value="setting" className={classes.tab} />
+        )}
+        {access?.map((item) => item?.nameModule)?.includes('utilitas_bank') && (
+          <Tab label="Bank" value="bank" className={classes.tab} />
+        )}
+        {(access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') ||
+          access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge')) && (
+          <Tab label="Challenge" value="challenge" className={classes.tab} />
+        )}
         {/* <Tab label="Pusat Iklan" value="ads" className={classes.tab} /> */}
-        <Tab label="Challenge" value="challenge" className={classes.tab} />
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
-        <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>
-          <Interest />
-        </TabPanel>
-        <TabPanel value="setting" style={{ padding: 0, height: '100%' }}>
-          <Setting />
-        </TabPanel>
-        <TabPanel value="bank" style={{ padding: 0, height: '100%' }}>
-          {router.query?.create ? (
-            <CreateMasterBank />
-          ) : router.query?.bankcode ? (
-            <EditMasterBank bankcode={router.query?.bankcode} />
-          ) : (
-            <MasterBank />
-          )}
-        </TabPanel>
+        {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
+          <TabPanel value="interest" style={{ padding: 0, height: '100%' }}>
+            <Interest />
+          </TabPanel>
+        )}
+        {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
+          <TabPanel value="setting" style={{ padding: 0, height: '100%' }}>
+            <Setting />
+          </TabPanel>
+        )}
+        {access?.map((item) => item?.nameModule)?.includes('utilitas_bank') && (
+          <TabPanel value="bank" style={{ padding: 0, height: '100%' }}>
+            {router.query?.create ? (
+              <CreateMasterBank />
+            ) : router.query?.bankcode ? (
+              <EditMasterBank bankcode={router.query?.bankcode} />
+            ) : (
+              <MasterBank />
+            )}
+          </TabPanel>
+        )}
+        {(access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') ||
+          access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge')) && (
+          <TabPanel value="challenge" style={{ padding: 0, height: '100%' }}>
+            <Stack direction="column" gap={3}>
+              {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') && (
+                <Stack direction="column" gap={2}>
+                  <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Jenis Challenge</Typography>
+                  <JenisChallenge />
+                </Stack>
+              )}
+
+              {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') &&
+                access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge') && <Divider flexItem />}
+
+              {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge') && (
+                <Stack direction="column" gap={2}>
+                  <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Badge Challenge</Typography>
+                  <BadgeChallenge />
+                </Stack>
+              )}
+            </Stack>
+          </TabPanel>
+        )}
         {/* <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
           <UtilityAds />
         </TabPanel> */}
-        <TabPanel value="challenge" style={{ padding: 0, height: '100%' }}>
-          <Stack direction="column" gap={3}>
-            <Stack direction="column" gap={2}>
-              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Jenis Challenge</Typography>
-              <JenisChallenge />
-            </Stack>
-
-            <Divider flexItem />
-
-            <Stack direction="column" gap={2}>
-              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Badge Challenge</Typography>
-              <BadgeChallenge />
-            </Stack>
-          </Stack>
-        </TabPanel>
       </div>
     </TabContext>
   );

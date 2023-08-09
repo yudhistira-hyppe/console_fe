@@ -22,6 +22,7 @@ const ChallengeTabDraftComponent = () => {
     join: [],
   });
   const [filterList, setFilterList] = useState([]);
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const getParams = () => {
     let params = {};
@@ -219,7 +220,8 @@ const ChallengeTabDraftComponent = () => {
             variant="contained"
             color="secondary"
             style={{ height: 40 }}
-            onClick={() => Router.push('/challenge/create')}>
+            onClick={() => Router.push('/challenge/create')}
+            disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.createAcces}>
             <Typography style={{ fontSize: 14 }}>Tambah Challenge Baru</Typography>
           </Button>
         </Stack>

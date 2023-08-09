@@ -12,7 +12,7 @@ import { toast } from 'react-hot-toast';
 export const useProvideAuth = () => {
   // Start rewritten code
   const { useLoginMutation, useLoginWithSocmedMutation, useLogoutMutation } = authApi;
-  const [login] = useLoginMutation();
+  const [login, { isError, error: errorLogin }] = useLoginMutation();
   const [loginWithSocmed] = useLoginWithSocmedMutation();
   const [logout] = useLogoutMutation();
   const [authUser, setAuthUser] = useState();
@@ -63,8 +63,8 @@ export const useProvideAuth = () => {
 
   const consoleLoginWithEmail = (user, isRememberUser) => {
     fetchStart();
-    login(user)
-      .then((result) => {
+    login(user).then((result) => {
+      if (result?.data) {
         if (result?.data?.data?.roles?.includes('ROLE_ADMIN')) {
           onHandleSuccessLogin(user, result?.data, isRememberUser);
           return toast.success('Login Berhasil', { id: 'signin' });
@@ -72,14 +72,13 @@ export const useProvideAuth = () => {
           fetchError('Akun yang digunakan tidak memiliki akses!');
           return toast.error('Akun yang digunakan tidak memiliki akses!', { id: 'signin' });
         }
-      })
-      .catch((error) => {
-        removeAuth();
-        fetchError(error?.data?.messages?.info?.join(' '));
-        return toast.error(error.data?.messages?.info?.join(' ') || 'Login bermasalah, silahkan coba lagi', {
+      } else {
+        fetchError(result?.error?.data?.messages?.info?.join(' '));
+        return toast.error(result?.error?.data?.messages?.info?.join(' '), {
           id: 'signin',
         });
-      });
+      }
+    });
   };
 
   const getResultLoginWithGoogle = async () => {
