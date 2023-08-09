@@ -36,11 +36,9 @@ const useStyles = makeStyles(() => ({
 
 const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
-  const [openModal, setOpenModal] = useState({
-    edit: false,
-  });
+  const [openModal, setOpenModal] = useState({ edit: false });
   const [selected, setSelected] = useState({});
-  const classes = useStyles();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   return (
     <>
@@ -131,16 +129,17 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                         <Avatar src={item?.badgeOther + '?m=' + new Date().getTime()} style={{ width: 80, height: 80 }} />
                       </TableCell>
                       <TableCell align="right">
-                        <Stack direction="row" justifyContent="flex-end" gap={1} minWidth={80}>
-                          <IconButton
-                            color="secondary"
-                            onClick={() => {
-                              setOpenModal({ ...openModal, edit: !openModal.edit });
-                              setSelected(item);
-                            }}>
-                            <Edit />
-                          </IconButton>
-                        </Stack>
+                        {access?.find((item) => item?.nameModule === 'utilitas_challenge_badge')?.acces?.updateAcces && (
+                          <Stack direction="row" justifyContent="flex-end" gap={1} minWidth={80}>
+                            <IconButton
+                              onClick={() => {
+                                setOpenModal({ ...openModal, edit: !openModal.edit });
+                                setSelected(item);
+                              }}>
+                              <Edit />
+                            </IconButton>
+                          </Stack>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))

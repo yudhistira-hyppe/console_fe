@@ -43,11 +43,9 @@ const useStyles = makeStyles(() => ({
 
 const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
-  const [openModal, setOpenModal] = useState({
-    edit: false,
-  });
+  const [openModal, setOpenModal] = useState({ edit: false });
   const [selected, setSelected] = useState({});
-  const classes = useStyles();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   return (
     <>
@@ -118,7 +116,7 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                   </TableCell>
                 ) : listTickets?.data?.length >= 1 ? (
                   listTickets?.data?.map((item, i) => (
-                    <TableRow key={i} hover>
+                    <TableRow key={i} hover style={{ height: 73 }}>
                       <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
                           {item?.name || '-'}
@@ -130,16 +128,17 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <Stack direction="row" justifyContent="flex-end" gap={1} minWidth={80}>
-                          <IconButton
-                            color="secondary"
-                            onClick={() => {
-                              setOpenModal({ ...openModal, edit: !openModal.edit });
-                              setSelected(item);
-                            }}>
-                            <Edit />
-                          </IconButton>
-                        </Stack>
+                        {access?.find((item) => item?.nameModule === 'utilitas_challenge_jenis')?.acces?.updateAcces && (
+                          <Stack direction="row" justifyContent="flex-end" gap={1} minWidth={80}>
+                            <IconButton
+                              onClick={() => {
+                                setOpenModal({ ...openModal, edit: !openModal.edit });
+                                setSelected(item);
+                              }}>
+                              <Edit />
+                            </IconButton>
+                          </Stack>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))

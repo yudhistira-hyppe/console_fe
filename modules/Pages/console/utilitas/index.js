@@ -67,7 +67,8 @@ const UtilitasComponent = () => {
         {access?.map((item) => item?.nameModule)?.includes('utilitas_bank') && (
           <Tab label="Bank" value="bank" className={classes.tab} />
         )}
-        {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge') && (
+        {(access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') ||
+          access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge')) && (
           <Tab label="Challenge" value="challenge" className={classes.tab} />
         )}
         {/* <Tab label="Pusat Iklan" value="ads" className={classes.tab} /> */}
@@ -94,20 +95,26 @@ const UtilitasComponent = () => {
             )}
           </TabPanel>
         )}
-        {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge') && (
+        {(access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') ||
+          access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge')) && (
           <TabPanel value="challenge" style={{ padding: 0, height: '100%' }}>
             <Stack direction="column" gap={3}>
-              <Stack direction="column" gap={2}>
-                <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Jenis Challenge</Typography>
-                <JenisChallenge />
-              </Stack>
+              {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') && (
+                <Stack direction="column" gap={2}>
+                  <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Jenis Challenge</Typography>
+                  <JenisChallenge />
+                </Stack>
+              )}
 
-              <Divider flexItem />
+              {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_jenis') &&
+                access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge') && <Divider flexItem />}
 
-              <Stack direction="column" gap={2}>
-                <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Badge Challenge</Typography>
-                <BadgeChallenge />
-              </Stack>
+              {access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge') && (
+                <Stack direction="column" gap={2}>
+                  <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Badge Challenge</Typography>
+                  <BadgeChallenge />
+                </Stack>
+              )}
             </Stack>
           </TabPanel>
         )}

@@ -18,6 +18,7 @@ const TableList = () => {
   });
   const [filterList, setFilterList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const getParams = () => {
     let params = {};
@@ -118,7 +119,8 @@ const TableList = () => {
           color="secondary"
           startIcon={<Add />}
           onClick={() => setOpenModal(!openModal)}
-          sx={{ height: 40 }}>
+          sx={{ height: 40 }}
+          disabled={!access?.find((item) => item?.nameModule === 'utilitas_challenge_badge')?.acces?.createAcces}>
           <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
             Tambah Badge
           </Typography>
