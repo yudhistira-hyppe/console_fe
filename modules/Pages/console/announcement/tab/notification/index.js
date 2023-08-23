@@ -135,7 +135,11 @@ const AnnouncementTabNotificationComponent = () => {
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Typography style={{ fontWeight: 'bold' }}>Daftar Push Notifikasi</Typography>
 
-              <Button variant="contained" color="secondary" style={{ height: 40 }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ height: 40 }}
+                onClick={() => Router.push('/announcement/create')}>
                 <Typography style={{ fontSize: 14 }}>Tambah Push Notifikasi</Typography>
               </Button>
             </Stack>
