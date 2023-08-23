@@ -126,6 +126,9 @@ const SecureConsolePage = ({ children }) => {
       } else if (router.pathname.includes('challenge') && accessModule.includes('challenge')) {
         setIsRenderChildren(true);
         setLoadingValidate(false);
+      } else if (router.pathname.includes('announcement')) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
       } else {
         setIsRenderChildren(false);
         setLoadingValidate(false);

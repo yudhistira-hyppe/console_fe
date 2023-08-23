@@ -169,4 +169,9 @@ export const consoleNav = [
     type: 'item',
     link: '/utilitas',
   },
+  {
+    name: 'Pengumuman',
+    type: 'item',
+    link: '/announcement',
+  },
 ];
