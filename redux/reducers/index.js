@@ -36,6 +36,7 @@ import {
   jualBeliAPI,
   bankApi,
   kycApi,
+  announcementApi,
 } from 'api/console';
 
 export default combineReducers({
@@ -76,4 +77,5 @@ export default combineReducers({
   [challengeApi.reducerPath]: challengeApi.reducer,
   [masterBadgeApi.reducerPath]: masterBadgeApi.reducer,
   [challengeUtilityApi.reducerPath]: challengeUtilityApi.reducer,
+  [announcementApi.reducerPath]: announcementApi.reducer,
 });
