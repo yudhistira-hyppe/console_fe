@@ -5,8 +5,9 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Stack, Tab } from '@mui/material';
 import useStyles from './index.style';
 import { Typography } from '@material-ui/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AnnouncementTabNotificationComponent from './tab/notification';
+import AnnouncementTabBannerComponent from './tab/banner';
 
 const AnnouncementComponent = () => {
   const classes = useStyles();
@@ -15,7 +16,16 @@ const AnnouncementComponent = () => {
 
   const onTabChange = (_, selectedTab) => {
     setTab(selectedTab);
+    router.push({ pathname: router.pathname, query: { tab: selectedTab } });
   };
+
+  useEffect(() => {
+    if (router?.query?.tab) {
+      setTab(router?.query?.tab);
+    } else {
+      setTab('notification');
+    }
+  }, [router]);
 
   return (
     <>
@@ -32,7 +42,7 @@ const AnnouncementComponent = () => {
           <AnnouncementTabNotificationComponent />
         </TabPanel>
         <TabPanel className={classes.tabPanel} value="banner">
-          <Typography>Banner page</Typography>
+          <AnnouncementTabBannerComponent />
         </TabPanel>
       </TabContext>
     </>

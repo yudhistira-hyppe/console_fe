@@ -56,13 +56,13 @@ const SearchSection = ({ filter, handleChange }) => {
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Judul Notifikasi</Typography>
+            <Typography style={{ fontSize: '13px' }}>Judul Banner</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <DelayedTextField
               fullWidth
               waitForInput={true}
-              placeholder="Cari Notifikasi"
+              placeholder="Cari Banner"
               name="search"
               filterValue={filter.search}
               onChange={(e) => handleChange('search', e.target.value)}
@@ -143,6 +143,27 @@ const SearchSection = ({ filter, handleChange }) => {
                 rangeColors={['#AB22AF']}
               />
             </Popover>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Status Tayang</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: '0px' }}>
+            <RadioGroup value={filter.status} onChange={(e) => handleChange('status', e.target.value)}>
+              <FormControlLabel
+                label={<Typography>Ditayangkan</Typography>}
+                value="TAYANG"
+                control={<Radio checked={filter?.status === 'TAYANG' || false} color="secondary" />}
+              />
+              <FormControlLabel
+                label={<Typography>Tidak Ditayangkan</Typography>}
+                value="TIDAK TAYANG"
+                control={<Radio checked={filter?.status === 'TIDAK TAYANG' || false} color="secondary" />}
+              />
+            </RadioGroup>
           </AccordionDetails>
         </Accordion>
       </Box>
