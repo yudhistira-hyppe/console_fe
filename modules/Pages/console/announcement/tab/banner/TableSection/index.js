@@ -55,6 +55,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       <ModalConfirmation
         showModal={openModal.showModal}
         selectedItem={openModal.selected}
+        type="banner"
         onClose={() => {
           setOpenModal({
             showModal: !openModal.showModal,
@@ -234,7 +235,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         <MenuItem
                           onClick={() => {
                             handleCloseMenu();
-                            Router.push(`/announcement/${item?._id}`);
+                            Router.push(`/announcement/banner/${item?._id}`);
                           }}
                           disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
                           <ListItemIcon>

@@ -10,6 +10,8 @@ import { isEmpty } from 'lodash';
 import { Typography } from '@material-ui/core';
 import CreateNotificationComponent from './tab/notification/create';
 import DetailNotificationComponent from './tab/notification/detail';
+import CreateBannerComponent from './tab/banner/create';
+import EditBannerComponent from './tab/banner/edit';
 
 const AnnouncementComponent = ({ tab, view, detailId }) => {
   const classes = useStyles();
@@ -43,12 +45,12 @@ const AnnouncementComponent = ({ tab, view, detailId }) => {
         tab === 'notification' ? (
           <CreateNotificationComponent />
         ) : (
-          <Typography>Create Banner</Typography>
+          <CreateBannerComponent />
         )
       ) : tab === 'notification' ? (
         <DetailNotificationComponent />
       ) : (
-        <Typography>edit Banner</Typography>
+        <EditBannerComponent />
       )}
     </>
   );

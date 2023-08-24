@@ -195,7 +195,11 @@ const CreateNotificationComponent = () => {
                 </Card>
 
                 <Stack direction="row" alignItems="center" justifyContent="flex-end" gap={2}>
-                  <Button variant="outlined" color="secondary" style={{ height: 40 }}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    style={{ height: 40 }}
+                    onClick={() => router.push('/announcement/notification')}>
                     <Typography style={{ fontSize: 14 }}>Kembali</Typography>
                   </Button>
                   <Button

@@ -70,6 +70,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       <ModalConfirmation
         showModal={openModal.showModal}
         selectedItem={openModal.selected}
+        type='notification'
         onClose={() => {
           setOpenModal({
             showModal: !openModal.showModal,

@@ -26,7 +26,7 @@ const style = {
   borderRadius: '12px',
 };
 
-export default function ModalConfirmation({ showModal, onClose, selectedItem }) {
+export default function ModalConfirmation({ showModal, type, onClose, selectedItem }) {
   return (
     <div>
       <Modal
@@ -37,18 +37,25 @@ export default function ModalConfirmation({ showModal, onClose, selectedItem }) 
         <Box sx={style}>
           <Stack direction="column" alignItems="center" gap={1}>
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>
-              Hapus Push Notifikasi ?
+              {type === 'notification' && 'Hapus Push Notifikasi ?'}
+              {type === 'banner' && 'Hapus Banner ?'}
+              {type === 'create-banner' && 'Simpan Banner'}
+              {type === 'update-banner' && 'Simpan Perubahan Banner'}
             </Typography>
             <Typography style={{ textAlign: 'center', fontSize: 16, lineHeight: 1.2 }}>
-              Apakah Anda yakin ingin menghapus Push Notification?
+              {type === 'notification' && 'Apakah Anda yakin ingin menghapus Push Notification?'}
+              {type === 'banner' && 'Apakah Anda yakin ingin menghapus Banner?'}
+              {type === 'create-banner' &&
+                'Banner ini akan disimpan. Pergi ke halaman dashboard banner untuk mengaktifkan banner pada aplikasi.'}
+              {type === 'update-banner' && 'Dengan mengklik konfirmasi anda akan menyetujui perubahan pada banner ini.'}
             </Typography>
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
+            <Button onClick={onClose}>Batal</Button>
             <LoadingButton loading={false} variant="contained" color="secondary" onClick={() => {}}>
               Konfirmasi
             </LoadingButton>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>
