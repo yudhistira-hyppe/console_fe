@@ -1,16 +1,30 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
+import React, { useEffect } from 'react';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
+import { useAuth } from 'authentication';
+import { useRouter } from 'next/router';
 
-const AnnouncementComponent = dynamic(() => import('modules/Pages/console/announcement'), {
-  loading: () => <PageLoader />,
-});
+const AnnouncementPage = () => {
+  const { authUser, isLoading } = useAuth();
+  const router = useRouter();
 
-const AnnouncementPage = () => (
-  <SecureConsolePage>
-    <AnnouncementComponent />
-  </SecureConsolePage>
-);
+  useEffect(() => {
+    if (!isLoading) {
+      if (authUser) {
+        const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+
+        router.replace('/announcement/notification');
+      } else {
+        router.replace('/signin');
+      }
+    }
+  }, [isLoading]);
+
+  return (
+    <SecureConsolePage>
+      <PageLoader />
+    </SecureConsolePage>
+  );
+};
 
 export default AnnouncementPage;
