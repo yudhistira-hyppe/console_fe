@@ -1,14 +1,14 @@
 import { Box, Button, Card, MenuItem, Select, Stack, TextField, Tooltip } from '@mui/material';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import Breadcrumbs from '../../help-center/bantuan-pengguna/BreadCrumb';
+import Breadcrumbs from '../../../../help-center/bantuan-pengguna/BreadCrumb';
 import { Typography } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import ChooseParticipant from './ChooseParticipant';
 
-const CreateAnnouncementComponent = () => {
+const CreateNotificationComponent = () => {
   const [inputValue, setInputValue] = useState({
     title_id: '',
     desc_id: '',
@@ -23,12 +23,12 @@ const CreateAnnouncementComponent = () => {
 
   const breadcrumbs = router?.query?.participant
     ? [
-        { label: 'Notifikasi Push', link: '/announcement' },
-        { label: 'Buat Notifikasi Push', link: { pathname: '/announcement/create', query: {} } },
+        { label: 'Notifikasi Push', link: '/announcement/notification' },
+        { label: 'Buat Notifikasi Push', link: { pathname: '/announcement/notification/create', query: {} } },
         { label: 'Pilih Partisipan', isActive: true },
       ]
     : [
-        { label: 'Notifikasi Push', link: '/announcement' },
+        { label: 'Notifikasi Push', link: '/announcement/notification' },
         { label: 'Buat Notifikasi Push', isActive: true },
       ];
 
@@ -221,4 +221,4 @@ const CreateAnnouncementComponent = () => {
   );
 };
 
-export default CreateAnnouncementComponent;
+export default CreateNotificationComponent;

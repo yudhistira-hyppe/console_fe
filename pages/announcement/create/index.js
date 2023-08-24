@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import SecureConsolePage from 'authentication/auth-page-wrappers/SecureConsolePage';
 
-const CreateAnnouncementComponent = dynamic(() => import('modules/Pages/console/announcement/create'), {
+const CreateAnnouncementComponent = dynamic(() => import('modules/Pages/console/announcement/tab/notification/create'), {
   loading: () => <PageLoader />,
 });
 

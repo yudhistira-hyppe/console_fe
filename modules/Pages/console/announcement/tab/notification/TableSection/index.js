@@ -267,9 +267,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         <MenuItem
                           onClick={() => {
                             handleCloseMenu();
-                            Router.push(`/announcement/${item?._id}`);
+                            Router.push(`/announcement/notification/detail/${item?._id}`);
                           }}
-                          disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
+                          // disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}
+                        >
                           <ListItemIcon>
                             <Visibility />
                           </ListItemIcon>
@@ -283,7 +284,8 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                               selected: item?._id,
                             });
                           }}
-                          disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.deleteAcces}>
+                          // disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.deleteAcces}
+                        >
                           <ListItemIcon>
                             <Delete />
                           </ListItemIcon>

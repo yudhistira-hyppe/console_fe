@@ -139,7 +139,7 @@ const AnnouncementTabNotificationComponent = () => {
                 variant="contained"
                 color="secondary"
                 style={{ height: 40 }}
-                onClick={() => Router.push('/announcement/create')}>
+                onClick={() => Router.push('/announcement/notification/create')}>
                 <Typography style={{ fontSize: 14 }}>Tambah Push Notifikasi</Typography>
               </Button>
             </Stack>

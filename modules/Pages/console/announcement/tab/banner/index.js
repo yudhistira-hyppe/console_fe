@@ -150,7 +150,7 @@ const AnnouncementTabBannerComponent = () => {
                 variant="contained"
                 color="secondary"
                 style={{ height: 40 }}
-                onClick={() => Router.push('/announcement/create')}>
+                onClick={() => Router.push('/announcement/banner/create')}>
                 <Typography style={{ fontSize: 14 }}>Tambah Banner</Typography>
               </Button>
             </Stack>

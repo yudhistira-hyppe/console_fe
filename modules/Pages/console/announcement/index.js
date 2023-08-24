@@ -4,47 +4,52 @@ import PropTypes from 'prop-types';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Stack, Tab } from '@mui/material';
 import useStyles from './index.style';
-import { Typography } from '@material-ui/core';
-import { useEffect, useState } from 'react';
 import AnnouncementTabNotificationComponent from './tab/notification';
 import AnnouncementTabBannerComponent from './tab/banner';
+import { isEmpty } from 'lodash';
+import { Typography } from '@material-ui/core';
+import CreateNotificationComponent from './tab/notification/create';
+import DetailNotificationComponent from './tab/notification/detail';
 
-const AnnouncementComponent = () => {
+const AnnouncementComponent = ({ tab, view, detailId }) => {
   const classes = useStyles();
   const router = useRouter();
-  const [tab, setTab] = useState('notification');
 
   const onTabChange = (_, selectedTab) => {
-    setTab(selectedTab);
-    router.push({ pathname: router.pathname, query: { tab: selectedTab } });
+    router.push(`/announcement/${selectedTab}`);
   };
-
-  useEffect(() => {
-    if (router?.query?.tab) {
-      setTab(router?.query?.tab);
-    } else {
-      setTab('notification');
-    }
-  }, [router]);
 
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Announcement</title>
       </Head>
-      <TabContext value={tab}>
-        <TabList onChange={onTabChange} textColor="secondary" indicatorColor="secondary" style={{ marginTop: -20 }}>
-          <Tab className={classes.tab} label="Push Notifikasi" value="notification" />
-          <Tab className={classes.tab} label="Banner" value="banner" />
-        </TabList>
 
-        <TabPanel className={classes.tabPanel} value="notification">
-          <AnnouncementTabNotificationComponent />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="banner">
-          <AnnouncementTabBannerComponent />
-        </TabPanel>
-      </TabContext>
+      {isEmpty(view) ? (
+        <TabContext value={tab}>
+          <TabList onChange={onTabChange} textColor="secondary" indicatorColor="secondary" style={{ marginTop: -20 }}>
+            <Tab className={classes.tab} label="Push Notifikasi" value="notification" />
+            <Tab className={classes.tab} label="Banner" value="banner" />
+          </TabList>
+
+          <TabPanel className={classes.tabPanel} value="notification">
+            <AnnouncementTabNotificationComponent />
+          </TabPanel>
+          <TabPanel className={classes.tabPanel} value="banner">
+            <AnnouncementTabBannerComponent />
+          </TabPanel>
+        </TabContext>
+      ) : view === 'create' ? (
+        tab === 'notification' ? (
+          <CreateNotificationComponent />
+        ) : (
+          <Typography>Create Banner</Typography>
+        )
+      ) : tab === 'notification' ? (
+        <DetailNotificationComponent />
+      ) : (
+        <Typography>edit Banner</Typography>
+      )}
     </>
   );
 };

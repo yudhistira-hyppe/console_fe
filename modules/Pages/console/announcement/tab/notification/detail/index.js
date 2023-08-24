@@ -1,14 +1,14 @@
 import { Box, Button, Card, Divider, MenuItem, Select, Stack, TextField, Tooltip } from '@mui/material';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import Breadcrumbs from '../../help-center/bantuan-pengguna/BreadCrumb';
+import Breadcrumbs from '../../../../help-center/bantuan-pengguna/BreadCrumb';
 import { Typography } from '@material-ui/core';
 import { ChevronLeft, InfoOutlined } from '@material-ui/icons';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import dayjs from 'dayjs';
 import Router from 'next/router';
 
-const DetailAnnouncementComponent = () => {
+const DetailNotificationComponent = () => {
   const [inputValue, setInputValue] = useState({
     title_id: '',
     desc_id: '',
@@ -20,7 +20,7 @@ const DetailAnnouncementComponent = () => {
   });
 
   const breadcrumbs = [
-    { label: 'Notifikasi Push', link: '/announcement' },
+    { label: 'Notifikasi Push', link: '/announcement/notification' },
     { label: 'Rincian Notifikasi Push', isActive: true },
   ];
 
@@ -39,7 +39,7 @@ const DetailAnnouncementComponent = () => {
           alignItems="center"
           gap={1}
           style={{ width: 'fit-content', cursor: 'pointer' }}
-          onClick={() => Router.push('/announcement')}>
+          onClick={() => Router.push('/announcement/notification')}>
           <ChevronLeft style={{ fontSize: 24 }} />
           <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Kembali</Typography>
         </Stack>
@@ -190,4 +190,4 @@ const DetailAnnouncementComponent = () => {
   );
 };
 
-export default DetailAnnouncementComponent;
+export default DetailNotificationComponent;
