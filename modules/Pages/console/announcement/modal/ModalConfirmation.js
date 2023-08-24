@@ -37,10 +37,12 @@ export default function ModalConfirmation({ showModal, type, onClose, selectedIt
         <Box sx={style}>
           <Stack direction="column" alignItems="center" gap={1}>
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>
-              {type === 'notification' && 'Hapus Push Notifikasi ?'}
-              {type === 'banner' && 'Hapus Banner ?'}
+              {type === 'notification' && 'Hapus Push Notifikasi?'}
+              {type === 'banner' && 'Hapus Banner?'}
               {type === 'create-banner' && 'Simpan Banner'}
               {type === 'update-banner' && 'Simpan Perubahan Banner'}
+              {type === 'active-banner' && 'Aktifkan Banner?'}
+              {type === 'inactive-banner' && 'Non Aktifkan Banner?'}
             </Typography>
             <Typography style={{ textAlign: 'center', fontSize: 16, lineHeight: 1.2 }}>
               {type === 'notification' && 'Apakah Anda yakin ingin menghapus Push Notification?'}
@@ -48,6 +50,8 @@ export default function ModalConfirmation({ showModal, type, onClose, selectedIt
               {type === 'create-banner' &&
                 'Banner ini akan disimpan. Pergi ke halaman dashboard banner untuk mengaktifkan banner pada aplikasi.'}
               {type === 'update-banner' && 'Dengan mengklik konfirmasi anda akan menyetujui perubahan pada banner ini.'}
+              {type === 'active-banner' && 'Apakah Anda yakin ingin menayangkan Banner?'}
+              {type === 'inactive-banner' && 'Apakah Anda yakin tidak ingin menayangkan Banner?'}
             </Typography>
           </Stack>
 

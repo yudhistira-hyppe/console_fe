@@ -36,6 +36,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState({
     showModal: false,
+    type: '',
     selected: {},
   });
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
@@ -55,7 +56,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       <ModalConfirmation
         showModal={openModal.showModal}
         selectedItem={openModal.selected}
-        type="banner"
+        type={openModal.type}
         onClose={() => {
           setOpenModal({
             showModal: !openModal.showModal,
@@ -217,7 +218,25 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width={100}>
-                        <Switch checked={false} color="secondary" />
+                        <Switch
+                          checked={false}
+                          color="secondary"
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setOpenModal({
+                                showModal: !openModal.showModal,
+                                type: 'active-banner',
+                                selected: item?._id,
+                              });
+                            } else {
+                              setOpenModal({
+                                showModal: !openModal.showModal,
+                                type: 'inactive-banner',
+                                selected: item?._id,
+                              });
+                            }
+                          }}
+                        />
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
@@ -248,6 +267,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             handleCloseMenu();
                             setOpenModal({
                               showModal: !openModal.showModal,
+                              type: 'banner',
                               selected: item?._id,
                             });
                           }}
