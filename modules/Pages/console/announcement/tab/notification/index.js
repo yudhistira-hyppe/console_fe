@@ -149,7 +149,7 @@ const AnnouncementTabNotificationComponent = () => {
               filterList={filterList}
               handleDeleteFilter={handleSearchChange}
               loading={false}
-              listTickets={{ data: [] }}
+              listTickets={{ data: [{}] }}
               handlePageChange={handlePageChange}
               handleOrder={onOrderChange}
             />
