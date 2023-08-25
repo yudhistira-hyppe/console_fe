@@ -7,6 +7,10 @@ import { InfoOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import ChooseParticipant from './ChooseParticipant';
+import { usePublishNotificationMutation } from 'api/console/announcement';
+import { useAuth } from 'authentication';
+import { LoadingButton } from '@mui/lab';
+import { toast } from 'react-hot-toast';
 
 const CreateNotificationComponent = () => {
   const [inputValue, setInputValue] = useState({
@@ -19,7 +23,9 @@ const CreateNotificationComponent = () => {
     participant: [],
   });
   const [refreshContainer, setRefreshContainer] = useState(false);
+  const [publishNotif, { isLoading: loadingPublish }] = usePublishNotificationMutation();
   const router = useRouter();
+  const { authUser } = useAuth();
 
   const breadcrumbs = router?.query?.participant
     ? [
@@ -31,6 +37,28 @@ const CreateNotificationComponent = () => {
         { label: 'Notifikasi Push', link: '/announcement/notification' },
         { label: 'Buat Notifikasi Push', isActive: true },
       ];
+
+  const handlePublish = () => {
+    const formData = {
+      email: authUser?.user?.email,
+      titleIN: inputValue?.title_id,
+      bodyIN: inputValue?.desc_id,
+      titleEN: inputValue?.title_en,
+      bodyEN: inputValue?.desc_en,
+      type: inputValue?.type,
+      url: inputValue?.url,
+      emailuser: inputValue?.participant?.map((item) => item?.email),
+    };
+
+    publishNotif(formData).then((res) => {
+      if (res?.data?.data) {
+        toast.success('Berhasil memposting push notifikasi');
+        router.replace('/announcement/notification');
+      } else {
+        toast.error('Gagal memposting push notifikasi');
+      }
+    });
+  };
 
   useEffect(() => {
     setRefreshContainer(true);
@@ -173,7 +201,9 @@ const CreateNotificationComponent = () => {
                           variant="contained"
                           color="secondary"
                           style={{ height: 40, width: '80%' }}
-                          onClick={() => router.push({ pathname: '/announcement/create', query: { participant: true } })}>
+                          onClick={() =>
+                            router.push({ pathname: '/announcement/notification/create', query: { participant: true } })
+                          }>
                           <Typography style={{ fontSize: 14 }}>
                             {inputValue?.participant?.length >= 1 ? 'Edit Partisipan' : 'Pilih Partisipan'}
                           </Typography>
@@ -202,19 +232,22 @@ const CreateNotificationComponent = () => {
                     onClick={() => router.push('/announcement/notification')}>
                     <Typography style={{ fontSize: 14 }}>Kembali</Typography>
                   </Button>
-                  <Button
+                  <LoadingButton
+                    loading={loadingPublish}
                     variant="contained"
                     color="secondary"
                     style={{ height: 40 }}
+                    onClick={handlePublish}
                     disabled={
                       !inputValue?.title_id ||
                       !inputValue?.title_en ||
                       !inputValue?.desc_id ||
                       !inputValue?.desc_en ||
-                      (inputValue?.participant?.length < 1 && inputValue?.type === 'OPTION')
+                      (inputValue?.participant?.length < 1 && inputValue?.type === 'OPTION') ||
+                      !inputValue?.type
                     }>
                     <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Posting</Typography>
-                  </Button>
+                  </LoadingButton>
                 </Stack>
               </Stack>
             )}

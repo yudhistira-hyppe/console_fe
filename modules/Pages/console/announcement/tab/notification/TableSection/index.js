@@ -221,7 +221,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
                         }}>
-                        {item?.subject_id || '-'}
+                        {item?.subject || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -238,7 +238,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           WebkitBoxOrient: 'vertical',
                           display: '-webkit-box',
                         }}>
-                        {item?.subject || '-'}
+                        {item?.body_detail || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">

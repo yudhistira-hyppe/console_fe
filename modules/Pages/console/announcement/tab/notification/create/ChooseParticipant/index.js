@@ -232,7 +232,7 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
             style={{ borderRadius: 6, padding: '10px 20px' }}
             onClick={() => {
               handleInputChange(selected);
-              Router.replace('/announcement/create');
+              Router.replace('/announcement/notification/create');
             }}>
             <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
               Terapkan Pilihan
