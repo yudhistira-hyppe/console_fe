@@ -14,6 +14,12 @@ export const announcementApi = createApi({
       }),
       providesTags: ['listNotif'],
     }),
+    getDetailNotification: build.query({
+      query: (id) => ({
+        url: `/templates/${id}`,
+        method: 'GET',
+      }),
+    }),
     publishNotification: build.mutation({
       query: (data) => ({
         url: '/utils/pushnotification',
@@ -25,4 +31,5 @@ export const announcementApi = createApi({
   }),
 });
 
-export const { useGetListNotificationQuery, usePublishNotificationMutation } = announcementApi;
+export const { useGetListNotificationQuery, useGetDetailNotificationQuery, usePublishNotificationMutation } =
+  announcementApi;
