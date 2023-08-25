@@ -8,7 +8,7 @@ export const announcementApi = createApi({
   endpoints: (build) => ({
     getListNotification: build.query({
       query: (data) => ({
-        url: '/',
+        url: '/templates/listing/push_notification',
         method: 'POST',
         body: data,
       }),
