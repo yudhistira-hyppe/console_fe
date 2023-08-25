@@ -70,7 +70,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       <ModalConfirmation
         showModal={openModal.showModal}
         selectedItem={openModal.selected}
-        type='notification'
+        type="notification"
         onClose={() => {
           setOpenModal({
             showModal: !openModal.showModal,
@@ -124,14 +124,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={filter.descending}
+              value={filter.ascending}
               onChange={handleOrder}
               displayEmpty
               color="secondary"
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'true'}>Terbaru</MenuItem>
-              <MenuItem value={'false'}>Terlama</MenuItem>
+              <MenuItem value={'false'}>Terbaru</MenuItem>
+              <MenuItem value={'true'}>Terlama</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -189,7 +189,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
                         }}>
-                        judul indo
+                        {item?.subject_id || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -206,7 +206,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           WebkitBoxOrient: 'vertical',
                           display: '-webkit-box',
                         }}>
-                        desc indo
+                        {item?.body_detail_id || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -221,7 +221,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
                         }}>
-                        judul english
+                        {item?.subject_id || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -238,19 +238,28 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           WebkitBoxOrient: 'vertical',
                           display: '-webkit-box',
                         }}>
-                        desc english
+                        {item?.subject || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography
                         variant="body1"
-                        style={{ fontSize: '14px', width: 120, textTransform: 'capitalize', color: '#00000099' }}>
-                        joko
+                        style={{
+                          fontSize: '14px',
+                          width: 150,
+                          textTransform: 'capitalize',
+                          color: '#00000099',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                        title={item?.fullName || '-'}>
+                        {item?.fullName || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '14px', width: 120, color: '#00000099' }}>
-                        {moment().format('DD/MM/YYYY')}
+                        {moment(item?.createdAt).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">

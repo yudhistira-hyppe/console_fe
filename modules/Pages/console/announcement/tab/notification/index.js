@@ -9,12 +9,13 @@ import moment from 'moment';
 import { Typography } from '@material-ui/core';
 import { useGetListChallengeQuery } from 'api/console/challenge';
 import Router from 'next/router';
+import { useGetListNotificationQuery } from 'api/console/announcement';
 
 const AnnouncementTabNotificationComponent = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    descending: 'true',
+    ascending: 'false',
     search: '',
     createdAt: [null, null],
   });
@@ -25,33 +26,35 @@ const AnnouncementTabNotificationComponent = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
+      ascending: filter.ascending === 'true' ? true : false,
     });
 
-    filter.search !== '' && Object.assign(params, { nameChallenge: filter.search });
+    filter.search !== '' && Object.assign(params, { keyword: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
 
     return params;
   };
 
-  // useEffect(() => {
-  //   if (filter.page >= 1 && listChallenge?.data?.length < 1) {
-  //     toast.success('Semua data sudah ditampilkan');
-  //     setFilter((prevVal) => {
-  //       return {
-  //         ...prevVal,
-  //         page: prevVal.page - 1,
-  //       };
-  //     });
-  //   }
-  // }, [filter, loadingChallenge]);
+  const { data: listNotification, isFetching: loadingNotification } = useGetListNotificationQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listNotification?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingNotification]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        descending: e.target.value,
+        ascending: e.target.value,
         page: 0,
       };
     });
@@ -148,8 +151,8 @@ const AnnouncementTabNotificationComponent = () => {
               filter={filter}
               filterList={filterList}
               handleDeleteFilter={handleSearchChange}
-              loading={false}
-              listTickets={{ data: [{}] }}
+              loading={loadingNotification}
+              listTickets={listNotification}
               handlePageChange={handlePageChange}
               handleOrder={onOrderChange}
             />
