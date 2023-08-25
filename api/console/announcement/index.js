@@ -14,7 +14,15 @@ export const announcementApi = createApi({
       }),
       providesTags: ['listNotif'],
     }),
+    publishNotification: build.mutation({
+      query: (data) => ({
+        url: '/utils/pushnotification',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listNotif'],
+    }),
   }),
 });
 
-export const { useGetListNotificationQuery } = announcementApi;
+export const { useGetListNotificationQuery, usePublishNotificationMutation } = announcementApi;
