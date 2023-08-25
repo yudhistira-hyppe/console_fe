@@ -48,7 +48,7 @@ const AnnouncementComponent = ({ tab, view, detailId }) => {
           <CreateBannerComponent />
         )
       ) : tab === 'notification' ? (
-        <DetailNotificationComponent />
+        <DetailNotificationComponent detailId={detailId} />
       ) : (
         <EditBannerComponent />
       )}
