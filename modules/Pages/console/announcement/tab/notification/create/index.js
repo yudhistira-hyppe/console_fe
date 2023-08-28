@@ -11,6 +11,7 @@ import { usePublishNotificationMutation } from 'api/console/announcement';
 import { useAuth } from 'authentication';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
+import ModalSelectedPeople from '../../../modal/ModalSelectedPeople';
 
 const CreateNotificationComponent = () => {
   const [inputValue, setInputValue] = useState({
@@ -23,6 +24,7 @@ const CreateNotificationComponent = () => {
     participant: [],
   });
   const [refreshContainer, setRefreshContainer] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [publishNotif, { isLoading: loadingPublish }] = usePublishNotificationMutation();
   const router = useRouter();
   const { authUser } = useAuth();
@@ -190,7 +192,8 @@ const CreateNotificationComponent = () => {
                             height="57px"
                             alignItems="center"
                             justifyContent="center"
-                            style={{ backgroundColor: '#CECECE', color: 'white', borderRadius: 6 }}>
+                            style={{ backgroundColor: '#CECECE', color: 'white', borderRadius: 6, cursor: 'pointer' }}
+                            onClick={() => setShowModal(!showModal)}>
                             <Typography style={{ fontWeight: 'bold' }}>{inputValue?.participant?.length}</Typography>
                           </Stack>
                         )}
@@ -252,6 +255,15 @@ const CreateNotificationComponent = () => {
               </Stack>
             )}
           </PageContainer>
+        )}
+
+        {showModal && (
+          <ModalSelectedPeople
+            showModal={showModal}
+            onClose={() => setShowModal(!showModal)}
+            selectedItem={inputValue?.participant}
+            handleInputChange={(val) => setInputValue({ ...inputValue, participant: val })}
+          />
         )}
       </Stack>
     </>

@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import Router from 'next/router';
 import { useGetDetailNotificationQuery } from 'api/console/announcement';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
+import ModalSelectedPeople from '../../../modal/ModalSelectedPeople';
 
 const DetailNotificationComponent = ({ detailId }) => {
   const [inputValue, setInputValue] = useState({
@@ -20,6 +21,7 @@ const DetailNotificationComponent = ({ detailId }) => {
     type: '',
     participant: [],
   });
+  const [showModal, setShowModal] = useState(false);
 
   const { data: details, isLoading: loadingDetail } = useGetDetailNotificationQuery(detailId);
 
@@ -182,7 +184,8 @@ const DetailNotificationComponent = ({ detailId }) => {
                           height="57px"
                           alignItems="center"
                           justifyContent="center"
-                          style={{ backgroundColor: '#CECECE', color: 'white', borderRadius: 6 }}>
+                          style={{ backgroundColor: '#CECECE', color: 'white', borderRadius: 6, cursor: 'pointer' }}
+                          onClick={() => setShowModal(!showModal)}>
                           <Typography style={{ fontWeight: 'bold' }}>{inputValue?.participant?.length}</Typography>
                         </Stack>
                       )}
@@ -204,6 +207,15 @@ const DetailNotificationComponent = ({ detailId }) => {
               </Card>
             </Stack>
           </PageContainer>
+        )}
+
+        {showModal && (
+          <ModalSelectedPeople
+            showModal={showModal}
+            onClose={() => setShowModal(!showModal)}
+            selectedItem={inputValue?.participant}
+            type='detail'
+          />
         )}
       </Stack>
     </>
