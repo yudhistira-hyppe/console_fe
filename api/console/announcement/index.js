@@ -70,6 +70,13 @@ export const announcementApi = createApi({
       }),
       invalidatesTags: ['listBanner', 'detailBanner'],
     }),
+    deleteBannerSearch: build.mutation({
+      query: (id) => ({
+        url: `/banner/delete/${id}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['listBanner', 'detailBanner'],
+    }),
   }),
 });
 
@@ -85,4 +92,5 @@ export const {
   useUpdateStatusBannerSearchMutation,
   useCreateBannerSearchMutation,
   useUpdateBannerSearchMutation,
+  useDeleteBannerSearchMutation,
 } = announcementApi;
