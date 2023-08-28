@@ -4,8 +4,9 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const announcementApi = createApi({
   reducerPath: 'console/announcement',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['listNotif'],
+  tagTypes: ['listNotif', 'listBanner'],
   endpoints: (build) => ({
+    // Push Notif
     getListNotification: build.query({
       query: (data) => ({
         url: '/templates/listing/push_notification',
@@ -28,8 +29,34 @@ export const announcementApi = createApi({
       }),
       invalidatesTags: ['listNotif'],
     }),
+
+    // Banner Search
+    getListBannerSearch: build.query({
+      query: (data) => ({
+        url: '/banner/listing',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['listBanner'],
+    }),
+    updateStatusBannerSearch: build.mutation({
+      query: (data) => ({
+        url: '/banner/update/statustayang',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listBanner'],
+    }),
   }),
 });
 
-export const { useGetListNotificationQuery, useGetDetailNotificationQuery, usePublishNotificationMutation } =
-  announcementApi;
+export const {
+  // Pust Notif
+  useGetListNotificationQuery,
+  useGetDetailNotificationQuery,
+  usePublishNotificationMutation,
+
+  // Banner Search
+  useGetListBannerSearchQuery,
+  useUpdateStatusBannerSearchMutation
+} = announcementApi;
