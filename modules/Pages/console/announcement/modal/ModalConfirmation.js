@@ -13,7 +13,11 @@ import {
 import { LoadingButton } from '@mui/lab';
 import { map } from 'lodash';
 import Router from 'next/router';
-import { useDeleteBannerSearchMutation, useUpdateStatusBannerSearchMutation } from 'api/console/announcement';
+import {
+  useDeleteBannerSearchMutation,
+  useDeleteNotificationMutation,
+  useUpdateStatusBannerSearchMutation,
+} from 'api/console/announcement';
 
 const style = {
   position: 'absolute',
@@ -30,6 +34,7 @@ const style = {
 export default function ModalConfirmation({ showModal, type, onClose, selectedItem, handleSubmit }) {
   const [updateStatusBanner, { isLoading: loadingUpdateBanner }] = useUpdateStatusBannerSearchMutation();
   const [deleteBanner, { isLoading: loadingDeleteBanner }] = useDeleteBannerSearchMutation();
+  const [deleteNotif, { isLoading: loadingDeleteNotif }] = useDeleteNotificationMutation();
 
   const handleUpdateBanner = (value) => {
     const formData = {
@@ -51,6 +56,17 @@ export default function ModalConfirmation({ showModal, type, onClose, selectedIt
     deleteBanner(selectedItem).then((res) => {
       if (res?.data) {
         toast.success('Berhasil menghapus banner');
+      } else {
+        toast.error('Terjadi kesalahan dengan sistem, silahkan coba lagi');
+      }
+      onClose();
+    });
+  };
+
+  const handleDeleteNotification = () => {
+    deleteNotif(selectedItem).then((res) => {
+      if (res?.data) {
+        toast.success('Berhasil menghapus push notifikasi');
       } else {
         toast.error('Terjadi kesalahan dengan sistem, silahkan coba lagi');
       }
@@ -83,16 +99,18 @@ export default function ModalConfirmation({ showModal, type, onClose, selectedIt
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button onClick={onClose} disabled={loadingUpdateBanner || loadingDeleteBanner}>
+            <Button onClick={onClose} disabled={loadingUpdateBanner || loadingDeleteBanner || loadingDeleteNotif}>
               Batal
             </Button>
             <LoadingButton
-              loading={loadingUpdateBanner || loadingDeleteBanner}
+              loading={loadingUpdateBanner || loadingDeleteBanner || loadingDeleteNotif}
               variant="contained"
               color="secondary"
               onClick={() => {
                 if (type === 'banner') {
                   handleDeleteBanner();
+                } else if (type === 'notification') {
+                  handleDeleteNotification();
                 } else if (type === 'inactive-banner') {
                   handleUpdateBanner('false');
                 } else if (type === 'active-banner') {
