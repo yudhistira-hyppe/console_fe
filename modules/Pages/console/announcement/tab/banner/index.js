@@ -9,12 +9,13 @@ import moment from 'moment';
 import { Typography } from '@material-ui/core';
 import { useGetListChallengeQuery } from 'api/console/challenge';
 import Router from 'next/router';
+import { useGetListBannerSearchQuery } from 'api/console/announcement';
 
 const AnnouncementTabBannerComponent = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    descending: 'true',
+    ascending: 'false',
     search: '',
     createdAt: [null, null],
     status: '',
@@ -26,34 +27,36 @@ const AnnouncementTabBannerComponent = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
+      ascending: filter.ascending === 'true' ? true : false,
     });
 
-    filter.search !== '' && Object.assign(params, { nameChallenge: filter.search });
+    filter.search !== '' && Object.assign(params, { keyword: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter?.status !== '' && Object.assign(params, { status: filter?.status });
+    filter?.status !== '' && Object.assign(params, { statustayang: filter?.status === 'TAYANG' });
 
     return params;
   };
 
-  // useEffect(() => {
-  //   if (filter.page >= 1 && listChallenge?.data?.length < 1) {
-  //     toast.success('Semua data sudah ditampilkan');
-  //     setFilter((prevVal) => {
-  //       return {
-  //         ...prevVal,
-  //         page: prevVal.page - 1,
-  //       };
-  //     });
-  //   }
-  // }, [filter, loadingChallenge]);
+  const { data: listBanner, isFetching: loadingBanner } = useGetListBannerSearchQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listBanner?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingBanner]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        descending: e.target.value,
+        ascending: e.target.value,
         page: 0,
       };
     });
@@ -74,8 +77,8 @@ const AnnouncementTabBannerComponent = () => {
         case 'search':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Nama (${value})` }]
-              : [...prevVal, { parent: kind, value: `Nama (${value})` }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Judul' }]
+              : [...prevVal, { parent: kind, value: 'Judul' }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'status':
           return prevVal.find((item) => item.parent === kind)
@@ -122,7 +125,7 @@ const AnnouncementTabBannerComponent = () => {
           return {
             page: 0,
             limit: 10,
-            descending: 'true',
+            ascending: 'true',
             search: '',
             createdAt: [null, null],
             status: '',
@@ -159,8 +162,8 @@ const AnnouncementTabBannerComponent = () => {
               filter={filter}
               filterList={filterList}
               handleDeleteFilter={handleSearchChange}
-              loading={false}
-              listTickets={{ data: [{}] }}
+              loading={loadingBanner}
+              listTickets={listBanner}
               handlePageChange={handlePageChange}
               handleOrder={onOrderChange}
             />

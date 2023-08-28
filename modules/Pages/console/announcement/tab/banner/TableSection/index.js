@@ -29,6 +29,7 @@ import Router from 'next/router';
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext, Visibility } from '@material-ui/icons';
 import ModalConfirmation from '../../../modal/ModalConfirmation';
+import dayjs from 'dayjs';
 
 const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
@@ -110,14 +111,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={filter.descending}
+              value={filter.ascending}
               onChange={handleOrder}
               displayEmpty
               color="secondary"
               inputProps={{ 'aria-label': 'Without label' }}
               style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'true'}>Terbaru</MenuItem>
-              <MenuItem value={'false'}>Terlama</MenuItem>
+              <MenuItem value={'false'}>Terbaru</MenuItem>
+              <MenuItem value={'true'}>Terlama</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -173,7 +174,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       }}
                       onClick={() => Router.push(`/challenge/detail/${item?._id}`)}>
                       <Stack direction="row" alignItems="center" gap="15px" width={180}>
-                        <Avatar src={item?.bannerLeaderboard + '?m=' + new Date().getTime()} variant="rounded" alt="X" />
+                        <Avatar src={item?.image} variant="rounded" alt="X" />
                         <Typography
                           style={{
                             fontSize: '14px',
@@ -185,14 +186,15 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                             overflow: 'hidden',
                             WebkitBoxOrient: 'vertical',
                             display: '-webkit-box',
-                          }}>
-                          akodsadosak dsodk oak oskdo sakdo kasdoas kdo
+                          }}
+                          title={item?.title || '-'}>
+                          {item?.title || '-'}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '14px', width: 120, color: '#00000099' }}>
-                        {moment().format('DD/MM/YYYY')}
+                        {dayjs(item?.createdAt).format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -205,21 +207,31 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
-                        }}>
-                        https://kaodkwokdoa.doawkdoadk.kdokaowkd
+                        }}
+                        title={item?.url || '-'}>
+                        {item?.url || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography
                         variant="body1"
-                        style={{ fontSize: '14px', width: 100, textTransform: 'capitalize', color: '#00000099' }}>
-                        joko
+                        style={{
+                          fontSize: '14px',
+                          width: 150,
+                          textTransform: 'capitalize',
+                          color: '#00000099',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                        title={item?.fullName || '-'}>
+                        {item?.fullName || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width={100}>
                         <Switch
-                          checked={false}
+                          checked={item?.statusTayang || false}
                           color="secondary"
                           onChange={(e) => {
                             if (e.target.checked) {
