@@ -9,19 +9,36 @@ import Router from 'next/router';
 import ModalConfirmation from '../../../modal/ModalConfirmation';
 import { isEmpty } from 'lodash';
 import dayjs from 'dayjs';
+import { useGetDetailBannerSearchQuery, useUpdateBannerSearchMutation } from 'api/console/announcement';
+import { LoadingButton } from '@mui/lab';
+import { toast } from 'react-hot-toast';
 
-const EditBannerComponent = () => {
+const EditBannerComponent = ({ detailId }) => {
   const [inputValue, setInputValue] = useState({
     title: '',
     url: '',
     banner_file: {},
   });
   const [openModal, setOpenModal] = useState(false);
+  const [updateBanner, { isLoading: loadingUpdate }] = useUpdateBannerSearchMutation();
 
   const breadcrumbs = [
     { label: 'Banner', link: '/announcement/banner' },
     { label: 'Edit Banner', isActive: true },
   ];
+
+  const { data: details, isLoading: loadingDetail } = useGetDetailBannerSearchQuery(detailId);
+
+  useEffect(() => {
+    setInputValue({
+      title: details?.title || '',
+      url: details?.url || '',
+      banner_file: {
+        file: null,
+        url: details?.image,
+      },
+    });
+  }, [loadingDetail]);
 
   function formatBytes(bytes) {
     return (bytes / Math.pow(1024, 2)).toFixed(1);
@@ -59,13 +76,56 @@ const EditBannerComponent = () => {
     }
   };
 
+  const handleUpdate = () => {
+    let formData = new FormData();
+    formData.append('id', detailId);
+    formData.append('title', inputValue?.title);
+    formData.append('url', inputValue?.url);
+    formData.append('email', details?.email);
+    if (inputValue?.banner_file?.url !== details?.image) {
+      formData.append('image', inputValue?.banner_file?.file);
+    }
+
+    updateBanner(formData).then((res) => {
+      if (res?.data) {
+        toast.success('Berhasil menyimpan perubahan banner');
+        Router.replace('/announcement/banner');
+      } else {
+        toast.error('Terjadi kesalahan pada sistem, silahkan coba lagi');
+      }
+    });
+  };
+
+  const checkDisabled = () => {
+    let disabled = false;
+
+    if (!inputValue?.title || !inputValue?.url || isEmpty(inputValue?.banner_file)) {
+      disabled = true;
+    }
+
+    if (
+      inputValue?.title === details?.title &&
+      inputValue?.url === details?.url &&
+      inputValue?.banner_file?.url === details?.image
+    ) {
+      disabled = true;
+    }
+
+    return disabled;
+  };
+
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Buat Banner</title>
       </Head>
 
-      <ModalConfirmation showModal={openModal} onClose={() => setOpenModal(!openModal)} type="update-banner" />
+      <ModalConfirmation
+        showModal={openModal}
+        onClose={() => setOpenModal(!openModal)}
+        type="update-banner"
+        handleSubmit={handleUpdate}
+      />
 
       <Stack direction="column" gap={2}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -189,17 +249,19 @@ const EditBannerComponent = () => {
                 variant="outlined"
                 color="secondary"
                 style={{ height: 40 }}
-                onClick={() => Router.push('/announcement/banner')}>
+                onClick={() => Router.push('/announcement/banner')}
+                disabled={loadingUpdate}>
                 <Typography style={{ fontSize: 14 }}>Batal</Typography>
               </Button>
-              <Button
+              <LoadingButton
+                loading={loadingUpdate}
                 variant="contained"
                 color="secondary"
                 style={{ height: 40 }}
                 onClick={() => setOpenModal(!openModal)}
-                disabled={!inputValue?.title || !inputValue?.url || isEmpty(inputValue?.banner_file)}>
+                disabled={checkDisabled()}>
                 <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
-              </Button>
+              </LoadingButton>
             </Stack>
           </Stack>
         </PageContainer>

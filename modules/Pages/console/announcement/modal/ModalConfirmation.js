@@ -27,7 +27,7 @@ const style = {
   borderRadius: '12px',
 };
 
-export default function ModalConfirmation({ showModal, type, onClose, selectedItem }) {
+export default function ModalConfirmation({ showModal, type, onClose, selectedItem, handleSubmit }) {
   const [updateStatusBanner, { isLoading: loadingUpdateBanner }] = useUpdateStatusBannerSearchMutation();
 
   const handleUpdateBanner = (value) => {
@@ -40,7 +40,7 @@ export default function ModalConfirmation({ showModal, type, onClose, selectedIt
       if (res?.data) {
         toast.success(value === 'true' ? 'Berhasil mengaktifkan banner' : 'Berhasil Menonaktifkan banner');
       } else {
-        toast.error('Terjadi kesalahan pada sistem, silahkan coba lagi');
+        toast.error('Banner yang aktif sudah mencapai batas maksimal');
       }
       onClose();
     });
@@ -81,6 +81,9 @@ export default function ModalConfirmation({ showModal, type, onClose, selectedIt
                   handleUpdateBanner('false');
                 } else if (type === 'active-banner') {
                   handleUpdateBanner('true');
+                } else if (type === 'create-banner' || type === 'update-banner') {
+                  handleSubmit();
+                  onClose();
                 }
               }}>
               Konfirmasi

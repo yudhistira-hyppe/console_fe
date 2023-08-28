@@ -161,18 +161,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        '&:hover': {
-                          cursor: 'pointer',
-                          '& .MuiTypography-root': {
-                            color: '#AB22AF !important',
-                            textDecoration: 'underline',
-                          },
-                        },
-                      }}
-                      onClick={() => Router.push(`/challenge/detail/${item?._id}`)}>
+                    <TableCell align="left">
                       <Stack direction="row" alignItems="center" gap="15px" width={180}>
                         <Avatar src={item?.image} variant="rounded" alt="X" />
                         <Typography
@@ -263,17 +252,19 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         MenuListProps={{
                           'aria-labelledby': `basic-button-${i}`,
                         }}>
-                        <MenuItem
-                          onClick={() => {
-                            handleCloseMenu();
-                            Router.push(`/announcement/banner/${item?._id}`);
-                          }}
-                          disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
-                          <ListItemIcon>
-                            <Edit />
-                          </ListItemIcon>
-                          <ListItemText>Edit</ListItemText>
-                        </MenuItem>
+                        {!item?.statusTayang && (
+                          <MenuItem
+                            onClick={() => {
+                              handleCloseMenu();
+                              Router.push(`/announcement/banner/detail/${item?._id}`);
+                            }}
+                            disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
+                            <ListItemIcon>
+                              <Edit />
+                            </ListItemIcon>
+                            <ListItemText>Edit</ListItemText>
+                          </MenuItem>
+                        )}
                         <MenuItem
                           onClick={() => {
                             handleCloseMenu();
