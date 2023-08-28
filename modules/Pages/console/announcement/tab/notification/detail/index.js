@@ -30,7 +30,8 @@ const DetailNotificationComponent = ({ detailId }) => {
       title_en: details?.subject || '',
       desc_en: details?.body_detail || '',
       url: details?.action_buttons || '',
-      type: details?.type || '',
+      type: details?.type_sending || '',
+      participant: details?.notif_data,
     });
   }, [loadingDetail]);
 
