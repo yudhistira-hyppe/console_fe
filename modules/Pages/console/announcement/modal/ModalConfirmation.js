@@ -13,6 +13,7 @@ import {
 import { LoadingButton } from '@mui/lab';
 import { map } from 'lodash';
 import Router from 'next/router';
+import { useUpdateStatusBannerSearchMutation } from 'api/console/announcement';
 
 const style = {
   position: 'absolute',
@@ -27,13 +28,27 @@ const style = {
 };
 
 export default function ModalConfirmation({ showModal, type, onClose, selectedItem }) {
+  const [updateStatusBanner, { isLoading: loadingUpdateBanner }] = useUpdateStatusBannerSearchMutation();
+
+  const handleUpdateBanner = (value) => {
+    const formData = {
+      id: selectedItem,
+      statustayang: value === 'true',
+    };
+
+    updateStatusBanner(formData).then((res) => {
+      if (res?.data) {
+        toast.success(value === 'true' ? 'Berhasil mengaktifkan banner' : 'Berhasil Menonaktifkan banner');
+      } else {
+        toast.error('Terjadi kesalahan pada sistem, silahkan coba lagi');
+      }
+      onClose();
+    });
+  };
+
   return (
     <div>
-      <Modal
-        open={showModal}
-        onClose={onClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+      <Modal open={showModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack direction="column" alignItems="center" gap={1}>
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>
@@ -57,7 +72,17 @@ export default function ModalConfirmation({ showModal, type, onClose, selectedIt
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
             <Button onClick={onClose}>Batal</Button>
-            <LoadingButton loading={false} variant="contained" color="secondary" onClick={() => {}}>
+            <LoadingButton
+              loading={loadingUpdateBanner}
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                if (type === 'inactive-banner') {
+                  handleUpdateBanner('false');
+                } else if (type === 'active-banner') {
+                  handleUpdateBanner('true');
+                }
+              }}>
               Konfirmasi
             </LoadingButton>
           </Stack>
