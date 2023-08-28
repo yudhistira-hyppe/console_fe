@@ -29,6 +29,13 @@ export const announcementApi = createApi({
       }),
       invalidatesTags: ['listNotif'],
     }),
+    deleteNotification: build.mutation({
+      query: (id) => ({
+        url: `/templates/delete/${id}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['listNotif'],
+    }),
 
     // Banner Search
     getListBannerSearch: build.query({
@@ -85,6 +92,7 @@ export const {
   useGetListNotificationQuery,
   useGetDetailNotificationQuery,
   usePublishNotificationMutation,
+  useDeleteNotificationMutation,
 
   // Banner Search
   useGetListBannerSearchQuery,
