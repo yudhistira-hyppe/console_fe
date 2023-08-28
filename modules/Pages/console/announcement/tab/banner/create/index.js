@@ -8,6 +8,10 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import Router from 'next/router';
 import ModalConfirmation from '../../../modal/ModalConfirmation';
 import { isEmpty } from 'lodash';
+import { LoadingButton } from '@mui/lab';
+import { useAuth } from 'authentication';
+import { useCreateBannerSearchMutation } from 'api/console/announcement';
+import { toast } from 'react-hot-toast';
 
 const CreateBannerComponent = () => {
   const [inputValue, setInputValue] = useState({
@@ -16,6 +20,8 @@ const CreateBannerComponent = () => {
     banner_file: {},
   });
   const [openModal, setOpenModal] = useState(false);
+  const [createBanner, { isLoading: loadingCreate }] = useCreateBannerSearchMutation();
+  const { authUser } = useAuth();
 
   const breadcrumbs = [
     { label: 'Banner', link: '/announcement/banner' },
@@ -58,13 +64,35 @@ const CreateBannerComponent = () => {
     }
   };
 
+  const handleCreate = () => {
+    let formData = new FormData();
+    formData.append('title', inputValue?.title);
+    formData.append('url', inputValue?.url);
+    formData.append('image', inputValue?.banner_file?.file);
+    formData.append('email', authUser?.user?.email);
+
+    createBanner(formData).then((res) => {
+      if (res?.data) {
+        toast.success('Berhasil menambahkan banner');
+        Router.replace('/announcement/banner');
+      } else {
+        toast.error('Terjadi kesalahan pada sistem, silahkan coba lagi');
+      }
+    });
+  };
+
   return (
     <>
       <Head>
         <title key="title">Hyppe-Console :: Buat Banner</title>
       </Head>
 
-      <ModalConfirmation showModal={openModal} onClose={() => setOpenModal(!openModal)} type="create-banner" />
+      <ModalConfirmation
+        showModal={openModal}
+        onClose={() => setOpenModal(!openModal)}
+        type="create-banner"
+        handleSubmit={handleCreate}
+      />
 
       <Stack direction="column" gap={2}>
         <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -172,17 +200,19 @@ const CreateBannerComponent = () => {
                 variant="outlined"
                 color="secondary"
                 style={{ height: 40 }}
-                onClick={() => Router.push('/announcement/banner')}>
+                onClick={() => Router.push('/announcement/banner')}
+                disabled={loadingCreate}>
                 <Typography style={{ fontSize: 14 }}>Kembali</Typography>
               </Button>
-              <Button
+              <LoadingButton
+                loading={loadingCreate}
                 variant="contained"
                 color="secondary"
                 style={{ height: 40 }}
                 onClick={() => setOpenModal(!openModal)}
                 disabled={!inputValue?.title || !inputValue?.url || isEmpty(inputValue?.banner_file)}>
                 <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
-              </Button>
+              </LoadingButton>
             </Stack>
           </Stack>
         </PageContainer>
