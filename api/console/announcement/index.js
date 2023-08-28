@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const announcementApi = createApi({
   reducerPath: 'console/announcement',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['listNotif', 'listBanner'],
+  tagTypes: ['listNotif', 'listBanner', 'detailBanner'],
   endpoints: (build) => ({
     // Push Notif
     getListNotification: build.query({
@@ -39,6 +39,13 @@ export const announcementApi = createApi({
       }),
       providesTags: ['listBanner'],
     }),
+    getDetailBannerSearch: build.query({
+      query: (id) => ({
+        url: `/banner/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['detailBanner'],
+    }),
     updateStatusBannerSearch: build.mutation({
       query: (data) => ({
         url: '/banner/update/statustayang',
@@ -46,6 +53,22 @@ export const announcementApi = createApi({
         body: data,
       }),
       invalidatesTags: ['listBanner'],
+    }),
+    createBannerSearch: build.mutation({
+      query: (data) => ({
+        url: '/banner/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listBanner'],
+    }),
+    updateBannerSearch: build.mutation({
+      query: (data) => ({
+        url: '/banner/update',
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['listBanner', 'detailBanner'],
     }),
   }),
 });
@@ -58,5 +81,8 @@ export const {
 
   // Banner Search
   useGetListBannerSearchQuery,
-  useUpdateStatusBannerSearchMutation
+  useGetDetailBannerSearchQuery,
+  useUpdateStatusBannerSearchMutation,
+  useCreateBannerSearchMutation,
+  useUpdateBannerSearchMutation,
 } = announcementApi;
