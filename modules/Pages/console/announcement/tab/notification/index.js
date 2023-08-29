@@ -20,6 +20,7 @@ const AnnouncementTabNotificationComponent = () => {
     createdAt: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const getParams = () => {
     let params = {};
@@ -142,7 +143,8 @@ const AnnouncementTabNotificationComponent = () => {
                 variant="contained"
                 color="secondary"
                 style={{ height: 40 }}
-                onClick={() => Router.push('/announcement/notification/create')}>
+                onClick={() => Router.push('/announcement/notification/create')}
+                disabled={!access?.find((item) => item?.nameModule === 'announcement_notif')?.acces?.createAcces}>
                 <Typography style={{ fontSize: 14 }}>Tambah Push Notifikasi</Typography>
               </Button>
             </Stack>

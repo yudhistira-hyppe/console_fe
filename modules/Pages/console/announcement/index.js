@@ -16,6 +16,7 @@ import EditBannerComponent from './tab/banner/edit';
 const AnnouncementComponent = ({ tab, view, detailId }) => {
   const classes = useStyles();
   const router = useRouter();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const onTabChange = (_, selectedTab) => {
     router.push(`/announcement/${selectedTab}`);
@@ -30,16 +31,24 @@ const AnnouncementComponent = ({ tab, view, detailId }) => {
       {isEmpty(view) ? (
         <TabContext value={tab}>
           <TabList onChange={onTabChange} textColor="secondary" indicatorColor="secondary" style={{ marginTop: -20 }}>
-            <Tab className={classes.tab} label="Push Notifikasi" value="notification" />
-            <Tab className={classes.tab} label="Banner" value="banner" />
+            {access?.find((item) => item?.nameModule === 'announcement_notif') && (
+              <Tab className={classes.tab} label="Push Notifikasi" value="notification" />
+            )}
+            {access?.find((item) => item?.nameModule === 'announcement_banner') && (
+              <Tab className={classes.tab} label="Banner" value="banner" />
+            )}
           </TabList>
 
-          <TabPanel className={classes.tabPanel} value="notification">
-            <AnnouncementTabNotificationComponent />
-          </TabPanel>
-          <TabPanel className={classes.tabPanel} value="banner">
-            <AnnouncementTabBannerComponent />
-          </TabPanel>
+          {access?.find((item) => item?.nameModule === 'announcement_notif') && (
+            <TabPanel className={classes.tabPanel} value="notification">
+              <AnnouncementTabNotificationComponent />
+            </TabPanel>
+          )}
+          {access?.find((item) => item?.nameModule === 'announcement_banner') && (
+            <TabPanel className={classes.tabPanel} value="banner">
+              <AnnouncementTabBannerComponent />
+            </TabPanel>
+          )}
         </TabContext>
       ) : view === 'create' ? (
         tab === 'notification' ? (
