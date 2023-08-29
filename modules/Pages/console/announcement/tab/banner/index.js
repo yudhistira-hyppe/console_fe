@@ -21,6 +21,7 @@ const AnnouncementTabBannerComponent = () => {
     status: '',
   });
   const [filterList, setFilterList] = useState([]);
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const getParams = () => {
     let params = {};
@@ -153,7 +154,8 @@ const AnnouncementTabBannerComponent = () => {
                 variant="contained"
                 color="secondary"
                 style={{ height: 40 }}
-                onClick={() => Router.push('/announcement/banner/create')}>
+                onClick={() => Router.push('/announcement/banner/create')}
+                disabled={!access?.find((item) => item?.nameModule === 'announcement_banner')?.acces?.createAcces}>
                 <Typography style={{ fontSize: 14 }}>Tambah Banner</Typography>
               </Button>
             </Stack>

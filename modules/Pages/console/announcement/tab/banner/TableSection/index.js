@@ -237,6 +237,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                               });
                             }
                           }}
+                          disabled={!access?.find((item) => item?.nameModule === 'announcement_banner')?.acces?.updateAcces}
                         />
                       </Stack>
                     </TableCell>
@@ -258,7 +259,9 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                               handleCloseMenu();
                               Router.push(`/announcement/banner/detail/${item?._id}`);
                             }}
-                            disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
+                            disabled={
+                              !access?.find((item) => item?.nameModule === 'announcement_banner')?.acces?.updateAcces
+                            }>
                             <ListItemIcon>
                               <Edit />
                             </ListItemIcon>
@@ -274,7 +277,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                               selected: item?._id,
                             });
                           }}
-                          disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.deleteAcces}>
+                          disabled={!access?.find((item) => item?.nameModule === 'announcement_banner')?.acces?.deleteAcces}>
                           <ListItemIcon>
                             <Delete />
                           </ListItemIcon>
