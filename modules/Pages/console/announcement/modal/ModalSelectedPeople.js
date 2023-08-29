@@ -81,14 +81,14 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
         <Box sx={style}>
           <Stack direction="column" gap={3}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>{listItem?.length || 0} Total Penerima</Typography>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>{listItem?.length || 0} Total Audiens</Typography>
               <IconButton onClick={onClose}>
                 <Close />
               </IconButton>
             </Stack>
 
             <TextField
-              placeholder="Cari nama penerima"
+              placeholder="Cari nama audiens"
               color="secondary"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -160,8 +160,8 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
                             {listItem?.map((item) => item?.iduser).includes(item?.iduser)
                               ? hoverRemove.show && item?.iduser === hoverRemove?.id
                                 ? 'Batalkan'
-                                : 'Terpilih'
-                              : 'Pilih'}
+                                : 'Ditarget'
+                              : 'Tambah'}
                           </Typography>
                         </Button>
                       )}
