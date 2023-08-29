@@ -275,8 +275,8 @@ const TableSection = ({
                           {selected?.map((item) => item?.iduser).includes(item?.iduser)
                             ? hoverRemove.show && item?.iduser === hoverRemove?.id
                               ? 'Batalkan'
-                              : 'Terpilih'
-                            : 'Pilih'}
+                              : 'Ditarget'
+                            : 'Tambah'}
                         </Typography>
                       </Button>
                     </TableCell>

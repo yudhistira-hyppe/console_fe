@@ -168,53 +168,6 @@ const CreateNotificationComponent = () => {
                     </Stack>
 
                     <Stack direction="column" gap={1}>
-                      <Typography>Target Notifikasi Push</Typography>
-                      <Stack direction="row" width="80%" gap={1} alignItems="center">
-                        <Select
-                          value={inputValue?.type}
-                          color="secondary"
-                          onChange={(e) => setInputValue({ ...inputValue, type: e.target.value })}
-                          sx={{ width: inputValue?.type === 'OPTION' ? '90%' : '100%' }}
-                          displayEmpty>
-                          <MenuItem value="" disabled>
-                            <Typography style={{ color: '#9B9B9B' }}>Pilih Target</Typography>
-                          </MenuItem>
-                          <MenuItem value="ALL">
-                            <Typography style={{ color: '#9B9B9B' }}>Semua Pengguna</Typography>
-                          </MenuItem>
-                          <MenuItem value="OPTION">
-                            <Typography style={{ color: '#9B9B9B' }}>Filter Pilihan</Typography>
-                          </MenuItem>
-                        </Select>
-                        {inputValue?.type === 'OPTION' && (
-                          <Stack
-                            width="10%"
-                            height="57px"
-                            alignItems="center"
-                            justifyContent="center"
-                            style={{ backgroundColor: '#CECECE', color: 'white', borderRadius: 6, cursor: 'pointer' }}
-                            onClick={() => setShowModal(!showModal)}>
-                            <Typography style={{ fontWeight: 'bold' }}>{inputValue?.participant?.length}</Typography>
-                          </Stack>
-                        )}
-                      </Stack>
-
-                      {inputValue?.type === 'OPTION' && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          style={{ height: 40, width: '80%' }}
-                          onClick={() =>
-                            router.push({ pathname: '/announcement/notification/create', query: { participant: true } })
-                          }>
-                          <Typography style={{ fontSize: 14 }}>
-                            {inputValue?.participant?.length >= 1 ? 'Edit Partisipan' : 'Pilih Partisipan'}
-                          </Typography>
-                        </Button>
-                      )}
-                    </Stack>
-
-                    <Stack direction="column" gap={1}>
                       <Typography>URL (Optional)</Typography>
                       <TextField
                         color="secondary"
@@ -223,6 +176,73 @@ const CreateNotificationComponent = () => {
                         onChange={(e) => setInputValue({ ...inputValue, url: e.target.value })}
                         sx={{ width: '80%', input: { fontFamily: 'Lato', color: '#9B9B9B' } }}
                       />
+                    </Stack>
+
+                    <Stack direction="column" gap={2}>
+                      <Stack direction="row" gap={3}>
+                        <Stack direction="column" width="40%" gap={1}>
+                          <Typography style={{ fontWeight: 'bold' }}>Target Notifikasi Push</Typography>
+                          <Select
+                            value={inputValue?.type}
+                            color="secondary"
+                            onChange={(e) => setInputValue({ ...inputValue, type: e.target.value })}
+                            renderValue={(val) => (
+                              <Typography>
+                                {val === 'ALL' && 'Semua Pengguna'} {val === 'OPTION' && 'Pilihan Pengguna Audiens'}
+                                {val === '' && 'Pilih Target'}
+                              </Typography>
+                            )}
+                            sx={{ width: '100%' }}
+                            displayEmpty>
+                            <MenuItem value="ALL">
+                              <Stack direction="column" gap="4px" my="6px">
+                                <Typography>Semua Pengguna</Typography>
+                                <Typography style={{ color: '#9B9B9B', fontSize: 12 }}>
+                                  Push notifikasi akan dikirimkan ke semua pengguna
+                                </Typography>
+                              </Stack>
+                            </MenuItem>
+                            <MenuItem value="OPTION">
+                              <Stack direction="column" gap="4px" my="6px">
+                                <Typography>Pilih Target Audiens</Typography>
+                                <Typography style={{ color: '#9B9B9B', fontSize: 12 }}>
+                                  Push notifikasi hanya akan dikirimkan ke pengguna yang dipilih
+                                </Typography>
+                              </Stack>
+                            </MenuItem>
+                          </Select>
+                        </Stack>
+
+                        {inputValue?.type === 'OPTION' && (
+                          <Stack direction="column" width="10%" gap={1}>
+                            <Typography>
+                              Total Audiens <span style={{ color: 'red' }}>*</span>
+                            </Typography>
+                            <Stack
+                              height="57px"
+                              alignItems="center"
+                              justifyContent="center"
+                              style={{ backgroundColor: '#EEEEEE', borderRadius: 6, cursor: 'pointer' }}
+                              onClick={() => setShowModal(!showModal)}>
+                              <Typography style={{ fontWeight: 'bold', color: '#666666' }}>
+                                {inputValue?.participant?.length}
+                              </Typography>
+                            </Stack>
+                          </Stack>
+                        )}
+                      </Stack>
+
+                      {inputValue?.type === 'OPTION' && (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          style={{ height: 45, width: '52%', borderRadius: 8 }}
+                          onClick={() =>
+                            router.push({ pathname: '/announcement/notification/create', query: { participant: true } })
+                          }>
+                          <Typography style={{ fontSize: 14, textTransform: 'capitalize' }}>Pilih Audiens</Typography>
+                        </Button>
+                      )}
                     </Stack>
                   </Stack>
                 </Card>
