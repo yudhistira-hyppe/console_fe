@@ -201,7 +201,7 @@ const TableSection = ({
                 listTickets?.data?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
                     <TableCell align="left">
-                      <Stack direction="row" alignItems="center" gap="15px" width={240}>
+                      <Stack direction="row" alignItems="center" gap="15px" width={320}>
                         <Checkbox
                           color="secondary"
                           checked={selected?.map((item) => item?.iduser).includes(item?.iduser)}

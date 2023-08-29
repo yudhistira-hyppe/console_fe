@@ -81,14 +81,14 @@ export default function ModalSelectedPeople({ showModal, onClose, selectedItem, 
         <Box sx={style}>
           <Stack direction="column" gap={3}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>{listItem?.length || 0} Total Partisipan</Typography>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>{listItem?.length || 0} Total Penerima</Typography>
               <IconButton onClick={onClose}>
                 <Close />
               </IconButton>
             </Stack>
 
             <TextField
-              placeholder="Cari nama partisipan"
+              placeholder="Cari nama penerima"
               color="secondary"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
