@@ -26,7 +26,7 @@ const AddMember = () => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const { data: profileUser, isFetching } = useGetProfileByUserEmailQuery(router.query.id);
-  const { data: dataJabatan } = useGetGroupQuery({ skip: 0, limit: 10, search: '' });
+  const { data: dataJabatan } = useGetGroupQuery({ skip: 0, limit: 100, search: '' });
   const [updateUser, { isLoading }] = useUpdateGroupUserMutation();
 
   const handleChange = (e) => {
@@ -124,6 +124,13 @@ const AddMember = () => {
               style={{ width: '100%', maxWidth: 400 }}
               name="position"
               onChange={handleChange}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 300,
+                  },
+                },
+              }}
               displayEmpty
               disabled={!access.find((item) => item?.nameModule === 'member_users')?.acces?.updateAcces}>
               <MenuItem value="" disabled>
