@@ -271,6 +271,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
                 editableDateInputs={true}
+                rangeColors={['#AB22AF']}
                 ranges={value}
                 direction="horizontal"
               />

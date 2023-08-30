@@ -38,6 +38,7 @@ import {
   kycApi,
   announcementApi,
 } from 'api/console';
+import filterParams from 'redux/slice/filterParams';
 
 export default combineReducers({
   common: Common,
@@ -47,6 +48,7 @@ export default combineReducers({
   monetizeReducers,
   helpCenterReducers,
   campaignReducer: Campaign,
+  filterParams: filterParams,
   [authApi.reducerPath]: authApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [engagementApi.reducerPath]: engagementApi.reducer,
