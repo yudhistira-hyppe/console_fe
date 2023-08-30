@@ -305,8 +305,12 @@ const DetailBandingKonten = () => {
                   <Stack
                     direction="row"
                     justifyContent="center"
-                    style={{ height: 500, width: '100%', border: '1px solid #dddddd', borderRadius: 6 }}>
-                    <video src={videoContent?.PlayUrl || ''} style={{ maxHeight: 500 }} controls />
+                    style={{ height: 500, width: '100%', overflow: 'hidden', border: '1px solid #dddddd', borderRadius: 6 }}>
+                    <video
+                      src={videoContent?.PlayUrl || ''}
+                      style={{ maxHeight: 500, width: '100%', overflow: 'hidden' }}
+                      controls
+                    />
                   </Stack>
                 )}
 

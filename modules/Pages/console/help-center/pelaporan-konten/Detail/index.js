@@ -430,8 +430,12 @@ const DetailPelaporanKonten = () => {
                   <Stack
                     direction="row"
                     justifyContent="center"
-                    style={{ height: 500, width: '100%', borderBottom: '1px solid #dddddd' }}>
-                    <video src={videoContent?.PlayUrl || ''} style={{ maxHeight: 500 }} controls />
+                    style={{ height: 500, width: '100%', overflow: 'hidden', border: '1px solid #dddddd', borderRadius: 6 }}>
+                    <video
+                      src={videoContent?.PlayUrl || ''}
+                      style={{ maxHeight: 500, width: '100%', overflow: 'hidden' }}
+                      controls
+                    />
                   </Stack>
                 )}
 
