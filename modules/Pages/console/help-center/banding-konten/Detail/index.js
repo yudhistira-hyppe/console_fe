@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import Head from 'next/head';
 import Breadcrumbs from '../../bantuan-pengguna/BreadCrumb';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
-import { Button, CardContent, CardHeader, CardMedia, Chip, Divider, Grid, Paper, Stack } from '@mui/material';
+import { Box, Button, CardContent, CardHeader, CardMedia, Chip, Divider, Grid, Paper, Stack } from '@mui/material';
 import { ClickAwayListener, Grow, MenuItem, MenuList, Popper, Typography } from '@material-ui/core';
 import router from 'next/router';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
@@ -26,6 +26,7 @@ import {
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import ScrollBar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
+import { useGetVideoFromApsaraQuery } from 'api/console/ads';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -71,6 +72,10 @@ const DetailBandingKonten = () => {
     type: 'content',
   });
 
+  const { data: videoContent } = useGetVideoFromApsaraQuery({
+    apsaraId: detail?.data[0]?.postType === 'pict' ? undefined : detail?.data[0]?.apsaraId,
+  });
+
   const getMediaEndpoint = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
@@ -101,6 +106,8 @@ const DetailBandingKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       case 'DITANGGUHKAN':
         return {
@@ -110,6 +117,8 @@ const DetailBandingKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       case 'TIDAK DITANGGUHKAN':
         return {
@@ -119,6 +128,8 @@ const DetailBandingKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       case 'FLAGING':
         return {
@@ -128,9 +139,11 @@ const DetailBandingKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       default:
-        return {};
+        return { width: 'fit-content' };
     }
   };
 
@@ -286,7 +299,17 @@ const DetailBandingKonten = () => {
               <Typography style={{ fontSize: 14 }}>{detail?.data[0]?.reportedUserHandle?.[0]?.remark || '-'}</Typography>
 
               <Stack direction="column" mt={5}>
-                <CardMedia component="img" height="500px" image={getImage(detail?.data[0])} style={{ borderRadius: 4 }} />
+                {detail?.data[0]?.postType === 'pict' ? (
+                  <CardMedia component="img" height="500px" image={getImage(detail?.data[0])} style={{ borderRadius: 4 }} />
+                ) : (
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    style={{ height: 500, width: '100%', border: '1px solid #dddddd', borderRadius: 6 }}>
+                    <video src={videoContent?.PlayUrl || ''} style={{ maxHeight: 500 }} controls />
+                  </Stack>
+                )}
+
                 <CardContent style={{ padding: '20px 0 0' }}>
                   <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="caption">Post ID: {detail?.data[0]?._id}</Typography>
@@ -323,26 +346,38 @@ const DetailBandingKonten = () => {
               </Stack>
             </Grid>
             <Grid item xs={12} sm={4} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-              <Paper style={{ padding: '25px 16px' }}>
-                <Button
-                  ref={anchorRef}
-                  variant="contained"
-                  id="composition-button"
-                  aria-controls={open ? 'composition-menu' : undefined}
-                  aria-expanded={open ? 'true' : undefined}
-                  style={buttonStyle(detail?.data[0]?.reportStatusLast)}
-                  onClick={detail?.data[0]?.reportStatusLast === 'BARU' ? () => handleToggle() : () => {}}
-                  aria-haspopup="true"
-                  endIcon={detail?.data[0]?.reportStatusLast === 'BARU' && <KeyboardArrowDown />}
-                  disabled={!access.find((item) => item?.nameModule === 'help_appeal_konten')?.acces?.updateAcces}>
-                  {detail?.data[0]?.reportStatusLast === 'FLAGING'
-                    ? 'Ditandai Sensitif'
-                    : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
-                    ? 'Dipulihkan'
-                    : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
-                    ? 'Ditangguhkan'
-                    : 'Baru'}
-                </Button>
+              <Paper style={{ padding: '16px 16px 25px' }}>
+                {detail?.data[0]?.reportStatusLast === 'BARU' ? (
+                  <Button
+                    ref={anchorRef}
+                    variant="contained"
+                    id="composition-button"
+                    aria-controls={open ? 'composition-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    style={buttonStyle(detail?.data[0]?.reportStatusLast)}
+                    onClick={handleToggle}
+                    aria-haspopup="true"
+                    endIcon={<KeyboardArrowDown />}
+                    disabled={!access.find((item) => item?.nameModule === 'help_appeal_konten')?.acces?.updateAcces}>
+                    {detail?.data[0]?.reportStatusLast === 'FLAGING'
+                      ? 'Ditandai Sensitif'
+                      : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
+                      ? 'Dipulihkan'
+                      : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
+                      ? 'Ditangguhkan'
+                      : 'Baru'}
+                  </Button>
+                ) : (
+                  <Box style={buttonStyle(detail?.data[0]?.reportStatusLast)}>
+                    {detail?.data[0]?.reportStatusLast === 'FLAGING'
+                      ? 'Ditandai Sensitif'
+                      : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
+                      ? 'Dipulihkan'
+                      : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
+                      ? 'Ditangguhkan'
+                      : 'Baru'}
+                  </Box>
+                )}
                 <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" transition>
                   {({ TransitionProps, placement }) => (
                     <Grow
