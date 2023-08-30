@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
@@ -11,6 +11,10 @@ import TableSection from './TableSection';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/konten';
 import moment from 'moment';
 import { toast } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveParams } from 'redux/slice/filterParams';
+import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -18,6 +22,9 @@ const breadcrumbs = [
 ];
 
 const BandingKonten = () => {
+  const [filterList, setFilterList] = useState([]);
+  const router = useRouter();
+  const dataParams = useSelector((state) => state.filterParams.value);
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -28,10 +35,11 @@ const BandingKonten = () => {
     status: [],
     reason: [],
   });
-  const [filterList, setFilterList] = useState([]);
-  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const getParams = () => {
+  const getParams = useCallback(() => {
+    dispatch(saveParams(filter));
+
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -60,9 +68,46 @@ const BandingKonten = () => {
     filter.reason.length >= 1 && Object.assign(params, { reasonAppeal: filter.reason });
 
     return params;
-  };
+  }, [filter]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
+
+  useEffect(() => {
+    if (!isEmpty(dataParams?.search)) {
+      handleSearchChange('search', dataParams?.search);
+    }
+    if (!isEmpty(filter?.status)) {
+      filter?.status?.map((item) => {
+        handleSearchChange('status', item);
+      });
+    }
+    if (!isEmpty(filter?.reason)) {
+      filter?.reason?.map((item) => {
+        handleSearchChange('reason', item);
+      });
+    }
+    if (!isEmpty(filter?.createdAt)) {
+      handleSearchChange('createdAt', filter?.createdAt);
+      handleSearchChange(
+        'labelTanggal',
+        `${dayjs(filter?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(filter?.createdAt[1]).format('DD-MM-YYYY')}`,
+      );
+    }
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending ? dataParams?.descending : 'true',
+      search: dataParams?.search || '',
+      labelTanggal: '',
+      createdAt: dataParams?.createdAt || [null, null],
+      status: dataParams?.status || [],
+      reason: dataParams?.reason || [],
+    });
+  }, []);
+
+  console.log(dataParams);
 
   useEffect(() => {
     if (filter.page >= 1 && listTickets?.arrdata?.length < 1) {

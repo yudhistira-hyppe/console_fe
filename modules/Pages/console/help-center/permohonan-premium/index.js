@@ -84,8 +84,6 @@ const PermohonanPremium = () => {
     }
   }, []);
 
-  console.log(dataParams);
-
   const { data: listTickets, isFetching: loadingTicket } = useGetListKYCQuery(getParams());
 
   useEffect(() => {
