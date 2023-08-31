@@ -154,6 +154,9 @@ const HorizontalDefault = ({ className, children }) => {
     ) {
       newMenu = newMenu.filter((item) => item.name !== 'Utilitas');
     }
+    if (!accessModule.includes('announcement_notif') && !accessModule.includes('announcement_banner')) {
+      newMenu = newMenu.filter((item) => item.name !== 'Pengumuman');
+    }
 
     setAccessModule(newMenu);
     setLoadingValidate(false);

@@ -63,15 +63,6 @@ const TableSection = ({
     return `${STREAM_URL}${endpoint?.[0]}${authToken}`;
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = listAllUser?.data?.map((n) => n);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
   const handleClick = (event, id) => {
     const selectedIndex = selected?.map((item) => item?.iduser).indexOf(id?.iduser);
 
@@ -158,18 +149,8 @@ const TableSection = ({
               <TableRow style={{ height: 70 }}>
                 <TableCell colSpan={7}>
                   <Stack direction="row" alignItems="center" gap={2}>
-                    <Checkbox
-                      color="secondary"
-                      indeterminate={selected.length > 0 && selected.length < listAllUser?.data?.length}
-                      checked={selected.length > 0 && selected.length === listAllUser?.data?.length}
-                      onChange={handleSelectAllClick}
-                      inputProps={{
-                        'aria-label': 'select all desserts',
-                      }}
-                      disabled={loadingAll}
-                    />
                     <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>
-                      Pilih Semua ({selected?.length})
+                      Partisipan Terpilih ({selected?.length})
                     </Typography>
                   </Stack>
                 </TableCell>
@@ -183,7 +164,7 @@ const TableSection = ({
                 <TableCell align="left">Umur</TableCell>
                 <TableCell align="left">Lokasi</TableCell>
                 <TableCell align="left">Jenis Akun</TableCell>
-                <TableCell align="left">Status Undangan</TableCell>
+                <TableCell align="left"></TableCell>
               </TableRow>
             </TableHead>
 
@@ -289,13 +270,13 @@ const TableSection = ({
                             setHoverRemove({ show: false, id: null });
                           }
                         }}
-                        style={{ width: 120 }}>
+                        style={{ width: 110 }}>
                         <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
                           {selected?.map((item) => item?.iduser).includes(item?.iduser)
                             ? hoverRemove.show && item?.iduser === hoverRemove?.id
                               ? 'Batalkan'
-                              : 'Diundang'
-                            : 'Undang'}
+                              : 'Ditarget'
+                            : 'Tambah'}
                         </Typography>
                       </Button>
                     </TableCell>
@@ -304,7 +285,7 @@ const TableSection = ({
               ) : (
                 <TableCell colSpan={8}>
                   <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data user</Typography>
                   </Stack>
                 </TableCell>
               )}

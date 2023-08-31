@@ -11,6 +11,10 @@ import { useRouter } from 'next/router';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/bantuan-pengguna';
 import moment from 'moment';
 import { toast } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveParams } from 'redux/slice/filterParams';
+import { isEmpty } from 'lodash';
+import dayjs from 'dayjs';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -18,6 +22,9 @@ const breadcrumbs = [
 ];
 
 const ConsoleBantuanPenggunaComponent = () => {
+  const [filterList, setFilterList] = useState([]);
+  const router = useRouter();
+  const dataParams = useSelector((state) => state.filterParams.value);
   const [filter, setFilter] = useState({
     descending: 'true',
     assignto: '',
@@ -31,10 +38,11 @@ const ConsoleBantuanPenggunaComponent = () => {
     page: 0,
     limit: 10,
   });
-  const [filterList, setFilterList] = useState([]);
-  const router = useRouter();
+  const dispatch = useDispatch();
 
   const getParams = () => {
+    dispatch(saveParams(filter));
+
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -63,6 +71,59 @@ const ConsoleBantuanPenggunaComponent = () => {
 
     return params;
   };
+
+  useEffect(() => {
+    if (!isEmpty(dataParams?.search)) {
+      handleSearchChange('search', dataParams?.search);
+    }
+    if (!isEmpty(dataParams?.assignto)) {
+      handleSearchChange('penerima', dataParams?.assignto);
+    }
+    if (!isEmpty(dataParams?.status)) {
+      dataParams?.status?.map((item) => handleSearchChange('status', item));
+    }
+    if (!isEmpty(dataParams?.sumber)) {
+      dataParams?.sumber?.map((item) => handleSearchChange('sumber', JSON.stringify({ _id: item?._id, name: item?.name })));
+    }
+    if (!isEmpty(dataParams?.kategori)) {
+      dataParams?.kategori?.map((item) =>
+        handleSearchChange('category', JSON.stringify({ _id: item?._id, name: item?.name })),
+      );
+    }
+    if (!isEmpty(dataParams?.level)) {
+      dataParams?.level?.map((item) => handleSearchChange('level', JSON.stringify({ _id: item?._id, name: item?.name })));
+    }
+    if (!isEmpty(dataParams?.createdAt)) {
+      handleSearchChange('createdAt', dataParams?.createdAt);
+      if (dataParams?.createdAt[0] !== null) {
+        handleSearchChange(
+          'labelTanggal',
+          `${dayjs(dataParams?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt[1]).format(
+            'DD-MM-YYYY',
+          )}`,
+        );
+      }
+    }
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending || 'true',
+      search: dataParams?.search || '',
+      assignto: dataParams?.assignto || '',
+      createdAt: dataParams?.createdAt || [null, null],
+      labelTanggal: dataParams?.createdAt?.[0]
+        ? `${dayjs(dataParams?.createdAt?.[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt?.[1]).format(
+            'DD-MM-YYYY',
+          )}`
+        : '',
+      status: dataParams?.status || [],
+      sumber: dataParams?.sumber || [],
+      kategori: dataParams?.kategori || [],
+      level: dataParams?.level || [],
+    });
+  }, [dispatch]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 

@@ -29,7 +29,16 @@ const SearchSection = ({ filter, handleChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
-    if (!filter.createdAt[0] && !filter.createdAt[1]) {
+    if (filter.createdAt[0] && filter.createdAt[1]) {
+      setValue([
+        {
+          startDate: moment(filter.createdAt[0]).toDate(),
+          endDate: moment(filter.createdAt[1]).toDate(),
+          key: 'selection',
+        },
+      ]);
+      setDate(true);
+    } else {
       setWeek(null);
       setValue([
         {
@@ -271,6 +280,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
                 editableDateInputs={true}
+                rangeColors={['#AB22AF']}
                 ranges={value}
                 direction="horizontal"
               />

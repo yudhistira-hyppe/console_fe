@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
@@ -11,6 +11,10 @@ import TableSection from './TableSection';
 import { useGetListKYCQuery } from 'api/console/helpCenter/kyc';
 import moment from 'moment';
 import { toast } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveParams } from 'redux/slice/filterParams';
+import { isEmpty } from 'lodash';
+import dayjs from 'dayjs';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -18,23 +22,28 @@ const breadcrumbs = [
 ];
 
 const PermohonanPremium = () => {
+  const [filterList, setFilterList] = useState([]);
+  const router = useRouter();
+  const dataParams = useSelector((state) => state.filterParams.value);
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
     descending: 'true',
+    search: '',
     labelTanggal: '',
     createdAt: [null, null],
     status: [],
   });
-  const [filterList, setFilterList] = useState([]);
-  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const getParams = () => {
+  const getParams = useCallback(() => {
+    dispatch(saveParams(filter));
+
     let params = {};
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
+      descending: dataParams?.descending && dataParams?.descending === 'true' ? true : false || true,
     });
     filter.search !== '' && Object.assign(params, { keys: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
@@ -53,8 +62,44 @@ const PermohonanPremium = () => {
           }
         }),
       });
+
     return params;
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    if (!isEmpty(dataParams?.search)) {
+      handleSearchChange('search', dataParams?.search);
+    }
+    if (!isEmpty(dataParams?.status)) {
+      dataParams?.status?.map((item) => handleSearchChange('status', item));
+    }
+    if (!isEmpty(dataParams?.createdAt)) {
+      handleSearchChange('createdAt', dataParams?.createdAt);
+      if (dataParams?.createdAt[0] !== null) {
+        handleSearchChange(
+          'labelTanggal',
+          `${dayjs(dataParams?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt[1]).format(
+            'DD-MM-YYYY',
+          )}`,
+        );
+      }
+    }
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending || 'true',
+      search: dataParams?.search || '',
+      createdAt: dataParams?.createdAt || [null, null],
+      labelTanggal: dataParams?.createdAt?.[0]
+        ? `${dayjs(dataParams?.createdAt?.[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt?.[1]).format(
+            'DD-MM-YYYY',
+          )}`
+        : '',
+      status: dataParams?.status || [],
+    });
+  }, [dispatch]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListKYCQuery(getParams());
 
@@ -135,6 +180,7 @@ const PermohonanPremium = () => {
           page: 0,
           limit: 10,
           descending: 'true',
+          search: '',
           labelTanggal: '',
           createdAt: [null, null],
           status: [],

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Breadcrumbs from '../../bantuan-pengguna/BreadCrumb';
-import { Chip, Grid, Stack } from '@mui/material';
+import { Box, Chip, Grid, Stack } from '@mui/material';
 
 import { Avatar, Button, Card, CardContent, CardHeader, Divider, Link, Paper, Typography } from '@material-ui/core';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
@@ -31,6 +31,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import moment from 'moment';
+import { useGetVideoFromApsaraQuery } from 'api/console/ads';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -120,6 +121,10 @@ const DetailPelaporanKonten = () => {
     type: 'content',
   });
 
+  const { data: videoContent } = useGetVideoFromApsaraQuery({
+    apsaraId: detail?.data[0]?.postType === 'pict' ? undefined : detail?.data[0]?.apsaraId,
+  });
+
   const showModalHandler = (data) => {
     setShowModal({
       show: true,
@@ -203,6 +208,8 @@ const DetailPelaporanKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       case 'TIDAK DITANGGUHKAN':
         return {
@@ -212,6 +219,8 @@ const DetailPelaporanKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       case 'DITANGGUHKAN':
         return {
@@ -221,6 +230,8 @@ const DetailPelaporanKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       case 'FLAGING':
         return {
@@ -230,6 +241,8 @@ const DetailPelaporanKonten = () => {
           fontFamily: 'Normal',
           width: 'fit-content',
           marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
         };
       default:
         return {
@@ -325,7 +338,7 @@ const DetailPelaporanKonten = () => {
                     </Stack>
                   </Stack>
 
-                  <Button variant="contained" style={buttonStyle(detail?.data[0]?.reportStatusLast)}>
+                  <Box style={buttonStyle(detail?.data[0]?.reportStatusLast)}>
                     {detail?.data[0]?.reportStatusLast === 'FLAGING'
                       ? 'Ditandai Sensitif'
                       : detail?.data[0]?.reportStatusLast === 'TIDAK DITANGGUHKAN'
@@ -333,7 +346,7 @@ const DetailPelaporanKonten = () => {
                       : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
                       ? 'Ditangguhkan'
                       : 'Baru'}
-                  </Button>
+                  </Box>
                 </Stack>
               </Card>
             </Grid>
@@ -346,7 +359,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Tidak Ditangguhkan
@@ -356,7 +369,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Tangguhkan
@@ -366,7 +379,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Ditandai Sensitif
@@ -405,13 +418,27 @@ const DetailPelaporanKonten = () => {
             </Grid>
             <Grid item xs={12} sm={8}>
               <Card>
-                <CardMedia
-                  component="img"
-                  height="500px"
-                  image={getImage(detail?.data[0])}
-                  title="YouTube video player"
-                  alt="green-iguana"
-                />
+                {detail?.data[0]?.postType === 'pict' ? (
+                  <CardMedia
+                    component="img"
+                    height="500px"
+                    image={getImage(detail?.data[0])}
+                    title="YouTube video player"
+                    alt="green-iguana"
+                  />
+                ) : (
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    style={{ height: 500, width: '100%', overflow: 'hidden', border: '1px solid #dddddd', borderRadius: 6 }}>
+                    <video
+                      src={videoContent?.PlayUrl || ''}
+                      style={{ maxHeight: 500, width: '100%', overflow: 'hidden' }}
+                      controls
+                    />
+                  </Stack>
+                )}
+
                 <CardContent style={{ paddingBottom: 16 }}>
                   <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="caption">Post ID: {detail?.data[0]?._id || '-'}</Typography>

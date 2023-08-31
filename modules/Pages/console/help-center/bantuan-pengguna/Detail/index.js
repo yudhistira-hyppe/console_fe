@@ -27,6 +27,7 @@ import { LoadingButton } from '@mui/lab';
 import { useGetDivisiQuery } from 'api/console/divisi';
 import Cookies from 'js-cookie';
 import { useGetUserDivisiQuery } from 'api/console/getUserHyppe';
+import { toast } from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -432,7 +433,13 @@ const DetailBantuanPengguna = () => {
                           variant="contained"
                           color="primary"
                           component="label"
-                          onChange={(e) => setBody({ ...body, file: e.target.files })}
+                          onChange={(e) => {
+                            if (e.target.files?.length > 3) {
+                              toast.error('File yang boleh dilampirkan maksimal 3');
+                            } else {
+                              setBody({ ...body, file: e.target.files });
+                            }
+                          }}
                           disabled={!access.find((item) => item?.nameModule === 'help_consumer')?.acces?.createAcces}>
                           Upload File
                           <input hidden accept="image/*" multiple type="file" />
