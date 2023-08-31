@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import Breadcrumbs from '../bantuan-pengguna/BreadCrumb';
 import { Link, Typography } from '@material-ui/core';
@@ -11,6 +11,9 @@ import SearchSection from './SearchSection';
 import { useGetListTicketsQuery } from 'api/console/helpCenter/konten';
 import moment from 'moment';
 import { toast } from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveParams } from 'redux/slice/filterParams';
+import { isEmpty } from 'lodash';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -18,6 +21,9 @@ const breadcrumbs = [
 ];
 
 const PelaporanKonten = () => {
+  const [filterList, setFilterList] = useState([]);
+  const router = useRouter();
+  const dataParams = useSelector((state) => state.filterParams.value);
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -28,10 +34,11 @@ const PelaporanKonten = () => {
     status: [],
     reason: [],
   });
-  const [filterList, setFilterList] = useState([]);
-  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const getParams = () => {
+  const getParams = useCallback(() => {
+    dispatch(saveParams(filter));
+
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -60,7 +67,38 @@ const PelaporanKonten = () => {
     filter.reason.length >= 1 && Object.assign(params, { reason: filter.reason.map((item) => item._id) });
 
     return params;
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    if (!isEmpty(dataParams?.search)) {
+      handleSearchChange('search', dataParams?.search);
+    }
+    if (!isEmpty(dataParams?.status)) {
+      dataParams?.status?.map((item) => handleSearchChange('status', item));
+    }
+    if (!isEmpty(dataParams?.reason)) {
+      dataParams?.reason?.map((item) => {
+        handleSearchChange('reason', JSON.stringify({ _id: item?._id, name: item?.name }));
+      });
+    }
+    if (!isEmpty(dataParams?.rangeReport)) {
+      handleSearchChange('startreport', dataParams?.rangeReport[0]);
+      handleSearchChange('endreport', dataParams?.rangeReport[1]);
+      handleSearchChange('range', `${dataParams?.rangeReport[0]}-${dataParams?.rangeReport[1]}`);
+    }
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending || 'true',
+      search: dataParams?.search || '',
+      range: dataParams?.rangeReport?.[0] ? `${dataParams?.rangeReport[0]}-${dataParams?.rangeReport[1]}` : '',
+      rangeReport: dataParams?.rangeReport || [],
+      status: dataParams?.status || [],
+      reason: dataParams?.reason || [],
+    });
+  }, [dispatch]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 

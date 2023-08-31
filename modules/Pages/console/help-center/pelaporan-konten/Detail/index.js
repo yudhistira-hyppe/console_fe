@@ -359,7 +359,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Tidak Ditangguhkan
@@ -369,7 +369,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Tangguhkan
@@ -379,7 +379,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Ditandai Sensitif
@@ -430,8 +430,12 @@ const DetailPelaporanKonten = () => {
                   <Stack
                     direction="row"
                     justifyContent="center"
-                    style={{ height: 500, width: '100%', borderBottom: '1px solid #dddddd' }}>
-                    <video src={videoContent?.PlayUrl || ''} style={{ maxHeight: 500 }} controls />
+                    style={{ height: 500, width: '100%', overflow: 'hidden', border: '1px solid #dddddd', borderRadius: 6 }}>
+                    <video
+                      src={videoContent?.PlayUrl || ''}
+                      style={{ maxHeight: 500, width: '100%', overflow: 'hidden' }}
+                      controls
+                    />
                   </Stack>
                 )}
 
