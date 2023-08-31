@@ -26,9 +26,9 @@ const PermohonanPremium = () => {
   const router = useRouter();
   const dataParams = useSelector((state) => state.filterParams.value);
   const [filter, setFilter] = useState({
-    page: dataParams?.page || 0,
-    limit: dataParams?.limit || 10,
-    descending: dataParams?.descending ? dataParams?.descending : 'true',
+    page: 0,
+    limit: 10,
+    descending: 'true',
     search: '',
     labelTanggal: '',
     createdAt: [null, null],
@@ -37,6 +37,8 @@ const PermohonanPremium = () => {
   const dispatch = useDispatch();
 
   const getParams = useCallback(() => {
+    dispatch(saveParams(filter));
+
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -65,10 +67,6 @@ const PermohonanPremium = () => {
   }, [filter]);
 
   useEffect(() => {
-    dispatch(saveParams(filter));
-  }, [getParams]);
-
-  useEffect(() => {
     if (!isEmpty(dataParams?.search)) {
       handleSearchChange('search', dataParams?.search);
     }
@@ -77,12 +75,31 @@ const PermohonanPremium = () => {
     }
     if (!isEmpty(dataParams?.createdAt)) {
       handleSearchChange('createdAt', dataParams?.createdAt);
-      handleSearchChange(
-        'labelTanggal',
-        `${dayjs(dataParams?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt[1]).format('DD-MM-YYYY')}`,
-      );
+      if (dataParams?.createdAt[0] !== null) {
+        handleSearchChange(
+          'labelTanggal',
+          `${dayjs(dataParams?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt[1]).format(
+            'DD-MM-YYYY',
+          )}`,
+        );
+      }
     }
-  }, []);
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending || 'true',
+      search: dataParams?.search || '',
+      createdAt: dataParams?.createdAt || [null, null],
+      labelTanggal: dataParams?.createdAt?.[0]
+        ? `${dayjs(dataParams?.createdAt?.[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt?.[1]).format(
+            'DD-MM-YYYY',
+          )}`
+        : '',
+      status: dataParams?.status || [],
+    });
+  }, [dispatch]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListKYCQuery(getParams());
 
