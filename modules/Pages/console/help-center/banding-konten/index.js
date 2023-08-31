@@ -72,8 +72,6 @@ const BandingKonten = () => {
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 
-  console.log(dataParams);
-
   useEffect(() => {
     if (!isEmpty(dataParams?.search)) {
       handleSearchChange('search', dataParams?.search);
@@ -115,24 +113,7 @@ const BandingKonten = () => {
       status: dataParams?.status || [],
       reason: dataParams?.reason || [],
     });
-
-    console.log('dataParams: ', dataParams);
-    console.log('filter: ', filter);
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   setFilter({
-  //     ...filter,
-  //     page: dataParams?.page || 0,
-  //     limit: dataParams?.limit || 10,
-  //     descending: dataParams?.descending ? dataParams?.descending : 'true',
-  //     search: dataParams?.search || '',
-  //     labelTanggal: '',
-  //     createdAt: dataParams?.createdAt || [null, null],
-  //     status: dataParams?.status || [],
-  //     reason: dataParams?.reason || [],
-  //   });
-  // }, []);
 
   useEffect(() => {
     if (filter.page >= 1 && listTickets?.arrdata?.length < 1) {

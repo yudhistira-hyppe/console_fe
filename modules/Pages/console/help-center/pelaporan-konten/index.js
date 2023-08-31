@@ -25,9 +25,9 @@ const PelaporanKonten = () => {
   const router = useRouter();
   const dataParams = useSelector((state) => state.filterParams.value);
   const [filter, setFilter] = useState({
-    page: dataParams?.page || 0,
-    limit: dataParams?.limit || 10,
-    descending: dataParams?.descending ? dataParams?.descending : 'true',
+    page: 0,
+    limit: 10,
+    descending: 'true',
     search: '',
     range: '',
     rangeReport: [],
@@ -37,6 +37,8 @@ const PelaporanKonten = () => {
   const dispatch = useDispatch();
 
   const getParams = useCallback(() => {
+    dispatch(saveParams(filter));
+
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -68,10 +70,6 @@ const PelaporanKonten = () => {
   }, [filter]);
 
   useEffect(() => {
-    dispatch(saveParams(filter));
-  }, [getParams]);
-
-  useEffect(() => {
     if (!isEmpty(dataParams?.search)) {
       handleSearchChange('search', dataParams?.search);
     }
@@ -88,7 +86,19 @@ const PelaporanKonten = () => {
       handleSearchChange('endreport', dataParams?.rangeReport[1]);
       handleSearchChange('range', `${dataParams?.rangeReport[0]}-${dataParams?.rangeReport[1]}`);
     }
-  }, []);
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending || 'true',
+      search: dataParams?.search || '',
+      range: dataParams?.rangeReport?.[0] ? `${dataParams?.rangeReport[0]}-${dataParams?.rangeReport[1]}` : '',
+      rangeReport: dataParams?.rangeReport || [],
+      status: dataParams?.status || [],
+      reason: dataParams?.reason || [],
+    });
+  }, [dispatch]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 
