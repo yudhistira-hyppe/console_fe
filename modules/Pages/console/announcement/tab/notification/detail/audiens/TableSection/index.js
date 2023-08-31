@@ -172,7 +172,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" alignItems="center" gap="15px" width={250}>
-                        <Avatar src={getMediaUri(item?.avatar?.[0]?.mediaEndpoint)} />
+                        <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                         <Stack gap="4px" overflow="hidden" width="100%">
                           <Typography
                             style={{
