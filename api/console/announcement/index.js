@@ -21,6 +21,13 @@ export const announcementApi = createApi({
         method: 'GET',
       }),
     }),
+    getListNotificationAudiens: build.query({
+      query: (data) => ({
+        url: '/templates/listaudiens',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     publishNotification: build.mutation({
       query: (data) => ({
         url: '/utils/pushnotification',
@@ -91,6 +98,7 @@ export const {
   // Pust Notif
   useGetListNotificationQuery,
   useGetDetailNotificationQuery,
+  useGetListNotificationAudiensQuery,
   usePublishNotificationMutation,
   useDeleteNotificationMutation,
 
