@@ -33,7 +33,6 @@ import { Delete, Edit, FileCopy, MoreVert, NavigateBefore, NavigateNext, Visibil
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
-    width: 100,
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
@@ -74,6 +73,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     onDelete={() => {
                       if (item.parent === 'search') {
                         handleDeleteFilter(item.parent, '');
+                      } else if (item.parent === 'age') {
+                        handleDeleteFilter('clearAge', '');
+                      } else if (item.parent === 'area') {
+                        handleDeleteFilter(item.parent, JSON.stringify({ name: item.value }));
                       } else if (item.parent === 'createdAt') {
                         handleDeleteFilter(item.parent, []);
                       } else {
@@ -102,14 +105,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
-              value={filter.descending}
+              value={filter.ascending}
               onChange={handleOrder}
               displayEmpty
               color="secondary"
               inputProps={{ 'aria-label': 'Without label' }}
-              style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'true'}>Terbaru</MenuItem>
-              <MenuItem value={'false'}>Terlama</MenuItem>
+              style={{ backgroundColor: 'white', width: 120 }}>
+              <MenuItem value={'false'}>A - Z</MenuItem>
+              <MenuItem value={'true'}>Z - A</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -120,6 +123,9 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell align="left">
+                  <Typography style={{ fontFamily: 'Lato', fontSize: 14 }}>Tanggal</Typography>
+                </TableCell>
                 <TableCell align="left">
                   <Typography style={{ fontFamily: 'Lato', fontSize: 14 }}>Pengguna</Typography>
                 </TableCell>
@@ -154,21 +160,42 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
               ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                    <TableCell style={{}}>
+                      <Stack direction="column" width={120}>
+                        <Typography style={{ color: '#00000099', fontSize: 14 }}>
+                          {moment(item?.createdAt).format('DD/MM/YYYY')}
+                        </Typography>
+                        <Typography style={{ color: '#00000099', fontSize: 12 }}>
+                          {moment(item?.createdAt).format('HH:mm')} WIB
+                        </Typography>
+                      </Stack>
+                    </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" alignItems="center" gap="15px" width={250}>
                         <Avatar src={getMediaUri(item?.avatar?.[0]?.mediaEndpoint)} />
                         <Stack gap="4px" overflow="hidden" width="100%">
                           <Typography
-                            style={{ fontSize: '14px', color: '#00000099' }}
-                            className={classes.textTruncate}
-                            title={item?.username || '-'}>
-                            {item?.username || '-'}
+                            style={{
+                              fontSize: '14px',
+                              fontWeight: 'bold',
+                              color: '#00000099',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                              overflow: 'hidden',
+                            }}
+                            title={item?.fullName || '-'}>
+                            {item?.fullName || '-'}
                           </Typography>
                           <Typography
-                            style={{ fontSize: '12px', color: '#00000099' }}
-                            className={classes.textTruncate}
-                            title={item?.email || '-'}>
-                            {item?.email || '-'}
+                            style={{
+                              fontSize: '12px',
+                              color: '#00000099',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                              overflow: 'hidden',
+                            }}
+                            title={`@${item?.username}` || '-'}>
+                            @{item?.username || '-'}
                           </Typography>
                         </Stack>
                       </Stack>
@@ -181,7 +208,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           width: 120,
                           textTransform: 'capitalize',
                         }}>
-                        {item?.gender || 'Perempuan'}
+                        {item?.gender === 'L' && 'Laki-laki'}
+                        {item?.gender === 'P' && 'Perempuan'}
+                        {item?.gender === 'O' && 'Lainnya'}
+                        {!item?.gender && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -207,7 +237,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           WebkitBoxOrient: 'vertical',
                           display: '-webkit-box',
                         }}>
-                        {item?.area || 'Bekasi, Jawa Barat'}
+                        {item?.state || '-'} {item?.city && `,`} <br /> {item?.city}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -217,31 +247,36 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                           fontSize: '14px',
                           width: 120,
                         }}>
-                        {item?.statusKyc || 'Premium'}
+                        {item?.jenis === 'PREMIUM' && 'Premium'}
+                        {item?.jenis === 'BASIC' && 'Basic'}
+                        {!item?.jenis && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width={130}>
-                        {/* <Chip
-                          label="Terkirim"
-                          style={{
-                            fontSize: 14,
-                            fontWeight: 'bold',
-                            fontFamily: 'Lato',
-                            color: '#71A500D9',
-                            backgroundColor: '#71A5001A',
-                          }}
-                        /> */}
-                        <Chip
-                          label="Tidak Terkirim"
-                          style={{
-                            fontSize: 14,
-                            fontWeight: 'bold',
-                            fontFamily: 'Lato',
-                            color: '#676767D9',
-                            backgroundColor: '#6767671A',
-                          }}
-                        />
+                        {item?.status === 'SEND' ? (
+                          <Chip
+                            label="Terkirim"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#71A500D9',
+                              backgroundColor: '#71A5001A',
+                            }}
+                          />
+                        ) : (
+                          <Chip
+                            label="Tidak Terkirim"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#676767D9',
+                              backgroundColor: '#6767671A',
+                            }}
+                          />
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>
@@ -250,7 +285,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                 <TableRow>
                   <TableCell colSpan={8}>
                     <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Notifikasi Push</Typography>
+                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data Audiens</Typography>
                     </Stack>
                   </TableCell>
                 </TableRow>

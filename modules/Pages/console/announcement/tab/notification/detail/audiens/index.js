@@ -5,23 +5,21 @@ import { Button, Stack } from '@mui/material';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { toast } from 'react-hot-toast';
-import moment from 'moment';
-import { Typography } from '@material-ui/core';
-import { useGetListChallengeQuery } from 'api/console/challenge';
 import Router from 'next/router';
-import { useGetListNotificationQuery } from 'api/console/announcement';
+import { useGetListNotificationAudiensQuery } from 'api/console/announcement';
 
-const AudiensNotificationComponent = () => {
+const AudiensNotificationComponent = ({ templateId }) => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    descending: 'true',
+    ascending: 'false',
     username: '',
     gender: [],
     age: '',
     area: [],
     rangeAge: [],
     type: [],
+    status: [],
   });
   const [filterList, setFilterList] = useState([]);
 
@@ -30,45 +28,58 @@ const AudiensNotificationComponent = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: filter.descending === 'true' ? true : false,
+      ascending: filter.ascending === 'true' ? true : false,
+      templateid: templateId,
     });
-    filter.username !== '' && Object.assign(params, { username: filter.username });
+    filter.username !== '' && Object.assign(params, { fullname: filter.username });
     filter.gender.length >= 1 &&
       Object.assign(params, {
         gender: filter.gender.map((item) => {
           if (item === 'Laki-laki') {
-            return 'MALE';
+            return 'L';
           } else if (item === 'Perempuan') {
-            return 'FEMALE';
+            return 'P';
           } else {
-            return 'OTHER';
+            return 'O';
           }
         }),
       });
-    filter.area.length >= 1 && Object.assign(params, { lokasi: filter.area.map((item) => item?._id) });
-    filter.age !== '' && Object.assign(params, { startage: filter.rangeAge[0], endage: filter.rangeAge[1] });
-    filter.type.length >= 1 && Object.assign(params, { jenis: filter.type.map((item) => item) });
+    filter.area.length >= 1 && Object.assign(params, { location: filter.area.map((item) => item?.name) });
+    filter.age !== '' && Object.assign(params, { minage: filter.rangeAge[0], maxage: filter.rangeAge[1] });
+    filter.type.length >= 1 && Object.assign(params, { accounttype: filter.type.map((item) => item) });
+    filter.status.length >= 1 &&
+      Object.assign(params, {
+        sendstatus: filter.status.map((item) => {
+          if (item === 'Terkirim') {
+            return 'SEND';
+          } else if (item === 'Tidak Terkirim') {
+            return 'NOTSEND';
+          }
+        }),
+      });
 
     return params;
   };
 
-  // useEffect(() => {
-  //   if (filter.page >= 1 && listNotification?.data?.length < 1) {
-  //     toast.success('Semua data sudah ditampilkan');
-  //     setFilter((prevVal) => {
-  //       return {
-  //         ...prevVal,
-  //         page: prevVal.page - 1,
-  //       };
-  //     });
-  //   }
-  // }, [filter, loadingNotification]);
+  const { data: listAudiens, isFetching: loadingAudiens } = useGetListNotificationAudiensQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listAudiens?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingAudiens]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        descending: e.target.value,
+        ascending: e.target.value,
       };
     });
   };
@@ -137,6 +148,14 @@ const AudiensNotificationComponent = () => {
               : [...filter.type, value],
             page: 0,
           };
+        case 'status':
+          return {
+            ...prevVal,
+            status: filter.status.find((item) => item === value)
+              ? filter.status.filter((item) => item !== value)
+              : [...filter.status, value],
+            page: 0,
+          };
         case 'age':
           if (value === '< 14') {
             return {
@@ -173,7 +192,7 @@ const AudiensNotificationComponent = () => {
           return {
             page: 0,
             limit: 10,
-            descending: 'true',
+            ascending: 'true',
             username: '',
             gender: [],
             age: '',
@@ -190,7 +209,7 @@ const AudiensNotificationComponent = () => {
   return (
     <>
       <Head>
-        <title key="title">Hyppe-Console :: Notification Push</title>
+        <title key="title">Hyppe-Console :: Notification Push Audiens</title>
       </Head>
       <PageContainer heading="">
         <Stack direction="row" gap={3}>
@@ -200,8 +219,8 @@ const AudiensNotificationComponent = () => {
             filter={filter}
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
-            loading={false}
-            listTickets={{ data: [{}] }}
+            loading={loadingAudiens}
+            listTickets={listAudiens}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
           />

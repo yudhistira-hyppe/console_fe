@@ -155,14 +155,35 @@ const SearchSection = ({ filter, handleChange }) => {
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('type', e.target.value)}>
               <FormControlLabel
-                label={'Tidak Terverifikasi'}
+                label={'Basic'}
                 value="BASIC"
                 control={<Checkbox checked={filter.type.includes('BASIC')} color="secondary" />}
               />
               <FormControlLabel
-                label={'Terverifikasi'}
+                label={'Premium'}
                 value="PREMIUM"
                 control={<Checkbox checked={filter.type.includes('PREMIUM')} color="secondary" />}
+              />
+            </FormGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Status</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
+              <FormControlLabel
+                label={'Terkirim'}
+                value="Terkirim"
+                control={<Checkbox checked={filter.status.includes('Terkirim')} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'Tidak Terkirim'}
+                value="Tidak Terkirim"
+                control={<Checkbox checked={filter.status.includes('Tidak Terkirim')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>

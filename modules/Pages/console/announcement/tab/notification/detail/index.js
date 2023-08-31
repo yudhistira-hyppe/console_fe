@@ -85,7 +85,7 @@ const DetailNotificationComponent = ({ detailId }) => {
               <ContentDetail details={details} inputValue={inputValue} />
             </TabPanel>
             <TabPanel className={classes.tabPanel} value="audiens">
-              <AudiensNotificationComponent />
+              <AudiensNotificationComponent templateId={details?._id} />
             </TabPanel>
           </TabContext>
         )}
