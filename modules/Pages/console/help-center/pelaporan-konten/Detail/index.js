@@ -359,7 +359,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'tidak ditangguhkan', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Tidak Ditangguhkan
@@ -369,7 +369,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'ditangguhkan', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Tangguhkan
@@ -379,7 +379,7 @@ const DetailPelaporanKonten = () => {
                       color="primary"
                       onClick={() => showModalHandler({ type: 'sensitif', modalType: 'confirmation' })}
                       disabled={
-                        detail?.data[0]?.reportStatusLast !== 'BARU' ||
+                        detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ||
                         !access.find((item) => item?.nameModule === 'help_konten')?.acces?.updateAcces
                       }>
                       Ditandai Sensitif
