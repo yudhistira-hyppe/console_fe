@@ -37,7 +37,7 @@ const BandingKonten = () => {
   });
   const dispatch = useDispatch();
 
-  const getParams = useCallback(() => {
+  const getParams = () => {
     dispatch(saveParams(filter));
 
     let params = {};
@@ -68,46 +68,71 @@ const BandingKonten = () => {
     filter.reason.length >= 1 && Object.assign(params, { reasonAppeal: filter.reason });
 
     return params;
-  }, [filter]);
+  };
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
+
+  console.log(dataParams);
 
   useEffect(() => {
     if (!isEmpty(dataParams?.search)) {
       handleSearchChange('search', dataParams?.search);
     }
-    if (!isEmpty(filter?.status)) {
-      filter?.status?.map((item) => {
+    if (!isEmpty(dataParams?.status)) {
+      dataParams?.status?.map((item) => {
         handleSearchChange('status', item);
       });
     }
-    if (!isEmpty(filter?.reason)) {
-      filter?.reason?.map((item) => {
+    if (!isEmpty(dataParams?.reason)) {
+      dataParams?.reason?.map((item) => {
         handleSearchChange('reason', item);
       });
     }
-    if (!isEmpty(filter?.createdAt)) {
-      handleSearchChange('createdAt', filter?.createdAt);
-      handleSearchChange(
-        'labelTanggal',
-        `${dayjs(filter?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(filter?.createdAt[1]).format('DD-MM-YYYY')}`,
-      );
+    if (!isEmpty(dataParams?.createdAt)) {
+      handleSearchChange('createdAt', dataParams?.createdAt);
+      if (dataParams?.createdAt[0] !== null) {
+        handleSearchChange(
+          'labelTanggal',
+          `${dayjs(dataParams?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt[1]).format(
+            'DD-MM-YYYY',
+          )}`,
+        );
+      }
     }
 
     setFilter({
       ...filter,
       page: dataParams?.page || 0,
       limit: dataParams?.limit || 10,
-      descending: dataParams?.descending ? dataParams?.descending : 'true',
+      descending: dataParams?.descending || 'true',
       search: dataParams?.search || '',
-      labelTanggal: '',
       createdAt: dataParams?.createdAt || [null, null],
+      labelTanggal: dataParams?.createdAt?.[0]
+        ? `${dayjs(dataParams?.createdAt?.[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt?.[1]).format(
+            'DD-MM-YYYY',
+          )}`
+        : '',
       status: dataParams?.status || [],
       reason: dataParams?.reason || [],
     });
-  }, []);
 
-  console.log(dataParams);
+    console.log('dataParams: ', dataParams);
+    console.log('filter: ', filter);
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   setFilter({
+  //     ...filter,
+  //     page: dataParams?.page || 0,
+  //     limit: dataParams?.limit || 10,
+  //     descending: dataParams?.descending ? dataParams?.descending : 'true',
+  //     search: dataParams?.search || '',
+  //     labelTanggal: '',
+  //     createdAt: dataParams?.createdAt || [null, null],
+  //     status: dataParams?.status || [],
+  //     reason: dataParams?.reason || [],
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (filter.page >= 1 && listTickets?.arrdata?.length < 1) {

@@ -14,7 +14,6 @@ import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
 import moment from 'moment';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { setDate } from 'date-fns';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -30,7 +29,16 @@ const SearchSection = ({ filter, handleChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
-    if (!filter.createdAt[0] && !filter.createdAt[1]) {
+    if (filter.createdAt[0] && filter.createdAt[1]) {
+      setValue([
+        {
+          startDate: moment(filter.createdAt[0]).toDate(),
+          endDate: moment(filter.createdAt[1]).toDate(),
+          key: 'selection',
+        },
+      ]);
+      setDate(true);
+    } else {
       setWeek(null);
       setValue([
         {
@@ -42,6 +50,8 @@ const SearchSection = ({ filter, handleChange }) => {
       setDate(false);
     }
   }, [filter.createdAt]);
+
+  console.log(value);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -272,6 +282,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
                 editableDateInputs={true}
+                rangeColors={['#AB22AF']}
                 ranges={value}
                 direction="horizontal"
               />
