@@ -116,6 +116,7 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                   <TableCell style={{ width: 160 }}>Icon Interest</TableCell>
                   <TableCell align="left">Interest (ID)</TableCell>
                   <TableCell align="left">Interest (EN)</TableCell>
+                  <TableCell align="left">Device Languange</TableCell>
                   <TableCell align="left"></TableCell>
                 </TableRow>
               </TableHead>
@@ -144,6 +145,12 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                       <TableCell align="left">
                         <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
                           {item?.interestName || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                          {item?.langIso === 'en' && 'Inggris'}
+                          {item?.langIso === 'id' && 'Indonesia'}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
