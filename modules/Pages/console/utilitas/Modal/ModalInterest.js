@@ -73,7 +73,7 @@ const ModalInterest = ({ open, handleClose, data }) => {
         }
 
         setInputValue({ ...inputValue, icon: e.target.files });
-        setUrlImage(img);
+        setUrlImage(url);
       };
     }
   };
