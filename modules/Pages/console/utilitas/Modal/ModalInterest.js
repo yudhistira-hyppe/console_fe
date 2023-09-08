@@ -58,14 +58,27 @@ const ModalInterest = ({ open, handleClose, data }) => {
   }, [data]);
 
   const handleUploadImage = (e) => {
-    if (e.target.files[0]?.type !== 'image/png') {
-      alert('salah format woyy 🤬');
+    if (e.target.files[0]?.type !== 'image/svg+xml') {
+      alert('salah format woyy 🤬, yang bener itu SVG');
       return;
     } else {
-      const blob = new Blob(e.target.files, { type: 'image/png' });
+      const blob = new Blob(e.target.files, { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
-      setInputValue({ ...inputValue, icon: e.target.files });
-      setUrlImage(url);
+      let img = new Image();
+      img.src = url;
+      img.onload = () => {
+        if (img.width > 60 || img.height > 60) {
+          alert('ukuran imagenya kegedean woyy 🤬, maksimal 60 x 60');
+          return;
+        }
+        if (img.width !== img.height) {
+          alert('ukuran imagenya harus 1:1 woyy 🤬');
+          return;
+        }
+
+        setInputValue({ ...inputValue, icon: e.target.files });
+        setUrlImage(img);
+      };
     }
   };
 
@@ -139,7 +152,7 @@ const ModalInterest = ({ open, handleClose, data }) => {
                   <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Thumbnail</Typography>
                 </>
               )}
-              <input hidden id="upload_icon" type="file" accept="image/png" onChange={handleUploadImage} />
+              <input hidden id="upload_icon" type="file" accept="image/svg+xml" onChange={handleUploadImage} />
             </Box>
           </label>
           <Stack direction="column" gap={2}>
