@@ -67,10 +67,6 @@ const ModalInterest = ({ open, handleClose, data }) => {
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 60 || img.height > 60) {
-          alert('ukuran imagenya kegedean woyy 🤬, maksimal 60 x 60');
-          return;
-        }
         if (img.width !== img.height) {
           alert('ukuran imagenya harus 1:1 woyy 🤬');
           return;
