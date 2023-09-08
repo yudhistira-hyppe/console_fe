@@ -49,7 +49,7 @@ const EditBannerComponent = ({ detailId }) => {
       e.target.files[0]?.type !== 'image/png' &&
       e.target.files[0]?.type !== 'image/jpeg' &&
       e.target.files[0]?.type !== 'image/jpg' &&
-      e.target.files[0]?.type !== 'image/svg'
+      e.target.files[0]?.type !== 'image/svg+xml'
     ) {
       alert('salah format woyy 🤬');
       return;
@@ -143,129 +143,144 @@ const EditBannerComponent = ({ detailId }) => {
         </Stack>
 
         <PageContainer>
-          <Stack direction="column" gap={2}>
-            <Card sx={{ p: 4 }}>
-              <Stack direction="column" gap={3}>
-                <Typography style={{ fontWeight: 'bold' }}>Edit Banner</Typography>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
 
-                <Stack direction="column" gap={1}>
-                  <Typography style={{ fontSize: 14, color: '#00000099' }}>
-                    <b>Tanggal Dibuat:</b> {dayjs(details?.createdAt).format('DD/MM/YYYY')}
-                  </Typography>
-                  <Typography style={{ fontSize: 14, color: '#00000099' }}>
-                    <b>Dibuat Oleh:</b> {details?.fullName || '-'}
-                  </Typography>
-                </Stack>
+              setOpenModal(!openModal);
+            }}>
+            <Stack direction="column" gap={2}>
+              <Card sx={{ p: 4 }}>
+                <Stack direction="column" gap={3}>
+                  <Typography style={{ fontWeight: 'bold' }}>Edit Banner</Typography>
 
-                <Divider />
-
-                <Stack direction="column" gap={1}>
-                  <Typography>
-                    Judul Banner <span style={{ color: 'red' }}>*</span>
-                  </Typography>
-                  <TextField
-                    color="secondary"
-                    placeholder="Tulis Judul Banner"
-                    value={inputValue?.title}
-                    onChange={(e) => setInputValue({ ...inputValue, title: e.target.value })}
-                    sx={{ width: 400, input: { fontFamily: 'Lato' } }}
-                    inputProps={{ maxLength: 30 }}
-                    disabled={details?.statusTayang}
-                  />
-                  <Typography style={{ color: '#9B9B9B', fontSize: 12 }}>{inputValue?.title?.length}/30 Karakter</Typography>
-                </Stack>
-
-                <Stack direction="column" gap={1}>
-                  <Typography>
-                    URL <span style={{ color: 'red' }}>*</span>
-                  </Typography>
-                  <TextField
-                    color="secondary"
-                    placeholder="Masukkan URL"
-                    value={inputValue?.url}
-                    onChange={(e) => setInputValue({ ...inputValue, url: e.target.value })}
-                    sx={{ width: 400, input: { fontFamily: 'Lato' } }}
-                    disabled={details?.statusTayang}
-                  />
-                </Stack>
-
-                <Stack direction="column" gap={2}>
-                  <Stack direction="row" gap={1} alignItems="center">
-                    <Typography>
-                      Banner <span style={{ color: 'red' }}>*</span>
+                  <Stack direction="column" gap={1}>
+                    <Typography style={{ fontSize: 14, color: '#00000099' }}>
+                      <b>Tanggal Dibuat:</b> {dayjs(details?.createdAt).format('DD/MM/YYYY')}
+                    </Typography>
+                    <Typography style={{ fontSize: 14, color: '#00000099' }}>
+                      <b>Dibuat Oleh:</b> {details?.fullName || '-'}
                     </Typography>
                   </Stack>
 
-                  <Stack direction="row" gap={3}>
-                    <label htmlFor="banner-background">
-                      <Box
-                        style={{
-                          width: 375,
-                          height: 211,
-                          border: '1px dashed #9B9B9B',
-                          borderRadius: 4,
-                          backgroundColor: '#F0F0F0',
-                          cursor: details?.statusTayang ? 'default' : 'pointer',
-                        }}>
-                        {inputValue?.banner_file?.url ? (
-                          <Avatar
-                            src={inputValue?.banner_file?.url}
-                            style={{ width: '100%', height: '100%' }}
-                            variant="rounded"
-                          />
-                        ) : (
-                          <Stack direction="column" alignItems="center" justifyContent="center" spacing={1} height="100%">
-                            <CloudUpload style={{ fontSize: 36, color: '#9B9B9B' }} />
-                            <Typography style={{ fontWeight: 'bold', color: '#9B9B9B' }}>
-                              Tambahkan dari Perangkat
-                            </Typography>
-                          </Stack>
-                        )}
-                        <input
-                          hidden
-                          id="banner-background"
-                          type="file"
-                          accept="image/jpeg,image/jpg,image/png,image/svg"
-                          onChange={handleUploadImage}
-                          disabled={details?.statusTayang}
-                        />
-                      </Box>
-                    </label>
-                    <Stack direction="column" gap={1}>
-                      <Typography style={{ fontWeight: 'bold', color: '#737373' }}>
-                        Ketentuan Gambar <span style={{ color: 'red' }}>*</span>
+                  <Divider />
+
+                  <Stack direction="column" gap={1}>
+                    <Typography>
+                      Judul Banner <span style={{ color: 'red' }}>*</span>
+                    </Typography>
+                    <TextField
+                      color="secondary"
+                      placeholder="Tulis Judul Banner"
+                      value={inputValue?.title}
+                      onChange={(e) => setInputValue({ ...inputValue, title: e.target.value })}
+                      sx={{ width: 400, input: { fontFamily: 'Lato' } }}
+                      inputProps={{ maxLength: 30 }}
+                      disabled={details?.statusTayang}
+                      required
+                    />
+                    <Typography style={{ color: '#9B9B9B', fontSize: 12 }}>
+                      {inputValue?.title?.length}/30 Karakter
+                    </Typography>
+                  </Stack>
+
+                  <Stack direction="column" gap={1}>
+                    <Typography>
+                      URL <span style={{ color: 'red' }}>*</span>
+                    </Typography>
+                    <TextField
+                      color="secondary"
+                      type="url"
+                      placeholder="https://example.com"
+                      value={inputValue?.url}
+                      onChange={(e) => setInputValue({ ...inputValue, url: e.target.value })}
+                      sx={{ width: 400, input: { fontFamily: 'Lato' } }}
+                      disabled={details?.statusTayang}
+                      pattern="https://.*"
+                      required
+                    />
+                  </Stack>
+
+                  <Stack direction="column" gap={2}>
+                    <Stack direction="row" gap={1} alignItems="center">
+                      <Typography>
+                        Banner <span style={{ color: 'red' }}>*</span>
                       </Typography>
-                      <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran Gambar : 1125px x 611px </Typography>
-                      <Typography style={{ color: '#737373', fontSize: 14 }}>Format Gambar : JPEG, PNG, dan SVG</Typography>
-                      <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Maximal 5mb</Typography>
+                    </Stack>
+
+                    <Stack direction="row" gap={3}>
+                      <label htmlFor="banner-background">
+                        <Box
+                          style={{
+                            width: 375,
+                            height: 211,
+                            border: '1px dashed #9B9B9B',
+                            borderRadius: 4,
+                            backgroundColor: '#F0F0F0',
+                            cursor: details?.statusTayang ? 'default' : 'pointer',
+                          }}>
+                          {inputValue?.banner_file?.url ? (
+                            <Avatar
+                              src={inputValue?.banner_file?.url}
+                              style={{ width: '100%', height: '100%' }}
+                              variant="rounded"
+                            />
+                          ) : (
+                            <Stack direction="column" alignItems="center" justifyContent="center" spacing={1} height="100%">
+                              <CloudUpload style={{ fontSize: 36, color: '#9B9B9B' }} />
+                              <Typography style={{ fontWeight: 'bold', color: '#9B9B9B' }}>
+                                Tambahkan dari Perangkat
+                              </Typography>
+                            </Stack>
+                          )}
+                          <input
+                            hidden
+                            id="banner-background"
+                            type="file"
+                            accept="image/jpeg,image/jpg,image/png,image/svg+xml"
+                            onChange={handleUploadImage}
+                            disabled={details?.statusTayang}
+                          />
+                        </Box>
+                      </label>
+                      <Stack direction="column" gap={1}>
+                        <Typography style={{ fontWeight: 'bold', color: '#737373' }}>
+                          Ketentuan Gambar <span style={{ color: 'red' }}>*</span>
+                        </Typography>
+                        <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran Gambar : 1125px x 611px </Typography>
+                        <Typography style={{ color: '#737373', fontSize: 14 }}>
+                          Format Gambar : JPEG, PNG, dan SVG
+                        </Typography>
+                        <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Maximal 5mb</Typography>
+                      </Stack>
                     </Stack>
                   </Stack>
                 </Stack>
-              </Stack>
-            </Card>
+              </Card>
 
-            {!details?.statusTayang && (
-              <Stack direction="row" alignItems="center" justifyContent="flex-end" gap={2}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  style={{ height: 40 }}
-                  onClick={() => Router.push('/announcement/banner')}
-                  disabled={loadingUpdate}>
-                  <Typography style={{ fontSize: 14 }}>Batal</Typography>
-                </Button>
-                <LoadingButton
-                  loading={loadingUpdate}
-                  variant="contained"
-                  color="secondary"
-                  style={{ height: 40 }}
-                  onClick={() => setOpenModal(!openModal)}
-                  disabled={checkDisabled()}>
-                  <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
-                </LoadingButton>
-              </Stack>
-            )}
-          </Stack>
+              {!details?.statusTayang && (
+                <Stack direction="row" alignItems="center" justifyContent="flex-end" gap={2}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    style={{ height: 40 }}
+                    onClick={() => Router.push('/announcement/banner')}
+                    disabled={loadingUpdate}>
+                    <Typography style={{ fontSize: 14 }}>Batal</Typography>
+                  </Button>
+                  <LoadingButton
+                    loading={loadingUpdate}
+                    variant="contained"
+                    color="secondary"
+                    style={{ height: 40 }}
+                    type="submit"
+                    disabled={checkDisabled()}>
+                    <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
+                  </LoadingButton>
+                </Stack>
+              )}
+            </Stack>
+          </form>
         </PageContainer>
       </Stack>
     </>
