@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   TableContainer,
@@ -35,12 +35,18 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
   const { authUser } = useAuth();
   const [openIndex, setOpenIndex] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [refreshImage, setRefreshImage] = useState(true);
   const [openModal, setOpenModal] = useState({
     showModal: false,
     type: '',
     selected: {},
   });
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+
+  useEffect(() => {
+    setRefreshImage(true);
+    setTimeout(() => setRefreshImage(false), 200);
+  }, []);
 
   const handleOpenMenu = (event, index) => {
     setAnchorEl(event.currentTarget);
@@ -163,7 +169,11 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
                     <TableCell align="left">
                       <Stack direction="row" alignItems="center" gap="15px" width={180}>
-                        <Avatar src={item?.image} variant="rounded" alt="X" />
+                        <Avatar
+                          src={refreshImage ? item?.image + '?m=' + new Date() : item?.image}
+                          variant="rounded"
+                          alt="X"
+                        />
                         <Typography
                           style={{
                             fontSize: '14px',
@@ -253,21 +263,15 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         MenuListProps={{
                           'aria-labelledby': `basic-button-${i}`,
                         }}>
-                        {!item?.statusTayang && (
-                          <MenuItem
-                            onClick={() => {
-                              handleCloseMenu();
-                              Router.push(`/announcement/banner/detail/${item?._id}`);
-                            }}
-                            disabled={
-                              !access?.find((item) => item?.nameModule === 'announcement_banner')?.acces?.updateAcces
-                            }>
-                            <ListItemIcon>
-                              <Edit />
-                            </ListItemIcon>
-                            <ListItemText>Edit</ListItemText>
-                          </MenuItem>
-                        )}
+                        <MenuItem
+                          onClick={() => {
+                            handleCloseMenu();
+                            Router.push(`/announcement/banner/detail/${item?._id}`);
+                          }}
+                          disabled={!access?.find((item) => item?.nameModule === 'announcement_banner')?.acces?.updateAcces}>
+                          <ListItemIcon>{item?.statusTayang ? <Visibility /> : <Edit />}</ListItemIcon>
+                          <ListItemText>{item?.statusTayang ? 'Lihat' : 'Edit'}</ListItemText>
+                        </MenuItem>
                         <MenuItem
                           onClick={() => {
                             handleCloseMenu();
