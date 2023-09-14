@@ -55,7 +55,7 @@ const HorizontalDefault = ({ className, children }) => {
       !accessModule.includes('boost_engagement') &&
       !accessModule.includes('boost_table')
     ) {
-      newMenu = newMenu.filter((item) => item.name !== 'Boost Post Center');
+      newMenu = newMenu.filter((item) => item.name !== 'Pusat Boost');
     }
     if (
       !accessModule.includes('database_account') &&
@@ -105,6 +105,21 @@ const HorizontalDefault = ({ className, children }) => {
       !accessModule.includes('member_divistion')
     ) {
       newMenu = newMenu.filter((item) => item.name !== 'Anggota');
+    }
+    if (!accessModule.includes('challenge')) {
+      newMenu = newMenu.filter((item) => item.name !== 'Challenge');
+    }
+    if (
+      !accessModule.includes('utilitas_interest') &&
+      !accessModule.includes('utilitas_setting') &&
+      !accessModule.includes('utilitas_bank') &&
+      !accessModule.includes('utilitas_challenge_jenis') &&
+      !accessModule.includes('utilitas_challenge_badge')
+    ) {
+      newMenu = newMenu.filter((item) => item.name !== 'Utilitas');
+    }
+    if (!accessModule.includes('announcement_notif') && !accessModule.includes('announcement_banner')) {
+      newMenu = newMenu.filter((item) => item.name !== 'Pengumuman');
     }
 
     setAccessModule(newMenu);
