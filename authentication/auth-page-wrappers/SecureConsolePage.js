@@ -63,10 +63,14 @@ const SecureConsolePage = ({ children }) => {
         setIsRenderChildren(true);
         setLoadingValidate(false);
       } else if (
-        router.pathname.includes('ads-center') &&
-        (accessModule.includes('ads_performance') ||
-          accessModule.includes('ads_demografis') ||
-          accessModule.includes('ads_table'))
+        router.pathname.includes('ads-center/setting') &&
+        (accessModule.includes('ads_setting_dashboard') || accessModule.includes('ads_setting_list'))
+      ) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('ads-center/manage') &&
+        (accessModule.includes('ads_manage_dashboard') || accessModule.includes('ads_manage_list'))
       ) {
         setIsRenderChildren(true);
         setLoadingValidate(false);
@@ -109,10 +113,22 @@ const SecureConsolePage = ({ children }) => {
       ) {
         setIsRenderChildren(true);
         setLoadingValidate(false);
-      } else if (router.pathname.includes('utilitas')) {
+      } else if (
+        router.pathname.includes('utilitas') &&
+        (accessModule.includes('utilitas_interest') ||
+          accessModule.includes('utilitas_setting') ||
+          accessModule.includes('utilitas_bank') ||
+          accessModule.includes('utilitas_challenge'))
+      ) {
         setIsRenderChildren(true);
         setLoadingValidate(false);
-      } else if (router.pathname.includes('challenge')) {
+      } else if (router.pathname.includes('challenge') && accessModule.includes('challenge')) {
+        setIsRenderChildren(true);
+        setLoadingValidate(false);
+      } else if (
+        router.pathname.includes('announcement') &&
+        (accessModule.includes('announcement_notif') || accessModule.includes('announcement_banner'))
+      ) {
         setIsRenderChildren(true);
         setLoadingValidate(false);
       } else {
