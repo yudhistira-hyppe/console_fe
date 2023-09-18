@@ -158,6 +158,21 @@ export const databaseApi = createApi({
       }),
       invalidatesTags: ['Media'],
     }),
+
+    //Sticker
+    getStickerTrend: build.query({
+      query: () => ({
+        url: '/mediastiker/trend',
+        method: 'GET',
+      }),
+    }),
+    getStickerCategory: build.query({
+      query: () => ({
+        url: '/stickercategory/listing',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -187,4 +202,8 @@ export const {
   useUpdateMusicMutation,
   useCreateMusicMutation,
   useDeleteMusicMutation,
+
+  //Sticker
+  useGetStickerTrendQuery,
+  useGetStickerCategoryQuery,
 } = databaseApi;
