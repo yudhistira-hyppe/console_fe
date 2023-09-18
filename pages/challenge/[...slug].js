@@ -20,7 +20,7 @@ const ChallengeDynamicPage = () => {
   const { authUser, isLoading } = useAuth();
   const router = useRouter();
   const { slug } = router.query;
-  const [challengeProps, setChallengeProps] = useState({});
+  const [challengeProps, setChallengeProps] = useState({ tab: 'draft' });
   const { data: listJenis, isLoading: loadingJenis } = authUser ? useGetJenisChallengeQuery({ limit: 100, page: 0 }) : {};
 
   useEffect(() => {
