@@ -11,14 +11,15 @@ import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
 import UploadThumbnail from '../upload-thumbnail';
 import ModalBatal from '../Modal/ModalBatal';
+import { useGetStickerCategoryQuery } from 'api/console/database';
 
 const FormSticker = (props) => {
   const { status, data, id } = props;
   const [inputValue, setInputValue] = useState({
-    stickerName: '',
-    category: '',
-    apsaraThumbnail: '',
-    status: '',
+    stickerName: data?.name || '',
+    category: data?.kategori || '',
+    image: data?.image || '',
+    status: data?.status || '',
   });
   const [modal, setModal] = useState({
     delete: false,
@@ -29,23 +30,11 @@ const FormSticker = (props) => {
   });
   const [loading, setLoading] = useState(false);
 
+  const { data: category, isLoading: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'STICKER' });
+
   const handleChangeInput = (e) => {
     const value = e.target.value;
     setInputValue({ ...inputValue, [e.target.name]: value });
-  };
-
-  const handleApsaraMedia = async () => {
-    const response = await fetch('/api/apsara-upload-media');
-    const data = await response.json();
-
-    return data;
-  };
-
-  const handleApsaraImage = async () => {
-    const response = await fetch('/api/apsara-upload-image');
-    const data = await response.json();
-
-    return data;
   };
 
   const handleCreate = () => {
@@ -58,11 +47,30 @@ const FormSticker = (props) => {
     router.replace('/database/sticker');
   };
 
+  const checkDisable = () => {
+    let disabled = false;
+
+    if (status === 'create' && (!inputValue.stickerName || !inputValue.category || !inputValue.image)) {
+      disabled = true;
+    } else {
+      if (
+        !inputValue.stickerName ||
+        !inputValue.category ||
+        (data?.name === inputValue.stickerName && data?.kategori === inputValue.category)
+      ) {
+        disabled = true;
+      }
+    }
+
+    return disabled;
+  };
+
   console.log(inputValue);
 
   return (
     <>
       <ModalDelete
+        id={data?._id}
         showModal={modal.delete}
         onClose={() => setModal({ ...modal, delete: !modal.delete })}
         onConfirm={() => router.replace('/database/sticker')}
@@ -94,7 +102,12 @@ const FormSticker = (props) => {
             gap="12px"
             maxWidth={status !== 'create' ? 170 : '100%'}
             alignItems="flex-end">
-            <UploadThumbnail thumbnail={''} status={status} setInputValue={setInputValue} inputValue={inputValue} />
+            <UploadThumbnail
+              thumbnail={inputValue?.image}
+              status={status}
+              setInputValue={setInputValue}
+              inputValue={inputValue}
+            />
           </Stack>
           <Stack direction={'column'} width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={'100%'}>
@@ -121,15 +134,23 @@ const FormSticker = (props) => {
                 color="secondary"
                 displayEmpty>
                 <MenuItem value="" disabled>
-                  Pilih Kategori Stiker
+                  Pilih Kategori
                 </MenuItem>
-                <MenuItem value="Hot">Hot</MenuItem>
-                <MenuItem value="Dekoratif">Dekoratif</MenuItem>
-                <MenuItem value="Teks">Teks</MenuItem>
-                <MenuItem value="Suasana Hati">Suasana Hati</MenuItem>
-                <MenuItem value="Gaya Hidup">Gaya Hidup</MenuItem>
-                <MenuItem value="Alam">Alam</MenuItem>
-                <MenuItem value="Events">Events</MenuItem>
+                {loadingCategory ? (
+                  <MenuItem value="" disabled>
+                    Loading data...
+                  </MenuItem>
+                ) : category?.data?.length >= 1 ? (
+                  category?.data?.map((item, key) => (
+                    <MenuItem key={key} value={item?.name}>
+                      {item?.name}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="" disabled>
+                    Tidak ada data
+                  </MenuItem>
+                )}
               </Select>
             </Stack>
             {status === 'create' && (
@@ -159,9 +180,7 @@ const FormSticker = (props) => {
                 color="secondary"
                 style={{ width: 'fit-content', fontWeight: 'bold' }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
-                disabled={
-                  !inputValue.stickerName || !inputValue.category || !inputValue.status || !inputValue.apsaraThumbnail
-                }>
+                disabled={checkDisable()}>
                 {status !== 'create' ? 'Terapkan' : 'Simpan'}
               </LoadingButton>
               {status === 'create' && (
@@ -170,12 +189,7 @@ const FormSticker = (props) => {
                   color="secondary"
                   style={{ width: 'fit-content', fontWeight: 'bold' }}
                   onClick={() => {
-                    if (
-                      !inputValue.stickerName &&
-                      !inputValue.category &&
-                      !inputValue.status &&
-                      !inputValue.apsaraThumbnail
-                    ) {
+                    if (!inputValue.stickerName && !inputValue.category && !inputValue.status && !inputValue.image) {
                       router.push('/database/sticker');
                     } else {
                       setModal({ ...modal, cancel: !modal.cancel });
@@ -197,13 +211,13 @@ const FormSticker = (props) => {
                 </Typography>
                 <RadioGroup
                   row
-                  value={data?.isActive ? 'active' : 'disactive'}
+                  value={data?.status ? 'active' : 'noneactive'}
                   style={{ gap: 40 }}
                   onChange={() =>
                     setModal({
                       ...modal,
                       confirmation: !modal.confirmation,
-                      status: data?.isActive ? 'active' : 'disactive',
+                      status: data?.status ? 'noneactive' : 'active',
                     })
                   }>
                   <FormControlLabel
@@ -212,7 +226,7 @@ const FormSticker = (props) => {
                     label={<Typography>Aktif</Typography>}
                   />
                   <FormControlLabel
-                    value="disactive"
+                    value="noneactive"
                     control={<Radio color="secondary" />}
                     label={<Typography>Tidak Aktif</Typography>}
                   />

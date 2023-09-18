@@ -1,31 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { CloudUpload } from '@material-ui/icons';
 import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
-import { makeStyles } from '@material-ui/styles';
-
-const useStyles = makeStyles(() => ({
-  uploadBox: {
-    backgroundColor: '#E8E8E8A6',
-    border: '1px dashed #737373',
-    borderRadius: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    gap: 12,
-    height: '100%',
-    width: '100%',
-    cursor: 'pointer',
-    overflow: 'hidden',
-  },
-}));
 
 const UploadThumbnail = (props) => {
   const { thumbnail, status, setInputValue, inputValue, disabled } = props;
   const [image, setImage] = useState(thumbnail);
   const [urlImage, setUrlImage] = useState(thumbnail);
-  const classes = useStyles();
 
   const handleUploadImage = (e) => {
     if (e.target.files[0]?.type !== 'image/png') {
@@ -43,9 +23,24 @@ const UploadThumbnail = (props) => {
   return (
     <>
       <label
-        htmlFor={status === 'create' && 'upload_thumbnail'}
+        htmlFor={(status === 'create' && 'upload_thumbnail') || ''}
         style={{ width: status === 'create' ? '100%' : 170, height: status === 'create' ? '100%' : 170 }}>
-        <Box className={classes.uploadBox}>
+        <Box
+          style={{
+            backgroundColor: '#E8E8E8A6',
+            border: '1px dashed #737373',
+            borderRadius: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            gap: 12,
+            height: '100%',
+            width: '100%',
+            cursor: status === 'create' ? 'pointer' : 'initial',
+            overflow: 'hidden',
+          }}>
           {image ? (
             <Avatar src={urlImage} alt="Thumbnail Efek" variant="square" style={{ width: '100%', height: '100%' }} />
           ) : (

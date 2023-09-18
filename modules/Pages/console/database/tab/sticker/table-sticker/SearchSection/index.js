@@ -14,7 +14,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
-import { useGetThemeMusicQuery } from 'api/console/database';
+import { useGetStickerCategoryQuery } from 'api/console/database';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -29,7 +29,7 @@ const SearchSection = ({ filter, handleChange }) => {
   const [isDate, setDate] = useState(false);
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
 
-  const { data: themes, isFetching: loadingTheme } = useGetThemeMusicQuery();
+  const { data: category, isFetching: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'STICKER' });
 
   useEffect(() => {
     if (!filter.createdAt[0] && !null) {
@@ -157,10 +157,10 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
-              {loadingTheme ? (
+              {loadingCategory ? (
                 <Typography>Loading data...</Typography>
-              ) : themes?.data?.length >= 1 ? (
-                themes?.data?.map((item, key) => (
+              ) : category?.data?.length >= 1 ? (
+                category?.data?.map((item, key) => (
                   <FormControlLabel
                     key={key}
                     label={item?.name}

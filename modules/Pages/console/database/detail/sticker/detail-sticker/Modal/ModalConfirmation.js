@@ -3,7 +3,10 @@ import Box from '@mui/material/Box';
 import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
+import { useUpdateStickerStatusMutation } from 'api/console/database';
+import { toast } from 'react-hot-toast';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -18,13 +21,24 @@ const style = {
 };
 
 export default function ModalConfirmation({ showModal, status, id, onClose }) {
+  const [updateStatus, { isLoading: loadingUpdate }] = useUpdateStickerStatusMutation();
+  const router = useRouter();
+
   const handleStatus = () => {
     const data = {
-      _id: [id],
-      status: status === 'active' ? false : true,
+      listid: [id],
+      status: status,
     };
 
-    onClose();
+    updateStatus(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil mengubah status sticker');
+        router.replace('/database/sticker');
+      }
+      onClose();
+    });
   };
 
   return (
@@ -36,18 +50,18 @@ export default function ModalConfirmation({ showModal, status, id, onClose }) {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack direction="column" alignItems="center">
-            {status === 'active' && <img src="/images/switch_off_voucher.png" style={{ width: 250, marginTop: '-50px' }} />}
-            {status !== 'active' && <img src="/images/switch_on_media.png" style={{ width: 250, marginBottom: 30 }} />}
+            {status === 'active' && <img src="/images/switch_on_media.png" style={{ width: 250, marginBottom: 30 }} />}
+            {status !== 'active' && <img src="/images/switch_off_voucher.png" style={{ width: 250, marginTop: '-50px' }} />}
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 18 }}>
-              {status === 'active' && 'Kamu Yakin Ingin Mengnonaktifkan Stiker ini ?'}
-              {status !== 'active' && 'Kamu Yakin Ingin Mengaktifkan Stiker ini ?'}
+              {status === 'active' && 'Kamu Yakin Ingin Mengaktifkan Stiker ini ?'}
+              {status !== 'active' && 'Kamu Yakin Ingin Mengnonaktifkan Stiker ini ?'}
             </Typography>
           </Stack>
 
           <Stack direction={'row'} mt={3} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={handleStatus}>
+            <LoadingButton loading={loadingUpdate} variant="contained" color="secondary" onClick={handleStatus}>
               Konfirmasi
-            </Button>
+            </LoadingButton>
             <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>

@@ -38,7 +38,7 @@ const DatabaseDetailStickerComponent = () => {
   } else if (isRenderChildren && slug[1] === 'create' && tab === 'sticker') {
     return <DetailSticker kind="create" />;
   } else if (isRenderChildren && slug[1] && tab === 'sticker') {
-    return <DetailSticker kind="update" />;
+    return <DetailSticker kind="update" idSticker={slug[1]} />;
   } else if (isRenderChildren && slug[1] === 'create' && tab === 'emoji') {
     return <DetailEmoji kind="create" />;
   } else if (isRenderChildren && slug[1] && tab === 'emoji') {
