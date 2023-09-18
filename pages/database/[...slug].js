@@ -22,7 +22,7 @@ const DatabaseDynamicPage = () => {
       if (slug) {
         if (authUser) {
           if (slug.length > 2 || !validDatabaseTab.includes(slug[0])) {
-            router.replace('/database/account');
+            router.replace('/database');
             return;
           }
           setDatabaseProps({ tab: slug[0], detailId: slug[1] });

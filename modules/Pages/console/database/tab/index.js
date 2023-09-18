@@ -37,8 +37,12 @@ const DatabaseTabComponent = (props) => {
           {access.map((item) => item?.nameModule).includes('database_music') && (
             <Tab className={classes.tab} label="Musik" value="music" />
           )}
-          <Tab className={classes.tab} label="Efek" value="effect" />
-          <Tab className={classes.tab} label="Stiker" value="sticker" />
+          {access.map((item) => item?.nameModule).includes('database_effect') && (
+            <Tab className={classes.tab} label="Efek" value="effect" />
+          )}
+          {access.map((item) => item?.nameModule).includes('database_sticker') && (
+            <Tab className={classes.tab} label="Stiker" value="sticker" />
+          )}
         </TabList>
         {access.map((item) => item?.nameModule).includes('database_account') && (
           <TabPanel className={classes.tabPanel} value="account">
@@ -55,12 +59,16 @@ const DatabaseTabComponent = (props) => {
             <DatabaseTabMediaComponent />
           </TabPanel>
         )}
-        <TabPanel className={classes.tabPanel} value="effect">
-          <DatabaseTabEffectComponent />
-        </TabPanel>
-        <TabPanel className={classes.tabPanel} value="sticker">
-          <DatabaseTabStickerComponent />
-        </TabPanel>
+        {access.map((item) => item?.nameModule).includes('database_effect') && (
+          <TabPanel className={classes.tabPanel} value="effect">
+            <DatabaseTabEffectComponent />
+          </TabPanel>
+        )}
+        {access.map((item) => item?.nameModule).includes('database_sticker') && (
+          <TabPanel className={classes.tabPanel} value="sticker">
+            <DatabaseTabStickerComponent />
+          </TabPanel>
+        )}
       </TabContext>
     </>
   );
