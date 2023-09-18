@@ -13,15 +13,17 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    if (isDraft) {
+    if (inputValue?.startdate && inputValue?.cycle >= 1 && inputValue?.cycle_day >= 1) {
       handleInputChange(
         'enddate',
-        inputValue?.startdate
-          ? inputValue?.cycle_day
-            ? inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day - 1, 'day')
-            : null
-          : null,
+        inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day, 'day'),
       );
+
+      if (!inputValue?.starthour) {
+        handleInputChange('starthour', inputValue?.startdate.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
+      } else {
+        handleInputChange('starthour', inputValue?.startdate);
+      }
     }
   }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
 
@@ -60,6 +62,8 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                 handleInputChange('cycle', 0);
                 handleInputChange('cycle_day', 0);
                 handleInputChange('startdate', null);
+                handleInputChange('enddate', null);
+                handleInputChange('starthour', null);
               }}
               SelectProps={{
                 renderValue: (selected) => (
@@ -231,7 +235,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                 <small style={{ color: '#9B9B9B' }}>Tentukan berapa kali siklus challenge akan diputar</small>
               </Stack>
 
-              {inputValue?.cycle_day >= 1 && (
+              {inputValue?.cycle >= 1 && inputValue?.cycle_day >= 1 && (
                 <Stack direction="row" mt={3} style={{ padding: 12, backgroundColor: '#EDEDED', borderRadius: 6 }}>
                   <Typography style={{ color: '#737373' }}>
                     Total Durasi Kompetisi akan berlangsung selama{' '}
@@ -264,7 +268,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                 value={inputValue?.startdate || null}
                 minDate={dayjs().add(1, 'day').toDate()}
                 onChange={(newValue) => {
-                  handleInputChange('startdate', newValue);
+                  handleInputChange('startdate', newValue.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
                 }}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => (
@@ -305,6 +309,17 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
               value={inputValue?.starthour || null}
               onChange={(newValue) => {
                 handleInputChange('starthour', newValue);
+
+                if (inputValue?.enddate) {
+                  handleInputChange(
+                    'startdate',
+                    dayjs(inputValue?.startdate).hour(newValue.get('hour')).minute(newValue.get('minute')),
+                  );
+                  handleInputChange(
+                    'enddate',
+                    dayjs(inputValue?.enddate).hour(newValue.get('hour')).minute(newValue.get('minute')),
+                  );
+                }
               }}
               open={false}
               onOpen={() => setOpenModal(true)}
@@ -369,7 +384,12 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
         selectedItem={inputValue?.starthour}
         onClose={() => setOpenModal(false)}
         onSubmit={(val) => {
-          handleInputChange('starthour', dayjs().hour(val.hour).minute(val.minute));
+          handleInputChange('starthour', dayjs(inputValue?.startdate).hour(val.hour).minute(val.minute));
+
+          if (inputValue?.enddate) {
+            handleInputChange('startdate', dayjs(inputValue?.startdate).hour(val.hour).minute(val.minute));
+            handleInputChange('enddate', dayjs(inputValue?.enddate).hour(val.hour).minute(val.minute));
+          }
           setOpenModal(false);
         }}
       />

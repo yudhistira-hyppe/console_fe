@@ -11,7 +11,7 @@ import {
   useUpdateChallengeMutation,
 } from 'api/console/challenge';
 import { LoadingButton } from '@mui/lab';
-import { map } from 'lodash';
+import { isString, map } from 'lodash';
 import Router from 'next/router';
 
 const style = {
@@ -421,9 +421,11 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('notifikasiPush_updateLeaderboard_unit', 'JAM');
         formData.append(
           'notifikasiPush_updateLeaderboard_aturWaktu',
-          specificNotification('update')
-            ?.blast?.split(',')
-            ?.map((item) => Number(item)),
+          isString(specificNotification('update')?.blast)
+            ? specificNotification('update')
+                ?.blast?.split(',')
+                ?.map((item) => Number(item))
+            : specificNotification('update')?.blast,
         );
       }
       if (type?.includes('will_end')) {
