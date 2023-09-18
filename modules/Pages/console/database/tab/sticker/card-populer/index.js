@@ -5,23 +5,7 @@ import { Info } from '@material-ui/icons';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
 const CardPopular = (props) => {
-  const { image = false, title, card, data, loading } = props;
-
-  const dataChart = () => {
-    if (!loading) {
-      if (data?.length >= 5) {
-        return data;
-      } else {
-        let tempData = new Array(...data);
-
-        for (let i = data?.length; i < 5; i++) {
-          tempData.push({});
-        }
-
-        return tempData;
-      }
-    }
-  };
+  const { image = false, title, data, loading } = props;
 
   return (
     <Card style={{ padding: 24, height: '100%' }}>
@@ -42,7 +26,7 @@ const CardPopular = (props) => {
               <Typography style={{ fontWeight: 'bold', color: '#737373' }}>loading data...</Typography>
             </Stack>
           ) : (
-            dataChart()?.map((item, key) => (
+            data?.map((item, key) => (
               <Stack key={key} direction="row" alignItems="center" gap="8px">
                 <Typography style={{ width: '100%', maxWidth: 85, fontWeight: 'bold', color: '#00000099' }}>
                   {key + 1}
@@ -50,9 +34,9 @@ const CardPopular = (props) => {
                 <Stack direction="row" alignItems="center" gap="12px" width="100%">
                   {image && (
                     <Avatar
-                      src={item?._id?.apsaraThumnailUrl || new Error()}
+                      src={item?.image || new Error()}
                       variant="rounded"
-                      style={{ width: '100%', maxWidth: 40, height: 40 }}
+                      style={{ width: '100%', maxWidth: 40, height: 40, border: '1px solid #DDDDDD' }}
                       alt="x"
                     />
                   )}
@@ -65,13 +49,12 @@ const CardPopular = (props) => {
                       width: 80,
                       textOverflow: 'ellipsis',
                     }}>
-                    {card === 'aesthetic' && (item?._id?.artistName || '-')}
-                    {card === 'special' && (item?._id?.musicTitle || '-')}
+                    {item?.name || '-'}
                   </Typography>
                 </Stack>
                 <Typography
                   style={{ width: '100%', maxWidth: 85, fontWeight: 'bold', color: '#00000099', textAlign: 'right' }}>
-                  {numberWithCommas(0)}
+                  {numberWithCommas(item?.countused || 0)}
                 </Typography>
               </Stack>
             ))

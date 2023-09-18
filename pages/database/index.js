@@ -19,6 +19,10 @@ const DatabasePage = () => {
           router.replace('/database/content');
         } else if (access.map((item) => item?.nameModule).includes('database_music')) {
           router.replace('/database/music');
+        } else if (access.map((item) => item?.nameModule).includes('database_effect')) {
+          router.replace('/database/effect');
+        } else if (access.map((item) => item?.nameModule).includes('database_sticker')) {
+          router.replace('/database/sticker');
         } else {
           router.replace('/');
         }
