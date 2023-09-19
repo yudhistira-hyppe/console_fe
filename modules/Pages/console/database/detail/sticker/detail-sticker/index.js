@@ -22,8 +22,6 @@ const DetailSticker = ({ kind, idSticker }) => {
   const { data: detail, isLoading: loadingSticker } = useGetDetailStickerQuery(idSticker);
   const { data: chart, isLoading: loadingChart } = useGetStickerChartQuery(idSticker);
 
-  console.log(chart);
-
   return (
     <>
       <Head>

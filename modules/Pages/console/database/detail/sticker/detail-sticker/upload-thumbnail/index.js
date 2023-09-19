@@ -8,15 +8,15 @@ const UploadThumbnail = (props) => {
   const [urlImage, setUrlImage] = useState(thumbnail);
 
   const handleUploadImage = (e) => {
-    if (e.target.files[0]?.type !== 'image/png') {
+    if (e.target.files[0]?.type !== 'image/png' && e.target.files[0]?.type !== 'image/svg+xml') {
       alert('salah format woyy 🤬');
       return;
     } else {
       setImage(e.target.files[0]);
-      const blob = new Blob(e.target.files, { type: 'image/png' });
+      const blob = new Blob(e.target.files, { type: e.target.files[0]?.type });
       const url = URL.createObjectURL(blob);
       setUrlImage(url);
-      setInputValue({ ...inputValue, apsaraThumbnail: e.target.files[0] });
+      setInputValue({ ...inputValue, image: e.target.files[0] });
     }
   };
 
@@ -36,6 +36,8 @@ const UploadThumbnail = (props) => {
             justifyContent: 'center',
             textAlign: 'center',
             gap: 12,
+            maxHeight: 400,
+            maxWidth: 400,
             height: '100%',
             width: '100%',
             cursor: status === 'create' ? 'pointer' : 'initial',
@@ -53,7 +55,7 @@ const UploadThumbnail = (props) => {
             hidden
             id="upload_thumbnail"
             type="file"
-            accept="image/png"
+            accept="image/png,image/svg+xml"
             onChange={handleUploadImage}
             disabled={disabled}
           />

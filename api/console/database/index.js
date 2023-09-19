@@ -210,6 +210,14 @@ export const databaseApi = createApi({
       }),
       invalidatesTags: ['Sticker', 'Detail-Sticker'],
     }),
+    createSticker: build.mutation({
+      query: (data) => ({
+        url: '/mediastiker/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Sticker'],
+    }),
   }),
 });
 
@@ -248,4 +256,5 @@ export const {
   useGetDetailStickerQuery,
   useGetStickerChartQuery,
   useUpdateStickerMutation,
+  useCreateStickerMutation,
 } = databaseApi;
