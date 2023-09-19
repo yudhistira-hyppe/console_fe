@@ -22,8 +22,8 @@ const CardPopular = (props) => {
         <Stack direction="column" mt={3} height={image ? 232 : 152} gap="8px">
           {loading ? (
             <Stack direction="column" alignItems="center" justifyContent="center" height={image ? 232 : 152} spacing={2}>
-              <CircularProgress color="secondary" />
-              <Typography style={{ fontWeight: 'bold', color: '#737373' }}>loading data...</Typography>
+              <CircularProgress color="secondary" size={32} />
+              {/* <Typography style={{ fontWeight: 'bold', color: '#737373' }}>loading data...</Typography> */}
             </Stack>
           ) : (
             data?.map((item, key) => (
@@ -36,7 +36,7 @@ const CardPopular = (props) => {
                     <Avatar
                       src={item?.image || new Error()}
                       variant="rounded"
-                      style={{ width: '100%', maxWidth: 40, height: 40, border: '1px solid #DDDDDD' }}
+                      style={{ width: '100%', maxWidth: 40, height: 40, border: '1px solid #E6E6E6' }}
                       alt="x"
                     />
                   )}

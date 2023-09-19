@@ -11,7 +11,7 @@ import CardWithDivider from './card-with-divider';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import CardWithIndicator from './card-with-indicator';
 import Interest from './interest';
-import { useGetDetailStickerQuery } from 'api/console/database';
+import { useGetDetailStickerQuery, useGetStickerChartQuery } from 'api/console/database';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const DetailSticker = ({ kind, idSticker }) => {
@@ -19,8 +19,10 @@ const DetailSticker = ({ kind, idSticker }) => {
     { label: 'Database Stiker', link: '/database/sticker' },
     { label: kind === 'create' ? 'Tambah Stiker' : 'Rincian stiker', isActive: true },
   ];
-
   const { data: detail, isLoading: loadingSticker } = useGetDetailStickerQuery(idSticker);
+  const { data: chart, isLoading: loadingChart } = useGetStickerChartQuery(idSticker);
+
+  console.log(chart);
 
   return (
     <>
@@ -59,22 +61,27 @@ const DetailSticker = ({ kind, idSticker }) => {
             <Grid item xs={12} sm={6}>
               <GridContainer>
                 <Grid item xs={12} sm={6}>
-                  <CardWithDivider title="Dicari" value={numberWithCommas(0)} description="Kali" />
+                  <CardWithDivider
+                    title="Dicari"
+                    loading={loadingChart}
+                    value={numberWithCommas(chart?.search || 0)}
+                    description="Kali"
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CardWithIndicator title="Digunakan" data={[]} />
+                  <CardWithIndicator title="Digunakan" loading={loadingChart} data={chart?.used || []} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CardWithIndicator title="Jenis Kelamin Audiens" data={[]} />
+                  <CardWithIndicator title="Jenis Kelamin Audiens" loading={loadingChart} data={chart?.gender || []} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CardWithIndicator title="Rentang Umur Audiens" data={[]} />
+                  <CardWithIndicator title="Rentang Umur Audiens" loading={loadingChart} data={chart?.age || []} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CardWithIndicator title="Wilayah Audiens" data={[]} />
+                  <CardWithIndicator title="Wilayah Audiens" loading={loadingChart} data={chart?.area || []} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Interest data={[]} />
+                  <Interest loading={loadingChart} data={chart?.interest || []} />
                 </Grid>
               </GridContainer>
             </Grid>

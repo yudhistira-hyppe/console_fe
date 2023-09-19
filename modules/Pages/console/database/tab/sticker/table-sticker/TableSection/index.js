@@ -334,7 +334,12 @@ const TableSection = ({
                       })
                     }>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={item?.image || new Error()} variant="rounded" alt="X" />
+                      <Avatar
+                        src={item?.image || new Error()}
+                        variant="rounded"
+                        alt="X"
+                        style={{ border: '1px solid #E6E6E6' }}
+                      />
                       <Typography
                         variant="body1"
                         style={{ fontSize: '14px', color: '#00000099' }}

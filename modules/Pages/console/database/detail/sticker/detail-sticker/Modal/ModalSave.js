@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -16,7 +17,7 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalSave({ showModal, onClose, onConfirm, status, statusCreate }) {
+export default function ModalSave({ showModal, onClose, onConfirm, status, statusCreate, loading }) {
   return (
     <div>
       <Modal
@@ -44,10 +45,12 @@ export default function ModalSave({ showModal, onClose, onConfirm, status, statu
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
+            <LoadingButton loading={loading} variant="contained" color="secondary" onClick={onConfirm}>
               Konfirmasi
+            </LoadingButton>
+            <Button onClick={onClose} disabled={loading}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>

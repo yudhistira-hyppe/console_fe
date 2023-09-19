@@ -11,7 +11,7 @@ import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
 import UploadThumbnail from '../upload-thumbnail';
 import ModalBatal from '../Modal/ModalBatal';
-import { useGetStickerCategoryQuery } from 'api/console/database';
+import { useGetStickerCategoryQuery, useUpdateStickerMutation } from 'api/console/database';
 
 const FormSticker = (props) => {
   const { status, data, id } = props;
@@ -19,6 +19,7 @@ const FormSticker = (props) => {
     stickerName: data?.name || '',
     category: data?.kategori || '',
     image: data?.image || '',
+    indexSticker: data?.index || '',
     status: data?.status || '',
   });
   const [modal, setModal] = useState({
@@ -28,7 +29,7 @@ const FormSticker = (props) => {
     cancel: false,
     status: '',
   });
-  const [loading, setLoading] = useState(false);
+  const [updateSticker, { isLoading: loadingUpdate }] = useUpdateStickerMutation();
 
   const { data: category, isLoading: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'STICKER' });
 
@@ -43,8 +44,23 @@ const FormSticker = (props) => {
   };
 
   const handleUpdate = () => {
-    setModal({ ...modal, save: !modal.save });
-    router.replace('/database/sticker');
+    let formData = new FormData();
+    formData.append('id', id);
+    formData.append('name', inputValue?.stickerName);
+    formData.append('kategori', inputValue?.category);
+    formData.append('status', inputValue?.status ? true : false);
+    formData.append('type', 'STICKER');
+    formData.append('nourut', inputValue?.indexSticker);
+
+    updateSticker(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menyimpan perubahan sticker');
+        router.replace('/database/sticker');
+      }
+      setModal({ ...modal, save: !modal.save });
+    });
   };
 
   const checkDisable = () => {
@@ -54,9 +70,12 @@ const FormSticker = (props) => {
       disabled = true;
     } else {
       if (
-        !inputValue.stickerName ||
-        !inputValue.category ||
-        (data?.name === inputValue.stickerName && data?.kategori === inputValue.category)
+        !inputValue?.stickerName ||
+        !inputValue?.category ||
+        !inputValue?.indexSticker ||
+        (data?.name === inputValue?.stickerName &&
+          data?.kategori === inputValue?.category &&
+          data?.index == inputValue?.indexSticker)
       ) {
         disabled = true;
       }
@@ -64,8 +83,6 @@ const FormSticker = (props) => {
 
     return disabled;
   };
-
-  console.log(inputValue);
 
   return (
     <>
@@ -80,6 +97,7 @@ const FormSticker = (props) => {
         statusCreate={inputValue.status}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
+        loading={loadingUpdate}
         onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
       />
       <ModalConfirmation
@@ -153,6 +171,25 @@ const FormSticker = (props) => {
                 )}
               </Select>
             </Stack>
+            <Stack direction="column" gap="8px" width={'100%'}>
+              <Typography style={{ fontWeight: 'bold' }}>
+                Nomor Urut Stiker <span style={{ color: '#E61D37' }}>*</span>
+              </Typography>
+              <TextField
+                name="indexSticker"
+                value={inputValue.indexSticker}
+                variant="outlined"
+                placeholder="Nomor Urut Stiker"
+                onChange={handleChangeInput}
+                inputProps={{
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
+              />
+            </Stack>
             {status === 'create' && (
               <Stack direction="column" gap="8px" width={'100%'}>
                 <Typography style={{ fontWeight: 'bold' }}>
@@ -175,13 +212,13 @@ const FormSticker = (props) => {
             )}
             <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
               <LoadingButton
-                loading={loading}
+                loading={loadingUpdate}
                 variant="contained"
                 color="secondary"
-                style={{ width: 'fit-content', fontWeight: 'bold' }}
+                style={{ width: 150, fontWeight: 'bold', height: 36 }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
                 disabled={checkDisable()}>
-                {status !== 'create' ? 'Terapkan' : 'Simpan'}
+                <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
               </LoadingButton>
               {status === 'create' && (
                 <Button

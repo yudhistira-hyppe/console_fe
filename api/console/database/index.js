@@ -198,8 +198,17 @@ export const databaseApi = createApi({
     }),
     getStickerChart: build.query({
       query: (id) => ({
-        url: `/`,
+        url: `/mediastiker/${id}/chart`,
+        method: 'GET',
       }),
+    }),
+    updateSticker: build.mutation({
+      query: (data) => ({
+        url: '/mediastiker/update',
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Sticker', 'Detail-Sticker'],
     }),
   }),
 });
@@ -237,4 +246,6 @@ export const {
   useGetListStickerQuery,
   useUpdateStickerStatusMutation,
   useGetDetailStickerQuery,
+  useGetStickerChartQuery,
+  useUpdateStickerMutation,
 } = databaseApi;
