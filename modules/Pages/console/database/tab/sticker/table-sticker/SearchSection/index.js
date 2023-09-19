@@ -166,11 +166,7 @@ const SearchSection = ({ filter, handleChange }) => {
                     label={item?.name}
                     value={JSON.stringify(item)}
                     control={
-                      <Checkbox
-                        defaultChecked={false}
-                        checked={filter.category?.map((t) => t.name).includes(item?.name)}
-                        color="secondary"
-                      />
+                      <Checkbox checked={filter.category?.map((t) => t.name).includes(item?.name)} color="secondary" />
                     }
                   />
                 ))
@@ -191,24 +187,22 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'<= 200'}
                 value="<= 200"
-                control={<Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '<= 200'} />}
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '<= 200'} />}
               />
               <FormControlLabel
                 label={'201 - 500'}
                 value="201 - 500"
-                control={<Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '201 - 500'} />}
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '201 - 500'} />}
               />
               <FormControlLabel
                 label={'501 - 750'}
                 value="501 - 750"
-                control={<Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '501 - 750'} />}
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '501 - 750'} />}
               />
               <FormControlLabel
                 label={'751 - 1000'}
                 value="751 - 1000"
-                control={
-                  <Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '751 - 1000'} />
-                }
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '751 - 1000'} />}
               />
             </RadioGroup>
           </AccordionDetails>
@@ -224,14 +218,12 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Aktif'}
                 value="Aktif"
-                control={<Checkbox defaultChecked={false} checked={filter.status.includes('Aktif')} color="secondary" />}
+                control={<Checkbox checked={filter.status.includes('Aktif')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Tidak Aktif'}
                 value="Tidak Aktif"
-                control={
-                  <Checkbox defaultChecked={false} checked={filter.status.includes('Tidak Aktif')} color="secondary" />
-                }
+                control={<Checkbox checked={filter.status.includes('Tidak Aktif')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>

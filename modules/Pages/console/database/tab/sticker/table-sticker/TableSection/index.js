@@ -298,12 +298,14 @@ const TableSection = ({
 
           <TableBody>
             {loading ? (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              </TableRow>
             ) : listSticker?.data?.length >= 1 ? (
               listSticker?.data?.map((item, i) => (
                 <TableRow
@@ -377,11 +379,13 @@ const TableSection = ({
                 </TableRow>
               ))
             ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Daftar Stiker</Typography>
-                </Stack>
-              </TableCell>
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Daftar Stiker</Typography>
+                  </Stack>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

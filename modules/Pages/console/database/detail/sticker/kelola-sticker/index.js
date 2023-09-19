@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Button, Stack } from '@mui/material';
 import Breadcrumbs from '../../../../help-center/bantuan-pengguna/BreadCrumb';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { Typography } from '@material-ui/core';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
 import ModalCreate from './Modal/ModalCreate';
 import CategoryCarousel from './CategoryCarousel';
 import ListSticker from './ListSticker';
+import { useGetStickerCategoryQuery } from 'api/console/database';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
   {
@@ -57,7 +59,23 @@ const KelolaSticker = () => {
   const [modal, setModal] = useState({
     create: false,
   });
-  const [tab, setTab] = useState(dummyCategory[0].name);
+  const [tab, setTab] = useState('');
+  const router = useRouter();
+
+  const { data: category, isLoading: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'STICKER' });
+
+  console.log(router);
+
+  useEffect(() => {
+    if (!loadingCategory) {
+      if (router?.query?.tab) {
+        setTab(router?.query?.tab);
+      } else {
+        setTab(category?.data?.[0]?.name);
+        router.replace({ pathname: router.asPath?.split('?')?.[0], query: { tab: category?.data?.[0]?.name } });
+      }
+    }
+  }, [loadingCategory]);
 
   return (
     <>
@@ -91,22 +109,28 @@ const KelolaSticker = () => {
 
       <ModalCreate showModal={modal.create} onClose={() => setModal({ ...modal, create: !modal.create })} />
 
-      <Stack direction="column">
-        <Stack direction="row" alignItems="center" gap={3}>
-          <Typography style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Kategori Stiker</Typography>
-          <Button variant="text" color="secondary" style={{ marginTop: 2 }}>
-            <Typography
-              style={{ fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}
-              onClick={() => setModal({ ...modal, create: !modal.create })}>
-              Tambah Kategori
-            </Typography>
-          </Button>
-        </Stack>
-      </Stack>
+      {loadingCategory ? (
+        <PageLoader />
+      ) : (
+        <>
+          <Stack direction="column">
+            <Stack direction="row" alignItems="center" gap={3}>
+              <Typography style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Kategori Stiker</Typography>
+              <Button variant="text" color="secondary" style={{ marginTop: 2 }}>
+                <Typography
+                  style={{ fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}
+                  onClick={() => setModal({ ...modal, create: !modal.create })}>
+                  Tambah Kategori
+                </Typography>
+              </Button>
+            </Stack>
+          </Stack>
 
-      <CategoryCarousel data={dummyCategory} tab={tab} setTab={setTab} />
+          <CategoryCarousel data={category?.data || []} tab={tab} setTab={setTab} />
 
-      <ListSticker category={dummyCategory.find((item) => item.name === tab)} />
+          <ListSticker category={category?.data?.find((item) => item.name === tab)} setTab={setTab} />
+        </>
+      )}
     </>
   );
 };
