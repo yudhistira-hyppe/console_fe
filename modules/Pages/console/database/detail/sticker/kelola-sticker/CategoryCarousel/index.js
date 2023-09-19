@@ -19,6 +19,7 @@ const CategoryCarousel = ({ data, tab, setTab }) => {
         responsive={responsive}
         swipeable={false}
         draggable={false}
+        rtl={false}
         customRightArrow={
           <IconButton
             style={{
@@ -80,7 +81,7 @@ const CategoryCarousel = ({ data, tab, setTab }) => {
               }}>
               {item.name}
             </Typography>
-            <img src={`/images/emoji/${item.image}`} style={{ width: 'auto', height: 45 }} />
+            <img src={item?.icon} style={{ width: 'auto', height: 45 }} />
           </Stack>
         ))}
       </Carousel>

@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const databaseApi = createApi({
   reducerPath: 'console/database',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['Konten', 'Detail-Konten', 'Util', 'Media', 'Detail-Media', 'Sticker', 'Detail-Sticker'],
+  tagTypes: ['Konten', 'Detail-Konten', 'Util', 'Media', 'Detail-Media', 'Sticker', 'Detail-Sticker', 'Category-Sticker'],
   endpoints: (build) => ({
     //Account
     getAllUser: build.query({
@@ -172,6 +172,7 @@ export const databaseApi = createApi({
         method: 'POST',
         body: data,
       }),
+      providesTags: ['Category-Sticker'],
     }),
     getListSticker: build.query({
       query: (data) => ({
@@ -218,6 +219,22 @@ export const databaseApi = createApi({
       }),
       invalidatesTags: ['Sticker'],
     }),
+    createStickerCategory: build.mutation({
+      query: (data) => ({
+        url: '/stickercategory',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Sticker'],
+    }),
+    updateStickerCategory: build.mutation({
+      query: (data) => ({
+        url: '/stickercategory/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Sticker'],
+    }),
   }),
 });
 
@@ -257,4 +274,6 @@ export const {
   useGetStickerChartQuery,
   useUpdateStickerMutation,
   useCreateStickerMutation,
+  useCreateStickerCategoryMutation,
+  useUpdateStickerCategoryMutation,
 } = databaseApi;
