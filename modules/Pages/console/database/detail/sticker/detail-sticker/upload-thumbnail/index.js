@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CloudUpload } from '@material-ui/icons';
 import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
+import { toast } from 'react-hot-toast';
 
 const UploadThumbnail = (props) => {
   const { thumbnail, status, setInputValue, inputValue, disabled } = props;
@@ -9,7 +10,7 @@ const UploadThumbnail = (props) => {
 
   const handleUploadImage = (e) => {
     if (e.target.files[0]?.type !== 'image/png' && e.target.files[0]?.type !== 'image/svg+xml') {
-      alert('salah format woyy 🤬');
+      toast.error('format sticker harus PNG atau SVG');
       return;
     } else {
       setImage(e.target.files[0]);

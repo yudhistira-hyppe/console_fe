@@ -36,7 +36,7 @@ const DetailSticker = ({ kind, idSticker }) => {
           direction={'row'}
           mt={1}
           mb={3}
-          onClick={() => router.push('/database/sticker')}
+          onClick={() => router.push({ pathname: '/database/sticker', query: { tab: router?.query?.tab } })}
           gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>
