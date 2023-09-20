@@ -15,6 +15,7 @@ import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import { useGetStickerCategoryQuery } from 'api/console/database';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -156,24 +157,26 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Kategori</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
-              {loadingCategory ? (
-                <Typography>Loading data...</Typography>
-              ) : category?.data?.length >= 1 ? (
-                category?.data?.map((item, key) => (
-                  <FormControlLabel
-                    key={key}
-                    label={item?.name}
-                    value={JSON.stringify(item)}
-                    control={
-                      <Checkbox checked={filter.category?.map((t) => t.name).includes(item?.name)} color="secondary" />
-                    }
-                  />
-                ))
-              ) : (
-                <Typography>Tidak ada data.</Typography>
-              )}
-            </FormGroup>
+            <ScrollBar style={{ height: 210 }}>
+              <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
+                {loadingCategory ? (
+                  <Typography>Loading data...</Typography>
+                ) : category?.data?.length >= 1 ? (
+                  category?.data?.map((item, key) => (
+                    <FormControlLabel
+                      key={key}
+                      label={item?.name}
+                      value={JSON.stringify(item)}
+                      control={
+                        <Checkbox checked={filter.category?.map((t) => t.name).includes(item?.name)} color="secondary" />
+                      }
+                    />
+                  ))
+                ) : (
+                  <Typography>Tidak ada data.</Typography>
+                )}
+              </FormGroup>
+            </ScrollBar>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
         </Accordion>

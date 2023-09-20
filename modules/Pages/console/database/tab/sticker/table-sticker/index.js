@@ -68,6 +68,7 @@ const TableListSticker = () => {
       return {
         ...prevVal,
         order: e.target.value,
+        page: 0,
       };
     });
   };

@@ -24,37 +24,6 @@ const breadcrumbs = [
   { label: 'Kelola Sticker', isActive: true },
 ];
 
-const dummyCategory = [
-  {
-    name: 'Hot',
-    image: 'fire.png',
-  },
-  {
-    name: 'Dekoratif',
-    image: 'party.png',
-  },
-  {
-    name: 'Teks',
-    image: 'teks.png',
-  },
-  {
-    name: 'Suasana Hati',
-    image: 'smile.png',
-  },
-  {
-    name: 'Gaya Hidup',
-    image: 'coffee.png',
-  },
-  {
-    name: 'Alam',
-    image: 'plant.png',
-  },
-  {
-    name: 'Events',
-    image: 'event.png',
-  },
-];
-
 const KelolaSticker = () => {
   const [modal, setModal] = useState({
     create: false,
@@ -63,8 +32,6 @@ const KelolaSticker = () => {
   const router = useRouter();
 
   const { data: category, isLoading: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'STICKER' });
-
-  console.log(router);
 
   useEffect(() => {
     if (!loadingCategory) {
