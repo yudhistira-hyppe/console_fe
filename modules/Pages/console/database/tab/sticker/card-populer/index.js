@@ -25,7 +25,7 @@ const CardPopular = (props) => {
               <CircularProgress color="secondary" size={32} />
               {/* <Typography style={{ fontWeight: 'bold', color: '#737373' }}>loading data...</Typography> */}
             </Stack>
-          ) : (
+          ) : data?.length >= 1 ? (
             data?.map((item, key) => (
               <Stack key={key} direction="row" alignItems="center" gap="8px">
                 <Typography style={{ width: '100%', maxWidth: 85, fontWeight: 'bold', color: '#00000099' }}>
@@ -58,6 +58,11 @@ const CardPopular = (props) => {
                 </Typography>
               </Stack>
             ))
+          ) : (
+            <Stack height="100%" width="100%" alignItems="center" justifyContent="center" gap="20px">
+              <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
+              <Typography style={{ color: '#666666' }}>Tidak ada data</Typography>
+            </Stack>
           )}
         </Stack>
       </Stack>
