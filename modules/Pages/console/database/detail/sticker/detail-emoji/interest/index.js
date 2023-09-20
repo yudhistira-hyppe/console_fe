@@ -1,10 +1,10 @@
 import React from 'react';
-import { Chip, Stack } from '@mui/material';
+import { Chip, CircularProgress, Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import { Box } from '@mui/system';
 
 const Interest = (props) => {
-  const { data } = props;
+  const { data, loading } = props;
 
   return (
     <Stack direction="column" height="100%" gap="24px">
@@ -19,12 +19,16 @@ const Interest = (props) => {
         Minat Penonton
         <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
       </Typography>
-      <Stack direction="row" flexWrap="wrap" gap="12px" height="100%">
-        {data?.length >= 1 ? (
+      <Stack direction="row" flexWrap="wrap" gap="12px" height="fit-content">
+        {loading ? (
+          <Stack direction="column" alignItems="center" justifyContent="center" height="100%" width="100%">
+            <CircularProgress color="secondary" size={32} />
+          </Stack>
+        ) : data?.length >= 1 ? (
           data?.map((item, key) => (
             <Chip
               key={key}
-              label="Kesehatan"
+              label={item?.interests}
               size="small"
               style={{
                 backgroundColor: 'white',

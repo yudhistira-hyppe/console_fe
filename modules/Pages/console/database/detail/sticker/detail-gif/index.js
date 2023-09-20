@@ -11,12 +11,16 @@ import CardWithDivider from './card-with-divider';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import CardWithIndicator from './card-with-indicator';
 import Interest from './interest';
+import { useGetDetailStickerQuery, useGetStickerChartQuery } from 'api/console/database';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
-const DetailGIF = ({ kind }) => {
+const DetailGIF = ({ kind, idGIF }) => {
   const breadcrumbs = [
     { label: 'Database GIF', link: { pathname: '/database/sticker', query: { tab: 'gif' } } },
     { label: kind === 'create' ? 'Tambah GIF' : 'Rincian GIF', isActive: true },
   ];
+  const { data: detail, isLoading: loadingSticker } = useGetDetailStickerQuery(idGIF);
+  const { data: chart, isLoading: loadingChart } = useGetStickerChartQuery(idGIF);
 
   return (
     <>
@@ -44,35 +48,44 @@ const DetailGIF = ({ kind }) => {
         </Stack>
       </Stack>
 
-      <GridContainer style={kind !== 'create' ? {} : { width: '70%', margin: '0 auto' }}>
-        <Grid item xs={12} sm={kind !== 'create' ? 6 : 12} style={kind !== 'create' ? {} : { padding: 0 }}>
-          <FormGIF status={kind !== 'create' ? 'detail' : 'create'} data={{}} id={kind} />
-        </Grid>
-        {kind !== 'create' && (
-          <Grid item xs={12} sm={6}>
-            <GridContainer>
-              <Grid item xs={12} sm={6}>
-                <CardWithDivider title="Dicari" value={numberWithCommas(0)} description="Kali" />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Digunakan" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Jenis Kelamin Audiens" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Rentang Umur Audiens" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Wilayah Audiens" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Interest data={[]} />
-              </Grid>
-            </GridContainer>
+      {loadingSticker ? (
+        <PageLoader />
+      ) : (
+        <GridContainer style={kind !== 'create' ? {} : { width: '70%', margin: '0 auto' }}>
+          <Grid item xs={12} sm={kind !== 'create' ? 6 : 12} style={kind !== 'create' ? {} : { padding: 0 }}>
+            <FormGIF status={kind !== 'create' ? 'detail' : 'create'} data={detail} id={detail?._id} />
           </Grid>
-        )}
-      </GridContainer>
+          {kind !== 'create' && (
+            <Grid item xs={12} sm={6}>
+              <GridContainer>
+                <Grid item xs={12} sm={6}>
+                  <CardWithDivider
+                    title="Dicari"
+                    loading={loadingChart}
+                    value={numberWithCommas(chart?.search || 0)}
+                    description="Kali"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Digunakan" loading={loadingChart} data={chart?.used || []} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Jenis Kelamin Audiens" loading={loadingChart} data={chart?.gender || []} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Rentang Umur Audiens" loading={loadingChart} data={chart?.age || []} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Wilayah Audiens" loading={loadingChart} data={chart?.area || []} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Interest loading={loadingChart} data={chart?.interest || []} />
+                </Grid>
+              </GridContainer>
+            </Grid>
+          )}
+        </GridContainer>
+      )}
     </>
   );
 };

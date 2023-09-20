@@ -19,7 +19,7 @@ const Interest = (props) => {
         Minat Penonton
         <Box style={{ height: 4, width: 40, backgroundColor: '#AB22AF', position: 'absolute', bottom: 0 }} />
       </Typography>
-      <Stack direction="row" flexWrap="wrap" gap="12px" height="100%">
+      <Stack direction="row" flexWrap="wrap" gap="12px" height="fit-content">
         {loading ? (
           <Stack direction="column" alignItems="center" justifyContent="center" height="100%" width="100%">
             <CircularProgress color="secondary" size={32} />
@@ -28,7 +28,7 @@ const Interest = (props) => {
           data?.map((item, key) => (
             <Chip
               key={key}
-              label="Kesehatan"
+              label={item?.interests}
               size="small"
               style={{
                 backgroundColor: 'white',

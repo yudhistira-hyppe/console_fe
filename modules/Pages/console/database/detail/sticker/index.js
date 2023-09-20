@@ -42,11 +42,11 @@ const DatabaseDetailStickerComponent = () => {
   } else if (isRenderChildren && slug[1] === 'create' && tab === 'emoji') {
     return <DetailEmoji kind="create" />;
   } else if (isRenderChildren && slug[1] && tab === 'emoji') {
-    return <DetailEmoji kind="update" />;
+    return <DetailEmoji kind="update" idEmoji={slug[1]} />;
   } else if (isRenderChildren && slug[1] === 'create' && tab === 'gif') {
     return <DetailGIF kind="create" />;
   } else if (isRenderChildren && slug[1] && tab === 'gif') {
-    return <DetailGIF kind="update" />;
+    return <DetailGIF kind="update" idGIF={slug[1]} />;
   } else {
     return null;
   }

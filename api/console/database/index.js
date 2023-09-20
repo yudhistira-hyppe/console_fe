@@ -233,7 +233,7 @@ export const databaseApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Category-Sticker'],
+      invalidatesTags: ['Category-Sticker', 'Sticker'],
     }),
   }),
 });

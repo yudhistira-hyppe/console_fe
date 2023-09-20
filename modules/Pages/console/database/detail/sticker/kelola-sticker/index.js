@@ -29,20 +29,24 @@ const KelolaSticker = () => {
     create: false,
   });
   const [tab, setTab] = useState('');
+  const [tabScroll, setTabScroll] = useState('');
   const router = useRouter();
 
   const { data: category, isLoading: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'STICKER' });
 
   useEffect(() => {
     if (!loadingCategory) {
-      if (router?.query?.tab) {
-        setTab(router?.query?.tab);
-      } else {
-        setTab(category?.data?.[0]?.name);
-        router.replace({ pathname: router.asPath?.split('?')?.[0], query: { tab: category?.data?.[0]?.name } });
-      }
+      setTab(category?.data?.[0]?.name);
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [loadingCategory]);
+
+  useEffect(() => {
+    if (tabScroll) {
+      window.scrollTo({ top: 250, behavior: 'smooth' });
+      console.log('run1');
+    }
+  }, [tabScroll]);
 
   return (
     <>
@@ -93,7 +97,14 @@ const KelolaSticker = () => {
             </Stack>
           </Stack>
 
-          <CategoryCarousel data={category?.data || []} tab={tab} setTab={setTab} />
+          <CategoryCarousel
+            data={category?.data || []}
+            tab={tab}
+            setTab={(val) => {
+              setTab(val);
+              setTabScroll(val);
+            }}
+          />
 
           <ListSticker category={category?.data?.find((item) => item.name === tab)} setTab={setTab} />
         </>

@@ -37,7 +37,7 @@ export default function ModalSave({ showModal, onClose, onConfirm, status, statu
               <>
                 <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>Simpan Stiker</Typography>
                 <Typography style={{ textAlign: 'center', fontFamily: 'Lato' }}>
-                  Kamu akan <strong>menyimpan & {statusCreate === 'aktif' ? 'mengaktifkan' : 'tidak mengaktifkan'}</strong>{' '}
+                  Kamu akan <strong>menyimpan & {statusCreate === 'active' ? 'mengaktifkan' : 'tidak mengaktifkan'}</strong>{' '}
                   stiker ini. Stiker akan tersedia di aplikasi Hyppe
                 </Typography>
               </>

@@ -34,7 +34,7 @@ const CustomButtonGroup = ({ next, previous, ...rest }) => {
           <ArrowBack style={{ fontSize: 20 }} />
         </IconButton>
       )}
-      {currentSlide + slidesToShow !== totalItems && (
+      {currentSlide + slidesToShow !== totalItems && totalItems >= slidesToShow && (
         <IconButton
           style={{
             position: 'absolute',

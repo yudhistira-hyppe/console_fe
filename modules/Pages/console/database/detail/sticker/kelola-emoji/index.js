@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Button, Stack } from '@mui/material';
 import Breadcrumbs from '../../../../help-center/bantuan-pengguna/BreadCrumb';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { Typography } from '@material-ui/core';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
 import ModalCreate from './Modal/ModalCreate';
 import CategoryCarousel from './CategoryCarousel';
 import ListEmoji from './ListEmoji';
+import { useGetStickerCategoryQuery } from 'api/console/database';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const breadcrumbs = [
   {
@@ -22,42 +24,29 @@ const breadcrumbs = [
   { label: 'Kelola Emoji', isActive: true },
 ];
 
-const dummyCategory = [
-  {
-    name: 'Hot',
-    image: 'fire.png',
-  },
-  {
-    name: 'Dekoratif',
-    image: 'party.png',
-  },
-  {
-    name: 'Teks',
-    image: 'teks.png',
-  },
-  {
-    name: 'Suasana Hati',
-    image: 'smile.png',
-  },
-  {
-    name: 'Gaya Hidup',
-    image: 'coffee.png',
-  },
-  {
-    name: 'Alam',
-    image: 'plant.png',
-  },
-  {
-    name: 'Events',
-    image: 'event.png',
-  },
-];
-
 const KelolaEmoji = () => {
   const [modal, setModal] = useState({
     create: false,
   });
-  const [tab, setTab] = useState(dummyCategory[0].name);
+  const [tab, setTab] = useState('');
+  const [tabScroll, setTabScroll] = useState('');
+  const router = useRouter();
+
+  const { data: category, isLoading: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'EMOJI' });
+
+  useEffect(() => {
+    if (!loadingCategory) {
+      setTab(category?.data?.[0]?.name);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [loadingCategory]);
+
+  useEffect(() => {
+    if (tabScroll) {
+      window.scrollTo({ top: 250, behavior: 'smooth' });
+      console.log('run1');
+    }
+  }, [tabScroll]);
 
   return (
     <>
@@ -91,22 +80,35 @@ const KelolaEmoji = () => {
 
       <ModalCreate showModal={modal.create} onClose={() => setModal({ ...modal, create: !modal.create })} />
 
-      <Stack direction="column">
-        <Stack direction="row" alignItems="center" gap={3}>
-          <Typography style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Kategori Emoji</Typography>
-          <Button variant="text" color="secondary" style={{ marginTop: 2 }}>
-            <Typography
-              style={{ fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}
-              onClick={() => setModal({ ...modal, create: !modal.create })}>
-              Tambah Kategori
-            </Typography>
-          </Button>
-        </Stack>
-      </Stack>
+      {loadingCategory ? (
+        <PageLoader />
+      ) : (
+        <>
+          <Stack direction="column">
+            <Stack direction="row" alignItems="center" gap={3}>
+              <Typography style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Kategori Emoji</Typography>
+              <Button variant="text" color="secondary" style={{ marginTop: 2 }}>
+                <Typography
+                  style={{ fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}
+                  onClick={() => setModal({ ...modal, create: !modal.create })}>
+                  Tambah Kategori
+                </Typography>
+              </Button>
+            </Stack>
+          </Stack>
 
-      <CategoryCarousel data={dummyCategory} tab={tab} setTab={setTab} />
+          <CategoryCarousel
+            data={category?.data || []}
+            tab={tab}
+            setTab={(val) => {
+              setTab(val);
+              setTabScroll(val);
+            }}
+          />
 
-      <ListEmoji category={dummyCategory.find((item) => item.name === tab)} />
+          <ListEmoji category={category?.data?.find((item) => item.name === tab)} setTab={setTab} />
+        </>
+      )}
     </>
   );
 };

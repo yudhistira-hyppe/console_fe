@@ -1,9 +1,11 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { toast } from 'react-hot-toast';
+import { useUpdateStickerStatusMutation } from 'api/console/database';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -18,19 +20,40 @@ const style = {
 };
 
 export default function ModalConfirmation({ showModal, status, onClose, onConfirm, data1, data2, isSingle }) {
+  const [updateStatus, { isLoading: loadingUpdate }] = useUpdateStickerStatusMutation();
+
   const handleStatus = () => {
     const data = {
-      _id: isSingle ? [data2] : [...data1],
-      status: status === 'active' ? true : false,
+      listid: isSingle ? [data2] : [...data1],
+      status: status,
     };
 
-    onConfirm();
-    toast.success('toast...');
+    updateStatus(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        isSingle
+          ? toast.success('Berhasil mengubah status gif')
+          : toast.success(`Berhasil mengubah ${data1?.length} status gif`);
+      }
+      onConfirm();
+    });
   };
 
   const handleDelete = () => {
-    alert('deleted');
-    onConfirm();
+    const data = {
+      listid: isSingle ? [data2] : [...data1],
+      status: 'delete',
+    };
+
+    updateStatus(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        isSingle ? toast.success('Berhasil menghapus gif') : toast.success(`Berhasil menghapus ${data1?.length} gif`);
+      }
+      onConfirm();
+    });
   };
 
   return (
@@ -42,17 +65,17 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack direction="column" alignItems="center">
-            {status === 'disactive' && (
+            {status === 'noneactive' && (
               <img src="/images/switch_off_voucher.png" style={{ width: 250, marginTop: '-50px' }} />
             )}
             {status === 'active' && <img src="/images/switch_on_media.png" style={{ height: 220, marginBottom: 30 }} />}
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>
-              {status === 'disactive' && `Nonaktifkan GIF`}
+              {status === 'noneactive' && `Nonaktifkan GIF`}
               {status === 'active' && `Aktifkan GIF`}
               {status === 'delete' && `Hapus GIF`}
             </Typography>
             <Typography style={{ textAlign: 'center', fontFamily: 'Lato' }}>
-              {status === 'disactive' &&
+              {status === 'noneactive' &&
                 `Kamu Yakin Ingin Mengnonaktifkan ${!isSingle ? (data1?.length > 1 ? data1?.length : '') : ''} GIF ini ?`}
               {status === 'active' &&
                 `Kamu Yakin Ingin Mengaktifkan ${!isSingle ? (data1?.length > 1 ? data1?.length : '') : ''} GIF ini ?`}
@@ -62,13 +85,16 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button
+            <LoadingButton
+              loading={loadingUpdate}
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={() => (status === 'delete' ? handleDelete() : handleStatus())}>
               Konfirmasi
+            </LoadingButton>
+            <Button variant="text" color="secondary" onClick={onClose}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>
