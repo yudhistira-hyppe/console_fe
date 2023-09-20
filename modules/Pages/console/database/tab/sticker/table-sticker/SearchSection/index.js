@@ -146,6 +146,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 editableDateInputs={true}
                 ranges={value}
                 direction="horizontal"
+                rangeColors={['#AB22AF']}
               />
             </Popover>
           </AccordionDetails>
