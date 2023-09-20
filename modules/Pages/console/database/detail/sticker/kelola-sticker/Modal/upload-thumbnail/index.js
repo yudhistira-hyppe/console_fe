@@ -3,7 +3,7 @@ import { CloudUpload } from '@material-ui/icons';
 import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
 
 const UploadThumbnail = (props) => {
-  const { thumbnail, status, setInputValue, inputValue, disabled } = props;
+  const { thumbnail = '', setInputValue, inputValue, disabled } = props;
   const [image, setImage] = useState(thumbnail);
   const [urlImage, setUrlImage] = useState(thumbnail);
 
@@ -22,9 +22,7 @@ const UploadThumbnail = (props) => {
 
   return (
     <>
-      <label
-        htmlFor={(status === 'create' && 'upload_thumbnail') || ''}
-        style={{ width: status === 'create' ? '100%' : 170, height: status === 'create' ? '100%' : 170 }}>
+      <label htmlFor="upload_thumbnail" style={{ width: 170, height: 170 }}>
         <Box
           style={{
             backgroundColor: '#E8E8E8A6',
@@ -36,11 +34,11 @@ const UploadThumbnail = (props) => {
             justifyContent: 'center',
             textAlign: 'center',
             gap: 12,
-            maxHeight: 400,
-            maxWidth: 400,
+            maxHeight: 170,
+            maxWidth: 170,
             height: '100%',
             width: '100%',
-            cursor: status === 'create' ? 'pointer' : 'initial',
+            cursor: 'pointer',
             overflow: 'hidden',
           }}>
           {image ? (
@@ -48,7 +46,9 @@ const UploadThumbnail = (props) => {
           ) : (
             <>
               <CloudUpload style={{ fontSize: 64, color: '#DADADA' }} />
-              <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Tambahkan dari perangkat</Typography>
+              <Typography style={{ fontWeight: 'bold', color: '#DADADA', fontSize: 13, fontFamily: 'Normal' }}>
+                Tambahkan dari perangkat
+              </Typography>
             </>
           )}
           <input

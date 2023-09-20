@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const databaseApi = createApi({
   reducerPath: 'console/database',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['Konten', 'Detail-Konten', 'Util', 'Media', 'Detail-Media'],
+  tagTypes: ['Konten', 'Detail-Konten', 'Util', 'Media', 'Detail-Media', 'Sticker', 'Detail-Sticker', 'Category-Sticker'],
   endpoints: (build) => ({
     //Account
     getAllUser: build.query({
@@ -167,11 +167,73 @@ export const databaseApi = createApi({
       }),
     }),
     getStickerCategory: build.query({
-      query: () => ({
+      query: (data) => ({
         url: '/stickercategory/listing',
         method: 'POST',
         body: data,
       }),
+      providesTags: ['Category-Sticker'],
+    }),
+    getListSticker: build.query({
+      query: (data) => ({
+        url: '/mediastiker/listing',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['Sticker'],
+    }),
+    updateStickerStatus: build.mutation({
+      query: (data) => ({
+        url: '/mediastiker/update/list',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Sticker', 'Detail-Sticker'],
+    }),
+    getDetailSticker: build.query({
+      query: (id) => ({
+        url: `/mediastiker/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Detail-Sticker'],
+    }),
+    getStickerChart: build.query({
+      query: (id) => ({
+        url: `/mediastiker/${id}/chart`,
+        method: 'GET',
+      }),
+    }),
+    updateSticker: build.mutation({
+      query: (data) => ({
+        url: '/mediastiker/update',
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Sticker', 'Detail-Sticker'],
+    }),
+    createSticker: build.mutation({
+      query: (data) => ({
+        url: '/mediastiker/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Sticker'],
+    }),
+    createStickerCategory: build.mutation({
+      query: (data) => ({
+        url: '/stickercategory',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Sticker'],
+    }),
+    updateStickerCategory: build.mutation({
+      query: (data) => ({
+        url: '/stickercategory/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Sticker'],
     }),
   }),
 });
@@ -206,4 +268,12 @@ export const {
   //Sticker
   useGetStickerTrendQuery,
   useGetStickerCategoryQuery,
+  useGetListStickerQuery,
+  useUpdateStickerStatusMutation,
+  useGetDetailStickerQuery,
+  useGetStickerChartQuery,
+  useUpdateStickerMutation,
+  useCreateStickerMutation,
+  useCreateStickerCategoryMutation,
+  useUpdateStickerCategoryMutation,
 } = databaseApi;
