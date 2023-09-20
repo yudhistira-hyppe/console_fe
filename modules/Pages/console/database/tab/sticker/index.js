@@ -12,8 +12,8 @@ import router, { useRouter } from 'next/router';
 
 const DatabaseTabStickerComponent = () => {
   const classes = useStyles();
-  const [tab, setTab] = useState('sticker');
   const router = useRouter();
+  const [tab, setTab] = useState(router.query.tab ? router.query.tab : 'sticker');
 
   useEffect(() => {
     router.query?.tab && setTab(router.query.tab);

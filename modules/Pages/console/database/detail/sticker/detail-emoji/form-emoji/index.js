@@ -5,20 +5,20 @@ import ModalDelete from '../Modal/ModalDelete';
 import ModalSave from '../Modal/ModalSave';
 import ModalConfirmation from '../Modal/ModalConfirmation';
 import router from 'next/router';
-import { onMediaUpload } from 'api/console/database/mediaService';
-import { onImageUpload } from 'api/console/database/imageService';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
 import UploadThumbnail from '../upload-thumbnail';
 import ModalBatal from '../Modal/ModalBatal';
+import { useCreateStickerMutation, useGetStickerCategoryQuery, useUpdateStickerMutation } from 'api/console/database';
 
 const FormEmoji = (props) => {
   const { status, data, id } = props;
   const [inputValue, setInputValue] = useState({
-    emojiName: '',
-    category: '',
-    apsaraThumbnail: '',
-    status: '',
+    stickerName: data?.name || '',
+    category: data?.kategori || '',
+    image: data?.image || '',
+    indexSticker: data?.index || '',
+    status: data?.status || '',
   });
   const [modal, setModal] = useState({
     delete: false,
@@ -27,51 +27,98 @@ const FormEmoji = (props) => {
     cancel: false,
     status: '',
   });
-  const [loading, setLoading] = useState(false);
+  const [createSticker, { isLoading: loadingCreate }] = useCreateStickerMutation();
+  const [updateSticker, { isLoading: loadingUpdate }] = useUpdateStickerMutation();
+
+  const { data: category, isLoading: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'EMOJI' });
 
   const handleChangeInput = (e) => {
     const value = e.target.value;
     setInputValue({ ...inputValue, [e.target.name]: value });
   };
 
-  const handleApsaraMedia = async () => {
-    const response = await fetch('/api/apsara-upload-media');
-    const data = await response.json();
-
-    return data;
-  };
-
-  const handleApsaraImage = async () => {
-    const response = await fetch('/api/apsara-upload-image');
-    const data = await response.json();
-
-    return data;
-  };
-
   const handleCreate = () => {
-    setModal({ ...modal, save: !modal.save });
-    router.replace({ pathname: '/database/sticker', query: { tab: 'emoji' } });
+    let formData = new FormData();
+    formData.append('name', inputValue?.stickerName);
+    formData.append('kategori', inputValue?.category);
+    formData.append('status', inputValue?.status === 'active' ? true : false);
+    formData.append('type', 'EMOJI');
+    formData.append('nourut', inputValue?.indexSticker);
+    formData.append('image', inputValue?.image);
+
+    createSticker(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menambahkan emoji');
+        router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });
+      }
+      setModal({ ...modal, save: !modal.save });
+    });
   };
 
   const handleUpdate = () => {
-    setModal({ ...modal, save: !modal.save });
-    router.replace({ pathname: '/database/sticker', query: { tab: 'emoji' } });
+    let formData = new FormData();
+    formData.append('id', id);
+    formData.append('name', inputValue?.stickerName);
+    formData.append('kategori', inputValue?.category);
+    formData.append('status', inputValue?.status ? true : false);
+    formData.append('type', 'EMOJI');
+    formData.append('nourut', inputValue?.indexSticker);
+
+    updateSticker(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menyimpan perubahan emoji');
+        router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });
+      }
+      setModal({ ...modal, save: !modal.save });
+    });
   };
 
-  console.log(inputValue);
+  const checkDisable = () => {
+    let disabled = false;
+
+    if (
+      status === 'create' &&
+      (!inputValue?.stickerName ||
+        !inputValue?.category ||
+        !inputValue?.image ||
+        !inputValue?.indexSticker ||
+        !inputValue?.status)
+    ) {
+      disabled = true;
+    } else {
+      if (
+        !inputValue?.stickerName ||
+        !inputValue?.category ||
+        !inputValue?.indexSticker ||
+        (data?.name === inputValue?.stickerName &&
+          data?.kategori === inputValue?.category &&
+          data?.index == inputValue?.indexSticker)
+      ) {
+        disabled = true;
+      }
+    }
+
+    return disabled;
+  };
 
   return (
     <>
       <ModalDelete
+        id={data?._id}
         showModal={modal.delete}
         onClose={() => setModal({ ...modal, delete: !modal.delete })}
-        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: 'emoji' } })}
+        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } })}
       />
       <ModalSave
         status={status}
         statusCreate={inputValue.status}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
+        loading={loadingUpdate || loadingCreate}
         onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
       />
       <ModalConfirmation
@@ -83,7 +130,7 @@ const FormEmoji = (props) => {
       <ModalBatal
         showModal={modal.cancel}
         onClose={() => setModal({ ...modal, cancel: !modal.cancel })}
-        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: 'emoji' } })}
+        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } })}
       />
 
       <Card style={{ padding: 20 }}>
@@ -94,7 +141,12 @@ const FormEmoji = (props) => {
             gap="12px"
             maxWidth={status !== 'create' ? 170 : '100%'}
             alignItems="flex-end">
-            <UploadThumbnail thumbnail={''} status={status} setInputValue={setInputValue} inputValue={inputValue} />
+            <UploadThumbnail
+              thumbnail={inputValue?.image}
+              status={status}
+              setInputValue={setInputValue}
+              inputValue={inputValue}
+            />
           </Stack>
           <Stack direction={'column'} width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={'100%'}>
@@ -102,8 +154,8 @@ const FormEmoji = (props) => {
                 Nama Emoji <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <TextField
-                name="emojiName"
-                value={inputValue.emojiName}
+                name="stickerName"
+                value={inputValue.stickerName}
                 variant="outlined"
                 placeholder="Nama Emoji"
                 onChange={handleChangeInput}
@@ -121,16 +173,43 @@ const FormEmoji = (props) => {
                 color="secondary"
                 displayEmpty>
                 <MenuItem value="" disabled>
-                  Pilih Kategori Emoji
+                  Pilih Kategori
                 </MenuItem>
-                <MenuItem value="Hot">Hot</MenuItem>
-                <MenuItem value="Dekoratif">Dekoratif</MenuItem>
-                <MenuItem value="Teks">Teks</MenuItem>
-                <MenuItem value="Suasana Hati">Suasana Hati</MenuItem>
-                <MenuItem value="Gaya Hidup">Gaya Hidup</MenuItem>
-                <MenuItem value="Alam">Alam</MenuItem>
-                <MenuItem value="Events">Events</MenuItem>
+                {loadingCategory ? (
+                  <MenuItem value="loading" disabled>
+                    Loading data...
+                  </MenuItem>
+                ) : category?.data?.length >= 1 ? (
+                  category?.data?.map((item, key) => (
+                    <MenuItem key={key} value={item?.name}>
+                      {item?.name}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="" disabled>
+                    Tidak ada data
+                  </MenuItem>
+                )}
               </Select>
+            </Stack>
+            <Stack direction="column" gap="8px" width={'100%'}>
+              <Typography style={{ fontWeight: 'bold' }}>
+                Nomor Urut Emoji per Kategori <span style={{ color: '#E61D37' }}>*</span>
+              </Typography>
+              <TextField
+                name="indexSticker"
+                value={inputValue.indexSticker}
+                variant="outlined"
+                placeholder="Nomor Urut Emoji"
+                onChange={handleChangeInput}
+                inputProps={{
+                  onKeyPress: (event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  },
+                }}
+              />
             </Stack>
             {status === 'create' && (
               <Stack direction="column" gap="8px" width={'100%'}>
@@ -147,22 +226,20 @@ const FormEmoji = (props) => {
                   <MenuItem value="" disabled>
                     Pilih Status Awal
                   </MenuItem>
-                  <MenuItem value="aktif">Aktif</MenuItem>
-                  <MenuItem value="inaktif">Tidak Aktif</MenuItem>
+                  <MenuItem value="active">Aktif</MenuItem>
+                  <MenuItem value="noneactive">Tidak Aktif</MenuItem>
                 </Select>
               </Stack>
             )}
             <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
               <LoadingButton
-                loading={loading}
+                loading={loadingUpdate || loadingCreate}
                 variant="contained"
                 color="secondary"
-                style={{ width: 'fit-content', fontWeight: 'bold' }}
+                style={{ width: 150, fontWeight: 'bold', height: 36 }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
-                disabled={
-                  !inputValue.emojiName || !inputValue.category || !inputValue.status || !inputValue.apsaraThumbnail
-                }>
-                {status !== 'create' ? 'Terapkan' : 'Simpan'}
+                disabled={checkDisable()}>
+                <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
               </LoadingButton>
               {status === 'create' && (
                 <Button
@@ -170,13 +247,14 @@ const FormEmoji = (props) => {
                   color="secondary"
                   style={{ width: 'fit-content', fontWeight: 'bold' }}
                   onClick={() => {
-                    if (!inputValue.emojiName && !inputValue.category && !inputValue.status && !inputValue.apsaraThumbnail) {
-                      router.push({ pathname: '/database/sticker', query: { tab: 'emoji' } });
+                    if (!inputValue.stickerName && !inputValue.category && !inputValue.status && !inputValue.image) {
+                      router.push({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });
                     } else {
                       setModal({ ...modal, cancel: !modal.cancel });
                     }
-                  }}>
-                  Batal
+                  }}
+                  disabled={loadingCreate}>
+                  <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Batal</Typography>
                 </Button>
               )}
             </Stack>
@@ -192,13 +270,13 @@ const FormEmoji = (props) => {
                 </Typography>
                 <RadioGroup
                   row
-                  value={data?.isActive ? 'active' : 'disactive'}
+                  value={data?.status ? 'active' : 'noneactive'}
                   style={{ gap: 40 }}
                   onChange={() =>
                     setModal({
                       ...modal,
                       confirmation: !modal.confirmation,
-                      status: data?.isActive ? 'active' : 'disactive',
+                      status: data?.status ? 'noneactive' : 'active',
                     })
                   }>
                   <FormControlLabel
@@ -207,7 +285,7 @@ const FormEmoji = (props) => {
                     label={<Typography>Aktif</Typography>}
                   />
                   <FormControlLabel
-                    value="disactive"
+                    value="noneactive"
                     control={<Radio color="secondary" />}
                     label={<Typography>Tidak Aktif</Typography>}
                   />
