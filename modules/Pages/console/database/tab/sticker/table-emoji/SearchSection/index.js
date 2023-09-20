@@ -14,7 +14,8 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
-import { useGetThemeMusicQuery } from 'api/console/database';
+import { useGetStickerCategoryQuery } from 'api/console/database';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -29,7 +30,7 @@ const SearchSection = ({ filter, handleChange }) => {
   const [isDate, setDate] = useState(false);
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
 
-  const { data: themes, isFetching: loadingTheme } = useGetThemeMusicQuery();
+  const { data: category, isFetching: loadingCategory } = useGetStickerCategoryQuery({ tipesticker: 'EMOJI' });
 
   useEffect(() => {
     if (!filter.createdAt[0] && !null) {
@@ -68,8 +69,8 @@ const SearchSection = ({ filter, handleChange }) => {
               fullWidth
               waitForInput={true}
               placeholder="Cari emoji"
-              name="emoji"
-              filterValue={filter.emoji}
+              name="sticker"
+              filterValue={filter.sticker}
               onChange={(e) => handleChangeDelay(e)}
               color="secondary"
             />
@@ -156,28 +157,26 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Kategori</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
-              {loadingTheme ? (
-                <Typography>Loading data...</Typography>
-              ) : themes?.data?.length >= 1 ? (
-                themes?.data?.map((item, key) => (
-                  <FormControlLabel
-                    key={key}
-                    label={item?.name}
-                    value={JSON.stringify(item)}
-                    control={
-                      <Checkbox
-                        defaultChecked={false}
-                        checked={filter.category?.map((t) => t.name).includes(item?.name)}
-                        color="secondary"
-                      />
-                    }
-                  />
-                ))
-              ) : (
-                <Typography>Tidak ada data.</Typography>
-              )}
-            </FormGroup>
+            <ScrollBar style={{ height: 210 }}>
+              <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
+                {loadingCategory ? (
+                  <Typography>Loading data...</Typography>
+                ) : category?.data?.length >= 1 ? (
+                  category?.data?.map((item, key) => (
+                    <FormControlLabel
+                      key={key}
+                      label={item?.name}
+                      value={JSON.stringify(item)}
+                      control={
+                        <Checkbox checked={filter.category?.map((t) => t.name).includes(item?.name)} color="secondary" />
+                      }
+                    />
+                  ))
+                ) : (
+                  <Typography>Tidak ada data.</Typography>
+                )}
+              </FormGroup>
+            </ScrollBar>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
         </Accordion>
@@ -191,24 +190,22 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'<= 200'}
                 value="<= 200"
-                control={<Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '<= 200'} />}
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '<= 200'} />}
               />
               <FormControlLabel
                 label={'201 - 500'}
                 value="201 - 500"
-                control={<Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '201 - 500'} />}
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '201 - 500'} />}
               />
               <FormControlLabel
                 label={'501 - 750'}
                 value="501 - 750"
-                control={<Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '501 - 750'} />}
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '501 - 750'} />}
               />
               <FormControlLabel
                 label={'751 - 1000'}
                 value="751 - 1000"
-                control={
-                  <Radio defaultChecked={false} color="secondary" checked={filter.labelPenggunaan === '751 - 1000'} />
-                }
+                control={<Radio color="secondary" checked={filter.labelPenggunaan === '751 - 1000'} />}
               />
             </RadioGroup>
           </AccordionDetails>
@@ -224,14 +221,12 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Aktif'}
                 value="Aktif"
-                control={<Checkbox defaultChecked={false} checked={filter.status.includes('Aktif')} color="secondary" />}
+                control={<Checkbox checked={filter.status.includes('Aktif')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Tidak Aktif'}
                 value="Tidak Aktif"
-                control={
-                  <Checkbox defaultChecked={false} checked={filter.status.includes('Tidak Aktif')} color="secondary" />
-                }
+                control={<Checkbox checked={filter.status.includes('Tidak Aktif')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
