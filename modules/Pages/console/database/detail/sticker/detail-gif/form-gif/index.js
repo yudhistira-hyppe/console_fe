@@ -5,19 +5,18 @@ import ModalDelete from '../Modal/ModalDelete';
 import ModalSave from '../Modal/ModalSave';
 import ModalConfirmation from '../Modal/ModalConfirmation';
 import router from 'next/router';
-import { onMediaUpload } from 'api/console/database/mediaService';
-import { onImageUpload } from 'api/console/database/imageService';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
 import UploadThumbnail from '../upload-thumbnail';
 import ModalBatal from '../Modal/ModalBatal';
+import { useCreateStickerMutation, useGetStickerCategoryQuery, useUpdateStickerMutation } from 'api/console/database';
 
 const FormGIF = (props) => {
   const { status, data, id } = props;
   const [inputValue, setInputValue] = useState({
-    gifName: '',
-    apsaraThumbnail: '',
-    status: '',
+    stickerName: data?.name || '',
+    image: data?.image || '',
+    status: data?.status || '',
   });
   const [modal, setModal] = useState({
     delete: false,
@@ -26,51 +25,78 @@ const FormGIF = (props) => {
     cancel: false,
     status: '',
   });
-  const [loading, setLoading] = useState(false);
+  const [createSticker, { isLoading: loadingCreate }] = useCreateStickerMutation();
+  const [updateSticker, { isLoading: loadingUpdate }] = useUpdateStickerMutation();
 
   const handleChangeInput = (e) => {
     const value = e.target.value;
     setInputValue({ ...inputValue, [e.target.name]: value });
   };
 
-  const handleApsaraMedia = async () => {
-    const response = await fetch('/api/apsara-upload-media');
-    const data = await response.json();
-
-    return data;
-  };
-
-  const handleApsaraImage = async () => {
-    const response = await fetch('/api/apsara-upload-image');
-    const data = await response.json();
-
-    return data;
-  };
-
   const handleCreate = () => {
-    setModal({ ...modal, save: !modal.save });
-    router.replace({ pathname: '/database/sticker', query: { tab: 'gif' } });
+    let formData = new FormData();
+    formData.append('name', inputValue?.stickerName);
+    formData.append('status', inputValue?.status === 'active' ? true : false);
+    formData.append('type', 'GIF');
+    formData.append('image', inputValue?.image);
+
+    createSticker(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menambahkan GIF');
+        router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });
+      }
+      setModal({ ...modal, save: !modal.save });
+    });
   };
 
   const handleUpdate = () => {
-    setModal({ ...modal, save: !modal.save });
-    router.replace({ pathname: '/database/sticker', query: { tab: 'gif' } });
+    let formData = new FormData();
+    formData.append('id', id);
+    formData.append('name', inputValue?.stickerName);
+    formData.append('status', inputValue?.status ? true : false);
+    formData.append('type', 'GIF');
+
+    updateSticker(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menyimpan perubahan GIF');
+        router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });
+      }
+      setModal({ ...modal, save: !modal.save });
+    });
   };
 
-  console.log(inputValue);
+  const checkDisable = () => {
+    let disabled = false;
+
+    if (status === 'create' && (!inputValue?.stickerName || !inputValue?.image || !inputValue?.status)) {
+      disabled = true;
+    } else {
+      if (!inputValue?.stickerName || data?.name === inputValue?.stickerName) {
+        disabled = true;
+      }
+    }
+
+    return disabled;
+  };
 
   return (
     <>
       <ModalDelete
+        id={data?._id}
         showModal={modal.delete}
         onClose={() => setModal({ ...modal, delete: !modal.delete })}
-        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: 'gif' } })}
+        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } })}
       />
       <ModalSave
         status={status}
         statusCreate={inputValue.status}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
+        loading={loadingUpdate || loadingCreate}
         onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
       />
       <ModalConfirmation
@@ -82,7 +108,7 @@ const FormGIF = (props) => {
       <ModalBatal
         showModal={modal.cancel}
         onClose={() => setModal({ ...modal, cancel: !modal.cancel })}
-        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: 'gif' } })}
+        onConfirm={() => router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } })}
       />
 
       <Card style={{ padding: 20 }}>
@@ -93,7 +119,12 @@ const FormGIF = (props) => {
             gap="12px"
             maxWidth={status !== 'create' ? 170 : '100%'}
             alignItems="flex-end">
-            <UploadThumbnail thumbnail={''} status={status} setInputValue={setInputValue} inputValue={inputValue} />
+            <UploadThumbnail
+              thumbnail={inputValue?.image}
+              status={status}
+              setInputValue={setInputValue}
+              inputValue={inputValue}
+            />
           </Stack>
           <Stack direction={'column'} width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={'100%'}>
@@ -101,8 +132,8 @@ const FormGIF = (props) => {
                 Nama GIF <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <TextField
-                name="gifName"
-                value={inputValue.gifName}
+                name="stickerName"
+                value={inputValue.stickerName}
                 variant="outlined"
                 placeholder="Nama GIF"
                 onChange={handleChangeInput}
@@ -116,27 +147,27 @@ const FormGIF = (props) => {
                 <Select
                   name="status"
                   value={inputValue.status}
-                  placeholder="Pilih Status gif"
+                  placeholder="Pilih Status Emoji"
                   onChange={handleChangeInput}
                   color="secondary"
                   displayEmpty>
                   <MenuItem value="" disabled>
                     Pilih Status Awal
                   </MenuItem>
-                  <MenuItem value="aktif">Aktif</MenuItem>
-                  <MenuItem value="inaktif">Tidak Aktif</MenuItem>
+                  <MenuItem value="active">Aktif</MenuItem>
+                  <MenuItem value="noneactive">Tidak Aktif</MenuItem>
                 </Select>
               </Stack>
             )}
             <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
               <LoadingButton
-                loading={loading}
+                loading={loadingUpdate || loadingCreate}
                 variant="contained"
                 color="secondary"
-                style={{ width: 'fit-content', fontWeight: 'bold' }}
+                style={{ width: 150, fontWeight: 'bold', height: 36 }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
-                disabled={!inputValue.gifName || !inputValue.status || !inputValue.apsaraThumbnail}>
-                {status !== 'create' ? 'Terapkan' : 'Simpan'}
+                disabled={checkDisable()}>
+                <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
               </LoadingButton>
               {status === 'create' && (
                 <Button
@@ -144,13 +175,14 @@ const FormGIF = (props) => {
                   color="secondary"
                   style={{ width: 'fit-content', fontWeight: 'bold' }}
                   onClick={() => {
-                    if (!inputValue.gifName && !inputValue.status && !inputValue.apsaraThumbnail) {
-                      router.push({ pathname: '/database/sticker', query: { tab: 'gif' } });
+                    if (!inputValue.stickerName && !inputValue.category && !inputValue.status && !inputValue.image) {
+                      router.push({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });
                     } else {
                       setModal({ ...modal, cancel: !modal.cancel });
                     }
-                  }}>
-                  Batal
+                  }}
+                  disabled={loadingCreate}>
+                  <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Batal</Typography>
                 </Button>
               )}
             </Stack>
@@ -166,13 +198,13 @@ const FormGIF = (props) => {
                 </Typography>
                 <RadioGroup
                   row
-                  value={data?.isActive ? 'active' : 'disactive'}
+                  value={data?.status ? 'active' : 'noneactive'}
                   style={{ gap: 40 }}
                   onChange={() =>
                     setModal({
                       ...modal,
                       confirmation: !modal.confirmation,
-                      status: data?.isActive ? 'active' : 'disactive',
+                      status: data?.status ? 'noneactive' : 'active',
                     })
                   }>
                   <FormControlLabel
@@ -181,7 +213,7 @@ const FormGIF = (props) => {
                     label={<Typography>Aktif</Typography>}
                   />
                   <FormControlLabel
-                    value="disactive"
+                    value="noneactive"
                     control={<Radio color="secondary" />}
                     label={<Typography>Tidak Aktif</Typography>}
                   />

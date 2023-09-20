@@ -86,8 +86,8 @@ const TableListGif = () => {
         case 'sticker':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Emoji (${value})` }]
-              : [...prevVal, { parent: kind, value: `Emoji (${value})` }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `GIF (${value})` }]
+              : [...prevVal, { parent: kind, value: `GIF (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]

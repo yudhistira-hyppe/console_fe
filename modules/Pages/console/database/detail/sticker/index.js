@@ -46,7 +46,7 @@ const DatabaseDetailStickerComponent = () => {
   } else if (isRenderChildren && slug[1] === 'create' && tab === 'gif') {
     return <DetailGIF kind="create" />;
   } else if (isRenderChildren && slug[1] && tab === 'gif') {
-    return <DetailGIF kind="update" />;
+    return <DetailGIF kind="update" idGIF={slug[1]} />;
   } else {
     return null;
   }

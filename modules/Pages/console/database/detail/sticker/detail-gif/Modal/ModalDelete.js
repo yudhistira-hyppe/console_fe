@@ -4,6 +4,9 @@ import { Button } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useUpdateStickerStatusMutation } from 'api/console/database';
+import { toast } from 'react-hot-toast';
 
 const style = {
   position: 'absolute',
@@ -17,7 +20,26 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalDelete({ showModal, onClose, onConfirm }) {
+export default function ModalDelete({ showModal, onClose, onConfirm, id }) {
+  const [deleteSticker, { isLoading: loadingDelete }] = useUpdateStickerStatusMutation();
+
+  const handleDelete = () => {
+    const data = {
+      listid: [id],
+      status: 'delete',
+    };
+
+    deleteSticker(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menghapus gif');
+      }
+      onClose();
+      onConfirm();
+    });
+  };
+
   return (
     <div>
       <Modal
@@ -34,9 +56,9 @@ export default function ModalDelete({ showModal, onClose, onConfirm }) {
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
+            <LoadingButton loading={loadingDelete} variant="contained" color="secondary" onClick={handleDelete}>
               Konfirmasi
-            </Button>
+            </LoadingButton>
             <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
