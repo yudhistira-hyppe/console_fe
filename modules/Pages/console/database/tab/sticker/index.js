@@ -17,6 +17,10 @@ const DatabaseTabStickerComponent = () => {
 
   useEffect(() => {
     router.query?.tab && setTab(router.query.tab);
+
+    if (window.screenY === 0 && router.query?.tab) {
+      window.scrollTo({ top: 620, behavior: 'instant' });
+    }
   }, [router]);
 
   const handleChangeTab = (_, value) => {
@@ -38,7 +42,7 @@ const DatabaseTabStickerComponent = () => {
       <PageContainer heading="">
         <StickerChart />
 
-        <TabContext value={tab}>
+        <TabContext value={tab} id="tab-sticker">
           <TabList onChange={handleChangeTab} textColor="secondary" indicatorColor="secondary" style={{ marginTop: 12 }}>
             <Tab className={classes.tab} label="Stiker" value="sticker" />
             <Tab className={classes.tab} label="Emoji" value="emoji" />
