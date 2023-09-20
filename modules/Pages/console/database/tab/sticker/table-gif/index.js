@@ -1,16 +1,18 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Stack } from '@mui/material';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
+import { useGetListStickerQuery } from 'api/console/database';
+import { toast } from 'react-hot-toast';
 
 const TableListGif = () => {
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
-    order: 'desc',
-    gif: '',
+    order: 'createdAt-',
+    sticker: '',
     createdAt: [null, null],
     labelPenggunaan: '',
     rangePenggunaan: [],
@@ -23,28 +25,57 @@ const TableListGif = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      sort: filter.order,
+      sorting: filter.order,
+      tipesticker: 'GIF',
     });
-    filter.gif !== '' && Object.assign(params, { name: filter.gif });
+    filter.sticker !== '' && Object.assign(params, { nama: filter.sticker });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.status?.length >= 1 && Object.assign(params, { status: filter.status.join(', ') });
+    filter.rangePenggunaan[0] && Object.assign(params, { startused: filter.rangePenggunaan[0] });
+    filter.rangePenggunaan[1] && Object.assign(params, { endused: filter.rangePenggunaan[1] });
+    filter.status?.length >= 1 &&
+      Object.assign(params, {
+        liststatus: filter.status?.map((item) => {
+          if (item === 'Tidak Aktif') {
+            return false;
+          } else if (item === 'Aktif') {
+            return true;
+          }
+        }),
+      });
+
+    return params;
   };
+
+  const { data: listSticker, isFetching: loadingSticker } = useGetListStickerQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listSticker?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+  }, [filter, loadingSticker]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
         order: e.target.value,
+        page: 0,
       };
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -52,11 +83,11 @@ const TableListGif = () => {
   const handleSearchChange = (kind, value) => {
     setFilterList((prevVal) => {
       switch (kind) {
-        case 'gif':
+        case 'sticker':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `GIF (${value})` }]
-              : [...prevVal, { parent: kind, value: `GIF (${value})` }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Emoji (${value})` }]
+              : [...prevVal, { parent: kind, value: `Emoji (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
@@ -82,6 +113,8 @@ const TableListGif = () => {
               ? [...prevVal.filter((item) => item.parent !== 'rangePenggunaan')]
               : [...prevVal.filter((item) => item.parent !== 'rangePenggunaan'), { parent: 'rangePenggunaan', value: value }]
             : [...prevVal, { parent: kind, value: value }];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -90,8 +123,8 @@ const TableListGif = () => {
     });
     setFilter((prevVal) => {
       switch (kind) {
-        case 'gif':
-          return { ...prevVal, gif: value, page: 0 };
+        case 'sticker':
+          return { ...prevVal, sticker: value, page: 0 };
         case 'createdAt':
           return { ...prevVal, createdAt: value, page: 0 };
         case 'rangePenggunaan':
@@ -134,6 +167,18 @@ const TableListGif = () => {
               : [...filter.status, value],
             page: 0,
           };
+        case 'clearAll':
+          return {
+            page: 0,
+            limit: 10,
+            order: 'createdAt-',
+            sticker: '',
+            createdAt: [null, null],
+            category: [],
+            labelPenggunaan: '',
+            rangePenggunaan: [],
+            status: [],
+          };
         default:
           return { ...prevVal, page: 0 };
       }
@@ -149,8 +194,8 @@ const TableListGif = () => {
           filterList={filterList}
           handleDeleteFilter={handleSearchChange}
           order={filter.order}
-          loading={false}
-          listGif={{ data: [{}] }}
+          loading={loadingSticker}
+          listSticker={listSticker}
           handlePageChange={handlePageChange}
           handleOrder={onOrderChange}
         />
