@@ -32,7 +32,6 @@ const ListSticker = ({ category, setTab }) => {
   useEffect(() => {
     if (category) {
       setFilter({ ...filter, kategori: [category?.name], page: 0 });
-      router.replace({ pathname: router.asPath?.split('?')?.[0], query: { tab: category?.name } });
     }
   }, [category]);
 
