@@ -37,14 +37,12 @@ const KelolaSticker = () => {
   useEffect(() => {
     if (!loadingCategory) {
       setTab(category?.data?.[0]?.name);
-      window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [loadingCategory]);
 
   useEffect(() => {
     if (tabScroll) {
       window.scrollTo({ top: 250, behavior: 'smooth' });
-      console.log('run1');
     }
   }, [tabScroll]);
 

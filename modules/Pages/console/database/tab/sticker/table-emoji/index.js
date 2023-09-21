@@ -63,6 +63,10 @@ const TableListEmoji = () => {
     }
   }, [filter, loadingSticker]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 620, behavior: 'smooth' });
+  }, [filter.page, loadingSticker]);
+
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
       return {
