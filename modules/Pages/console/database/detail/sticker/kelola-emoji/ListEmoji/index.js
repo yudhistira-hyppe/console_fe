@@ -22,7 +22,7 @@ const ListEmoji = ({ category, setTab }) => {
     page: 0,
     limit: 10,
     tipesticker: 'EMOJI',
-    sorting: 'createdAt-',
+    sorting: 'index',
     kategori: [],
   });
   const [updateSticker] = useUpdateStickerMutation();
@@ -48,6 +48,10 @@ const ListEmoji = ({ category, setTab }) => {
       });
     }
   }, [filter, loadingSticker]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 250, behavior: 'smooth' });
+  }, [filter.page, refreshTable]);
 
   useEffect(() => {
     setRefreshTable(true);
@@ -138,7 +142,7 @@ const ListEmoji = ({ category, setTab }) => {
                 <Typography style={{ width: '30%', fontSize: 14 }}>Jumlah Digunakan</Typography>
               </Stack>
 
-              {refreshTable ? (
+              {refreshTable || loadingSticker ? (
                 <Stack direction="column" alignItems="center" justifyContent="center" height={880} width="100%" gap={2}>
                   <CircularProgress color="secondary" />
                   <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
