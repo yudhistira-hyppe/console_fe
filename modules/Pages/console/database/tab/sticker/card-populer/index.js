@@ -12,7 +12,7 @@ const CardPopular = (props) => {
       <Stack direction="column">
         <Stack direction="row" alignItems="center" gap="6px">
           <Typography style={{ color: '#3F3F3F', fontSize: 20, fontWeight: 'bold', opacity: 0.6 }}>{title}</Typography>
-          <Info style={{ color: 'rgba(0, 0, 0, 0.38)', fontSize: 18 }} />
+          {/* <Info style={{ color: 'rgba(0, 0, 0, 0.38)', fontSize: 18 }} /> */}
         </Stack>
         <Stack direction="row" gap="8px" mt={3}>
           <Typography style={{ width: '100%', maxWidth: 85, fontSize: 14, fontWeight: 'bold' }}>Peringkat</Typography>
