@@ -16,7 +16,8 @@ import { useCreateStickerMutation, useGetStickerCategoryQuery, useUpdateStickerM
 const FormSticker = (props) => {
   const { status, data, id } = props;
   const [inputValue, setInputValue] = useState({
-    stickerName: data?.name || '',
+    idName: data?.name || '',
+    engName: data?.nameEn || '',
     category: data?.kategori || '',
     image: data?.image || '',
     indexSticker: data?.index || '',
@@ -41,7 +42,7 @@ const FormSticker = (props) => {
 
   const handleCreate = () => {
     let formData = new FormData();
-    formData.append('name', inputValue?.stickerName);
+    formData.append('name', inputValue?.idName);
     formData.append('kategori', inputValue?.category);
     formData.append('status', inputValue?.status === 'active' ? true : false);
     formData.append('type', 'STICKER');
@@ -62,7 +63,8 @@ const FormSticker = (props) => {
   const handleUpdate = () => {
     let formData = new FormData();
     formData.append('id', id);
-    formData.append('name', inputValue?.stickerName);
+    formData.append('name', inputValue?.idName);
+    formData.append('nameEn', inputValue?.engName);
     formData.append('kategori', inputValue?.category);
     formData.append('status', inputValue?.status ? true : false);
     formData.append('type', 'STICKER');
@@ -84,7 +86,8 @@ const FormSticker = (props) => {
 
     if (
       status === 'create' &&
-      (!inputValue?.stickerName ||
+      (!inputValue?.idName ||
+        // !inputValue?.engName ||
         !inputValue?.category ||
         !inputValue?.image ||
         !inputValue?.indexSticker ||
@@ -93,10 +96,12 @@ const FormSticker = (props) => {
       disabled = true;
     } else {
       if (
-        !inputValue?.stickerName ||
+        !inputValue?.idName ||
+        // !inputValue?.engName ||
         !inputValue?.category ||
         !inputValue?.indexSticker ||
-        (data?.name === inputValue?.stickerName &&
+        (data?.name === inputValue?.idName &&
+          // data?.nameEn === inputValue?.engName &&
           data?.kategori === inputValue?.category &&
           data?.index == inputValue?.indexSticker)
       ) {
@@ -153,16 +158,28 @@ const FormSticker = (props) => {
           <Stack direction={'column'} width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={'100%'}>
               <Typography style={{ fontWeight: 'bold' }}>
-                Nama Stiker <span style={{ color: '#E61D37' }}>*</span>
+                Nama Stiker (Indonesia) <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <TextField
-                name="stickerName"
-                value={inputValue.stickerName}
+                name="idName"
+                value={inputValue.idName}
                 variant="outlined"
-                placeholder="Nama Stiker"
+                placeholder="Nama Stiker Indonesia"
                 onChange={handleChangeInput}
               />
             </Stack>
+            {/* <Stack direction="column" gap="8px" width={'100%'}>
+              <Typography style={{ fontWeight: 'bold' }}>
+                Nama Stiker (Inggris) <span style={{ color: '#E61D37' }}>*</span>
+              </Typography>
+              <TextField
+                name="engName"
+                value={inputValue.engName}
+                variant="outlined"
+                placeholder="Nama Stiker Inggris"
+                onChange={handleChangeInput}
+              />
+            </Stack> */}
             <Stack direction="column" gap="8px" width={'100%'}>
               <Typography style={{ fontWeight: 'bold' }}>
                 Kategori <span style={{ color: '#E61D37' }}>*</span>
@@ -249,7 +266,13 @@ const FormSticker = (props) => {
                   color="secondary"
                   style={{ width: 'fit-content', fontWeight: 'bold' }}
                   onClick={() => {
-                    if (!inputValue.stickerName && !inputValue.category && !inputValue.status && !inputValue.image) {
+                    if (
+                      !inputValue.idName &&
+                      !inputValue.engName &&
+                      !inputValue.category &&
+                      !inputValue.status &&
+                      !inputValue.image
+                    ) {
                       router.push('/database/sticker');
                     } else {
                       setModal({ ...modal, cancel: !modal.cancel });
