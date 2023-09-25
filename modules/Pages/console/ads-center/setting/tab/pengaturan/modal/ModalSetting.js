@@ -73,7 +73,7 @@ const ModalSetting = ({ open, onClose, data }) => {
                 },
               }}
               onChange={(e) => {
-                if (e.target.value > 100) {
+                if (e.target.value > 100 && data?.Unit === 'Persen') {
                   setInputValue({ [data?.Jenis]: 100 });
                 } else {
                   setInputValue({ [data?.Jenis]: Number(e.target.value) });
