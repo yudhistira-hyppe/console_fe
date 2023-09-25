@@ -36,7 +36,11 @@ const KelolaEmoji = () => {
 
   useEffect(() => {
     if (!loadingCategory) {
-      setTab(category?.data?.[0]?.name);
+      if (category?.data?.length >= 1) {
+        setTab(category?.data?.[0]?.name);
+      } else {
+        setTab('');
+      }
     }
   }, [loadingCategory]);
 
@@ -104,7 +108,7 @@ const KelolaEmoji = () => {
             }}
           />
 
-          <ListEmoji category={category?.data?.find((item) => item.name === tab)} setTab={setTab} />
+          {tab && <ListEmoji category={category?.data?.find((item) => item.name === tab)} setTab={setTab} />}
         </>
       )}
     </>
