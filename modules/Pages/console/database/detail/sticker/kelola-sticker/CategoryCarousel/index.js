@@ -56,60 +56,64 @@ const CustomButtonGroup = ({ next, previous, ...rest }) => {
 const CategoryCarousel = ({ data, tab, setTab }) => {
   return (
     <Stack mt={3} style={{ position: 'relative' }}>
-      <Carousel
-        responsive={responsive}
-        swipeable={false}
-        draggable={false}
-        rtl={false}
-        arrows={false}
-        customButtonGroup={<CustomButtonGroup />}
-        renderArrowsWhenDisabled={false}
-        renderButtonGroupOutside
-        renderDotsOutside={false}>
-        {data.map((item, key) => (
-          <Stack
-            key={key}
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            style={{
-              background: 'linear-gradient(90deg, #610164 0%, #AB22AF 100%)',
-              width: '95%',
-              height: 80,
-              margin: '0 auto',
-              borderRadius: 8,
-              padding: '12px 16px',
-              flexShrink: 0,
-              cursor: 'pointer',
-              position: 'relative',
-            }}
-            onClick={() => setTab(item.name)}>
-            <div
+      {data?.length >= 1 ? (
+        <Carousel
+          responsive={responsive}
+          swipeable={false}
+          draggable={false}
+          rtl={false}
+          arrows={false}
+          customButtonGroup={<CustomButtonGroup />}
+          renderArrowsWhenDisabled={false}
+          renderButtonGroupOutside
+          renderDotsOutside={false}>
+          {data.map((item, key) => (
+            <Stack
+              key={key}
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
               style={{
-                position: 'absolute',
-                top: 12,
-                width: 60,
-                height: 5,
-                borderRadius: 100,
-                background: 'white',
-                transition: 'all .2s ease-in',
-                opacity: tab === item.name ? 1 : 0,
+                background: 'linear-gradient(90deg, #610164 0%, #AB22AF 100%)',
+                width: '95%',
+                height: 80,
+                margin: '0 auto',
+                borderRadius: 8,
+                padding: '12px 16px',
+                flexShrink: 0,
+                cursor: 'pointer',
+                position: 'relative',
               }}
-            />
-            <Typography
-              style={{
-                color: 'white',
-                fontSize: 24,
-                fontWeight: 'bold',
-                transition: 'all .15s ease-in',
-                marginTop: tab === item.name ? 10 : 0,
-              }}>
-              {item.name}
-            </Typography>
-            <img src={item?.icon} style={{ width: 'auto', height: 45 }} />
-          </Stack>
-        ))}
-      </Carousel>
+              onClick={() => setTab(item.name)}>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 12,
+                  width: 60,
+                  height: 5,
+                  borderRadius: 100,
+                  background: 'white',
+                  transition: 'all .2s ease-in',
+                  opacity: tab === item.name ? 1 : 0,
+                }}
+              />
+              <Typography
+                style={{
+                  color: 'white',
+                  fontSize: 24,
+                  fontWeight: 'bold',
+                  transition: 'all .15s ease-in',
+                  marginTop: tab === item.name ? 10 : 0,
+                }}>
+                {item.name}
+              </Typography>
+              <img src={item?.icon} style={{ width: 'auto', height: 45 }} />
+            </Stack>
+          ))}
+        </Carousel>
+      ) : (
+        <Typography>Tidak ada data kategori stiker</Typography>
+      )}
     </Stack>
   );
 };
