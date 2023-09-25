@@ -65,15 +65,15 @@ const MainApp = (props) => {
     }
   });
 
-  // useEffect(async () => {
-  //   fetch('https://static.ads-twitter.com/uwt.js', { method: 'head', mode: 'no-cors' })
-  //     .then(() => {
-  //       setBlur(false);
-  //     })
-  //     .catch(() => {
-  //       setBlur(true);
-  //     });
-  // }, []);
+  useEffect(async () => {
+    fetch('https://static.ads-twitter.com/uwt.js', { method: 'head', mode: 'no-cors' })
+      .then(() => {
+        setBlur(false);
+      })
+      .catch(() => {
+        setBlur(true);
+      });
+  }, []);
 
   return (
     <React.Fragment>
