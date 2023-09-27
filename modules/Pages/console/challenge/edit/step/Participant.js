@@ -116,7 +116,11 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
                     }
                   />
                 }
-                label={<Typography style={{ color: '#9B9B9B', textTransform: 'capitalize' }}>{item}</Typography>}
+                label={
+                  <Typography style={{ color: '#9B9B9B', textTransform: 'capitalize' }}>
+                    {item === '<44' ? '> 44' : ''}
+                  </Typography>
+                }
               />
             ))}
           </FormGroup>
