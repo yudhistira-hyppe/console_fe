@@ -24,14 +24,14 @@ const postsConfig = [
 ];
 
 const UserPost = (props) => {
-  const { username } = props;
+  const { idUser } = props;
   const classes = useStyles();
   const [tab, setTab] = useState('all');
   const [payload, setPayload] = useState({
     page: 0,
     limit: 10,
     descending: true,
-    username: username,
+    iduser: idUser,
   });
   const [posts, setPosts] = useState({
     tab: tab,
