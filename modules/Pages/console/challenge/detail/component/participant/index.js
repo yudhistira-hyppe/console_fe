@@ -36,7 +36,7 @@ const ParticipantComponent = ({ detail }) => {
     filter.username !== '' && Object.assign(params, { username: filter.username });
     filter.gender.length >= 1 &&
       Object.assign(params, {
-        gender: filter.gender.map((item) => {
+        jeniskelamin: filter.gender.map((item) => {
           if (item === 'Laki-laki') {
             return 'MALE';
           } else if (item === 'Perempuan') {
@@ -47,7 +47,7 @@ const ParticipantComponent = ({ detail }) => {
         }),
       });
     filter.age !== '' && Object.assign(params, { startage: filter.rangeAge[0], endage: filter.rangeAge[1] });
-    filter.type.length >= 1 && Object.assign(params, { jenis: filter.type.map((item) => item) });
+    filter.type.length >= 1 && Object.assign(params, { jenisakun: filter.type.map((item) => item) });
 
     return params;
   };

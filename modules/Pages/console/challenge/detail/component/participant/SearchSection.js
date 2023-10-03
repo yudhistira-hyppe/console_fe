@@ -103,13 +103,13 @@ const SearchSection = ({ filter, handleChange }) => {
             <FormGroup onChange={(e) => handleChange('type', e.target.value)}>
               <FormControlLabel
                 label={'Tidak Terverifikasi'}
-                value="BASIC"
-                control={<Checkbox checked={filter.type.includes('BASIC')} color="secondary" />}
+                value="unverified"
+                control={<Checkbox checked={filter.type.includes('unverified')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Terverifikasi'}
-                value="PREMIUM"
-                control={<Checkbox checked={filter.type.includes('PREMIUM')} color="secondary" />}
+                value="verified"
+                control={<Checkbox checked={filter.type.includes('verified')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>

@@ -109,7 +109,7 @@ const DatabaseDetailAccountComponent = (props) => {
                   <Interest interests={userFriendListRes?.[0]?.interests} />
                 </Grid>
                 <Grid item xs={12} md>
-                  <UserPost username={userFriendListRes?.[0]?.username} />
+                  <UserPost idUser={detailId} />
                 </Grid>
               </Grid>
               <Grid container gap={3}>
