@@ -341,7 +341,7 @@ const FormMusic = (props) => {
                       !inputValue.theme ||
                       !inputValue.mood ||
                       !inputValue.apsaraMusic ||
-                      inputValue.releaseDate ||
+                      !inputValue.releaseDate ||
                       !inputValue.apsaraThumnail) ||
                   !access.find((item) => item?.nameModule === 'database_music')?.acces?.updateAcces
                 }>
