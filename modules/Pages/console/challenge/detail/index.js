@@ -278,7 +278,7 @@ const DetailChallenge = ({ detailId }) => {
                         setOpenModal({
                           showModal: !openModal.showModal,
                           status: 'publish',
-                          selected: inputValue,
+                          selected: detail?._id,
                         })
                       }
                       disabled>
@@ -297,7 +297,7 @@ const DetailChallenge = ({ detailId }) => {
                     setOpenModal({
                       showModal: !openModal.showModal,
                       status: 'publish',
-                      selected: inputValue,
+                      selected: detail?._id,
                     })
                   }
                   disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.updateAcces}>
