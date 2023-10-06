@@ -54,7 +54,7 @@ const EditChallenge = ({ detailId, moreSlug }) => {
   const isDraft = detail?.statusChallenge === 'DRAFT';
 
   const steps = isDraft
-    ? ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi']
+    ? ['Detail', 'Objektif', 'Bergabung', 'Partisipan', 'Leaderboard', 'Hadiah', 'Notifikasi']
     : ['Detail', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
   useEffect(() => {
@@ -301,16 +301,16 @@ const EditChallenge = ({ detailId, moreSlug }) => {
         disabled = true;
       } else if (
         activeStep == 2 &&
-        (isEmpty(inputValue?.account_type) ||
-          isEmpty(inputValue?.age_range) ||
-          isEmpty(inputValue?.gender) ||
-          isEmpty(inputValue?.area))
+        (!inputValue?.type_invitation ||
+          (inputValue?.type_invitation === 'invitation' && isEmpty(inputValue?.invited_people)))
       ) {
         disabled = true;
       } else if (
         activeStep == 3 &&
-        (!inputValue?.type_invitation ||
-          (inputValue?.type_invitation === 'invitation' && isEmpty(inputValue?.invited_people)))
+        (isEmpty(inputValue?.account_type) ||
+          isEmpty(inputValue?.age_range) ||
+          isEmpty(inputValue?.gender) ||
+          isEmpty(inputValue?.area))
       ) {
         disabled = true;
       } else if (activeStep == 4 && (!inputValue?.banner_leaderboard || !inputValue?.banner_background_color)) {
@@ -420,8 +420,6 @@ const EditChallenge = ({ detailId, moreSlug }) => {
     return disabled;
   };
 
-  console.log(inputValue);
-
   return (
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -494,14 +492,14 @@ const EditChallenge = ({ detailId, moreSlug }) => {
                     <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} isDraft={isDraft} />
                   )}
                   {activeStep === 2 && (
-                    <ComponentStepParticipant
+                    <ComponentStepInvitation
                       inputValue={inputValue}
                       handleInputChange={handleInputChange}
                       isDraft={isDraft}
                     />
                   )}
                   {activeStep === 3 && (
-                    <ComponentStepInvitation
+                    <ComponentStepParticipant
                       inputValue={inputValue}
                       handleInputChange={handleInputChange}
                       isDraft={isDraft}
@@ -559,7 +557,14 @@ const EditChallenge = ({ detailId, moreSlug }) => {
                   variant="outlined"
                   color="secondary"
                   style={{ borderRadius: 6, padding: '10px 20px' }}
-                  onClick={handleBack}>
+                  onClick={() => {
+                    if (activeStep === 4 && inputValue?.type_invitation === 'invitation') {
+                      handleBack();
+                      handleBack();
+                    } else {
+                      handleBack();
+                    }
+                  }}>
                   <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Back</Typography>
                 </Button>
               ) : (
@@ -599,7 +604,12 @@ const EditChallenge = ({ detailId, moreSlug }) => {
                   style={{ borderRadius: 6, padding: '10px 20px' }}
                   onClick={() => {
                     if (activeStep < (isDraft ? 6 : 3)) {
-                      handleNext();
+                      if (isDraft && activeStep === 2 && inputValue?.type_invitation === 'invitation') {
+                        handleNext();
+                        handleNext();
+                      } else {
+                        handleNext();
+                      }
                     } else {
                       setOpenModal({
                         showModal: !openModal.showModal,

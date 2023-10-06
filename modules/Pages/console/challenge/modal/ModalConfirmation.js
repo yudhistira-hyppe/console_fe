@@ -123,14 +123,13 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         : 'ALL',
     );
 
-    formData.append('tipeAkun', selectedItem?.type_invitation === 'all' ? selectedItem?.account_type?.join(',') : []);
-    formData.append('jenis_kelamin', selectedItem?.type_invitation === 'all' ? selectedItem?.gender?.join(',') : []);
-
+    formData.append('tipeAkun', selectedItem?.type_invitation === 'all' ? selectedItem?.account_type?.join(',') : '');
+    formData.append('jenis_kelamin', selectedItem?.type_invitation === 'all' ? selectedItem?.gender?.join(',') : '');
     formData.append(
       'lokasi',
-      selectedItem?.type_invitation === 'all' ? selectedItem?.area?.map((item) => item?._id)?.join(',') : [],
+      selectedItem?.type_invitation === 'all' ? selectedItem?.area?.map((item) => item?._id)?.join(',') : '',
     );
-    formData.append('rentangumur', selectedItem?.type_invitation === 'all' ? selectedItem?.age_range?.join(',') : []);
+    formData.append('rentangumur', selectedItem?.type_invitation === 'all' ? selectedItem?.age_range?.join(',') : '');
 
     formData.append('leaderboard_tampilbadge_dileaderboard', selectedItem?.show_badge_leaderboard ? true : false);
     formData.append('leaderboard_Height', 176);
@@ -340,7 +339,6 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('konten_hyppediary_viewpost', selectedItem?.content_like_diary);
     }
 
-    formData.append('tipeAkun', selectedItem?.account_type?.join(','));
     formData.append('caraGabung', selectedItem?.type_invitation === 'all' ? 'SEMUA PENGGUNA' : 'DENGAN UNDANGAN');
     formData.append(
       'list_partisipan_challenge',
@@ -348,9 +346,14 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         ? selectedItem?.invited_people?.map((item) => item?.iduser)?.join(',')
         : 'ALL',
     );
-    formData.append('jenis_kelamin', selectedItem?.gender?.join(','));
-    formData.append('lokasi', selectedItem?.area?.map((item) => item?._id)?.join(','));
-    formData.append('rentangumur', selectedItem?.age_range?.join(','));
+
+    formData.append('tipeAkun', selectedItem?.type_invitation === 'all' ? selectedItem?.account_type?.join(',') : '');
+    formData.append('jenis_kelamin', selectedItem?.type_invitation === 'all' ? selectedItem?.gender?.join(',') : '');
+    formData.append(
+      'lokasi',
+      selectedItem?.type_invitation === 'all' ? selectedItem?.area?.map((item) => item?._id)?.join(',') : '',
+    );
+    formData.append('rentangumur', selectedItem?.type_invitation === 'all' ? selectedItem?.age_range?.join(',') : '');
 
     formData.append('leaderboard_tampilbadge_dileaderboard', selectedItem?.show_badge_leaderboard ? true : false);
     formData.append('leaderboard_warnaBackground', selectedItem?.banner_background_color?.color);
@@ -362,10 +365,18 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
     }
 
     formData.append('ketentuanhadiah_tampilbadge', selectedItem?.winner_badges ? true : false);
-    formData.append('ketentuanhadiah_Height', 80);
-    formData.append('ketentuanhadiah_Width', 80);
-    formData.append('ketentuanhadiah_formatFile', 'png');
-    if (selectedItem?.winner_ranking_badge?.length >= 1) {
+    selectedItem?.winner_badges !== undefined &&
+      selectedItem?.winner_badges &&
+      formData.append('ketentuanhadiah_Height', 80);
+    selectedItem?.winner_badges !== undefined && selectedItem?.winner_badges && formData.append('ketentuanhadiah_Width', 80);
+    selectedItem?.winner_badges !== undefined &&
+      selectedItem?.winner_badges &&
+      formData.append('ketentuanhadiah_formatFile', 'png');
+    if (
+      selectedItem?.winner_badges !== undefined &&
+      selectedItem?.winner_badges &&
+      selectedItem?.winner_ranking_badge?.length >= 1
+    ) {
       formData.append(
         'listbadge',
         selectedItem?.winner_ranking_badge?.map((item) => {
@@ -399,12 +410,12 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
 
     formData.append('hadiah_set_hadiahpemenang', selectedItem?.winner_rewards ? true : false);
     selectedItem?.winner_rewards !== undefined &&
-      !selectedItem?.winner_rewards &&
+      selectedItem?.winner_rewards &&
       formData.append('hadiah_jenispemenang', selectedItem?.winner_rewards_type === 'ranking' ? 'RANKING' : 'POINT');
-    selectedItem?.winner_rewards !== undefined && !selectedItem?.winner_rewards && formData.append('hadiah_currency', 'Rp');
+    selectedItem?.winner_rewards !== undefined && selectedItem?.winner_rewards && formData.append('hadiah_currency', 'Rp');
     if (
       selectedItem?.winner_rewards !== undefined &&
-      !selectedItem?.winner_rewards &&
+      selectedItem?.winner_rewards &&
       selectedItem?.winner_rewards_type === 'ranking'
     ) {
       if (selectedItem?.winner_ranking_price?.length >= 1) {
@@ -414,8 +425,12 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         );
       }
     } else {
-      formData.append('point_price', Number(selectedItem?.reward_poin));
-      formData.append('point_price_max', Number(selectedItem?.max_reward));
+      selectedItem?.winner_rewards !== undefined &&
+        selectedItem?.winner_rewards &&
+        formData.append('point_price', Number(selectedItem?.reward_poin));
+      selectedItem?.winner_rewards !== undefined &&
+        selectedItem?.winner_rewards &&
+        formData.append('point_price_max', Number(selectedItem?.max_reward));
     }
 
     if (selectedItem?.notification_push?.length >= 1) {

@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { Button, Checkbox, CircularProgress, Divider, IconButton, Pagination, Stack } from '@mui/material';
+import { Button, Checkbox, CircularProgress, Divider, IconButton, Pagination, Stack, Tooltip } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -158,16 +158,20 @@ const TableSection = ({
               <TableRow style={{ height: 70 }}>
                 <TableCell colSpan={7}>
                   <Stack direction="row" alignItems="center" gap={2}>
-                    <Checkbox
-                      color="secondary"
-                      indeterminate={selected.length > 0 && selected.length < listAllUser?.data?.length}
-                      checked={selected.length > 0 && selected.length === listAllUser?.data?.length}
-                      onChange={handleSelectAllClick}
-                      inputProps={{
-                        'aria-label': 'select all desserts',
-                      }}
-                      disabled={loadingAll}
-                    />
+                    <Tooltip title={loadingAll ? 'Loading mendapatkan data...' : 'Pilih Semua'}>
+                      <div>
+                        <Checkbox
+                          color="secondary"
+                          indeterminate={selected.length > 0 && selected.length < listAllUser?.data?.length}
+                          checked={selected.length > 0 && selected.length === listAllUser?.data?.length}
+                          onChange={handleSelectAllClick}
+                          inputProps={{
+                            'aria-label': 'select all desserts',
+                          }}
+                          disabled={loadingAll}
+                        />
+                      </div>
+                    </Tooltip>
                     <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>
                       Pilih Semua ({selected?.length})
                     </Typography>
