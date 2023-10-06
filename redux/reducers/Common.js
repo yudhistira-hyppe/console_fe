@@ -7,7 +7,7 @@ const INIT_STATE = {
   loading: false,
 };
 
-export default (state = INIT_STATE, action) => {
+const Common = (state = INIT_STATE, action) => {
   switch (action.type) {
     case FETCH_START: {
       return { ...state, error: '', message: '', loading: true };
@@ -22,3 +22,5 @@ export default (state = INIT_STATE, action) => {
       return state;
   }
 };
+
+export default Common;
