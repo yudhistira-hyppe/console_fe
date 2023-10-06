@@ -18,8 +18,6 @@ import { ArrowLeft, ChevronLeft } from '@material-ui/icons';
 import Router from 'next/router';
 import ModalConfirmation from '../modal/ModalConfirmation';
 
-const steps = ['Detail', 'Tipe', 'Partisipan', 'Undangan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
-
 const CreateChallenge = ({ moreSlug }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [inputValue, setInputValue] = useState({});
@@ -38,6 +36,8 @@ const CreateChallenge = ({ moreSlug }) => {
     status: '',
     selected: {},
   });
+
+  const steps = ['Detail', 'Objektif', 'Bergabung', 'Partisipan', 'Leaderboard', 'Hadiah', 'Notifikasi'];
 
   useEffect(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
@@ -102,15 +102,15 @@ const CreateChallenge = ({ moreSlug }) => {
       disabled = true;
     } else if (
       activeStep == 2 &&
-      (isEmpty(inputValue?.account_type) ||
-        isEmpty(inputValue?.age_range) ||
-        isEmpty(inputValue?.gender) ||
-        isEmpty(inputValue?.area))
+      (!inputValue?.type_invitation || (inputValue?.type_invitation === 'invitation' && isEmpty(inputValue?.invited_people)))
     ) {
       disabled = true;
     } else if (
       activeStep == 3 &&
-      (!inputValue?.type_invitation || (inputValue?.type_invitation === 'invitation' && isEmpty(inputValue?.invited_people)))
+      (isEmpty(inputValue?.account_type) ||
+        isEmpty(inputValue?.age_range) ||
+        isEmpty(inputValue?.gender) ||
+        isEmpty(inputValue?.area))
     ) {
       disabled = true;
     } else if (activeStep == 4 && (!inputValue?.banner_leaderboard || !inputValue?.banner_background_color)) {
@@ -158,6 +158,8 @@ const CreateChallenge = ({ moreSlug }) => {
     return disabled;
   };
 
+  console.log(inputValue);
+
   return (
     <Stack direction="column" gap={3}>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -201,8 +203,8 @@ const CreateChallenge = ({ moreSlug }) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           {activeStep === 0 && <ComponentStepDetail inputValue={inputValue} handleInputChange={handleInputChange} />}
           {activeStep === 1 && <ComponentStepType inputValue={inputValue} handleInputChange={handleInputChange} />}
-          {activeStep === 2 && <ComponentStepParticipant inputValue={inputValue} handleInputChange={handleInputChange} />}
-          {activeStep === 3 && <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 2 && <ComponentStepInvitation inputValue={inputValue} handleInputChange={handleInputChange} />}
+          {activeStep === 3 && <ComponentStepParticipant inputValue={inputValue} handleInputChange={handleInputChange} />}
           {activeStep === 4 && <ComponentStepLeaderboard inputValue={inputValue} handleInputChange={handleInputChange} />}
           {activeStep === 5 && <ComponentStepRewards inputValue={inputValue} handleInputChange={handleInputChange} />}
           {activeStep === 6 && <ComponentStepNotification inputValue={inputValue} handleInputChange={handleInputChange} />}
@@ -216,7 +218,14 @@ const CreateChallenge = ({ moreSlug }) => {
               variant="outlined"
               color="secondary"
               style={{ borderRadius: 6, padding: '10px 20px' }}
-              onClick={handleBack}>
+              onClick={() => {
+                if (activeStep === 4 && inputValue?.type_invitation === 'invitation') {
+                  handleBack();
+                  handleBack();
+                } else {
+                  handleBack();
+                }
+              }}>
               <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>Back</Typography>
             </Button>
           ) : (
@@ -247,7 +256,12 @@ const CreateChallenge = ({ moreSlug }) => {
               style={{ borderRadius: 6, padding: '10px 20px' }}
               onClick={() => {
                 if (activeStep < 6) {
-                  handleNext();
+                  if (activeStep === 2 && inputValue?.type_invitation === 'invitation') {
+                    handleNext();
+                    handleNext();
+                  } else {
+                    handleNext();
+                  }
                 } else {
                   setOpenModal({
                     showModal: !openModal.showModal,
