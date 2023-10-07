@@ -9,8 +9,8 @@ const ActivityItem = ({ detail }) => {
 
   return (
     <ScrollBar style={{ height: 572, marginTop: 16 }}>
-      <Stack direction="column" gap={2} style={{ width: '100%', paddingRight: 16 }}>
-        {[{}, {}, {}].map((item, key) => (
+      {/* <Stack direction="column" gap={2} style={{ width: '100%', paddingRight: 16 }}>
+        {[].map((item, key) => (
           <>
             <Stack direction="column" gap={1}>
               <Typography style={{ color: '#737373' }}>
@@ -28,6 +28,12 @@ const ActivityItem = ({ detail }) => {
             <Divider flexItem />
           </>
         ))}
+      </Stack> */}
+      <Stack direction="column" alignItems="center" justifyContent="center" height="100%" gap={2}>
+        <img src="/images/icon-media-empty.png" style={{ width: 60, height: 60 }} />
+        <Typography style={{ color: '#666666', width: 250, textAlign: 'center' }}>
+          Anda akan melihat data aktifitas challenge di sini.
+        </Typography>
       </Stack>
     </ScrollBar>
   );

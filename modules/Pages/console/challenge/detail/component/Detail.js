@@ -222,11 +222,15 @@ const DetailChallengeComponent = ({ detail }) => {
           </Stack>
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Jenis Kelamin:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>{gender?.join(' & ')}</Typography>
+            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+              {gender?.join(' & ') || '-'}
+            </Typography>
           </Stack>
           <Stack direction="row" gap={1}>
             <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Usia:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>{age?.join(', ')}</Typography>
+            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+              {age?.join(', ') || '-'}
+            </Typography>
           </Stack>
         </Stack>
       </Stack>

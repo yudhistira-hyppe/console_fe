@@ -11,7 +11,7 @@ const RewardsComponent = ({ detail }) => {
         <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>Ketentuan Hadiah</Typography>
         {detail?.ketentuanHadiah?.[0]?.badgePemenang && (
           <>
-            <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" gap={3}>
               {Object.keys(detail?.ketentuanHadiah?.[0]?.badge?.[0]).includes('juara1') && (
                 <Stack direction="column" gap={2} justifyContent="center" alignItems="center">
                   <Typography style={{ fontWeight: 'bold', color: '#00000099', fontSize: 14 }}>Juara#1</Typography>
