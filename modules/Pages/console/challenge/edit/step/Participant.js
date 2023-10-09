@@ -19,6 +19,7 @@ import PopoverArea from '../component/PopoverArea';
 
 const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [areaLength, setAreaLength] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,6 +52,23 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             Tipe Akun<span style={{ color: 'red' }}>*</span>
           </Typography>
           <FormGroup row style={{ gap: 16 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  indeterminate={inputValue?.account_type?.length >= 1 && inputValue?.account_type?.length < 2}
+                  checked={inputValue?.account_type?.length >= 2 || false}
+                  onChange={() => {
+                    if (inputValue?.account_type?.length >= 2) {
+                      handleInputChange('account_type', undefined);
+                    } else {
+                      handleInputChange('account_type', ['TIDAKTERVERIFIKASI', 'TERVERIFIKASI']);
+                    }
+                  }}
+                  color="secondary"
+                />
+              }
+              label={<Typography style={{ color: '#9B9B9B' }}>Pilih Semua</Typography>}
+            />
             <FormControlLabel
               control={
                 <Checkbox
@@ -97,6 +115,23 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             Rentang Umur<span style={{ color: 'red' }}>*</span>
           </Typography>
           <FormGroup row style={{ gap: 16 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="secondary"
+                  indeterminate={inputValue?.age_range?.length >= 1 && inputValue?.age_range?.length < 5}
+                  checked={inputValue?.age_range?.length >= 5 || false}
+                  onChange={() => {
+                    if (inputValue?.age_range?.length >= 5) {
+                      handleInputChange('age_range', undefined);
+                    } else {
+                      handleInputChange('age_range', ['<14', '14-28', '29-43', '44<', 'LAINNYA']);
+                    }
+                  }}
+                />
+              }
+              label={<Typography style={{ color: '#9B9B9B', textTransform: 'capitalize' }}>Pilih Semua</Typography>}
+            />
             {['<14', '14-28', '29-43', '44<', 'LAINNYA'].map((item, key) => (
               <FormControlLabel
                 key={key}
@@ -118,7 +153,7 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
                 }
                 label={
                   <Typography style={{ color: '#9B9B9B', textTransform: 'capitalize' }}>
-                    {item === '44<' ? '> 44' : item}
+                    {item === '44<' ? '> 44' : item === 'LAINNYA' ? 'Lainnya' : item}
                   </Typography>
                 }
               />
@@ -131,6 +166,23 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             Jenis Kelamin<span style={{ color: 'red' }}>*</span>
           </Typography>
           <FormGroup row style={{ gap: 16 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="secondary"
+                  indeterminate={inputValue?.gender?.length >= 1 && inputValue?.gender?.length < 3}
+                  checked={inputValue?.gender?.length >= 3 || false}
+                  onChange={() => {
+                    if (inputValue?.gender?.length >= 3) {
+                      handleInputChange('gender', undefined);
+                    } else {
+                      handleInputChange('gender', ['L', 'P', 'O']);
+                    }
+                  }}
+                />
+              }
+              label={<Typography style={{ color: '#9B9B9B' }}>Pilih Semua</Typography>}
+            />
             <FormControlLabel
               control={
                 <Checkbox
@@ -206,9 +258,11 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
                 <Typography style={{ color: '#9B9B9B' }}>Pilih Lokasi Pengguna</Typography>
               ) : (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected?.map((value, key) => (
-                    <Chip key={key} label={value?.stateName} />
-                  ))}
+                  {selected?.length === areaLength ? (
+                    <Chip label="Semua Lokasi" />
+                  ) : (
+                    selected?.map((value, key) => <Chip key={key} label={value?.stateName} />)
+                  )}
                 </Box>
               )
             }
@@ -226,6 +280,7 @@ const ComponentStepParticipant = ({ inputValue, handleInputChange }) => {
             handleClose={handleClose}
             inputValue={inputValue}
             handleInputChange={handleInputChange}
+            setAreaLength={setAreaLength}
           />
         </Stack>
       </Stack>

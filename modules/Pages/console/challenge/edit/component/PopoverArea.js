@@ -16,7 +16,7 @@ import { useGetAreasQuery } from 'api/user/insight';
 import React, { useEffect, useState } from 'react';
 import ScrollBar from 'react-perfect-scrollbar';
 
-const PopoverArea = ({ anchorEl, handleClose, inputValue, handleInputChange }) => {
+const PopoverArea = ({ anchorEl, handleClose, inputValue, handleInputChange, setAreaLength }) => {
   const open = Boolean(anchorEl);
   const [search, setSearch] = useState('');
   const [selectedArea, setSelectedArea] = useState([]);
@@ -29,6 +29,10 @@ const PopoverArea = ({ anchorEl, handleClose, inputValue, handleInputChange }) =
       }, 500);
     }
     setSearch('');
+
+    if (!loadingArea) {
+      setAreaLength(areas?.length);
+    }
   }, [open]);
 
   const filteredArea = areas?.filter((item) => item?.stateName.toLowerCase()?.includes(search.toLowerCase()));
@@ -79,26 +83,49 @@ const PopoverArea = ({ anchorEl, handleClose, inputValue, handleInputChange }) =
             {loadingArea ? (
               <Typography>Loading data...</Typography>
             ) : (
-              filteredArea?.map((item, key) => (
-                <Grid key={key} item xs={6}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        color="secondary"
-                        checked={selectedArea?.map((area) => area?._id).includes(item?._id)}
-                        onChange={() =>
-                          setSelectedArea((prev) => {
-                            return prev?.find((area) => area?._id === item?._id)
-                              ? prev?.filter((area) => area?._id !== item?._id)
-                              : [...prev, item];
-                          })
-                        }
-                      />
-                    }
-                    label={<Typography style={{ color: '#9B9B9B', fontSize: 14 }}>{item?.stateName}</Typography>}
-                  />
-                </Grid>
-              ))
+              <>
+                {search === '' && (
+                  <Grid item xs={6}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          color="secondary"
+                          indeterminate={selectedArea?.length >= 1 && selectedArea?.length < areas?.length}
+                          checked={selectedArea?.length === areas?.length}
+                          onChange={() => {
+                            if (selectedArea?.length === areas?.length) {
+                              setSelectedArea([]);
+                            } else {
+                              setSelectedArea(areas);
+                            }
+                          }}
+                        />
+                      }
+                      label={<Typography style={{ color: '#9B9B9B', fontSize: 14 }}>Semua Lokasi</Typography>}
+                    />
+                  </Grid>
+                )}
+                {filteredArea?.map((item, key) => (
+                  <Grid key={key} item xs={6}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          color="secondary"
+                          checked={selectedArea?.map((area) => area?.stateName).includes(item?.stateName)}
+                          onChange={() =>
+                            setSelectedArea((prev) => {
+                              return prev?.find((area) => area?.stateName === item?.stateName)
+                                ? prev?.filter((area) => area?.stateName !== item?.stateName)
+                                : [...prev, item];
+                            })
+                          }
+                        />
+                      }
+                      label={<Typography style={{ color: '#9B9B9B', fontSize: 14 }}>{item?.stateName}</Typography>}
+                    />
+                  </Grid>
+                ))}
+              </>
             )}
           </Grid>
         </ScrollBar>

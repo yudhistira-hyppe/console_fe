@@ -21,8 +21,6 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
 
       if (!inputValue?.starthour) {
         handleInputChange('starthour', inputValue?.startdate.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
-      } else {
-        handleInputChange('starthour', inputValue?.startdate);
       }
     }
   }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);

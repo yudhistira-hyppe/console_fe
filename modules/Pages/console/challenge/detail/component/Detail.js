@@ -212,22 +212,30 @@ const DetailChallengeComponent = ({ detail }) => {
               Banner, Pop-Up & Notifikasi Push
             </Typography>
           </Stack>
-          <Stack direction="row" gap={1}>
-            <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Tipe Akun:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-              {detail?.peserta?.[0]?.tipeAkunTerverikasi === 'YES' && 'KYC'}
-              {detail?.peserta?.[0]?.tipeAkunTerverikasi === 'NO' && 'Non E-KYC'}
-              {detail?.peserta?.[0]?.tipeAkunTerverikasi === 'ALL' && 'KYC & Non E-KYC'}
-            </Typography>
-          </Stack>
-          <Stack direction="row" gap={1}>
-            <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Jenis Kelamin:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>{gender?.join(' & ')}</Typography>
-          </Stack>
-          <Stack direction="row" gap={1}>
-            <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Usia:</Typography>
-            <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>{age?.join(', ')}</Typography>
-          </Stack>
+          {detail?.peserta?.[0]?.caraGabung === 'SEMUA PENGGUNA' && (
+            <>
+              <Stack direction="row" gap={1}>
+                <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Tipe Akun:</Typography>
+                <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+                  {detail?.peserta?.[0]?.tipeAkunTerverikasi === 'YES' && 'KYC'}
+                  {detail?.peserta?.[0]?.tipeAkunTerverikasi === 'NO' && 'Non E-KYC'}
+                  {detail?.peserta?.[0]?.tipeAkunTerverikasi === 'ALL' && 'KYC & Non E-KYC'}
+                </Typography>
+              </Stack>
+              <Stack direction="row" gap={1}>
+                <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Jenis Kelamin:</Typography>
+                <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+                  {gender?.join(' & ') || '-'}
+                </Typography>
+              </Stack>
+              <Stack direction="row" gap={1}>
+                <Typography style={{ color: '#00000061', width: 150, fontSize: 14 }}>Usia:</Typography>
+                <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
+                  {age?.join(', ') || '-'}
+                </Typography>
+              </Stack>
+            </>
+          )}
         </Stack>
       </Stack>
     </Card>
