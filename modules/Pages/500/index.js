@@ -3,6 +3,7 @@ import IntlMessages from '../../../@jumbo/utils/IntlMessages';
 import Box from '@material-ui/core/Box';
 import { Button } from '@material-ui/core';
 import { alpha, makeStyles } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
+    width: '100%',
   },
   errorNumber: {
     color: theme.palette.text.primary,
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Error500 = () => {
   const classes = useStyles();
+  const router = useRouter();
 
   return (
     <Box className={classes.root}>
@@ -65,7 +67,7 @@ const Error500 = () => {
         <IntlMessages id="extraPages.500Msg" />
       </Box>
       <Box>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={() => router.push('/')}>
           <IntlMessages id="extraPages.goHome" />
         </Button>
       </Box>
