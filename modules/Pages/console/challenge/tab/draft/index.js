@@ -192,7 +192,7 @@ const ChallengeTabDraftComponent = () => {
           return {
             page: 0,
             limit: 10,
-            ascending: 'true',
+            ascending: 'false',
             search: '',
             createdAt: [null, null],
             type: [],
