@@ -169,7 +169,6 @@ const HeaderNotifications = () => {
           <CmtCardHeader
             title="Notifikasi"
             actionsPos="top-corner"
-            actions=""
             separator={{
               color: theme.palette.borderColor.dark,
               borderWidth: 1,
