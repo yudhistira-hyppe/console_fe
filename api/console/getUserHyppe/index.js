@@ -7,11 +7,10 @@ export const getUserHyppe = createApi({
   tagTypes: ['userHyppe', 'userDivisi', 'detailUser'],
   endpoints: (build) => ({
     getAnggota: build.query({
-      query: (payload) => ({
-        url: `/getuserhyppe?skip=${payload.skip}&limit=${payload.limit}&search=${
-          payload?.search ? payload.search : ''
-        }&searchemail=${payload.searchemail ? payload.searchemail : ''}`,
-        method: 'GET',
+      query: (data) => ({
+        url: `/getuserhyppe`,
+        method: 'POST',
+        body: data,
       }),
       providesTags: ['userHyppe'],
     }),
