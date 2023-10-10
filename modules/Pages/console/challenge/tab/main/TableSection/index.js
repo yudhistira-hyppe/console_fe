@@ -35,7 +35,6 @@ import dayjs from 'dayjs';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
-    width: 100,
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
@@ -216,12 +215,13 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                         },
                       }}
                       onClick={() => Router.push(`/challenge/detail/${item?._id}`)}>
-                      <Stack direction="row" alignItems="center" gap="15px" width={130}>
+                      <Stack direction="row" alignItems="center" gap="15px" width={200}>
                         <Avatar src={item?.bannerLeaderboard + '?m=' + new Date().getTime()} variant="rounded" alt="X" />
                         <Typography
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}>
+                          className={classes.textTruncate}
+                          title={item?.nameChallenge || 'Hyppers of The Week'}>
                           {item?.nameChallenge || 'Hyppers of The Week'}
                         </Typography>
                       </Stack>
