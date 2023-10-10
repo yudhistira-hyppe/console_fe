@@ -161,19 +161,8 @@ export const consoleNav = [
   },
   {
     name: 'Anggota',
-    type: 'collapse',
-    children: [
-      {
-        name: 'Old',
-        type: 'item',
-        link: '/anggota/old',
-      },
-      {
-        name: 'New',
-        type: 'item',
-        link: '/anggota/new',
-      },
-    ],
+    type: 'item',
+    link: '/anggota',
   },
   {
     name: 'Utilitas',
