@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Anggota = () => {
   const classes = useStyles();
   const router = useRouter();
-  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const handleChange = (event, newValue) => {
     router.push(`${router.pathname}?tab=${newValue}`);
@@ -96,18 +96,16 @@ const Anggota = () => {
           indicatorColor="secondary"
           variant="scrollable"
           style={{ marginTop: -20 }}>
-          {Tabs().map((tab) => {
-            return <Tab label={tab.label} value={tab.value} className={classes.tab} />;
+          {Tabs().map((tab, key) => {
+            return <Tab key={key} label={tab.label} value={tab.value} className={classes.tab} />;
           })}
         </TabList>
         <div style={{ marginTop: '10px' }}>
-          {Tabs().map((comp) => {
+          {Tabs().map((comp, key) => {
             return (
-              <>
-                <TabPanel value={comp.value} style={{ padding: 0 }}>
-                  {comp.component}
-                </TabPanel>
-              </>
+              <TabPanel key={key} value={comp.value} style={{ padding: 0 }}>
+                {comp.component}
+              </TabPanel>
             );
           })}
         </div>
