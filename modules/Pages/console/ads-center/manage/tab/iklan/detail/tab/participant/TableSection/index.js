@@ -182,7 +182,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
-                        {'-'}
+                        {item?.commonality < 25 && '< 25%'}
+                        {item?.commonality >= 25 && item?.commonality < 50 && '25 - 50%'}
+                        {item?.commonality >= 50 && item?.commonality < 75 && '50 - 75%'}
+                        {item?.commonality >= 75 && item?.commonality <= 100 && '75 - 100%'}
                       </Typography>
                     </TableCell>
                   </TableRow>

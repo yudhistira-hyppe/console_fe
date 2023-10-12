@@ -377,26 +377,32 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Kesamaan Audiens</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('gender', e.target.value)}>
+            <FormGroup onChange={(e) => handleChange('similarity', e.target.value)}>
               <FormControlLabel
                 label={'< 25%'}
                 value="< 25%"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.gender.includes('< 25%')} />}
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.similarity.includes('< 25%')} />}
               />
               <FormControlLabel
                 label={'25 - 50%'}
                 value="25 - 50%"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.gender.includes('25 - 50%')} />}
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.similarity.includes('25 - 50%')} />
+                }
               />
               <FormControlLabel
                 label={'50 - 75%'}
                 value="50 - 75%"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.gender.includes('50 - 75%')} />}
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.similarity.includes('50 - 75%')} />
+                }
               />
               <FormControlLabel
                 label={'75 - 100%'}
                 value="75 - 100%"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.gender.includes('75 - 100%')} />}
+                control={
+                  <Checkbox defaultChecked={false} color="secondary" checked={filter.similarity.includes('75 - 100%')} />
+                }
               />
             </FormGroup>
           </AccordionDetails>

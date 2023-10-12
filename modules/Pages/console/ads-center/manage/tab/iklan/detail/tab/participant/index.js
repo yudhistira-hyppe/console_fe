@@ -24,6 +24,7 @@ const TableRewardsParticipant = ({ idAds }) => {
     labelTanggal: '',
     createdAt: [null, null],
     gender: [],
+    similarity: [],
   });
   const [filterList, setFilterList] = useState([]);
   const [isExport, setExport] = useState(false);
@@ -63,6 +64,20 @@ const TableRewardsParticipant = ({ idAds }) => {
             return 'FEMALE';
           } else if (item === 'Lainnya') {
             return 'OTHER';
+          }
+        }),
+      });
+    filter.similarity.length >= 1 &&
+      Object.assign(params, {
+        similarity: filter.similarity.map((item) => {
+          if (item === '< 25%') {
+            return 'show_smaller_than_25';
+          } else if (item === '25 - 50%') {
+            return 'show_25_smaller_than_50';
+          } else if (item === '50 - 75%') {
+            return 'show_50_smaller_than_75';
+          } else if (item === '75 - 100%') {
+            return 'show_75_smaller_than_100';
           }
         }),
       });
@@ -170,6 +185,14 @@ const TableRewardsParticipant = ({ idAds }) => {
             : [...filter.gender, value],
           page: 0,
         };
+      } else if (kind === 'similarity') {
+        return {
+          ...prevVal,
+          similarity: filter.similarity.find((item) => item === value)
+            ? filter.similarity.filter((item) => item !== value)
+            : [...filter.similarity, value],
+          page: 0,
+        };
       } else if (kind === 'clearAll') {
         return {
           page: 0,
@@ -181,6 +204,7 @@ const TableRewardsParticipant = ({ idAds }) => {
           labelTanggal: '',
           createdAt: [null, null],
           gender: [],
+          similarity: [],
         };
       } else {
         return { ...prevVal };
