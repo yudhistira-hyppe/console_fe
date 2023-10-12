@@ -12,6 +12,7 @@ import { renderToString } from 'react-dom/server';
 import DocumentPDF from './DocumentPDF';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { CSVLink } from 'react-csv';
+import dayjs from 'dayjs';
 
 const TableRewardsParticipant = ({ idAds }) => {
   const [filter, setFilter] = useState({
@@ -255,8 +256,41 @@ const TableRewardsParticipant = ({ idAds }) => {
                 </span>
               </Tooltip>
             ) : (
-              <CSVLink data={listExport?.data} filename="List Rewards Participant.csv" onClick={() => handleExport()}>
-                <LoadingButton color="secondary" variant="contained">
+              <CSVLink
+                data={listExport?.data?.map((item) => {
+                  return {
+                    tanggal: dayjs(item?.timestamp).subtract(7, 'hour').format('DD/MM/YYYY'),
+                    nama: item?.username || '-',
+                    email: item?.email || '-',
+                    jenis_kelamin: item?.gender || '-',
+                    umur: item?.age || '-',
+                    lokasi: item?.lokasi ? item?.lokasi : 'Lainnya',
+                    minat: item?.interest?.length >= 1 ? item?.interest?.join(', ') : '-',
+                    kesamaan_audiens:
+                      item?.commonality < 25
+                        ? '< 25%'
+                        : item?.commonality >= 25 && item?.commonality < 50
+                        ? '25 - 50%'
+                        : item?.commonality >= 50 && item?.commonality < 75
+                        ? '50 - 75%'
+                        : item?.commonality >= 75 && item?.commonality <= 100 && '75 - 100%',
+                  };
+                })}
+                filename="List Rewards Participant.csv"
+                disabled={listViewers?.data?.length < 1 || isExport}>
+                <LoadingButton
+                  loading={loadingExport}
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    setExport(true);
+                    const toastId = toast.loading('Generate csv...');
+                    setTimeout(() => {
+                      toast.success('Berhasil generate csv', { id: toastId });
+                      setExport(false);
+                    }, 2000);
+                  }}
+                  disabled={listViewers?.data?.length < 1 || isExport}>
                   <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                     Download CSV
                   </Typography>

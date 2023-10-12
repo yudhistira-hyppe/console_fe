@@ -132,7 +132,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: 14, width: 80 }}>
-                        {moment(item?.timestamp).format('DD/MM/YYYY')}
+                        {moment(item?.timestamp).utc().format('DD/MM/YYYY')}
                       </Typography>
                     </TableCell>
                     <TableCell align="left" style={{ overflow: 'hidden' }}>
