@@ -54,6 +54,7 @@ const useStyles = makeStyles(() => ({
 
 const TableSection = ({
   filterList,
+  challengeId,
   handleOrder,
   handlePageChange,
   handleDeleteFilter,
@@ -88,6 +89,12 @@ const TableSection = ({
     setTimeout(() => setRerenderTable(false), 200);
     handlePageChange(0);
   }, [periode]);
+
+  useEffect(() => {
+    if (session === 'BERAKHIR') {
+      setPeriode(1);
+    }
+  }, [session]);
 
   const listUserChallenge =
     session === 'BERAKHIR'
@@ -295,7 +302,7 @@ const TableSection = ({
                                   handleCloseMenu();
                                   setOpenModal({
                                     open: true,
-                                    data: item,
+                                    data: { ...item, challengeId: challengeId },
                                   });
                                 }}>
                                 <ListItemIcon>
