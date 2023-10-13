@@ -68,6 +68,14 @@ export const challengeApi = createApi({
       }),
       invalidatesTags: ['list'],
     }),
+    kickUserChallengen: build.mutation({
+      query: (data) => ({
+        url: '/userchallenges/delete',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listUser'],
+    }),
   }),
 });
 
@@ -80,4 +88,5 @@ export const {
   usePublishChallengeMutation,
   useDeleteChallengeMutation,
   useCreateChallengeMutation,
+  useKickUserChallengenMutation,
 } = challengeApi;

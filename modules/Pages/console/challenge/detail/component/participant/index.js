@@ -225,6 +225,7 @@ const ParticipantComponent = ({ detail }) => {
               )}
               <TableSection
                 filterList={filterList}
+                challengeId={detail?._id}
                 handleDeleteFilter={handleSearchChange}
                 filter={filter}
                 loading={loadingUser}
