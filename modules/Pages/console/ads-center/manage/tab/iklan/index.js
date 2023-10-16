@@ -9,6 +9,8 @@ import { Typography } from '@material-ui/core';
 import { GetApp } from '@material-ui/icons';
 import { CSVLink } from 'react-csv';
 import { toast } from 'react-hot-toast';
+import moment from 'moment';
+import { formatCurrency } from 'helpers/stringHelper';
 
 const AdsManageTableList = () => {
   const [filter, setFilter] = useState({
@@ -24,6 +26,7 @@ const AdsManageTableList = () => {
     status: [],
   });
   const [filterList, setFilterList] = useState([]);
+  const [isExport, setExport] = useState(false);
 
   const getParams = () => {
     let params = {};
@@ -205,15 +208,6 @@ const AdsManageTableList = () => {
     });
   };
 
-  const handleExport = () => {
-    const toastId = toast.loading('Generate pdf...');
-    if (isError) {
-      toast.error('Terjadi kesalahan saat generate pdf, silahkan coba lagi.', { id: toastId, duration: 2000 });
-    } else {
-      toast.success('Berhasil generate pdf', { id: toastId });
-    }
-  };
-
   return (
     <PageContainer>
       <Stack direction="row" position="relative">
@@ -229,8 +223,45 @@ const AdsManageTableList = () => {
               </span>
             </Tooltip>
           ) : (
-            <CSVLink data={listExport?.data} filename="List Ads.csv" onClick={() => handleExport()}>
-              <LoadingButton color="secondary" variant="contained">
+            <CSVLink
+              data={listExport?.data?.map((item) => {
+                return {
+                  ID: item?.campaignId || item?.adsIdNumber || '-',
+                  nama: item?.name || '-',
+                  tanggal_buat: moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm'),
+                  tanggal_mulai: moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm'),
+                  tanggal_selesai: moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm'),
+                  tipe_iklan: item?.adstypes || '-',
+                  plan_tayang: formatCurrency(item?.tayang || 0) || 0,
+                  impresi: formatCurrency(item?.impresi || 0) || 0,
+                  jangkauan: formatCurrency(item?.reach || 0) || 0,
+                  klik: formatCurrency(item?.CTA || 0) || 0,
+                  kredit: formatCurrency(item?.totalCredit || 0) || 0,
+                  status:
+                    item?.status === 'DRAFT'
+                      ? 'Draf'
+                      : item?.status === 'ACTIVE' || item?.status === 'APPROVE'
+                      ? 'Aktif'
+                      : item?.status === 'UNDER_REVIEW'
+                      ? 'Ditinjau'
+                      : 'Tidak Aktif',
+                  remark: item?.remark || '-',
+                };
+              })}
+              filename="List Ads.csv">
+              <LoadingButton
+                loading={loadingExport || isExport}
+                color="secondary"
+                variant="contained"
+                onClick={() => {
+                  setExport(true);
+                  const toastId = toast.loading('Generate csv...');
+                  setTimeout(() => {
+                    toast.success('Berhasil generate csv', { id: toastId });
+                    setExport(false);
+                  }, 2000);
+                }}
+                disabled={isExport}>
                 <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                   Download CSV
                 </Typography>
