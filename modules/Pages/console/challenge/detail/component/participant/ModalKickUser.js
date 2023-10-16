@@ -39,17 +39,19 @@ const ModalKickUser = ({ open, handleClose, data }) => {
     const formData = {
       idChallenge: data?.challengeId,
       email: data?.email,
-      idAdmin: authUser?.user?.email,
+      idAdmin: authUser?.user?.id,
       reason: reason,
     };
 
+    handleClose();
+    toast.loading('Loading Hapus Partisipan...', { id: 'kick-user' });
+
     kickUser(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message, { duration: 3000 });
+        toast.error(res?.error?.data?.message, { id: 'kick-user', duration: 3000 });
       } else {
-        toast.success('Berhasil Menghapus Partisipan dari Challenge', { duration: 3000 });
+        toast.success('Berhasil Menghapus Partisipan dari Challenge', { id: 'kick-user', duration: 3000 });
       }
-      handleClose();
     });
   };
 

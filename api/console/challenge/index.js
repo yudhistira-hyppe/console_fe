@@ -70,7 +70,7 @@ export const challengeApi = createApi({
     }),
     kickUserChallengen: build.mutation({
       query: (data) => ({
-        url: '/userchallenges/delete',
+        url: '/challenge/user/delete',
         method: 'POST',
         body: data,
       }),
