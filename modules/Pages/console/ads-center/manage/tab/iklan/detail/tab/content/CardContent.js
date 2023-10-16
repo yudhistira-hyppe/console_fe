@@ -35,14 +35,26 @@ const CardContent = ({ details }) => {
       <Stack direction="row" spacing={3}>
         <Avatar
           src={details?.media ? details?.media?.CoverURL : getImage(details?._id)}
-          style={{ width: 300, height: 230, cursor: details?.media ? 'pointer' : 'initial' }}
+          style={{
+            width: 300,
+            height: 230,
+            cursor: 'pointer',
+            border: '1px solid #DDDDDD',
+            borderRadius: 8,
+          }}
           variant="rounded"
-          onClick={() => (details?.media ? setShowModal(true) : {})}
+          onClick={() => setShowModal(true)}
           alt="X"
         />
 
         {showModal && (
-          <ModalMedia showModal={showModal} onClose={() => setShowModal(false)} idApsara={details?.media?.VideoId} />
+          <ModalMedia
+            showModal={showModal}
+            onClose={() => setShowModal(false)}
+            contentType={details?.media ? 'video' : 'image'}
+            idApsara={details?.media?.VideoId}
+            urlImage={getImage(details?._id)}
+          />
         )}
 
         <Stack direction="column" width="100%">

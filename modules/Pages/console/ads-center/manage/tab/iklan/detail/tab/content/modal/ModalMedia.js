@@ -19,7 +19,7 @@ const style = {
   justifyContent: 'center',
 };
 
-export default function ModalMedia({ showModal, onClose, idApsara }) {
+export default function ModalMedia({ showModal, onClose, contentType, idApsara, urlImage }) {
   const { data: adsVideo } = useGetVideoFromApsaraQuery({ apsaraId: idApsara });
 
   return (
@@ -30,7 +30,11 @@ export default function ModalMedia({ showModal, onClose, idApsara }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <video src={adsVideo?.PlayUrl} controls height="100%" />
+          {contentType === 'video' ? (
+            <video src={adsVideo?.PlayUrl} controls height="100%" />
+          ) : (
+            <img src={urlImage} alt="image ads" height="100%" />
+          )}
         </Box>
       </Modal>
     </div>
