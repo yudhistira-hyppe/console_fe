@@ -166,6 +166,8 @@ const VoucherFormComponent = ({ data }) => {
     setShowModal(false);
   };
 
+  console.log(val);
+
   return (
     <>
       <Head>
@@ -267,9 +269,6 @@ const VoucherFormComponent = ({ data }) => {
                   }}
                   style={{ marginTop: 57, maxWidth: 470 }}
                 />
-                <FormHelperText>
-                  1 kredit = Rp 1.500,-. Harga voucher = Rp {numberWithCommas(val?.creditValue * 1500)}{' '}
-                </FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12} md={6} sm={6}>
@@ -300,7 +299,7 @@ const VoucherFormComponent = ({ data }) => {
                   }}
                   style={{ marginTop: 57, maxWidth: 470 }}
                 />
-                <FormHelperText>1 kredit = Rp 0,-</FormHelperText>
+                <FormHelperText>Tidak ada biaya tambahan</FormHelperText>
               </FormControl>
             </Grid>
           </GridContainer>
@@ -416,7 +415,7 @@ const VoucherFormComponent = ({ data }) => {
                         id="bootstrap-input"
                         size="small"
                         value={val?.otherExpired}
-                        onChange={(e) => setVal({ ...val, otherExpired: Number(e.target.value) })}
+                        onChange={(e) => setVal({ ...val, otherExpired: Number(e.target.value), expiredDay: 'other' })}
                         disabled={
                           val?.expiredDay !== 'other' || data
                             ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
@@ -489,9 +488,16 @@ const VoucherFormComponent = ({ data }) => {
             // disabled={!val?.name || !val?.kode || !val?.kredit || !val?.stok || !val?.exp || (!val?.sdk && !data)}>
             onClick={() => (data ? onConfirm() : setShowModal(true))}
             disabled={
-              data
+              !val?.nameAds ||
+              !val?.codeVoucher ||
+              val?.creditPromo < 1 ||
+              val?.creditValue < 1 ||
+              !val?.description ||
+              (val?.expiredDay === 'other' ? val?.otherExpired < 1 : val?.expiredDay < 1) ||
+              val?.qty < 1 ||
+              (data
                 ? !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.updateAcces
-                : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces
+                : !access.find((item) => item?.nameModule === 'monetize_manage_voucher')?.acces?.createAcces)
             }>
             Simpan
           </Button>
