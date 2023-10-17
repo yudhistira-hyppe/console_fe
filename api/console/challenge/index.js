@@ -76,6 +76,12 @@ export const challengeApi = createApi({
       }),
       invalidatesTags: ['listUser'],
     }),
+    getAreaUserChallenge: build.query({
+      query: (id) => ({
+        url: `/challenge/listuserwilayah/${id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -89,4 +95,5 @@ export const {
   useDeleteChallengeMutation,
   useCreateChallengeMutation,
   useKickUserChallengenMutation,
+  useGetAreaUserChallengeQuery,
 } = challengeApi;
