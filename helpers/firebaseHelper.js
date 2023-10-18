@@ -29,6 +29,7 @@ const firebaseCloudMessaging = {
       })
       .catch((err) => {
         console.log('An error occurred while retrieving token. ', err);
+        return 'gagal';
       });
     return fcmToken;
   },

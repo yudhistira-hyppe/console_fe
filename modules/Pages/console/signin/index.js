@@ -83,6 +83,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const [location, setLocation] = useState();
   const [deviceId, setDeviceId] = useState();
   const [email, setEmail] = useState('');
+  const [errorFCM, setErrorFMC] = useState(false);
   const [password, setPassword] = useState('');
   const [isRememberMeChecked, setIsRememberMeChecked] = useState(false);
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
@@ -113,10 +114,17 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
       if (loadingFCM) {
         toast.loading('Menghubungkan ke server...', { id: 'signin' });
       } else {
-        toast.success('Berhasil terhubung dengan server', { id: 'signin' });
+        if (errorFCM) {
+          toast.error(
+            'Gagal menghubungkan anda dengan server, refresh ulang halaman ini dan pastikan internetmu berfungsi',
+            { id: 'signin' },
+          );
+        } else {
+          toast.success('Berhasil terhubung dengan server', { id: 'signin' });
+        }
       }
     }
-  }, [loadingFCM, error]);
+  }, [loadingFCM, errorFCM, error]);
 
   const generateFCMToken = async () => {
     const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
@@ -125,25 +133,27 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
       await Notification.requestPermission().then(async (res) => {
         if (res === 'granted') {
           setNotifAllowed(true);
-          await firebaseCloudMessaging
-            .getFCMToken()
-            .then((token) => {
+          await firebaseCloudMessaging.getFCMToken().then((token) => {
+            console.log(token);
+            if (token === 'gagal') {
+              setLoadingFCM(false);
+              setErrorFMC(true);
+            } else {
               setDeviceId(token);
               setLoadingFCM(false);
-            })
-            .catch(() => {
-              setDeviceId(uuidv4());
-              setLoadingFCM(false);
-            });
+              setErrorFMC(false);
+            }
+          });
         } else {
           setNotifAllowed(false);
           toast.error('Notifikasi browser diwajibkan!', { id: 'signin' });
         }
       });
     } else {
-      setDeviceId(uuidv4());
-      setNotifAllowed(true);
+      // setDeviceId(uuidv4());
+      setNotifAllowed(false);
       setLoadingFCM(false);
+      setErrorFMC(true);
     }
   };
 
