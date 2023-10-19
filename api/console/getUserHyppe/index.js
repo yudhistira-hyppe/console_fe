@@ -32,11 +32,16 @@ export const getUserHyppe = createApi({
       query: (email) => ({
         url: `/profile`,
         method: 'POST',
-        body: {
-          email,
-        },
+        body: { email },
       }),
-      providesTags: ['detailUser'],
+    }),
+    getProfileByUserEmail2: build.mutation({
+      query: (email) => ({
+        url: `/profile`,
+        method: 'POST',
+        body: { email },
+      }),
+      invalidatesTags: [],
     }),
     deleteAnggota: build.mutation({
       query: (email) => ({
@@ -69,6 +74,7 @@ export const {
   useGetUserDivisiQuery,
   useGetDetailAnggotaQuery,
   useGetProfileByUserEmailQuery,
+  useGetProfileByUserEmail2Mutation,
   useDeleteAnggotaMutation,
   useUpdateStatusGroupUserMutation,
   useUpdateGroupUserMutation,

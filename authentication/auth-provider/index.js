@@ -63,6 +63,7 @@ export const useProvideAuth = () => {
 
   const consoleLoginWithEmail = (user, isRememberUser) => {
     fetchStart();
+    toast.loading('Loading Masuk...', { id: 'signin' });
     login(user).then((result) => {
       if (result?.data) {
         if (result?.data?.data?.roles?.includes('ROLE_ADMIN')) {
@@ -74,9 +75,12 @@ export const useProvideAuth = () => {
         }
       } else {
         fetchError(result?.error?.data?.messages?.info?.join(' '));
-        return toast.error(result?.error?.data?.messages?.info?.join(' '), {
-          id: 'signin',
-        });
+        return toast.error(
+          result?.error?.data?.messages?.info?.join(' ') || 'Terjadi kesalahan pada sistem, silahkan coba lagi.',
+          {
+            id: 'signin',
+          },
+        );
       }
     });
   };

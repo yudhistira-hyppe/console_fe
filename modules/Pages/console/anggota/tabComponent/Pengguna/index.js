@@ -8,6 +8,7 @@ import Router from 'next/router';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { useGetAnggotaQuery } from 'api/console/getUserHyppe';
+import { useAuth } from 'authentication';
 
 const ChallengeTabMainComponent = ({ kind }) => {
   const [filter, setFilter] = useState({
@@ -21,7 +22,6 @@ const ChallengeTabMainComponent = ({ kind }) => {
     status: '',
   });
   const [filterList, setFilterList] = useState([]);
-  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const getParams = () => {
     let params = {};

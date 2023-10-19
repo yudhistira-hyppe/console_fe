@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import CmtDropdownMenu from '../../../../@coremat/CmtDropdownMenu';
 import CmtAvatar from '../../../../@coremat/CmtAvatar';
@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { Chip, Stack, Typography } from '@mui/material';
 import { toast } from 'react-hot-toast';
+import { useGetProfileByUserEmail2Mutation } from 'api/console/getUserHyppe';
 
 const useStyles = makeStyles((theme) => ({
   profileRoot: {
@@ -59,6 +60,16 @@ const UserDropDown = () => {
   const classes = useStyles();
   const { authUser, userSignOut } = useAuth();
   const router = useRouter();
+  const [profileUser] = useGetProfileByUserEmail2Mutation();
+  const [group, setGroup] = useState({});
+
+  useEffect(() => {
+    if (!authUser?.user?.group) {
+      profileUser(authUser?.user?.email).then((res) => {
+        setGroup(res?.data?.data?.[0]);
+      });
+    }
+  }, []);
 
   const getMediaUri = () => {
     const authToken = `?x-auth-token=${authUser?.token}&x-auth-user=${authUser?.user?.email}`;
@@ -83,10 +94,7 @@ const UserDropDown = () => {
   return (
     <Box className={clsx(classes.profileRoot, 'Cmt-profile-pic')}>
       <Stack direction="row" alignItems="center">
-        <Chip
-          label={authUser?.user?.roles?.includes('ROLE_ADMIN') ? 'Administrator' : 'User'}
-          className={classes.chipRole}
-        />
+        <Chip label={group?.group || '-'} className={classes.chipRole} />
       </Stack>
       <CmtDropdownMenu
         onItemClick={onItemClick}

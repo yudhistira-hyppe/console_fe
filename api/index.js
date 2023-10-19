@@ -12,8 +12,8 @@ export const customBaseQuery = fetchBaseQuery({
     const cookies = getAllCookies();
 
     if (cookies && cookies.token && endpoint !== 'login') {
-      headers.set('x-auth-token', cookies.token);
-      headers.set('x-auth-user', cookies.user.email);
+      headers.set('x-auth-token', cookies?.token);
+      headers.set('x-auth-user', cookies?.user.email);
     }
 
     return headers;
@@ -33,8 +33,8 @@ export const customBaseQueryWithHandleReauth = async (args, api, extraOptions) =
       try {
         const refreshResult = await api.dispatch(
           authApi.endpoints.refreshToken.initiate({
-            email: cookies.user.email,
-            refreshToken: cookies.refreshToken,
+            email: cookies?.user.email,
+            refreshToken: cookies?.refreshToken,
           }),
         );
 
@@ -43,7 +43,7 @@ export const customBaseQueryWithHandleReauth = async (args, api, extraOptions) =
             token: { value: refreshResult.data.token, expirationHour: 144 },
             refreshToken: { value: refreshResult.data.refreshToken, expirationHour: 144 },
             user: {
-              value: cookies.user,
+              value: cookies?.user,
               expirationHour: 144,
             },
           };

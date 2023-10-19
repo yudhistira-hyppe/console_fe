@@ -156,7 +156,7 @@ const SecureConsolePage = ({ children }) => {
         }
         if (
           authUser &&
-          authUser?.user?.roles.includes('ROLE_ADMIN') &&
+          authUser?.user?.roles?.includes('ROLE_ADMIN') &&
           router.asPath.includes('/signin') &&
           router.query.redirect
         ) {
@@ -165,7 +165,7 @@ const SecureConsolePage = ({ children }) => {
         }
         if (
           authUser &&
-          authUser?.user?.roles.includes('ROLE_ADMIN') &&
+          authUser?.user?.roles?.includes('ROLE_ADMIN') &&
           router.asPath.includes('/signin') &&
           !router.query.redirect
         ) {

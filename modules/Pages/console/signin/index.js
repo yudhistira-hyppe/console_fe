@@ -134,7 +134,6 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         if (res === 'granted') {
           setNotifAllowed(true);
           await firebaseCloudMessaging.getFCMToken().then((token) => {
-            console.log(token);
             if (token === 'gagal') {
               setLoadingFCM(false);
               setErrorFMC(true);
