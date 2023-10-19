@@ -223,7 +223,7 @@ const Contact = ({ dataUser, dataPosition, query }) => {
                 Status
               </Box>
               <Box component="p" className={classes.wordAddress} fontSize={16} color="text.primary">
-                {dataUser?.data[0]?.roles.includes('ROLE_USER') ? 'Basic' : 'Premium'}
+                {dataUser?.data[0]?.roles?.includes('ROLE_USER') ? 'Basic' : 'Premium'}
               </Box>
             </Box>
           </Box>
