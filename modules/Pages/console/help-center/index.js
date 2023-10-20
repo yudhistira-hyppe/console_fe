@@ -65,7 +65,7 @@ const ConsoleHelpCenterComponent = () => {
       </Head>
 
       <PageContainer>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-start" mb={4}>
           <Typography style={{ fontSize: 20, fontWeight: 'bold' }}>Bantuan Pengguna</Typography>
           <Card style={{ padding: 10 }}>
             <Stack direction="row" alignItems="center" spacing={1}>
