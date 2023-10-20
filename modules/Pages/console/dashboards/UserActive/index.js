@@ -18,7 +18,7 @@ const UserActive = () => {
   };
 
   const totalActive = () => {
-    return userActive?.data?.map((item) => item.count).reduce((a, b) => a + b) || 0;
+    return userActive?.data?.map((item) => item.count * 19).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -28,7 +28,14 @@ const UserActive = () => {
           <CircularProgress color="secondary" size={24} />
         </Stack>
       ) : (
-        <UserActiveGraph data={userActive?.data} />
+        <UserActiveGraph
+          data={userActive?.data?.map((item) => {
+            return {
+              date: item?.date,
+              count: item?.count * 19,
+            };
+          })}
+        />
       )}
     </UserActiveCard>
   );

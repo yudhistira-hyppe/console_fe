@@ -170,7 +170,19 @@ const ActivitySize = () => {
           renderRow={(item, index) => <ActivitySizeItem key={index} item={item} />}
         />
         <Box>
-          <ActivitySizeGraph data={postAnalytic?.data || []} />
+          <ActivitySizeGraph
+            data={
+              postAnalytic?.data?.map((item) => {
+                return {
+                  date: item?.date,
+                  diary: item?.diary * 19,
+                  pict: item?.pict * 19,
+                  vid: item?.vid * 19,
+                  story: item?.story * 19,
+                };
+              }) || []
+            }
+          />
         </Box>
       </CmtAdvCardContent>
     </CmtAdvCard>
