@@ -14,10 +14,11 @@ import { useAuth } from '../../../../../../authentication';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import CmtMediaObject from '@coremat/CmtMediaObject';
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { readNotification } from 'redux/actions/Profiles';
 import { Notifications } from '@material-ui/icons';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme) => ({
   feedItemRoot: {
@@ -90,9 +91,10 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
-    '-webkit-line-clamp': 2,
-    lineClamp: 2,
+    '-webkit-line-clamp': 4,
+    lineClamp: 4,
     overflow: 'hidden',
+    width: 250,
   },
 }));
 
@@ -191,23 +193,22 @@ const HeaderNotifications = () => {
                             <CmtMediaObject
                               subTitle={
                                 <Typography className={classes.textTruncate}>
-                                  {item?.notification?.title} {''}
-                                  {item?.notification?.body}
+                                  {item?.notification?.title}
+                                  <br />
+                                  <span style={{ fontWeight: 'normal', fontSize: 12 }}>{item?.notification?.body}</span>
                                 </Typography>
                               }
                               style={{ width: '100%', flexGrow: 1 }}
                             />
                             <Typography fontSize={12} fontFamily="Lato" color="rgba(0, 0, 0, 0.38)">
-                              {moment().diff(moment(item?.created_at), 'minutes') === 0
-                                ? 'Baru saja'
-                                : `${moment().diff(moment(item?.created_at), 'minutes')} menit lalu`}
+                              {item?.created_at} WIB
                             </Typography>
                           </Stack>
                         </Stack>
                       ),
                   )}
                 </PerfectScrollbar>
-                <Box style={{ display: 'flex', borderTop: '1px solid', borderColor: theme.palette.borderColor.dark }}>
+                {/* <Box style={{ display: 'flex', borderTop: '1px solid', borderColor: theme.palette.borderColor.dark }}>
                   <Button
                     color="secondary"
                     style={{
@@ -221,7 +222,7 @@ const HeaderNotifications = () => {
                     onClick={() => router.push('/notification')}>
                     Lihat semua
                   </Button>
-                </Box>
+                </Box> */}
               </>
             ) : (
               <Box
