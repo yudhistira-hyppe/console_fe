@@ -13,10 +13,12 @@ import DemographyUser from '../../DemographyUser';
 import SesiGraph from '../../Sesi';
 
 const Metrik = () => {
+  const [dataPengguna, setPengguna] = useState(0);
+
   return (
     <Grid container spacing={5}>
       <Grid item xs={12} sm={6} md={6}>
-        <PenggunaBaru />
+        <PenggunaBaru setPengguna={setPengguna} />
       </Grid>
       <Grid item xs={12} sm={6} md={6}>
         <PenggunaAktif />
@@ -26,7 +28,7 @@ const Metrik = () => {
           title="Demografis"
           tooltipPlacement="bottom"
           tooltipTitle="Jumlah pengguna aplikasi berdasarkan jenis kelamin & wilayah"
-          content={<DemographyUser />}
+          content={<DemographyUser dataPengguna={dataPengguna} />}
         />
       </Grid>
       <Grid item xs={12}>
@@ -35,7 +37,7 @@ const Metrik = () => {
           tooltipPlacement="bottom"
           tooltipTitle="Akumulasi waktu aktivitas pengguna yang masuk ke dalam aplikasi dalam satu sesi kunjungan termasuk saat pengguna berpindah-pindah halaman hingga pengguna menutup aplikasi "
           content={<SesiGraph />}
-          cardStyle={{height: '28em'}}
+          cardStyle={{ height: '28em' }}
         />
       </Grid>
 

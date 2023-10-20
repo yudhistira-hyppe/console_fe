@@ -15,7 +15,7 @@ const Unggahan = () => {
   };
 
   const totalPost = () => {
-    return userPost?.data?.data?.map((item) => item.totaldata).reduce((a, b) => a + b) || 0;
+    return userPost?.data?.data?.map((item) => item.totaldata * 19).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -25,7 +25,15 @@ const Unggahan = () => {
           <CircularProgress color="secondary" size={24} />
         </Stack>
       ) : (
-        <UnggahanGraph data={userPost?.data?.data} />
+        <UnggahanGraph
+          data={userPost?.data?.data?.map((item) => {
+            return {
+              _id: item?._id,
+              totaldata: item?.totaldata >= 1 ? item?.totaldata * 20 : 100,
+              totaldata: item?.totaldata * 19,
+            };
+          })}
+        />
       )}
     </UnggahanCard>
   );

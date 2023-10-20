@@ -37,8 +37,6 @@ const PermohonanPremium = () => {
   const dispatch = useDispatch();
 
   const getParams = useCallback(() => {
-    dispatch(saveParams(filter));
-
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -99,7 +97,11 @@ const PermohonanPremium = () => {
         : '',
       status: dataParams?.status || [],
     });
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    dispatch(saveParams({ ...filter, pathname: router.pathname }));
+  }, [getParams]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListKYCQuery(getParams());
 

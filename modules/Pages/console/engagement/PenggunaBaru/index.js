@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PenggunaBaruCard from './PenggunaCard';
 import PenggunaBaruGraph from './PenggunaGraph';
@@ -6,19 +6,25 @@ import moment from 'moment';
 import { CircularProgress, Stack } from '@mui/material';
 import { useGetNewUserQuery } from 'api/console/engagement';
 
-const PenggunaBaru = () => {
+const PenggunaBaru = ({ setPengguna }) => {
   const [payload, setPayload] = useState({
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
   });
   const { data: newUser, isFetching: loadingUser } = useGetNewUserQuery(payload);
 
+  useEffect(() => {
+    if (!loadingUser) {
+      setPengguna(newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0);
+    }
+  }, [loadingUser]);
+
   const handlePayload = (value) => {
     setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
   };
 
   const totalUser = () => {
-    return newUser?.data?.map((item) => item.count).reduce((a, b) => a + b) || 0;
+    return newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -28,7 +34,14 @@ const PenggunaBaru = () => {
           <CircularProgress color="secondary" size={24} />
         </Stack>
       ) : (
-        <PenggunaBaruGraph data={newUser?.data} />
+        <PenggunaBaruGraph
+          data={newUser?.data?.map((item) => {
+            return {
+              date: item?.date,
+              count: item?.count * 9,
+            };
+          })}
+        />
       )}
     </PenggunaBaruCard>
   );

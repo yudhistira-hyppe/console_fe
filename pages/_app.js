@@ -17,7 +17,7 @@ import AppContextProvider from '../@jumbo/components/contextProvider/AppContextP
 import { AuthProvider } from '../authentication';
 import { firebaseApp } from 'helpers/firebaseHelper';
 import { getMessaging, onMessage } from 'firebase/messaging';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from 'redux/actions/Profiles';
 import { Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
@@ -25,12 +25,14 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { toast, Toaster } from 'react-hot-toast';
 import { Info } from '@material-ui/icons';
+import { clearParams } from 'redux/slice/filterParams';
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
   const [blur, setBlur] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
+  const dataParams = useSelector((state) => state.filterParams.value);
 
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
@@ -74,6 +76,12 @@ const MainApp = (props) => {
         setBlur(true);
       });
   }, []);
+
+  useEffect(() => {
+    if (!router.pathname?.includes(dataParams?.pathname)) {
+      dispatch(clearParams({}));
+    }
+  }, [router]);
 
   return (
     <React.Fragment>
