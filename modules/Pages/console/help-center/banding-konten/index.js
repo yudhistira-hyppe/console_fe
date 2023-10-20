@@ -37,9 +37,7 @@ const BandingKonten = () => {
   });
   const dispatch = useDispatch();
 
-  const getParams = () => {
-    dispatch(saveParams(filter));
-
+  const getParams = useCallback(() => {
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -68,7 +66,7 @@ const BandingKonten = () => {
     filter.reason.length >= 1 && Object.assign(params, { reasonAppeal: filter.reason });
 
     return params;
-  };
+  }, [filter]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 
@@ -113,7 +111,11 @@ const BandingKonten = () => {
       status: dataParams?.status || [],
       reason: dataParams?.reason || [],
     });
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    dispatch(saveParams({ ...filter, pathname: router.pathname }));
+  }, [getParams]);
 
   useEffect(() => {
     if (filter.page >= 1 && listTickets?.arrdata?.length < 1) {
