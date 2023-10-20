@@ -9,8 +9,11 @@ const filterParamsSlice = createSlice({
     saveParams: (state, action) => {
       state.value = action.payload;
     },
+    clearParams: (state, action) => {
+      state.value = action.payload;
+    },
   },
 });
 
-export const { saveParams } = filterParamsSlice.actions;
+export const { saveParams, clearParams } = filterParamsSlice.actions;
 export default filterParamsSlice.reducer;
