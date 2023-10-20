@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import SearchSection from './SearchSection';
@@ -40,9 +40,7 @@ const ConsoleBantuanPenggunaComponent = () => {
   });
   const dispatch = useDispatch();
 
-  const getParams = () => {
-    dispatch(saveParams(filter));
-
+  const getParams = useCallback(() => {
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -70,7 +68,7 @@ const ConsoleBantuanPenggunaComponent = () => {
     filter.level.length >= 1 && Object.assign(params, { level: filter.level.map((item) => item._id) });
 
     return params;
-  };
+  }, [filter]);
 
   useEffect(() => {
     if (!isEmpty(dataParams?.search)) {
@@ -123,7 +121,11 @@ const ConsoleBantuanPenggunaComponent = () => {
       kategori: dataParams?.kategori || [],
       level: dataParams?.level || [],
     });
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    dispatch(saveParams({ ...filter, pathname: router.pathname }));
+  }, [getParams]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 
