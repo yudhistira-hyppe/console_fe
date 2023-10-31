@@ -10,6 +10,7 @@ import { Button } from '@material-ui/core';
 import { TabContext, TabPanel } from '@material-ui/lab';
 import { useRouter } from 'next/router';
 import MonetizeJualBeliComponent from './jual-beli';
+import MonetizeTopUpComponent from './topup';
 
 const ConsoleMonetizeComponent = () => {
   const [value, setValue] = useState('0');
@@ -148,7 +149,7 @@ const ConsoleMonetizeComponent = () => {
             </TabPanel>
           )}
           <TabPanel style={{ padding: 0 }} value="4">
-            <p>hue</p>
+            <MonetizeTopUpComponent />
           </TabPanel>
         </TabContext>
       </PageContainer>
