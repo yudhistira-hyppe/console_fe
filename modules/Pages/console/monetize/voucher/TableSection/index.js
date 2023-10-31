@@ -17,18 +17,13 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import Pagination from '@mui/material/Pagination';
 import moment from 'moment';
-import ModalDetailTransaction from '../Modal/ModalDetailTransaction';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 
 const TableSection = ({ filterList, handleDeleteFilter, listVouchers, filter, handleOrder, handlePageChange, loading }) => {
-  // const [isDetail, setDetail] = React.useState(false);
-  // const [selectedID, setSelectedID] = React.useState({});
-
   return (
     <>
-      {/* <ModalDetailTransaction id={selectedID} showModal={isDetail} onCancel={() => setDetail(!isDetail)} /> */}
       <Stack flex={1} width="100%" maxWidth={956}>
         <Box
           display="flex"

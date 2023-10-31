@@ -25,11 +25,11 @@ import Head from 'next/head';
 import Breadcrumbs from 'modules/Pages/console/help-center/bantuan-pengguna/BreadCrumb';
 import { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
-import { ModalCreateVoucher } from '../../components';
 import { useCreateVoucherMutation, useUpdateVoucherMutation } from 'api/console/monetize/voucher';
 import { TextField } from '@mui/material';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { toast } from 'react-hot-toast';
+import ModalCreateVoucher from '../Modal/ModalCreateVoucher';
 
 const useStyles = makeStyles((theme) => ({
   inputLabel: {

@@ -17,7 +17,6 @@ import {
 import { Stack } from '@mui/system';
 import React, { useEffect } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
-import { ModalChangeStatusConfirmation } from 'modules/Pages/console/monetize/components';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
@@ -29,6 +28,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import { toast } from 'react-hot-toast';
 import ScrollBar from 'react-perfect-scrollbar';
 import { NavigateBefore, NavigateNext } from '@material-ui/icons';
+import ModalChangeStatusConfirmation from '../Modal/ModalChangeStatus';
 
 const breadcrumbs = [
   { label: 'Monetisasi', link: '/monetize' },
