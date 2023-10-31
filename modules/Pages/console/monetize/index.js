@@ -55,7 +55,7 @@ const ConsoleMonetizeComponent = () => {
       </Head>
       <PageContainer>
         <TabContext value={value}>
-          <Stack direction={'row'} justifyContent={'space-between'}>
+          <Stack direction={'row'} justifyContent={'space-between'} marginTop="-20px">
             <Tabs
               className="mb-5"
               value={value}
