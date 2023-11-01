@@ -28,7 +28,20 @@ export const dashboardMonetizeAPI = createApi({
       }),
       providesTags: ['listTopup'],
     }),
+    deleteTopup: build.mutation({
+      query: (data) => ({
+        url: '/topups/delete',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listTopup'],
+    }),
   }),
 });
 
-export const { useGetTotalSemuaPendapatanQuery, useGetPendapatanJualBeliQuery, useGetListTopupQuery } = dashboardMonetizeAPI;
+export const {
+  useGetTotalSemuaPendapatanQuery,
+  useGetPendapatanJualBeliQuery,
+  useGetListTopupQuery,
+  useDeleteTopupMutation,
+} = dashboardMonetizeAPI;
