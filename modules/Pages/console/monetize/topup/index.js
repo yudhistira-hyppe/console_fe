@@ -2,9 +2,10 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import React, { useEffect, useState } from 'react';
 import TableSection from './TableSection';
 import SearchSection from './SearchSection';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useGetListTopupQuery } from 'api/console/monetize/dashboard';
+import ModalTopup from './Modal/modal-topup';
 
 const MonetizeTopUpComponent = () => {
   const [filter, setFilter] = useState({
@@ -17,6 +18,7 @@ const MonetizeTopUpComponent = () => {
     createdBy: '',
   });
   const [filterList, setFilterList] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   const getParams = () => {
     let params = {};
@@ -128,18 +130,35 @@ const MonetizeTopUpComponent = () => {
 
   return (
     <>
+      <ModalTopup open={openModal} status="create" handleClose={() => setOpenModal(!openModal)} />
+
       <PageContainer>
         <Stack direction="row" spacing={3}>
           <SearchSection filter={filter} handleChange={handleSearchChange} />
-          <TableSection
-            filterList={filterList}
-            listTransaction={listTopup}
-            filter={filter}
-            loading={loadingTopup}
-            handleOrder={onOrderChange}
-            handlePageChange={handlePageChange}
-            handleDeleteFilter={handleSearchChange}
-          />
+
+          <Stack direction="column" gap={3}>
+            <Stack direction="row" gap={2} justifyContent="flex-end" alignItems="center">
+              <Button variant="contained" color="secondary">
+                Upload data Bulk
+              </Button>
+              <Button variant="contained" color="secondary">
+                Download mock up data
+              </Button>
+              <Button variant="contained" color="secondary" onClick={() => setOpenModal(!openModal)}>
+                Tambah baru
+              </Button>
+            </Stack>
+
+            <TableSection
+              filterList={filterList}
+              listTransaction={listTopup}
+              filter={filter}
+              loading={loadingTopup}
+              handleOrder={onOrderChange}
+              handlePageChange={handlePageChange}
+              handleDeleteFilter={handleSearchChange}
+            />
+          </Stack>
         </Stack>
       </PageContainer>
     </>

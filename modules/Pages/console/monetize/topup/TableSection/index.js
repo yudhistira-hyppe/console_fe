@@ -114,14 +114,14 @@ const TableSection = ({
               <TableHead>
                 <TableRow>
                   <TableCell>Tanggal Buat</TableCell>
+                  <TableCell align="left">Dibuat Oleh</TableCell>
                   <TableCell align="left">Email</TableCell>
                   <TableCell align="left">Username</TableCell>
                   <TableCell align="left">Jumlah Topup</TableCell>
                   <TableCell align="left">Pajak PPH</TableCell>
                   <TableCell align="left">Total</TableCell>
-                  <TableCell align="left">Dibuat Oleh</TableCell>
-                  <TableCell align="left">Disetujui Strategy</TableCell>
-                  <TableCell align="left">Disetujui Finance</TableCell>
+                  <TableCell align="left">Persetujuan Strategy</TableCell>
+                  <TableCell align="left">Persetujuan Finance</TableCell>
                   <TableCell align="left">Status</TableCell>
                   <TableCell align="left"></TableCell>
                 </TableRow>
@@ -141,6 +141,11 @@ const TableSection = ({
                       <TableCell>
                         <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
                           {moment(item?.createdAt).utc().format('DD/MM/YY - HH:mm')} WIB
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                          {item?.createByUsername || '-'}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
@@ -187,13 +192,16 @@ const TableSection = ({
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
-                          {item?.createByUsername || '-'}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="left">
                         <Stack width={180}>
-                          {item?.approveByStrategy ? (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            size="small"
+                            style={{ height: 32 }}
+                            onClick={() => setOpenModal({ open: !openModal.open, selected: item?._id, status: 'strategy' })}>
+                            <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Setujui</Typography>
+                          </Button>
+                          {/* {item?.approveByStrategy ? (
                             <Chip
                               label="Disetujui"
                               style={{
@@ -217,12 +225,20 @@ const TableSection = ({
                                 width: 'fit-content',
                               }}
                             />
-                          )}
+                          )} */}
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
                         <Stack width={180}>
-                          {item?.approveByFinance ? (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            size="small"
+                            style={{ height: 32 }}
+                            onClick={() => setOpenModal({ open: !openModal.open, selected: item?._id, status: 'finance' })}>
+                            <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Setujui</Typography>
+                          </Button>
+                          {/* {item?.approveByFinance ? (
                             <Chip
                               label="Disetujui"
                               style={{
@@ -246,7 +262,7 @@ const TableSection = ({
                                 width: 'fit-content',
                               }}
                             />
-                          )}
+                          )} */}
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
@@ -300,9 +316,7 @@ const TableSection = ({
                             size="small"
                             style={{ height: 32 }}
                             onClick={() => setOpenModal({ open: !openModal.open, selected: item?._id, status: 'delete' })}>
-                            <Typography style={{ fontWeight: 'bold', fontSize: 12, textTransform: 'capitalize' }}>
-                              Hapus
-                            </Typography>
+                            <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Hapus</Typography>
                           </Button>
                         )}
                       </TableCell>

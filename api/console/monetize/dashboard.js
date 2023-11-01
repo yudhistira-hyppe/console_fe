@@ -36,6 +36,22 @@ export const dashboardMonetizeAPI = createApi({
       }),
       invalidatesTags: ['listTopup'],
     }),
+    approveTopup: build.mutation({
+      query: (data) => ({
+        url: '/topups/approve',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listTopup'],
+    }),
+    createTopup: build.mutation({
+      query: (data) => ({
+        url: '/topups/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listTopup'],
+    }),
   }),
 });
 
@@ -44,4 +60,6 @@ export const {
   useGetPendapatanJualBeliQuery,
   useGetListTopupQuery,
   useDeleteTopupMutation,
+  useApproveTopupMutation,
+  useCreateTopupMutation,
 } = dashboardMonetizeAPI;
