@@ -20,6 +20,21 @@ const ConsoleMonetizeComponent = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    router.replace({
+      pathname: router.pathname,
+      query: {
+        tab:
+          newValue === '0'
+            ? 'dashboard'
+            : newValue === '1'
+            ? 'voucher'
+            : newValue === '3'
+            ? 'content'
+            : newValue === '4'
+            ? 'topup'
+            : 'dashboard',
+      },
+    });
   };
 
   useEffect(() => {
@@ -47,6 +62,18 @@ const ConsoleMonetizeComponent = () => {
       setRenderPanel(false);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (router?.query?.tab === 'voucher') {
+      setValue('1');
+    } else if (router?.query?.tab === 'content') {
+      setValue('3');
+    } else if (router?.query?.tab === 'topup') {
+      setValue('4');
+    } else {
+      setValue('0');
+    }
+  }, [router]);
 
   return (
     <>

@@ -31,7 +31,7 @@ import { NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ModalChangeStatusConfirmation from '../Modal/ModalChangeStatus';
 
 const breadcrumbs = [
-  { label: 'Monetisasi', link: '/monetize' },
+  { label: 'Monetisasi', link: { pathname: '/monetize', query: { tab: 'voucher' } } },
   { label: 'Kelola Voucher', isActive: true },
 ];
 
@@ -104,7 +104,7 @@ const KelolaVoucherComponent = () => {
           direction={'row'}
           mt={1}
           mb={3}
-          onClick={() => router.push('/monetize')}
+          onClick={() => router.push({ pathname: '/monetize', query: { tab: 'voucher' } })}
           gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>
