@@ -3,6 +3,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 
 export const dashboardMonetizeAPI = createApi({
   reducerPath: 'monetize/dashboard',
+  tagTypes: ['listTopup'],
   baseQuery: customBaseQueryWithHandleReauth,
   endpoints: (build) => ({
     getTotalSemuaPendapatan: build.query({
@@ -19,7 +20,15 @@ export const dashboardMonetizeAPI = createApi({
         body: data,
       }),
     }),
+    getListTopup: build.query({
+      query: (data) => ({
+        url: '/topups/list',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['listTopup'],
+    }),
   }),
 });
 
-export const { useGetTotalSemuaPendapatanQuery, useGetPendapatanJualBeliQuery } = dashboardMonetizeAPI;
+export const { useGetTotalSemuaPendapatanQuery, useGetPendapatanJualBeliQuery, useGetListTopupQuery } = dashboardMonetizeAPI;

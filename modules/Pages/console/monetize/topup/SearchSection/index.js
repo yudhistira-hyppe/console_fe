@@ -64,6 +64,42 @@ const SearchSection = ({ filter, handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Username / Email</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari username / email"
+              name="search"
+              color="secondary"
+              filterValue={filter.search}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+            />
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Pembuat</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari pembuat"
+              name="createdBy"
+              color="secondary"
+              filterValue={filter.createdBy}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+            />
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
         <Accordion elevation={0} disableGutters defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Transaksi</Typography>
@@ -263,6 +299,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 editableDateInputs={true}
                 ranges={value}
                 direction="horizontal"
+                rangeColors={['#aa22af']}
               />
             </Popover>
           </AccordionDetails>

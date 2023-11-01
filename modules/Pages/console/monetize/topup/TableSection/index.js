@@ -44,7 +44,7 @@ const TableSection = ({
                     onDelete={() => {
                       if (item.parent === 'createdAt') {
                         handleDeleteFilter(item.parent, [null, null]);
-                      } else if (item.parent === 'penjual' || item.parent === 'pembeli') {
+                      } else if (item.parent === 'search' || item.parent === 'createdBy') {
                         handleDeleteFilter(item.parent, '');
                       } else {
                         handleDeleteFilter(item.parent, item.value);
@@ -68,17 +68,20 @@ const TableSection = ({
 
         <Stack direction={'row'} spacing={2} style={{ flex: 1 }} justifyContent={'flex-end'}>
           <Box display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-            <Typography>Urutkan berdasarkan</Typography>
+            <Typography>Urutkan</Typography>
           </Box>
           <FormControl sx={{ m: 1, minWidth: '30%' }} size="small">
             <Select
               value={filter.descending}
               onChange={handleOrder}
               displayEmpty
+              color="secondary"
               inputProps={{ 'aria-label': 'Without label' }}
-              style={{ backgroundColor: 'white' }}>
-              <MenuItem value={'true'}>Terbaru</MenuItem>
-              <MenuItem value={'false'}>Terlama</MenuItem>
+              style={{ backgroundColor: 'white', width: 180 }}>
+              <MenuItem value={'date-true'}>Tanggal (Terbaru)</MenuItem>
+              <MenuItem value={'date-false'}>Tanggal (Terlama)</MenuItem>
+              <MenuItem value={'email-false'}>Email (A - Z)</MenuItem>
+              <MenuItem value={'email-true'}>Email (Z - A)</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -98,6 +101,7 @@ const TableSection = ({
                 <TableCell align="left">Dibuat Oleh</TableCell>
                 <TableCell align="left">Disetujui Strategy</TableCell>
                 <TableCell align="left">Disetujui Finance</TableCell>
+                <TableCell align="left">Status</TableCell>
               </TableRow>
             </TableHead>
 
@@ -111,10 +115,10 @@ const TableSection = ({
                 </TableCell>
               ) : listTransaction?.data?.length >= 1 ? (
                 listTransaction?.data?.map((item, key) => (
-                  <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+                  <TableRow key={key} hover>
                     <TableCell>
                       <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
-                        {moment(item?.timestamp).utc().format('DD/MM/YY - HH:mm')} WIB
+                        {moment(item?.createdAt).utc().format('DD/MM/YY - HH:mm')} WIB
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -122,13 +126,13 @@ const TableSection = ({
                         variant="body1"
                         style={{
                           fontSize: '12px',
-                          width: 150,
+                          width: 170,
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
                         }}
-                        title={'email user'}>
-                        {'email user'}
+                        title={item?.email || '-'}>
+                        {item?.email || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
@@ -136,110 +140,146 @@ const TableSection = ({
                         variant="body1"
                         style={{
                           fontSize: '12px',
-                          width: 150,
+                          width: 140,
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
                         }}
-                        title={'username user'}>
-                        {'username user' || '-'}
+                        title={item?.username}>
+                        {item?.username || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
-                        Rp {numberWithCommas(100000000)}
+                        Rp {numberWithCommas(item?.topup || 0)}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
-                        Rp {numberWithCommas(100000000)}
+                        Rp {numberWithCommas(item?.pph || 0)}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
-                        Rp {numberWithCommas(100000000)}
+                        Rp {numberWithCommas(item?.total || 0)}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
-                        Pembuat
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                        {item?.createByUsername || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Stack width={120}>
-                        {item?.status === 'WAITING_PAYMENT' && (
+                      <Stack width={180}>
+                        {item?.approveByStrategy ? (
                           <Chip
-                            label="Menunggu Pembayaran"
-                            style={{ backgroundColor: '#0356AF1A', color: '#0356AF', width: 'fit-content' }}
+                            label="Disetujui"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#E6094BD9',
+                              backgroundColor: '#E6094B1A',
+                              width: 'fit-content',
+                            }}
+                          />
+                        ) : (
+                          <Chip
+                            label="Menunggu Persetujuan"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#0095F2',
+                              backgroundColor: '#0095F233',
+                              width: 'fit-content',
+                            }}
                           />
                         )}
-                        {item?.status === 'Success' && (
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack width={180}>
+                        {item?.approveByFinance ? (
                           <Chip
-                            label="Berhasil"
-                            style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9', width: 'fit-content' }}
+                            label="Disetujui"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#E6094BD9',
+                              backgroundColor: '#E6094B1A',
+                              width: 'fit-content',
+                            }}
+                          />
+                        ) : (
+                          <Chip
+                            label="Menunggu Persetujuan"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#0095F2',
+                              backgroundColor: '#0095F233',
+                              width: 'fit-content',
+                            }}
                           />
                         )}
-                        {item?.status === 'Cancel' && (
-                          <Chip
-                            label="Gagal"
-                            style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767D9', width: 'fit-content' }}
-                          />
-                        )}
-                        <Chip
-                          label="Disetujui"
-                          style={{
-                            fontSize: 14,
-                            fontWeight: 'bold',
-                            fontFamily: 'Lato',
-                            color: '#71A500D9',
-                            backgroundColor: '#71A5001A',
-                            width: 'fit-content',
-                          }}
-                        />
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
                       <Stack width={120}>
-                        {item?.status === 'WAITING_PAYMENT' && (
+                        {item?.status === 'NEW' && (
                           <Chip
-                            label="Menunggu Pembayaran"
-                            style={{ backgroundColor: '#0356AF1A', color: '#0356AF', width: 'fit-content' }}
+                            label="Baru"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              color: '#E6094BD9',
+                              backgroundColor: '#E6094B1A',
+                              width: 'fit-content',
+                            }}
                           />
                         )}
-                        {item?.status === 'Success' && (
+                        {item?.status === 'SUCCESS' && (
                           <Chip
                             label="Berhasil"
-                            style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9', width: 'fit-content' }}
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              backgroundColor: 'rgba(113, 165, 0, 0.1)',
+                              color: '#71A500D9',
+                              width: 'fit-content',
+                            }}
                           />
                         )}
-                        {item?.status === 'Cancel' && (
+                        {item?.status === 'DELETED' && (
                           <Chip
-                            label="Gagal"
-                            style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767D9', width: 'fit-content' }}
+                            label="Ditolak"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 'bold',
+                              fontFamily: 'Lato',
+                              backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                              color: '#676767D9',
+                              width: 'fit-content',
+                            }}
                           />
                         )}
-                        <Chip
-                          label="Disetujui"
-                          style={{
-                            fontSize: 14,
-                            fontWeight: 'bold',
-                            fontFamily: 'Lato',
-                            color: '#71A500D9',
-                            backgroundColor: '#71A5001A',
-                            width: 'fit-content',
-                          }}
-                        />
                       </Stack>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={12} align="center">
                     Tidak ada data.
                   </TableCell>
                 </TableRow>
               )}
+              {listTransaction?.data?.length >= 1 && <TableRow style={{ height: 15 }}></TableRow>}
             </TableBody>
           </Table>
         </ScrollBar>
