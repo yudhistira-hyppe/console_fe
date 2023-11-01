@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
 const ConsoleEngagementComponent = () => {
   const [value, setValue] = useState('metrik');
   const classes = useStyles();
-  const access =localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

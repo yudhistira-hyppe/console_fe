@@ -18,7 +18,7 @@ const PenggunaAktif = () => {
   };
 
   const totalActive = () => {
-    return userActive?.data?.map((item) => item?.count * 19).reduce((a, b) => a + b) || 0;
+    return userActive?.data?.map((item) => item?.count).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -32,7 +32,7 @@ const PenggunaAktif = () => {
           data={userActive?.data?.map((item) => {
             return {
               date: item?.date,
-              count: item?.count * 19,
+              count: item?.count,
             };
           })}
         />

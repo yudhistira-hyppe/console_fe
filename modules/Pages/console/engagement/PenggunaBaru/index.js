@@ -15,7 +15,7 @@ const PenggunaBaru = ({ setPengguna }) => {
 
   useEffect(() => {
     if (!loadingUser) {
-      setPengguna(newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0);
+      setPengguna(newUser?.data?.map((item) => item?.count).reduce((a, b) => a + b) || 0);
     }
   }, [loadingUser]);
 
@@ -24,7 +24,7 @@ const PenggunaBaru = ({ setPengguna }) => {
   };
 
   const totalUser = () => {
-    return newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0;
+    return newUser?.data?.map((item) => item?.count).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -38,7 +38,7 @@ const PenggunaBaru = ({ setPengguna }) => {
           data={newUser?.data?.map((item) => {
             return {
               date: item?.date,
-              count: item?.count * 9,
+              count: item?.count,
             };
           })}
         />
