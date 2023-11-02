@@ -1,7 +1,7 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import React, { useEffect, useState } from 'react';
-import TableSection from '../components/JualBeliTableSection';
-import SearchSection from '../components/JualBeliSearchSection';
+import TableSection from './TableSection';
+import SearchSection from './SearchSection';
 import { Stack } from '@mui/material';
 import { useGetListJualBeliContentQuery } from 'api/console/monetize/jualbeli';
 import { toast } from 'react-hot-toast';

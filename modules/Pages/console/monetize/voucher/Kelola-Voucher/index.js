@@ -17,7 +17,6 @@ import {
 import { Stack } from '@mui/system';
 import React, { useEffect } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
-import { ModalChangeStatusConfirmation } from 'modules/Pages/console/monetize/components';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
@@ -29,9 +28,10 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import { toast } from 'react-hot-toast';
 import ScrollBar from 'react-perfect-scrollbar';
 import { NavigateBefore, NavigateNext } from '@material-ui/icons';
+import ModalChangeStatusConfirmation from '../Modal/ModalChangeStatus';
 
 const breadcrumbs = [
-  { label: 'Monetisasi', link: '/monetize' },
+  { label: 'Monetisasi', link: { pathname: '/monetize', query: { tab: 'voucher' } } },
   { label: 'Kelola Voucher', isActive: true },
 ];
 
@@ -104,7 +104,7 @@ const KelolaVoucherComponent = () => {
           direction={'row'}
           mt={1}
           mb={3}
-          onClick={() => router.push('/monetize')}
+          onClick={() => router.push({ pathname: '/monetize', query: { tab: 'voucher' } })}
           gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>

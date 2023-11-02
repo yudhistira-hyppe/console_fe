@@ -173,15 +173,31 @@ const TableSection = ({
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      {item?.status === 'WAITING_PAYMENT' && (
-                        <Chip label="Menunggu Pembayaran" style={{ backgroundColor: '#0356AF1A', color: '#0356AF' }} />
-                      )}
-                      {item?.status === 'Success' && (
-                        <Chip label="Berhasil" style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9' }} />
-                      )}
-                      {item?.status === 'Cancel' && (
-                        <Chip label="Gagal" style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767D9' }} />
-                      )}
+                      <Stack width={250}>
+                        {item?.status === 'WAITING_PAYMENT' && (
+                          <Chip
+                            label="Menunggu Pembayaran"
+                            style={{ backgroundColor: '#0356AF1A', color: '#0356AF', width: 'fit-content' }}
+                          />
+                        )}
+                        {item?.status === 'Success' && (
+                          <Chip
+                            label="Berhasil"
+                            style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: '#71A500D9', width: 'fit-content' }}
+                          />
+                        )}
+                        {item?.status === 'Cancel' && (
+                          <Chip
+                            label="Gagal"
+                            style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: '#676767D9', width: 'fit-content' }}
+                          />
+                        )}
+                        {item?.status !== 'Success' && item?.status !== 'Cancel' && item?.status !== 'WAITING_PAYMENT' && (
+                          <Typography variant="body1" style={{ fontSize: 12 }}>
+                            {item?.status}
+                          </Typography>
+                        )}
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 ))

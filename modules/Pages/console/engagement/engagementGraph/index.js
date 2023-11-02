@@ -63,21 +63,21 @@ const EngagementGraph = () => {
       label: 'Dilihat',
       icon: <img src="/images/icons/Eye_On.svg" width="24" alt="icon" />,
       color: '#D72934',
-      value: activityUser?.data?.map((item) => item.views * 19)?.reduce((a, b) => a + b, 0),
+      value: activityUser?.data?.map((item) => item.views)?.reduce((a, b) => a + b, 0),
       key: 'dilihat',
     },
     {
       label: 'Disukai',
       icon: <img src="/images/icons/Likes.svg" width="24" alt="icon" />,
       color: '#3F51B5',
-      value: activityUser?.data?.map((item) => item.likes * 19)?.reduce((a, b) => a + b, 0),
+      value: activityUser?.data?.map((item) => item.likes)?.reduce((a, b) => a + b, 0),
       key: 'disukai',
     },
     {
       label: 'Komentar',
       icon: <img src="/images/icons/Message.svg" width="24" alt="icon" />,
       color: '#FFA005',
-      value: activityUser?.data?.map((item) => item.comments * 19)?.reduce((a, b) => a + b, 0),
+      value: activityUser?.data?.map((item) => item.comments)?.reduce((a, b) => a + b, 0),
       key: 'komentar',
     },
   ];
@@ -88,9 +88,9 @@ const EngagementGraph = () => {
     activityUser?.data?.map((item) => {
       newData.push({
         date: moment(item.date).format('DD/MM/YY'),
-        Dilihat: item.views * 19,
-        Disukai: item.likes * 19,
-        Komentar: item.comments * 19,
+        Dilihat: item.views,
+        Disukai: item.likes,
+        Komentar: item.comments,
       });
     });
 

@@ -58,7 +58,7 @@ const ContentReport = () => {
       </Typography>
       <CmtCardContent
         style={{
-          padding: '15px 0',
+          padding: '12px 0',
           height: '100%',
           width: '100%',
           margin: 'auto 0',

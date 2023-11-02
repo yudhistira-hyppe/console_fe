@@ -1,10 +1,10 @@
 import React from 'react';
 import GridContainer from '@jumbo/components/GridContainer';
-import CardChart from '../CardChart';
+import CardChart from './CardChart';
 import { Grid } from '@material-ui/core';
-import TotalSemuaPendapatan from '../components/TotalSemuaPendapatan';
-import Voucher from '../components/Voucher';
-import JualBeli from '../components/JualBeli';
+import TotalSemuaPendapatan from './CardChart/TotalSemuaPendapatan';
+import Voucher from './Voucher';
+import JualBeli from './JualBeli';
 
 const MonetizeDashboardComponent = () => {
   return (

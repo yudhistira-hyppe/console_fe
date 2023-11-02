@@ -2,11 +2,12 @@ import GridContainer from '@jumbo/components/GridContainer';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Grid, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { SearchSection, TableSection } from '../components';
 import { useGetTransactionVouchersQuery } from 'api/console/monetize/voucher';
 import moment from 'moment';
 import { Stack } from '@mui/material';
 import { toast } from 'react-hot-toast';
+import SearchSection from './SearchSection';
+import TableSection from './TableSection';
 
 const MonetizeVoucherComponent = () => {
   const [filter, setFilter] = useState({

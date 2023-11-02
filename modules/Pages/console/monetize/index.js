@@ -3,14 +3,14 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import MonetizeDashboard from './Dashboard';
+import MonetizeDashboard from './dashboard';
 import MonetizeVoucher from './voucher';
 import { Stack } from '@mui/system';
 import { Button } from '@material-ui/core';
 import { TabContext, TabPanel } from '@material-ui/lab';
-import MonetizeKepemilikanComponent from './Kepemilikan';
 import { useRouter } from 'next/router';
 import MonetizeJualBeliComponent from './jual-beli';
+import MonetizeTopUpComponent from './topup';
 
 const ConsoleMonetizeComponent = () => {
   const [value, setValue] = useState('0');
@@ -20,6 +20,21 @@ const ConsoleMonetizeComponent = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    router.replace({
+      pathname: router.pathname,
+      query: {
+        tab:
+          newValue === '0'
+            ? 'dashboard'
+            : newValue === '1'
+            ? 'voucher'
+            : newValue === '3'
+            ? 'content'
+            : newValue === '4'
+            ? 'topup'
+            : 'dashboard',
+      },
+    });
   };
 
   useEffect(() => {
@@ -48,6 +63,18 @@ const ConsoleMonetizeComponent = () => {
     }
   }, [value]);
 
+  useEffect(() => {
+    if (router?.query?.tab === 'voucher') {
+      setValue('1');
+    } else if (router?.query?.tab === 'content') {
+      setValue('3');
+    } else if (router?.query?.tab === 'topup') {
+      setValue('4');
+    } else {
+      setValue('0');
+    }
+  }, [router]);
+
   return (
     <>
       <Head>
@@ -55,7 +82,7 @@ const ConsoleMonetizeComponent = () => {
       </Head>
       <PageContainer>
         <TabContext value={value}>
-          <Stack direction={'row'} justifyContent={'space-between'}>
+          <Stack direction={'row'} justifyContent={'space-between'} marginTop="-20px">
             <Tabs
               className="mb-5"
               value={value}
@@ -92,20 +119,6 @@ const ConsoleMonetizeComponent = () => {
                   }}
                 />
               )}
-              {/* {access.map((item) => item?.nameModule).includes('monetize_ownership') && (
-                <Tab
-                  label="Kepemilikan"
-                  value="2"
-                  style={{
-                    padding: '0px',
-                    marginRight: '1.5em',
-                    fontWeight: 'bold',
-                    fontFamily: 'Lato',
-                    fontSize: 16,
-                    textTransform: 'initial',
-                  }}
-                />
-              )} */}
               {access.map((item) => item?.nameModule).includes('monetize_buy/sell') && (
                 <Tab
                   label="Jual-Beli Konten"
@@ -120,6 +133,18 @@ const ConsoleMonetizeComponent = () => {
                   }}
                 />
               )}
+              <Tab
+                label="Topup Saldo"
+                value="4"
+                style={{
+                  padding: '0px',
+                  marginRight: '1.5em',
+                  fontWeight: 'bold',
+                  fontFamily: 'Lato',
+                  fontSize: 16,
+                  textTransform: 'initial',
+                }}
+              />
             </Tabs>
             {value == '1' && (
               <Stack direction={'column'} justifyContent={'center'}>
@@ -145,16 +170,14 @@ const ConsoleMonetizeComponent = () => {
               <MonetizeVoucher />
             </TabPanel>
           )}
-          {/* {renderPanel && (
-            <TabPanel style={{ padding: 0 }} value="2">
-              <MonetizeKepemilikanComponent />
-            </TabPanel>
-          )} */}
           {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="3">
               <MonetizeJualBeliComponent />
             </TabPanel>
           )}
+          <TabPanel style={{ padding: 0 }} value="4">
+            <MonetizeTopUpComponent />
+          </TabPanel>
         </TabContext>
       </PageContainer>
     </>

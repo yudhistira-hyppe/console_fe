@@ -37,8 +37,6 @@ const PelaporanKonten = () => {
   const dispatch = useDispatch();
 
   const getParams = useCallback(() => {
-    dispatch(saveParams(filter));
-
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -98,7 +96,11 @@ const PelaporanKonten = () => {
       status: dataParams?.status || [],
       reason: dataParams?.reason || [],
     });
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    dispatch(saveParams({ ...filter, pathname: router.pathname }));
+  }, [getParams]);
 
   const { data: listTickets, isFetching: loadingTicket } = useGetListTicketsQuery(getParams());
 
