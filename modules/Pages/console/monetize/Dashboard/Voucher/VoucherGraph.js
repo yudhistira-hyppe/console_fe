@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userActiveGraph = ({ data }) => {
+const VoucherGraph = ({ data }) => {
   const classes = useStyles();
 
   return (
@@ -53,4 +53,4 @@ const userActiveGraph = ({ data }) => {
   );
 };
 
-export default userActiveGraph;
+export default VoucherGraph;

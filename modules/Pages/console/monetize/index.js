@@ -3,12 +3,12 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import MonetizeDashboard from './dashboard';
-import MonetizeVoucher from './voucher';
 import { Stack } from '@mui/system';
 import { Button } from '@material-ui/core';
 import { TabContext, TabPanel } from '@material-ui/lab';
 import { useRouter } from 'next/router';
+import MonetizeDashboardComponent from './dashboard';
+import MonetizeVoucherComponent from './voucher';
 import MonetizeJualBeliComponent from './jual-beli';
 import MonetizeTopUpComponent from './topup';
 
@@ -162,12 +162,12 @@ const ConsoleMonetizeComponent = () => {
           </Stack>
           {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="0">
-              <MonetizeDashboard />
+              <MonetizeDashboardComponent />
             </TabPanel>
           )}
           {renderPanel && (
             <TabPanel style={{ padding: 0 }} value="1">
-              <MonetizeVoucher />
+              <MonetizeVoucherComponent />
             </TabPanel>
           )}
           {renderPanel && (
