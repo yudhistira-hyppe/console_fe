@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userActiveCard = ({ title, amount, progress, children, handlePayload }) => {
+const VoucherCard = ({ title, amount, progress, children, handlePayload }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -135,4 +135,4 @@ const userActiveCard = ({ title, amount, progress, children, handlePayload }) =>
   );
 };
 
-export default userActiveCard;
+export default VoucherCard;

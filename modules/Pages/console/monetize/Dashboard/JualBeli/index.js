@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import JualBeliCard from './JualBeliCard';
-import JualBeliGraph from './JualBeliGraph';
 import moment from 'moment';
 import { useAuth } from 'authentication';
 import { CircularProgress, Stack } from '@mui/material';
 import { useGetPendapatanJualBeliQuery } from 'api/console/monetize/dashboard';
+import JualBeliCard from './JualBeliCard';
+import JualBeliGraph from './JualBeliGraph';
 
-const JualBeli = () => {
-  const { authUser } = useAuth();
+const PendapatanJualBeliGraph = () => {
   const [payload, setPayload] = useState({
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
@@ -35,4 +34,4 @@ const JualBeli = () => {
   );
 };
 
-export default JualBeli;
+export default PendapatanJualBeliGraph;

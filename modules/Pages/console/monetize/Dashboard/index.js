@@ -1,10 +1,10 @@
 import React from 'react';
 import GridContainer from '@jumbo/components/GridContainer';
-import CardChart from './CardChart';
 import { Grid } from '@material-ui/core';
+import GraphChart from './CardChart';
 import TotalSemuaPendapatan from './CardChart/TotalSemuaPendapatan';
-import Voucher from './Voucher';
-import JualBeli from './JualBeli';
+import PendapatanVoucherGraph from './Voucher';
+import PendapatanJualBeliGraph from './JualBeli';
 
 const MonetizeDashboardComponent = () => {
   return (
@@ -12,13 +12,13 @@ const MonetizeDashboardComponent = () => {
       <Grid item xs={12}>
         <GridContainer>
           <Grid item xs={12} sm={12} md={4}>
-            <CardChart title={'Total Semua Pendapatan'} content={<TotalSemuaPendapatan />} cardStyle={{ height: '100%' }} />
+            <GraphChart title={'Total Semua Pendapatan'} content={<TotalSemuaPendapatan />} cardStyle={{ height: '100%' }} />
           </Grid>
           <Grid item xs={12} sm={12} md={4}>
-            <Voucher />
+            <PendapatanVoucherGraph />
           </Grid>
           <Grid item xs={12} sm={12} md={4}>
-            <JualBeli />
+            <PendapatanJualBeliGraph />
           </Grid>
         </GridContainer>
       </Grid>

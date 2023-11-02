@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useGetVoucherIncomeQuery } from 'api/console/dashboard';
-
-import VoucherCard from './VoucherCard';
-import VoucherGraph from './VoucherGraph';
 import moment from 'moment';
 import { useAuth } from 'authentication';
 import { CircularProgress, Stack } from '@mui/material';
+import VoucherCard from './VoucherCard';
+import VoucherGraph from './VoucherGraph';
 
-const UserACtiveGraphhh = () => {
+const PendapatanVoucherGraph = () => {
   const { authUser } = useAuth();
   const [payload, setPayload] = useState({
     idusersell: authUser?.user?.id,
@@ -36,4 +35,4 @@ const UserACtiveGraphhh = () => {
   );
 };
 
-export default UserACtiveGraphhh;
+export default PendapatanVoucherGraph;
