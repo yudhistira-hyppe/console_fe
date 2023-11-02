@@ -52,6 +52,14 @@ export const dashboardMonetizeAPI = createApi({
       }),
       invalidatesTags: ['listTopup'],
     }),
+    uploadBulkTopup: build.mutation({
+      query: (data) => ({
+        url: '/topups/import',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listTopup'],
+    }),
   }),
 });
 
@@ -62,4 +70,5 @@ export const {
   useDeleteTopupMutation,
   useApproveTopupMutation,
   useCreateTopupMutation,
+  useUploadBulkTopupMutation,
 } = dashboardMonetizeAPI;

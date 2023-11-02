@@ -21,6 +21,7 @@ import numberWithCommas from 'modules/Components/CommonComponent/NumberWithComma
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ModalTopup from '../Modal/modal-topup';
+import { useAuth } from 'authentication';
 
 const TableSection = ({
   filter,
@@ -36,6 +37,7 @@ const TableSection = ({
     selected: '',
     status: '',
   });
+  const { authUser } = useAuth();
 
   return (
     <>
@@ -123,7 +125,6 @@ const TableSection = ({
                   <TableCell align="left">Persetujuan Strategy</TableCell>
                   <TableCell align="left">Persetujuan Finance</TableCell>
                   <TableCell align="left">Status</TableCell>
-                  <TableCell align="left"></TableCell>
                 </TableRow>
               </TableHead>
 
@@ -192,27 +193,42 @@ const TableSection = ({
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Stack width={180}>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            style={{ height: 32 }}
-                            onClick={() => setOpenModal({ open: !openModal.open, selected: item?._id, status: 'strategy' })}>
-                            <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Setujui</Typography>
-                          </Button>
-                          {/* {item?.approveByStrategy ? (
+                        <Stack width={220}>
+                          {item?.status === 'DELETE' ? (
+                            <Chip
+                              label="Ditolak"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
+                          ) : item?.approveByStrategy ? (
                             <Chip
                               label="Disetujui"
                               style={{
                                 fontSize: 14,
                                 fontWeight: 'bold',
                                 fontFamily: 'Lato',
-                                color: '#E6094BD9',
-                                backgroundColor: '#E6094B1A',
+                                color: '#71A500D9',
+                                backgroundColor: '#71A5001A',
                                 width: 'fit-content',
                               }}
                             />
+                          ) : authUser?.user?.group === 'Head Of Strategy' ? (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              size="small"
+                              style={{ height: 32 }}
+                              onClick={() =>
+                                setOpenModal({ open: !openModal.open, selected: item?._id, status: 'strategy' })
+                              }>
+                              <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
+                            </Button>
                           ) : (
                             <Chip
                               label="Menunggu Persetujuan"
@@ -225,31 +241,46 @@ const TableSection = ({
                                 width: 'fit-content',
                               }}
                             />
-                          )} */}
+                          )}
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
-                        <Stack width={180}>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            style={{ height: 32 }}
-                            onClick={() => setOpenModal({ open: !openModal.open, selected: item?._id, status: 'finance' })}>
-                            <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Setujui</Typography>
-                          </Button>
-                          {/* {item?.approveByFinance ? (
+                        <Stack width={220}>
+                          {item?.status === 'DELETE' ? (
+                            <Chip
+                              label="Ditolak"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
+                          ) : item?.approveByFinance ? (
                             <Chip
                               label="Disetujui"
                               style={{
                                 fontSize: 14,
                                 fontWeight: 'bold',
                                 fontFamily: 'Lato',
-                                color: '#E6094BD9',
-                                backgroundColor: '#E6094B1A',
+                                color: '#71A500D9',
+                                backgroundColor: '#71A5001A',
                                 width: 'fit-content',
                               }}
                             />
+                          ) : authUser?.user?.group === 'Head Of Finance' ? (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              size="small"
+                              style={{ height: 32 }}
+                              onClick={() =>
+                                setOpenModal({ open: !openModal.open, selected: item?._id, status: 'finance' })
+                              }>
+                              <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
+                            </Button>
                           ) : (
                             <Chip
                               label="Menunggu Persetujuan"
@@ -262,11 +293,11 @@ const TableSection = ({
                                 width: 'fit-content',
                               }}
                             />
-                          )} */}
+                          )}
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
-                        <Stack width={100}>
+                        <Stack width={150}>
                           {item?.status === 'NEW' && (
                             <Chip
                               label="Baru"
@@ -280,7 +311,20 @@ const TableSection = ({
                               }}
                             />
                           )}
-                          {item?.status === 'SUCCESS' && (
+                          {item?.status === 'PROCESS' && (
+                            <Chip
+                              label="Proses"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                color: '#0095F2',
+                                backgroundColor: '#0095F233',
+                                width: 'fit-content',
+                              }}
+                            />
+                          )}
+                          {item?.status === 'APPROVE' && (
                             <Chip
                               label="Berhasil"
                               style={{
@@ -293,7 +337,7 @@ const TableSection = ({
                               }}
                             />
                           )}
-                          {item?.status === 'DELETED' && (
+                          {item?.status === 'DELETE' && (
                             <Chip
                               label="Ditolak"
                               style={{
@@ -307,18 +351,6 @@ const TableSection = ({
                             />
                           )}
                         </Stack>
-                      </TableCell>
-                      <TableCell align="left">
-                        {item?.status === 'NEW' && (
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            size="small"
-                            style={{ height: 32 }}
-                            onClick={() => setOpenModal({ open: !openModal.open, selected: item?._id, status: 'delete' })}>
-                            <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Hapus</Typography>
-                          </Button>
-                        )}
                       </TableCell>
                     </TableRow>
                   ))

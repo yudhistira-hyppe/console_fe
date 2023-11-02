@@ -1,7 +1,13 @@
 import { Typography } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, InputAdornment, Modal, Stack, TextField } from '@mui/material';
-import { useApproveTopupMutation, useCreateTopupMutation, useDeleteTopupMutation } from 'api/console/monetize/dashboard';
+import {
+  useApproveTopupMutation,
+  useCreateTopupMutation,
+  useDeleteTopupMutation,
+  useUploadBulkTopupMutation,
+} from 'api/console/monetize/dashboard';
 import { formatCurrency } from 'helpers/stringHelper';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -10,15 +16,18 @@ function ModalTopup({ open, selected, status, handleClose }) {
   const [inputValue, setInputValue] = useState({
     email: '',
     topup: '',
+    file: [],
   });
   const [deleteTopup, { isLoading: loadingDelete }] = useDeleteTopupMutation();
   const [approveTopup, { isLoading: loadingApprove }] = useApproveTopupMutation();
   const [createTopup, { isLoading: loadingCreate }] = useCreateTopupMutation();
+  const [bulkUpload, { isLoading: loadingUpload }] = useUploadBulkTopupMutation();
 
   useEffect(() => {
     setInputValue({
       email: '',
       topup: '',
+      file: [],
     });
   }, [open]);
 
@@ -64,6 +73,22 @@ function ModalTopup({ open, selected, status, handleClose }) {
     handleClose();
   };
 
+  const handleUpload = () => {
+    let formData = new FormData();
+    formData.append('file', inputValue?.file);
+
+    bulkUpload(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.messages?.info ? res?.error?.data?.messages?.info?.[0] : res?.error?.data?.message, {
+          duration: 3000,
+        });
+      } else {
+        toast.success('Berhasil Mengupload Bulk Data', { duration: 3000 });
+      }
+    });
+    handleClose();
+  };
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -72,18 +97,21 @@ function ModalTopup({ open, selected, status, handleClose }) {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 450,
+          width: 500,
           backgroundColor: 'white',
           boxShadow: 24,
-          padding: 24,
+          padding: 32,
           borderRadius: '4px',
         }}>
-        <Stack direction="column" alignItems="center" gap={3} style={{ position: 'relative' }}>
-          <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 18 }}>
-            {status === 'delete' && 'Kamu yakin ingin menghapus data ini ?'}
-            {status === 'finance' && 'Kamu (Head Of Finance), yakin ingin menyetujui topup dana ini ?'}
-            {status === 'strategy' && 'Kamu (Head Of Strategy), yakin ingin menyetujui topup dana ini ?'}
+        <div style={{ position: 'absolute', zIndex: 100, top: 15, right: 15, cursor: 'pointer' }} onClick={handleClose}>
+          <Close style={{ color: '#666666' }} />
+        </div>
+        <Stack direction="column" alignItems="center" gap={3} p={1} style={{ position: 'relative' }}>
+          <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 18, width: '90%' }}>
+            {status === 'finance' && 'Kamu (Head Of Finance), ingin menyetujui topup dana ini ?'}
+            {status === 'strategy' && 'Kamu (Head Of Strategy), ingin menyetujui topup dana ini ?'}
             {status === 'create' && 'Form Permintaan Topup'}
+            {status === 'upload' && 'Form Upload Bulk Data Topup'}
           </Typography>
           {status === 'create' && (
             <Stack direction="column" gap={2} width="100%">
@@ -120,35 +148,53 @@ function ModalTopup({ open, selected, status, handleClose }) {
               />
             </Stack>
           )}
+          {status === 'upload' && (
+            <TextField
+              type="file"
+              color="secondary"
+              onChange={(e) => {
+                if (e.target.files[0]?.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                  toast.error('Harap memasukan file dengan format excel');
+                  setInputValue({ ...inputValue, file: [] });
+                } else {
+                  setInputValue({ ...inputValue, file: e.target.files[0] });
+                }
+              }}
+            />
+          )}
           <Stack direction="row" justifyContent="center" alignItems="center" gap={2}>
             <LoadingButton
-              loading={loadingDelete || loadingApprove || loadingCreate}
+              loading={loadingDelete || loadingApprove || loadingCreate || loadingUpload}
               type="submit"
               variant="contained"
               color="secondary"
               style={{ height: 32 }}
               onClick={() => {
-                if (status === 'delete') {
-                  handleDelete();
-                } else if (status === 'finance' || status === 'strategy') {
+                if (status === 'finance' || status === 'strategy') {
                   handleApprove();
                 } else if (status === 'create') {
                   handleCreate();
+                } else if (status === 'upload') {
+                  handleUpload();
                 }
               }}
               disabled={
-                status === 'create' && (!inputValue?.email || !inputValue?.email?.includes('@') || inputValue?.topup < 1)
+                (status === 'create' &&
+                  (!inputValue?.email || !inputValue?.email?.includes('@') || inputValue?.topup < 1)) ||
+                (status === 'upload' && inputValue?.file?.length < 1)
               }>
-              {status === 'delete' && 'Hapus'} {(status === 'finance' || status === 'strategy') && 'Konfirmasi'}
+              {(status === 'finance' || status === 'strategy') && 'Setujui'}
               {status === 'create' && 'Tambah'}
+              {status === 'upload' && 'Upload'}
             </LoadingButton>
             <Button
               variant="text"
               color="secondary"
               style={{ height: 32 }}
-              onClick={handleClose}
-              disabled={loadingDelete || loadingApprove || loadingCreate}>
-              Batal
+              onClick={() => (status === 'create' || status === 'upload' ? handleClose() : handleDelete())}
+              disabled={loadingDelete || loadingApprove || loadingCreate || loadingUpload}>
+              {(status === 'finance' || status === 'strategy') && 'Tolak'}
+              {(status === 'create' || status === 'upload') && 'Batal'}
             </Button>
           </Stack>
         </Stack>

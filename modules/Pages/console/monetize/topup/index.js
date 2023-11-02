@@ -18,7 +18,10 @@ const MonetizeTopUpComponent = () => {
     createdBy: '',
   });
   const [filterList, setFilterList] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState({
+    open: false,
+    status: '',
+  });
 
   const getParams = () => {
     let params = {};
@@ -130,7 +133,11 @@ const MonetizeTopUpComponent = () => {
 
   return (
     <>
-      <ModalTopup open={openModal} status="create" handleClose={() => setOpenModal(!openModal)} />
+      <ModalTopup
+        open={openModal.open}
+        status={openModal.status}
+        handleClose={() => setOpenModal({ open: false, status: '' })}
+      />
 
       <PageContainer>
         <Stack direction="row" spacing={3}>
@@ -138,13 +145,16 @@ const MonetizeTopUpComponent = () => {
 
           <Stack direction="column" gap={3}>
             <Stack direction="row" gap={2} justifyContent="flex-end" alignItems="center">
-              <Button variant="contained" color="secondary">
+              <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'upload' })}>
                 Upload data Bulk
               </Button>
-              <Button variant="contained" color="secondary">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}>
                 Download mock up data
               </Button>
-              <Button variant="contained" color="secondary" onClick={() => setOpenModal(!openModal)}>
+              <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'create' })}>
                 Tambah baru
               </Button>
             </Stack>
