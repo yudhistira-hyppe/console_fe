@@ -58,15 +58,16 @@ const actionsList = [
 
 const UserDropDown = () => {
   const classes = useStyles();
-  const { authUser, userSignOut } = useAuth();
+  const { authUser, userSignOut, setAuthUser } = useAuth();
   const router = useRouter();
   const [profileUser] = useGetProfileByUserEmail2Mutation();
-  const [group, setGroup] = useState({});
+  const [group, setGroup] = useState('');
 
   useEffect(() => {
     if (!authUser?.user?.group) {
       profileUser(authUser?.user?.email).then((res) => {
-        setGroup(res?.data?.data?.[0]);
+        setGroup(res?.data?.data?.[0]?.group);
+        setAuthUser({ ...authUser, user: { ...authUser?.user, group: res?.data?.data?.[0]?.group } });
       });
     }
   }, []);
@@ -94,7 +95,7 @@ const UserDropDown = () => {
   return (
     <Box className={clsx(classes.profileRoot, 'Cmt-profile-pic')}>
       <Stack direction="row" alignItems="center">
-        <Chip label={group?.group || '-'} className={classes.chipRole} />
+        <Chip label={group || '-'} className={classes.chipRole} />
       </Stack>
       <CmtDropdownMenu
         onItemClick={onItemClick}

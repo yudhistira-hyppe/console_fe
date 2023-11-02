@@ -8,6 +8,7 @@ import { useGetUserAccessMutation } from 'api/user/auth';
 import Cookies from 'js-cookie';
 import router from 'next/router';
 import { toast } from 'react-hot-toast';
+import { isEmpty } from 'lodash';
 
 export const useProvideAuth = () => {
   // Start rewritten code
@@ -54,7 +55,14 @@ export const useProvideAuth = () => {
   const getAuthUser = () => {
     try {
       fetchStart();
-      setAuthUser(getAllCookies());
+      if (authUser?.user) {
+        setAuthUser({
+          ...getAllCookies(),
+          user: !isEmpty(authUser?.user) ? { ...getAllCookies()?.user, ...authUser?.user } : undefined,
+        });
+      } else {
+        setAuthUser(getAllCookies());
+      }
       fetchSuccess();
     } catch (error) {
       fetchError(error.message);
