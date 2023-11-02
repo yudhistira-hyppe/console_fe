@@ -207,21 +207,21 @@ const DetailRekeningBank = () => {
             <Stack direction="row" alignItems="center" ml="auto" gap="30px">
               <Stack direction="column" alignItems="center">
                 <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>
-                  {numberWithCommas(insightUser?.[0]?.insights?.followers)}
+                  {numberWithCommas(insightUser?.[0]?.insights?.followers || 0)}
                 </Typography>
                 <Typography style={{ color: '#00000099', fontSize: 14 }}>Pengikut</Typography>
               </Stack>
               <Divider orientation="vertical" flexItem />
               <Stack direction="column" alignItems="center">
                 <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>
-                  {numberWithCommas(insightUser?.[0]?.insights?.followings)}
+                  {numberWithCommas(insightUser?.[0]?.insights?.followings || 0)}
                 </Typography>
                 <Typography style={{ color: '#00000099', fontSize: 14 }}>Mengikuti</Typography>
               </Stack>
               <Divider orientation="vertical" flexItem />
               <Stack direction="column" alignItems="center">
                 <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>
-                  {numberWithCommas(insightUser?.[0]?.friend)}
+                  {numberWithCommas(insightUser?.[0]?.friend || 0)}
                 </Typography>
                 <Typography style={{ color: '#00000099', fontSize: 14 }}>Teman</Typography>
               </Stack>
