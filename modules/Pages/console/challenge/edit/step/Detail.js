@@ -19,7 +19,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
         inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day, 'day'),
       );
 
-      if (!inputValue?.starthour) {
+      if (!inputValue?.starthour || !inputValue?.starthour?.isValid()) {
         handleInputChange('starthour', inputValue?.startdate.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
       }
     }
@@ -266,7 +266,13 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                 value={inputValue?.startdate || null}
                 minDate={dayjs().add(1, 'day').toDate()}
                 onChange={(newValue) => {
-                  handleInputChange('startdate', newValue.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
+                  if (newValue !== null && newValue?.isValid()) {
+                    handleInputChange('startdate', newValue.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
+                  } else {
+                    handleInputChange('startdate', undefined);
+                    handleInputChange('enddate', undefined);
+                    handleInputChange('starthour', undefined);
+                  }
                 }}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => (
@@ -286,13 +292,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                 value={inputValue?.enddate || null}
                 onChange={() => {}}
                 inputFormat="DD/MM/YYYY"
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    style={{ backgroundColor: isDraft ? 'transparent' : '#EAEAEA' }}
-                    disabled={!isDraft}
-                  />
-                )}
+                renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#EAEAEA' }} disabled />}
                 disabled
               />
             </Stack>
@@ -305,20 +305,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
             </Typography>
             <DateTimePicker
               value={inputValue?.starthour || null}
-              onChange={(newValue) => {
-                handleInputChange('starthour', newValue);
-
-                if (inputValue?.enddate) {
-                  handleInputChange(
-                    'startdate',
-                    dayjs(inputValue?.startdate).hour(newValue.get('hour')).minute(newValue.get('minute')),
-                  );
-                  handleInputChange(
-                    'enddate',
-                    dayjs(inputValue?.enddate).hour(newValue.get('hour')).minute(newValue.get('minute')),
-                  );
-                }
-              }}
+              onChange={() => {}}
               open={false}
               onOpen={() => setOpenModal(true)}
               inputFormat="HH:mm"
@@ -327,12 +314,17 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                 <TextField
                   color="secondary"
                   {...params}
-                  style={{ backgroundColor: isDraft ? 'transparent' : '#EAEAEA' }}
-                  disabled={!isDraft}
+                  style={{ backgroundColor: isDraft && inputValue?.startdate ? 'transparent' : '#EAEAEA' }}
+                  disabled={!isDraft || !inputValue?.startdate}
                 />
               )}
-              style={{ backgroundColor: isDraft ? 'transparent' : '#EAEAEA' }}
-              disabled={!isDraft}
+              style={{ backgroundColor: isDraft && inputValue?.startdate ? 'transparent' : '#EAEAEA' }}
+              InputProps={{
+                onKeyDown: (event) => {
+                  event.preventDefault();
+                },
+              }}
+              disabled={!isDraft || !inputValue?.startdate}
             />
           </Stack>
         </Grid>
