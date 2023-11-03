@@ -19,11 +19,14 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
         inputValue?.startdate.add((inputValue?.cycle ? inputValue?.cycle : 0) * inputValue?.cycle_day, 'day'),
       );
 
-      if (!inputValue?.starthour) {
+      if (!inputValue?.starthour || !inputValue?.starthour?.isValid()) {
         handleInputChange('starthour', inputValue?.startdate.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
       } else {
         handleInputChange('starthour', inputValue?.startdate);
       }
+    } else {
+      handleInputChange('enddate', undefined);
+      handleInputChange('starthour', undefined);
     }
   }, [inputValue?.cycle, inputValue?.cycle_day, inputValue?.startdate]);
 
@@ -237,7 +240,13 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 value={inputValue?.startdate || null}
                 minDate={dayjs().add(1, 'day').toDate()}
                 onChange={(newValue) => {
-                  handleInputChange('startdate', newValue.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
+                  if (newValue !== null && newValue?.isValid()) {
+                    handleInputChange('startdate', newValue.hour(dayjs().get('hour')).minute(dayjs().get('minute')));
+                  } else {
+                    handleInputChange('startdate', undefined);
+                    handleInputChange('enddate', undefined);
+                    handleInputChange('starthour', undefined);
+                  }
                 }}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => <TextField color="secondary" {...params} />}
@@ -249,7 +258,7 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                 value={inputValue?.enddate || null}
                 onChange={() => {}}
                 inputFormat="DD/MM/YYYY"
-                renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#E0E0E0' }} disabled />}
+                renderInput={(params) => <TextField {...params} style={{ backgroundColor: '#EAEAEA' }} disabled />}
                 disabled
               />
             </Stack>
@@ -280,7 +289,25 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               onOpen={() => setOpenModal(true)}
               inputFormat="HH:mm"
               views={['hours', 'minutes']}
-              renderInput={(params) => <TextField color="secondary" {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  color="secondary"
+                  style={{
+                    backgroundColor:
+                      inputValue?.startdate && inputValue?.cycle && inputValue?.cycle_day ? 'transparent' : '#EAEAEA',
+                  }}
+                  {...params}
+                />
+              )}
+              style={{
+                backgroundColor:
+                  inputValue?.startdate && inputValue?.cycle && inputValue?.cycle_day ? 'transparent' : '#EAEAEA',
+              }}
+              InputProps={{
+                onKeyDown: (event) => {
+                  event.preventDefault();
+                },
+              }}
               disabled={!inputValue?.enddate}
             />
           </Stack>

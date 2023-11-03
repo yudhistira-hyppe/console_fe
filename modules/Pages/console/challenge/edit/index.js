@@ -257,6 +257,8 @@ const EditChallenge = ({ detailId, moreSlug }) => {
     });
   };
 
+  console.log(inputValue);
+
   const checkDisabled = () => {
     let disabled = false;
 
@@ -365,9 +367,10 @@ const EditChallenge = ({ detailId, moreSlug }) => {
           !inputValue?.cycle ||
           !inputValue?.cycle_day ||
           !inputValue?.startdate ||
-          inputValue?.startdate?.isBefore() ||
+          inputValue?.startdate?.isAfter(dayjs()) ||
           !inputValue?.starthour ||
           inputValue?.starthour?.isValid() === false ||
+          inputValue?.starthour?.diff(dayjs(), 'hour') < 1 ||
           !inputValue?.description)
       ) {
         disabled = true;
