@@ -17,6 +17,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import React from 'react';
+import toast from 'react-hot-toast';
 
 let notificationItem = [
   { type: 'upcoming', label: 'Akan Datang' },
@@ -46,12 +47,12 @@ const ComponentStepNotification = ({ inputValue, handleInputChange, isDraft }) =
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 343 && img.height > 103) {
-          alert('ukuran imagenya kegedean woyy 🤬');
+        if (img.width % 343 >= 1 || img.height % 103 >= 1) {
+          toast.error('ukuran imagenya harus beraspect ratio 343 x 103 ya beb 👍');
           return;
         }
         if (formatBytes(e.target.files[0].size) >= 2) {
-          alert('size filenya kegedean woyy 🤬');
+          toast.error('size filenya kegedean woyy 🤬');
         } else {
           handleInputChange(kind, {
             file: e.target.files[0],
@@ -77,8 +78,8 @@ const ComponentStepNotification = ({ inputValue, handleInputChange, isDraft }) =
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 326 && img.height > 326) {
-          alert('ukuran imagenya kegedean woyy 🤬');
+        if (img.width !== img.height) {
+          toast.error('ukuran imagenya harus 1 : 1 ya beb 👍');
           return;
         }
         if (formatBytes(e.target.files[0].size) >= 2) {
@@ -179,9 +180,9 @@ const ComponentStepNotification = ({ inputValue, handleInputChange, isDraft }) =
             </label>
             <Stack direction="column" spacing={1}>
               <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Ketentuan Gambar</Typography>
-              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran Gambar : 343px x 103px</Typography>
+              <Typography style={{ color: '#737373', fontSize: 14 }}>Aspek Rasio Ukuran Gambar : 343px x 103px</Typography>
               <Typography style={{ color: '#737373', fontSize: 14 }}>Format Gambar : JPEG dan PNG</Typography>
-              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Min 800kb - Max 2mb</Typography>
+              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Max 2mb</Typography>
             </Stack>
           </Stack>
         </Stack>
@@ -254,9 +255,9 @@ const ComponentStepNotification = ({ inputValue, handleInputChange, isDraft }) =
             </label>
             <Stack direction="column" spacing={1}>
               <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Ketentuan Gambar</Typography>
-              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran Gambar : 326px x 326px</Typography>
+              <Typography style={{ color: '#737373', fontSize: 14 }}>Aspek Rasio Ukuran Gambar : 1 : 1</Typography>
               <Typography style={{ color: '#737373', fontSize: 14 }}>Format Gambar : JPEG, PNG dan GIF</Typography>
-              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Min 800kb - Max 2mb</Typography>
+              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Max 2mb</Typography>
             </Stack>
           </Stack>
         </Stack>
