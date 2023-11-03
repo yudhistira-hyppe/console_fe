@@ -2,7 +2,8 @@ import { Typography } from '@material-ui/core';
 import { Add, CloudUpload, InfoOutlined } from '@material-ui/icons';
 import { Avatar, Box, Card, Stack, Switch, Tooltip } from '@mui/material';
 import { debounce } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import toast from 'react-hot-toast';
 
 const ComponentStepLeaderboard = ({ inputValue, handleInputChange, isDraft }) => {
   function formatBytes(bytes) {
@@ -24,12 +25,12 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange, isDraft }) =>
       let img = new Image();
       img.src = url;
       img.onload = () => {
-        if (img.width > 375 || img.height > 176) {
-          alert('ukuran imagenya kegedean woyy 🤬');
+        if (img.width % 375 >= 1 || img.height % 176 >= 1) {
+          toast.error('ukuran imagenya harus beraspect ratio 375 x 176 ya beb 👍');
           return;
         }
         if (formatBytes(e.target.files[0].size) >= 2) {
-          alert('size filenya kegedean woyy 🤬');
+          toast.error('size filenya kegedean woyy 🤬');
         } else {
           handleInputChange('banner_leaderboard', { file: e.target.files[0], url: url });
         }
@@ -101,9 +102,9 @@ const ComponentStepLeaderboard = ({ inputValue, handleInputChange, isDraft }) =>
             </label>
             <Stack direction="column" spacing={1}>
               <Typography style={{ fontWeight: 'bold', color: '#737373' }}>Ketentuan Gambar</Typography>
-              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran Gambar : 375px x 176px</Typography>
+              <Typography style={{ color: '#737373', fontSize: 14 }}>Aspek Rasio Ukuran Gambar : 375px x 176px</Typography>
               <Typography style={{ color: '#737373', fontSize: 14 }}>Format Gambar : JPEG, PNG dan GIF</Typography>
-              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Min 800kb - Max 2mb</Typography>
+              <Typography style={{ color: '#737373', fontSize: 14 }}>Ukuran File : Max 2mb</Typography>
             </Stack>
           </Stack>
         </Stack>
