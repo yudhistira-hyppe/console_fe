@@ -2,10 +2,13 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import React, { useEffect, useState } from 'react';
 import TableSection from './TableSection';
 import SearchSection from './SearchSection';
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Tooltip } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useGetListTopupQuery } from 'api/console/monetize/dashboard';
 import ModalTopup from './Modal/modal-topup';
+import { LoadingButton } from '@mui/lab';
+import { Typography } from '@material-ui/core';
+import { CSVLink } from 'react-csv';
 
 const MonetizeTopUpComponent = () => {
   const [filter, setFilter] = useState({
@@ -16,12 +19,14 @@ const MonetizeTopUpComponent = () => {
     createdAt: [null, null],
     search: '',
     createdBy: '',
+    status: [],
   });
   const [filterList, setFilterList] = useState([]);
   const [openModal, setOpenModal] = useState({
     open: false,
     status: '',
   });
+  const [isExport, setExport] = useState(false);
 
   const getParams = () => {
     let params = {};
@@ -37,6 +42,22 @@ const MonetizeTopUpComponent = () => {
     filter.createdAt[1] && Object.assign(params, { end_date: filter.createdAt[1] });
     filter.search !== '' && Object.assign(params, { search: filter.search });
     filter.createdBy !== '' && Object.assign(params, { createBy: filter.createdBy });
+    filter.status?.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status?.map((item) => {
+          if (item === 'Baru') {
+            return 'NEW';
+          } else if (item === 'Proses') {
+            return 'PROCESS';
+          } else if (item === 'Berhasil') {
+            return 'SUCCESS';
+          } else if (item === 'Ditolak') {
+            return 'DELETE';
+          } else if (item === 'Gagal Sistem') {
+            return 'FAILED';
+          }
+        }),
+      });
 
     return params;
   };
@@ -54,6 +75,8 @@ const MonetizeTopUpComponent = () => {
       });
     }
   }, [filter, loadingTopup]);
+
+  const { data: listExport, isFetching: loadingExport } = useGetListTopupQuery({ ...getParams(), limit: 1000000, page: 0 });
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
@@ -115,6 +138,14 @@ const MonetizeTopUpComponent = () => {
         return { ...prevVal, createdAt: value, page: 0 };
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
+      } else if (kind === 'status') {
+        return {
+          ...prevVal,
+          status: filter.status.find((item) => item === value)
+            ? filter.status.filter((item) => item !== value)
+            : [...filter.status, value],
+          page: 0,
+        };
       } else if (kind === 'clearAll') {
         return {
           page: 0,
@@ -124,6 +155,7 @@ const MonetizeTopUpComponent = () => {
           createdAt: [null, null],
           search: '',
           createdBy: '',
+          status: [],
         };
       } else {
         return { ...prevVal };
@@ -146,17 +178,44 @@ const MonetizeTopUpComponent = () => {
           <Stack direction="column" gap={3}>
             <Stack direction="row" gap={2} justifyContent="flex-end" alignItems="center">
               <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'upload' })}>
-                Upload data Bulk
+                Upload data bulk
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}>
-                Download mock up data
+                Template data bulk
               </Button>
               <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'create' })}>
                 Tambah baru
               </Button>
+              {loadingExport || listExport?.data?.length < 1 ? (
+                <Tooltip title="Loading fetching data...">
+                  <span>
+                    <LoadingButton color="secondary" variant="contained" disabled>
+                      Download CSV
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
+              ) : (
+                <CSVLink data={listExport?.data} filename="List Top Up.csv">
+                  <LoadingButton
+                    loading={loadingExport || isExport}
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => {
+                      setExport(true);
+                      const toastId = toast.loading('Generate csv...');
+                      setTimeout(() => {
+                        toast.success('Berhasil generate csv', { id: toastId });
+                        setExport(false);
+                      }, 2000);
+                    }}
+                    disabled={isExport}>
+                    Download CSV
+                  </LoadingButton>
+                </CSVLink>
+              )}
             </Stack>
 
             <TableSection
