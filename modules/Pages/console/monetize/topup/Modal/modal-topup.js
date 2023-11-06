@@ -83,7 +83,9 @@ function ModalTopup({ open, selected, status, handleClose }) {
           duration: 3000,
         });
       } else {
-        toast.success('Berhasil Mengupload Bulk Data', { duration: 3000 });
+        toast.success(`Berhasil mengupload ${res?.data?.data?.succes} data dari ${res?.data?.data?.length} data`, {
+          duration: 3000,
+        });
       }
     });
     handleClose();

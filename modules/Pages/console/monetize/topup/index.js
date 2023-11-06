@@ -146,13 +146,13 @@ const MonetizeTopUpComponent = () => {
           <Stack direction="column" gap={3}>
             <Stack direction="row" gap={2} justifyContent="flex-end" alignItems="center">
               <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'upload' })}>
-                Upload data Bulk
+                Upload data bulk
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}>
-                Download mock up data
+                Template data bulk
               </Button>
               <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'create' })}>
                 Tambah baru
