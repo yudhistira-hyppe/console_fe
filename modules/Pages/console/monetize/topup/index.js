@@ -19,6 +19,7 @@ const MonetizeTopUpComponent = () => {
     createdAt: [null, null],
     search: '',
     createdBy: '',
+    status: [],
   });
   const [filterList, setFilterList] = useState([]);
   const [openModal, setOpenModal] = useState({
@@ -41,6 +42,22 @@ const MonetizeTopUpComponent = () => {
     filter.createdAt[1] && Object.assign(params, { end_date: filter.createdAt[1] });
     filter.search !== '' && Object.assign(params, { search: filter.search });
     filter.createdBy !== '' && Object.assign(params, { createBy: filter.createdBy });
+    filter.status?.length >= 1 &&
+      Object.assign(params, {
+        status: filter.status?.map((item) => {
+          if (item === 'Baru') {
+            return 'NEW';
+          } else if (item === 'Proses') {
+            return 'PROCESS';
+          } else if (item === 'Berhasil') {
+            return 'SUCCESS';
+          } else if (item === 'Ditolak') {
+            return 'DELETE';
+          } else if (item === 'Gagal Sistem') {
+            return 'FAILED';
+          }
+        }),
+      });
 
     return params;
   };
@@ -121,6 +138,14 @@ const MonetizeTopUpComponent = () => {
         return { ...prevVal, createdAt: value, page: 0 };
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
+      } else if (kind === 'status') {
+        return {
+          ...prevVal,
+          status: filter.status.find((item) => item === value)
+            ? filter.status.filter((item) => item !== value)
+            : [...filter.status, value],
+          page: 0,
+        };
       } else if (kind === 'clearAll') {
         return {
           page: 0,
@@ -130,6 +155,7 @@ const MonetizeTopUpComponent = () => {
           createdAt: [null, null],
           search: '',
           createdBy: '',
+          status: [],
         };
       } else {
         return { ...prevVal };

@@ -324,7 +324,7 @@ const TableSection = ({
                               }}
                             />
                           )}
-                          {item?.status === 'APPROVE' && (
+                          {item?.status === 'SUCCESS' && (
                             <Chip
                               label="Berhasil"
                               style={{
@@ -340,6 +340,19 @@ const TableSection = ({
                           {item?.status === 'DELETE' && (
                             <Chip
                               label="Ditolak"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
+                          )}
+                          {item?.status === 'FAILED' && (
+                            <Chip
+                              label="Gagal Sistem"
                               style={{
                                 fontSize: 14,
                                 fontWeight: 'bold',

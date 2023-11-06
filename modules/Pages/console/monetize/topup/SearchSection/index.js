@@ -303,6 +303,42 @@ const SearchSection = ({ filter, handleChange }) => {
               />
             </Popover>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Status</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
+              <FormControlLabel
+                label="Baru"
+                value="Baru"
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Baru')} />}
+              />
+              <FormControlLabel
+                label="Proses"
+                value="Proses"
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Proses')} />}
+              />
+              <FormControlLabel
+                label="Berhasil"
+                value="Berhasil"
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Berhasil')} />}
+              />
+              <FormControlLabel
+                label="Ditolak"
+                value="Ditolak"
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Ditolak')} />}
+              />
+              <FormControlLabel
+                label="Gagal Sistem"
+                value="Gagal Sistem"
+                control={<Checkbox color="secondary" checked={filter?.status?.includes('Gagal Sistem')} />}
+              />
+            </FormGroup>
+          </AccordionDetails>
         </Accordion>
       </Box>
     </>
