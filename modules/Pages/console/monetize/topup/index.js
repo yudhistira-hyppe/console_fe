@@ -2,10 +2,13 @@ import PageContainer from '@jumbo/components/PageComponents/layouts/PageContaine
 import React, { useEffect, useState } from 'react';
 import TableSection from './TableSection';
 import SearchSection from './SearchSection';
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Tooltip } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useGetListTopupQuery } from 'api/console/monetize/dashboard';
 import ModalTopup from './Modal/modal-topup';
+import { LoadingButton } from '@mui/lab';
+import { Typography } from '@material-ui/core';
+import { CSVLink } from 'react-csv';
 
 const MonetizeTopUpComponent = () => {
   const [filter, setFilter] = useState({
@@ -22,6 +25,7 @@ const MonetizeTopUpComponent = () => {
     open: false,
     status: '',
   });
+  const [isExport, setExport] = useState(false);
 
   const getParams = () => {
     let params = {};
@@ -54,6 +58,8 @@ const MonetizeTopUpComponent = () => {
       });
     }
   }, [filter, loadingTopup]);
+
+  const { data: listExport, isFetching: loadingExport } = useGetListTopupQuery({ ...getParams(), limit: 1000000, page: 0 });
 
   const onOrderChange = (e) => {
     setFilter((prevVal) => {
@@ -157,6 +163,33 @@ const MonetizeTopUpComponent = () => {
               <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'create' })}>
                 Tambah baru
               </Button>
+              {loadingExport || listExport?.data?.length < 1 ? (
+                <Tooltip title="Loading fetching data...">
+                  <span>
+                    <LoadingButton color="secondary" variant="contained" disabled>
+                      Download CSV
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
+              ) : (
+                <CSVLink data={listExport?.data} filename="List Top Up.csv">
+                  <LoadingButton
+                    loading={loadingExport || isExport}
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => {
+                      setExport(true);
+                      const toastId = toast.loading('Generate csv...');
+                      setTimeout(() => {
+                        toast.success('Berhasil generate csv', { id: toastId });
+                        setExport(false);
+                      }, 2000);
+                    }}
+                    disabled={isExport}>
+                    Download CSV
+                  </LoadingButton>
+                </CSVLink>
+              )}
             </Stack>
 
             <TableSection
