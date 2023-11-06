@@ -194,7 +194,7 @@ const TableSection = ({
                       </TableCell>
                       <TableCell align="left">
                         <Stack width={220}>
-                          {item?.status === 'DELETE' ? (
+                          {item?.status === 'DELETE' || item?.status === 'FAILED' ? (
                             <Chip
                               label="Ditolak"
                               style={{
@@ -246,7 +246,7 @@ const TableSection = ({
                       </TableCell>
                       <TableCell align="left">
                         <Stack width={220}>
-                          {item?.status === 'DELETE' ? (
+                          {item?.status === 'DELETE' || item?.status === 'FAILED' ? (
                             <Chip
                               label="Ditolak"
                               style={{
