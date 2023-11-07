@@ -9,6 +9,8 @@ import ModalTopup from './Modal/modal-topup';
 import { LoadingButton } from '@mui/lab';
 import { Typography } from '@material-ui/core';
 import { CSVLink } from 'react-csv';
+import moment from 'moment';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 
 const MonetizeTopUpComponent = () => {
   const [filter, setFilter] = useState({
@@ -198,7 +200,41 @@ const MonetizeTopUpComponent = () => {
                   </span>
                 </Tooltip>
               ) : (
-                <CSVLink data={listExport?.data} filename="List Top Up.csv">
+                <CSVLink
+                  data={listExport?.data?.map((item) => {
+                    return {
+                      'Tanggal Buat': `${moment(item?.createdAt).utc().format('DD/MM/YY - HH:mm')} WIB`,
+                      'Dibuat Oleh': item?.createByUsername || '-',
+                      Email: item?.email || '-',
+                      Username: item?.username || '-',
+                      'Jumlah Topup': `Rp ${numberWithCommas(item?.topup || 0)}`,
+                      'Pajak PPH': `Rp ${numberWithCommas(item?.pph || 0)}`,
+                      Total: `Rp ${numberWithCommas(item?.total || 0)}`,
+                      'Persetujuan Strategy':
+                        item?.status === 'DELETE' || item?.status === 'FAILED'
+                          ? 'Tolak'
+                          : item?.approveByStrategy
+                          ? 'Disetujui'
+                          : 'Menunggu Persetujuan',
+                      'Persetujuan Finance':
+                        item?.status === 'DELETE' || item?.status === 'FAILED'
+                          ? 'Tolak'
+                          : item?.approveByFinance
+                          ? 'Disetujui'
+                          : 'Menunggu Persetujuan',
+                      Status:
+                        item?.status === 'NEW'
+                          ? 'Baru'
+                          : item?.status === 'PROCESS'
+                          ? 'Proses'
+                          : item?.status === 'SUCCESS'
+                          ? 'Disetujui'
+                          : item?.status === 'DELETE'
+                          ? 'Ditolak'
+                          : item?.status === 'FAILED' && 'Gagal Sistem',
+                    };
+                  })}
+                  filename="List Top Up.csv">
                   <LoadingButton
                     loading={loadingExport || isExport}
                     color="secondary"
