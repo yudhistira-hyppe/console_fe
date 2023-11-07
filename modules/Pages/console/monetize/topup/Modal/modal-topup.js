@@ -77,14 +77,18 @@ function ModalTopup({ open, selected, status, handleClose }) {
     let formData = new FormData();
     formData.append('file', inputValue?.file);
 
+    toast.loading('Loading upload...', { id: 'loading-upload' });
+
     bulkUpload(formData).then((res) => {
       if (res?.error) {
         toast.error(res?.error?.data?.messages?.info ? res?.error?.data?.messages?.info?.[0] : res?.error?.data?.message, {
-          duration: 3000,
+          id: 'loading-upload',
+          duration: 5000,
         });
       } else {
         toast.success(`Berhasil mengupload ${res?.data?.data?.succes} data dari ${res?.data?.data?.length} data`, {
-          duration: 3000,
+          id: 'loading-upload',
+          duration: 5000,
         });
       }
     });
