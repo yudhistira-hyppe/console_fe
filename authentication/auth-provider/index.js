@@ -47,22 +47,29 @@ export const useProvideAuth = () => {
   };
 
   const removeAuth = () => {
+    localStorage.removeItem('access');
     deleteAllCookies();
     setAuthUser(null);
-    localStorage.removeItem('access');
   };
 
   const getAuthUser = () => {
     try {
       fetchStart();
-      if (authUser?.user) {
+
+      if (getAllCookies()) {
+        localStorage.setItem('token_expired', 'false');
         setAuthUser({
           ...getAllCookies(),
-          user: !isEmpty(authUser?.user) ? { ...getAllCookies()?.user, ...authUser?.user } : undefined,
+          user: { ...getAllCookies()?.user, ...authUser?.user },
         });
       } else {
-        setAuthUser(getAllCookies());
+        localStorage.setItem('token_expired', 'true');
+        if (localStorage.getItem('token_expired') === 'true' && !isEmpty(localStorage.getItem('access'))) {
+          toast.error('Mohon maaf sesi login anda sudah berakhir, silahkan login kembali', { id: 'token-expired' });
+        }
+        setAuthUser();
       }
+
       fetchSuccess();
     } catch (error) {
       fetchError(error.message);
