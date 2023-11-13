@@ -16,6 +16,7 @@ import ModalConfirmation from '../modal/ModalConfirmation';
 import NotifikasiComponent from './component/Notifikasi';
 import ParticipantComponent from './component/participant';
 import dayjs from 'dayjs';
+import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 
 const DetailChallenge = ({ detailId }) => {
   const [tab, setTab] = useState('challenge');
@@ -341,21 +342,23 @@ const DetailChallenge = ({ detailId }) => {
             )}
           </TabList>
           <TabPanel value="challenge" style={{ padding: 0 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={7}>
-                <Stack direction="column" gap={2} style={{ height: '100%' }}>
-                  <DetailChallengeComponent detail={detail} />
-                  <NotifikasiComponent detail={detail} />
-                </Stack>
+            <PageContainer>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={7}>
+                  <Stack direction="column" gap={2} style={{ height: '100%' }}>
+                    <DetailChallengeComponent detail={detail} />
+                    <NotifikasiComponent detail={detail} />
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} md={5}>
+                  <Stack direction="column" gap={2} style={{ height: '100%' }}>
+                    <LeaderboardComponent detail={detail} />
+                    <RewardsComponent detail={detail} />
+                    <AreaComponent detail={detail} />
+                  </Stack>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={5}>
-                <Stack direction="column" gap={2} style={{ height: '100%' }}>
-                  <LeaderboardComponent detail={detail} />
-                  <RewardsComponent detail={detail} />
-                  <AreaComponent detail={detail} />
-                </Stack>
-              </Grid>
-            </Grid>
+            </PageContainer>
           </TabPanel>
           {access?.map((item) => item?.nameModule)?.includes('challenge_participant') && (
             <TabPanel value="partisipan" style={{ padding: 0 }}>
