@@ -29,7 +29,26 @@ const SearchSection = ({ filter, handleChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
-    if (!filter.createdAt[0] && !filter.createdAt[1]) {
+    if (filter.createdAt[0] && filter.createdAt[1]) {
+      setValue([
+        {
+          startDate: moment(filter.createdAt[0]).toDate(),
+          endDate: moment(filter.createdAt[1]).toDate(),
+          key: 'selection',
+        },
+      ]);
+      setDate(true);
+      console.log(moment(filter.createdAt[1]).diff(moment(filter.createdAt[0]), 'day'));
+      if (moment(filter.createdAt[1]).diff(moment(filter.createdAt[0]), 'day') === 7) {
+        setWeek(1);
+      } else if (moment(filter.createdAt[1]).diff(moment(filter.createdAt[0]), 'day') === 14) {
+        setWeek(2);
+      } else if (moment(filter.createdAt[1]).diff(moment(filter.createdAt[0]), 'day') === 30) {
+        setWeek(4);
+      } else if (moment(filter.createdAt[1]).diff(moment(filter.createdAt[0]), 'day') === 90) {
+        setWeek(12);
+      }
+    } else {
       setWeek(null);
       setValue([
         {

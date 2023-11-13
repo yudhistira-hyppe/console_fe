@@ -11,6 +11,7 @@ import { Typography } from '@material-ui/core';
 import { CSVLink } from 'react-csv';
 import moment from 'moment';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
+import { useAuth } from 'authentication';
 
 const MonetizeTopUpComponent = () => {
   const [filter, setFilter] = useState({
@@ -29,6 +30,7 @@ const MonetizeTopUpComponent = () => {
     status: '',
   });
   const [isExport, setExport] = useState(false);
+  const { authUser } = useAuth();
 
   const getParams = () => {
     let params = {};
@@ -179,16 +181,25 @@ const MonetizeTopUpComponent = () => {
 
           <Stack direction="column" gap={3}>
             <Stack direction="row" gap={2} justifyContent="flex-end" alignItems="center">
-              <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'upload' })}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpenModal({ open: true, status: 'upload' })}
+                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
                 Upload data bulk
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}>
+                onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}
+                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
                 Template data bulk
               </Button>
-              <Button variant="contained" color="secondary" onClick={() => setOpenModal({ open: true, status: 'create' })}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpenModal({ open: true, status: 'create' })}
+                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
                 Tambah baru
               </Button>
               {loadingExport || listExport?.data?.length < 1 ? (
