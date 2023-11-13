@@ -85,7 +85,7 @@ const CommentItem = ({ item }) => {
         <Box component="div" fontSize={13} mt={1}>
           <Typography
             component="div"
-            variant="h7"
+            variant="h6"
             style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: 200 }}
             title={item?.reasonLast}>
             Alasan : {item?.reasonLast || '-'}
