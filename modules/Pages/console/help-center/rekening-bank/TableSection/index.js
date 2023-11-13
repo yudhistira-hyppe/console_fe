@@ -146,7 +146,7 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                           variant="body1"
                           style={{ fontSize: '14px', color: '#00000099' }}
                           className={classes.textTruncate}>
-                          {item?.fullName || '-'}
+                          {item?.username || '-'}
                         </Typography>
                         <Typography
                           variant="body1"

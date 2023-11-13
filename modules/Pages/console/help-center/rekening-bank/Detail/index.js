@@ -74,7 +74,11 @@ const DetailRekeningBank = () => {
   );
 
   useEffect(() => {
-    !loadingDetail && !loadingInsight && setViewer(new Viewer(document.getElementById('images')));
+    if (!loadingDetail && !loadingInsight) {
+      if (detailBank?.data?.dokumenPendukung?.length >= 1) {
+        setViewer(new Viewer(document.getElementById('images')));
+      }
+    }
   }, [loadingDetail, loadingInsight]);
 
   const handleView = () => {
@@ -201,8 +205,8 @@ const DetailRekeningBank = () => {
           <Stack direction="row" alignItems="center" gap="25px" mb="24px">
             <Avatar src={getMediaUri(detailBank?.data?.avatar?.mediaEndpoint)} sx={{ width: 70, height: 70 }} />
             <Stack direction="column">
-              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>{detailBank?.data?.fullName || '-'}</Typography>
-              <Typography>{detailBank?.data?.username || '-'}</Typography>
+              <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>{detailBank?.data?.username || '-'}</Typography>
+              <Typography>{detailBank?.data?.fullName || '-'}</Typography>
             </Stack>
             <Stack direction="row" alignItems="center" ml="auto" gap="30px">
               <Stack direction="column" alignItems="center">
@@ -253,7 +257,11 @@ const DetailRekeningBank = () => {
                     <Typography variant="subtitle2" style={{ color: '#00000099' }}>
                       Email
                     </Typography>
-                    <Typography>{detailBank?.data?.email || '-'}</Typography>
+                    <Typography
+                      style={{ width: 150, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+                      title={detailBank?.data?.email || '-'}>
+                      {detailBank?.data?.email || '-'}
+                    </Typography>
                   </Stack>
                 </Stack>
 
@@ -551,19 +559,25 @@ const DetailRekeningBank = () => {
                   )}
                 </Stack>
                 <Stack direction="row" alignItems="center" gap="8px" padding="24px" height="100%">
-                  <ImageList sx={{ width: 600 }} cols={3} rowHeight={180} id="images">
-                    {detailBank?.data?.dokumenPendukung?.map((item, key) => (
-                      <ImageListItem key={key} onClick={handleView}>
-                        <Avatar
-                          variant="rounded"
-                          src={getImage(item, key)}
-                          srcSet={getImage(item, key)}
-                          alt="X"
-                          style={{ borderRadius: 8, height: '100%', width: '100%', cursor: 'pointer' }}
-                        />
-                      </ImageListItem>
-                    ))}
-                  </ImageList>
+                  {detailBank?.data?.dokumenPendukung?.length >= 1 ? (
+                    <ImageList sx={{ width: 600 }} cols={3} rowHeight={180} id="images">
+                      {detailBank?.data?.dokumenPendukung?.map((item, key) => (
+                        <ImageListItem key={key} onClick={handleView}>
+                          <Avatar
+                            variant="rounded"
+                            src={getImage(item, key)}
+                            srcSet={getImage(item, key)}
+                            alt="X"
+                            style={{ borderRadius: 8, height: '100%', width: '100%', cursor: 'pointer' }}
+                          />
+                        </ImageListItem>
+                      ))}
+                    </ImageList>
+                  ) : (
+                    <Stack direction="row" alignItems="center" justifyContent="center" width="100%">
+                      <Typography>Tidak ada dokumen pendukung</Typography>
+                    </Stack>
+                  )}
                 </Stack>
                 {detailBank?.statusLast === 'BARU' && (
                   <Stack direction="row" justifyContent="center" gap="8px" pb="24px" marginTop="auto">
