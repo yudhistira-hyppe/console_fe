@@ -119,6 +119,7 @@ const TableSection = ({
                   <TableCell align="left">Dibuat Oleh</TableCell>
                   <TableCell align="left">Email</TableCell>
                   <TableCell align="left">Username</TableCell>
+                  <TableCell align="left">NPWP</TableCell>
                   <TableCell align="left">Jumlah Topup</TableCell>
                   <TableCell align="left">Pajak PPH</TableCell>
                   <TableCell align="left">Total</TableCell>
@@ -130,12 +131,14 @@ const TableSection = ({
 
               <TableBody>
                 {loading ? (
-                  <TableCell colSpan={12}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                      <CircularProgress color="secondary" />
-                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                    </Stack>
-                  </TableCell>
+                  <TableRow>
+                    <TableCell colSpan={12}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                        <CircularProgress color="secondary" />
+                        <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
                 ) : listTransaction?.data?.length >= 1 ? (
                   listTransaction?.data?.map((item, key) => (
                     <TableRow key={key} hover>
@@ -175,6 +178,11 @@ const TableSection = ({
                           }}
                           title={item?.username}>
                           {item?.username || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                          {item?.npwp === 'YES' ? 'Ya' : 'Tidak'}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">

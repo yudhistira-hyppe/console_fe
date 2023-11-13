@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, InputAdornment, Modal, Stack, TextField } from '@mui/material';
+import { Box, Button, FormControlLabel, InputAdornment, Modal, Radio, RadioGroup, Stack, TextField } from '@mui/material';
 import {
   useApproveTopupMutation,
   useCreateTopupMutation,
@@ -16,8 +16,9 @@ function ModalTopup({ open, selected, status, handleClose }) {
   const [inputValue, setInputValue] = useState({
     email: '',
     topup: '',
-    file: [],
+    npwp: '',
   });
+  const [uploadBulk, setUploadBulk] = useState([]);
   const [deleteTopup, { isLoading: loadingDelete }] = useDeleteTopupMutation();
   const [approveTopup, { isLoading: loadingApprove }] = useApproveTopupMutation();
   const [createTopup, { isLoading: loadingCreate }] = useCreateTopupMutation();
@@ -27,8 +28,9 @@ function ModalTopup({ open, selected, status, handleClose }) {
     setInputValue({
       email: '',
       topup: '',
-      file: [],
+      npwp: '',
     });
+    setUploadBulk([]);
   }, [open]);
 
   const handleDelete = () => {
@@ -75,7 +77,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
 
   const handleUpload = () => {
     let formData = new FormData();
-    formData.append('file', inputValue?.file);
+    formData.append('file', uploadBulk);
 
     toast.loading('Loading upload...', { id: 'loading-upload' });
 
@@ -152,6 +154,16 @@ function ModalTopup({ open, selected, status, handleClose }) {
                   },
                 }}
               />
+              <Stack direction="column">
+                <Typography>Apakah penerima memiliki NPWP ?</Typography>
+                <RadioGroup
+                  row
+                  value={inputValue?.npwp}
+                  onChange={(e) => setInputValue({ ...inputValue, npwp: e.target.value })}>
+                  <FormControlLabel label="Ya" value="YES" control={<Radio color="secondary" size="small" />} />
+                  <FormControlLabel label="Tidak" value="NO" control={<Radio color="secondary" size="small" />} />
+                </RadioGroup>
+              </Stack>
             </Stack>
           )}
           {status === 'upload' && (
@@ -161,9 +173,9 @@ function ModalTopup({ open, selected, status, handleClose }) {
               onChange={(e) => {
                 if (e.target.files[0]?.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                   toast.error('Harap memasukan file dengan format excel');
-                  setInputValue({ ...inputValue, file: [] });
+                  setUploadBulk([]);
                 } else {
-                  setInputValue({ ...inputValue, file: e.target.files[0] });
+                  setUploadBulk(e.target.files[0]);
                 }
               }}
             />
@@ -186,8 +198,8 @@ function ModalTopup({ open, selected, status, handleClose }) {
               }}
               disabled={
                 (status === 'create' &&
-                  (!inputValue?.email || !inputValue?.email?.includes('@') || inputValue?.topup < 1)) ||
-                (status === 'upload' && inputValue?.file?.length < 1)
+                  (!inputValue?.email || !inputValue?.email?.includes('@') || inputValue?.topup < 1 || !inputValue?.npwp)) ||
+                (status === 'upload' && uploadBulk?.length < 1)
               }>
               {(status === 'finance' || status === 'strategy') && 'Setujui'}
               {status === 'create' && 'Tambah'}
