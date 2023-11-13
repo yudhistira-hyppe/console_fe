@@ -30,8 +30,6 @@ const ChallengeTabMainComponent = ({ kind }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  console.log(dataParams);
-
   const getParams = useCallback(() => {
     let params = {};
     Object.assign(params, {
