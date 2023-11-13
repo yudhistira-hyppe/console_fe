@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Button, Stack } from '@mui/material';
@@ -8,9 +8,13 @@ import { toast } from 'react-hot-toast';
 import moment from 'moment';
 import { Typography } from '@material-ui/core';
 import { useGetListChallengeQuery } from 'api/console/challenge';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveParams } from 'redux/slice/filterParams';
+import { isEmpty } from 'lodash';
 
 const ChallengeTabMainComponent = ({ kind }) => {
+  const dataParams = useSelector((state) => state.filterParams.value);
   const [filter, setFilter] = useState({
     page: 0,
     limit: 10,
@@ -23,8 +27,12 @@ const ChallengeTabMainComponent = ({ kind }) => {
   });
   const [filterList, setFilterList] = useState([]);
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const getParams = () => {
+  console.log(dataParams);
+
+  const getParams = useCallback(() => {
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -76,7 +84,7 @@ const ChallengeTabMainComponent = ({ kind }) => {
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
 
     return params;
-  };
+  }, [filter]);
 
   const { data: listChallenge, isFetching: loadingChallenge } = useGetListChallengeQuery(getParams());
 
@@ -91,6 +99,40 @@ const ChallengeTabMainComponent = ({ kind }) => {
       });
     }
   }, [filter, loadingChallenge]);
+
+  useEffect(() => {
+    if (!isEmpty(dataParams?.search)) {
+      handleSearchChange('search', dataParams?.search);
+    }
+    if (!isEmpty(dataParams?.status)) {
+      dataParams?.status?.map((item) => handleSearchChange('status', item));
+    }
+    if (!isEmpty(dataParams?.type)) {
+      dataParams?.type?.map((item) => handleSearchChange('type', item));
+    }
+    if (!isEmpty(dataParams?.join)) {
+      dataParams?.join?.map((item) => handleSearchChange('join', item));
+    }
+    if (!isEmpty(dataParams?.createdAt)) {
+      handleSearchChange('createdAt', dataParams?.createdAt);
+    }
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending || 'true',
+      search: dataParams?.search || '',
+      createdAt: dataParams?.createdAt || [null, null],
+      status: dataParams?.status || [],
+      type: dataParams?.type || [],
+      join: dataParams?.join || [],
+    });
+  }, []);
+
+  useEffect(() => {
+    dispatch(saveParams({ ...filter, pathname: router.pathname }));
+  }, [getParams]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -139,14 +181,14 @@ const ChallengeTabMainComponent = ({ kind }) => {
                   ...prevVal.filter((item) => item.parent !== kind),
                   {
                     parent: kind,
-                    value: `Terakhir Ditambahkan (${value.map((item) => moment(item)?.format('DD-MM-YYYY')).join('-')})`,
+                    value: `Terakhir Ditambahkan (${value.map((item) => moment(item)?.format('DD-MM-YYYY')).join(' - ')})`,
                   },
                 ]
               : [
                   ...prevVal,
                   {
                     parent: kind,
-                    value: `Terakhir Ditambahkan (${value.map((item) => moment(item)?.format('DD-MM-YYYY')).join('-')})`,
+                    value: `Terakhir Ditambahkan (${value.map((item) => moment(item)?.format('DD-MM-YYYY')).join(' - ')})`,
                   },
                 ]
             : [...prevVal.filter((item) => item.parent !== kind)];
@@ -211,21 +253,21 @@ const ChallengeTabMainComponent = ({ kind }) => {
       <Head>
         <title key="title">Hyppe-Console :: Challenge Main</title>
       </Head>
-      <PageContainer heading="">
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>{listChallenge?.total || 0}</Typography>
-            <Typography style={{ fontWeight: 'bold' }}>Total Challenge</Typography>
-          </Stack>
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{ height: 40 }}
-            onClick={() => Router.push('/challenge/create')}
-            disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.createAcces}>
-            <Typography style={{ fontSize: 14 }}>Tambah Challenge Baru</Typography>
-          </Button>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Typography style={{ fontSize: 36, fontWeight: 'bold' }}>{listChallenge?.total || 0}</Typography>
+          <Typography style={{ fontWeight: 'bold' }}>Total Challenge</Typography>
         </Stack>
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ height: 40 }}
+          onClick={() => Router.push('/challenge/create')}
+          disabled={!access?.find((item) => item?.nameModule === 'challenge')?.acces?.createAcces}>
+          <Typography style={{ fontSize: 14 }}>Tambah Challenge Baru</Typography>
+        </Button>
+      </Stack>
+      <PageContainer heading="">
         <Stack direction="row" spacing={3} mt="24px">
           <SearchSection filter={filter} handleChange={handleSearchChange} />
           <TableSection
