@@ -2,14 +2,14 @@ const path = require('path');
 
 module.exports = {
   swcMinify: true,
-  future: {
-    webpack5: true,
-  },
-  webpack: (config) => {
-    config.resolve.modules.push(path.resolve('./'));
-    config.experiments = {};
-    return config;
-  },
+  // future: {
+  //   webpack5: true,
+  // },
+  // webpack: (config) => {
+  //   config.resolve.modules.push(path.resolve('./'));
+  //   config.experiments = {};
+  //   return config;
+  // },
   module: {
     rules: [
       {

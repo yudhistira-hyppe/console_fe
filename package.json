@@ -18,6 +18,7 @@
     "@mui/x-data-grid": "^5.12.1",
     "@mui/x-date-pickers": "^5.0.0-beta.1",
     "@mui/x-date-pickers-pro": "^5.0.1",
+    "@next/codemod": "^14.0.2",
     "@reduxjs/toolkit": "^1.8.2",
     "aliyun-upload-vod": "^1.0.6",
     "animate.css": "^4.1.1",
