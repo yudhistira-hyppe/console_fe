@@ -324,9 +324,9 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
               rows={4}
               value={inputValue?.description || ''}
               onChange={(e) => handleInputChange('description', e.target.value)}
-              inputProps={{ maxLength: 300 }}
+              inputProps={{ maxLength: 3000 }}
             />
-            <small style={{ color: '#9B9B9B' }}>{inputValue?.description?.length || 0}/300 Karakter</small>
+            <small style={{ color: '#9B9B9B' }}>{inputValue?.description?.length || 0}/3000 Karakter</small>
           </Stack>
         </Grid>
         <Grid item xs={12} md={5}>
