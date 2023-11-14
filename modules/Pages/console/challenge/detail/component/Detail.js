@@ -2,6 +2,7 @@ import { Typography } from '@material-ui/core';
 import { Card, Chip, Divider, Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import ScrollBar from 'react-perfect-scrollbar';
 
 const DetailChallengeComponent = ({ detail }) => {
   const [gender, setGender] = useState([]);
@@ -96,7 +97,12 @@ const DetailChallengeComponent = ({ detail }) => {
               )}) - 
             ${dayjs(detail?.startTime).format('HH:mm')} WIB`}
           </Typography>
-          <Typography style={{ fontSize: 14 }}>{detail?.description}</Typography>
+          <ScrollBar style={{ maxHeight: 100, padding: '0 8px 0 0' }}>
+            <div
+              style={{ wordWrap: 'break-word', whiteSpace: 'pre-line' }}
+              dangerouslySetInnerHTML={{ __html: detail?.description }}
+            />
+          </ScrollBar>
           <Chip
             label={
               <Typography style={{ fontSize: 14, fontWeight: 'bold', fontSize: 14, color: '#00000099' }}>
