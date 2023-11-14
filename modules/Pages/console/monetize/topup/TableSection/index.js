@@ -11,7 +11,7 @@ import {
   Paper,
   Chip,
 } from '@material-ui/core';
-import { Button, CircularProgress, Divider, IconButton, Stack } from '@mui/material';
+import { Button, CircularProgress, Divider, IconButton, Stack, Tooltip } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -22,6 +22,7 @@ import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ModalTopup from '../Modal/modal-topup';
 import { useAuth } from 'authentication';
+import Link from 'next/link';
 
 const TableSection = ({
   filter,
@@ -153,18 +154,22 @@ const TableSection = ({
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography
-                          variant="body1"
-                          style={{
-                            fontSize: '12px',
-                            width: 170,
-                            whiteSpace: 'nowrap',
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                          }}
-                          title={item?.email || '-'}>
-                          {item?.email || '-'}
-                        </Typography>
+                        <Link href={`database/account/${item?.idUser}`}>
+                          <Tooltip title={`Lihat detail profile ${item?.email}`}>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontSize: '12px',
+                                width: 170,
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                                overflow: 'hidden',
+                                cursor: 'pointer',
+                              }}>
+                              {item?.email || '-'}
+                            </Typography>
+                          </Tooltip>
+                        </Link>
                       </TableCell>
                       <TableCell align="left">
                         <Typography
