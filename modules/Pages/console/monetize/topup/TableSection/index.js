@@ -19,7 +19,7 @@ import Pagination from '@mui/material/Pagination';
 import moment from 'moment';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import ScrollBar from 'react-perfect-scrollbar';
-import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
+import { ArrowRight, ChevronRight, Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ModalTopup from '../Modal/modal-topup';
 import { useAuth } from 'authentication';
 import Link from 'next/link';
@@ -206,8 +206,8 @@ const TableSection = ({
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Stack width={220}>
-                          {item?.status === 'DELETE' || item?.status === 'FAILED' ? (
+                        <Stack width={260}>
+                          {item?.status === 'FAILED' ? (
                             <Chip
                               label="Ditolak"
                               style={{
@@ -220,17 +220,25 @@ const TableSection = ({
                               }}
                             />
                           ) : item?.approveByStrategy ? (
-                            <Chip
-                              label="Disetujui"
-                              style={{
-                                fontSize: 14,
-                                fontWeight: 'bold',
-                                fontFamily: 'Lato',
-                                color: '#71A500D9',
-                                backgroundColor: '#71A5001A',
-                                width: 'fit-content',
-                              }}
-                            />
+                            <Stack direction="row" alignItems="center" gap={1}>
+                              <Chip
+                                label="Disetujui"
+                                style={{
+                                  fontSize: 14,
+                                  fontWeight: 'bold',
+                                  fontFamily: 'Lato',
+                                  color: '#71A500D9',
+                                  backgroundColor: '#71A5001A',
+                                  width: 'fit-content',
+                                }}
+                              />
+                              <ArrowRight />
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                {item?.approveByStrategyDate
+                                  ? `${moment(item?.approveByStrategyDate).utc().format('DD/MM/YY - HH:mm')} WIB`
+                                  : '-'}
+                              </Typography>
+                            </Stack>
                           ) : authUser?.user?.group === 'Head Of Strategy' ? (
                             <Button
                               variant="contained"
@@ -242,6 +250,18 @@ const TableSection = ({
                               }>
                               <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
                             </Button>
+                          ) : item?.status === 'DELETE' ? (
+                            <Chip
+                              label="Ditolak"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
                           ) : (
                             <Chip
                               label="Menunggu Persetujuan"
@@ -258,8 +278,8 @@ const TableSection = ({
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
-                        <Stack width={220}>
-                          {item?.status === 'DELETE' || item?.status === 'FAILED' ? (
+                        <Stack width={260}>
+                          {item?.status === 'FAILED' ? (
                             <Chip
                               label="Ditolak"
                               style={{
@@ -272,17 +292,25 @@ const TableSection = ({
                               }}
                             />
                           ) : item?.approveByFinance ? (
-                            <Chip
-                              label="Disetujui"
-                              style={{
-                                fontSize: 14,
-                                fontWeight: 'bold',
-                                fontFamily: 'Lato',
-                                color: '#71A500D9',
-                                backgroundColor: '#71A5001A',
-                                width: 'fit-content',
-                              }}
-                            />
+                            <Stack direction="row" alignItems="center" gap={1}>
+                              <Chip
+                                label="Disetujui"
+                                style={{
+                                  fontSize: 14,
+                                  fontWeight: 'bold',
+                                  fontFamily: 'Lato',
+                                  color: '#71A500D9',
+                                  backgroundColor: '#71A5001A',
+                                  width: 'fit-content',
+                                }}
+                              />
+                              <ArrowRight />
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                {item?.approveByFinanceDate
+                                  ? `${moment(item?.approveByFinanceDate).utc().format('DD/MM/YY - HH:mm')} WIB`
+                                  : '-'}
+                              </Typography>
+                            </Stack>
                           ) : authUser?.user?.group === 'Head Of Finance' ? (
                             <Button
                               variant="contained"
@@ -294,6 +322,18 @@ const TableSection = ({
                               }>
                               <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
                             </Button>
+                          ) : item?.status === 'DELETE' ? (
+                            <Chip
+                              label="Ditolak"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
                           ) : (
                             <Chip
                               label="Menunggu Persetujuan"
