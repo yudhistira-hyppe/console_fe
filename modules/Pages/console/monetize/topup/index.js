@@ -184,16 +184,16 @@ const MonetizeTopUpComponent = () => {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => setOpenModal({ open: true, status: 'upload' })}
+                onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}
                 disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
-                Upload data bulk
+                Template data bulk
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}
+                onClick={() => setOpenModal({ open: true, status: 'upload' })}
                 disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
-                Template data bulk
+                Upload data bulk
               </Button>
               <Button
                 variant="contained"
