@@ -6,17 +6,18 @@ import { Typography } from '@material-ui/core';
 import CmtSearch from '@coremat/CmtSearch';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import moment from 'moment';
-import { useLazyUserAdListQuery, useUserAdListQuery } from 'api/console/monetize/ad';
+import { useUserAdListQuery } from 'api/console/monetize/ad';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { LoadingButton } from '@mui/lab';
+import { debounce } from 'lodash';
 
 const AdsCampaign = (props) => {
   const { email } = props;
   const classes = useStyles();
   const [adsCampaign, setAdsCampaign] = useState([]);
   const [payload, setPayload] = useState({
-    startdate: moment().subtract(90, 'day').format('YYYY/MM/DD'),
-    enddate: moment().format('YYYY/MM/DD'),
+    startdate: moment().subtract(90, 'day').format('YYYY-MM-DD'),
+    enddate: moment().format('YYYY-MM-DD'),
     email: email,
     search: '',
     page: 0,
@@ -26,19 +27,24 @@ const AdsCampaign = (props) => {
   const { data: userAds, isFetching: loadingAds } = useUserAdListQuery(payload);
 
   useEffect(() => {
-    setAdsCampaign((prev) => {
-      return payload?.search !== '' ? userAds?.data : prev?.length >= 1 ? [...prev, ...userAds?.data] : userAds?.data;
-    });
-  }, [userAds]);
+    if (!loadingAds) {
+      setAdsCampaign((prev) => {
+        if (payload.page >= 1) {
+          return [...prev, userAds?.data];
+        } else {
+          return prev;
+        }
+      });
+    }
+  }, [userAds, loadingAds]);
 
-  const onSearchInputBlur = (value) => {
-    value === '' && setAdsCampaign([]);
+  const onSearchInputBlur = debounce((value) => {
     setPayload((prevState) => ({
       ...prevState,
       search: value,
       page: 0,
     }));
-  };
+  }, 500);
 
   const onErrorPostImage = (error) => {
     error.target.src = '/images/icons/img-empty.svg';
@@ -51,8 +57,8 @@ const AdsCampaign = (props) => {
         <CmtSearch
           onlyIcon
           border={false}
-          placeholder="Cari kampanye iklan"
-          onBlur={(e) => onSearchInputBlur(e.target.value)}
+          placeholder="Cari nama iklan"
+          onChange={(e) => onSearchInputBlur(e.target.value)}
         />
       </Stack>
       <Divider />
@@ -74,24 +80,21 @@ const AdsCampaign = (props) => {
                 <Stack direction="column" justifyContent="space-between" gap={1} ml={2} my={1}>
                   <Typography className={classes.adCampaignDescription}>{item?.name}</Typography>
                   <Box fontSize={12} lineHeight="16px">
-                    <Box component="span" color="text.disabled">
-                      Tanggal Mulai
-                    </Box>
-                    {` ${moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm')}`}
+                    <Typography style={{ fontSize: 12, color: '#00000061' }}>
+                      Tanggal Mulai <span style={{ color: 'black' }}>{moment(item?.liveAt).format('DD/MM/YYYY')}</span>
+                    </Typography>
                   </Box>
                 </Stack>
                 <Stack gap={0.5} ml="auto" alignItems="flex-end">
                   <Box fontSize={12} lineHeight="16px">
-                    <Box component="span" color="text.disabled">
-                      Rencana Tayang:
-                    </Box>{' '}
-                    {numberWithCommas(item?.tayang || 0)} Kali
+                    <Typography style={{ fontSize: 12, color: '#00000061' }}>
+                      Rencana Tayang <span style={{ color: 'black' }}>{numberWithCommas(item?.tayang || 0)}</span>
+                    </Typography>
                   </Box>
                   <Box fontSize={12} lineHeight="16px">
-                    <Box component="span" color="text.disabled">
-                      Penempatan:
-                    </Box>{' '}
-                    {item?.nameType}
+                    <Typography style={{ fontSize: 12, color: '#00000061' }}>
+                      Penempatan <span style={{ color: 'black' }}>{item?.nameType}</span>
+                    </Typography>
                   </Box>
                 </Stack>
               </Stack>

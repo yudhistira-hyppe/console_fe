@@ -42,7 +42,7 @@ const FormGIF = (props) => {
 
     createSticker(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message);
+        toast.error(res?.error?.data?.messages?.info?.[0]);
       } else if (res?.data) {
         toast.success('Berhasil menambahkan GIF');
         router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });
@@ -60,7 +60,7 @@ const FormGIF = (props) => {
 
     updateSticker(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message);
+        toast.error(res?.error?.data?.messages?.info?.[0]);
       } else if (res?.data) {
         toast.success('Berhasil menyimpan perubahan GIF');
         router.replace({ pathname: '/database/sticker', query: { tab: router?.query?.tab } });

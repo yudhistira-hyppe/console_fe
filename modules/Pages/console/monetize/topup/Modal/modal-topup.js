@@ -39,7 +39,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
-        toast.success('Berhasil Menghapus Data', { duration: 3000 });
+        toast.success('Berhasil Menolak Topup Saldo', { duration: 3000 });
       }
     });
     handleClose();

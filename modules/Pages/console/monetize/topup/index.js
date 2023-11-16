@@ -223,17 +223,36 @@ const MonetizeTopUpComponent = () => {
                       'Pajak PPH': `Rp ${numberWithCommas(item?.pph || 0)}`,
                       Total: `Rp ${numberWithCommas(item?.total || 0)}`,
                       'Persetujuan Strategy':
-                        item?.status === 'DELETE' || item?.status === 'FAILED'
-                          ? 'Tolak'
+                        item?.status === 'FAILED'
+                          ? 'Ditolak Sistem'
                           : item?.approveByStrategy
-                          ? 'Disetujui'
+                          ? `Disetujui`
+                          : item?.status === 'DELETE'
+                          ? 'Tidak Disetujui'
                           : 'Menunggu Persetujuan',
+                      'Tanggal Strategy': item?.approveByStrategyDate
+                        ? moment(item?.approveByStrategyDate).utc().format('DD/MM/YY - HH:mm:ss')
+                        : item?.status === 'DELETE'
+                        ? moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss')
+                        : '-',
                       'Persetujuan Finance':
-                        item?.status === 'DELETE' || item?.status === 'FAILED'
-                          ? 'Tolak'
+                        item?.status === 'FAILED'
+                          ? 'Ditolak Sistem'
+                          : !item?.approveByStrategy && item?.status === 'DELETE'
+                          ? 'Sudah Tidak Disetujui Strategy'
                           : item?.approveByFinance
-                          ? 'Disetujui'
+                          ? `Disetujui`
+                          : item?.status === 'DELETE'
+                          ? 'Tidak Disetujui'
                           : 'Menunggu Persetujuan',
+                      'Tanggal Finance': item?.approveByFinanceDate
+                        ? moment(item?.approveByFinanceDate).utc().format('DD/MM/YY - HH:mm:ss')
+                        : (!item?.approveByStrategy && item?.status === 'DELETE') ||
+                          item?.status === 'NEW' ||
+                          item?.status === 'FAILED' ||
+                          item?.status === 'PROCESS'
+                        ? '-'
+                        : moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss'),
                       Status:
                         item?.status === 'NEW'
                           ? 'Baru'
