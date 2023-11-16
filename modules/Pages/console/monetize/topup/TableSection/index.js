@@ -149,10 +149,10 @@ const TableSection = ({
                     <TableRow key={key} hover>
                       {(authUser?.user?.group === 'Head Of Strategy' || authUser?.user?.group === 'Super Admin') && (
                         <TableCell align="left">
-                          <Stack width={260}>
-                            {item?.status === 'FAILED' || item?.status === 'DELETE' ? (
+                          <Stack width={300}>
+                            {item?.status === 'FAILED' ? (
                               <Chip
-                                label="Ditolak"
+                                label="Ditolak Sistem"
                                 style={{
                                   fontSize: 14,
                                   fontWeight: 'bold',
@@ -178,8 +178,26 @@ const TableSection = ({
                                 <ArrowRight />
                                 <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
                                   {item?.approveByStrategyDate
-                                    ? `${moment(item?.approveByStrategyDate).utc().format('DD/MM/YY - HH:mm')} WIB`
+                                    ? moment(item?.approveByStrategyDate).utc().format('DD/MM/YY - HH:mm:ss')
                                     : '-'}
+                                </Typography>
+                              </Stack>
+                            ) : item?.status === 'DELETE' ? (
+                              <Stack direction="row" alignItems="center" gap={1}>
+                                <Chip
+                                  label="Tidak Disetujui"
+                                  style={{
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                    fontFamily: 'Lato',
+                                    backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                    color: '#676767D9',
+                                    width: 'fit-content',
+                                  }}
+                                />
+                                <ArrowRight />
+                                <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                  {moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss')}
                                 </Typography>
                               </Stack>
                             ) : authUser?.user?.group === 'Head Of Strategy' ? (
@@ -209,10 +227,22 @@ const TableSection = ({
                       )}
                       {(authUser?.user?.group === 'Head Of Finance' || authUser?.user?.group === 'Super Admin') && (
                         <TableCell align="left">
-                          <Stack width={260}>
-                            {item?.status === 'FAILED' || item?.status === 'DELETE' ? (
+                          <Stack width={300}>
+                            {item?.status === 'FAILED' ? (
                               <Chip
-                                label="Ditolak"
+                                label="Ditolak Sistem"
+                                style={{
+                                  fontSize: 14,
+                                  fontWeight: 'bold',
+                                  fontFamily: 'Lato',
+                                  backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                  color: '#676767D9',
+                                  width: 'fit-content',
+                                }}
+                              />
+                            ) : !item?.approveByStrategy && item?.status === 'DELETE' ? (
+                              <Chip
+                                label="Sudah Tidak Disetujui Strategy"
                                 style={{
                                   fontSize: 14,
                                   fontWeight: 'bold',
@@ -238,8 +268,26 @@ const TableSection = ({
                                 <ArrowRight />
                                 <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
                                   {item?.approveByFinanceDate
-                                    ? `${moment(item?.approveByFinanceDate).utc().format('DD/MM/YY - HH:mm')} WIB`
+                                    ? moment(item?.approveByFinanceDate).utc().format('DD/MM/YY - HH:mm:ss')
                                     : '-'}
+                                </Typography>
+                              </Stack>
+                            ) : item?.status === 'DELETE' ? (
+                              <Stack direction="row" alignItems="center" gap={1}>
+                                <Chip
+                                  label="Tidak Disetujui"
+                                  style={{
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                    fontFamily: 'Lato',
+                                    backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                    color: '#676767D9',
+                                    width: 'fit-content',
+                                  }}
+                                />
+                                <ArrowRight />
+                                <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                  {moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss')}
                                 </Typography>
                               </Stack>
                             ) : authUser?.user?.group === 'Head Of Finance' ? (
