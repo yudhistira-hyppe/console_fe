@@ -41,6 +41,7 @@ const MonetizeTopUpComponent = () => {
         createdAt: filter.descending === 'date-true' ? -1 : filter.descending === 'date-false' ? 1 : undefined,
         email: filter.descending === 'email-true' ? -1 : filter.descending === 'email-false' ? 1 : undefined,
       },
+      approveByStrategy: authUser?.user?.group === 'Head Of Finance' ? true : undefined,
     });
     filter.createdAt[0] && Object.assign(params, { start_date: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { end_date: filter.createdAt[1] });
