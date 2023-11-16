@@ -51,7 +51,7 @@ const FormSticker = (props) => {
 
     createSticker(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message);
+        toast.error(res?.error?.data?.messages?.info?.[0]);
       } else if (res?.data) {
         toast.success('Berhasil menambahkan sticker');
         router.replace('/database/sticker');
@@ -72,7 +72,7 @@ const FormSticker = (props) => {
 
     updateSticker(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message);
+        toast.error(res?.error?.data?.messages?.info?.[0]);
       } else if (res?.data) {
         toast.success('Berhasil menyimpan perubahan sticker');
         router.replace('/database/sticker');
