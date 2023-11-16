@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   Button,
   Card,
+  Chip,
   CircularProgress,
   Paper,
   Stack,
@@ -77,6 +78,7 @@ const TransactionComponent = (props) => {
                     <TableCell>Jenis</TableCell>
                     <TableCell>Nominal</TableCell>
                     <TableCell>Keterangan</TableCell>
+                    <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -124,6 +126,20 @@ const TransactionComponent = (props) => {
                                 : 'Penjualan Boost'
                               : ''}
                           </Typography>
+                        </TableCell>
+                        <TableCell>
+                          {(item?.status === 'Cancel' || item?.status === 'Failed') && (
+                            <Chip
+                              label="Gagal"
+                              style={{ backgroundColor: 'rgba(103, 103, 103, 0.1)', color: 'rgba(103, 103, 103, 0.85)' }}
+                            />
+                          )}
+                          {item?.status === 'Success' && (
+                            <Chip
+                              label="Berhasil"
+                              style={{ backgroundColor: 'rgba(113, 165, 0, 0.1)', color: 'rgba(113, 165, 0, 0.85)' }}
+                            />
+                          )}
                         </TableCell>
                       </TableRow>
                     ))

@@ -9,6 +9,7 @@ import {
   useUploadBulkTopupMutation,
 } from 'api/console/monetize/dashboard';
 import { formatCurrency } from 'helpers/stringHelper';
+import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -34,7 +35,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
   }, [open]);
 
   const handleDelete = () => {
-    deleteTopup({ _id: selected }).then((res) => {
+    deleteTopup({ _id: selected?._id }).then((res) => {
       if (res?.error) {
         toast.error(res?.error?.data?.message, { duration: 3000 });
       } else {
@@ -46,7 +47,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
 
   const handleApprove = () => {
     let formData = {
-      _id: selected,
+      _id: selected?._id,
       approveByFinance: status === 'finance' ? true : undefined,
       approveByStrategy: status === 'strategy' ? true : undefined,
     };
@@ -114,10 +115,10 @@ function ModalTopup({ open, selected, status, handleClose }) {
         <div style={{ position: 'absolute', zIndex: 100, top: 15, right: 15, cursor: 'pointer' }} onClick={handleClose}>
           <Close style={{ color: '#666666' }} />
         </div>
-        <Stack direction="column" alignItems="center" gap={3} p={1} style={{ position: 'relative' }}>
-          <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 18, width: '90%' }}>
-            {status === 'finance' && 'Kamu (Head Of Finance), ingin menyetujui topup dana ini ?'}
-            {status === 'strategy' && 'Kamu (Head Of Strategy), ingin menyetujui topup dana ini ?'}
+        <Stack direction="column" alignItems="flex-start" gap={3} p={1} style={{ position: 'relative' }}>
+          <Typography style={{ fontWeight: 'bold', fontSize: 18, width: '90%' }}>
+            {status === 'finance' && 'Kamu (Head Of Finance), menyetujui topup saldo dengan detail dibawah ini ?'}
+            {status === 'strategy' && 'Kamu (Head Of Strategy), menyetujui topup saldo dengan detail dibawah ini ?'}
             {status === 'create' && 'Form Permintaan Topup'}
             {status === 'upload' && 'Form Upload Bulk Data Topup'}
           </Typography>
@@ -179,6 +180,25 @@ function ModalTopup({ open, selected, status, handleClose }) {
                 }
               }}
             />
+          )}
+          {(status === 'finance' || status === 'strategy') && (
+            <Stack direction="column" alignItems="flex-start" gap={2} width="100%">
+              <Stack direction="row" gap={2}>
+                <Typography style={{ width: 150 }}>Email</Typography>
+                <Typography>:</Typography>
+                <Typography>{selected?.email || '-'}</Typography>
+              </Stack>
+              <Stack direction="row" gap={2}>
+                <Typography style={{ width: 150 }}>Username</Typography>
+                <Typography>:</Typography>
+                <Typography>{selected?.username || '-'}</Typography>
+              </Stack>
+              <Stack direction="row" gap={2}>
+                <Typography style={{ width: 150 }}>Total saldo topup</Typography>
+                <Typography>:</Typography>
+                <Typography> Rp {numberWithCommas(selected?.total || 0)}</Typography>
+              </Stack>
+            </Stack>
           )}
           <Stack direction="row" justifyContent="center" alignItems="center" gap={2}>
             <LoadingButton
