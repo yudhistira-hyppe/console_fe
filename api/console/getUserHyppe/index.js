@@ -34,6 +34,7 @@ export const getUserHyppe = createApi({
         method: 'POST',
         body: { email },
       }),
+      providesTags: ['detailUser'],
     }),
     getProfileByUserEmail2: build.mutation({
       query: (email) => ({
