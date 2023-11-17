@@ -186,21 +186,21 @@ const MonetizeTopUpComponent = () => {
                 variant="contained"
                 color="secondary"
                 onClick={() => window.open(process.env.NEXT_PUBLIC_API_BASE_URL + '/topups/file/download/')}
-                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
+                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Marketing Assistant'}>
                 Template data bulk
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={() => setOpenModal({ open: true, status: 'upload' })}
-                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
+                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Marketing Assistant'}>
                 Upload data bulk
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={() => setOpenModal({ open: true, status: 'create' })}
-                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Head Of Strategy'}>
+                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Marketing Assistant'}>
                 Tambah baru
               </Button>
               {loadingExport || listExport?.data?.length < 1 ? (
