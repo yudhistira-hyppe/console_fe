@@ -116,10 +116,14 @@ const TableSection = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  {(authUser?.user?.group === 'Head Of Strategy' || authUser?.user?.group === 'Super Admin') && (
+                  {(authUser?.user?.group === 'Head Of Strategy' ||
+                    authUser?.user?.group === 'Super Admin' ||
+                    authUser?.user?.group === 'Marketing Assistant') && (
                     <TableCell align="left">Persetujuan Strategy</TableCell>
                   )}
-                  {(authUser?.user?.group === 'Head Of Finance' || authUser?.user?.group === 'Super Admin') && (
+                  {(authUser?.user?.group === 'Head Of Finance' ||
+                    authUser?.user?.group === 'Super Admin' ||
+                    authUser?.user?.group === 'Marketing Assistant') && (
                     <TableCell align="left">Persetujuan Finance</TableCell>
                   )}
                   <TableCell>Tanggal Buat</TableCell>
@@ -147,7 +151,9 @@ const TableSection = ({
                 ) : listTransaction?.data?.length >= 1 ? (
                   listTransaction?.data?.map((item, key) => (
                     <TableRow key={key} hover>
-                      {(authUser?.user?.group === 'Head Of Strategy' || authUser?.user?.group === 'Super Admin') && (
+                      {(authUser?.user?.group === 'Head Of Strategy' ||
+                        authUser?.user?.group === 'Super Admin' ||
+                        authUser?.user?.group === 'Marketing Assistant') && (
                         <TableCell align="left">
                           <Stack width={300}>
                             {item?.status === 'FAILED' ? (
@@ -225,7 +231,9 @@ const TableSection = ({
                           </Stack>
                         </TableCell>
                       )}
-                      {(authUser?.user?.group === 'Head Of Finance' || authUser?.user?.group === 'Super Admin') && (
+                      {(authUser?.user?.group === 'Head Of Finance' ||
+                        authUser?.user?.group === 'Super Admin' ||
+                        authUser?.user?.group === 'Marketing Assistant') && (
                         <TableCell align="left">
                           <Stack width={300}>
                             {item?.status === 'FAILED' ? (
