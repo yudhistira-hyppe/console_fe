@@ -13,12 +13,15 @@ import DemographyUser from '../../DemographyUser';
 import SesiGraph from '../../Sesi';
 
 const Metrik = () => {
-  const [dataPengguna, setPengguna] = useState(0);
+  const [dataPengguna, setPengguna] = useState({
+    date: '',
+    total: 0,
+  });
 
   return (
     <Grid container spacing={5}>
       <Grid item xs={12} sm={6} md={6}>
-        <PenggunaBaru setPengguna={setPengguna} />
+        <PenggunaBaru pengguna={dataPengguna} setPengguna={setPengguna} />
       </Grid>
       <Grid item xs={12} sm={6} md={6}>
         <PenggunaAktif />

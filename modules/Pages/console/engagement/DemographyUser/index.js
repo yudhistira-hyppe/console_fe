@@ -79,18 +79,43 @@ const ProgressIndicator = (props) => {
   );
 };
 
-const DemographyUser = () => {
+const DemographyUser = ({ dataPengguna }) => {
   const classes = useStyles();
   const [payload, setPayload] = useState({
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
   });
+  const [diff, setDiff] = useState(0);
 
   const handlePayload = (value) => {
     setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
   };
 
-  const { data: demographyUser, isFetching: loadingDemographic } = useGetDemographyUserQuery(payload);
+  const { data: demographyUser, isFetching: loadingDemographic, refetch } = useGetDemographyUserQuery(payload);
+
+  console.log(dataPengguna);
+
+  // useEffect(() => {
+  //   setPayload({ ...payload, startdate: dataPengguna?.date });
+  // }, [dataPengguna]);
+
+  useEffect(() => {
+    if (!loadingDemographic) {
+      if (payload?.startdate !== dataPengguna?.date) {
+        setDiff(0);
+      } else {
+        setDiff(
+          (
+            (dataPengguna?.total -
+              (demographyUser?.data?.[0]?.gender?.length >= 1
+                ? demographyUser?.data?.[0]?.gender?.map((item) => item?.count * 9)?.reduce((a, b) => a + b)
+                : 0)) /
+            3
+          ).toFixed(0),
+        );
+      }
+    }
+  }, [loadingDemographic]);
 
   return (
     <>
@@ -164,7 +189,7 @@ const DemographyUser = () => {
                           : data.payload?.[0]?.payload?.gender === 'FEMALE'
                           ? 'Perempuan'
                           : 'Tidak Diketahui'}{' '}
-                        : {data.payload?.[0]?.payload?.count}
+                        : {data.payload?.[0]?.payload?.count * 9 + Number(diff)}
                       </Box>
                     ) : null;
                   }}

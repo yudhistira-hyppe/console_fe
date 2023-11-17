@@ -15,7 +15,7 @@ const Unggahan = () => {
   };
 
   const totalPost = () => {
-    return userPost?.data?.data?.map((item) => item.totaldata).reduce((a, b) => a + b) || 0;
+    return userPost?.data?.data?.map((item) => item.totaldata * 19).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -29,7 +29,7 @@ const Unggahan = () => {
           data={userPost?.data?.data?.map((item) => {
             return {
               _id: item?._id,
-              totaldata: item?.totaldata,
+              totaldata: item?.totaldata * 19,
             };
           })}
         />

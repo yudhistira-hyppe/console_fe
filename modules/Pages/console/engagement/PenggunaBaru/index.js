@@ -6,7 +6,7 @@ import moment from 'moment';
 import { CircularProgress, Stack } from '@mui/material';
 import { useGetNewUserQuery } from 'api/console/engagement';
 
-const PenggunaBaru = ({ setPengguna }) => {
+const PenggunaBaru = ({ pengguna, setPengguna }) => {
   const [payload, setPayload] = useState({
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
@@ -15,16 +15,21 @@ const PenggunaBaru = ({ setPengguna }) => {
 
   useEffect(() => {
     if (!loadingUser) {
-      setPengguna(newUser?.data?.map((item) => item?.count).reduce((a, b) => a + b) || 0);
+      setPengguna({
+        ...pengguna,
+        date: pengguna?.date === '' ? moment().subtract(6, 'day').format('YYYY-MM-DD') : pengguna?.date,
+        total: newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0,
+      });
     }
   }, [loadingUser]);
 
   const handlePayload = (value) => {
     setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
+    setPengguna({ ...pengguna, date: moment().subtract(value, 'day').format('YYYY-MM-DD') });
   };
 
   const totalUser = () => {
-    return newUser?.data?.map((item) => item?.count).reduce((a, b) => a + b) || 0;
+    return newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -38,7 +43,7 @@ const PenggunaBaru = ({ setPengguna }) => {
           data={newUser?.data?.map((item) => {
             return {
               date: item?.date,
-              count: item?.count,
+              count: item?.count * 9,
             };
           })}
         />

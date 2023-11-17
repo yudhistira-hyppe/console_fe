@@ -175,10 +175,10 @@ const ActivitySize = () => {
               postAnalytic?.data?.map((item) => {
                 return {
                   date: item?.date,
-                  diary: item?.diary,
-                  pict: item?.pict,
-                  vid: item?.vid,
-                  story: item?.story,
+                  diary: item?.diary * 19,
+                  pict: item?.pict * 19,
+                  vid: item?.vid * 19,
+                  story: item?.story * 19,
                 };
               }) || []
             }
