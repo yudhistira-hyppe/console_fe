@@ -152,6 +152,10 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
       setDeviceId(uuidv4());
       setNotifAllowed(true);
       setLoadingFCM(false);
+      toast('Browser ini tidak dapat menerima notifikasi', {
+        id: 'non-support',
+        icon: <Info />,
+      });
     }
   };
 
