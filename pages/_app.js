@@ -52,18 +52,9 @@ const MainApp = (props) => {
   }, []);
 
   useEffect(() => {
-    const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
-
-    if (isSupported()) {
-      if (Notification.permission === 'granted') {
-        const message = getMessaging(firebaseApp);
-        onMessage(message, (payload) => dispatch(setNotification(payload)));
-      }
-    } else {
-      toast('Browser ini tidak memiliki akses notifikasi', {
-        id: 'non-support',
-        icon: <Info />,
-      });
+    if (Notification.permission === 'granted') {
+      const message = getMessaging(firebaseApp);
+      onMessage(message, (payload) => dispatch(setNotification(payload)));
     }
   });
 
