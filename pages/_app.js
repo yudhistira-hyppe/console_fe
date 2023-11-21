@@ -52,9 +52,13 @@ const MainApp = (props) => {
   }, []);
 
   useEffect(() => {
-    if (Notification.permission === 'granted') {
-      const message = getMessaging(firebaseApp);
-      onMessage(message, (payload) => dispatch(setNotification(payload)));
+    const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+
+    if (isSupported()) {
+      if (Notification.permission === 'granted') {
+        const message = getMessaging(firebaseApp);
+        onMessage(message, (payload) => dispatch(setNotification(payload)));
+      }
     }
   });
 
