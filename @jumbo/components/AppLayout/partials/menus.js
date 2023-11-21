@@ -15,11 +15,22 @@ export const sidebarNavs = [
   },
   {
     name: 'Pusat Iklan',
-    type: 'item',
-    link: '/ads-center',
+    type: 'collapse',
+    children: [
+      {
+        name: 'Pengaturan Iklan',
+        type: 'item',
+        link: '/ads-center/setting',
+      },
+      {
+        name: 'Kelola Advertiser',
+        type: 'item',
+        link: '/ads-center/manage',
+      },
+    ],
   },
   {
-    name: 'Boost Post Center',
+    name: 'Pusat Boost',
     type: 'item',
     link: '/boost-center',
   },
@@ -39,9 +50,24 @@ export const sidebarNavs = [
     link: '/monetize',
   },
   {
+    name: 'Challenge',
+    type: 'item',
+    link: '/challenge',
+  },
+  {
     name: 'Anggota',
     type: 'item',
     link: '/anggota',
+  },
+  {
+    name: 'Utilitas',
+    type: 'item',
+    link: '/utilitas',
+  },
+  {
+    name: 'Pengumuman',
+    type: 'item',
+    link: '/announcement',
   },
 ];
 
