@@ -129,7 +129,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
   const generateFCMToken = async () => {
     const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
 
-    if (isSupported()) {
+    if (isSupported() || !navigator.userAgentData.mobile) {
       await Notification.requestPermission().then(async (res) => {
         if (res === 'granted') {
           setNotifAllowed(true);
@@ -149,10 +149,9 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         }
       });
     } else {
-      // setDeviceId(uuidv4());
-      setNotifAllowed(false);
+      setDeviceId(uuidv4());
+      setNotifAllowed(true);
       setLoadingFCM(false);
-      setErrorFMC(true);
     }
   };
 
