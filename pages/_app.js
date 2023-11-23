@@ -73,7 +73,7 @@ const MainApp = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!router.pathname?.includes(dataParams?.pathname)) {
+    if (router?.pathname?.includes(dataParams?.pathname)) {
       dispatch(clearParams({}));
     }
   }, [router]);
