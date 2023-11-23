@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Card, Chip, Stack } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
+import ModalMedia from './modal/ModalMedia';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -20,6 +21,8 @@ const useStyles = makeStyles(() => ({
 
 const PostDetail = ({ data }) => {
   const classes = useStyles();
+  const [showModal, setShowModal] = useState(false);
+
   const { authUser } = useAuth();
 
   const getMediaUri = (mediaEndpoint) => {
@@ -47,10 +50,29 @@ const PostDetail = ({ data }) => {
       <Stack direction="row" gap="24px">
         <Avatar
           src={getImage(data)}
-          alt="Detail Post"
           variant="rounded"
-          style={{ width: '100%', maxWidth: 120, height: 120 }}
+          onClick={() => setShowModal(true)}
+          alt="X"
+          style={{
+            width: '100%',
+            maxWidth: 120,
+            height: 120,
+            cursor: 'pointer',
+            border: '1px solid #DDDDDD',
+            borderRadius: 8,
+          }}
         />
+
+        {showModal && (
+          <ModalMedia
+            showModal={showModal}
+            onClose={() => setShowModal(false)}
+            contentType={data?.type !== 'HyppePic' ? 'video' : 'image'}
+            idApsara={data?.media?.VideoList?.[0]?.VideoId || ''}
+            urlImage={getImage(data)}
+          />
+        )}
+
         <Stack direction="column">
           <Chip
             label={data?.type}

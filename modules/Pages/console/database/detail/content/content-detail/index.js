@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Card, Chip, Stack, Typography } from '@mui/material';
 import { useStyles } from './index.style';
 import moment from 'moment';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
+import ModalMedia from 'modules/Pages/console/boost-center/Detail/modal/ModalMedia';
 
 const ContentDetail = (props) => {
   const { data } = props;
+  const [showModal, setShowModal] = useState(false);
+
   const { authUser } = useAuth();
   const classes = useStyles();
 
@@ -63,7 +66,31 @@ const ContentDetail = (props) => {
   return (
     <Card style={{ padding: 24, height: '100%' }}>
       <Stack direction="row" gap="24px">
-        <Avatar src={getImage(data)} variant="rounded" style={{ width: '100%', maxWidth: 80, height: 80 }} />
+        <Avatar
+          src={getImage(data)}
+          variant="rounded"
+          style={{
+            width: '100%',
+            maxWidth: 80,
+            height: 80,
+            cursor: 'pointer',
+            border: '1px solid #DDDDDD',
+            borderRadius: 8,
+          }}
+          onClick={() => setShowModal(true)}
+          alt="X"
+        />
+
+        {showModal && (
+          <ModalMedia
+            showModal={showModal}
+            onClose={() => setShowModal(false)}
+            contentType={data?.type !== 'HyppePic' ? 'video' : 'image'}
+            idApsara={data?.media?.VideoList?.[0]?.VideoId || ''}
+            urlImage={getImage(data)}
+          />
+        )}
+
         <Stack direction="column" gap="8px">
           <Chip label={data?.type || 'Hyppe'} size="small" className={classes.chipStyle} />
           <Typography className={classes.label}>
