@@ -93,29 +93,27 @@ const DemographyUser = ({ dataPengguna }) => {
 
   const { data: demographyUser, isFetching: loadingDemographic, refetch } = useGetDemographyUserQuery(payload);
 
-  console.log(dataPengguna);
-
   // useEffect(() => {
   //   setPayload({ ...payload, startdate: dataPengguna?.date });
   // }, [dataPengguna]);
 
-  useEffect(() => {
-    if (!loadingDemographic) {
-      if (payload?.startdate !== dataPengguna?.date) {
-        setDiff(0);
-      } else {
-        setDiff(
-          (
-            (dataPengguna?.total -
-              (demographyUser?.data?.[0]?.gender?.length >= 1
-                ? demographyUser?.data?.[0]?.gender?.map((item) => item?.count * 9)?.reduce((a, b) => a + b)
-                : 0)) /
-            3
-          ).toFixed(0),
-        );
-      }
-    }
-  }, [loadingDemographic]);
+  // useEffect(() => {
+  //   if (!loadingDemographic) {
+  //     if (payload?.startdate !== dataPengguna?.date) {
+  //       setDiff(0);
+  //     } else {
+  //       setDiff(
+  //         (
+  //           (dataPengguna?.total -
+  //             (demographyUser?.data?.[0]?.gender?.length >= 1
+  //               ? demographyUser?.data?.[0]?.gender?.map((item) => item?.count * 9)?.reduce((a, b) => a + b)
+  //               : 0)) /
+  //           3
+  //         ).toFixed(0),
+  //       );
+  //     }
+  //   }
+  // }, [loadingDemographic]);
 
   return (
     <>
@@ -189,7 +187,7 @@ const DemographyUser = ({ dataPengguna }) => {
                           : data.payload?.[0]?.payload?.gender === 'FEMALE'
                           ? 'Perempuan'
                           : 'Tidak Diketahui'}{' '}
-                        : {data.payload?.[0]?.payload?.count * 9 + Number(diff)}
+                        : {data.payload?.[0]?.payload?.count + Number(diff)}
                       </Box>
                     ) : null;
                   }}
