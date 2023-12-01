@@ -18,7 +18,7 @@ const PenggunaBaru = ({ pengguna, setPengguna }) => {
       setPengguna({
         ...pengguna,
         date: pengguna?.date === '' ? moment().subtract(6, 'day').format('YYYY-MM-DD') : pengguna?.date,
-        total: newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0,
+        total: newUser?.data?.map((item) => item?.count).reduce((a, b) => a + b) || 0,
       });
     }
   }, [loadingUser]);
@@ -29,7 +29,7 @@ const PenggunaBaru = ({ pengguna, setPengguna }) => {
   };
 
   const totalUser = () => {
-    return newUser?.data?.map((item) => item?.count * 9).reduce((a, b) => a + b) || 0;
+    return newUser?.data?.map((item) => item?.count).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -43,7 +43,7 @@ const PenggunaBaru = ({ pengguna, setPengguna }) => {
           data={newUser?.data?.map((item) => {
             return {
               date: item?.date,
-              count: item?.count * 9,
+              count: item?.count,
             };
           })}
         />
