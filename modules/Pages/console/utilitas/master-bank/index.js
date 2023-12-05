@@ -24,6 +24,7 @@ const TableList = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
+      activestatus: true,
     });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
