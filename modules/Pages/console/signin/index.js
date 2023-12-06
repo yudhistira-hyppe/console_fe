@@ -118,11 +118,22 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         .register('/firebase-messaging-sw.js')
         .then(function (registration) {
           console.log('Registration successful, scope is:', registration.scope);
-          generateFCMToken();
+          if (registration.active) {
+            console.log('service worker berhasil');
+          } else {
+            console.log('service worker gagal');
+          }
         })
         .catch(function (err) {
           console.log('Service worker registration failed, error:', err);
         });
+
+      navigator.serviceWorker.ready.then((registration) => {
+        console.log('service worker berhasil');
+        console.log(registration.active);
+
+        generateFCMToken();
+      });
     }
   }, []);
 
