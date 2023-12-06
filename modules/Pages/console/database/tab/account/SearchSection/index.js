@@ -16,6 +16,7 @@ import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
 import { useGetInterestContentQuery } from 'api/console/database';
 import { useGetAreasQuery } from 'api/user/insight';
+import dayjs from 'dayjs';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -43,7 +44,17 @@ const SearchSection = ({ filter, handleChange }) => {
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
 
   useEffect(() => {
-    if (!filter.createdAt[0] && !filter.createdAt[1]) {
+    if (filter.createdAt[0] && filter.createdAt[1]) {
+      setValue([
+        {
+          startDate: moment(filter.createdAt[0]).toDate(),
+          endDate: moment(filter.createdAt[1]).toDate(),
+          key: 'selection',
+        },
+      ]);
+      setDate(true);
+    } else {
+      setWeek(null);
       setValue([
         {
           startDate: new Date(),
@@ -52,12 +63,21 @@ const SearchSection = ({ filter, handleChange }) => {
         },
       ]);
       setDate(false);
-      setWeek(null);
     }
   }, [filter.createdAt]);
 
   useEffect(() => {
-    if (!filter.rangeOnline[0] && !filter.rangeOnline[1]) {
+    if (filter.rangeOnline[0] && filter.rangeOnline[1]) {
+      setDateOnline([
+        {
+          startDate: moment(filter.rangeOnline[0]).toDate(),
+          endDate: moment(filter.rangeOnline[1]).toDate(),
+          key: 'selection',
+        },
+      ]);
+      setOnline(true);
+    } else {
+      setWeek(null);
       setDateOnline([
         {
           startDate: new Date(),
@@ -120,7 +140,7 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(1);
                     setValue([
                       {
-                        startDate: new Date().setDate(new Date().getDate() - 7),
+                        startDate: new Date().setDate(new Date().getDate() - 6),
                         endDate: new Date(),
                         key: 'selection',
                       },
@@ -290,10 +310,12 @@ const SearchSection = ({ filter, handleChange }) => {
                   setDate(true);
                   setWeek(null);
                 }}
+                maxDate={dayjs().toDate()}
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
                 editableDateInputs={true}
                 ranges={value}
+                rangeColors={['#AA22AF']}
                 direction="horizontal"
               />
             </Popover>
@@ -310,12 +332,12 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Perempuan'}
                 value="Perempuan"
-                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('Perempuan')} color="secondary" />}
+                control={<Checkbox checked={filter.gender.includes('Perempuan')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Laki-laki'}
                 value="Laki-laki"
-                control={<Checkbox defaultChecked={false} checked={filter.gender.includes('Laki-laki')} color="secondary" />}
+                control={<Checkbox checked={filter.gender.includes('Laki-laki')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
@@ -331,22 +353,22 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'< 14'}
                 value="< 14"
-                control={<Radio defaultChecked={false} checked={filter.age === '< 14'} color="secondary" />}
+                control={<Radio checked={filter.age === '< 14'} color="secondary" />}
               />
               <FormControlLabel
                 label={'15 - 28'}
                 value="15 - 28"
-                control={<Radio defaultChecked={false} checked={filter.age === '15 - 28'} color="secondary" />}
+                control={<Radio checked={filter.age === '15 - 28'} color="secondary" />}
               />
               <FormControlLabel
                 label={'29 - 43'}
                 value="29 - 43"
-                control={<Radio defaultChecked={false} checked={filter.age === '29 - 43'} color="secondary" />}
+                control={<Radio checked={filter.age === '29 - 43'} color="secondary" />}
               />
               <FormControlLabel
                 label={'> 44'}
                 value="> 44"
-                control={<Radio defaultChecked={false} checked={filter.age === '> 44'} color="secondary" />}
+                control={<Radio checked={filter.age === '> 44'} color="secondary" />}
               />
             </RadioGroup>
           </AccordionDetails>
@@ -362,12 +384,12 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Basic'}
                 value="BASIC"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('BASIC')} color="secondary" />}
+                control={<Checkbox checked={filter.type.includes('BASIC')} color="secondary" />}
               />
               <FormControlLabel
                 label={'Premium'}
                 value="PREMIUM"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('PREMIUM')} color="secondary" />}
+                control={<Checkbox checked={filter.type.includes('PREMIUM')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
@@ -390,7 +412,6 @@ const SearchSection = ({ filter, handleChange }) => {
                     value={JSON.stringify({ _id: item?._id, name: item?.stateName })}
                     control={
                       <Checkbox
-                        defaultChecked={false}
                         color="secondary"
                         checked={filter.area?.map((item) => item?.name).includes(item?.stateName)}
                       />
@@ -428,7 +449,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   moment().subtract(1, 'hour').format('YYYY-MM-DD HH:mm:ss'),
                   moment().format('YYYY-MM-DD HH:mm:ss'),
                 ])}
-                control={<Radio defaultChecked={false} checked={filter.lastOnline === '1 jam lalu'} color="secondary" />}
+                control={<Radio checked={filter.lastOnline === '1 jam lalu'} color="secondary" />}
               />
               <FormControlLabel
                 name="1 hari lalu"
@@ -437,7 +458,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   moment().subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss'),
                   moment().format('YYYY-MM-DD HH:mm:ss'),
                 ])}
-                control={<Radio defaultChecked={false} checked={filter.lastOnline === '1 hari lalu'} color="secondary" />}
+                control={<Radio checked={filter.lastOnline === '1 hari lalu'} color="secondary" />}
               />
               <FormControlLabel
                 name="1 minggu lalu"
@@ -446,7 +467,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   moment().subtract(1, 'week').format('YYYY-MM-DD HH:mm:ss'),
                   moment().format('YYYY-MM-DD HH:mm:ss'),
                 ])}
-                control={<Radio defaultChecked={false} checked={filter.lastOnline === '1 minggu lalu'} color="secondary" />}
+                control={<Radio checked={filter.lastOnline === '1 minggu lalu'} color="secondary" />}
               />
               <FormControlLabel
                 name="1 bulan lalu"
@@ -455,7 +476,7 @@ const SearchSection = ({ filter, handleChange }) => {
                   moment().subtract(1, 'month').format('YYYY-MM-DD HH:mm:ss'),
                   moment().format('YYYY-MM-DD HH:mm:ss'),
                 ])}
-                control={<Radio defaultChecked={false} checked={filter.lastOnline === '1 bulan lalu'} color="secondary" />}
+                control={<Radio checked={filter.lastOnline === '1 bulan lalu'} color="secondary" />}
               />
             </RadioGroup>
             <Stack direction="row" alignItems="center" spacing={1} mt={1}>
@@ -510,6 +531,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 editableDateInputs={true}
                 ranges={dateOnline}
                 direction="horizontal"
+                rangeColors={['#AA22AF']}
               />
             </Popover>
           </AccordionDetails>

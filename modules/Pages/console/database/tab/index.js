@@ -10,15 +10,19 @@ import useStyles from './index.style';
 import Cookies from 'js-cookie';
 import DatabaseTabEffectComponent from './effect';
 import DatabaseTabStickerComponent from './sticker';
+import { clearParams } from 'redux/slice/filterParams';
+import { useDispatch } from 'react-redux';
 
 const DatabaseTabComponent = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const { tab } = props;
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const dispatch = useDispatch();
 
   const onTabChange = (_, selectedTab) => {
     router.replace(`/database/${selectedTab}`);
+    dispatch(clearParams({ pathname: router.pathname }));
   };
 
   return (
