@@ -92,6 +92,9 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
 
   useEffect(() => {
     getCurrentUserLocation();
+    if (!deviceId) {
+      generateFCMToken();
+    }
   }, []);
 
   useEffect(() => {
@@ -113,28 +116,23 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-    if (loadingFCM) {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-          .register('/firebase-messaging-sw.js')
-          .then(function (registration) {
-            console.log('Registration successful, scope is:', registration.scope);
-            if (registration.active) {
-              console.log('service worker berhasil');
-            } else {
-              console.log('service worker gagal');
-            }
-          })
-          .catch(function (err) {
-            console.log('Service worker registration failed, error:', err);
-          });
+  }, []);
 
-        navigator.serviceWorker.ready.then(() => {
+  if ('serviceWorker' in navigator && !deviceId) {
+    navigator.serviceWorker
+      .register('/firebase-messaging-sw.js')
+      .then((registration) => {
+        if (registration.active) {
+          console.log('service worker berhasil');
           generateFCMToken();
-        });
-      }
-    }
-  }, [loadingFCM]);
+        } else {
+          console.log('service worker gagal');
+        }
+      })
+      .catch(function (err) {
+        console.log('Service worker registration failed, error:', err);
+      });
+  }
 
   useEffect(() => {
     if (error === '') {
