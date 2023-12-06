@@ -113,7 +113,6 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-
     if (loadingFCM) {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker
