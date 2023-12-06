@@ -136,12 +136,14 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
           <TableBody>
             {loading ? (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              </TableRow>
             ) : listTickets?.data?.length >= 1 ? (
               listTickets?.data?.map((item, i) => (
                 <TableRow
@@ -152,7 +154,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                   onClick={() => router.push(`/database/account/${item?.iduser}`)}>
                   <TableCell align="left" style={{ maxWidth: 160 }}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getMediaUri(item?.avatar[0]?.mediaEndpoint)} />
+                      <Avatar src={item?.avatar[0]?.mediaEndpoint ? getMediaUri(item?.avatar[0]?.mediaEndpoint) : ''} />
                       <Stack gap="4px" overflow="hidden" width="100%">
                         <Typography
                           variant="body1"
@@ -217,11 +219,13 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                 </TableRow>
               ))
             ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Permohonan Akun Premium</Typography>
-                </Stack>
-              </TableCell>
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data</Typography>
+                  </Stack>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
