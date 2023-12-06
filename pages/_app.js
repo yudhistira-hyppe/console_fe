@@ -40,7 +40,7 @@ const MainApp = (props) => {
 
     if (isSupported()) {
       if (Notification.permission === 'granted') {
-        if (firebase?.messaging?.isSupported) {
+        if (firebase?.messaging?.isSupported()) {
           const message = getMessaging(firebaseApp);
           onMessage(message, (payload) => dispatch(setNotification(payload)));
         }
