@@ -228,9 +228,9 @@ const AdsManageTableList = () => {
                 return {
                   ID: item?.campaignId || item?.adsIdNumber || '-',
                   nama: item?.name || '-',
-                  tanggal_buat: moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm'),
-                  tanggal_mulai: moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm'),
-                  tanggal_selesai: moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm'),
+                  tanggal_buat: moment(item?.timestamp).utc().format('DD/MM/YYYY - HH:mm') + ' WIB',
+                  tanggal_mulai: moment(item?.liveAt).format('DD/MM/YYYY'),
+                  tanggal_selesai: moment(item?.liveEnd).format('DD/MM/YYYY'),
                   tipe_iklan: item?.adstypes || '-',
                   plan_tayang: formatCurrency(item?.tayang || 0) || 0,
                   impresi: formatCurrency(item?.impresi || 0) || 0,

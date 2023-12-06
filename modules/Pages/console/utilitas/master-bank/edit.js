@@ -40,6 +40,7 @@ const EditMasterBank = ({ bankcode }) => {
     atm: '',
     m_banking: '',
     i_banking: '',
+    isActive: '',
   });
   const { data: detailMaster, isLoading } = useGetDetailMasterBankQuery({ bankcode });
   const [updateBank, { isLoading: loadingUpdate }] = useUpdateMasterBankMutation();
@@ -53,6 +54,7 @@ const EditMasterBank = ({ bankcode }) => {
       atm: detailMaster?.data?.atm || '',
       m_banking: detailMaster?.data?.mobileBanking || '',
       i_banking: detailMaster?.data?.internetBanking || '',
+      isActive: detailMaster?.data?.isActive ? 'true' : 'false' || '',
     });
     setUrlImage(detailMaster?.data?.bankIcon + '?m=' + new Date().getTime());
   }, [isLoading]);
