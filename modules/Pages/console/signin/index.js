@@ -113,29 +113,29 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/firebase-messaging-sw.js')
-        .then(function (registration) {
-          console.log('Registration successful, scope is:', registration.scope);
-          if (registration.active) {
-            console.log('service worker berhasil');
-          } else {
-            console.log('service worker gagal');
-          }
-        })
-        .catch(function (err) {
-          console.log('Service worker registration failed, error:', err);
+
+    if (loadingFCM) {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/firebase-messaging-sw.js')
+          .then(function (registration) {
+            console.log('Registration successful, scope is:', registration.scope);
+            if (registration.active) {
+              console.log('service worker berhasil');
+            } else {
+              console.log('service worker gagal');
+            }
+          })
+          .catch(function (err) {
+            console.log('Service worker registration failed, error:', err);
+          });
+
+        navigator.serviceWorker.ready.then(() => {
+          generateFCMToken();
         });
-
-      navigator.serviceWorker.ready.then((registration) => {
-        console.log('service worker berhasil');
-        console.log(registration.active);
-
-        generateFCMToken();
-      });
+      }
     }
-  }, []);
+  }, [loadingFCM]);
 
   useEffect(() => {
     if (error === '') {
@@ -145,7 +145,6 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         if (errorFCM) {
           toast.error('Gagal menghubungkan anda dengan server, mengkoneksikan ulang...', { id: 'signin' });
           setLoadingFCM(true);
-          generateFCMToken();
         } else {
           toast.success('Berhasil terhubung dengan server', { id: 'signin' });
         }
