@@ -92,6 +92,9 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
 
   useEffect(() => {
     getCurrentUserLocation();
+    if (!deviceId) {
+      generateFCMToken();
+    }
   }, []);
 
   useEffect(() => {
@@ -116,9 +119,13 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/firebase-messaging-sw.js')
-        .then(function (registration) {
-          console.log('Registration successful, scope is:', registration.scope);
-          generateFCMToken();
+        .then((registration) => {
+          if (registration.active) {
+            console.log('service worker berhasil');
+            generateFCMToken();
+          } else {
+            console.log('service worker gagal');
+          }
         })
         .catch(function (err) {
           console.log('Service worker registration failed, error:', err);
@@ -132,9 +139,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         toast.loading('Menghubungkan ke server...', { id: 'signin' });
       } else {
         if (errorFCM) {
-          toast.error('Gagal menghubungkan anda dengan server, mengkoneksikan ulang...', { id: 'signin' });
-          setLoadingFCM(true);
-          generateFCMToken();
+          toast.error('Gagal menghubungkan anda dengan server, silahkan refresh ulang...', { id: 'signin' });
         } else {
           toast.success('Berhasil terhubung dengan server', { id: 'signin' });
         }

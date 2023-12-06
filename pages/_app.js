@@ -26,6 +26,7 @@ import Cookies from 'js-cookie';
 import { toast, Toaster } from 'react-hot-toast';
 import { Info } from '@material-ui/icons';
 import { clearParams } from 'redux/slice/filterParams';
+import firebase from 'firebase/compat/app';
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
@@ -34,16 +35,18 @@ const MainApp = (props) => {
   const dispatch = useDispatch();
   const dataParams = useSelector((state) => state.filterParams.value);
 
-  useEffect(() => {
-    const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+  // useEffect(() => {
+  //   const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
 
-    if (isSupported()) {
-      if (Notification.permission === 'granted') {
-        const message = getMessaging(firebaseApp);
-        onMessage(message, (payload) => dispatch(setNotification(payload)));
-      }
-    }
-  });
+  //   if (isSupported()) {
+  //     if (Notification.permission === 'granted') {
+  //       if (firebase?.messaging?.isSupported()) {
+  //         const message = getMessaging(firebaseApp);
+  //         onMessage(message, (payload) => dispatch(setNotification(payload)));
+  //       }
+  //     }
+  //   }
+  // });
 
   useEffect(async () => {
     fetch('https://static.ads-twitter.com/uwt.js', { method: 'head', mode: 'no-cors' })
