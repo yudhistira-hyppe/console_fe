@@ -37,7 +37,7 @@ const initStore = () => {
   const store = configureStore({
     reducer: reducers,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat([
+      getDefaultMiddleware({ serializableCheck: false }).concat([
         authApi.middleware,
         dashboardApi.middleware,
         engagementApi.middleware,
