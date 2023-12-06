@@ -26,6 +26,7 @@ import Cookies from 'js-cookie';
 import { toast, Toaster } from 'react-hot-toast';
 import { Info } from '@material-ui/icons';
 import { clearParams } from 'redux/slice/filterParams';
+import firebase from 'firebase/compat/app';
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
@@ -39,8 +40,10 @@ const MainApp = (props) => {
 
     if (isSupported()) {
       if (Notification.permission === 'granted') {
-        const message = getMessaging(firebaseApp);
-        onMessage(message, (payload) => dispatch(setNotification(payload)));
+        if (firebase?.messaging?.isSupported) {
+          const message = getMessaging(firebaseApp);
+          onMessage(message, (payload) => dispatch(setNotification(payload)));
+        }
       }
     }
   });
