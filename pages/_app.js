@@ -35,23 +35,6 @@ const MainApp = (props) => {
   const dataParams = useSelector((state) => state.filterParams.value);
 
   useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/firebase-messaging-sw.js')
-        .then(function (registration) {
-          console.log('Registration successful, scope is:', registration.scope);
-        })
-        .catch(function (err) {
-          console.log('Service worker registration failed, error:', err);
-        });
-    }
-  }, []);
-
-  useEffect(() => {
     const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
 
     if (isSupported()) {
@@ -73,7 +56,7 @@ const MainApp = (props) => {
   }, []);
 
   useEffect(() => {
-    if (router?.pathname?.includes(dataParams?.pathname)) {
+    if (!router?.pathname?.includes(dataParams?.pathname)) {
       dispatch(clearParams({}));
     }
   }, [router]);

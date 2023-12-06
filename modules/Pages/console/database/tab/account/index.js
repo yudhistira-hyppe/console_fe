@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack, Tooltip } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
@@ -10,6 +10,11 @@ import { CSVLink } from 'react-csv';
 import { LoadingButton } from '@mui/lab';
 import { Typography } from '@material-ui/core';
 import { GetApp } from '@material-ui/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { saveParams } from 'redux/slice/filterParams';
+import { isEmpty } from 'lodash';
+import dayjs from 'dayjs';
 
 const DatabaseTabAccountComponent = () => {
   const [filter, setFilter] = useState({
@@ -28,8 +33,11 @@ const DatabaseTabAccountComponent = () => {
     rangeOnline: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
+  const dataParams = useSelector((state) => state.filterParams.value);
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const getParams = () => {
+  const getParams = useCallback(() => {
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -48,7 +56,66 @@ const DatabaseTabAccountComponent = () => {
     filter.rangeOnline[1] && Object.assign(params, { endlogin: filter.rangeOnline[1] });
 
     return params;
-  };
+  }, [filter]);
+
+  console.log(dataParams);
+
+  useEffect(() => {
+    if (!isEmpty(dataParams?.username)) {
+      handleSearchChange('username', dataParams?.username);
+    }
+    if (!isEmpty(dataParams?.age)) {
+      handleSearchChange('age', dataParams?.age);
+    }
+    if (!isEmpty(dataParams?.lastOnline)) {
+      handleSearchChange('lastOnline', dataParams?.lastOnline);
+    }
+    if (!isEmpty(dataParams?.area)) {
+      dataParams?.area?.map((item) => handleSearchChange('area', item));
+    }
+    if (!isEmpty(dataParams?.gender)) {
+      dataParams?.gender?.map((item) => handleSearchChange('gender', item));
+    }
+    if (!isEmpty(dataParams?.type)) {
+      dataParams?.type?.map((item) => handleSearchChange('type', item));
+    }
+    if (!isEmpty(dataParams?.createdAt)) {
+      handleSearchChange('createdAt', dataParams?.createdAt);
+      if (dataParams?.createdAt[0] !== null) {
+        handleSearchChange(
+          'labelCreated',
+          `${dayjs(dataParams?.createdAt[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt[1]).format(
+            'DD-MM-YYYY',
+          )}`,
+        );
+      }
+    }
+
+    setFilter({
+      ...filter,
+      page: dataParams?.page || 0,
+      limit: dataParams?.limit || 10,
+      descending: dataParams?.descending || 'true',
+      username: dataParams?.username || '',
+      gender: dataParams?.gender || [],
+      age: dataParams?.age || '',
+      area: dataParams?.area || [],
+      rangeAge: dataParams?.rangeAge || [],
+      type: dataParams?.type || [],
+      createdAt: dataParams?.createdAt || [null, null],
+      labelCreated: dataParams?.createdAt?.[0]
+        ? `${dayjs(dataParams?.createdAt?.[0]).format('DD-MM-YYYY')} - ${dayjs(dataParams?.createdAt?.[1]).format(
+            'DD-MM-YYYY',
+          )}`
+        : '',
+      lastOnline: dataParams?.lastOnline || '',
+      rangeOnline: dataParams?.rangeOnline || [null, null],
+    });
+  }, []);
+
+  useEffect(() => {
+    dispatch(saveParams({ ...filter, pathname: router.pathname }));
+  }, [getParams]);
 
   const { data: listUser, isFetching: loadingUser } = useGetAllUserQuery(getParams());
 
@@ -62,6 +129,8 @@ const DatabaseTabAccountComponent = () => {
         };
       });
     }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [filter, loadingUser]);
 
   const {
@@ -111,10 +180,7 @@ const DatabaseTabAccountComponent = () => {
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'labelCreated':
           return prevVal.find((item) => item.parent === 'createdAt')
-            ? [
-                ...prevVal.filter((item) => item.parent !== 'createdAt'),
-                { parent: 'createdAt', value: `Tanggal Daftar (${value})` },
-              ]
+            ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
             : [...prevVal];
         case 'lastOnline':
           return value.length >= 1 && value[0]
@@ -254,7 +320,7 @@ const DatabaseTabAccountComponent = () => {
                 </span>
               </Tooltip>
             ) : (
-              <CSVLink data={listExport?.data} filename="Database Account.csv" onClick={() => handleExport()}>
+              <CSVLink data={listExport?.data || []} filename="Database Account.csv" onClick={() => handleExport()}>
                 <LoadingButton color="secondary" variant="contained">
                   <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                     Download CSV
