@@ -116,23 +116,22 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/firebase-messaging-sw.js')
+        .then((registration) => {
+          if (registration.active) {
+            console.log('service worker berhasil');
+            generateFCMToken();
+          } else {
+            console.log('service worker gagal');
+          }
+        })
+        .catch(function (err) {
+          console.log('Service worker registration failed, error:', err);
+        });
+    }
   }, []);
-
-  if ('serviceWorker' in navigator && !deviceId) {
-    navigator.serviceWorker
-      .register('/firebase-messaging-sw.js')
-      .then((registration) => {
-        if (registration.active) {
-          console.log('service worker berhasil');
-          generateFCMToken();
-        } else {
-          console.log('service worker gagal');
-        }
-      })
-      .catch(function (err) {
-        console.log('Service worker registration failed, error:', err);
-      });
-  }
 
   useEffect(() => {
     if (error === '') {
@@ -140,8 +139,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         toast.loading('Menghubungkan ke server...', { id: 'signin' });
       } else {
         if (errorFCM) {
-          toast.error('Gagal menghubungkan anda dengan server, mengkoneksikan ulang...', { id: 'signin' });
-          setLoadingFCM(true);
+          toast.error('Gagal menghubungkan anda dengan server, silahkan refresh ulang...', { id: 'signin' });
         } else {
           toast.success('Berhasil terhubung dengan server', { id: 'signin' });
         }
