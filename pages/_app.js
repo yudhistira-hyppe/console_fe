@@ -35,18 +35,36 @@ const MainApp = (props) => {
   const dispatch = useDispatch();
   const dataParams = useSelector((state) => state.filterParams.value);
 
-  // useEffect(() => {
-  //   const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+  useEffect(() => {
+    const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
 
-  //   if (isSupported()) {
-  //     if (Notification.permission === 'granted') {
-  //       if (firebase?.messaging?.isSupported()) {
-  //         const message = getMessaging(firebaseApp);
-  //         onMessage(message, (payload) => dispatch(setNotification(payload)));
-  //       }
-  //     }
-  //   }
-  // });
+    if (isSupported()) {
+      if (Notification.permission === 'granted') {
+        const message = getMessaging(firebaseApp);
+        onMessage(message, (payload) => dispatch(setNotification(payload)));
+      }
+    }
+  });
+
+  useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/firebase-messaging-sw.js', { scope: '/' })
+        .then((registration) => {
+          console.log('registration scope: ', registration.scope);
+        })
+        .catch(function (err) {
+          console.log('Service worker registration failed, error:', err);
+        });
+    }
+  });
 
   useEffect(async () => {
     fetch('https://static.ads-twitter.com/uwt.js', { method: 'head', mode: 'no-cors' })
