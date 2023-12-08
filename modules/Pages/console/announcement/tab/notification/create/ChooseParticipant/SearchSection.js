@@ -29,8 +29,19 @@ const SearchSection = ({ filter, handleChange }) => {
       key: 'selection',
     },
   ]);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [dateOnline, setDateOnline] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+  const [anchorEl, setAnchorEl] = useState({
+    create: null,
+    online: null,
+  });
   const [isDate, setDate] = useState(false);
+  const [isOnline, setOnline] = useState(false);
   const [week, setWeek] = useState(false);
 
   useEffect(() => {
@@ -56,16 +67,32 @@ const SearchSection = ({ filter, handleChange }) => {
     }
   }, [filter.createdAt]);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  useEffect(() => {
+    if (filter.rangeOnline[0] && filter.rangeOnline[1]) {
+      setDateOnline([
+        {
+          startDate: moment(filter.rangeOnline[0]).toDate(),
+          endDate: moment(filter.rangeOnline[1]).toDate(),
+          key: 'selection',
+        },
+      ]);
+      setOnline(true);
+    } else {
+      setWeek(null);
+      setDateOnline([
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: 'selection',
+        },
+      ]);
+      setOnline(false);
+    }
+  }, [filter.lastOnline]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const openCreated = Boolean(anchorEl.create);
+  const openOnline = Boolean(anchorEl.online);
+  const id = openCreated || openOnline ? 'simple-popover' : undefined;
 
   const { data: areas, isLoading: loadingArea } = useGetAreasQuery();
   const filteredArea = areas?.filter((item) => item?.stateName.toLowerCase()?.includes(search.toLowerCase()));
@@ -146,7 +173,7 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(2);
                     setValue([
                       {
-                        startDate: new Date().setDate(new Date().getDate() - 13),
+                        startDate: new Date().setDate(new Date().getDate() - 14),
                         endDate: new Date(),
                         key: 'selection',
                       },
@@ -176,7 +203,7 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(4);
                     setValue([
                       {
-                        startDate: new Date().setDate(new Date().getDate() - 29),
+                        startDate: new Date().setDate(new Date().getDate() - 30),
                         endDate: new Date(),
                         key: 'selection',
                       },
@@ -206,7 +233,7 @@ const SearchSection = ({ filter, handleChange }) => {
                     setWeek(12);
                     setValue([
                       {
-                        startDate: new Date().setDate(new Date().getDate() - 89),
+                        startDate: new Date().setDate(new Date().getDate() - 90),
                         endDate: new Date(),
                         key: 'selection',
                       },
@@ -231,7 +258,7 @@ const SearchSection = ({ filter, handleChange }) => {
                 placeholder="Pilih Tanggal"
                 autoComplete="off"
                 color="secondary"
-                onClick={handleClick}
+                onClick={(e) => setAnchorEl({ ...anchorEl, create: e.currentTarget })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -262,9 +289,9 @@ const SearchSection = ({ filter, handleChange }) => {
 
             <Popover
               id={id}
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handleClose}
+              open={openCreated}
+              anchorEl={anchorEl.create}
+              onClose={() => setAnchorEl({ ...anchorEl, create: null })}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -357,6 +384,27 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Tipe Akun</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup onChange={(e) => handleChange('type', e.target.value)}>
+              <FormControlLabel
+                label={'Tidak Terverifikasi'}
+                value="BASIC"
+                control={<Checkbox checked={filter.type.includes('BASIC')} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'Terverifikasi'}
+                value="PREMIUM"
+                control={<Checkbox checked={filter.type.includes('PREMIUM')} color="secondary" />}
+              />
+            </FormGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Lokasi</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
@@ -402,21 +450,115 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tipe Akun</Typography>
+            <Typography style={{ fontSize: '13px' }}>Terakhir Aktif</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('type', e.target.value)}>
+            <RadioGroup
+              onChange={(e) => {
+                handleChange('lastOnline', e.target.name);
+                handleChange('rangeOnline', JSON.parse(e.target.value));
+                setDateOnline([
+                  {
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    key: 'selection',
+                  },
+                ]);
+                setOnline(false);
+              }}>
               <FormControlLabel
-                label={'Tidak Terverifikasi'}
-                value="BASIC"
-                control={<Checkbox checked={filter.type.includes('BASIC')} color="secondary" />}
+                name="1 jam lalu"
+                label={'1 Jam lalu'}
+                value={JSON.stringify([
+                  moment().subtract(1, 'hour').format('YYYY-MM-DD HH:mm:ss'),
+                  moment().format('YYYY-MM-DD HH:mm:ss'),
+                ])}
+                control={<Radio checked={filter.lastOnline === '1 jam lalu'} color="secondary" />}
               />
               <FormControlLabel
-                label={'Terverifikasi'}
-                value="PREMIUM"
-                control={<Checkbox checked={filter.type.includes('PREMIUM')} color="secondary" />}
+                name="1 hari lalu"
+                label={'1 Hari lalu'}
+                value={JSON.stringify([
+                  moment().subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss'),
+                  moment().format('YYYY-MM-DD HH:mm:ss'),
+                ])}
+                control={<Radio checked={filter.lastOnline === '1 hari lalu'} color="secondary" />}
               />
-            </FormGroup>
+              <FormControlLabel
+                name="1 minggu lalu"
+                label={'1 minggu lalu'}
+                value={JSON.stringify([
+                  moment().subtract(1, 'week').format('YYYY-MM-DD HH:mm:ss'),
+                  moment().format('YYYY-MM-DD HH:mm:ss'),
+                ])}
+                control={<Radio checked={filter.lastOnline === '1 minggu lalu'} color="secondary" />}
+              />
+              <FormControlLabel
+                name="1 bulan lalu"
+                label={'1 Bulan lalu'}
+                value={JSON.stringify([
+                  moment().subtract(1, 'month').format('YYYY-MM-DD HH:mm:ss'),
+                  moment().format('YYYY-MM-DD HH:mm:ss'),
+                ])}
+                control={<Radio checked={filter.lastOnline === '1 bulan lalu'} color="secondary" />}
+              />
+            </RadioGroup>
+            <Stack direction="row" alignItems="center" spacing={1} mt={1}>
+              <TextField
+                value={
+                  isOnline
+                    ? `${moment(dateOnline[0]?.startDate).format('DD/MM/YYYY')} - ${moment(dateOnline[0]?.endDate).format(
+                        'DD/MM/YYYY',
+                      )}`
+                    : ''
+                }
+                color="secondary"
+                placeholder="Pilih Tanggal"
+                autoComplete="off"
+                onClick={(e) => setAnchorEl({ ...anchorEl, online: e.currentTarget })}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <DateRange />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Stack>
+
+            <Popover
+              id={id}
+              open={openOnline}
+              anchorEl={anchorEl.online}
+              onClose={() => setAnchorEl({ ...anchorEl, online: null })}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}>
+              <DateRangePicker
+                onChange={(item) => {
+                  setDateOnline([item.selection]);
+                  handleChange('rangeOnline', [
+                    moment(item.selection.startDate).format('YYYY-MM-DD'),
+                    item.selection.endDate ? moment(item.selection.endDate).format('YYYY-MM-DD') : '',
+                  ]);
+                  setOnline(true);
+                  handleChange(
+                    'lastOnline',
+                    `${moment(item.selection.startDate).format('DD-MM-YYYY')} - ${
+                      item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
+                    }`,
+                  );
+                }}
+                dragSelectionEnabled={false}
+                moveRangeOnFirstSelection={false}
+                editableDateInputs={true}
+                ranges={dateOnline}
+                maxDate={dayjs().toDate()}
+                direction="horizontal"
+                rangeColors={['#AA22AF']}
+              />
+            </Popover>
           </AccordionDetails>
         </Accordion>
       </Box>

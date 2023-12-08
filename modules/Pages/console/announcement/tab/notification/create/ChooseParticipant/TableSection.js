@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { Button, Checkbox, CircularProgress, Divider, IconButton, Pagination, Stack } from '@mui/material';
+import { Button, Checkbox, CircularProgress, Divider, IconButton, Pagination, Stack, Tooltip } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -78,6 +78,15 @@ const TableSection = ({
       newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
     }
     setSelected(newSelected);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelected = listAllUser?.data?.map((n) => n);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
   };
 
   return (
@@ -147,8 +156,29 @@ const TableSection = ({
           <Table>
             <TableHead>
               <TableRow style={{ height: 70 }}>
-                <TableCell colSpan={7}>
+                <TableCell colSpan={10}>
                   <Stack direction="row" alignItems="center" gap={2}>
+                    <Tooltip
+                      title={
+                        loadingAll
+                          ? 'Loading mendapatkan data...'
+                          : filterList?.length < 1
+                          ? 'Hanya berlaku untuk data filter'
+                          : 'Pilih Semua'
+                      }>
+                      <div>
+                        <Checkbox
+                          color="secondary"
+                          indeterminate={selected.length > 0 && selected.length < listAllUser?.data?.length}
+                          checked={selected.length > 0 && selected.length === listAllUser?.data?.length}
+                          onChange={handleSelectAllClick}
+                          inputProps={{
+                            'aria-label': 'select all desserts',
+                          }}
+                          disabled={loadingAll || filterList?.length < 1}
+                        />
+                      </div>
+                    </Tooltip>
                     <Typography style={{ fontWeight: 'bold', color: '#00000099' }}>
                       Partisipan Terpilih ({selected?.length})
                     </Typography>
@@ -161,6 +191,7 @@ const TableSection = ({
               <TableRow>
                 <TableCell align="left">Nama</TableCell>
                 <TableCell align="left">Tanggal Daftar</TableCell>
+                <TableCell align="left">Terakhir Aktif</TableCell>
                 <TableCell align="left">Jenis Kelamin</TableCell>
                 <TableCell align="left">Umur</TableCell>
                 <TableCell align="left">Lokasi</TableCell>
@@ -214,6 +245,13 @@ const TableSection = ({
                         variant="body1"
                         style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 140, overflow: 'hidden' }}>
                         {moment(item?.createdAt).utc().format('DD/MM/YYYY')}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant="body1" style={{ width: 150, fontSize: '12px' }}>
+                        {item?.lastlogin
+                          ? moment(item?.lastlogin).locale('id').startOf('minute').fromNow().replace(' yang ', ' ')
+                          : '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">

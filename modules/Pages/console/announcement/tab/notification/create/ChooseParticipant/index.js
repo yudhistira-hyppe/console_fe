@@ -23,6 +23,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
     type: [],
     labelCreated: '',
     createdAt: [null, null],
+    lastOnline: '',
+    rangeOnline: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
   const [selected, setSelected] = useState([]);
@@ -52,6 +54,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
     filter.type.length >= 1 && Object.assign(params, { jenis: filter.type.map((item) => item) });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
+    filter.rangeOnline[0] && Object.assign(params, { startlogin: filter.rangeOnline[0] });
+    filter.rangeOnline[1] && Object.assign(params, { endlogin: filter.rangeOnline[1] });
 
     return params;
   };
@@ -125,6 +129,14 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
           return prevVal.find((item) => item.parent === 'createdAt')
             ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
             : [...prevVal];
+        case 'lastOnline':
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Terakhir Online (${value})` }]
+              : [...prevVal, { parent: kind, value: `Terakhir Online (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'rangeOnline':
+          return [...prevVal];
         case 'clearAll':
           return [];
         default:
@@ -195,6 +207,10 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
           return { ...prevVal, createdAt: value, page: 0 };
         case 'labelCreated':
           return { ...prevVal, labelCreated: value };
+        case 'lastOnline':
+          return { ...prevVal, lastOnline: value, page: 0 };
+        case 'rangeOnline':
+          return { ...prevVal, rangeOnline: value, page: 0 };
         case 'clearAge':
           return { ...prevVal, age: '', rangeAge: [], page: 0 };
         case 'clearAll':
@@ -210,6 +226,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
             type: [],
             labelCreated: '',
             createdAt: [null, null],
+            lastOnline: '',
+            rangeOnline: [null, null],
           };
         default:
           return { ...prevVal };
@@ -253,7 +271,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
             onClick={() => {
               handleInputChange(selected);
               Router.replace('/announcement/notification/create');
-            }}>
+            }}
+            disabled={selected?.length < 1}>
             <Typography style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: 14 }}>
               Terapkan Pilihan
             </Typography>
