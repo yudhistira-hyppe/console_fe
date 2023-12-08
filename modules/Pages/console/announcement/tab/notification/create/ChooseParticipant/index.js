@@ -21,6 +21,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
     area: [],
     rangeAge: [],
     type: [],
+    labelCreated: '',
+    createdAt: [null, null],
   });
   const [filterList, setFilterList] = useState([]);
   const [selected, setSelected] = useState([]);
@@ -48,6 +50,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
     filter.area.length >= 1 && Object.assign(params, { lokasi: filter.area.map((item) => item?._id) });
     filter.age !== '' && Object.assign(params, { startage: filter.rangeAge[0], endage: filter.rangeAge[1] });
     filter.type.length >= 1 && Object.assign(params, { jenis: filter.type.map((item) => item) });
+    filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
+    filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
 
     return params;
   };
@@ -111,6 +115,16 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
             ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'createdAt':
+          return value.length >= 1 && value[0]
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: 'Tanggal Daftar' }]
+              : [...prevVal, { parent: kind, value: 'Tanggal Daftar' }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'labelCreated':
+          return prevVal.find((item) => item.parent === 'createdAt')
+            ? [...prevVal.filter((item) => item.parent !== 'createdAt'), { parent: 'createdAt', value: value }]
+            : [...prevVal];
         case 'clearAll':
           return [];
         default:
@@ -177,6 +191,10 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
               page: 0,
             };
           }
+        case 'createdAt':
+          return { ...prevVal, createdAt: value, page: 0 };
+        case 'labelCreated':
+          return { ...prevVal, labelCreated: value };
         case 'clearAge':
           return { ...prevVal, age: '', rangeAge: [], page: 0 };
         case 'clearAll':
@@ -190,6 +208,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
             area: [],
             rangeAge: [],
             type: [],
+            labelCreated: '',
+            createdAt: [null, null],
           };
         default:
           return { ...prevVal };

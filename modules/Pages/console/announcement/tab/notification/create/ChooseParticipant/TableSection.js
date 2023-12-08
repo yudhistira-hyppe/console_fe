@@ -160,6 +160,7 @@ const TableSection = ({
             <TableHead>
               <TableRow>
                 <TableCell align="left">Nama</TableCell>
+                <TableCell align="left">Tanggal Daftar</TableCell>
                 <TableCell align="left">Jenis Kelamin</TableCell>
                 <TableCell align="left">Umur</TableCell>
                 <TableCell align="left">Lokasi</TableCell>
@@ -211,7 +212,14 @@ const TableSection = ({
                     <TableCell align="left">
                       <Typography
                         variant="body1"
-                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 80, overflow: 'hidden' }}>
+                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 140, overflow: 'hidden' }}>
+                        {moment(item?.createdAt).utc().format('DD/MM/YYYY')}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography
+                        variant="body1"
+                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 120, overflow: 'hidden' }}>
                         {item?.gender === 'MALE' && 'Laki-laki'}
                         {item?.gender === 'FEMALE' && 'Perempuan'}
                         {item?.gender === 'OTHER' && 'Lainnya'}
@@ -230,12 +238,13 @@ const TableSection = ({
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
                           whiteSpace: 'nowrap',
+                          width: 200,
                         }}>
                         {item?.areas || '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      <Typography variant="body1" style={{ width: 160, fontSize: '12px' }}>
                         {item?.jenis === 'BASIC' && 'Tidak Terverifikasi'}
                         {item?.jenis === 'PREMIUM' && 'Terverifikasi'}
                         {!item?.jenis && '-'}
