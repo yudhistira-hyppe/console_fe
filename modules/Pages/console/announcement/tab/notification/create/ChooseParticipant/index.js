@@ -101,6 +101,8 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
   };
 
   const handleSearchChange = (kind, value) => {
+    setSelected([]);
+
     setFilterList((prevVal) => {
       switch (kind) {
         case 'username':
