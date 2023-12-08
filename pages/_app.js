@@ -64,7 +64,7 @@ const MainApp = (props) => {
           console.log('Service worker registration failed, error:', err);
         });
     }
-  });
+  }, []);
 
   useEffect(async () => {
     fetch('https://static.ads-twitter.com/uwt.js', { method: 'head', mode: 'no-cors' })
