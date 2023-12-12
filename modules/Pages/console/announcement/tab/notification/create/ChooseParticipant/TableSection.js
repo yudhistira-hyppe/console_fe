@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -47,7 +47,7 @@ const TableSection = ({
   filter,
   loading,
   loadingAll,
-  listTickets,
+  listUser,
   listAllUser,
   selected,
   setSelected,
@@ -55,6 +55,11 @@ const TableSection = ({
   const { authUser } = useAuth();
   const classes = useStyles();
   const [hoverRemove, setHoverRemove] = useState({ show: false, id: null });
+  const [checkAll, setCheckAll] = useState(false);
+
+  useEffect(() => {
+    setCheckAll(false);
+  }, [loadingAll]);
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -82,11 +87,34 @@ const TableSection = ({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = listAllUser?.data?.map((n) => n);
-      setSelected(newSelected);
+      setCheckAll(true);
+
+      const allSelected = listAllUser?.data?.map((n) => n);
+
+      const newSelected = allSelected?.filter((bot) => {
+        if (!selected?.map((item) => item?._id).includes(bot?._id)) {
+          return bot;
+        } else {
+          return;
+        }
+      });
+
+      setSelected([...selected, ...newSelected]);
       return;
     }
-    setSelected([]);
+    setCheckAll(false);
+
+    const allSelected = listAllUser?.data?.map((n) => n);
+
+    const newSelected = selected?.filter((bot) => {
+      if (allSelected?.map((item) => item?._id).includes(bot?._id)) {
+        return;
+      } else {
+        return bot;
+      }
+    });
+
+    setSelected([...newSelected]);
   };
 
   return (
@@ -169,8 +197,8 @@ const TableSection = ({
                       <div>
                         <Checkbox
                           color="secondary"
-                          indeterminate={selected.length > 0 && selected.length < listAllUser?.data?.length}
-                          checked={selected.length > 0 && selected.length === listAllUser?.data?.length}
+                          indeterminate={selected.length > 0 && selected.length !== listAllUser?.data?.length && !checkAll}
+                          checked={(selected.length > 0 && selected.length === listAllUser?.data?.length) || checkAll}
                           onChange={handleSelectAllClick}
                           inputProps={{
                             'aria-label': 'select all desserts',
@@ -210,8 +238,8 @@ const TableSection = ({
                     </Stack>
                   </TableCell>
                 </TableRow>
-              ) : listTickets?.data?.length >= 1 ? (
-                listTickets?.data?.map((item, i) => (
+              ) : listUser?.data?.length >= 1 ? (
+                listUser?.data?.map((item, i) => (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
                     <TableCell align="left">
                       <Stack direction="row" alignItems="center" gap="15px" width={320}>
@@ -340,7 +368,7 @@ const TableSection = ({
           </Table>
         </ScrollBar>
       </TableContainer>
-      {listTickets?.data?.length >= 1 && !loading && (
+      {listUser?.data?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
           <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
             <NavigateBefore />
@@ -348,7 +376,7 @@ const TableSection = ({
           <IconButton
             color="secondary"
             onClick={() => handlePageChange(filter.page + 1)}
-            disabled={listTickets?.data?.length < 10}>
+            disabled={listUser?.data?.length < 10}>
             <NavigateNext />
           </IconButton>
         </Stack>
