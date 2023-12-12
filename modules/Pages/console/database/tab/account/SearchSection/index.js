@@ -100,13 +100,13 @@ const SearchSection = ({ filter, handleChange }) => {
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Username Akun</Typography>
+            <Typography style={{ fontSize: '13px' }}>Username / Email</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <DelayedTextField
               fullWidth
               waitForInput={true}
-              placeholder="Cari Username"
+              placeholder="Cari username / email"
               name="username"
               filterValue={filter.username}
               onChange={(e) => handleChangeDelay(e)}
@@ -309,6 +309,11 @@ const SearchSection = ({ filter, handleChange }) => {
                   );
                   setDate(true);
                   setWeek(null);
+                }}
+                onRangeFocusChange={(date) => {
+                  if (date?.[1] < 1) {
+                    setAnchorEl({ ...anchorEl, create: null });
+                  }
                 }}
                 maxDate={dayjs().toDate()}
                 dragSelectionEnabled={false}
@@ -525,6 +530,11 @@ const SearchSection = ({ filter, handleChange }) => {
                       item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
                     }`,
                   );
+                }}
+                onRangeFocusChange={(date) => {
+                  if (date?.[1] < 1) {
+                    setAnchorEl({ ...anchorEl, online: null });
+                  }
                 }}
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}

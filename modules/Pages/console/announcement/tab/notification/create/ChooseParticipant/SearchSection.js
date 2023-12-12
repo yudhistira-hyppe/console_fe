@@ -312,6 +312,11 @@ const SearchSection = ({ filter, handleChange }) => {
                   setDate(true);
                   setWeek(null);
                 }}
+                onRangeFocusChange={(date) => {
+                  if (date?.[1] < 1) {
+                    setAnchorEl({ ...anchorEl, create: null });
+                  }
+                }}
                 maxDate={dayjs().toDate()}
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
@@ -549,6 +554,11 @@ const SearchSection = ({ filter, handleChange }) => {
                       item.selection.endDate ? moment(item.selection.endDate).format('DD-MM-YYYY') : ''
                     }`,
                   );
+                }}
+                onRangeFocusChange={(date) => {
+                  if (date?.[1] < 1) {
+                    setAnchorEl({ ...anchorEl, online: null });
+                  }
                 }}
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
