@@ -101,8 +101,6 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
   };
 
   const handleSearchChange = (kind, value) => {
-    setSelected([]);
-
     setFilterList((prevVal) => {
       switch (kind) {
         case 'username':
@@ -247,7 +245,7 @@ const ChooseParticipant = ({ inputValue, handleInputChange }) => {
           filter={filter}
           loading={loadingUser}
           loadingAll={loadingAllUser}
-          listTickets={listUser}
+          listUser={listUser}
           listAllUser={allUser}
           handlePageChange={handlePageChange}
           handleOrder={onOrderChange}
