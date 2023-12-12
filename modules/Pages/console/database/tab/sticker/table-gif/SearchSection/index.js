@@ -137,6 +137,11 @@ const SearchSection = ({ filter, handleChange }) => {
                   ]);
                   setDate(true);
                 }}
+                onRangeFocusChange={(date) => {
+                  if (date?.[1] < 1) {
+                    handleClose();
+                  }
+                }}
                 dragSelectionEnabled={false}
                 moveRangeOnFirstSelection={false}
                 editableDateInputs={true}

@@ -163,8 +163,8 @@ const DatabaseTabAccountComponent = () => {
         case 'username':
           return value.length >= 1
             ? prevVal.find((item) => item.parent === kind)
-              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `username (${value})` }]
-              : [...prevVal, { parent: kind, value: `username (${value})` }]
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Pencarian (${value})` }]
+              : [...prevVal, { parent: kind, value: `Pencarian (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'age':
           return prevVal.find((item) => item.parent === kind)

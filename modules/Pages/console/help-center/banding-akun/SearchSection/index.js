@@ -246,10 +246,16 @@ const SearchSection = ({ filter, handleChange }) => {
                   ]);
                   item.selection.endDate && setAnchorEl(null);
                 }}
+                onRangeFocusChange={(date) => {
+                  if (date?.[1] < 1) {
+                    handleClose();
+                  }
+                }}
                 showPreview={false}
                 dragSelectionEnabled={false}
                 retainEndDateOnFirstSelection={true}
                 ranges={value}
+                rangeColors={['#AA22AF']}
                 direction="horizontal"
               />
             </Popover>
