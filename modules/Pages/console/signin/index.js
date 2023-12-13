@@ -134,7 +134,7 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
         }
       }
     }
-  }, [loadingFCM, errorFCM, error]);
+  }, [loadingFCM, errorFCM]);
 
   const generateFCMToken = async () => {
     const isSupported = () => 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
