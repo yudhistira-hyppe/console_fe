@@ -77,7 +77,7 @@ const TableSection = ({ filter, filterList, handleOrder, handlePageChange, handl
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = listEffect?.data?.map((n, key) => key);
+      const newSelected = listEffect?.data?.map((n, key) => n?._id);
       setSelected(newSelected);
       return;
     }
@@ -286,11 +286,11 @@ const TableSection = ({ filter, filterList, handleOrder, handlePageChange, handl
                   <TableCell style={{ maxWidth: 80, width: 80 }}>
                     <Checkbox
                       color="secondary"
-                      checked={selected.includes(i)}
+                      checked={selected.includes(item?._id)}
                       inputProps={{
                         'aria-labelledby': 'asd',
                       }}
-                      onClick={(event) => handleClick(event, i)}
+                      onClick={(event) => handleClick(event, item?._id)}
                       disabled={!access.find((item) => item?.nameModule === 'database_music')?.acces?.createAcces}
                     />
                   </TableCell>
