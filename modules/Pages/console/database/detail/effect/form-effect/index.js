@@ -72,6 +72,7 @@ const FormEffect = (props) => {
       />
       <ModalSave
         status={status}
+        isLoading={loadingCreate}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
         onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
@@ -155,8 +156,7 @@ const FormEffect = (props) => {
               </Stack>
             )}
             <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
-              <LoadingButton
-                loading={loadingCreate}
+              <Button
                 variant="contained"
                 color="secondary"
                 style={{ width: 'fit-content', fontWeight: 'bold' }}
@@ -169,7 +169,7 @@ const FormEffect = (props) => {
                   !inputValue.fileAsset
                 }>
                 {status !== 'create' ? 'Terapkan' : 'Simpan'}
-              </LoadingButton>
+              </Button>
               {status === 'create' && (
                 <Button
                   variant="contained"
