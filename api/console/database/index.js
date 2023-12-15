@@ -4,7 +4,18 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const databaseApi = createApi({
   reducerPath: 'console/database',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['Konten', 'Detail-Konten', 'Util', 'Media', 'Detail-Media', 'Sticker', 'Detail-Sticker', 'Category-Sticker'],
+  tagTypes: [
+    'Konten',
+    'Detail-Konten',
+    'Util',
+    'Media',
+    'Detail-Media',
+    'Effect',
+    'Category-Effect',
+    'Sticker',
+    'Detail-Sticker',
+    'Category-Sticker',
+  ],
   endpoints: (build) => ({
     //Account
     getAllUser: build.query({
@@ -159,6 +170,64 @@ export const databaseApi = createApi({
       invalidatesTags: ['Media'],
     }),
 
+    //Effect
+    getEffect: build.query({
+      query: (data) => ({
+        url: '/assets/filter/listconsole',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['Effect'],
+    }),
+    getCategoryEffect: build.query({
+      query: (data) => ({
+        url: '/filtercategory/list',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['Category-Effect'],
+    }),
+    updateEffectStatus: build.mutation({
+      query: (data) => ({
+        url: '/assets/filter/updatelist',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Effect'],
+    }),
+    createEffect: build.mutation({
+      query: (data) => ({
+        url: '/assets/filter/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Effect'],
+    }),
+    createCategoryEffect: build.mutation({
+      query: (data) => ({
+        url: '/filtercategory',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Effect'],
+    }),
+    updateCategoryEffect: build.mutation({
+      query: ({ id, data }) => ({
+        url: `/filtercategory/update/${id}`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Effect'],
+    }),
+    deleteCategoryEffect: build.mutation({
+      query: (id) => ({
+        url: `/filtercategory/update/${id}`,
+        method: 'POST',
+        body: { active: false },
+      }),
+      invalidatesTags: ['Category-Effect'],
+    }),
+
     //Sticker
     getStickerTrend: build.query({
       query: () => ({
@@ -264,6 +333,15 @@ export const {
   useUpdateMusicMutation,
   useCreateMusicMutation,
   useDeleteMusicMutation,
+
+  //Effect
+  useGetEffectQuery,
+  useGetCategoryEffectQuery,
+  useUpdateEffectStatusMutation,
+  useCreateEffectMutation,
+  useCreateCategoryEffectMutation,
+  useUpdateCategoryEffectMutation,
+  useDeleteCategoryEffectMutation,
 
   //Sticker
   useGetStickerTrendQuery,

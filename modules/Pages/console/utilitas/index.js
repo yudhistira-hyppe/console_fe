@@ -13,6 +13,7 @@ import UtilityAds from './ads';
 import JenisChallenge from './jenis-challenge';
 import BadgeChallenge from './badge-challenge';
 import { Typography } from '@material-ui/core';
+import UtilityDatabase from './database';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -71,6 +72,7 @@ const UtilitasComponent = () => {
           access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge')) && (
           <Tab label="Challenge" value="challenge" className={classes.tab} />
         )}
+        <Tab label="Database" value="database" className={classes.tab} />
         {/* <Tab label="Pusat Iklan" value="ads" className={classes.tab} /> */}
       </TabList>
       <div style={{ marginTop: 30, height: '100%' }}>
@@ -118,6 +120,9 @@ const UtilitasComponent = () => {
             </Stack>
           </TabPanel>
         )}
+        <TabPanel value="database" style={{ padding: 0, height: '100%' }}>
+          <UtilityDatabase />
+        </TabPanel>
         {/* <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
           <UtilityAds />
         </TabPanel> */}

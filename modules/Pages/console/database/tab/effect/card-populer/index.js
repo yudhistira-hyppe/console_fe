@@ -48,7 +48,7 @@ const CardPopular = (props) => {
                 <Stack direction="row" alignItems="center" gap="12px" width="100%">
                   {image && (
                     <Avatar
-                      src={item?._id?.apsaraThumnailUrl || new Error()}
+                      src={item?.apsaraThumnailUrl || new Error()}
                       variant="rounded"
                       style={{ width: '100%', maxWidth: 40, height: 40 }}
                       alt="x"

@@ -14,6 +14,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import moment from 'moment';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
+import { useGetCategoryEffectQuery } from 'api/console/database';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -27,6 +28,8 @@ const SearchSection = ({ filter, handleChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isDate, setDate] = useState(false);
   const handleChangeDelay = (e) => handleChange(e.target.name, e.target.value);
+
+  const { data: dataCategory, isLoading: loadingCategory } = useGetCategoryEffectQuery({ page: 0 });
 
   useEffect(() => {
     if (!filter.createdAt[0] && !null) {
@@ -160,18 +163,22 @@ const SearchSection = ({ filter, handleChange }) => {
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('category', e.target.value)}>
-              <FormControlLabel
-                label={'Estetis'}
-                value="Estetis"
-                control={<Checkbox defaultChecked={false} checked={filter.category.includes('Estetis')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'Efek Khusus'}
-                value="Efek Khusus"
-                control={
-                  <Checkbox defaultChecked={false} checked={filter.category.includes('Efek Khusus')} color="secondary" />
-                }
-              />
+              {loadingCategory ? (
+                <Typography>Loading data...</Typography>
+              ) : dataCategory?.data?.length >= 1 ? (
+                dataCategory?.data?.map((item, key) => (
+                  <FormControlLabel
+                    key={key}
+                    label={item?.name}
+                    value={JSON.stringify(item)}
+                    control={
+                      <Checkbox checked={filter?.category?.map((t) => t.name).includes(item?.name)} color="secondary" />
+                    }
+                  />
+                ))
+              ) : (
+                <Typography>Tidak ada data.</Typography>
+              )}
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
@@ -182,20 +189,18 @@ const SearchSection = ({ filter, handleChange }) => {
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
-            <FormGroup onChange={(e) => handleChange('status', e.target.value)}>
+            <RadioGroup onChange={(e) => handleChange('status', e.target.value)}>
               <FormControlLabel
                 label={'Aktif'}
                 value="Aktif"
-                control={<Checkbox defaultChecked={false} checked={filter.status.includes('Aktif')} color="secondary" />}
+                control={<Radio checked={filter.status === 'Aktif'} color="secondary" />}
               />
               <FormControlLabel
                 label={'Tidak Aktif'}
                 value="Tidak Aktif"
-                control={
-                  <Checkbox defaultChecked={false} checked={filter.status.includes('Tidak Aktif')} color="secondary" />
-                }
+                control={<Radio checked={filter.status === 'Tidak Aktif'} color="secondary" />}
               />
-            </FormGroup>
+            </RadioGroup>
           </AccordionDetails>
         </Accordion>
       </Box>

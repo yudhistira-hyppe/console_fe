@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { Button, Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -16,12 +17,12 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalSave({ showModal, onClose, onConfirm, status }) {
+export default function ModalSave({ showModal, statusEfek, onClose, onConfirm, status, isLoading }) {
   return (
     <div>
       <Modal
         open={showModal}
-        onClose={onClose}
+        onClose={() => (isLoading ? {} : onClose())}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
@@ -36,17 +37,20 @@ export default function ModalSave({ showModal, onClose, onConfirm, status }) {
               <>
                 <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>Simpan Efek</Typography>
                 <Typography style={{ textAlign: 'center', fontFamily: 'Lato' }}>
-                  Kamu akan <strong>menyimpan & mengaktifkan</strong> efek ini. Efek akan tersedia di aplikasi Hyppe
+                  Kamu akan <strong>menyimpan {statusEfek === 'active' ? ' & mengaktifkan' : ''}</strong> efek ini. Efek akan
+                  tersedia di aplikasi Hyppe
                 </Typography>
               </>
             )}
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
+            <LoadingButton loading={isLoading} variant="contained" color="secondary" onClick={onConfirm}>
               Konfirmasi
+            </LoadingButton>
+            <Button variant="text" onClick={onClose} disabled={isLoading}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>

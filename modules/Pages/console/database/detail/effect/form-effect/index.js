@@ -12,16 +12,16 @@ import { toast } from 'react-hot-toast';
 import UploadThumbnail from '../upload-thumbnail';
 import UploadEffect from '../upload-effect';
 import ModalBatal from '../Modal/ModalBatal';
+import { useCreateEffectMutation, useGetCategoryEffectQuery } from 'api/console/database';
 
 const FormEffect = (props) => {
   const { status, data, id } = props;
   const [inputValue, setInputValue] = useState({
-    effectName: '',
-    category: '',
+    namafile: '',
+    category_id: '',
     status: '',
-    apsaraThumbnail: '',
-    apsaraEffect: '',
-    status: '',
+    imageFile: '',
+    fileAsset: '',
   });
   const [modal, setModal] = useState({
     delete: false,
@@ -30,36 +30,36 @@ const FormEffect = (props) => {
     cancel: false,
     status: '',
   });
-  const [loading, setLoading] = useState(false);
+  const { data: categories, isLoading: loadingCategory } = useGetCategoryEffectQuery({ page: 0 });
+  const [createEffect, { isLoading: loadingCreate }] = useCreateEffectMutation();
 
   const handleChangeInput = (e) => {
     const value = e.target.value;
     setInputValue({ ...inputValue, [e.target.name]: value });
   };
 
-  const handleApsaraMedia = async () => {
-    const response = await fetch('/api/apsara-upload-media');
-    const data = await response.json();
-
-    return data;
-  };
-
-  const handleApsaraImage = async () => {
-    const response = await fetch('/api/apsara-upload-image');
-    const data = await response.json();
-
-    return data;
-  };
-
   const handleCreate = () => {
-    setModal({ ...modal, save: !modal.save });
+    let formData = new FormData();
+    formData.append('namafile', inputValue?.namafile);
+    formData.append('category_id', inputValue?.category_id);
+    formData.append('status', inputValue?.status === 'active' ? true : false);
+    formData.append('imageFile', inputValue?.imageFile);
+    formData.append('fileAsset', inputValue?.fileAsset);
+
+    createEffect(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success('Berhasil menambahkan efek');
+        router.replace('/database/effect');
+      }
+      setModal({ ...modal, save: !modal.save });
+    });
   };
 
   const handleUpdate = () => {
     setModal({ ...modal, save: !modal.save });
   };
-
-  console.log(inputValue);
 
   return (
     <>
@@ -70,6 +70,8 @@ const FormEffect = (props) => {
       />
       <ModalSave
         status={status}
+        statusEfek={inputValue?.status}
+        isLoading={loadingCreate}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
         onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
@@ -103,8 +105,8 @@ const FormEffect = (props) => {
                 Nama Efek <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <TextField
-                name="effectName"
-                value={inputValue.effectName}
+                name="namafile"
+                value={inputValue.namafile}
                 variant="outlined"
                 placeholder="Nama Efek"
                 onChange={handleChangeInput}
@@ -115,17 +117,21 @@ const FormEffect = (props) => {
                 Kategori <span style={{ color: '#E61D37' }}>*</span>
               </Typography>
               <Select
-                name="category"
-                value={inputValue.category}
+                name="category_id"
+                value={inputValue.category_id}
                 placeholder="Pilih Kategori Efek"
                 onChange={handleChangeInput}
                 color="secondary"
                 displayEmpty>
                 <MenuItem value="" disabled>
-                  Pilih Kategori Efek
+                  {loadingCategory ? 'Loading data...' : 'Pilih Kategori Efek'}
                 </MenuItem>
-                <MenuItem value="estetis">Estetis</MenuItem>
-                <MenuItem value="khusus">Efek Khusus</MenuItem>
+                {!loadingCategory &&
+                  categories?.data?.map((item, key) => (
+                    <MenuItem key={key} value={item?._id}>
+                      {item?.name || '-'}
+                    </MenuItem>
+                  ))}
               </Select>
             </Stack>
             {status === 'create' && (
@@ -136,34 +142,33 @@ const FormEffect = (props) => {
                 <Select
                   name="status"
                   value={inputValue.status}
-                  placeholder="Pilih Kategori Efek"
+                  placeholder="Pilih status"
                   onChange={handleChangeInput}
                   color="secondary"
                   displayEmpty>
                   <MenuItem value="" disabled>
                     Pilih Status Awal
                   </MenuItem>
-                  <MenuItem value="estetis">Aktif</MenuItem>
-                  <MenuItem value="khusus">Tidak Aktif</MenuItem>
+                  <MenuItem value="active">Aktif</MenuItem>
+                  <MenuItem value="nonactive">Tidak Aktif</MenuItem>
                 </Select>
               </Stack>
             )}
             <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
-              <LoadingButton
-                loading={loading}
+              <Button
                 variant="contained"
                 color="secondary"
                 style={{ width: 'fit-content', fontWeight: 'bold' }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
                 disabled={
-                  !inputValue.effectName ||
-                  !inputValue.category ||
+                  !inputValue.namafile ||
+                  !inputValue.category_id ||
                   !inputValue.status ||
-                  !inputValue.apsaraThumbnail ||
-                  !inputValue.apsaraEffect
+                  !inputValue.imageFile ||
+                  !inputValue.fileAsset
                 }>
                 {status !== 'create' ? 'Terapkan' : 'Simpan'}
-              </LoadingButton>
+              </Button>
               {status === 'create' && (
                 <Button
                   variant="contained"
@@ -171,11 +176,11 @@ const FormEffect = (props) => {
                   style={{ width: 'fit-content', fontWeight: 'bold' }}
                   onClick={() => {
                     if (
-                      !inputValue.effectName &&
-                      !inputValue.category &&
+                      !inputValue.namafile &&
+                      !inputValue.category_id &&
                       !inputValue.status &&
-                      !inputValue.apsaraThumbnail &&
-                      !inputValue.apsaraEffect
+                      !inputValue.imageFile &&
+                      !inputValue.fileEffect
                     ) {
                       router.replace('/database/effect');
                     } else {
