@@ -17,7 +17,7 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalSave({ showModal, onClose, onConfirm, status, isLoading }) {
+export default function ModalSave({ showModal, statusEfek, onClose, onConfirm, status, isLoading }) {
   return (
     <div>
       <Modal
@@ -37,7 +37,8 @@ export default function ModalSave({ showModal, onClose, onConfirm, status, isLoa
               <>
                 <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>Simpan Efek</Typography>
                 <Typography style={{ textAlign: 'center', fontFamily: 'Lato' }}>
-                  Kamu akan <strong>menyimpan & mengaktifkan</strong> efek ini. Efek akan tersedia di aplikasi Hyppe
+                  Kamu akan <strong>menyimpan {statusEfek === 'active' ? ' & mengaktifkan' : ''}</strong> efek ini. Efek akan
+                  tersedia di aplikasi Hyppe
                 </Typography>
               </>
             )}

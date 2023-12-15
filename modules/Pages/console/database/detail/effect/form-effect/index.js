@@ -61,8 +61,6 @@ const FormEffect = (props) => {
     setModal({ ...modal, save: !modal.save });
   };
 
-  console.log(inputValue);
-
   return (
     <>
       <ModalDelete
@@ -72,6 +70,7 @@ const FormEffect = (props) => {
       />
       <ModalSave
         status={status}
+        statusEfek={inputValue?.status}
         isLoading={loadingCreate}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
