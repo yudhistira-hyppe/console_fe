@@ -4,7 +4,17 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const databaseApi = createApi({
   reducerPath: 'console/database',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['Konten', 'Detail-Konten', 'Util', 'Media', 'Detail-Media', 'Sticker', 'Detail-Sticker', 'Category-Sticker'],
+  tagTypes: [
+    'Konten',
+    'Detail-Konten',
+    'Util',
+    'Media',
+    'Detail-Media',
+    'Effect',
+    'Sticker',
+    'Detail-Sticker',
+    'Category-Sticker',
+  ],
   endpoints: (build) => ({
     //Account
     getAllUser: build.query({
@@ -159,6 +169,23 @@ export const databaseApi = createApi({
       invalidatesTags: ['Media'],
     }),
 
+    //Effect
+    getEffect: build.query({
+      query: (data) => ({
+        url: '/assets/filter/listconsole',
+        method: 'POST',
+        body: data,
+      }),
+      providesTags: ['Effect'],
+    }),
+    getCategoryEffect: build.query({
+      query: (data) => ({
+        url: '/filtercategory/list',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+
     //Sticker
     getStickerTrend: build.query({
       query: () => ({
@@ -264,6 +291,10 @@ export const {
   useUpdateMusicMutation,
   useCreateMusicMutation,
   useDeleteMusicMutation,
+
+  //Effect
+  useGetEffectQuery,
+  useGetCategoryEffectQuery,
 
   //Sticker
   useGetStickerTrendQuery,
