@@ -193,6 +193,14 @@ export const databaseApi = createApi({
       }),
       invalidatesTags: ['Effect'],
     }),
+    createEffect: build.mutation({
+      query: (data) => ({
+        url: '/assets/filter/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Effect'],
+    }),
 
     //Sticker
     getStickerTrend: build.query({
@@ -304,6 +312,7 @@ export const {
   useGetEffectQuery,
   useGetCategoryEffectQuery,
   useUpdateEffectStatusMutation,
+  useCreateEffectMutation,
 
   //Sticker
   useGetStickerTrendQuery,
