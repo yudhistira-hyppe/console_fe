@@ -42,7 +42,7 @@ const FormEffect = (props) => {
     let formData = new FormData();
     formData.append('namafile', inputValue?.namafile);
     formData.append('category_id', inputValue?.category_id);
-    formData.append('status', inputValue?.status);
+    formData.append('status', inputValue?.status === 'active' ? true : false);
     formData.append('imageFile', inputValue?.imageFile);
     formData.append('fileAsset', inputValue?.fileAsset);
 
