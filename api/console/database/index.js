@@ -11,6 +11,7 @@ export const databaseApi = createApi({
     'Media',
     'Detail-Media',
     'Effect',
+    'Category-Effect',
     'Sticker',
     'Detail-Sticker',
     'Category-Sticker',
@@ -184,6 +185,7 @@ export const databaseApi = createApi({
         method: 'POST',
         body: data,
       }),
+      providesTags: ['Category-Effect'],
     }),
     updateEffectStatus: build.mutation({
       query: (data) => ({
@@ -200,6 +202,30 @@ export const databaseApi = createApi({
         body: data,
       }),
       invalidatesTags: ['Effect'],
+    }),
+    createCategoryEffect: build.mutation({
+      query: (data) => ({
+        url: '/filtercategory',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Effect'],
+    }),
+    updateCategoryEffect: build.mutation({
+      query: ({ id, data }) => ({
+        url: `/filtercategory/update/${id}`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Category-Effect'],
+    }),
+    deleteCategoryEffect: build.mutation({
+      query: (id) => ({
+        url: `/filtercategory/update/${id}`,
+        method: 'POST',
+        body: { active: false },
+      }),
+      invalidatesTags: ['Category-Effect'],
     }),
 
     //Sticker
@@ -313,6 +339,9 @@ export const {
   useGetCategoryEffectQuery,
   useUpdateEffectStatusMutation,
   useCreateEffectMutation,
+  useCreateCategoryEffectMutation,
+  useUpdateCategoryEffectMutation,
+  useDeleteCategoryEffectMutation,
 
   //Sticker
   useGetStickerTrendQuery,
