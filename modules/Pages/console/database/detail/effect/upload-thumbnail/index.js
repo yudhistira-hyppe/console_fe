@@ -23,9 +23,16 @@ const useStyles = makeStyles(() => ({
 
 const UploadThumbnail = (props) => {
   const { thumbnail, status, setInputValue, inputValue, disabled } = props;
-  const [image, setImage] = useState(thumbnail);
-  const [urlImage, setUrlImage] = useState(thumbnail);
+  const [image, setImage] = useState('');
+  const [urlImage, setUrlImage] = useState('');
   const classes = useStyles();
+
+  useEffect(() => {
+    if (status !== 'create') {
+      setImage(thumbnail);
+      setUrlImage(thumbnail);
+    }
+  }, []);
 
   const handleUploadImage = (e) => {
     if (e.target.files[0]?.type !== 'image/png') {

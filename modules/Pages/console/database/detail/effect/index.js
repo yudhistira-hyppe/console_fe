@@ -12,6 +12,7 @@ import CardWithIndicator from './card-with-indicator';
 import Interest from './interest';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import FormEffect from './form-effect';
+import { useGetDetailEffectQuery } from 'api/console/database';
 
 const dummyData = [
   {
@@ -49,6 +50,8 @@ const DatabaseDetailEffectComponent = (props) => {
     { label: detailId === 'create' ? 'Tambah Efek' : 'Rincian Efek', isActive: true },
   ];
 
+  const { data: details, isLoading: loadingDetail } = detailId !== 'create' ? useGetDetailEffectQuery(detailId) : {};
+
   return (
     <>
       <Head>
@@ -75,38 +78,42 @@ const DatabaseDetailEffectComponent = (props) => {
         </Stack>
       </Stack>
 
-      <GridContainer style={detailId !== 'create' ? {} : { width: '70%', margin: '0 auto' }}>
-        <Grid item xs={12} sm={detailId !== 'create' ? 5 : 12} style={detailId !== 'create' ? {} : { padding: 0 }}>
-          <FormEffect status={detailId !== 'create' ? 'detail' : 'create'} data={{}} id={detailId} />
-        </Grid>
-        {detailId !== 'create' && (
-          <Grid item xs={12} sm={7}>
-            <GridContainer>
-              <Grid item xs={12} sm={4}>
-                <CardWithDivider title="Disimpan" value={numberWithCommas(0)} description="Kali" />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <CardWithDivider title="Dikunjungi" value={numberWithCommas(0)} description="Kali" />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <CardWithIndicator title="Digunakan" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Jenis Kelamin Audiens" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Rentang Umur Audiens" data={[]} />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CardWithIndicator title="Wilayah Audiens" data={[]} />
-              </Grid>
-              {/* <Grid item xs={12} sm={6}>
+      {loadingDetail ? (
+        <PageLoader />
+      ) : (
+        <GridContainer style={detailId !== 'create' ? {} : { width: '70%', margin: '0 auto' }}>
+          <Grid item xs={12} sm={detailId !== 'create' ? 5 : 12} style={detailId !== 'create' ? {} : { padding: 0 }}>
+            <FormEffect status={detailId !== 'create' ? 'detail' : 'create'} data={details?.data?.detail} id={detailId} />
+          </Grid>
+          {detailId !== 'create' && (
+            <Grid item xs={12} sm={7}>
+              <GridContainer>
+                <Grid item xs={12} sm={4}>
+                  <CardWithDivider title="Disimpan" value={numberWithCommas(0)} description="Kali" />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <CardWithDivider title="Dikunjungi" value={numberWithCommas(0)} description="Kali" />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <CardWithIndicator title="Digunakan" data={[]} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Jenis Kelamin Audiens" data={[]} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Rentang Umur Audiens" data={[]} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CardWithIndicator title="Wilayah Audiens" data={[]} />
+                </Grid>
+                {/* <Grid item xs={12} sm={6}>
                   <Interest data={[]} />
                 </Grid> */}
-            </GridContainer>
-          </Grid>
-        )}
-      </GridContainer>
+              </GridContainer>
+            </Grid>
+          )}
+        </GridContainer>
+      )}
     </>
   );
 };
