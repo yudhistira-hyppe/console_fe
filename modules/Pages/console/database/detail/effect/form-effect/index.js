@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Divider, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
 import { TextField, Typography } from '@material-ui/core';
 import ModalDelete from '../Modal/ModalDelete';
@@ -12,7 +12,7 @@ import { toast } from 'react-hot-toast';
 import UploadThumbnail from '../upload-thumbnail';
 import UploadEffect from '../upload-effect';
 import ModalBatal from '../Modal/ModalBatal';
-import { useCreateEffectMutation, useGetCategoryEffectQuery } from 'api/console/database';
+import { useCreateEffectMutation, useGetCategoryEffectQuery, useUpdateEffectMutation } from 'api/console/database';
 
 const FormEffect = (props) => {
   const { status, data, id } = props;
@@ -32,6 +32,18 @@ const FormEffect = (props) => {
   });
   const { data: categories, isLoading: loadingCategory } = useGetCategoryEffectQuery({ page: 0 });
   const [createEffect, { isLoading: loadingCreate }] = useCreateEffectMutation();
+  const [updateEffect, { isLoading: loadingUpdate }] = useUpdateEffectMutation();
+
+  useEffect(() => {
+    if (status !== 'create') {
+      setInputValue({
+        ...inputValue,
+        namafile: data?.namafile || '',
+        category_id: data?.category_id || '',
+        imageFile: data?.mediaUri ? data?.mediaUri + '?m=' + new Date().getTime() : '',
+      });
+    }
+  }, [data]);
 
   const handleChangeInput = (e) => {
     const value = e.target.value;
@@ -58,8 +70,25 @@ const FormEffect = (props) => {
   };
 
   const handleUpdate = () => {
-    setModal({ ...modal, save: !modal.save });
+    let formData = new FormData();
+    formData.append('_id', data?._id);
+    formData.append('namafile', inputValue?.namafile);
+    formData.append('category_id', inputValue?.category_id);
+    formData.append('status', data?.status);
+    inputValue?.imageFile !== data?.mediaUri && formData.append('imageFile', inputValue?.imageFile);
+
+    updateEffect(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.messages?.info?.join(' '));
+      } else if (res?.data) {
+        toast.success('Berhasil menerapkan perubahan efek');
+        router.replace('/database/effect');
+      }
+      setModal({ ...modal, save: !modal.save });
+    });
   };
+
+  console.log(data);
 
   return (
     <>
@@ -71,7 +100,7 @@ const FormEffect = (props) => {
       <ModalSave
         status={status}
         statusEfek={inputValue?.status}
-        isLoading={loadingCreate}
+        isLoading={loadingCreate || loadingUpdate}
         showModal={modal.save}
         onClose={() => setModal({ ...modal, save: !modal.save })}
         onConfirm={() => (status !== 'create' ? handleUpdate() : handleCreate())}
@@ -97,7 +126,12 @@ const FormEffect = (props) => {
       <Card style={{ padding: 20 }}>
         <Stack direction={'row-reverse'} gap="24px">
           <Stack direction="column" width="100%" maxWidth={170} gap="12px">
-            <UploadThumbnail thumbnail={''} status={status} setInputValue={setInputValue} inputValue={inputValue} />
+            <UploadThumbnail
+              thumbnail={data?.mediaUri ? data?.mediaUri + '?m=' + new Date().getTime() : ''}
+              status={status}
+              setInputValue={setInputValue}
+              inputValue={inputValue}
+            />
           </Stack>
           <Stack direction={'column'} width="100%" gap="24px">
             <Stack direction="column" gap="8px" width={status !== 'create' ? '100%' : '65%'}>
@@ -163,9 +197,8 @@ const FormEffect = (props) => {
                 disabled={
                   !inputValue.namafile ||
                   !inputValue.category_id ||
-                  !inputValue.status ||
                   !inputValue.imageFile ||
-                  !inputValue.fileAsset
+                  (status === 'create' && (!inputValue.fileAsset || !inputValue.status))
                 }>
                 {status !== 'create' ? 'Terapkan' : 'Simpan'}
               </Button>
@@ -203,13 +236,13 @@ const FormEffect = (props) => {
                 </Typography>
                 <RadioGroup
                   row
-                  value={data?.isActive ? 'active' : 'disactive'}
+                  value={data?.status ? 'active' : 'disactive'}
                   style={{ gap: 40 }}
                   onChange={() =>
                     setModal({
                       ...modal,
                       confirmation: !modal.confirmation,
-                      status: data?.isActive ? 'active' : 'disactive',
+                      status: data?.status ? 'active' : 'disactive',
                     })
                   }>
                   <FormControlLabel
@@ -224,14 +257,14 @@ const FormEffect = (props) => {
                   />
                 </RadioGroup>
               </Stack>
-              <Typography style={{ color: '#3f3f3f' }}>
+              {/* <Typography style={{ color: '#3f3f3f' }}>
                 Hapus Efek Ini?{' '}
                 <span
                   style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
                   onClick={() => setModal({ ...modal, delete: !modal.delete })}>
                   Klik disini
                 </span>
-              </Typography>
+              </Typography> */}
             </Stack>
           </>
         )}

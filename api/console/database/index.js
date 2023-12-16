@@ -11,6 +11,7 @@ export const databaseApi = createApi({
     'Media',
     'Detail-Media',
     'Effect',
+    'Detail-Effect',
     'Category-Effect',
     'Sticker',
     'Detail-Sticker',
@@ -179,6 +180,13 @@ export const databaseApi = createApi({
       }),
       providesTags: ['Effect'],
     }),
+    getDetailEffect: build.query({
+      query: (id) => ({
+        url: `/assets/filter/detail/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Detail-Effect'],
+    }),
     getCategoryEffect: build.query({
       query: (data) => ({
         url: '/filtercategory/list',
@@ -187,13 +195,21 @@ export const databaseApi = createApi({
       }),
       providesTags: ['Category-Effect'],
     }),
+    updateEffect: build.mutation({
+      query: (data) => ({
+        url: '/assets/filter/updatedata',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Effect', 'Detail-Effect'],
+    }),
     updateEffectStatus: build.mutation({
       query: (data) => ({
         url: '/assets/filter/updatelist',
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Effect'],
+      invalidatesTags: ['Effect', 'Detail-Effect'],
     }),
     createEffect: build.mutation({
       query: (data) => ({
@@ -336,7 +352,9 @@ export const {
 
   //Effect
   useGetEffectQuery,
+  useGetDetailEffectQuery,
   useGetCategoryEffectQuery,
+  useUpdateEffectMutation,
   useUpdateEffectStatusMutation,
   useCreateEffectMutation,
   useCreateCategoryEffectMutation,

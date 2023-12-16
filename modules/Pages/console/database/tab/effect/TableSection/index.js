@@ -298,9 +298,9 @@ const TableSection = ({ filter, filterList, handleOrder, handlePageChange, handl
                     align="left"
                     className={classes.hoverCell}
                     style={{ maxWidth: 320, width: 320 }}
-                    onClick={() => router.push(`/database/effect/${i}`)}>
+                    onClick={() => router.push(`/database/effect/${item?._id}`)}>
                     <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={item?.mediaThumUri || ''} variant="rounded" />
+                      <Avatar src={item?.mediaThumUri + '?m=' + new Date().getTime() || ''} variant="rounded" />
                       <Typography
                         variant="body1"
                         style={{ fontSize: '14px', color: '#00000099' }}
@@ -311,7 +311,7 @@ const TableSection = ({ filter, filterList, handleOrder, handlePageChange, handl
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 320, width: 320 }}>
                     <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.createdAt).format('DD/MM/YY')}
+                      {item?.createdAt ? `${moment(item?.createdAt).format('DD/MM/YYYY HH:mm')} WIB` : '-'}
                     </Typography>
                   </TableCell>
                   <TableCell align="left" style={{ maxWidth: 220, width: 220 }}>
