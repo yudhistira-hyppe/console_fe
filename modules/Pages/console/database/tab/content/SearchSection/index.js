@@ -208,13 +208,13 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Nama Pemilik</Typography>
+            <Typography style={{ fontSize: '13px' }}>Pemilik Konten</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <DelayedTextField
               fullWidth
               waitForInput={true}
-              placeholder="Cari Pemilik"
+              placeholder="Cari Username / Email"
               name="pemilik"
               filterValue={filter.pemilik}
               onChange={(e) => handleChangeDelay(e)}
