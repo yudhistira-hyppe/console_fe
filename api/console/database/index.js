@@ -187,13 +187,13 @@ export const databaseApi = createApi({
       }),
       providesTags: ['Detail-Effect'],
     }),
-    getCategoryEffect: build.query({
+    createEffect: build.mutation({
       query: (data) => ({
-        url: '/filtercategory/list',
+        url: '/assets/filter/create',
         method: 'POST',
         body: data,
       }),
-      providesTags: ['Category-Effect'],
+      invalidatesTags: ['Effect'],
     }),
     updateEffect: build.mutation({
       query: (data) => ({
@@ -211,13 +211,21 @@ export const databaseApi = createApi({
       }),
       invalidatesTags: ['Effect', 'Detail-Effect'],
     }),
-    createEffect: build.mutation({
+    deleteEffect: build.mutation({
+      query: (id) => ({
+        url: `/assets/filter/delete/${id}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Effect', 'Detail-Effect'],
+    }),
+
+    getCategoryEffect: build.query({
       query: (data) => ({
-        url: '/assets/filter/create',
+        url: '/filtercategory/list',
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['Effect'],
+      providesTags: ['Category-Effect'],
     }),
     createCategoryEffect: build.mutation({
       query: (data) => ({
@@ -357,6 +365,7 @@ export const {
   useUpdateEffectMutation,
   useUpdateEffectStatusMutation,
   useCreateEffectMutation,
+  useDeleteEffectMutation,
   useCreateCategoryEffectMutation,
   useUpdateCategoryEffectMutation,
   useDeleteCategoryEffectMutation,
