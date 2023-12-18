@@ -12,7 +12,12 @@ import { toast } from 'react-hot-toast';
 import UploadThumbnail from '../upload-thumbnail';
 import UploadEffect from '../upload-effect';
 import ModalBatal from '../Modal/ModalBatal';
-import { useCreateEffectMutation, useGetCategoryEffectQuery, useUpdateEffectMutation } from 'api/console/database';
+import {
+  useCreateEffectMutation,
+  useDeleteEffectMutation,
+  useGetCategoryEffectQuery,
+  useUpdateEffectMutation,
+} from 'api/console/database';
 
 const FormEffect = (props) => {
   const { status, data, id } = props;
@@ -33,6 +38,7 @@ const FormEffect = (props) => {
   const { data: categories, isLoading: loadingCategory } = useGetCategoryEffectQuery({ page: 0 });
   const [createEffect, { isLoading: loadingCreate }] = useCreateEffectMutation();
   const [updateEffect, { isLoading: loadingUpdate }] = useUpdateEffectMutation();
+  const [deleteEffect, { isLoading: loadingDelete }] = useDeleteEffectMutation();
 
   useEffect(() => {
     if (status !== 'create') {
@@ -88,14 +94,25 @@ const FormEffect = (props) => {
     });
   };
 
-  console.log(data);
+  const handleDelete = () => {
+    deleteEffect(data?._id).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.messages?.info?.join(' '));
+      } else if (res?.data) {
+        toast.success('Berhasil menghapus efek');
+        router.replace('/database/effect');
+      }
+      setModal({ ...modal, delete: !modal.delete });
+    });
+  };
 
   return (
     <>
       <ModalDelete
         showModal={modal.delete}
+        isLoading={loadingDelete}
         onClose={() => setModal({ ...modal, delete: !modal.delete })}
-        onConfirm={() => router.replace('/database/effect')}
+        onConfirm={handleDelete}
       />
       <ModalSave
         status={status}
@@ -257,14 +274,14 @@ const FormEffect = (props) => {
                   />
                 </RadioGroup>
               </Stack>
-              {/* <Typography style={{ color: '#3f3f3f' }}>
+              <Typography style={{ color: '#3f3f3f' }}>
                 Hapus Efek Ini?{' '}
                 <span
                   style={{ color: '#AB22AF', fontWeight: 'bold', cursor: 'pointer' }}
                   onClick={() => setModal({ ...modal, delete: !modal.delete })}>
                   Klik disini
                 </span>
-              </Typography> */}
+              </Typography>
             </Stack>
           </>
         )}

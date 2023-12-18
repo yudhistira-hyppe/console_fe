@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -17,7 +18,7 @@ const style = {
   borderRadius: '4px',
 };
 
-export default function ModalDelete({ showModal, onClose, onConfirm }) {
+export default function ModalDelete({ showModal, onClose, isLoading, onConfirm }) {
   return (
     <div>
       <Modal
@@ -34,9 +35,9 @@ export default function ModalDelete({ showModal, onClose, onConfirm }) {
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button variant="contained" color="primary" onClick={onConfirm}>
+            <LoadingButton loading={isLoading} variant="contained" color="secondary" onClick={onConfirm}>
               Konfirmasi
-            </Button>
+            </LoadingButton>
             <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
