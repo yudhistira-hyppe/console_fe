@@ -175,11 +175,24 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography
-                        variant="body1"
-                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 100, overflow: 'hidden' }}>
-                        {item?.username || '-'}
-                      </Typography>
+                      <Stack direction="column" gap={1}>
+                        <Typography
+                          variant="body1"
+                          style={{
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            textOverflow: 'ellipsis',
+                            width: 100,
+                            overflow: 'hidden',
+                          }}>
+                          {item?.username || '-'}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 170, overflow: 'hidden' }}>
+                          {item?.email || '-'}
+                        </Typography>
+                      </Stack>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 100 }}>

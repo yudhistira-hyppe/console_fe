@@ -41,8 +41,19 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
   };
 
   const handleDelete = () => {
-    alert('deleted');
-    onConfirm();
+    const data = {
+      list: isSingle ? [data2] : [...data1],
+      status: 'delete',
+    };
+
+    updateStatus(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        isSingle ? toast.success('Berhasil menghapus efek') : toast.success(`Berhasil menghapus ${data1?.length} efek`);
+      }
+      onConfirm();
+    });
   };
 
   return (
@@ -81,7 +92,7 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
               onClick={() => (status === 'delete' ? handleDelete() : handleStatus())}>
               Konfirmasi
             </LoadingButton>
-            <Button variant="text" color="secondary" onClick={onClose}>
+            <Button variant="text" color="secondary" onClick={onClose} disabled={loadingUpdate}>
               Batal
             </Button>
           </Stack>

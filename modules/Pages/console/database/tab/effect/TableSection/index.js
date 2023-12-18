@@ -130,7 +130,7 @@ const TableSection = ({ filter, filterList, handleOrder, handlePageChange, handl
                     onChange={(e) => setModal({ ...modal, status: e.target.value })}>
                     <MenuItem value="active">Aktifkan</MenuItem>
                     <MenuItem value="disactive">Nonaktifkan</MenuItem>
-                    {/* <MenuItem value="delete">Hapus</MenuItem> */}
+                    <MenuItem value="delete">Hapus</MenuItem>
                   </Select>
                   <Button
                     variant="text"
