@@ -24,19 +24,15 @@ const useStyles = makeStyles(() => ({
 const UploadEffect = (props) => {
   const { status, setInputValue, inputValue, disabled } = props;
   const [effect, setEffect] = useState('');
-  const [urlEffect, setUrlEffect] = useState('');
   const classes = useStyles();
 
   const handleUploadEffect = (e) => {
-    if (e.target.files[0]?.type !== 'image/png') {
+    if (e.target.files[0]?.type?.includes('image')) {
       alert('salah format woyy 🤬');
       return;
     } else {
       setEffect(e.target.files[0]);
-      const blob = new Blob(e.target.files, { type: 'image/png' });
-      const url = URL.createObjectURL(blob);
-      setUrlEffect(url);
-      setInputValue({ ...inputValue, apsaraEffect: e.target.files[0] });
+      setInputValue({ ...inputValue, fileAsset: e.target.files[0] });
     }
   };
 
@@ -45,21 +41,14 @@ const UploadEffect = (props) => {
       <label htmlFor={status === 'create' && 'upload_effect'} style={{ width: '100%' }}>
         <Box className={classes.uploadBox}>
           {effect ? (
-            <Avatar src={urlEffect} alt="Efek" variant="square" style={{ width: '100%', height: 'auto' }} />
+            <Avatar src={''} alt="Efek" variant="square" style={{ width: '100%', height: 'auto' }} />
           ) : (
             <>
               <CloudUpload style={{ fontSize: 64, color: '#DADADA' }} />
               <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Efek</Typography>
             </>
           )}
-          <input
-            hidden
-            id="upload_effect"
-            type="file"
-            accept="image/png"
-            onChange={handleUploadEffect}
-            disabled={disabled}
-          />
+          <input hidden id="upload_effect" type="file" onChange={handleUploadEffect} disabled={disabled} />
         </Box>
       </label>
     </>

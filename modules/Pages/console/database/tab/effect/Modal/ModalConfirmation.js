@@ -1,9 +1,11 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
-import { Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { toast } from 'react-hot-toast';
+import { useUpdateEffectStatusMutation } from 'api/console/database';
+import { LoadingButton } from '@mui/lab';
 
 const style = {
   position: 'absolute',
@@ -18,14 +20,24 @@ const style = {
 };
 
 export default function ModalConfirmation({ showModal, status, onClose, onConfirm, data1, data2, isSingle }) {
+  const [updateStatus, { isLoading: loadingUpdate }] = useUpdateEffectStatusMutation();
+
   const handleStatus = () => {
     const data = {
-      _id: isSingle ? [data2] : [...data1],
-      status: status === 'active' ? true : false,
+      list: isSingle ? [data2] : [...data1],
+      status: status === 'active' ? 'active' : 'nonactive',
     };
 
-    onConfirm();
-    toast.success('toast...');
+    updateStatus(data).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        isSingle
+          ? toast.success('Berhasil mengubah status efek')
+          : toast.success(`Berhasil mengubah ${data1?.length} status efek`);
+      }
+      onConfirm();
+    });
   };
 
   const handleDelete = () => {
@@ -62,13 +74,16 @@ export default function ModalConfirmation({ showModal, status, onClose, onConfir
           </Stack>
 
           <Stack direction={'row'} mt={5} justifyContent={'center'} spacing={3}>
-            <Button
+            <LoadingButton
+              loading={loadingUpdate}
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={() => (status === 'delete' ? handleDelete() : handleStatus())}>
               Konfirmasi
+            </LoadingButton>
+            <Button variant="text" color="secondary" onClick={onClose}>
+              Batal
             </Button>
-            <Button onClick={onClose}>Batal</Button>
           </Stack>
         </Box>
       </Modal>

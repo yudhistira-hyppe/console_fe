@@ -23,9 +23,16 @@ const useStyles = makeStyles(() => ({
 
 const UploadThumbnail = (props) => {
   const { thumbnail, status, setInputValue, inputValue, disabled } = props;
-  const [image, setImage] = useState(thumbnail);
-  const [urlImage, setUrlImage] = useState(thumbnail);
+  const [image, setImage] = useState('');
+  const [urlImage, setUrlImage] = useState('');
   const classes = useStyles();
+
+  useEffect(() => {
+    if (status !== 'create') {
+      setImage(thumbnail);
+      setUrlImage(thumbnail);
+    }
+  }, []);
 
   const handleUploadImage = (e) => {
     if (e.target.files[0]?.type !== 'image/png') {
@@ -36,7 +43,7 @@ const UploadThumbnail = (props) => {
       const blob = new Blob(e.target.files, { type: 'image/png' });
       const url = URL.createObjectURL(blob);
       setUrlImage(url);
-      setInputValue({ ...inputValue, apsaraThumbnail: e.target.files[0] });
+      setInputValue({ ...inputValue, imageFile: e.target.files[0] });
     }
   };
 
@@ -45,7 +52,7 @@ const UploadThumbnail = (props) => {
       <label htmlFor={status === 'create' && 'upload_thumbnail'} style={{ width: '100%' }}>
         <Box className={classes.uploadBox}>
           {image ? (
-            <Avatar src={urlImage} alt="Thumbnail Efek" variant="square" style={{ width: '100%', height: 'auto' }} />
+            <Avatar src={urlImage} alt="Thumbnail Efek" variant="square" style={{ width: 'auto', height: '100%' }} />
           ) : (
             <>
               <CloudUpload style={{ fontSize: 64, color: '#DADADA' }} />

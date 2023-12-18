@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import EffectChart from './effect-chart';
 import Head from 'next/head';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
@@ -6,6 +6,8 @@ import { Stack } from '@mui/material';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import moment from 'moment';
+import { useGetEffectQuery } from 'api/console/database';
+import toast from 'react-hot-toast';
 
 const DatabaseTabEffectComponent = () => {
   const [filter, setFilter] = useState({
@@ -15,23 +17,49 @@ const DatabaseTabEffectComponent = () => {
     effect: '',
     createdAt: [null, null],
     category: [],
-    status: [],
+    status: '',
   });
   const [filterList, setFilterList] = useState([]);
+  const [initial, setInitial] = useState(true);
 
-  const getParams = () => {
+  const getParams = useCallback(() => {
     let params = {};
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      sort: filter.order,
+      ascending: filter.order === 'desc' ? false : true,
     });
-    filter.effect !== '' && Object.assign(params, { name: filter.effect });
+    filter.effect !== '' && Object.assign(params, { keyword: filter.effect });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
-    filter.category?.length >= 1 && Object.assign(params, { category: filter.category.join(', ') });
-    filter.status?.length >= 1 && Object.assign(params, { status: filter.status.join(', ') });
-  };
+    filter.category?.length >= 1 && Object.assign(params, { kategori: filter.category?.map((item) => item?._id) });
+    filter.status !== '' && Object.assign(params, { status: [filter.status === 'Aktif' ? true : false] });
+
+    return params;
+  }, [filter]);
+
+  const { data: listEffect, isFetching: loadingList } = useGetEffectQuery(getParams());
+
+  useEffect(() => {
+    if (filter.page >= 1 && listEffect?.data?.length < 1) {
+      toast.success('Semua data sudah ditampilkan');
+      setFilter((prevVal) => {
+        return {
+          ...prevVal,
+          page: prevVal.page - 1,
+        };
+      });
+    }
+    setInitial(false);
+  }, [filter, loadingList]);
+
+  useEffect(() => {
+    if (!initial) {
+      setTimeout(() => {
+        window.scrollTo({ top: 610, behavior: 'smooth' });
+      }, 150);
+    }
+  }, [filter, setInitial]);
 
   const onOrderChange = (e, val) => {
     setFilter((prevVal) => {
@@ -42,11 +70,11 @@ const DatabaseTabEffectComponent = () => {
     });
   };
 
-  const handlePageChange = (e, value) => {
+  const handlePageChange = (value) => {
     setFilter((prevVal) => {
       return {
         ...prevVal,
-        page: value - 1,
+        page: value,
       };
     });
   };
@@ -59,6 +87,12 @@ const DatabaseTabEffectComponent = () => {
             ? prevVal.find((item) => item.parent === kind)
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Efek (${value})` }]
               : [...prevVal, { parent: kind, value: `Efek (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'status':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: value }]
+              : [...prevVal, { parent: kind, value: value }]
             : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
@@ -82,6 +116,8 @@ const DatabaseTabEffectComponent = () => {
           return prevVal.find((item) => item.value === JSON.parse(value)?.name)
             ? [...prevVal.filter((item) => item.value !== JSON.parse(value)?.name)]
             : [...prevVal, { parent: kind, value: JSON.parse(value)?.name }];
+        case 'clearAll':
+          return [];
         default:
           return prevVal.find((item) => item.value === value)
             ? [...prevVal.filter((item) => item.value !== value)]
@@ -103,12 +139,16 @@ const DatabaseTabEffectComponent = () => {
             page: 0,
           };
         case 'status':
+          return { ...prevVal, status: value, page: 0 };
+        case 'clearAll':
           return {
-            ...prevVal,
-            status: filter.status.find((item) => item === value)
-              ? filter.status.filter((item) => item !== value)
-              : [...filter.status, value],
             page: 0,
+            limit: 10,
+            order: 'desc',
+            effect: '',
+            createdAt: [null, null],
+            category: [],
+            status: '',
           };
         default:
           return { ...prevVal, page: 0 };
@@ -131,9 +171,8 @@ const DatabaseTabEffectComponent = () => {
             filter={filter}
             filterList={filterList}
             handleDeleteFilter={handleSearchChange}
-            order={filter.order}
-            loading={false}
-            listEffect={{ data: [{}, {}] }}
+            loading={loadingList}
+            listEffect={listEffect}
             handlePageChange={handlePageChange}
             handleOrder={onOrderChange}
           />
