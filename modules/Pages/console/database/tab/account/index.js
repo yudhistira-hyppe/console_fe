@@ -31,6 +31,7 @@ const DatabaseTabAccountComponent = () => {
     createdAt: [null, null],
     lastOnline: '',
     rangeOnline: [null, null],
+    creator: '',
   });
   const [filterList, setFilterList] = useState([]);
   const dataParams = useSelector((state) => state.filterParams.value);
@@ -54,11 +55,11 @@ const DatabaseTabAccountComponent = () => {
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.rangeOnline[0] && Object.assign(params, { startlogin: filter.rangeOnline[0] });
     filter.rangeOnline[1] && Object.assign(params, { endlogin: filter.rangeOnline[1] });
+    filter.creator !== '' &&
+      Object.assign(params, { creator: [filter.creator === 'ya' ? true : filter.creator === 'tidak' && false] });
 
     return params;
   }, [filter]);
-
-  console.log(dataParams);
 
   useEffect(() => {
     if (!isEmpty(dataParams?.username)) {
@@ -166,6 +167,12 @@ const DatabaseTabAccountComponent = () => {
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Pencarian (${value})` }]
               : [...prevVal, { parent: kind, value: `Pencarian (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'creator':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Akun Creator (${value})` }]
+              : [...prevVal, { parent: kind, value: `Akun Creator (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
         case 'age':
           return prevVal.find((item) => item.parent === kind)
             ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `rentang umur (${value})` }]
@@ -230,6 +237,8 @@ const DatabaseTabAccountComponent = () => {
               : [...filter.type, value],
             page: 0,
           };
+        case 'creator':
+          return { ...prevVal, creator: value };
         case 'age':
           if (value === '< 14') {
             return {
@@ -285,6 +294,7 @@ const DatabaseTabAccountComponent = () => {
             createdAt: [null, null],
             lastOnline: '',
             rangeOnline: [null, null],
+            creator: [],
           };
         default:
           return { ...prevVal };
