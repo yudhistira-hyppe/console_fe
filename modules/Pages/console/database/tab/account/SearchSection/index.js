@@ -401,6 +401,27 @@ const SearchSection = ({ filter, handleChange }) => {
           <Divider style={{ marginTop: 16 }} />
         </Accordion>
 
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Akun Creator</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <RadioGroup onChange={(e) => handleChange('creator', e.target.value)}>
+              <FormControlLabel
+                label={'Ya'}
+                value="ya"
+                control={<Radio checked={filter.creator?.includes('ya')} color="secondary" />}
+              />
+              <FormControlLabel
+                label={'Tidak'}
+                value="tidak"
+                control={<Radio checked={filter.creator?.includes('tidak')} color="secondary" />}
+              />
+            </RadioGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
         <Accordion elevation={0} disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Lokasi</Typography>
