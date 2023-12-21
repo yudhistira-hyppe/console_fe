@@ -117,10 +117,9 @@ const CreateChallenge = ({ moreSlug }) => {
       disabled = true;
     } else if (
       activeStep == 5 &&
-      ((!inputValue?.winner_rewards && !inputValue?.winner_badges) ||
-        (inputValue?.winner_rewards &&
-          inputValue?.winner_rewards_type === 'ranking' &&
-          isEmpty(inputValue?.winner_ranking_price)) ||
+      ((inputValue?.winner_rewards &&
+        inputValue?.winner_rewards_type === 'ranking' &&
+        isEmpty(inputValue?.winner_ranking_price)) ||
         (inputValue?.winner_rewards &&
           inputValue?.winner_rewards_type === 'ranking' &&
           (inputValue?.winner_ranking_price?.map((item) => item?.price)?.includes('') ||
