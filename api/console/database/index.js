@@ -5,6 +5,8 @@ export const databaseApi = createApi({
   reducerPath: 'console/database',
   baseQuery: customBaseQueryWithHandleReauth,
   tagTypes: [
+    'Account',
+    'Detail-Account',
     'Konten',
     'Detail-Konten',
     'Util',
@@ -25,12 +27,14 @@ export const databaseApi = createApi({
         method: 'POST',
         body: data,
       }),
+      providesTags: ['Account'],
     }),
     getuserDatabaseDetail: build.query({
       query: (id) => ({
         url: `user/userdetail/${id}`,
         method: 'GET',
       }),
+      providesTags: ['Detail-Account'],
     }),
     getUserBasics: build.query({
       query: (email) => ({
@@ -46,6 +50,7 @@ export const databaseApi = createApi({
           email,
         },
       }),
+      providesTags: ['Detail-Account'],
     }),
     getAccountBalance: build.query({
       query: (data) => ({
@@ -53,6 +58,7 @@ export const databaseApi = createApi({
         method: 'POST',
         body: data,
       }),
+      providesTags: ['Detail-Account'],
     }),
     getBankAccountByUserEmail: build.query({
       query: (email) => ({
@@ -62,6 +68,15 @@ export const databaseApi = createApi({
           email,
         },
       }),
+      providesTags: ['Detail-Account'],
+    }),
+    updateUserCreator: build.mutation({
+      query: (data) => ({
+        url: '/user/updatestatuscreator',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Account', 'Detail-Account'],
     }),
 
     //Content
@@ -339,6 +354,7 @@ export const {
   useGetProfileByUserEmailQuery,
   useGetAccountBalanceQuery,
   useGetBankAccountByUserEmailQuery,
+  useUpdateUserCreatorMutation,
 
   //Content
   useGetListContentQuery,

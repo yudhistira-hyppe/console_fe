@@ -12,7 +12,7 @@ import {
   Avatar,
   Chip,
 } from '@material-ui/core';
-import { CircularProgress, Divider, IconButton, Pagination, Stack } from '@mui/material';
+import { CircularProgress, Divider, IconButton, Pagination, Stack, Switch } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -24,23 +24,41 @@ import router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
 import ScrollBar from 'react-perfect-scrollbar';
+import { useUpdateUserCreatorMutation } from 'api/console/database';
+import toast from 'react-hot-toast';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
-    width: '100%',
+    WebkitLineClamp: 2,
     textOverflow: 'ellipsis',
-    display: '-webkit-box',
-    '-webkit-box-orient': 'vertical',
-    '-webkit-line-clamp': 2,
-    lineClamp: 2,
     overflow: 'hidden',
-    whiteSpace: 'nowrap',
+    WebkitBoxOrient: 'vertical',
+    display: '-webkit-box',
+    fontSize: 14,
+    width: '100%',
+    color: '#00000099',
   },
 }));
 
 const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteFilter, filter, loading, listTickets }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
+  const [updateCreator] = useUpdateUserCreatorMutation();
+
+  const handleUpdateCreator = (user, status) => {
+    const formData = {
+      idUser: user?.iduser,
+      creator: status,
+    };
+
+    updateCreator(formData).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
+      } else if (res?.data) {
+        toast.success(`Berhasil mengubah status creator user`);
+      }
+    });
+  };
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
@@ -61,7 +79,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     key={key}
                     label={item.value}
                     onDelete={() => {
-                      if (item.parent === 'username') {
+                      if (item.parent === 'username' || item.parent === 'creator') {
                         handleDeleteFilter(item.parent, '');
                       } else if (item.parent === 'age') {
                         handleDeleteFilter('clearAge', '');
@@ -111,124 +129,138 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left" style={{ maxWidth: 160 }}>
-                Nama
-              </TableCell>
-              <TableCell align="left" style={{ maxWidth: 100 }}>
-                Jenis Kelamin
-              </TableCell>
-              <TableCell align="left">Umur</TableCell>
-              <TableCell align="left" style={{ maxWidth: 150 }}>
-                Lokasi
-              </TableCell>
-              <TableCell align="left">Jenis Akun</TableCell>
-              <TableCell align="left" style={{ width: 150 }}>
-                Tanggal Daftar
-              </TableCell>
-              <TableCell align="left" style={{ maxWidth: 100 }}>
-                Terakhir Aktif
-              </TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {loading ? (
+        <ScrollBar>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableCell colSpan={8}>
-                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <CircularProgress color="secondary" />
-                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                  </Stack>
+                <TableCell align="left" style={{ maxWidth: 160 }}>
+                  Nama
+                </TableCell>
+                <TableCell align="left" style={{ maxWidth: 100 }}>
+                  Jenis Kelamin
+                </TableCell>
+                <TableCell align="left">Umur</TableCell>
+                <TableCell align="left" style={{ maxWidth: 150 }}>
+                  Lokasi
+                </TableCell>
+                <TableCell align="left">Jenis Akun</TableCell>
+                <TableCell align="left">Creator</TableCell>
+                <TableCell align="left" style={{ width: 150 }}>
+                  Tanggal Daftar
+                </TableCell>
+                <TableCell align="left" style={{ maxWidth: 100 }}>
+                  Terakhir Aktif
                 </TableCell>
               </TableRow>
-            ) : listTickets?.data?.length >= 1 ? (
-              listTickets?.data?.map((item, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  hover
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => router.push(`/database/account/${item?.iduser}`)}>
-                  <TableCell align="left" style={{ maxWidth: 160 }}>
-                    <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={item?.avatar[0]?.mediaEndpoint ? getMediaUri(item?.avatar[0]?.mediaEndpoint) : ''} />
-                      <Stack gap="4px" overflow="hidden" width="100%">
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}
-                          title={item?.username || '-'}>
-                          {item?.username || '-'}
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '12px', color: '#00000099' }}
-                          className={classes.textTruncate}
-                          title={item?.email || '-'}>
-                          {item?.email || '-'}
-                        </Typography>
-                      </Stack>
+            </TableHead>
+
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <CircularProgress color="secondary" />
+                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 100 }}>
-                    <Typography
-                      variant="body1"
-                      style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 80, overflow: 'hidden' }}>
-                      {item?.gender === 'MALE' && 'Laki-laki'}
-                      {item?.gender === 'FEMALE' && 'Perempuan'}
-                      {item?.gender === 'OTHER' && 'Lainnya'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.age || 0}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 150 }}>
-                    <Typography
-                      variant="body1"
-                      style={{
-                        fontSize: '12px',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                      }}>
-                      {item?.areas || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.jenis || '-'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px', maxWidth: 80 }}>
-                      {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {item?.lastlogin
-                        ? moment(item?.lastlogin).locale('id').startOf('minute').fromNow().replace(' yang ', ' ')
-                        : '-'}
-                    </Typography>
+                </TableRow>
+              ) : listTickets?.data?.length >= 1 ? (
+                listTickets?.data?.map((item, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    hover
+                    style={{ cursor: 'pointer' }}>
+                    <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
+                      <Stack direction="row" alignItems="center" gap="15px" width={200}>
+                        <Avatar src={item?.avatar[0]?.mediaEndpoint ? getMediaUri(item?.avatar[0]?.mediaEndpoint) : ''} />
+                        <Stack gap="4px" overflow="hidden" width="100%">
+                          <Typography
+                            variant="body1"
+                            className={classes.textTruncate}
+                            title={item?.username || '-'}
+                            style={{ WebkitLineClamp: 1 }}>
+                            {item?.username || '-'}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: '12px', WebkitLineClamp: 1 }}
+                            className={classes.textTruncate}
+                            title={item?.email || '-'}>
+                            {item?.email || '-'}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
+                      <Stack direction="row" width={120}>
+                        <Typography variant="body1" className={classes.textTruncate}>
+                          {item?.gender === 'MALE' && 'Laki-laki'}
+                          {item?.gender === 'FEMALE' && 'Perempuan'}
+                          {item?.gender === 'OTHER' && 'Lainnya'}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
+                      <Stack direction="row" width={50}>
+                        <Typography variant="body1" className={classes.textTruncate}>
+                          {item?.age || 0}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
+                      <Stack direction="row" width={120}>
+                        <Typography variant="body1" className={classes.textTruncate}>
+                          {item?.areas || '-'}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
+                      <Stack direction="row" width={120}>
+                        <Typography variant="body1" className={classes.textTruncate}>
+                          {item?.jenis || '-'}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Stack direction="row" width={120}>
+                        <Switch
+                          color="secondary"
+                          checked={item?.creator || false}
+                          onChange={(e) => handleUpdateCreator(item, e.target.checked)}
+                        />
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
+                      <Stack direction="row" width={160}>
+                        <Typography variant="body1" className={classes.textTruncate}>
+                          {moment(item?.createdAt).format('DD/MM/YY - HH:mm')} WIB
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
+                      <Stack direction="row" width={120}>
+                        <Typography variant="body1" className={classes.textTruncate}>
+                          {item?.lastlogin
+                            ? moment(item?.lastlogin).locale('id').startOf('minute').fromNow().replace(' yang ', ' ')
+                            : '-'}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data</Typography>
+                    </Stack>
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={8}>
-                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data</Typography>
-                  </Stack>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollBar>
       </TableContainer>
       {listTickets?.data?.length >= 1 && !loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
