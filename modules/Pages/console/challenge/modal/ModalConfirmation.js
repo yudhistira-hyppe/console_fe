@@ -112,7 +112,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('konten_hyppediary_likepost', selectedItem?.content_like_diary);
       selectedItem?.content_view_vid >= 1 && formData.append('konten_hyppevid_viewpost', selectedItem?.content_view_vid);
       selectedItem?.content_view_diary >= 1 &&
-        formData.append('konten_hyppediary_viewpost', selectedItem?.content_like_diary);
+        formData.append('konten_hyppediary_viewpost', selectedItem?.content_view_diary);
     }
 
     formData.append('caraGabung', selectedItem?.type_invitation === 'all' ? 'SEMUA PENGGUNA' : 'DENGAN UNDANGAN');
@@ -336,7 +336,7 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('konten_hyppediary_likepost', selectedItem?.content_like_diary);
       selectedItem?.content_view_vid >= 1 && formData.append('konten_hyppevid_viewpost', selectedItem?.content_view_vid);
       selectedItem?.content_view_diary >= 1 &&
-        formData.append('konten_hyppediary_viewpost', selectedItem?.content_like_diary);
+        formData.append('konten_hyppediary_viewpost', selectedItem?.content_view_diary);
     }
 
     formData.append('caraGabung', selectedItem?.type_invitation === 'all' ? 'SEMUA PENGGUNA' : 'DENGAN UNDANGAN');
