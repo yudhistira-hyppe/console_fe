@@ -178,8 +178,15 @@ const DetailBantuanPengguna = () => {
   }, [ticketData]);
 
   useEffect(() => {
-    !isLoading && setViewer(new Viewer(document.getElementById('images')));
-    !isLoading && setViewerDetail(new Viewer(document.getElementById('detail-images')));
+    if (!isLoading) {
+      if (ticketData?.data[0]?.fsSourceName?.length >= 1) {
+        setViewer(new Viewer(document.getElementById('images')));
+      }
+
+      if (ticketData?.data[0]?.detail?.length >= 1) {
+        setViewerDetail(new Viewer(document.getElementById('detail-images')));
+      }
+    }
   }, [isLoading]);
 
   const handleView = () => {
@@ -397,11 +404,12 @@ const DetailBantuanPengguna = () => {
                               <Typography variant="caption">{moment(item?.datetime).format('lll')}</Typography>
                             </Typography>
                             <Typography>{item?.body}</Typography>
-                            {item?.fsSourceUri?.length >= 1 ? (
-                              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                <div>
-                                  <Stack direction="row" id="detail-images">
-                                    {item?.fsSourceUri?.map((item, key) => (
+
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                              <div>
+                                <Stack direction="row" id="detail-images">
+                                  {item?.fsSourceUri?.length >= 1 ? (
+                                    item?.fsSourceUri?.map((item, key) => (
                                       <Chip
                                         key={key}
                                         label={
@@ -439,17 +447,17 @@ const DetailBantuanPengguna = () => {
                                         style={{ marginRight: '1em' }}
                                         onClick={handleViewDetail}
                                       />
-                                    ))}
-                                  </Stack>
-                                </div>
+                                    ))
+                                  ) : (
+                                    <Stack direction={'column'} justifyContent={'center'}>
+                                      <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
+                                        Tidak ada lampiran.
+                                      </Typography>
+                                    </Stack>
+                                  )}
+                                </Stack>
                               </div>
-                            ) : (
-                              <Stack direction={'column'} justifyContent={'center'}>
-                                <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
-                                  Tidak ada lampiran.
-                                </Typography>
-                              </Stack>
-                            )}
+                            </div>
                           </Stack>
                         </Stack>
                       ))}
