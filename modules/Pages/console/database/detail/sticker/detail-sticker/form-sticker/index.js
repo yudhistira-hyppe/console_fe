@@ -51,7 +51,8 @@ const FormSticker = (props) => {
 
     createSticker(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.messages?.info?.[0]);
+        console.log(res?.error);
+        toast.error(res?.error?.data?.message || res?.error?.data?.messages?.info?.join(','));
       } else if (res?.data) {
         toast.success('Berhasil menambahkan sticker');
         router.replace('/database/sticker');
@@ -251,15 +252,14 @@ const FormSticker = (props) => {
               </Stack>
             )}
             <Stack direction="row" flexWrap="wrap" gap="12px" width="100%">
-              <LoadingButton
-                loading={loadingUpdate || loadingCreate}
+              <Button
                 variant="contained"
                 color="secondary"
                 style={{ width: 150, fontWeight: 'bold', height: 36 }}
                 onClick={() => setModal({ ...modal, save: !modal.save })}
                 disabled={checkDisable()}>
                 <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Simpan</Typography>
-              </LoadingButton>
+              </Button>
               {status === 'create' && (
                 <Button
                   variant="contained"
@@ -277,8 +277,7 @@ const FormSticker = (props) => {
                     } else {
                       setModal({ ...modal, cancel: !modal.cancel });
                     }
-                  }}
-                  disabled={loadingCreate}>
+                  }}>
                   <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Batal</Typography>
                 </Button>
               )}

@@ -22,7 +22,7 @@ export default function ModalSave({ showModal, onClose, onConfirm, status, statu
     <div>
       <Modal
         open={showModal}
-        onClose={onClose}
+        onClose={() => (loading ? {} : onClose())}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
