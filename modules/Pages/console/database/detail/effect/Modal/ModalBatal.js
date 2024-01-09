@@ -29,7 +29,7 @@ export default function ModalBatal({ showModal, onClose, onConfirm }) {
           <Stack direction="column" alignItems="center" gap="8px">
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 20 }}>Batal</Typography>
             <Typography style={{ textAlign: 'center', fontFamily: 'Lato' }}>
-              Kamu akan membatalkan penambahan stiker. Semua data yang sudah dimasukan tidak akan tersimpan
+              Kamu akan membatalkan penambahan efek. Semua data yang sudah dimasukan tidak akan tersimpan
             </Typography>
           </Stack>
 
