@@ -215,6 +215,17 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                             }}
                           />
                         )}
+                        {item?.reportStatusLast === 'DELETE' && (
+                          <Chip
+                            label="Dihapus"
+                            style={{
+                              backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                              color: '#676767',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
                         {!item?.reportStatusLast && '-'}
                       </Stack>
                     </TableCell>
