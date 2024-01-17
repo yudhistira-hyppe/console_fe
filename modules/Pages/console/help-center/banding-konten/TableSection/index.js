@@ -231,10 +231,11 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
-                        {item?.reportedStatus === 'ALL' && 'Tersedia'}
-                        {item?.reportedStatus === 'OWNED' && 'Ditarik'}
-                        {item?.reportedStatus === 'BLURRED' && 'Ditandai Sensitif'}
-                        {!item?.reportedStatus && '-'}
+                        {item?.reportStatusLast === 'DELETE' && 'Ditarik'}
+                        {item?.reportedStatus === 'ALL' && item?.reportStatusLast !== 'DELETE' && 'Tersedia'}
+                        {item?.reportedStatus === 'OWNED' && item?.reportStatusLast !== 'DELETE' && 'Ditarik'}
+                        {item?.reportedStatus === 'BLURRED' && item?.reportStatusLast !== 'DELETE' && 'Ditandai Sensitif'}
+                        {!item?.reportedStatus && item?.reportStatusLast !== 'DELETE' && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
