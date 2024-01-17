@@ -11,12 +11,15 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import ScrollBar from 'react-perfect-scrollbar';
 import GridContainer from '@jumbo/components/GridContainer';
+import Viewer from 'viewerjs';
+import 'viewerjs/dist/viewer.css';
 
 const UserInfoComponent = (props) => {
   const classes = useStyles();
   const { authUser } = useAuth();
   const { accountDetail } = props;
   const [tab, setTab] = useState('1');
+  const [viewer, setViewer] = useState('');
   const [userBankAccounts, setUserBankAccounts] = useState(accountDetail?.userbankaccounts);
 
   const formattedLocation = (city, area, country) => {
@@ -67,6 +70,16 @@ const UserInfoComponent = (props) => {
     });
 
     return blurredName.join('');
+  };
+
+  useEffect(() => {
+    if (tab === '2') {
+      setViewer(new Viewer(document.getElementById('images')));
+    }
+  }, [tab]);
+
+  const handleView = () => {
+    return viewer.toggle();
   };
 
   return (
@@ -203,26 +216,28 @@ const UserInfoComponent = (props) => {
         <TabPanel value="2" style={{ padding: 0 }}>
           <ScrollBar style={{ maxHeight: 300 }}>
             <Stack direction="column" p="24px" gap="24px">
-              <Stack direction="row">
-                {accountDetail?.dokument?.length >= 1 ? (
+              <Stack direction="row" id="images">
+                {accountDetail?.dokument?.filter((item) => item !== null)?.length >= 1 ? (
                   <ImageList sx={{ width: '100%' }} cols={4} gap="12px" rowHeight={120}>
-                    {accountDetail?.dokument?.map((item, key) => (
-                      <ImageListItem key={key}>
-                        <img
-                          src={getImage(item)}
-                          srcSet={getImage(item)}
-                          alt="Lampiran Akun Premium"
-                          loading="lazy"
-                          style={{
-                            borderRadius: 8,
-                            height: 140,
-                            objectFit: 'cover',
-                            objectPosition: 'center',
-                            border: '1px solid #dddddd',
-                          }}
-                        />
-                      </ImageListItem>
-                    ))}
+                    {accountDetail?.dokument
+                      ?.filter((item) => item !== null)
+                      ?.map((item, key) => (
+                        <ImageListItem key={key} onClick={handleView}>
+                          <img
+                            src={getImage(item)}
+                            srcSet={getImage(item)}
+                            alt="Lampiran Akun Premium"
+                            loading="lazy"
+                            style={{
+                              borderRadius: 8,
+                              height: 140,
+                              objectFit: 'cover',
+                              objectPosition: 'center',
+                              border: '1px solid #dddddd',
+                            }}
+                          />
+                        </ImageListItem>
+                      ))}
                   </ImageList>
                 ) : (
                   <Stack width="100%" height={120}>
