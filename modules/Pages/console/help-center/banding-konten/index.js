@@ -60,6 +60,8 @@ const BandingKonten = () => {
             return 'DITANGGUHKAN';
           } else if (item === 'Ditandai Sensitif') {
             return 'FLAGING';
+          } else if (item === 'Dihapus') {
+            return 'DELETE'
           }
         }),
       });

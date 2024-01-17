@@ -215,15 +215,27 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                             }}
                           />
                         )}
+                        {item?.reportStatusLast === 'DELETE' && (
+                          <Chip
+                            label="Dihapus"
+                            style={{
+                              backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                              color: '#676767',
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                            }}
+                          />
+                        )}
                         {!item?.reportStatusLast && '-'}
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant="body1" style={{ fontSize: '12px', width: 150 }}>
-                        {item?.reportedStatus === 'ALL' && 'Tersedia'}
-                        {item?.reportedStatus === 'OWNED' && 'Ditarik'}
-                        {item?.reportedStatus === 'BLURRED' && 'Ditandai Sensitif'}
-                        {!item?.reportedStatus && '-'}
+                        {item?.reportStatusLast === 'DELETE' && 'Ditarik'}
+                        {item?.reportedStatus === 'ALL' && item?.reportStatusLast !== 'DELETE' && 'Tersedia'}
+                        {item?.reportedStatus === 'OWNED' && item?.reportStatusLast !== 'DELETE' && 'Ditarik'}
+                        {item?.reportedStatus === 'BLURRED' && item?.reportStatusLast !== 'DELETE' && 'Ditandai Sensitif'}
+                        {!item?.reportedStatus && item?.reportStatusLast !== 'DELETE' && '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align="left">

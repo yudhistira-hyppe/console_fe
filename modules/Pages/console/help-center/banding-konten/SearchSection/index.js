@@ -328,6 +328,11 @@ const SearchSection = ({ filter, handleChange }) => {
                   <Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Ditandai Sensitif')} />
                 }
               />
+              <FormControlLabel
+                label={'Dihapus'}
+                value="Dihapus"
+                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status.includes('Dihapus')} />}
+              />
             </FormGroup>
           </AccordionDetails>
           <Divider style={{ marginTop: 16 }} />
