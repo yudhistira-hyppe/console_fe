@@ -30,7 +30,7 @@ export const getUserHyppe = createApi({
     }),
     getProfileByUserEmail: build.query({
       query: (email) => ({
-        url: `/profile`,
+        url: `/profile/v2`,
         method: 'POST',
         body: { email },
       }),
@@ -38,7 +38,7 @@ export const getUserHyppe = createApi({
     }),
     getProfileByUserEmail2: build.mutation({
       query: (email) => ({
-        url: `/profile`,
+        url: `/profile/v2`,
         method: 'POST',
         body: { email },
       }),
