@@ -195,9 +195,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
                       <Stack direction="row" width={120}>
                         <Typography variant="body1" className={classes.textTruncate}>
-                          {item?.gender === 'MALE' && 'Laki-laki'}
-                          {item?.gender === 'FEMALE' && 'Perempuan'}
-                          {item?.gender === 'OTHER' && 'Lainnya'}
+                          {item?.gender === 'MALE' || item?.gender === 'Laki-laki' && 'Laki-laki'}
+                          {item?.gender === 'FEMALE' || item?.gender === 'Perempuan' && 'Perempuan'}
+                          {item?.gender === 'OTHER' || item?.gender === 'Other' && 'Lainnya'}
+                          {!item?.gender && 'Lainnya'}
                         </Typography>
                       </Stack>
                     </TableCell>
