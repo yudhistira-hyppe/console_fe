@@ -8,7 +8,7 @@ export const boostAPI = createApi({
   endpoints: (build) => ({
     getListBoostPost: build.query({
       query: (data) => ({
-        url: '/getusercontents/boostconsole/list',
+        url: '/getusercontents/boostconsole/list/v2',
         method: 'POST',
         body: data,
       }),
@@ -21,13 +21,13 @@ export const boostAPI = createApi({
     }),
     getAnalyticBoost: build.query({
       query: () => ({
-        url: '/getusercontents/boostconsole',
+        url: '/getusercontents/boostconsole/v2',
         method: 'POST',
       }),
     }),
     getDetailBoostPost: build.query({
       query: (data) => ({
-        url: '/getusercontents/boostconsole/list/details',
+        url: '/getusercontents/boostconsole/list/details/v2',
         method: 'POST',
         body: data,
       }),
