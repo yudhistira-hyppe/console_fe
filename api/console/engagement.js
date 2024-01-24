@@ -7,14 +7,14 @@ export const engagementApi = createApi({
   endpoints: (build) => ({
     getNewUser: build.query({
       query: (data) => ({
-        url: '/userbasics/newuser',
+        url: '/userbasics/newuser/v2',
         method: 'POST',
         body: data,
       }),
     }),
     getDemographyUser: build.query({
       query: (data) => ({
-        url: '/userbasics/demografis',
+        url: '/userbasics/demografis/v2',
         method: 'POST',
         body: data,
       }),
@@ -28,7 +28,7 @@ export const engagementApi = createApi({
     }),
     getActivityUser: build.query({
       query: (data) => ({
-        url: '/posts/interaksi',
+        url: '/posts/interaksi/v2',
         method: 'POST',
         body: data,
       }),

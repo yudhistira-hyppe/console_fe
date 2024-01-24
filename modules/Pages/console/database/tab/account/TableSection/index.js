@@ -173,7 +173,7 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     style={{ cursor: 'pointer' }}>
                     <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
                       <Stack direction="row" alignItems="center" gap="15px" width={200}>
-                        <Avatar src={item?.avatar[0]?.mediaEndpoint ? getMediaUri(item?.avatar[0]?.mediaEndpoint) : ''} />
+                        <Avatar src={item?.avatar?.mediaEndpoint ? getMediaUri(item?.avatar?.mediaEndpoint) : ''} />
                         <Stack gap="4px" overflow="hidden" width="100%">
                           <Typography
                             variant="body1"
@@ -195,9 +195,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
                       <Stack direction="row" width={120}>
                         <Typography variant="body1" className={classes.textTruncate}>
-                          {item?.gender === 'MALE' && 'Laki-laki'}
-                          {item?.gender === 'FEMALE' && 'Perempuan'}
-                          {item?.gender === 'OTHER' && 'Lainnya'}
+                          {item?.gender === 'MALE' || item?.gender === 'Laki-laki' && 'Laki-laki'}
+                          {item?.gender === 'FEMALE' || item?.gender === 'Perempuan' && 'Perempuan'}
+                          {item?.gender === 'OTHER' || item?.gender === 'Other' && 'Lainnya'}
+                          {!item?.gender && 'Lainnya'}
                         </Typography>
                       </Stack>
                     </TableCell>

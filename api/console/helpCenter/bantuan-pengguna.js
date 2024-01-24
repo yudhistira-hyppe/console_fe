@@ -8,7 +8,7 @@ export const bantuanPenggunaApi = createApi({
   endpoints: (build) => ({
     getListTickets: build.query({
       query: (params) => ({
-        url: '/usertickets/filter',
+        url: '/usertickets/filter/v2',
         method: 'POST',
         body: params,
       }),
@@ -37,7 +37,7 @@ export const bantuanPenggunaApi = createApi({
     }),
     getDetailTicket: build.query({
       query: (params) => ({
-        url: '/usertickets/comment',
+        url: '/usertickets/comment/v2',
         method: 'POST',
         body: params,
       }),

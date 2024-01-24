@@ -8,7 +8,7 @@ export const bankApi = createApi({
   endpoints: (build) => ({
     getListBank: build.query({
       query: (data) => ({
-        url: '/userbankaccounts/getAccountList',
+        url: '/userbankaccounts/getAccountList/v2',
         method: 'POST',
         body: data,
       }),
@@ -16,7 +16,7 @@ export const bankApi = createApi({
     }),
     getDetailBank: build.query({
       query: (id) => ({
-        url: `/userbankaccounts/getAccountList/${id}`,
+        url: `/userbankaccounts/getAccountList/v2/${id}`,
         method: 'GET',
       }),
       providesTags: ['bank'],

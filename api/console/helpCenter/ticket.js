@@ -41,7 +41,7 @@ export const ticketApi = createApi({
     }),
     getCountingHelpCenter: build.query({
       query: (data) => ({
-        url: '/reportuser/summary',
+        url: '/reportuser/summary/v2',
         method: 'POST',
         body: data,
       }),

@@ -23,7 +23,7 @@ export const voucherApi = createApi({
     }),
     getTransactionVouchers: build.query({
       query: (params) => ({
-        url: '/transactions/historys/voucher',
+        url: '/transactions/historys/voucher/v2',
         method: 'POST',
         body: params,
       }),
@@ -31,7 +31,7 @@ export const voucherApi = createApi({
     }),
     getDetailTransactionVouchers: build.query({
       query: (data) => ({
-        url: '/transactions/historys/voucher/detail',
+        url: '/transactions/historys/voucher/detail/v2',
         method: 'POST',
         body: data,
       }),

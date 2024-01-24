@@ -23,7 +23,7 @@ export const databaseApi = createApi({
     //Account
     getAllUser: build.query({
       query: (data) => ({
-        url: `/getuserprofiles`,
+        url: `/getuserprofiles/v2`,
         method: 'POST',
         body: data,
       }),
@@ -31,7 +31,7 @@ export const databaseApi = createApi({
     }),
     getuserDatabaseDetail: build.query({
       query: (id) => ({
-        url: `user/userdetail/${id}`,
+        url: `user/userdetail/v2/${id}`,
         method: 'GET',
       }),
       providesTags: ['Detail-Account'],
@@ -44,7 +44,7 @@ export const databaseApi = createApi({
     }),
     getProfileByUserEmail: build.query({
       query: (email) => ({
-        url: `/profile`,
+        url: `/profile/v2`,
         method: 'POST',
         body: {
           email,
@@ -54,7 +54,7 @@ export const databaseApi = createApi({
     }),
     getAccountBalance: build.query({
       query: (data) => ({
-        url: `/accountbalances`,
+        url: `/accountbalances/v2`,
         method: 'POST',
         body: data,
       }),
@@ -82,7 +82,7 @@ export const databaseApi = createApi({
     //Content
     getListContent: build.query({
       query: (data) => ({
-        url: '/getusercontents/database',
+        url: '/getusercontents/database/v2',
         method: 'POST',
         body: data,
       }),
@@ -97,7 +97,7 @@ export const databaseApi = createApi({
     }),
     getDetailContent: build.query({
       query: (data) => ({
-        url: '/getusercontents/database/details',
+        url: '/getusercontents/database/details/v2',
         method: 'POST',
         body: data,
       }),
