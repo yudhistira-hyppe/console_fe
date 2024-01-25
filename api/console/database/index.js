@@ -107,21 +107,21 @@ export const databaseApi = createApi({
     //Media
     getGenreMusic: build.query({
       query: () => ({
-        url: '/genre',
+        url: '/genre/version/2',
         method: 'GET',
       }),
       providesTags: ['Util'],
     }),
     getThemeMusic: build.query({
       query: () => ({
-        url: '/theme',
+        url: '/theme/version/2',
         method: 'GET',
       }),
       providesTags: ['Util'],
     }),
     getMoodMusic: build.query({
       query: () => ({
-        url: '/mood',
+        url: '/mood/version/2',
         method: 'GET',
       }),
       providesTags: ['Util'],
@@ -149,7 +149,7 @@ export const databaseApi = createApi({
     }),
     getMediaChart: build.query({
       query: () => ({
-        url: '/musiccard',
+        url: '/musiccard/v2',
         method: 'GET',
       }),
     }),
