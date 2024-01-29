@@ -48,7 +48,7 @@ export const kontenApi = createApi({
     }),
     updateFlagingTicket: build.mutation({
       query: (data) => ({
-        url: '/reportuser/flaging',
+        url: '/reportuser/flaging/v2',
         method: 'POST',
         body: data,
       }),
