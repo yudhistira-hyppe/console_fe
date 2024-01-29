@@ -46,7 +46,7 @@ const CardStatus = ({ details }) => {
   };
 
   return (
-    <Card sx={{ p: 3, height: '100%' }}>
+    <Card sx={{ p: 3 }}>
       <Stack direction="column" alignItems="center" justifyContent="center" height="100%" gap={2}>
         <Button
           fullWidth
