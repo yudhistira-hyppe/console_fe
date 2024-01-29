@@ -45,7 +45,7 @@ export const bantuanPenggunaApi = createApi({
     }),
     updateDetailTicket: build.mutation({
       query: ({ id, data }) => ({
-        url: `/usertickets/update/${id}`,
+        url: `/usertickets/update/v2/${id}`,
         method: 'PUT',
         body: data,
       }),
@@ -53,7 +53,7 @@ export const bantuanPenggunaApi = createApi({
     }),
     replyTicket: build.mutation({
       query: (data) => ({
-        url: '/usertickets/reply',
+        url: '/usertickets/reply/v2',
         method: 'POST',
         body: data,
       }),
