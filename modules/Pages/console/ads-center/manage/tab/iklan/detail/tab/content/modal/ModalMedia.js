@@ -10,33 +10,35 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
-  height: '60vh',
+  width: '500px',
+  height: 'auto',
+  maxHeight: '80vh',
   boxShadow: 24,
   p: 0,
   borderRadius: '4px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  overflow: 'hidden',
 };
 
 export default function ModalMedia({ showModal, onClose, contentType, idApsara, urlImage }) {
   const { data: adsVideo } = useGetVideoFromApsaraQuery({ apsaraId: idApsara });
 
   return (
-    <div>
-      <Modal
-        open={showModal}
-        onClose={onClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
-        <Box sx={style}>
-          {contentType === 'video' ? (
-            <video src={adsVideo?.PlayUrl} controls height="100%" />
-          ) : (
-            <img src={urlImage} alt="image ads" height="100%" />
-          )}
-        </Box>
-      </Modal>
-    </div>
+    <Modal
+      open={showModal}
+      onClose={onClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      disableAutoFocus>
+      <Box sx={style}>
+        {contentType === 'video' ? (
+          <video src={adsVideo?.PlayUrl} controls width="100%" height="auto" />
+        ) : (
+          <img src={urlImage} alt="image ads" width="100%" height="auto" />
+        )}
+      </Box>
+    </Modal>
   );
 }
