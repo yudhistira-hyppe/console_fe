@@ -8,7 +8,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 
 const CardContent = ({ details }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState({ show: false, type: '', contentType: '' });
   const { authUser } = useAuth();
 
   const checkDayAds = () => {
@@ -24,10 +24,16 @@ const CardContent = ({ details }) => {
     return day?.length === 7 ? 'Setiap Hari' : day?.join(', ');
   };
 
-  const getImage = (idAds) => {
+  const getImage = (type) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
 
-    return `${STREAM_URL}/api/adsv2/ads/image/read/${idAds}${authToken}`;
+    if (type === 'DEFAULT') {
+      return `${STREAM_URL}/api/adsv2/ads/image/read/${details?._id}${authToken}`;
+    } else if (type === 'PORTRAIT') {
+      return `${STREAM_URL}/api/adsv2/ads/image/read/portrait/${details?._id}${authToken}`;
+    } else if (type === 'LANDSCAPE') {
+      return `${STREAM_URL}/api/adsv2/ads/image/read/landscape/${details?._id}${authToken}`;
+    }
   };
 
   return (
@@ -98,29 +104,55 @@ const CardContent = ({ details }) => {
 
           <Stack direction="column" gap={1}>
             <Typography style={{ fontSize: 14, fontWeight: 700 }}>Pratinjau Iklan</Typography>
-            <Avatar
-              src={details?.media ? details?.media?.CoverURL : getImage(details?._id)}
-              style={{
-                width: 184,
-                height: 184,
-                cursor: 'pointer',
-                border: '1px solid #DDDDDD',
-                borderRadius: 8,
-              }}
-              variant="rounded"
-              onClick={() => setShowModal(true)}
-              alt="X"
-            />
+            <Stack direction="row" gap={2}>
+              {details?.adsImageContains?.map((item) => (
+                <img
+                  key={item}
+                  src={getImage(item)}
+                  style={{
+                    width: 184,
+                    height: 184,
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                    cursor: 'pointer',
+                    border: '1px solid #DDDDDD',
+                    borderRadius: 8,
+                  }}
+                  variant="rounded"
+                  onClick={() => setShowModal({ show: true, type: item, contentType: 'image' })}
+                  alt="X"
+                />
+              ))}
 
-            {showModal && (
-              <ModalMedia
-                showModal={showModal}
-                onClose={() => setShowModal(false)}
-                contentType={details?.media ? 'video' : 'image'}
-                idApsara={details?.media?.VideoId}
-                urlImage={getImage(details?._id)}
-              />
-            )}
+              {details?.adsVideoContains?.map((item) => (
+                <img
+                  key={item}
+                  src={details?.[`${item}`] && details?.[`${item}`]?.CoverURL}
+                  style={{
+                    width: 184,
+                    height: 184,
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                    cursor: 'pointer',
+                    border: '1px solid #DDDDDD',
+                    borderRadius: 8,
+                  }}
+                  variant="rounded"
+                  onClick={() => setShowModal({ show: true, type: item, contentType: 'video' })}
+                  alt="X"
+                />
+              ))}
+
+              {showModal.show && (
+                <ModalMedia
+                  showModal={showModal.show}
+                  onClose={() => setShowModal({ show: false, type: '' })}
+                  contentType={showModal?.contentType}
+                  idApsara={details?.[showModal?.type]?.VideoId}
+                  urlImage={getImage(showModal.type)}
+                />
+              )}
+            </Stack>
           </Stack>
 
           <Stack direction="column" gap="6px">
