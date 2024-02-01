@@ -8,7 +8,7 @@ export const getUserHyppe = createApi({
   endpoints: (build) => ({
     getAnggota: build.query({
       query: (data) => ({
-        url: `/getuserhyppe`,
+        url: `/getuserhyppe/v2`,
         method: 'POST',
         body: data,
       }),
@@ -24,7 +24,7 @@ export const getUserHyppe = createApi({
     }),
     getDetailAnggota: build.query({
       query: ({ skip, limit, groupId }) => ({
-        url: `/getuserhyppe?skip=${skip}&limit=${limit}&groupId=${groupId}`,
+        url: `/getuserhyppe/v2?skip=${skip}&limit=${limit}&groupId=${groupId}`,
         method: 'GET',
       }),
     }),
