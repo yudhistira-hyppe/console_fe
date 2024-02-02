@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import TreeView from '@mui/lab/TreeView';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem';
 import {
   Button,
   Checkbox,
@@ -28,6 +26,7 @@ import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import Head from 'next/head';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
+import { TreeItem, TreeView } from '@mui/x-tree-view';
 
 const useStyles = makeStyles((theme) => ({
   checkbox: {
@@ -79,6 +78,8 @@ const RichObjectTreeView = () => {
       };
     }),
   };
+
+  console.log(data);
 
   const breadcrumbs = [
     { label: 'Jabatan', link: '/anggota?tab=jabatan' },

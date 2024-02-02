@@ -78,8 +78,8 @@ const DetailPermohonanPremium = () => {
     const endpoint = mediaEndpoint.split('/');
 
     return endpoint.includes('supportfile')
-      ? `${STREAM_URL}/${endpoint[1]}/${detail?.data[0]?._id}/${key}${authToken}`
-      : `${STREAM_URL}/${endpoint[1]}/${detail?.data[0]?._id}${authToken}`;
+      ? `${STREAM_URL}/${endpoint[1]}/v2/${detail?.data[0]?._id}/${key}${authToken}`
+      : `${STREAM_URL}/${endpoint[1]}/v2/${detail?.data[0]?._id}${authToken}`;
   };
 
   const handleConfirm = (val) => {
