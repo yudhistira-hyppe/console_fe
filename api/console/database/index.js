@@ -72,7 +72,7 @@ export const databaseApi = createApi({
     }),
     updateUserCreator: build.mutation({
       query: (data) => ({
-        url: '/user/updatestatuscreator',
+        url: '/user/updatestatuscreator/v2',
         method: 'POST',
         body: data,
       }),
