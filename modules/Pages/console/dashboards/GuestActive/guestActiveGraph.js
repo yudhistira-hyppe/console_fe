@@ -9,12 +9,12 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     borderRadius: 6,
     padding: '4px 12px',
-    backgroundColor: '#CB76CD',
+    backgroundColor: '#2A8F9C',
     color: theme.palette.common.white,
   },
 }));
 
-const InstalasiGraph = ({ data }) => {
+const guestActiveGraph = ({ data }) => {
   const classes = useStyles();
 
   return (
@@ -26,24 +26,24 @@ const InstalasiGraph = ({ data }) => {
           content={(data) => {
             return data.payload[0] ? (
               <Box className={classes.tooltip}>
-                {moment(data.payload[0].payload._id).format('DD MMM YYYY')}: {data.payload[0].payload.totaldata} Post
+                {moment(data.payload[0].payload.date).format('DD MMM YYYY')}: {data.payload[0].payload.count} Guest
               </Box>
             ) : null;
           }}
         />
         <defs>
-          <linearGradient id="color13" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="rgba(203, 118, 205, 1)" stopOpacity={1} />
-            <stop offset="95%" stopColor="rgba(244, 229, 246, 0)" stopOpacity={1} />
+          <linearGradient id="color14" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#A9E8F0" stopOpacity={1} />
+            <stop offset="95%" stopColor="rgba(255, 255, 255, 0.00)" stopOpacity={1} />
           </linearGradient>
         </defs>
         <Area
-          dataKey="totaldata"
+          dataKey="count"
           type="monotone"
           strokeWidth={2}
           stackId="2"
-          stroke="#CB76CD"
-          fill="url(#color13)"
+          stroke="#2A8F9C"
+          fill="url(#color14)"
           fillOpacity={1}
         />
       </AreaChart>
@@ -51,4 +51,4 @@ const InstalasiGraph = ({ data }) => {
   );
 };
 
-export default InstalasiGraph;
+export default guestActiveGraph;

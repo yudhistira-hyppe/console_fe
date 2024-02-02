@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Typography } from '@material-ui/core';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { TabContext, TabList } from '@mui/lab';
 import { Box, Card, CircularProgress, Divider, Stack, Tab, Button, Avatar, Pagination, IconButton } from '@mui/material';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
@@ -14,13 +14,13 @@ import CmtImage from '@coremat/CmtImage';
 import { fakeDb } from 'modules/FakeDb/fake-db';
 import { NavigateBefore, NavigateNext } from '@material-ui/icons';
 import { useGetListContentQuery } from 'api/console/database';
+import Link from 'next/link';
 
 const postsConfig = [
-  { key: 'all', label: 'ALL' },
-  { key: 'HyppeVid', label: 'HYPPEVID' },
-  { key: 'HyppePic', label: 'HYPPEPICT' },
-  { key: 'HyppeStory', label: 'HYPPESTORY' },
-  { key: 'HyppeDiary', label: 'HYPPEDIARY' },
+  { key: 'all', label: 'Semua' },
+  { key: 'HyppePic', label: 'Hyppepic' },
+  { key: 'HyppeDiary', label: 'Hyppediary' },
+  { key: 'HyppeVid', label: 'Hyppevid' },
 ];
 
 const UserPost = (props) => {
@@ -87,80 +87,89 @@ const UserPost = (props) => {
   return (
     <Card>
       <TabContext value={tab}>
-        <Box position="relative" sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Box padding="24px 24px 0">
-            <Typography variant="h4">Post Pengguna</Typography>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          style={{ padding: '16px 24px 0', borderBottom: '1px solid #0000001f', position: 'relative' }}>
+          <Box style={{ position: 'absolute', left: 24 }}>
+            <Typography variant="h4">Postingan Pengguna</Typography>
           </Box>
           <TabList
             onChange={onTabChange}
             centered={window.innerWidth < 500 ? false : true}
             variant={window.innerWidth < 500 ? 'scrollable' : 'standard'}
             scrollButtons
-            textColor="secondary"
-            indicatorColor="secondary">
+            sx={{ marginLeft: 22, '& .MuiTabs-indicator': { backgroundColor: '#AB22AF' } }}>
             {postsConfig?.map(({ key, label }) => (
               <Tab key={key} className={classes.tab} label={label} value={key} />
             ))}
           </TabList>
-        </Box>
-        <PerfectScrollbar style={{ maxHeight: 544, minHeight: 544, padding: 20 }}>
-          <Stack direction="column" width="100%" alignItems="center" gap="12px">
+        </Stack>
+        <PerfectScrollbar style={{ maxHeight: 544, minHeight: 544 }}>
+          <Stack direction="column" width="100%" alignItems="center">
             {loadingContent ? (
-              <Stack height={504} alignItems="center" justifyContent="center" spacing={2}>
+              <Stack height={544} alignItems="center" justifyContent="center" gap={2}>
                 <CircularProgress color="secondary" />
                 <Typography style={{ fontWeight: 'bold' }}>Loading data...</Typography>
               </Stack>
             ) : posts?.data?.length > 0 ? (
               posts?.data?.map((post, index) => (
-                <CmtMediaObject
-                  key={index}
-                  style={{ width: '100%' }}
-                  className={classes.mediaObjectRoot}
-                  avatar={
-                    <Box
-                      position="relative"
-                      style={{ width: 200, height: 150, border: '1px solid #eeeeee', borderRadius: 4 }}>
-                      <Avatar src={getPostImage(post)} alt="X" variant="rounded" style={{ width: '100%', height: '100%' }} />
-                    </Box>
-                  }
-                  avatarPos="center"
-                  footerComponentProps={{ className: classes.footerComponentRoot }}>
-                  <Stack direction="column" height={150}>
-                    <Box className={classes.badgeRoot} component="span" bgcolor={'#EBEBEB'}>
-                      {post.postType}
-                    </Box>
-                    <Typography component="div" variant="h4" className={classes.titleRoot}>
-                      {post.description}
-                    </Typography>
-                    <Box component="p" display="flex" flexDirection="row" fontSize={12}>
-                      {post.likes || 0}
-                      <Box component="span" color="text.secondary">
-                        &nbsp;Suka |
+                <Link key={index} href={`/database/content/${post?._id}`}>
+                  <CmtMediaObject
+                    sx={{
+                      width: '100%',
+                      padding: '24px',
+                      borderBottom: '1px solid rgb(238, 238, 238)',
+                      '&:hover': {
+                        cursor: 'pointer',
+                        background: '#bdbdbd24',
+                      },
+                    }}
+                    className={classes.mediaObjectRoot}
+                    avatar={
+                      <Box
+                        position="relative"
+                        style={{ width: 200, height: 150, border: '1px solid #eeeeee', borderRadius: 4 }}>
+                        <Avatar
+                          src={getPostImage(post)}
+                          alt="X"
+                          variant="rounded"
+                          style={{ width: '100%', height: '100%' }}
+                        />
                       </Box>
-                      &nbsp;{post.comments || 0}
-                      <Box component="span" color="text.secondary">
-                        &nbsp;Komentar |
+                    }
+                    avatarPos="center"
+                    footerComponentProps={{ className: classes.footerComponentRoot }}>
+                    <Stack direction="column" height={150}>
+                      <Box className={classes.badgeRoot} bgcolor={'#EBEBEB'}>
+                        {post.postType}
                       </Box>
-                      &nbsp;{post.views || 0}
-                      <Box component="span" color="text.secondary">
-                        &nbsp;Dilihat
-                      </Box>
-                    </Box>
-                    <Typography style={{ color: '#737373', fontSize: 12, marginTop: 10 }}>
-                      {moment(post?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
-                    </Typography>
-                  </Stack>
-                </CmtMediaObject>
+                      <Typography className={classes.titleRoot}>{post.description}</Typography>
+                      <Stack direction="row" style={{ fontSize: 12 }}>
+                        {post.likes || 0}
+                        <span style={{ color: 'rgba(0, 0, 0, 0.6)' }}>&nbsp;Suka |</span>
+                        &nbsp;{post.comments || 0}
+                        <span style={{ color: 'rgba(0, 0, 0, 0.6)' }}>&nbsp;Komentar |</span>
+                        &nbsp;{post.views || 0}
+                        <span style={{ color: 'rgba(0, 0, 0, 0.6)' }}>&nbsp;Dilihat</span>
+                      </Stack>
+                      <Typography style={{ color: '#737373', fontSize: 12, marginTop: 10 }}>
+                        {moment(post?.createdAt).format('DD/MM/YYYY - HH:mm')} WIB
+                      </Typography>
+                    </Stack>
+                  </CmtMediaObject>
+                </Link>
               ))
             ) : (
-              <Stack height={504} alignItems="center" justifyContent="center" spacing={2}>
+              <Stack height={504} alignItems="center" justifyContent="center" gap={2}>
                 <img src="/images/icons/empty-posts.svg" alt="Empty Post" />
                 <Typography>Pengguna belum memiliki kiriman apapun</Typography>
               </Stack>
             )}
           </Stack>
         </PerfectScrollbar>
-        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} m={2}>
+        <Stack direction="row" alignItems="center" justifyContent="left" spacing={2} m={2}>
           <IconButton
             color="secondary"
             onClick={() =>

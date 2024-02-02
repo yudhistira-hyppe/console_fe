@@ -3,10 +3,10 @@ import { useGetUserActiveQuery } from 'api/console/dashboard';
 import moment from 'moment';
 import React, { useState } from 'react';
 
-import UserActiveCard from './userActiveCard';
-import UserActiveGraph from './userActiveGraph';
+import GuestActiveCard from './guestActiveCard';
+import GuestActiveGraph from './guestActiveGraph';
 
-const UserActive = () => {
+const GuestActive = () => {
   const [payload, setPayload] = useState({
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
@@ -22,13 +22,13 @@ const UserActive = () => {
   };
 
   return (
-    <UserActiveCard title="Pengguna Aktif" secondaryTitle="Bulan ini" amount={totalActive()} handlePayload={handlePayload}>
+    <GuestActiveCard title="Guest Aktif" secondaryTitle="Bulan ini" amount={totalActive()} handlePayload={handlePayload}>
       {loadingActive ? (
         <Stack direction="column" alignItems="center" justifyContent="center" height={150} spacing={2}>
           <CircularProgress color="secondary" size={24} />
         </Stack>
       ) : (
-        <UserActiveGraph
+        <GuestActiveGraph
           data={userActive?.data?.map((item) => {
             return {
               date: item?.date,
@@ -37,8 +37,8 @@ const UserActive = () => {
           })}
         />
       )}
-    </UserActiveCard>
+    </GuestActiveCard>
   );
 };
 
-export default UserActive;
+export default GuestActive;

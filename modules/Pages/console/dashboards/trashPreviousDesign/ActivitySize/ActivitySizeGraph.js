@@ -17,7 +17,7 @@ const ActivitySizeGraph = ({ data }) => {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={250}>
       <LineChart data={fixedData()} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
         <CartesianGrid strokeDasharray="4 4" />
         <XAxis dataKey="date" allowDataOverflow allowDecimals={false} />

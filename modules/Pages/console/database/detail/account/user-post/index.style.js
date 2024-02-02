@@ -4,16 +4,19 @@ const useStyles = makeStyles((theme) => ({
   tab: {
     '&.MuiTab-root': {
       minWidth: '60px',
-      padding: '25px',
-      justifyContent: 'center',
-      fontSize: '14px',
+      padding: '8px',
+      justifyContent: 'end',
+      textTransform: 'capitalize',
+      fontSize: '16px',
       fontFamily: 'Lato',
       fontWeight: '700',
-    },
-  },
-  tabPanel: {
-    '&.MuiTabPanel-root': {
-      padding: '24px 0',
+      marginRight: 26,
+      color: 'black',
+      marginBottom: 12,
+
+      '&.Mui-selected': {
+        color: '#AB22AF',
+      },
     },
   },
   imageThumbRoot: {

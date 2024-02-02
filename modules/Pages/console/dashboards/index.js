@@ -17,6 +17,8 @@ import UserActive from './UserActive';
 import Unggahan from './Unggahan';
 import Pendapatan from './Pendapatan';
 import Voucher from './Voucher';
+import GuestActive from './GuestActive';
+import GuestChart from './GuestChart';
 
 const useStyles = makeStyles((theme) => ({
   '& .MuiBox-root': {
@@ -46,22 +48,28 @@ const ConsoleDashboardComponent = () => {
       <PageContainer>
         <GridContainer>
           {access?.map((item) => item?.nameModule).includes('dashboard_active_user') && (
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={4}>
               <UserActive />
             </Grid>
           )}
+          <Grid item xs={12} sm={6} md={4}>
+            <GuestActive />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <GuestChart />
+          </Grid>
           {access?.map((item) => item?.nameModule).includes('dashboard_total_post') && (
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={4}>
               <Unggahan />
             </Grid>
           )}
           {access?.map((item) => item?.nameModule).includes('dashboard_total_income') && (
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={4}>
               <Pendapatan />
             </Grid>
           )}
           {access?.map((item) => item?.nameModule).includes('dashboard_voucher') && (
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={4}>
               <Voucher />
             </Grid>
           )}

@@ -17,11 +17,12 @@ const useStyles = makeStyles(() => ({
   tableRowCustomPadding: {
     '& .MuiTableCell-root': {
       padding: '24px',
+      height: 485,
       '&.MuiTableCell-body': {
         color: '#00000099',
       },
     },
-  }
+  },
 }));
 
 export default useStyles;

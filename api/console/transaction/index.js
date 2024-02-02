@@ -7,7 +7,7 @@ export const transactionAPI = createApi({
   endpoints: (build) => ({
     allTransaction: build.query({
       query: (payload) => ({
-        url: `/transactions/list`,
+        url: `/transactions/list/v2`,
         method: 'POST',
         body: payload,
       }),
