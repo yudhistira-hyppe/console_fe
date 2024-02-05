@@ -127,8 +127,8 @@ const DatabaseDetailAccountComponent = (props) => {
                         <Box style={{ position: 'relative' }}>
                           <CmtAvatar
                             src={getMediaUri(userFriendListRes?.[0]?.avatar?.mediaEndpoint)}
-                            alt={userFriendListRes?.[0]?.fullName}
-                            style={{ borderRadius: 18, width: 56, height: 'auto', border: '0.5px solid #0000001F' }}
+                            alt={userFriendListRes?.[0]?.username}
+                            style={{ borderRadius: 18, width: 56, height: 56, border: '0.5px solid #0000001F' }}
                           />
 
                           {userFriendListRes?.[0]?.statusUser !== 'BASIC' && (

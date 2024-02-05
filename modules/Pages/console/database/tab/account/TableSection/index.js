@@ -173,7 +173,10 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                     style={{ cursor: 'pointer' }}>
                     <TableCell align="left" onClick={() => router.push(`/database/account/${item?.iduser}`)}>
                       <Stack direction="row" alignItems="center" gap="15px" width={200}>
-                        <Avatar src={item?.avatar?.mediaEndpoint ? getMediaUri(item?.avatar?.mediaEndpoint) : ''} />
+                        <Avatar
+                          src={item?.avatar?.mediaEndpoint ? getMediaUri(item?.avatar?.mediaEndpoint) : new Error()}
+                          alt={item?.username}
+                        />
                         <Stack gap="4px" overflow="hidden" width="100%">
                           <Typography
                             variant="body1"

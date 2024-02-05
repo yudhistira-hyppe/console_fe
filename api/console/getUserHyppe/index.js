@@ -61,7 +61,7 @@ export const getUserHyppe = createApi({
     }),
     updateGroupUser: build.mutation({
       query: (payload) => ({
-        url: `/group/user`,
+        url: `/group/user/v2`,
         method: 'POST',
         body: payload,
       }),
