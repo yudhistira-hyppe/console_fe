@@ -87,10 +87,17 @@ const UserBankInfoComponent = ({ accountDetail }) => {
                   <Grid key={bankAccount.id} item xs={12} sm={6}>
                     <Stack direction="row" alignItems="center" gap={2}>
                       <img
-                        src=""
+                        src={bankAccount?.bankIcon || ''}
                         alt=""
                         loading="lazy"
-                        style={{ width: 80, height: 56, border: '1px solid #737373', borderRadius: 8 }}
+                        style={{
+                          width: 80,
+                          height: 56,
+                          border: '1px solid #737373',
+                          borderRadius: 8,
+                          objectFit: 'cover',
+                          objectPosition: 'center',
+                        }}
                       />
 
                       <Stack direction="column" gap="6px">
