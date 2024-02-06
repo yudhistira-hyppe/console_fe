@@ -29,11 +29,11 @@ const useStyles = makeStyles({
 const dummyData = [
   {
     name: 'Terdaftar',
-    count: 50,
+    count: 0,
   },
   {
     name: 'Tidak Terdaftar',
-    count: 150,
+    count: 0,
   },
 ];
 
