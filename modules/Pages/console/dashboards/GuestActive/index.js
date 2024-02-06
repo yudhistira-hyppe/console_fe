@@ -1,5 +1,5 @@
 import { CircularProgress, Stack } from '@mui/material';
-import { useGetUserActiveQuery } from 'api/console/dashboard';
+import { useGetGuestActiveQuery } from 'api/console/dashboard';
 import moment from 'moment';
 import React, { useState } from 'react';
 
@@ -11,14 +11,14 @@ const GuestActive = () => {
     startdate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
     enddate: moment().format('YYYY-MM-DD'),
   });
-  const { data: userActive, isFetching: loadingActive } = useGetUserActiveQuery(payload);
+  const { data: guestActive, isFetching: loadingActive } = useGetGuestActiveQuery(payload);
 
   const handlePayload = (value) => {
     setPayload({ ...payload, startdate: moment().subtract(value, 'day').format('YYYY-MM-DD') });
   };
 
   const totalActive = () => {
-    return userActive?.data?.map((item) => item.count).reduce((a, b) => a + b) || 0;
+    return guestActive?.data?.map((item) => item.count).reduce((a, b) => a + b) || 0;
   };
 
   return (
@@ -29,7 +29,7 @@ const GuestActive = () => {
         </Stack>
       ) : (
         <GuestActiveGraph
-          data={userActive?.data?.map((item) => {
+          data={guestActive?.data?.map((item) => {
             return {
               date: item?.date,
               count: item?.count,

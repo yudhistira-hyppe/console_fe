@@ -12,6 +12,13 @@ export const dashboardApi = createApi({
         body: data,
       }),
     }),
+    getGuestActive: build.query({
+      query: (data) => ({
+        url: '/activityevents/logactivitas/guest',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     getUserTotalPost: build.query({
       query: (data) => ({
         url: '/posts/postbychart/v2',
@@ -51,6 +58,7 @@ export const dashboardApi = createApi({
 
 export const {
   useGetUserActiveQuery,
+  useGetGuestActiveQuery,
   useGetUserTotalPostQuery,
   useGetAdminBalancesQuery,
   useGetVoucherIncomeQuery,
