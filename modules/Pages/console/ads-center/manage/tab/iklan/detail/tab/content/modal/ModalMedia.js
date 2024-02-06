@@ -9,11 +9,6 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  width: '500px',
-  height: 'auto',
-  maxHeight: '80vh',
-  boxShadow: 24,
   p: 0,
   borderRadius: '4px',
   display: 'flex',
@@ -34,9 +29,17 @@ export default function ModalMedia({ showModal, onClose, contentType, idApsara, 
       disableAutoFocus>
       <Box sx={style}>
         {contentType === 'video' ? (
-          <video src={adsVideo?.PlayUrl} controls width="100%" height="auto" />
+          <video
+            src={adsVideo?.PlayUrl}
+            controls
+            style={{ height: 'auto', maxHeight: 500, objectFit: 'contain', objectPosition: 'center' }}
+          />
         ) : (
-          <img src={urlImage} alt="image ads" width="100%" height="auto" />
+          <img
+            src={urlImage}
+            alt="image ads"
+            style={{ height: 'auto', maxHeight: 500, objectFit: 'contain', objectPosition: 'center' }}
+          />
         )}
       </Box>
     </Modal>
