@@ -19,6 +19,12 @@ export const dashboardApi = createApi({
         body: data,
       }),
     }),
+    getTotalGuest: build.query({
+      query: () => ({
+        url: '/newuserbasics/guestchart',
+        method: 'GET',
+      }),
+    }),
     getUserTotalPost: build.query({
       query: (data) => ({
         url: '/posts/postbychart/v2',
@@ -59,6 +65,7 @@ export const dashboardApi = createApi({
 export const {
   useGetUserActiveQuery,
   useGetGuestActiveQuery,
+  useGetTotalGuestQuery,
   useGetUserTotalPostQuery,
   useGetAdminBalancesQuery,
   useGetVoucherIncomeQuery,
