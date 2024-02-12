@@ -1,6 +1,7 @@
 import { Typography, makeStyles } from '@material-ui/core';
 import { Error } from '@material-ui/icons';
 import { Box, Card, Popover, Stack } from '@mui/material';
+import { useGetTotalGuestQuery } from 'api/console/dashboard';
 import React, { useState } from 'react';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
@@ -26,21 +27,11 @@ const useStyles = makeStyles({
   },
 });
 
-const dummyData = [
-  {
-    name: 'Terdaftar',
-    count: 0,
-  },
-  {
-    name: 'Tidak Terdaftar',
-    count: 0,
-  },
-];
-
 const GuestChart = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const classes = useStyles();
+  const { data: guestTotal, isLoading: loadingGuest } = useGetTotalGuestQuery();
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -87,9 +78,9 @@ const GuestChart = () => {
 
         <Stack direction="row" alignItems="center" gap={2}>
           <PieChart width={150} height={176}>
-            <Pie data={dummyData} innerRadius={35} outerRadius={60} fill="#8884d8" paddingAngle={1} dataKey="count">
-              {dummyData?.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.name === 'Terdaftar' ? '#23036A' : '#AB22AF'} />
+            <Pie data={guestTotal?.data} innerRadius={35} outerRadius={60} fill="#8884d8" paddingAngle={1} dataKey="total">
+              {guestTotal?.data?.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry?.id === 'TERDAFTAR' ? '#23036A' : '#AB22AF'} />
               ))}
             </Pie>
             <Tooltip
@@ -99,7 +90,8 @@ const GuestChart = () => {
                 return (
                   data.payload?.[0] && (
                     <Box className={classes.tooltip}>
-                      {data.payload?.[0]?.payload?.name}: {data.payload?.[0]?.payload?.count}
+                      {data.payload?.[0]?.payload?.id === 'TERDAFTAR' ? 'Terdaftar' : 'Tidak Terdaftar'}:{' '}
+                      {data.payload?.[0]?.payload?.total}
                     </Box>
                   )
                 );
