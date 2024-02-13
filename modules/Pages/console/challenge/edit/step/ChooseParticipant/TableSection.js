@@ -214,7 +214,7 @@ const TableSection = ({
                           }}
                           onClick={(event) => handleClick(event, item)}
                         />
-                        <Avatar src={getMediaUri(item?.avatar[0]?.mediaEndpoint)} />
+                        <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                         <Stack gap="4px" overflow="hidden" width="100%">
                           <Typography
                             style={{ fontSize: '14px', color: '#00000099' }}
@@ -234,7 +234,7 @@ const TableSection = ({
                     <TableCell align="left">
                       <Typography
                         variant="body1"
-                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 80, overflow: 'hidden' }}>
+                        style={{ fontSize: '12px', textOverflow: 'ellipsis', width: 120, overflow: 'hidden' }}>
                         {item?.gender === 'MALE' && 'Laki-laki'}
                         {item?.gender === 'FEMALE' && 'Perempuan'}
                         {item?.gender === 'OTHER' && 'Lainnya'}
@@ -258,7 +258,7 @@ const TableSection = ({
                       </Typography>
                     </TableCell>
                     <TableCell align="left">
-                      <Typography variant="body1" style={{ fontSize: '12px' }}>
+                      <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
                         {item?.jenis === 'BASIC' && 'Tidak Terverifikasi'}
                         {item?.jenis === 'PREMIUM' && 'Terverifikasi'}
                         {!item?.jenis && '-'}
@@ -316,8 +316,9 @@ const TableSection = ({
           </Table>
         </ScrollBar>
       </TableContainer>
+
       {listTickets?.data?.length >= 1 && !loading && (
-        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
+        <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2} pb={12}>
           <IconButton color="secondary" onClick={() => handlePageChange(filter.page - 1)} disabled={filter.page < 1}>
             <NavigateBefore />
           </IconButton>
