@@ -142,7 +142,7 @@ export const databaseApi = createApi({
     }),
     getDetailGeographicMusic: build.query({
       query: (id) => ({
-        url: `/music/used/${id}`,
+        url: `/music/used/v2/${id}`,
         method: 'GET',
       }),
       providesTags: ['Detail-Media'],
