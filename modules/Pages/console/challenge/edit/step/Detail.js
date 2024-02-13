@@ -318,6 +318,15 @@ const ComponentStepDetail = ({ inputValue, handleInputChange, isDraft }) => {
                   disabled={!isDraft || !inputValue?.startdate}
                 />
               )}
+              PaperProps={{
+                sx: {
+                  '& .MuiPickersDay-root': {
+                    '&.Mui-selected': {
+                      backgroundColor: '#AA22AF',
+                    },
+                  },
+                },
+              }}
               style={{ backgroundColor: isDraft && inputValue?.startdate ? 'transparent' : '#EAEAEA' }}
               InputProps={{
                 onKeyDown: (event) => {
