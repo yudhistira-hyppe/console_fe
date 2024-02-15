@@ -23,7 +23,7 @@ export const announcementApi = createApi({
     }),
     getListNotificationAudiens: build.query({
       query: (data) => ({
-        url: '/templates/listaudiens',
+        url: '/templates/listaudiens/v2',
         method: 'POST',
         body: data,
       }),
