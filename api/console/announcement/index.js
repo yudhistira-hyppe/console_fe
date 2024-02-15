@@ -9,7 +9,7 @@ export const announcementApi = createApi({
     // Push Notif
     getListNotification: build.query({
       query: (data) => ({
-        url: '/templates/listing/push_notification',
+        url: '/templates/listing/push_notification/v2',
         method: 'POST',
         body: data,
       }),
