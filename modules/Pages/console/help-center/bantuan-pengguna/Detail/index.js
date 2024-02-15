@@ -69,7 +69,7 @@ const DetailBantuanPengguna = () => {
   });
   const [filter, setFilter] = useState({ id: router?.query?.id, type: 'chat' });
   const [viewer, setViewer] = useState('');
-  const [viewerDetail, setViewerDetail] = useState('');
+  const [viewerDetail, setViewerDetail] = useState([]);
   const [loading, setLoading] = useState({
     reply: false,
     update: false,
@@ -77,12 +77,12 @@ const DetailBantuanPengguna = () => {
   const [divisiID, setDivisiID] = useState('');
   const [userAssign, setUserAssign] = useState('');
   const classes = useStyles();
-  const { data: ticketData, isLoading, refetch } = useGetDetailTicketQuery(filter);
+  const { data: ticketData, isFetching: isLoading, refetch } = useGetDetailTicketQuery(filter);
   const { data: logHistory } = useGetLogHistoryDetailTicketQuery({ iduserticket: router?.query?.id });
   const { data: listDivisi } = useGetDivisiQuery({ skip: 0, limit: 10 });
   const { data: userDivisi } = useGetUserDivisiQuery({ divisionId: divisiID || '' }) || [];
   const [updateTicket] = useUpdateDetailTicketMutation();
-  const [replyTicket] = useReplyTicketMutation();
+  const [replyTicket, { isLoading: loadingReply }] = useReplyTicketMutation();
   const { authUser } = useAuth();
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
@@ -183,18 +183,34 @@ const DetailBantuanPengguna = () => {
         setViewer(new Viewer(document.getElementById('images')));
       }
 
-      if (ticketData?.data[0]?.detail?.length >= 1) {
-        setViewerDetail(new Viewer(document.getElementById('detail-images')));
+      if (ticketData?.data[0]?.detail?.length >= 1 && viewerDetail?.length < 1) {
+        setViewerDetail(
+          ticketData?.data[0]?.detail?.map(
+            (item, key) => new Viewer(document.getElementById(`detail-images-${item?.type}-${key}`)),
+          ),
+        );
       }
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (!isLoading && viewerDetail?.length >= 1) {
+      setViewerDetail((prevState) => {
+        prevState?.map((item) => item?.destroy());
+
+        return ticketData?.data[0]?.detail?.map(
+          (item, key) => new Viewer(document.getElementById(`detail-images-${item?.type}-${key}`)),
+        );
+      });
+    }
+  }, [filter, isLoading]);
 
   const handleView = () => {
     return viewer.toggle();
   };
 
-  const handleViewDetail = () => {
-    return viewerDetail.toggle();
+  const handleViewDetail = (key) => {
+    return viewerDetail?.find((item) => item?.element?.id === key)?.toggle();
   };
 
   const onCloseModal = () => {
@@ -395,8 +411,8 @@ const DetailBantuanPengguna = () => {
                 <Box height={tab !== 'history' ? 250 : 420} overflow="auto">
                   {tab !== 'history' && ticketData?.data[0]?.detail?.length >= 1 ? (
                     <Stack direction="column" spacing={3}>
-                      {ticketData?.data[0]?.detail?.map((item, key) => (
-                        <Stack key={key} direction="row" spacing={2}>
+                      {ticketData?.data[0]?.detail?.map((item, ticketKey) => (
+                        <Stack key={ticketKey} direction="row" spacing={2}>
                           <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                           <Stack direction="column" spacing={1} width="100%">
                             <Typography>
@@ -407,21 +423,21 @@ const DetailBantuanPengguna = () => {
 
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                               <div>
-                                <Stack direction="row" id="detail-images">
+                                <Stack direction="row" id={`detail-images-${item?.type}-${ticketKey}`}>
                                   {item?.fsSourceUri?.length >= 1 ? (
-                                    item?.fsSourceUri?.map((item, key) => (
+                                    item?.fsSourceUri?.map((child, key) => (
                                       <Chip
                                         key={key}
                                         label={
                                           <Typography
-                                            title={item}
+                                            title={child}
                                             style={{
                                               width: 100,
                                               overflow: 'hidden',
                                               textOverflow: 'ellipsis',
                                               fontSize: 12,
                                             }}>
-                                            {item}
+                                            {child}
                                           </Typography>
                                         }
                                         avatar={
@@ -429,8 +445,8 @@ const DetailBantuanPengguna = () => {
                                             <FolderShared style={{ marginLeft: 10, fontSize: 20 }} />
                                             <Avatar
                                               variant="rounded"
-                                              src={getFile(item, key, true)}
-                                              srcSet={getFile(item, key, true)}
+                                              src={getFile(child, key, true)}
+                                              srcSet={getFile(child, key, true)}
                                               alt="X"
                                               style={{
                                                 borderRadius: 8,
@@ -445,7 +461,7 @@ const DetailBantuanPengguna = () => {
                                           </>
                                         }
                                         style={{ marginRight: '1em' }}
-                                        onClick={handleViewDetail}
+                                        onClick={() => handleViewDetail(`detail-images-${item?.type}-${ticketKey}`)}
                                       />
                                     ))
                                   ) : (
