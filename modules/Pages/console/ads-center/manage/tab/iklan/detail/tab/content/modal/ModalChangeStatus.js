@@ -15,28 +15,20 @@ const RadioItem = ({ onChange, label, value }) => (
 
 const dummyData = [
   {
-    value: 'Landing Page tidak sesuai standar',
-    label: 'Landing Page tidak sesuai standar',
+    value: 'Melanggar kebijakan iklan Hyppe',
+    label: 'Melanggar kebijakan iklan Hyppe',
   },
   {
-    value: 'Iklan tidak konsisten',
-    label: 'Iklan tidak konsisten',
+    value: 'Melanggar kebijakan teknis Hyppe',
+    label: 'Melanggar kebijakan teknis Hyppe',
   },
   {
-    value: 'Penggunaan bahasa yang tidak pantas',
-    label: 'Penggunaan bahasa yang tidak pantas',
+    value: 'Melanggar panduan komunitas Hyppe',
+    label: 'Melanggar panduan komunitas Hyppe',
   },
   {
-    value: 'Masalah dengan judul, deskripsi, video atau gambar',
-    label: 'Masalah dengan judul, deskripsi, video atau gambar',
-  },
-  {
-    value: 'Menampilkan hal yang bertentangan dengan Panduan Komunitas',
-    label: 'Menampilkan hal yang bertentangan dengan Panduan Komunitas',
-  },
-  {
-    value: 'Lainnya',
-    label: 'Lainnya',
+    value: 'Alasan Lainnya',
+    label: 'Alasan Lainnya',
   },
 ];
 
@@ -62,7 +54,7 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
   }, [showModal]);
 
   const onChangeHandler = (e) => {
-    if (e.target.value === 'Lainnya') {
+    if (e.target.value === 'Alasan Lainnya') {
       setShowTextArea(true);
       setReason('');
     } else {
@@ -81,11 +73,9 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
           </Stack>
         ) : (
           <Stack direction="column">
-            <Typography style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 24 }}>
-              Mengapa Anda Menolak Penayangan Iklan Ini?
-            </Typography>
+            <Typography style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 24 }}>Alasan Penolakan</Typography>
 
-            <Typography style={{ marginBottom: 12 }}>Berikan alasan penolakan</Typography>
+            <Typography style={{ marginBottom: 12 }}>Pilih alasan penolakan untuk iklan ini:</Typography>
 
             <FormControl>
               <RadioGroup>
