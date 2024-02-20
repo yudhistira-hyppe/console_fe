@@ -41,7 +41,7 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: type === 'approve' ? 420 : 520,
+    width: type === 'approve' ? 420 : 380,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: type === 'approve' ? 4 : 3,
@@ -84,14 +84,19 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
                 ))}
               </RadioGroup>
               {showTextArea && (
-                <TextField
-                  multiline
-                  rows={[4]}
-                  color="secondary"
-                  placeholder="Tulis Penjelasan"
-                  onChange={(e) => setReason(e.target.value)}
-                  style={{ marginTop: 6 }}
-                />
+                <Stack direction="column" gap="4px" alignItems="flex-end">
+                  <TextField
+                    multiline
+                    fullWidth
+                    rows={[4]}
+                    color="secondary"
+                    placeholder="Jelaskan alasan penolakan"
+                    onChange={(e) => setReason(e.target.value)}
+                    style={{ marginTop: 6 }}
+                    inputProps={{ maxLength: 160 }}
+                  />
+                  <small>{reason?.length} / 160</small>
+                </Stack>
               )}
             </FormControl>
           </Stack>
