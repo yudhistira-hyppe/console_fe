@@ -45,8 +45,9 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const mediaUri = mediaEndpoint?.split('.');
 
-    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}${mediaUri[0]}${authToken}`;
   };
 
   const getImage = (item) => {
