@@ -9,7 +9,7 @@ import MasterBank from './master-bank';
 import Setting from './setting';
 import CreateMasterBank from './master-bank/create';
 import EditMasterBank from './master-bank/edit';
-import UtilityAds from './ads';
+import Komunitas from './komunitas';
 import JenisChallenge from './jenis-challenge';
 import BadgeChallenge from './badge-challenge';
 import { Typography } from '@material-ui/core';
@@ -62,6 +62,7 @@ const UtilitasComponent = () => {
         {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
           <Tab label="Interest" value="interest" className={classes.tab} />
         )}
+        <Tab label="Panduan Komunitas" value="community" className={classes.tab} />
         {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
           <Tab label="Setting" value="setting" className={classes.tab} />
         )}
@@ -81,6 +82,9 @@ const UtilitasComponent = () => {
             <Interest />
           </TabPanel>
         )}
+        <TabPanel value="community" style={{ padding: 0, height: '100%' }}>
+          <Komunitas />
+        </TabPanel>
         {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
           <TabPanel value="setting" style={{ padding: 0, height: '100%' }}>
             <Setting />
