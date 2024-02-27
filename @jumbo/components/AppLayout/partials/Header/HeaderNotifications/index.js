@@ -139,8 +139,6 @@ const HeaderNotifications = () => {
     return setAnchorEl(null);
   };
 
-  console.log(notification);
-
   return (
     <Box pr={2}>
       <Tooltip title="Notifications">
