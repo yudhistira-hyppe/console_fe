@@ -190,7 +190,11 @@ const TableSection = ({ loading, listData }) => {
                             onClick={() =>
                               router.push({ pathname: '/utilitas', query: { tab: 'community', _id: item?._id } })
                             }
-                            disabled={!access?.find((item) => item?.nameModule === 'community_support')?.acces?.updateAcces}>
+                            disabled={
+                              !access?.find((item) => item?.nameModule === 'community_support')?.acces?.updateAcces ||
+                              item?.status === 'SUBMITTED' ||
+                              item?.status === 'REJECTED'
+                            }>
                             <Edit />
                           </IconButton>
                         </Stack>
