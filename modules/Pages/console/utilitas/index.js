@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UtilitasComponent = () => {
-  const [tab, setTab] = useState('interest');
+  const [tab, setTab] = useState('');
   const classes = useStyles();
   const router = useRouter();
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
@@ -42,6 +42,8 @@ const UtilitasComponent = () => {
   useEffect(() => {
     if (!isEmpty(router.query)) {
       setTab(router.query?.tab);
+    } else {
+      setTab('interest');
     }
   }, [router]);
 
