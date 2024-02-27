@@ -116,16 +116,8 @@ const TableSection = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  {(authUser?.user?.group === 'Head Of Strategy' ||
-                    authUser?.user?.group === 'Super Admin' ||
-                    authUser?.user?.group === 'Marketing Assistant') && (
-                    <TableCell align="left">Persetujuan Strategy</TableCell>
-                  )}
-                  {(authUser?.user?.group === 'Head Of Finance' ||
-                    authUser?.user?.group === 'Super Admin' ||
-                    authUser?.user?.group === 'Marketing Assistant') && (
-                    <TableCell align="left">Persetujuan Finance</TableCell>
-                  )}
+                  <TableCell align="left">Persetujuan Strategy</TableCell>
+                  <TableCell align="left">Persetujuan Finance</TableCell>
                   <TableCell>Tanggal Buat</TableCell>
                   <TableCell align="left">Dibuat Oleh</TableCell>
                   <TableCell align="left">Email</TableCell>
@@ -151,14 +143,44 @@ const TableSection = ({
                 ) : listTransaction?.data?.length >= 1 ? (
                   listTransaction?.data?.map((item, key) => (
                     <TableRow key={key} hover>
-                      {(authUser?.user?.group === 'Head Of Strategy' ||
-                        authUser?.user?.group === 'Super Admin' ||
-                        authUser?.user?.group === 'Marketing Assistant') && (
-                        <TableCell align="left">
-                          <Stack width={300}>
-                            {item?.status === 'FAILED' ? (
+                      <TableCell align="left">
+                        <Stack width={300}>
+                          {item?.status === 'FAILED' ? (
+                            <Chip
+                              label="Ditolak Sistem"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
+                          ) : item?.approveByStrategy ? (
+                            <Stack direction="row" alignItems="center" gap={1}>
                               <Chip
-                                label="Ditolak Sistem"
+                                label="Disetujui"
+                                style={{
+                                  fontSize: 14,
+                                  fontWeight: 'bold',
+                                  fontFamily: 'Lato',
+                                  color: '#71A500D9',
+                                  backgroundColor: '#71A5001A',
+                                  width: 'fit-content',
+                                }}
+                              />
+                              <ArrowRight />
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                {item?.approveByStrategyDate
+                                  ? moment(item?.approveByStrategyDate).utc().format('DD/MM/YY - HH:mm:ss')
+                                  : '-'}
+                              </Typography>
+                            </Stack>
+                          ) : item?.status === 'DELETE' ? (
+                            <Stack direction="row" alignItems="center" gap={1}>
+                              <Chip
+                                label="Tidak Disetujui"
                                 style={{
                                   fontSize: 14,
                                   fontWeight: 'bold',
@@ -168,77 +190,85 @@ const TableSection = ({
                                   width: 'fit-content',
                                 }}
                               />
-                            ) : item?.approveByStrategy ? (
-                              <Stack direction="row" alignItems="center" gap={1}>
-                                <Chip
-                                  label="Disetujui"
-                                  style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    fontFamily: 'Lato',
-                                    color: '#71A500D9',
-                                    backgroundColor: '#71A5001A',
-                                    width: 'fit-content',
-                                  }}
-                                />
-                                <ArrowRight />
-                                <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
-                                  {item?.approveByStrategyDate
-                                    ? moment(item?.approveByStrategyDate).utc().format('DD/MM/YY - HH:mm:ss')
-                                    : '-'}
-                                </Typography>
-                              </Stack>
-                            ) : item?.status === 'DELETE' ? (
-                              <Stack direction="row" alignItems="center" gap={1}>
-                                <Chip
-                                  label="Tidak Disetujui"
-                                  style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    fontFamily: 'Lato',
-                                    backgroundColor: 'rgba(103, 103, 103, 0.1)',
-                                    color: '#676767D9',
-                                    width: 'fit-content',
-                                  }}
-                                />
-                                <ArrowRight />
-                                <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
-                                  {moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss')}
-                                </Typography>
-                              </Stack>
-                            ) : authUser?.user?.group === 'Head Of Strategy' ? (
-                              <Button
-                                variant="contained"
-                                color="secondary"
-                                size="small"
-                                style={{ height: 32 }}
-                                onClick={() => setOpenModal({ open: !openModal.open, selected: item, status: 'strategy' })}>
-                                <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
-                              </Button>
-                            ) : (
+                              <ArrowRight />
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                {moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss')}
+                              </Typography>
+                            </Stack>
+                          ) : authUser?.user?.group === 'Head Of Strategy' ? (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              size="small"
+                              style={{ height: 32 }}
+                              onClick={() => setOpenModal({ open: !openModal.open, selected: item, status: 'strategy' })}>
+                              <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
+                            </Button>
+                          ) : (
+                            <Chip
+                              label="Menunggu Persetujuan"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                color: '#0095F2',
+                                backgroundColor: '#0095F233',
+                                width: 'fit-content',
+                              }}
+                            />
+                          )}
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Stack width={300}>
+                          {item?.status === 'FAILED' ? (
+                            <Chip
+                              label="Ditolak Sistem"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
+                          ) : !item?.approveByStrategy && item?.status === 'DELETE' ? (
+                            <Chip
+                              label="Sudah Tidak Disetujui Strategy"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                                color: '#676767D9',
+                                width: 'fit-content',
+                              }}
+                            />
+                          ) : item?.approveByFinance ? (
+                            <Stack direction="row" alignItems="center" gap={1}>
                               <Chip
-                                label="Menunggu Persetujuan"
+                                label="Disetujui"
                                 style={{
                                   fontSize: 14,
                                   fontWeight: 'bold',
                                   fontFamily: 'Lato',
-                                  color: '#0095F2',
-                                  backgroundColor: '#0095F233',
+                                  color: '#71A500D9',
+                                  backgroundColor: '#71A5001A',
                                   width: 'fit-content',
                                 }}
                               />
-                            )}
-                          </Stack>
-                        </TableCell>
-                      )}
-                      {(authUser?.user?.group === 'Head Of Finance' ||
-                        authUser?.user?.group === 'Super Admin' ||
-                        authUser?.user?.group === 'Marketing Assistant') && (
-                        <TableCell align="left">
-                          <Stack width={300}>
-                            {item?.status === 'FAILED' ? (
+                              <ArrowRight />
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                {item?.approveByFinanceDate
+                                  ? moment(item?.approveByFinanceDate).utc().format('DD/MM/YY - HH:mm:ss')
+                                  : '-'}
+                              </Typography>
+                            </Stack>
+                          ) : item?.status === 'DELETE' ? (
+                            <Stack direction="row" alignItems="center" gap={1}>
                               <Chip
-                                label="Ditolak Sistem"
+                                label="Tidak Disetujui"
                                 style={{
                                   fontSize: 14,
                                   fontWeight: 'bold',
@@ -248,81 +278,35 @@ const TableSection = ({
                                   width: 'fit-content',
                                 }}
                               />
-                            ) : !item?.approveByStrategy && item?.status === 'DELETE' ? (
-                              <Chip
-                                label="Sudah Tidak Disetujui Strategy"
-                                style={{
-                                  fontSize: 14,
-                                  fontWeight: 'bold',
-                                  fontFamily: 'Lato',
-                                  backgroundColor: 'rgba(103, 103, 103, 0.1)',
-                                  color: '#676767D9',
-                                  width: 'fit-content',
-                                }}
-                              />
-                            ) : item?.approveByFinance ? (
-                              <Stack direction="row" alignItems="center" gap={1}>
-                                <Chip
-                                  label="Disetujui"
-                                  style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    fontFamily: 'Lato',
-                                    color: '#71A500D9',
-                                    backgroundColor: '#71A5001A',
-                                    width: 'fit-content',
-                                  }}
-                                />
-                                <ArrowRight />
-                                <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
-                                  {item?.approveByFinanceDate
-                                    ? moment(item?.approveByFinanceDate).utc().format('DD/MM/YY - HH:mm:ss')
-                                    : '-'}
-                                </Typography>
-                              </Stack>
-                            ) : item?.status === 'DELETE' ? (
-                              <Stack direction="row" alignItems="center" gap={1}>
-                                <Chip
-                                  label="Tidak Disetujui"
-                                  style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    fontFamily: 'Lato',
-                                    backgroundColor: 'rgba(103, 103, 103, 0.1)',
-                                    color: '#676767D9',
-                                    width: 'fit-content',
-                                  }}
-                                />
-                                <ArrowRight />
-                                <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
-                                  {moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss')}
-                                </Typography>
-                              </Stack>
-                            ) : authUser?.user?.group === 'Head Of Finance' ? (
-                              <Button
-                                variant="contained"
-                                color="secondary"
-                                size="small"
-                                style={{ height: 32 }}
-                                onClick={() => setOpenModal({ open: !openModal.open, selected: item, status: 'finance' })}>
-                                <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
-                              </Button>
-                            ) : (
-                              <Chip
-                                label="Menunggu Persetujuan"
-                                style={{
-                                  fontSize: 14,
-                                  fontWeight: 'bold',
-                                  fontFamily: 'Lato',
-                                  color: '#0095F2',
-                                  backgroundColor: '#0095F233',
-                                  width: 'fit-content',
-                                }}
-                              />
-                            )}
-                          </Stack>
-                        </TableCell>
-                      )}
+                              <ArrowRight />
+                              <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
+                                {moment(item?.updatedAt).format('DD/MM/YY - HH:mm:ss')}
+                              </Typography>
+                            </Stack>
+                          ) : authUser?.user?.group === 'Head Of Finance' ? (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              size="small"
+                              style={{ height: 32 }}
+                              onClick={() => setOpenModal({ open: !openModal.open, selected: item, status: 'finance' })}>
+                              <Typography style={{ fontWeight: 'bold', fontSize: 12 }}>Tindak Lanjut</Typography>
+                            </Button>
+                          ) : (
+                            <Chip
+                              label="Menunggu Persetujuan"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Lato',
+                                color: '#0095F2',
+                                backgroundColor: '#0095F233',
+                                width: 'fit-content',
+                              }}
+                            />
+                          )}
+                        </Stack>
+                      </TableCell>
                       <TableCell>
                         <Typography variant="body1" style={{ fontSize: '12px', width: 140 }}>
                           {moment(item?.createdAt).utc().format('DD/MM/YY - HH:mm')} WIB
