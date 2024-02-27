@@ -39,7 +39,8 @@ const TableSection = ({ loading, listData }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="left">Judul</TableCell>
+              <TableCell align="left">Nama Jenis</TableCell>
+              <TableCell align="left">Waktu Dibuat</TableCell>
               <TableCell align="left">Terakhir Diperbarui</TableCell>
               <TableCell align="left">Diajukan Oleh</TableCell>
               <TableCell align="left">Disetujui Oleh</TableCell>
@@ -50,12 +51,16 @@ const TableSection = ({ loading, listData }) => {
           </TableHead>
 
           {loading ? (
-            <TableCell colSpan={8}>
-              <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                <CircularProgress color="secondary" />
-                <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-              </Stack>
-            </TableCell>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <CircularProgress color="secondary" />
+                    <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           ) : (
             <TableBody>
               {listData?.data?.length >= 1 ? (
@@ -76,6 +81,16 @@ const TableSection = ({ loading, listData }) => {
                     </TableCell>
                     <TableCell>
                       <Stack direction="column">
+                        <Typography variant="body1" style={{ fontSize: 12, width: 100 }}>
+                          {dayjs(item?.createdAt).format('DD/MM/YYYY')} -
+                        </Typography>
+                        <Typography variant="body1" style={{ fontSize: 12, width: 100 }}>
+                          {dayjs(item?.createdAt).format('HH:mm')} WIB
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell>
+                      <Stack direction="column">
                         <Typography variant="body1" style={{ fontSize: 12, width: 130 }}>
                           {dayjs(item?.updatedAt).format('DD/MM/YYYY')} -
                         </Typography>
@@ -86,7 +101,7 @@ const TableSection = ({ loading, listData }) => {
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" alignItems="center" gap={2}>
-                        <Avatar src={getAvatar(item?.creatorAvatar?.mediaEndpoint)} alt="User yang mengajukan" />
+                        <Avatar src={getAvatar(item?.creatorAvatar?.mediaEndpoint)} alt={item?.creatorFullname || ''} />
                         <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
                           {item?.creatorFullname || '-'}
                         </Typography>
@@ -94,44 +109,75 @@ const TableSection = ({ loading, listData }) => {
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" alignItems="center" gap={2}>
-                        <Avatar src={getAvatar(item?.approverAvatar?.mediaEndpoint)} alt="User yang menyetujui" />
+                        <Avatar src={getAvatar(item?.approverAvatar?.mediaEndpoint)} alt={item?.approverFullname || ''} />
                         <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
                           {item?.approverFullname || '-'}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Stack direction="column">
+                      {item?.approvedAt ? (
+                        <Stack direction="column">
+                          <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
+                            {dayjs(item?.approvedAt).format('DD/MM/YYYY')} -
+                          </Typography>
+                          <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
+                            {dayjs(item?.approvedAt).format('HH:mm')} WIB
+                          </Typography>
+                        </Stack>
+                      ) : (
                         <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
-                          {dayjs(item?.approvedAt).format('DD/MM/YYYY')} -
+                          -
                         </Typography>
-                        <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
-                          {dayjs(item?.approvedAt).format('HH:mm')} WIB
-                        </Typography>
-                      </Stack>
+                      )}
                     </TableCell>
                     <TableCell align="left">
-                      <Stack direction="row" width={80}>
-                        {item?.status === 'APPROVED' ? (
+                      <Stack direction="row" width={90}>
+                        {item?.status === 'APPROVED' && (
                           <Chip
                             label="Live"
                             style={{
-                              fontSize: 14,
+                              fontSize: 13,
                               fontWeight: 'bold',
-                              fontFamily: 'Lato',
+                              fontFamily: 'Normal',
                               color: '#71A500D9',
                               backgroundColor: '#71A5001A',
                             }}
                           />
-                        ) : (
+                        )}
+                        {item?.status === 'SUBMITTED' && (
                           <Chip
                             label="Diajukan"
                             style={{
-                              fontSize: 14,
+                              fontSize: 13,
                               fontWeight: 'bold',
-                              fontFamily: 'Lato',
+                              fontFamily: 'Normal',
+                              color: '#E6094BD9',
+                              backgroundColor: '#E6094B1A',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'DRAFT' && (
+                          <Chip
+                            label="Draft"
+                            style={{
+                              fontSize: 13,
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
                               color: '#FF8C00D9',
                               backgroundColor: '#FF8C0026',
+                            }}
+                          />
+                        )}
+                        {item?.status === 'REJECTED' && (
+                          <Chip
+                            label="Ditolak"
+                            style={{
+                              fontSize: 13,
+                              fontWeight: 'bold',
+                              fontFamily: 'Normal',
+                              color: '#676767',
+                              backgroundColor: '#6767671a',
                             }}
                           />
                         )}
@@ -143,7 +189,8 @@ const TableSection = ({ loading, listData }) => {
                           <IconButton
                             onClick={() =>
                               router.push({ pathname: '/utilitas', query: { tab: 'community', _id: item?._id } })
-                            }>
+                            }
+                            disabled={!access?.find((item) => item?.nameModule === 'community_support')?.acces?.updateAcces}>
                             <Edit />
                           </IconButton>
                         </Stack>

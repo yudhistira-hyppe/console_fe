@@ -15,13 +15,13 @@ const SearchSection = ({ filter, handleChange }) => {
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Cari nama</Typography>
+            <Typography style={{ fontSize: '13px' }}>Cari nama jenis</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
             <DelayedTextField
               fullWidth
               waitForInput={true}
-              placeholder="Cari nama"
+              placeholder="nama jenis"
               name="name"
               filterValue={filter.name}
               onChange={(e) => handleChange(e.target.name, e.target.value)}

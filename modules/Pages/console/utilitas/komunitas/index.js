@@ -13,7 +13,6 @@ const TableList = () => {
     limit: 10,
     descending: true,
     name: '',
-    isActive: true,
   });
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
   const router = useRouter();
@@ -35,7 +34,7 @@ const TableList = () => {
           color="secondary"
           onClick={() => router.push({ pathname: '/utilitas', query: { tab: 'community', create: true } })}
           sx={{ height: 40 }}
-          disabled={!access?.find((item) => item?.nameModule === 'utilitas_setting')?.acces?.createAcces}>
+          disabled={!access?.find((item) => item?.nameModule === 'community_support')?.acces?.createAcces}>
           <Typography
             style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize', marginBottom: 3 }}>
             Tambah Data
