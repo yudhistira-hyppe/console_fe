@@ -9,6 +9,7 @@ import Router, { useRouter } from 'next/router';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useGetDetailCommunityQuery, useUpdateCommunityMutation } from 'api/console/utilitas/community';
 import toast from 'react-hot-toast';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const useStyles = makeStyles(() => ({
   uploadBox: {
@@ -108,7 +109,11 @@ const UpdateCommunity = ({ _id }) => {
 
     updateCommunity(formData).then((res) => {
       if (res?.data) {
-        toast.success('Berhasil memperbarui data');
+        if (type === 'SUBMITTED') {
+          toast.success('Berhasil mengajukan data');
+        } else {
+          toast.success('Berhasil memperbarui data');
+        }
         router.replace({ pathname: '/utilitas', query: { tab: 'community' } });
       } else {
         toast.error('Terjadi kesalahan, silahkan coba lagi');
@@ -116,7 +121,9 @@ const UpdateCommunity = ({ _id }) => {
     });
   };
 
-  return (
+  return loadingDetail ? (
+    <PageLoader />
+  ) : (
     <Stack direction="column" gap={3}>
       <Stack
         direction={'row'}

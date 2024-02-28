@@ -95,7 +95,11 @@ const CreateCommunity = () => {
 
     createCommunity(formData).then((res) => {
       if (res?.data) {
-        toast.success('Berhasil mengajukan data');
+        if (type === 'SUBMITTED') {
+          toast.success('Berhasil mengajukan data');
+        } else {
+          toast.success('Berhasil membuat data draft');
+        }
         router.replace({ pathname: '/utilitas', query: { tab: 'community' } });
       } else {
         toast.error('Terjadi kesalahan, silahkan coba lagi');
