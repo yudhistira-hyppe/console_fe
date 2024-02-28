@@ -45,6 +45,7 @@ const TableSection = ({ loading, listData }) => {
               <TableCell align="left">Diajukan Oleh</TableCell>
               <TableCell align="left">Disetujui Oleh</TableCell>
               <TableCell align="left">Waktu Disetujui</TableCell>
+              <TableCell align="left">Waktu Ditolak</TableCell>
               <TableCell align="left">Status</TableCell>
               <TableCell align="left"></TableCell>
             </TableRow>
@@ -123,6 +124,22 @@ const TableSection = ({ loading, listData }) => {
                           </Typography>
                           <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
                             {dayjs(item?.approvedAt).format('HH:mm')} WIB
+                          </Typography>
+                        </Stack>
+                      ) : (
+                        <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
+                          -
+                        </Typography>
+                      )}
+                    </TableCell>
+                    <TableCell align="left">
+                      {item?.rejectedAt ? (
+                        <Stack direction="column">
+                          <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
+                            {dayjs(item?.rejectedAt).format('DD/MM/YYYY')} -
+                          </Typography>
+                          <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
+                            {dayjs(item?.rejectedAt).format('HH:mm')} WIB
                           </Typography>
                         </Stack>
                       ) : (
