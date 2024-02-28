@@ -27,6 +27,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import { Info } from '@material-ui/icons';
 import { clearParams } from 'redux/slice/filterParams';
 import firebase from 'firebase/compat/app';
+import './style.css';
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;

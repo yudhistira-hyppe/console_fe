@@ -31,6 +31,7 @@ import {
   challengeUtilityApi,
   databaseApi,
   announcementApi,
+  communityUtilityApi,
 } from 'api/console';
 
 const initStore = () => {
@@ -69,6 +70,7 @@ const initStore = () => {
         masterBadgeApi.middleware,
         challengeUtilityApi.middleware,
         announcementApi.middleware,
+        communityUtilityApi.middleware,
       ]),
   });
   return store;

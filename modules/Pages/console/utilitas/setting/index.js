@@ -48,6 +48,10 @@ const TableSection = () => {
 
   const filteredData = listSettings?.data?.filter((item) => item.jenisdata === kind);
 
+  useEffect(() => {
+    setQuery('');
+  }, [kind]);
+
   const categorySetting = () => {
     let category = ['PPN', 'UMUM', 'PPH', 'ADS', 'SCORING', 'LANDINGPAGE'];
 
@@ -67,46 +71,8 @@ const TableSection = () => {
         />
       )}
 
-      <Stack flex={1} width="100%" style={{ position: 'relative', height: '100%' }}>
-        <Stack direction="row" spacing={3} style={{ position: 'absolute', top: -70, right: 0 }}>
-          <DelayedTextField
-            waitForInput={true}
-            filterValue={query}
-            color="secondary"
-            placeholder="Cari Jenis"
-            onChange={(e) => setQuery(e.target.value)}
-            InputProps={{
-              endAdornment: query?.length >= 1 && (
-                <InputAdornment position="end">
-                  <IconButton aria-label="toggle password visibility" edge="end" onClick={() => setQuery('')}>
-                    <Delete style={{ fontSize: 20 }} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              width: 250,
-              input: {
-                height: 40,
-                padding: '0px 8px',
-              },
-            }}
-          />
-
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<Add />}
-            onClick={() => setOpenModal(!openModal)}
-            sx={{ height: 40, width: 200 }}
-            disabled={!access?.find((item) => item?.nameModule === 'utilitas_setting')?.acces?.createAcces}>
-            <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
-              Tambah Setting
-            </Typography>
-          </Button>
-        </Stack>
-
-        <Stack direction="column" spacing={3} mt={2} height="100%">
+      <Stack flex={1} width="100%" style={{ height: '100%' }}>
+        <Stack direction="column" spacing={3} height="100%">
           <Stack direction="row" spacing={3}>
             {categorySetting().map((item, key) => (
               <Button
@@ -115,7 +81,8 @@ const TableSection = () => {
                 color="secondary"
                 style={{
                   padding: '12px 4px',
-                  width: 130,
+                  width: '100%',
+                  maxWidth: 130,
                 }}
                 onClick={() => {
                   setKind(item);
@@ -124,6 +91,41 @@ const TableSection = () => {
                 <Typography style={{ fontFamily: 'Normal', fontSize: 12 }}>{item}</Typography>
               </Button>
             ))}
+
+            <Stack direction="row" justifyContent="flex-end" height="100%" width="100%" spacing={1} ml="auto">
+              <DelayedTextField
+                waitForInput={true}
+                filterValue={query}
+                color="secondary"
+                placeholder="Cari Jenis"
+                onChange={(e) => setQuery(e.target.value)}
+                InputProps={{
+                  endAdornment: query?.length >= 1 && (
+                    <InputAdornment position="end">
+                      <IconButton aria-label="toggle password visibility" edge="end" onClick={() => setQuery('')}>
+                        <Delete style={{ fontSize: 20 }} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  width: 200,
+                  input: {
+                    height: 44,
+                    padding: '0px 8px',
+                  },
+                }}
+              />
+
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpenModal(!openModal)}
+                sx={{ height: '100%' }}
+                disabled={!access?.find((item) => item?.nameModule === 'utilitas_setting')?.acces?.createAcces}>
+                <Add />
+              </Button>
+            </Stack>
           </Stack>
           {loadingSetting ? (
             <Stack direction="column" alignItems="center" justifyContent="center" height="100%" spacing={2}>
