@@ -45,6 +45,14 @@ export const communityUtilityApi = createApi({
       }),
       invalidatesTags: ['list', 'detail'],
     }),
+    rejectCommunity: build.mutation({
+      query: (body) => ({
+        url: '/guidelines/reject',
+        method: 'POST',
+        body: body,
+      }),
+      invalidatesTags: ['list', 'detail'],
+    }),
   }),
 });
 
@@ -54,4 +62,5 @@ export const {
   useGetDetailCommunityQuery,
   useUpdateCommunityMutation,
   useApproveCommunityMutation,
+  useRejectCommunityMutation,
 } = communityUtilityApi;
