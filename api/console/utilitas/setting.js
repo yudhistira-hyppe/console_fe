@@ -4,7 +4,7 @@ import { customBaseQueryWithHandleReauth } from 'api';
 export const settingApi = createApi({
   reducerPath: 'utilitas/setting',
   baseQuery: customBaseQueryWithHandleReauth,
-  tagTypes: ['list'],
+  tagTypes: ['list', 'maintenance'],
   endpoints: (build) => ({
     getListSettings: build.query({
       query: (data) => ({
@@ -30,7 +30,16 @@ export const settingApi = createApi({
       }),
       invalidatesTags: ['list'],
     }),
+    getWebHyppe: build.query({
+      query: () => ({
+        url: 'https://hyppe.id',
+        method: 'GET',
+      }),
+      providesTags: ['maintenance'],
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
-export const { useGetListSettingsQuery, useUpdateSettingMutation, useCreateSettingMutation } = settingApi;
+export const { useGetListSettingsQuery, useUpdateSettingMutation, useCreateSettingMutation, useGetWebHyppeQuery } =
+  settingApi;
