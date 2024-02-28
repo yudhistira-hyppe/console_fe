@@ -1,4 +1,4 @@
-import { AddPhotoAlternate } from '@material-ui/icons';
+import { AddPhotoAlternate, Info } from '@material-ui/icons';
 import { LoadingButton } from '@mui/lab';
 import { Avatar, Box, Button, Card, Grid, Stack, TextField } from '@mui/material';
 import { Typography } from '@material-ui/core';
@@ -10,9 +10,11 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import {
   useApproveCommunityMutation,
   useGetDetailCommunityQuery,
+  useRejectCommunityMutation,
   useUpdateCommunityMutation,
 } from 'api/console/utilitas/community';
 import toast from 'react-hot-toast';
+import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 
 const useStyles = makeStyles(() => ({
   uploadBox: {
@@ -42,18 +44,28 @@ const ApproveCommunity = ({ _id }) => {
     remark: '',
   });
   const [approveCommunity, { isLoading: loadingApprove }] = useApproveCommunityMutation();
+  const [rejectCommunity, { isLoading: loadingReject }] = useRejectCommunityMutation();
   const { data: detailCommunity, isFetching: loadingDetail } = useGetDetailCommunityQuery(_id);
   const router = useRouter();
 
   useEffect(() => {
-    setInputValue({
-      name: detailCommunity?.data?.name || '',
-      title_id: detailCommunity?.data?.title_id || '',
-      title_en: detailCommunity?.data?.title_en || '',
-      value_id: detailCommunity?.data?.value_id || '',
-      value_en: detailCommunity?.data?.value_en || '',
-      remark: detailCommunity?.data?.remark || '',
-    });
+    if (!loadingDetail) {
+      if (detailCommunity?.data?.status === 'SUBMITTED') {
+        setInputValue({
+          name: detailCommunity?.data?.name || '',
+          title_id: detailCommunity?.data?.title_id || '',
+          title_en: detailCommunity?.data?.title_en || '',
+          value_id: detailCommunity?.data?.value_id || '',
+          value_en: detailCommunity?.data?.value_en || '',
+          remark: detailCommunity?.data?.remark || '',
+        });
+      } else {
+        router.replace({ pathname: '/utilitas', query: { tab: 'community' } });
+        toast('Pengajuan sudah selesai dikonfirmasi', {
+          icon: <Info style={{ fontSize: 16 }} />,
+        });
+      }
+    }
   }, [loadingDetail]);
 
   const onCkeditorChange = (event, name) => {
@@ -76,10 +88,21 @@ const ApproveCommunity = ({ _id }) => {
           toast.error('Terjadi kesalahan, silahkan coba lagi');
         }
       });
+    } else {
+      rejectCommunity({ id: _id }).then((res) => {
+        if (res?.data) {
+          toast.success('Berhasil menolak ajuan');
+          router.replace({ pathname: '/utilitas', query: { tab: 'community' } });
+        } else {
+          toast.error('Terjadi kesalahan, silahkan coba lagi');
+        }
+      });
     }
   };
 
-  return (
+  return loadingDetail ? (
+    <PageLoader />
+  ) : (
     <Stack direction="column" gap={3}>
       <Stack
         direction={'row'}
@@ -237,22 +260,22 @@ const ApproveCommunity = ({ _id }) => {
           </Grid>
           <Stack direction="row" alignItems="center" justifyContent="flex-start" gap={3}>
             <LoadingButton
-              loading={loadingApprove}
+              loading={loadingApprove || loadingReject}
               variant="contained"
               color="secondary"
               sx={{ height: 40 }}
               onClick={(e) => handleSubmit(e, 'APPROVE')}
               type="submit"
-              disabled={loadingApprove}>
+              disabled={loadingApprove || loadingReject}>
               Setujui
             </LoadingButton>
             <LoadingButton
-              loading={loadingApprove}
+              loading={loadingApprove || loadingReject}
               variant="outlined"
               color="secondary"
               sx={{ height: 40 }}
               onClick={(e) => handleSubmit(e, 'REJECT')}
-              disabled={loadingApprove}>
+              disabled={loadingApprove || loadingReject}>
               Tolak
             </LoadingButton>
           </Stack>
