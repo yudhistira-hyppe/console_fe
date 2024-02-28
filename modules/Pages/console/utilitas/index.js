@@ -17,6 +17,7 @@ import UtilityDatabase from './database';
 import CreateKomunitas from './komunitas/create';
 import UpdateKomunitas from './komunitas/edit';
 import ApproveCommunity from './komunitas/approve';
+import Maintenance from './maintenance';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -82,6 +83,7 @@ const UtilitasComponent = () => {
             <Tab label="Challenge" value="challenge" className={classes.tab} />
           )}
           <Tab label="Database" value="database" className={classes.tab} />
+          <Tab label="Maintenance" value="maintenance" className={classes.tab} />
         </TabList>
         <div style={{ marginTop: 30, height: '100%' }}>
           {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
@@ -144,9 +146,9 @@ const UtilitasComponent = () => {
           <TabPanel value="database" style={{ padding: 0, height: '100%' }}>
             <UtilityDatabase />
           </TabPanel>
-          {/* <TabPanel value="ads" style={{ padding: 0, height: '100%' }}>
-          <UtilityAds />
-        </TabPanel> */}
+          <TabPanel value="maintenance" style={{ padding: 0, height: '100%' }}>
+            <Maintenance />
+          </TabPanel>
         </div>
       </TabContext>
     )
