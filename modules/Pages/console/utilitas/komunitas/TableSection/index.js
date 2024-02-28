@@ -44,6 +44,7 @@ const TableSection = ({ loading, listData }) => {
               <TableCell align="left">Terakhir Diperbarui</TableCell>
               <TableCell align="left">Diajukan Oleh</TableCell>
               <TableCell align="left">Disetujui Oleh</TableCell>
+              <TableCell align="left">Ditolak Oleh</TableCell>
               <TableCell align="left">Waktu Disetujui</TableCell>
               <TableCell align="left">Waktu Ditolak</TableCell>
               <TableCell align="left">Status</TableCell>
@@ -109,12 +110,32 @@ const TableSection = ({ loading, listData }) => {
                       </Stack>
                     </TableCell>
                     <TableCell align="left">
-                      <Stack direction="row" alignItems="center" gap={2}>
-                        <Avatar src={getAvatar(item?.approverAvatar?.mediaEndpoint)} alt={item?.approverFullname || ''} />
+                      {item?.status === 'APPROVED' ? (
+                        <Stack direction="row" alignItems="center" gap={2}>
+                          <Avatar src={getAvatar(item?.approverAvatar?.mediaEndpoint)} alt={item?.approverFullname || ''} />
+                          <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
+                            {item?.approverFullname || '-'}
+                          </Typography>
+                        </Stack>
+                      ) : (
                         <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
-                          {item?.approverFullname || '-'}
+                          -
                         </Typography>
-                      </Stack>
+                      )}
+                    </TableCell>
+                    <TableCell align="left">
+                      {item?.status === 'REJECTED' ? (
+                        <Stack direction="row" alignItems="center" gap={2}>
+                          <Avatar src={getAvatar(item?.rejecterAvatar?.mediaEndpoint)} alt={item?.rejecterFullname || ''} />
+                          <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
+                            {item?.rejecterFullname || '-'}
+                          </Typography>
+                        </Stack>
+                      ) : (
+                        <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
+                          -
+                        </Typography>
+                      )}
                     </TableCell>
                     <TableCell align="left">
                       {item?.approvedAt ? (
