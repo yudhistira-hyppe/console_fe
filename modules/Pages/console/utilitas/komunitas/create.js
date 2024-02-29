@@ -10,24 +10,6 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import { useCreateCommunityMutation } from 'api/console/utilitas/community';
 import toast from 'react-hot-toast';
 
-const useStyles = makeStyles(() => ({
-  uploadBox: {
-    backgroundColor: '#E8E8E8A6',
-    border: '1px dashed #737373',
-    borderRadius: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    gap: 12,
-    height: 170,
-    width: '100%',
-    cursor: 'pointer',
-    overflow: 'hidden',
-  },
-}));
-
 const CreateCommunity = () => {
   const [inputValue, setInputValue] = useState({
     name: '',
@@ -81,9 +63,7 @@ const CreateCommunity = () => {
     });
   };
 
-  const handleSubmit = (e, type) => {
-    e.preventDefault();
-
+  const handleSubmit = (type) => {
     const formData = {
       ...inputValue,
       status: type,
@@ -122,164 +102,161 @@ const CreateCommunity = () => {
         </Typography>
       </Stack>
 
-      <form onSubmit={handleSubmit}>
-        <Stack direction="column" gap={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Card style={{ padding: '18px 24px 24px' }}>
+      <Stack direction="column" gap={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Card style={{ padding: '18px 24px 24px' }}>
+              <Stack direction="column" gap={1}>
+                <Typography variant="body1">Nama Jenis</Typography>
+                <TextField
+                  placeholder="Input Nama Jenis"
+                  color="secondary"
+                  value={inputValue.name}
+                  onChange={(e) => setInputValue({ ...inputValue, name: e.target.value })}
+                  inputProps={{ maxLength: 30 }}
+                  style={{ width: 353 }}
+                  required
+                />
+              </Stack>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card style={{ padding: '18px 24px 24px' }}>
+              <Stack direction="row" alignItems="center" gap={3}>
                 <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Nama Jenis</Typography>
+                  <Typography variant="body1">Judul (Indonesia)</Typography>
                   <TextField
-                    placeholder="Input Nama Jenis"
+                    placeholder="Input Judul Indonesia"
                     color="secondary"
-                    value={inputValue.name}
-                    onChange={(e) => setInputValue({ ...inputValue, name: e.target.value })}
+                    value={inputValue.title_id}
+                    onChange={(e) => setInputValue({ ...inputValue, title_id: e.target.value })}
                     inputProps={{ maxLength: 30 }}
                     style={{ width: 353 }}
                     required
                   />
                 </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <Card style={{ padding: '18px 24px 24px' }}>
-                <Stack direction="row" alignItems="center" gap={3}>
-                  <Stack direction="column" gap={1}>
-                    <Typography variant="body1">Judul (Indonesia)</Typography>
-                    <TextField
-                      placeholder="Input Judul Indonesia"
-                      color="secondary"
-                      value={inputValue.title_id}
-                      onChange={(e) => setInputValue({ ...inputValue, title_id: e.target.value })}
-                      inputProps={{ maxLength: 30 }}
-                      style={{ width: 353 }}
-                      required
-                    />
-                  </Stack>
 
-                  <Stack direction="column" gap={1}>
-                    <Typography variant="body1">Judul (English)</Typography>
-                    <TextField
-                      placeholder="Input Judul English"
-                      color="secondary"
-                      value={inputValue.title_en}
-                      onChange={(e) => setInputValue({ ...inputValue, title_en: e.target.value })}
-                      inputProps={{ maxLength: 30 }}
-                      style={{ width: 353 }}
-                      required
-                    />
-                  </Stack>
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <Card style={{ padding: '18px 24px 24px' }}>
                 <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Isi (Indonesia)</Typography>
-                  <Ckeditor
-                    content={inputValue.value_id}
-                    events={{
-                      change: (e) => onCkeditorChange(e, 'value_id'),
-                    }}
-                    config={{
-                      toolbarLocation: 'bottom',
-                      toolbarGroups: [
-                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
-                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
-                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
-                        { name: 'forms', groups: ['forms'] },
-                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
-                        { name: 'links', groups: ['links'] },
-                        { name: 'insert', groups: ['Image', 'Table'] },
-                        { name: 'styles', groups: ['styles'] },
-                        { name: 'colors', groups: ['colors'] },
-                        { name: 'tools', groups: ['tools'] },
-                        { name: 'others', groups: ['others'] },
-                        { name: 'about', groups: ['about'] },
-                      ],
-                    }}
-                  />
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <Card style={{ padding: '18px 24px 24px' }}>
-                <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Isi (English)</Typography>
-                  <Ckeditor
-                    content={inputValue.value_en}
-                    events={{
-                      change: (e) => onCkeditorChange(e, 'value_en'),
-                    }}
-                    config={{
-                      toolbarLocation: 'bottom',
-                      toolbarGroups: [
-                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
-                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
-                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
-                        { name: 'forms', groups: ['forms'] },
-                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
-                        { name: 'links', groups: ['links'] },
-                        { name: 'insert', groups: ['Image', 'Table'] },
-                        { name: 'styles', groups: ['styles'] },
-                        { name: 'colors', groups: ['colors'] },
-                        { name: 'tools', groups: ['tools'] },
-                        { name: 'others', groups: ['others'] },
-                        { name: 'about', groups: ['about'] },
-                      ],
-                    }}
-                  />
-                </Stack>
-              </Card>
-            </Grid>
-            <Grid item xs={12}>
-              <Card style={{ padding: '18px 24px 24px' }}>
-                <Stack direction="column" gap={1} width="100%">
-                  <Typography variant="body1">Catatan</Typography>
+                  <Typography variant="body1">Judul (English)</Typography>
                   <TextField
-                    fullWidth
-                    placeholder="Tambahkan catatan perubahan atau informasi tambahan di sini..."
+                    placeholder="Input Judul English"
                     color="secondary"
-                    value={inputValue.remark}
-                    onChange={(e) => setInputValue({ ...inputValue, remark: e.target.value })}
+                    value={inputValue.title_en}
+                    onChange={(e) => setInputValue({ ...inputValue, title_en: e.target.value })}
                     inputProps={{ maxLength: 30 }}
+                    style={{ width: 353 }}
                     required
                   />
                 </Stack>
-              </Card>
-            </Grid>
+              </Stack>
+            </Card>
           </Grid>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Stack direction="row" alignItems="center" gap={3}>
-              <LoadingButton
-                loading={loadingCreate}
-                variant="contained"
-                color="secondary"
-                sx={{ height: 40 }}
-                onClick={(e) => handleSubmit(e, 'SUBMITTED')}
-                disabled={checkDisable() || loadingCreate}>
-                Ajukan
-              </LoadingButton>
-              <LoadingButton
-                loading={loadingCreate}
-                variant="outlined"
-                color="secondary"
-                sx={{ height: 40 }}
-                onClick={(e) => handleSubmit(e, 'DRAFT')}
-                type="submit"
-                disabled={checkEligibleDraft() || loadingCreate}>
-                Simpan sebagai draft
-              </LoadingButton>
-            </Stack>
-
-            <Button color="secondary" onClick={() => router.replace({ pathname: '/utilitas', query: { tab: 'community' } })}>
-              Batal
-            </Button>
+          <Grid item xs={12}>
+            <Card style={{ padding: '18px 24px 24px' }}>
+              <Stack direction="column" gap={1}>
+                <Typography variant="body1">Isi (Indonesia)</Typography>
+                <Ckeditor
+                  content={inputValue.value_id}
+                  events={{
+                    change: (e) => onCkeditorChange(e, 'value_id'),
+                  }}
+                  config={{
+                    toolbarLocation: 'bottom',
+                    toolbarGroups: [
+                      { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                      { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                      { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                      { name: 'forms', groups: ['forms'] },
+                      { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                      { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                      { name: 'links', groups: ['links'] },
+                      { name: 'insert', groups: ['Image', 'Table'] },
+                      { name: 'styles', groups: ['styles'] },
+                      { name: 'colors', groups: ['colors'] },
+                      { name: 'tools', groups: ['tools'] },
+                      { name: 'others', groups: ['others'] },
+                      { name: 'about', groups: ['about'] },
+                    ],
+                  }}
+                />
+              </Stack>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card style={{ padding: '18px 24px 24px' }}>
+              <Stack direction="column" gap={1}>
+                <Typography variant="body1">Isi (English)</Typography>
+                <Ckeditor
+                  content={inputValue.value_en}
+                  events={{
+                    change: (e) => onCkeditorChange(e, 'value_en'),
+                  }}
+                  config={{
+                    toolbarLocation: 'bottom',
+                    toolbarGroups: [
+                      { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                      { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                      { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                      { name: 'forms', groups: ['forms'] },
+                      { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                      { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                      { name: 'links', groups: ['links'] },
+                      { name: 'insert', groups: ['Image', 'Table'] },
+                      { name: 'styles', groups: ['styles'] },
+                      { name: 'colors', groups: ['colors'] },
+                      { name: 'tools', groups: ['tools'] },
+                      { name: 'others', groups: ['others'] },
+                      { name: 'about', groups: ['about'] },
+                    ],
+                  }}
+                />
+              </Stack>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card style={{ padding: '18px 24px 24px' }}>
+              <Stack direction="column" gap={1} width="100%">
+                <Typography variant="body1">Catatan</Typography>
+                <TextField
+                  fullWidth
+                  placeholder="Tambahkan catatan perubahan atau informasi tambahan di sini..."
+                  color="secondary"
+                  value={inputValue.remark}
+                  onChange={(e) => setInputValue({ ...inputValue, remark: e.target.value })}
+                  inputProps={{ maxLength: 30 }}
+                  required
+                />
+              </Stack>
+            </Card>
+          </Grid>
+        </Grid>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Stack direction="row" alignItems="center" gap={3}>
+            <LoadingButton
+              loading={loadingCreate}
+              variant="contained"
+              color="secondary"
+              sx={{ height: 40 }}
+              onClick={() => handleSubmit('SUBMITTED')}
+              disabled={checkDisable() || loadingCreate}>
+              Ajukan
+            </LoadingButton>
+            <LoadingButton
+              loading={loadingCreate}
+              variant="outlined"
+              color="secondary"
+              sx={{ height: 40 }}
+              onClick={() => handleSubmit('DRAFT')}
+              disabled={checkEligibleDraft() || loadingCreate}>
+              Simpan sebagai draft
+            </LoadingButton>
           </Stack>
+
+          <Button color="secondary" onClick={() => router.replace({ pathname: '/utilitas', query: { tab: 'community' } })}>
+            Batal
+          </Button>
         </Stack>
-      </form>
+      </Stack>
     </Stack>
   );
 };
