@@ -242,7 +242,7 @@ const TableSection = ({ loading, listData }) => {
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {access?.find((item) => item?.nameModule === 'utilitas_setting')?.acces?.updateAcces && (
+                      {access?.find((item) => item?.nameModule === 'community_support')?.acces?.updateAcces && (
                         <Stack direction="row" justifyContent="flex-end" gap={1} width="100%">
                           <IconButton
                             onClick={() =>

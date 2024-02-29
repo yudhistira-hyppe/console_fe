@@ -47,21 +47,29 @@ const ApproveCommunity = ({ _id }) => {
   const [rejectCommunity, { isLoading: loadingReject }] = useRejectCommunityMutation();
   const { data: detailCommunity, isFetching: loadingDetail } = useGetDetailCommunityQuery(_id);
   const router = useRouter();
+  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   useEffect(() => {
     if (!loadingDetail) {
-      if (detailCommunity?.data?.status === 'SUBMITTED') {
-        setInputValue({
-          name: detailCommunity?.data?.name || '',
-          title_id: detailCommunity?.data?.title_id || '',
-          title_en: detailCommunity?.data?.title_en || '',
-          value_id: detailCommunity?.data?.value_id || '',
-          value_en: detailCommunity?.data?.value_en || '',
-          remark: detailCommunity?.data?.remark || '',
-        });
+      if (access?.find((item) => item?.nameModule === 'community_approval')?.acces?.updateAcces) {
+        if (detailCommunity?.data?.status === 'SUBMITTED') {
+          setInputValue({
+            name: detailCommunity?.data?.name || '',
+            title_id: detailCommunity?.data?.title_id || '',
+            title_en: detailCommunity?.data?.title_en || '',
+            value_id: detailCommunity?.data?.value_id || '',
+            value_en: detailCommunity?.data?.value_en || '',
+            remark: detailCommunity?.data?.remark || '',
+          });
+        } else {
+          router.replace({ pathname: '/utilitas', query: { tab: 'community' } });
+          toast('Pengajuan sudah selesai dikonfirmasi', {
+            icon: <Info style={{ fontSize: 16 }} />,
+          });
+        }
       } else {
         router.replace({ pathname: '/utilitas', query: { tab: 'community' } });
-        toast('Pengajuan sudah selesai dikonfirmasi', {
+        toast('Silahkan kontak ke user yang memiliki akses untuk memproses ajuan ini', {
           icon: <Info style={{ fontSize: 16 }} />,
         });
       }

@@ -42,12 +42,23 @@ const UtilitasComponent = () => {
   const classes = useStyles();
   const router = useRouter();
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
+  const accessModule = access.map((item) => item.nameModule);
 
   useEffect(() => {
     if (!isEmpty(router.query)) {
       setTab(router.query?.tab);
     } else {
-      setTab('interest');
+      if (accessModule?.includes('utilitas_interest')) {
+        setTab('interest');
+      } else if (accessModule?.includes('utilitas_setting')) {
+        setTab('setting');
+      } else if (accessModule?.includes('utilitas_bank')) {
+        setTab('bank');
+      } else if (accessModule?.includes('utilitas_challenge')) {
+        setTab('challenge');
+      } else if (accessModule?.includes('community_support') || accessModule?.includes('community_approval')) {
+        setTab('community');
+      }
     }
   }, [router]);
 
@@ -69,7 +80,8 @@ const UtilitasComponent = () => {
           {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
             <Tab label="Interest" value="interest" className={classes.tab} />
           )}
-          {access?.map((item) => item?.nameModule)?.includes('community_support') && (
+          {(access?.map((item) => item?.nameModule)?.includes('community_support') ||
+            access?.map((item) => item?.nameModule)?.includes('community_approval')) && (
             <Tab label="Panduan Komunitas" value="community" className={classes.tab} />
           )}
           {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
@@ -82,8 +94,12 @@ const UtilitasComponent = () => {
             access?.map((item) => item?.nameModule)?.includes('utilitas_challenge_badge')) && (
             <Tab label="Challenge" value="challenge" className={classes.tab} />
           )}
-          <Tab label="Database" value="database" className={classes.tab} />
-          <Tab label="Maintenance" value="maintenance" className={classes.tab} />
+          {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
+            <Tab label="Database" value="database" className={classes.tab} />
+          )}
+          {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
+            <Tab label="Maintenance" value="maintenance" className={classes.tab} />
+          )}
         </TabList>
         <div style={{ marginTop: 30, height: '100%' }}>
           {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
@@ -91,7 +107,8 @@ const UtilitasComponent = () => {
               <Interest />
             </TabPanel>
           )}
-          {access?.map((item) => item?.nameModule)?.includes('community_support') && (
+          {(access?.map((item) => item?.nameModule)?.includes('community_support') ||
+            access?.map((item) => item?.nameModule)?.includes('community_approval')) && (
             <TabPanel value="community" style={{ padding: 0, height: '100%' }}>
               {router.query?.create ? (
                 <CreateKomunitas />
@@ -143,12 +160,16 @@ const UtilitasComponent = () => {
               </Stack>
             </TabPanel>
           )}
-          <TabPanel value="database" style={{ padding: 0, height: '100%' }}>
-            <UtilityDatabase />
-          </TabPanel>
-          <TabPanel value="maintenance" style={{ padding: 0, height: '100%' }}>
-            <Maintenance />
-          </TabPanel>
+          {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
+            <TabPanel value="database" style={{ padding: 0, height: '100%' }}>
+              <UtilityDatabase />
+            </TabPanel>
+          )}
+          {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
+            <TabPanel value="maintenance" style={{ padding: 0, height: '100%' }}>
+              <Maintenance />
+            </TabPanel>
+          )}
         </div>
       </TabContext>
     )
