@@ -154,7 +154,7 @@ const TableSection = ({ loading, listData }) => {
                       )}
                     </TableCell>
                     <TableCell align="left">
-                      {item?.rejectedAt ? (
+                      {item?.status === 'REJECTED' && item?.rejectedAt ? (
                         <Stack direction="column">
                           <Typography variant="body1" style={{ fontSize: 12, width: 110 }}>
                             {dayjs(item?.rejectedAt).format('DD/MM/YYYY')} -
@@ -171,18 +171,38 @@ const TableSection = ({ loading, listData }) => {
                     </TableCell>
                     <TableCell align="left">
                       <Stack direction="row" width={90}>
-                        {item?.status === 'APPROVED' && (
-                          <Chip
-                            label="Live"
-                            style={{
-                              fontSize: 13,
-                              fontWeight: 'bold',
-                              fontFamily: 'Normal',
-                              color: '#71A500D9',
-                              backgroundColor: '#71A5001A',
-                            }}
-                          />
+                        {item?.isActive ? (
+                          <>
+                            {item?.status === 'APPROVED' && (
+                              <Chip
+                                label="Live"
+                                style={{
+                                  fontSize: 13,
+                                  fontWeight: 'bold',
+                                  fontFamily: 'Normal',
+                                  color: '#71A500D9',
+                                  backgroundColor: '#71A5001A',
+                                }}
+                              />
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            {item?.status === 'APPROVED' && (
+                              <Chip
+                                label="Non Aktif"
+                                style={{
+                                  fontSize: 13,
+                                  fontWeight: 'bold',
+                                  fontFamily: 'Normal',
+                                  color: '#676767',
+                                  backgroundColor: '#6767671a',
+                                }}
+                              />
+                            )}
+                          </>
                         )}
+
                         {item?.status === 'SUBMITTED' && (
                           <Chip
                             label="Diajukan"
@@ -231,7 +251,9 @@ const TableSection = ({ loading, listData }) => {
                             disabled={
                               !access?.find((item) => item?.nameModule === 'community_support')?.acces?.updateAcces ||
                               item?.status === 'SUBMITTED' ||
-                              item?.status === 'REJECTED'
+                              item?.status === 'REJECTED' ||
+                              item?.child?.[0]?.status === 'SUBMITTED' ||
+                              (item?.status === 'APPROVED' && !item?.isActive)
                             }>
                             <Edit />
                           </IconButton>

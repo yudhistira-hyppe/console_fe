@@ -17,7 +17,7 @@ const TableList = () => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
   const router = useRouter();
 
-  const { data: listData, isFetching: loadingList } = useGetListCommunityQuery(filter);
+  const { data: listData, isFetching: loadingList } = useGetListCommunityQuery(filter, { refetchOnFocus: true });
 
   const handleChange = (name, val) => {
     setFilter((prevVal) => ({ ...prevVal, [name]: val }));
