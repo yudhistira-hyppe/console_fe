@@ -17,7 +17,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
   const [inputValue, setInputValue] = useState({
     email: '',
     topup: '',
-    npwp: '',
+    npwp: 'YES',
   });
   const [uploadBulk, setUploadBulk] = useState([]);
   const [deleteTopup, { isLoading: loadingDelete }] = useDeleteTopupMutation();
@@ -29,7 +29,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
     setInputValue({
       email: '',
       topup: '',
-      npwp: '',
+      npwp: 'YES',
     });
     setUploadBulk([]);
   }, [open]);
@@ -155,7 +155,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
                   },
                 }}
               />
-              <Stack direction="column">
+              {/* <Stack direction="column">
                 <Typography>Apakah penerima memiliki NPWP ?</Typography>
                 <RadioGroup
                   row
@@ -164,7 +164,7 @@ function ModalTopup({ open, selected, status, handleClose }) {
                   <FormControlLabel label="Ya" value="YES" control={<Radio color="secondary" size="small" />} />
                   <FormControlLabel label="Tidak" value="NO" control={<Radio color="secondary" size="small" />} />
                 </RadioGroup>
-              </Stack>
+              </Stack> */}
             </Stack>
           )}
           {status === 'upload' && (
