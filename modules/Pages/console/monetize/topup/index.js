@@ -200,7 +200,11 @@ const MonetizeTopUpComponent = () => {
                 variant="contained"
                 color="secondary"
                 onClick={() => setOpenModal({ open: true, status: 'create' })}
-                disabled={authUser?.user?.group !== 'Super Admin' && authUser?.user?.group !== 'Marketing Assistant'}>
+                disabled={
+                  authUser?.user?.group !== 'Super Admin' &&
+                  authUser?.user?.group !== 'Marketing Assistant' &&
+                  authUser?.user?.group !== 'Head Of Strategy'
+                }>
                 Tambah baru
               </Button>
               {loadingExport || listExport?.data?.length < 1 ? (
