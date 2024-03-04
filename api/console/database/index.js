@@ -78,6 +78,13 @@ export const databaseApi = createApi({
       }),
       invalidatesTags: ['Account', 'Detail-Account'],
     }),
+    getUserReferralList: build.query({
+      query: (data) => ({
+        url: '/referral/list',
+        method: 'POST',
+        body: data,
+      }),
+    }),
 
     //Content
     getListContent: build.query({
@@ -355,6 +362,7 @@ export const {
   useGetAccountBalanceQuery,
   useGetBankAccountByUserEmailQuery,
   useUpdateUserCreatorMutation,
+  useGetUserReferralListQuery,
 
   //Content
   useGetListContentQuery,
