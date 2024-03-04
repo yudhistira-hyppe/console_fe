@@ -189,7 +189,7 @@ const DatabaseDetailAccountComponent = (props) => {
                   <Stack direction="column" gap={2}>
                     <Interest interests={userFriendListRes?.[0]?.interests} />
 
-                    <InvitationInfo />
+                    <InvitationInfo invitation={userFriendListRes?.[0]?.invitationDetail || {}} />
 
                     <ReferralInfo userId={userFriendListRes?.[0]?._id} count={userFriendListRes?.[0]?.referralCount} />
                   </Stack>
