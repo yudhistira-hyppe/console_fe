@@ -115,7 +115,7 @@ const UserInfoComponent = ({ accountDetail }) => {
                 <ItemInfo
                   icon={<Place style={{ fontSize: 36, color: '#767676' }} />}
                   title="Lokasi"
-                  value={`${accountDetail?.states}, ${accountDetail?.cities}`}
+                  value={`${accountDetail?.states || ''} ${accountDetail?.cities ? `,${accountDetail?.cities}` : ''}`}
                 />
               </Grid>
             </Grid>
