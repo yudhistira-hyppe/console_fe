@@ -94,7 +94,13 @@ const UserInfoComponent = ({ accountDetail }) => {
                   icon={<Wc style={{ fontSize: 36, color: '#767676' }} />}
                   title="Jenis Kelamin"
                   value={
-                    accountDetail?.gender === 'FEMALE' ? 'Perempuan' : accountDetail?.gender === 'MALE' ? 'Laki-laki' : '-'
+                    accountDetail?.gender === 'FEMALE'
+                      ? 'Perempuan'
+                      : accountDetail?.gender === 'MALE'
+                      ? 'Laki-laki'
+                      : accountDetail?.gender === 'OTHER'
+                      ? 'Lainnya'
+                      : '-'
                   }
                 />
               </Grid>

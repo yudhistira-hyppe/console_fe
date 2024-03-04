@@ -33,7 +33,7 @@ const AccountInfoComponent = ({ data }) => {
           value={`${data?.states}, ${data?.cities}`}
         />
 
-        <ItemInfo icon={<DeveloperMode style={{ fontSize: 28, color: '#767676' }} />} title="Sistem Operasi" value={'-'} />
+        <ItemInfo icon={<DeveloperMode style={{ fontSize: 28, color: '#767676' }} />} title="Sistem Operasi" value={data?.loginSrc || '-'} />
 
         <ItemInfo
           icon={<QueryBuilder style={{ fontSize: 28, color: '#767676' }} />}
