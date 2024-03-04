@@ -28,7 +28,7 @@ const InvitationInfoComponent = ({}) => {
       <Stack direction="column" justifyContent="center" height="100%" spacing={3}>
         <ItemInfo icon={<GroupAdd style={{ fontSize: 28, color: '#767676' }} />} title="Diundang Oleh" value={`-`} />
 
-        <ItemInfo icon={<Link style={{ fontSize: 28, color: '#767676' }} />} title="Link Referal" value={`-`} />
+        {/* <ItemInfo icon={<Link style={{ fontSize: 28, color: '#767676' }} />} title="Link Referal" value={`-`} /> */}
       </Stack>
     </Card>
   );
