@@ -362,7 +362,7 @@ const DetailBandingKonten = () => {
             </Grid>
             <Grid item xs={12} sm={4} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               <Paper style={{ padding: '16px 16px 25px' }}>
-                {detail?.data[0]?.reportStatusLast === 'BARU' ? (
+                {detail?.data[0]?.reportStatusLast === 'BARU' || detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN' ? (
                   <Button
                     ref={anchorRef}
                     variant="contained"
