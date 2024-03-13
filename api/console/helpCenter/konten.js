@@ -40,7 +40,7 @@ export const kontenApi = createApi({
     }),
     updateDetailTicket: build.mutation({
       query: (data) => ({
-        url: '/reportuser/approval/v2',
+        url: '/reportuser/approval',
         method: 'POST',
         body: data,
       }),
