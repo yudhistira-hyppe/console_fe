@@ -128,7 +128,13 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
       } else {
         if (errorFCM) {
           toast.error('Gagal menghubungkan anda dengan server, merefresh ulang halaman...', { id: 'signin' });
-          window.location.reload();
+          setTimeout(() => {
+            toast.loading('Mencoba menghubungkan kembali...', { id: 'signin' });
+          }, 1000);
+          setTimeout(() => {
+            generateFCMToken();
+            setErrorFMC(false);
+          }, 3000);
         } else {
           toast.success('Berhasil terhubung dengan server', { id: 'signin' });
         }
