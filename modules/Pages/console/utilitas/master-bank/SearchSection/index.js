@@ -6,8 +6,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Typography } from '@material-ui/core';
 import { Button, Card, Chip, Stack } from '@mui/material';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
-import { Router } from 'next/router';
 import { Add, Edit } from '@material-ui/icons';
+import Router from 'next/router';
 
 const SearchSection = ({ filter, handleChange }) => {
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
