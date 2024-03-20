@@ -18,6 +18,8 @@ import CreateKomunitas from './komunitas/create';
 import UpdateKomunitas from './komunitas/edit';
 import ApproveCommunity from './komunitas/approve';
 import Maintenance from './maintenance';
+import TransactionCategory from './transaction/category';
+import TransactionCOA from './transaction/coa';
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '16px',
       fontFamily: 'Lato',
       fontWeight: '700',
-      marginRight: 50,
+      marginRight: 30,
     },
   },
 }));
@@ -100,6 +102,7 @@ const UtilitasComponent = () => {
           {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
             <Tab label="Maintenance" value="maintenance" className={classes.tab} />
           )}
+          <Tab label="Transaksi" value="transaction" className={classes.tab} />
         </TabList>
         <div style={{ marginTop: 30, height: '100%' }}>
           {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
@@ -170,6 +173,13 @@ const UtilitasComponent = () => {
               <Maintenance />
             </TabPanel>
           )}
+          <TabPanel value="transaction" style={{ padding: 0, height: '100%' }}>
+            <Stack direction="column" gap={3}>
+              <TransactionCategory />
+
+              <TransactionCOA />
+            </Stack>
+          </TabPanel>
         </div>
       </TabContext>
     )
