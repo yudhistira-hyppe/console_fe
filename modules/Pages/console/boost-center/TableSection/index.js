@@ -26,6 +26,7 @@ import router from 'next/router';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -45,8 +46,9 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const mediaUri = mediaEndpoint?.split('.');
 
-    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}${mediaUri[0]}${authToken}`;
   };
 
   const getImage = (item) => {
@@ -149,25 +151,27 @@ const TableSection = ({ filterList, handleOrder, handlePageChange, handleDeleteF
                 </TableCell>
               ) : listTickets?.data?.length >= 1 ? (
                 listTickets?.data?.map((item, i) => (
-                  <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        '&:hover': {
-                          cursor: 'pointer',
-                          '& .MuiTypography-root': {
-                            color: '#AB22AF !important',
-                            textDecoration: 'underline',
-                          },
+                  <TableRow
+                    key={i}
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                      '&:hover': {
+                        cursor: 'pointer',
+                        '& .title': {
+                          color: '#AB22AF !important',
+                          textDecoration: 'underline',
                         },
-                      }}
-                      onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}>
-                      <Stack direction="row" gap="15px" width={180}>
-                        <Avatar src={getImage(item)} variant="rounded" alt="X" />
+                      },
+                    }}
+                    hover
+                    onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}>
+                    <TableCell align="left">
+                      <Stack direction="row" alignItems="center" gap="15px" width={180}>
+                        <Avatar src={getImage(item)} variant="rounded" alt="X" style={{ width: 42, height: 42 }} />
                         <Typography
                           variant="body1"
-                          style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}>
+                          className={clsx(classes.textTruncate, 'title')}
+                          style={{ fontSize: 14, color: '#00000099', height: '100%' }}>
                           {item?.description || '-'}
                         </Typography>
                       </Stack>

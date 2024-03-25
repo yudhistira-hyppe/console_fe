@@ -154,7 +154,7 @@ export const adsApi = createApi({
     }),
     getSummaryDetailAds: build.query({
       query: (data) => ({
-        url: '/adsv2/ads/campaign/detail/all',
+        url: '/adsv2/ads/campaign/detail/all/v2',
         method: 'POST',
         body: data,
       }),

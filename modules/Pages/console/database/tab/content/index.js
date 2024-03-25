@@ -273,7 +273,7 @@ const DatabaseTabContentComponent = () => {
                 </span>
               </Tooltip>
             ) : (
-              <CSVLink data={listExport?.data} filename="Database Content.csv" onClick={() => handleExport()}>
+              <CSVLink data={isError ? [] : listExport?.data} filename="Database Content.csv" onClick={() => handleExport()}>
                 <LoadingButton color="secondary" variant="contained">
                   <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                     Download CSV

@@ -119,7 +119,9 @@ const SecureConsolePage = ({ children }) => {
         (accessModule.includes('utilitas_interest') ||
           accessModule.includes('utilitas_setting') ||
           accessModule.includes('utilitas_bank') ||
-          accessModule.includes('utilitas_challenge'))
+          accessModule.includes('utilitas_challenge') ||
+          accessModule.includes('community_support') ||
+          accessModule.includes('community_approval'))
       ) {
         setIsRenderChildren(true);
         setLoadingValidate(false);

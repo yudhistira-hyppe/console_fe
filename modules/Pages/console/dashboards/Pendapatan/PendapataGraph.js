@@ -19,7 +19,7 @@ const PendapatanGraph = ({ data }) => {
   const classes = useStyles();
 
   return (
-    <ResponsiveContainer width="100%" height={112}>
+    <ResponsiveContainer width="100%" height={130}>
       <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
         <Tooltip
           labelStyle={{ color: 'black' }}

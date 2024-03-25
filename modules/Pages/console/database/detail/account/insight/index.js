@@ -6,34 +6,18 @@ import { formatNumber } from 'helpers/stringHelper';
 
 const InsightComponent = ({ insight, friends }) => {
   return (
-    <Stack
-      direction="row"
-      justifyContent={{ xs: 'space-evenly' }}
-      spacing={3}
-      divider={<Divider orientation="vertical" flexItem />}>
-      <Stack>
-        <Typography component="div" variant="h1" align="center">
-          {formatNumber(insight?.followers || 0)}
-        </Typography>
-        <Box component="span" fontSize={12} color="text.secondary" mt={1} textAlign="center">
-          Pengikut
-        </Box>
+    <Stack direction="row" justifyContent="center" gap={3.5}>
+      <Stack direction="column" alignItems="center" gap="2px" width={60}>
+        <Typography style={{ fontSize: 14, color: '#00000099' }}>Pengikut</Typography>
+        <Typography style={{ fontSize: 16 }}>{formatNumber(insight?.followers || 0)}</Typography>
       </Stack>
-      <Stack>
-        <Typography component="div" variant="h1" align="center">
-          {formatNumber(insight?.followings || 0)}
-        </Typography>
-        <Box component="span" fontSize={12} color="text.secondary" mt={1} textAlign="center">
-          Mengikuti
-        </Box>
+      <Stack direction="column" alignItems="center" gap="2px" width={60}>
+        <Typography style={{ fontSize: 14, color: '#00000099' }}>Mengikuti</Typography>
+        <Typography style={{ fontSize: 16 }}>{formatNumber(insight?.followings || 0)}</Typography>
       </Stack>
-      <Stack>
-        <Typography component="div" variant="h1" align="center">
-          {formatNumber(friends || 0)}
-        </Typography>
-        <Box component="span" fontSize={12} color="text.secondary" mt={1} textAlign="center">
-          Teman
-        </Box>
+      <Stack direction="column" alignItems="center" gap="2px" width={60}>
+        <Typography style={{ fontSize: 14, color: '#00000099' }}>Teman</Typography>
+        <Typography style={{ fontSize: 16 }}>{formatNumber(friends || 0)}</Typography>
       </Stack>
     </Stack>
   );

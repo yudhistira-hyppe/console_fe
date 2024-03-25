@@ -248,6 +248,15 @@ const ComponentStepDetail = ({ inputValue, handleInputChange }) => {
                     handleInputChange('starthour', undefined);
                   }
                 }}
+                PaperProps={{
+                  sx: {
+                    '& .MuiPickersDay-root': {
+                      '&.Mui-selected': {
+                        backgroundColor: '#AA22AF',
+                      },
+                    },
+                  },
+                }}
                 inputFormat="DD/MM/YYYY"
                 renderInput={(params) => <TextField color="secondary" {...params} />}
               />

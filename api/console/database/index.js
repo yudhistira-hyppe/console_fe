@@ -23,7 +23,7 @@ export const databaseApi = createApi({
     //Account
     getAllUser: build.query({
       query: (data) => ({
-        url: `/getuserprofiles`,
+        url: `/getuserprofiles/v2`,
         method: 'POST',
         body: data,
       }),
@@ -31,7 +31,7 @@ export const databaseApi = createApi({
     }),
     getuserDatabaseDetail: build.query({
       query: (id) => ({
-        url: `user/userdetail/${id}`,
+        url: `user/userdetail/v2/${id}`,
         method: 'GET',
       }),
       providesTags: ['Detail-Account'],
@@ -44,7 +44,7 @@ export const databaseApi = createApi({
     }),
     getProfileByUserEmail: build.query({
       query: (email) => ({
-        url: `/profile`,
+        url: `/profile/v2`,
         method: 'POST',
         body: {
           email,
@@ -54,7 +54,7 @@ export const databaseApi = createApi({
     }),
     getAccountBalance: build.query({
       query: (data) => ({
-        url: `/accountbalances`,
+        url: `/accountbalances/v2`,
         method: 'POST',
         body: data,
       }),
@@ -72,17 +72,24 @@ export const databaseApi = createApi({
     }),
     updateUserCreator: build.mutation({
       query: (data) => ({
-        url: '/user/updatestatuscreator',
+        url: '/user/updatestatuscreator/v2',
         method: 'POST',
         body: data,
       }),
       invalidatesTags: ['Account', 'Detail-Account'],
     }),
+    getUserReferralList: build.query({
+      query: (data) => ({
+        url: '/referral/list',
+        method: 'POST',
+        body: data,
+      }),
+    }),
 
     //Content
     getListContent: build.query({
       query: (data) => ({
-        url: '/getusercontents/database',
+        url: '/getusercontents/database/v2',
         method: 'POST',
         body: data,
       }),
@@ -97,7 +104,7 @@ export const databaseApi = createApi({
     }),
     getDetailContent: build.query({
       query: (data) => ({
-        url: '/getusercontents/database/details',
+        url: '/getusercontents/database/details/v2',
         method: 'POST',
         body: data,
       }),
@@ -107,21 +114,21 @@ export const databaseApi = createApi({
     //Media
     getGenreMusic: build.query({
       query: () => ({
-        url: '/genre',
+        url: '/genre/version/2',
         method: 'GET',
       }),
       providesTags: ['Util'],
     }),
     getThemeMusic: build.query({
       query: () => ({
-        url: '/theme',
+        url: '/theme/version/2',
         method: 'GET',
       }),
       providesTags: ['Util'],
     }),
     getMoodMusic: build.query({
       query: () => ({
-        url: '/mood',
+        url: '/mood/version/2',
         method: 'GET',
       }),
       providesTags: ['Util'],
@@ -142,14 +149,14 @@ export const databaseApi = createApi({
     }),
     getDetailGeographicMusic: build.query({
       query: (id) => ({
-        url: `/music/used/${id}`,
+        url: `/music/used/v2/${id}`,
         method: 'GET',
       }),
       providesTags: ['Detail-Media'],
     }),
     getMediaChart: build.query({
       query: () => ({
-        url: '/musiccard',
+        url: '/musiccard/v2',
         method: 'GET',
       }),
     }),
@@ -355,6 +362,7 @@ export const {
   useGetAccountBalanceQuery,
   useGetBankAccountByUserEmailQuery,
   useUpdateUserCreatorMutation,
+  useGetUserReferralListQuery,
 
   //Content
   useGetListContentQuery,

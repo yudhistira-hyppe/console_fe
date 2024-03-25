@@ -17,7 +17,7 @@ const CheckboxCounter = ({ label, description, max, min, style, handleCheckbox, 
           />
         }
         label={<Typography style={{ color: '#9B9B9B' }}>{label || 'label here'}</Typography>}
-        style={{ width: 100, ...style }}
+        style={{ width: 130, ...style }}
       />
       {value >= 1 && (
         <>

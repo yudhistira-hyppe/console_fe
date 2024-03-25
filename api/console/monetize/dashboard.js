@@ -46,7 +46,7 @@ export const dashboardMonetizeAPI = createApi({
     }),
     createTopup: build.mutation({
       query: (data) => ({
-        url: '/topups/create',
+        url: '/topups/create/v2',
         method: 'POST',
         body: data,
       }),
@@ -54,7 +54,7 @@ export const dashboardMonetizeAPI = createApi({
     }),
     uploadBulkTopup: build.mutation({
       query: (data) => ({
-        url: '/topups/import',
+        url: '/topups/import/v2',
         method: 'POST',
         body: data,
       }),

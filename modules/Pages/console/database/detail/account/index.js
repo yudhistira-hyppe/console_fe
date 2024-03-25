@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { Typography, Box } from '@material-ui/core';
-import { Grid, Stack } from '@mui/material';
+import { Typography, Box, makeStyles } from '@material-ui/core';
+import { Card, Grid, Stack, Tab } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import Breadcrumbs from '../../../help-center/bantuan-pengguna/BreadCrumb';
 import BackIconNav from '@material-ui/icons/ArrowBackIos';
@@ -17,27 +17,79 @@ import Transaction from './transaction';
 import AdsCampaign from './ads-campaign';
 import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
-import { useUserListFriendQuery } from 'api/user/friend';
-import ActiveTime from './active-time';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { useGetuserDatabaseDetailQuery } from 'api/console/database';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { CheckCircle } from '@material-ui/icons';
+import UserBankInfo from './user-bank-info';
+import InvitationInfo from './invitation-info';
+import ReferralInfo from './referral-info';
+import ProfileVisit from './profile-visit';
+import ActivityPostPic from './post-activity/pic';
+import ActivityPostVid from './post-activity/vid';
+import ActivityPostDiary from './post-activity/diary';
+import TimeSpent from './time-spent';
+import DetailDatabaseAccountReferralList from './table-referral';
 
-const breadcrumbs = [
-  { label: 'Database Akun', link: '/database/account' },
-  { label: 'Rincian Akun', isActive: true },
-];
+const useStyles = makeStyles(() => ({
+  tab: {
+    '&.MuiTab-root': {
+      minWidth: '60px',
+      padding: '8px',
+      justifyContent: 'end',
+      textTransform: 'capitalize',
+      fontSize: '16px',
+      fontFamily: 'Lato',
+      fontWeight: '700',
+      marginRight: 35,
+      paddingBottom: 12,
+
+      '&.Mui-selected': {
+        color: '#BE31BC',
+      },
+    },
+  },
+  tabPanel: {
+    '&.MuiTabPanel-root': {
+      padding: '28px 0',
+    },
+  },
+}));
 
 const DatabaseDetailAccountComponent = (props) => {
   const { detailId } = props;
   const { authUser } = useAuth();
+  const [tab, setTab] = useState('1');
   const router = useRouter();
-  const { data: userFriendListRes, isSuccess, isLoading } = useGetuserDatabaseDetailQuery(detailId);
+  const classes = useStyles();
+  const { data: userFriendListRes, isLoading } = useGetuserDatabaseDetailQuery(detailId);
+
+  const breadcrumbs =
+    tab === 'referral'
+      ? [
+          { label: 'Database Akun', link: '/database/account' },
+          { label: 'Rincian Akun', link: `/database/account/${userFriendListRes?.[0]?._id}` },
+          { label: 'Referal Akun', isActive: true },
+        ]
+      : [
+          { label: 'Database Akun', link: '/database/account' },
+          { label: 'Rincian Akun', isActive: true },
+        ];
+
+  useEffect(() => {
+    setTab(router.query?.tab ? router.query?.tab : '1');
+  }, [router]);
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
     const endpoint = mediaEndpoint?.split('_');
 
     return `${STREAM_URL}${endpoint?.[0]}${authToken}`;
+  };
+
+  const onTabChange = (_, selectedTab) => {
+    setTab(selectedTab);
+    router.replace({ pathname: `/database/${router.query?.slug[0]}/${router.query?.slug[1]}`, query: { tab: selectedTab } });
   };
 
   return (
@@ -51,7 +103,9 @@ const DatabaseDetailAccountComponent = (props) => {
           direction={'row'}
           mt={1}
           mb={3}
-          onClick={() => router.push('/database/account')}
+          onClick={() =>
+            router.push(tab === 'referral' ? `/database/account/${userFriendListRes?.[0]?._id}` : '/database/account')
+          }
           gap="5px"
           style={{ width: 'fit-content', cursor: 'pointer' }}>
           <Stack direction={'column'} justifyContent={'center'}>
@@ -63,72 +117,120 @@ const DatabaseDetailAccountComponent = (props) => {
         </Stack>
       </Stack>
 
-      <PageContainer>
-        {isLoading ? (
-          <PageLoader />
-        ) : (
-          isSuccess && (
-            <Stack spacing={3}>
-              <Stack
-                gap={3}
-                direction={{ xs: 'column', sm: 'row' }}
-                alignItems={{ sm: 'center' }}
-                justifyContent={{ sm: 'space-between' }}>
-                <Stack direction="row" spacing={3}>
-                  <CmtAvatar
-                    src={getMediaUri(userFriendListRes?.[0]?.avatar?.mediaEndpoint)}
-                    alt={userFriendListRes?.[0]?.fullName}
-                    phCharLength={2}
-                    size={80}
-                    color="random"
-                  />
-                  <Stack justifyContent="center" gap="4px">
-                    <Typography variant="h1">{userFriendListRes?.[0]?.username}</Typography>
-                    <Box fontSize={14} color="text.secondary">
-                      {userFriendListRes?.[0]?.fullName}
-                    </Box>
+      {tab === 'referral' ? (
+        <>{!isLoading && <DetailDatabaseAccountReferralList email={userFriendListRes?.[0]?.email} />}</>
+      ) : (
+        <TabContext value={tab}>
+          <TabList onChange={onTabChange} sx={{ '& .MuiTabs-indicator': { backgroundColor: '#BE31BC' } }}>
+            <Tab className={classes.tab} label="Info" value="1" />
+            <Tab className={classes.tab} label="Aktifitas" value="2" />
+            <Tab className={classes.tab} label="Postingan & Monetisasi" value="3" />
+          </TabList>
+
+          <TabPanel className={classes.tabPanel} value="1">
+            {isLoading ? (
+              <PageLoader />
+            ) : (
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={3}>
+                  <Stack direction="column" gap={2}>
+                    <Card style={{ padding: '36px 20px' }}>
+                      <Stack direction="column" gap={3}>
+                        <Stack direction="row" gap={2}>
+                          <Box style={{ position: 'relative' }}>
+                            <CmtAvatar
+                              src={getMediaUri(userFriendListRes?.[0]?.avatar?.mediaEndpoint)}
+                              alt={userFriendListRes?.[0]?.username}
+                              style={{ borderRadius: 18, width: 56, height: 56, border: '0.5px solid #0000001F' }}
+                            />
+
+                            {userFriendListRes?.[0]?.statusUser !== 'BASIC' && (
+                              <CheckCircle
+                                style={{
+                                  color: '#BE31BC',
+                                  backgroundColor: 'white',
+                                  fontSize: 16,
+                                  borderRadius: 30,
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  right: 0,
+                                }}
+                              />
+                            )}
+                          </Box>
+
+                          <Stack direction="column" justifyContent="center">
+                            <Typography style={{ fontSize: 18, fontWeight: 'bold' }}>
+                              {userFriendListRes?.[0]?.username}
+                            </Typography>
+                            <Box fontSize={14} color="text.secondary">
+                              {userFriendListRes?.[0]?.email}
+                            </Box>
+                          </Stack>
+                        </Stack>
+
+                        <Insight insight={userFriendListRes?.[0]?.insights} friends={userFriendListRes?.[0]?.friend} />
+                      </Stack>
+                    </Card>
+
+                    <AccountInfo data={userFriendListRes?.[0]} />
                   </Stack>
-                </Stack>
-                <Insight insight={userFriendListRes?.[0]?.insights} friends={userFriendListRes?.[0]?.friend} />
-              </Stack>
-              <Grid container gap={3}>
-                <Grid item xs={12} md={3.5}>
-                  <AccountInfo
-                    createdAt={userFriendListRes?.[0]?.createdAt}
-                    fullName={userFriendListRes?.[0]?.fullName || '-'}
-                    email={userFriendListRes?.[0]?.email || '-'}
-                    roles={userFriendListRes?.[0]?.statusUser || '-'}
-                  />
                 </Grid>
-                <Grid item xs={12} md>
-                  <UserInfo accountDetail={userFriendListRes?.[0]} />
+
+                <Grid item xs={12} md={6}>
+                  <Stack direction="column" gap={2}>
+                    <UserInfo accountDetail={userFriendListRes?.[0]} />
+
+                    <UserBankInfo accountDetail={userFriendListRes?.[0]} />
+                  </Stack>
                 </Grid>
-              </Grid>
-              <Grid container gap={3}>
-                <Grid item xs={12} md={3.5}>
-                  <Interest interests={userFriendListRes?.[0]?.interests} />
-                </Grid>
-                <Grid item xs={12} md>
-                  <UserPost idUser={detailId} />
+
+                <Grid item xs={12} md={3}>
+                  <Stack direction="column" gap={2}>
+                    <Interest interests={userFriendListRes?.[0]?.interests} />
+
+                    <InvitationInfo invitation={userFriendListRes?.[0]?.invitationDetail || {}} />
+
+                    <ReferralInfo userId={userFriendListRes?.[0]?._id} count={userFriendListRes?.[0]?.referralCount} />
+                  </Stack>
                 </Grid>
               </Grid>
-              <Grid container gap={3}>
-                <Grid item xs={12} md={6.5}>
-                  <Transaction email={userFriendListRes?.[0]?.email} />
-                </Grid>
-                <Grid item xs={12} md>
-                  <ActiveTime />
-                </Grid>
+            )}
+          </TabPanel>
+          <TabPanel className={classes.tabPanel} value="2">
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={3}>
+                <ProfileVisit />
               </Grid>
-              <Grid container>
-                <Grid item xs={12}>
-                  <AdsCampaign email={userFriendListRes?.[0]?.email} />
-                </Grid>
+              <Grid item xs={12} md={3}>
+                <ActivityPostPic />
               </Grid>
-            </Stack>
-          )
-        )}
-      </PageContainer>
+              <Grid item xs={12} md={3}>
+                <ActivityPostVid />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <ActivityPostDiary />
+              </Grid>
+              <Grid item xs={12}>
+                <TimeSpent />
+              </Grid>
+            </Grid>
+          </TabPanel>
+          <TabPanel className={classes.tabPanel} value="3">
+            <Grid container spacing={3}>
+              <Grid item xs={8}>
+                <UserPost idUser={detailId} />
+              </Grid>
+              <Grid item xs={4}>
+                <Transaction email={userFriendListRes?.[0]?.email} />
+              </Grid>
+              <Grid item xs={12}>
+                <AdsCampaign email={userFriendListRes?.[0]?.email} />
+              </Grid>
+            </Grid>
+          </TabPanel>
+        </TabContext>
+      )}
     </>
   );
 };

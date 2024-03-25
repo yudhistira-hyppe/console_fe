@@ -48,7 +48,14 @@ const UploadEffect = (props) => {
               <Typography style={{ fontWeight: 'bold', color: '#DADADA' }}>Upload Efek</Typography>
             </>
           )}
-          <input hidden id="upload_effect" type="file" onChange={handleUploadEffect} disabled={disabled} />
+          <input
+            hidden
+            id="upload_effect"
+            type="file"
+            accept=".deepar"
+            onChange={handleUploadEffect}
+            disabled={disabled}
+          />
         </Box>
       </label>
     </>

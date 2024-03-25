@@ -37,11 +37,11 @@ const ModalIndexing = ({ showModal, onClose, data, onSubmit }) => {
 
     updateSticker(formData).then((res) => {
       if (res?.error) {
-        toast.error(res?.error?.data?.message);
+        toast.error(res?.error?.data?.message || res?.error?.data?.messages?.info?.join(','));
       } else if (res?.data) {
         toast.success('Berhasil mengubah urutan emoji');
-        onSubmit();
       }
+      onSubmit();
     });
   };
 

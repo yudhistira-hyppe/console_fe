@@ -23,7 +23,7 @@ export const challengeApi = createApi({
     }),
     getListUserChallenge: build.query({
       query: (data) => ({
-        url: `/challenge/listing/userchallenge`,
+        url: `/challenge/listing/userchallenge/v2`,
         method: 'POST',
         body: data,
       }),
@@ -38,7 +38,7 @@ export const challengeApi = createApi({
     }),
     updateChallenge: build.mutation({
       query: ({ id, formData }) => ({
-        url: `/challenge/update/${id}`,
+        url: `/challenge/update/${id}/v2`,
         method: 'POST',
         body: formData,
       }),
@@ -70,7 +70,7 @@ export const challengeApi = createApi({
     }),
     kickUserChallengen: build.mutation({
       query: (data) => ({
-        url: '/challenge/user/delete',
+        url: '/challenge/user/delete/v2',
         method: 'POST',
         body: data,
       }),

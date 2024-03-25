@@ -41,7 +41,7 @@ const PermohonanPremium = () => {
     Object.assign(params, {
       page: filter.page,
       limit: filter.limit,
-      descending: dataParams?.descending && dataParams?.descending === 'true' ? true : false || true,
+      descending: filter?.descending === 'true' ? true : false,
     });
     filter.search !== '' && Object.assign(params, { keys: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
@@ -122,6 +122,7 @@ const PermohonanPremium = () => {
       return {
         ...prevVal,
         descending: e.target.value,
+        page: 0,
       };
     });
   };

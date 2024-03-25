@@ -15,17 +15,23 @@ const MoreInfo = (props) => {
               Tag:
             </Typography>
           </Stack>
-          <Stack direction={'row'} flexWrap={'wrap'} justifyContent="flex-start">
+          <Stack direction="row" flexWrap="wrap" gap={0.3}>
             {data?.tagPeople?.length >= 1 ? (
-              data?.tagPeople?.map((item, key) => (
-                <Typography key={key} variant="body2" color="primary" style={{ marginRight: '0.3em' }}>
-                  @{item?.name}
-                </Typography>
-              ))
+              data?.tagPeople?.map(
+                (item, key) =>
+                  key < 5 && (
+                    <Typography key={key} variant="body2" color="primary" style={{ marginRight: '0.3em' }}>
+                      @{item || '-'}
+                    </Typography>
+                  ),
+              )
             ) : (
               <Typography variant="body2" color="primary">
                 -
               </Typography>
+            )}
+            {data?.tagPeople?.length >= 6 && (
+              <Typography variant="caption">+{data?.tagPeople?.length - 5} Lainnya</Typography>
             )}
           </Stack>
         </Stack>

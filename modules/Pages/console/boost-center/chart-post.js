@@ -5,6 +5,7 @@ import { Info, Lens } from '@material-ui/icons';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import { makeStyles } from '@material-ui/styles';
+import { formatNumber } from 'helpers/stringHelper';
 
 const useStyles = makeStyles((theme) => ({
   tooltip: {
@@ -39,7 +40,7 @@ const ChartPost = ({ totalPost, chartData, persenJangkauan }) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center" height="100%">
           <Stack direction="column">
             <Typography style={{ color: '#23036A', fontWeight: 900, fontSize: 24 }}>
-              {numberWithCommas(totalPost)}
+              {numberWithCommas(totalPost || 0)}
             </Typography>
             <Typography style={{ fontSize: 12, color: '#737373' }}>Total Boost Post</Typography>
           </Stack>
@@ -80,7 +81,7 @@ const ChartPost = ({ totalPost, chartData, persenJangkauan }) => {
                     width: 90,
                     textAlign: 'center',
                   }}>
-                  {persenJangkauan}%
+                  {formatNumber(persenJangkauan || 0)}%
                 </Typography>
                 <Typography style={{ fontSize: 12, color: '#737373' }}>Jangkauan</Typography>
               </Stack>

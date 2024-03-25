@@ -12,9 +12,22 @@ export const dashboardApi = createApi({
         body: data,
       }),
     }),
+    getGuestActive: build.query({
+      query: (data) => ({
+        url: '/activityevents/logactivitas/guest',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getTotalGuest: build.query({
+      query: () => ({
+        url: '/newuserbasics/guestchart',
+        method: 'GET',
+      }),
+    }),
     getUserTotalPost: build.query({
       query: (data) => ({
-        url: '/posts/postbychart',
+        url: '/posts/postbychart/v2',
         method: 'POSt',
         body: data,
       }),
@@ -35,14 +48,14 @@ export const dashboardApi = createApi({
     }),
     getPostAnalytic: build.query({
       query: (data) => ({
-        url: '/posts/analityc',
+        url: '/posts/analityc/v2',
         method: 'POST',
         body: data,
       }),
     }),
     getOwnershipChart: build.query({
       query: () => ({
-        url: '/posts/showsertifikasistatbychart',
+        url: '/posts/showsertifikasistatbychart/v2',
         method: 'GET',
       }),
     }),
@@ -51,6 +64,8 @@ export const dashboardApi = createApi({
 
 export const {
   useGetUserActiveQuery,
+  useGetGuestActiveQuery,
+  useGetTotalGuestQuery,
   useGetUserTotalPostQuery,
   useGetAdminBalancesQuery,
   useGetVoucherIncomeQuery,

@@ -257,25 +257,29 @@ const TableRewardsParticipant = ({ idAds }) => {
               </Tooltip>
             ) : (
               <CSVLink
-                data={listExport?.data?.map((item) => {
-                  return {
-                    tanggal: dayjs(item?.timestamp).subtract(7, 'hour').format('DD/MM/YYYY'),
-                    nama: item?.username || '-',
-                    email: item?.email || '-',
-                    jenis_kelamin: item?.gender || '-',
-                    umur: item?.age || '-',
-                    lokasi: item?.lokasi ? item?.lokasi : 'Lainnya',
-                    minat: item?.interest?.length >= 1 ? item?.interest?.join(', ') : '-',
-                    kesamaan_audiens:
-                      item?.commonality < 25
-                        ? '< 25%'
-                        : item?.commonality >= 25 && item?.commonality < 50
-                        ? '25 - 50%'
-                        : item?.commonality >= 50 && item?.commonality < 75
-                        ? '50 - 75%'
-                        : item?.commonality >= 75 && item?.commonality <= 100 && '75 - 100%',
-                  };
-                })}
+                data={
+                  isError
+                    ? []
+                    : listExport?.data?.map((item) => {
+                        return {
+                          tanggal: dayjs(item?.timestamp).subtract(7, 'hour').format('DD/MM/YYYY'),
+                          nama: item?.username || '-',
+                          email: item?.email || '-',
+                          jenis_kelamin: item?.gender || '-',
+                          umur: item?.age || '-',
+                          lokasi: item?.lokasi ? item?.lokasi : 'Lainnya',
+                          minat: item?.interest?.length >= 1 ? item?.interest?.join(', ') : '-',
+                          kesamaan_audiens:
+                            item?.commonality < 25
+                              ? '< 25%'
+                              : item?.commonality >= 25 && item?.commonality < 50
+                              ? '25 - 50%'
+                              : item?.commonality >= 50 && item?.commonality < 75
+                              ? '50 - 75%'
+                              : item?.commonality >= 75 && item?.commonality <= 100 && '75 - 100%',
+                        };
+                      })
+                }
                 filename="List Rewards Participant.csv"
                 disabled={listViewers?.data?.length < 1 || isExport}>
                 <LoadingButton
@@ -290,7 +294,7 @@ const TableRewardsParticipant = ({ idAds }) => {
                       setExport(false);
                     }, 2000);
                   }}
-                  disabled={listViewers?.data?.length < 1 || isExport}>
+                  disabled={listViewers?.data?.length < 1 || isExport || isError}>
                   <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                     Download CSV
                   </Typography>
@@ -303,7 +307,7 @@ const TableRewardsParticipant = ({ idAds }) => {
               color="secondary"
               variant="contained"
               onClick={handleExport}
-              disabled={listViewers?.data?.length < 1 || isExport}>
+              disabled={listViewers?.data?.length < 1 || isExport || isError}>
               <Typography style={{ fontFamily: 'Lato', fontWeight: 'bold', textTransform: 'capitalize' }}>
                 Download PDF
               </Typography>

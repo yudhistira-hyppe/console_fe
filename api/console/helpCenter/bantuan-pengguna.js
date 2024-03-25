@@ -8,7 +8,7 @@ export const bantuanPenggunaApi = createApi({
   endpoints: (build) => ({
     getListTickets: build.query({
       query: (params) => ({
-        url: '/usertickets/filter',
+        url: '/usertickets/filter/v2',
         method: 'POST',
         body: params,
       }),
@@ -37,7 +37,7 @@ export const bantuanPenggunaApi = createApi({
     }),
     getDetailTicket: build.query({
       query: (params) => ({
-        url: '/usertickets/comment',
+        url: '/usertickets/comment/v2',
         method: 'POST',
         body: params,
       }),
@@ -45,7 +45,7 @@ export const bantuanPenggunaApi = createApi({
     }),
     updateDetailTicket: build.mutation({
       query: ({ id, data }) => ({
-        url: `/usertickets/update/${id}`,
+        url: `/usertickets/update/v2/${id}`,
         method: 'PUT',
         body: data,
       }),
@@ -53,7 +53,7 @@ export const bantuanPenggunaApi = createApi({
     }),
     replyTicket: build.mutation({
       query: (data) => ({
-        url: '/usertickets/reply',
+        url: '/usertickets/reply/v2',
         method: 'POST',
         body: data,
       }),

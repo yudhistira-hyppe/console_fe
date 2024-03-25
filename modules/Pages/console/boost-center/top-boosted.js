@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/styles';
 import numberWithCommas from 'modules/Components/CommonComponent/NumberWithCommas/NumberWithCommas';
 import { useAuth } from 'authentication';
 import { STREAM_URL } from 'authentication/auth-provider/config';
+import { useRouter } from 'next/router';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -23,11 +25,13 @@ const TopBoosted = (props) => {
   const { loading, data } = props;
   const classes = useStyles();
   const { authUser } = useAuth();
+  const router = useRouter();
 
   const getMediaUri = (mediaEndpoint) => {
     const authToken = `?x-auth-token=${authUser.token}&x-auth-user=${authUser.user.email}`;
+    const mediaUri = mediaEndpoint?.split('.');
 
-    return `${STREAM_URL}${mediaEndpoint}${authToken}`;
+    return `${STREAM_URL}${mediaUri[0]}${authToken}`;
   };
 
   const getImage = (item) => {
@@ -57,40 +61,57 @@ const TopBoosted = (props) => {
         </Stack>
         <Stack direction="row" gap="8px" mt={3}>
           <Typography style={{ width: 85, fontSize: 14, fontWeight: 'bold' }}>Peringkat</Typography>
-          <Typography style={{ width: 250, fontSize: 14, fontWeight: 'bold' }}>Post</Typography>
-          <Typography style={{ width: 180, fontSize: 14, fontWeight: 'bold' }}>ID Post</Typography>
-          <Typography style={{ width: 150, fontSize: 14, fontWeight: 'bold' }}>Tipe Konten</Typography>
+          <Typography style={{ width: 200, fontSize: 14, fontWeight: 'bold' }}>Post</Typography>
+          <Typography style={{ width: 270, fontSize: 14, fontWeight: 'bold' }}>ID Post</Typography>
+          <Typography style={{ width: 100, fontSize: 14, fontWeight: 'bold' }}>Tipe Konten</Typography>
           <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Jangkauan</Typography>
         </Stack>
-        <Stack direction="column" mt={3} height={232} gap="8px">
+        <Stack direction="column" mt={3} gap="12px">
           {loading ? (
-            <Stack direction="column" alignItems="center" justifyContent="center" height={232} spacing={2}>
-              <CircularProgress color="secondary" />
-              <Typography style={{ fontWeight: 'bold', color: '#737373' }}>loading data...</Typography>
+            <Stack direction="column" alignItems="center" justifyContent="center" height={258} spacing={2}>
+              <CircularProgress color="secondary" size={26} />
             </Stack>
           ) : (
             data?.map((item, key) => (
-              <Stack key={key} direction="row" alignItems="center" gap="8px">
+              <Stack
+                key={key}
+                direction="row"
+                alignItems="center"
+                gap="8px"
+                onClick={() => router.push({ pathname: `/boost-center/detail`, query: { _id: item?._id } })}
+                sx={{
+                  ':hover': {
+                    cursor: 'pointer',
+                    '& .title': {
+                      color: '#AB22AF !important',
+                      textDecoration: 'underline',
+                    },
+                  },
+                }}>
                 <Typography style={{ width: 85, fontWeight: 'bold', color: '#00000099' }}>{key + 1}</Typography>
-                <Stack direction="row" gap="12px" width={250}>
-                  <Avatar src={getImage(item)} variant="rounded" style={{ width: '100%', maxWidth: 40, height: 40 }} />
-                  <Typography variant="body1" className={classes.textTruncate} style={{ fontSize: 14, color: '#00000099' }}>
+                <Stack direction="row" alignItems="center" gap="12px" width={200}>
+                  <Avatar src={getImage(item)} variant="rounded" style={{ width: '100%', width: 42, height: 42 }} />
+                  <Typography
+                    variant="body1"
+                    className={clsx(classes.textTruncate, 'title')}
+                    style={{ fontSize: 14, color: '#00000099', height: '100%' }}>
                     {item?.description || '-'}
                   </Typography>
                 </Stack>
                 <Typography
                   className={classes.textTruncate}
                   style={{
-                    width: 160,
+                    width: 250,
                     fontSize: 14,
                     fontWeight: 'bold',
                     color: '#00000099',
                     marginRight: 20,
                     whiteSpace: 'nowrap',
-                  }}>
+                  }}
+                  title={item?.postID || '-'}>
                   {item?.postID || '-'}
                 </Typography>
-                <Typography style={{ width: 150, fontSize: 14, fontWeight: 'bold', color: '#00000099' }}>
+                <Typography style={{ width: 100, fontSize: 14, fontWeight: 'bold', color: '#00000099' }}>
                   {item?.postType || '-'}
                 </Typography>
                 <Typography style={{ fontWeight: 'bold', fontSize: 14, color: '#00000099' }}>

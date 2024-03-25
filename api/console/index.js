@@ -10,7 +10,15 @@ import { transactionAPI } from './transaction';
 import { databaseApi } from './database';
 import { boostAPI } from './boost';
 import { adsApi } from './ads';
-import { interestApi, settingApi, masterBankApi, adsUtilityApi, masterBadgeApi, challengeUtilityApi } from './utilitas';
+import {
+  interestApi,
+  settingApi,
+  masterBankApi,
+  adsUtilityApi,
+  masterBadgeApi,
+  challengeUtilityApi,
+  communityUtilityApi,
+} from './utilitas';
 import { challengeApi } from './challenge';
 import { announcementApi } from './announcement';
 
@@ -43,4 +51,5 @@ export {
   masterBadgeApi,
   challengeUtilityApi,
   announcementApi,
+  communityUtilityApi,
 };

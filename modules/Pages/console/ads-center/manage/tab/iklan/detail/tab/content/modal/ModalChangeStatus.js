@@ -15,28 +15,20 @@ const RadioItem = ({ onChange, label, value }) => (
 
 const dummyData = [
   {
-    value: 'Landing Page tidak sesuai standar',
-    label: 'Landing Page tidak sesuai standar',
+    value: 'Melanggar kebijakan iklan Hyppe',
+    label: 'Melanggar kebijakan iklan Hyppe',
   },
   {
-    value: 'Iklan tidak konsisten',
-    label: 'Iklan tidak konsisten',
+    value: 'Melanggar kebijakan teknis Hyppe',
+    label: 'Melanggar kebijakan teknis Hyppe',
   },
   {
-    value: 'Penggunaan bahasa yang tidak pantas',
-    label: 'Penggunaan bahasa yang tidak pantas',
+    value: 'Melanggar panduan komunitas Hyppe',
+    label: 'Melanggar panduan komunitas Hyppe',
   },
   {
-    value: 'Masalah dengan judul, deskripsi, video atau gambar',
-    label: 'Masalah dengan judul, deskripsi, video atau gambar',
-  },
-  {
-    value: 'Menampilkan hal yang bertentangan dengan Panduan Komunitas',
-    label: 'Menampilkan hal yang bertentangan dengan Panduan Komunitas',
-  },
-  {
-    value: 'Lainnya',
-    label: 'Lainnya',
+    value: 'Alasan Lainnya',
+    label: 'Alasan Lainnya',
   },
 ];
 
@@ -49,7 +41,7 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: type === 'approve' ? 420 : 520,
+    width: type === 'approve' ? 420 : 380,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: type === 'approve' ? 4 : 3,
@@ -62,7 +54,7 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
   }, [showModal]);
 
   const onChangeHandler = (e) => {
-    if (e.target.value === 'Lainnya') {
+    if (e.target.value === 'Alasan Lainnya') {
       setShowTextArea(true);
       setReason('');
     } else {
@@ -81,11 +73,9 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
           </Stack>
         ) : (
           <Stack direction="column">
-            <Typography style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 24 }}>
-              Mengapa Anda Menolak Penayangan Iklan Ini?
-            </Typography>
+            <Typography style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 24 }}>Alasan Penolakan</Typography>
 
-            <Typography style={{ marginBottom: 12 }}>Berikan alasan penolakan</Typography>
+            <Typography style={{ marginBottom: 12 }}>Pilih alasan penolakan untuk iklan ini:</Typography>
 
             <FormControl>
               <RadioGroup>
@@ -94,14 +84,19 @@ export default function ModalChangeStatus({ showModal, onClose, onConfirm, type,
                 ))}
               </RadioGroup>
               {showTextArea && (
-                <TextField
-                  multiline
-                  rows={[4]}
-                  color="secondary"
-                  placeholder="Tulis Penjelasan"
-                  onChange={(e) => setReason(e.target.value)}
-                  style={{ marginTop: 6 }}
-                />
+                <Stack direction="column" gap="4px" alignItems="flex-end">
+                  <TextField
+                    multiline
+                    fullWidth
+                    rows={[4]}
+                    color="secondary"
+                    placeholder="Jelaskan alasan penolakan"
+                    onChange={(e) => setReason(e.target.value)}
+                    style={{ marginTop: 6 }}
+                    inputProps={{ maxLength: 160 }}
+                  />
+                  <small>{reason?.length} / 160</small>
+                </Stack>
               )}
             </FormControl>
           </Stack>

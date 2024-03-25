@@ -251,7 +251,7 @@ const TableSection = ({
                           }}
                           onClick={(event) => handleClick(event, item)}
                         />
-                        <Avatar src={getMediaUri(item?.avatar[0]?.mediaEndpoint)} />
+                        <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                         <Stack gap="4px" overflow="hidden" width="100%">
                           <Typography
                             style={{ fontSize: '14px', color: '#00000099' }}

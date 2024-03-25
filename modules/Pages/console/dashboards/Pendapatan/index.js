@@ -30,7 +30,7 @@ const Pendapatan = () => {
       amount={totalBalance()}
       handlePayload={handlePayload}>
       {loadingBalance ? (
-        <Stack direction="column" alignItems="center" justifyContent="center" height={112} spacing={2}>
+        <Stack direction="column" alignItems="center" justifyContent="center" height={130} spacing={2}>
           <CircularProgress color="secondary" size={24} />
         </Stack>
       ) : (

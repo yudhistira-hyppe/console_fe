@@ -8,7 +8,7 @@ export const kycApi = createApi({
   endpoints: (build) => ({
     getListKYC: build.query({
       query: (data) => ({
-        url: '/mediaproofpicts/listkyc',
+        url: '/mediaproofpicts/listkyc/v2',
         method: 'POST',
         body: data,
       }),
@@ -16,7 +16,7 @@ export const kycApi = createApi({
     }),
     getDetailKYC: build.query({
       query: (data) => ({
-        url: '/mediaproofpicts/detailkyc',
+        url: '/mediaproofpicts/detailkyc/v2',
         method: 'POST',
         body: data,
       }),
@@ -24,7 +24,7 @@ export const kycApi = createApi({
     }),
     approveKYC: build.mutation({
       query: (data) => ({
-        url: '/mediaproofpicts/approve',
+        url: '/mediaproofpicts/approve/v2',
         method: 'POST',
         body: data,
       }),

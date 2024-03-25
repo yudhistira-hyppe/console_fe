@@ -227,13 +227,29 @@ const SignIn = ({ variant = 'default', wrapperVariant = 'default' }) => {
           </Box>
         ) : (
           <Box className={classes.visualAuth}>
-            <CmtImage src="/images/auth/logo-visual.png" width="35%" />
-            <CmtImage src="/images/auth/visual-login.png" width="75%" />
+            <CmtImage
+              src="/images/auth/logo-visual.png"
+              width="134"
+              height="60"
+              style={{ maxWidth: '35%', height: 'auto' }}
+            />
+            <CmtImage
+              src="/images/auth/visual-login.png"
+              width="287"
+              height="265"
+              style={{ maxWidth: '75%', height: 'auto' }}
+            />
           </Box>
         )}
         <Box className={classes.authContent}>
           <Box mb={7}>
-            <img src="images/logo-console.png" alt="Logo Dashboard" style={{ width: '36%' }} />
+            <img
+              src="images/logo-console.png"
+              alt="Logo Dashboard"
+              width="135"
+              height="32"
+              style={{ maxWidth: '36%', height: 'auto' }}
+            />
           </Box>
           <Typography component="div" variant="h1" className={classes.titleRoot}>
             Login

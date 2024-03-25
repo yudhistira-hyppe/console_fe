@@ -8,7 +8,7 @@ export const iklanApi = createApi({
   endpoints: (build) => ({
     getListTickets: build.query({
       query: (data) => ({
-        url: 'reportuser/listreport',
+        url: '/reportuser/listreport/v2',
         method: 'POST',
         body: data,
       }),

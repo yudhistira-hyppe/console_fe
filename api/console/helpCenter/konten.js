@@ -8,7 +8,7 @@ export const kontenApi = createApi({
   endpoints: (build) => ({
     getListTickets: build.query({
       query: (data) => ({
-        url: 'reportuser/listreport',
+        url: '/reportuser/listreport/v2',
         method: 'POST',
         body: data,
       }),
@@ -16,7 +16,7 @@ export const kontenApi = createApi({
     }),
     getDetailTicket: build.query({
       query: (data) => ({
-        url: '/reportuser/listdetail',
+        url: '/reportuser/listdetail/v2',
         method: 'POST',
         body: data,
       }),
@@ -24,7 +24,7 @@ export const kontenApi = createApi({
     }),
     getReportUserDetailTicket: build.query({
       query: (data) => ({
-        url: '/reportuser/listuserreport',
+        url: '/reportuser/listuserreport/v2',
         method: 'POST',
         body: data,
       }),
@@ -48,7 +48,7 @@ export const kontenApi = createApi({
     }),
     updateFlagingTicket: build.mutation({
       query: (data) => ({
-        url: '/reportuser/flaging',
+        url: '/reportuser/flaging/v2',
         method: 'POST',
         body: data,
       }),

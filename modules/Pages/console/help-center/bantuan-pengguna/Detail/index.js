@@ -1,7 +1,7 @@
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Avatar, Button, Card, Chip, Divider, Grow, Paper, Popper, TextareaAutosize, Typography } from '@material-ui/core';
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Select, Stack } from '@mui/material';
+import { Box, ImageList, ImageListItem, Select, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Breadcrumbs from '../BreadCrumb/index';
 import { useRouter } from 'next/router';
@@ -25,9 +25,10 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import { useAuth } from 'authentication';
 import { LoadingButton } from '@mui/lab';
 import { useGetDivisiQuery } from 'api/console/divisi';
-import Cookies from 'js-cookie';
 import { useGetUserDivisiQuery } from 'api/console/getUserHyppe';
 import { toast } from 'react-hot-toast';
+import Viewer from 'viewerjs';
+import 'viewerjs/dist/viewer.css';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -67,6 +68,8 @@ const DetailBantuanPengguna = () => {
     children2: null,
   });
   const [filter, setFilter] = useState({ id: router?.query?.id, type: 'chat' });
+  const [viewer, setViewer] = useState('');
+  const [viewerDetail, setViewerDetail] = useState([]);
   const [loading, setLoading] = useState({
     reply: false,
     update: false,
@@ -74,12 +77,12 @@ const DetailBantuanPengguna = () => {
   const [divisiID, setDivisiID] = useState('');
   const [userAssign, setUserAssign] = useState('');
   const classes = useStyles();
-  const { data: ticketData, isLoading, refetch } = useGetDetailTicketQuery(filter);
+  const { data: ticketData, isFetching: isLoading, refetch } = useGetDetailTicketQuery(filter);
   const { data: logHistory } = useGetLogHistoryDetailTicketQuery({ iduserticket: router?.query?.id });
   const { data: listDivisi } = useGetDivisiQuery({ skip: 0, limit: 10 });
   const { data: userDivisi } = useGetUserDivisiQuery({ divisionId: divisiID || '' }) || [];
   const [updateTicket] = useUpdateDetailTicketMutation();
-  const [replyTicket] = useReplyTicketMutation();
+  const [replyTicket, { isLoading: loadingReply }] = useReplyTicketMutation();
   const { authUser } = useAuth();
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
@@ -147,7 +150,7 @@ const DetailBantuanPengguna = () => {
     setOpen(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     switch (ticketData?.data[0]?.status) {
       case 'new':
         setButtonColor({ background: '#E92A63' });
@@ -173,6 +176,42 @@ const DetailBantuanPengguna = () => {
       };
     });
   }, [ticketData]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (ticketData?.data[0]?.fsSourceName?.length >= 1) {
+        setViewer(new Viewer(document.getElementById('images')));
+      }
+
+      if (ticketData?.data[0]?.detail?.length >= 1 && viewerDetail?.length < 1) {
+        setViewerDetail(
+          ticketData?.data[0]?.detail?.map(
+            (item, key) => new Viewer(document.getElementById(`detail-images-${item?.type}-${key}`)),
+          ),
+        );
+      }
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!isLoading && viewerDetail?.length >= 1) {
+      setViewerDetail((prevState) => {
+        prevState?.map((item) => item?.destroy());
+
+        return ticketData?.data[0]?.detail?.map(
+          (item, key) => new Viewer(document.getElementById(`detail-images-${item?.type}-${key}`)),
+        );
+      });
+    }
+  }, [filter, isLoading]);
+
+  const handleView = () => {
+    return viewer.toggle();
+  };
+
+  const handleViewDetail = (key) => {
+    return viewerDetail?.find((item) => item?.element?.id === key)?.toggle();
+  };
 
   const onCloseModal = () => {
     setShowModal({
@@ -282,30 +321,52 @@ const DetailBantuanPengguna = () => {
                 <Typography variant="h1">{ticketData?.data[0]?.subject}</Typography>
                 <Typography variant="subtitle2">{ticketData?.data[0]?.body}</Typography>
                 {ticketData?.data[0]?.fsSourceName?.length >= 1 ? (
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    {ticketData?.data[0]?.fsSourceName?.map(
-                      (item, key) =>
-                        key <= 1 && (
+                  <Stack direction="row">
+                    <div>
+                      <Stack direction="row" id="images">
+                        {ticketData?.data[0]?.fsSourceName?.map((item, key) => (
                           <Chip
+                            key={key}
                             label={
                               <Typography
                                 title={item}
                                 style={{
                                   width: '100%',
-                                  maxWidth: 100,
+                                  maxWidth: 150,
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
                                   fontSize: 12,
+                                  zIndex: 1,
                                 }}>
                                 {item}
                               </Typography>
                             }
-                            avatar={<FolderShared style={{ marginLeft: 10 }} />}
-                            style={{ marginRight: '1em' }}
-                            onClick={() => window.open(getFile(ticketData?.data[0]?.fsSourceUri[0], key))}
+                            avatar={
+                              <>
+                                <FolderShared style={{ marginLeft: 10, fontSize: 20 }} />
+                                <Avatar
+                                  variant="rounded"
+                                  src={getFile(ticketData?.data[0]?.fsSourceUri[0], key)}
+                                  srcSet={getFile(ticketData?.data[0]?.fsSourceUri[0], key)}
+                                  alt="X"
+                                  style={{
+                                    borderRadius: 8,
+                                    height: '100%',
+                                    width: '100%',
+                                    cursor: 'pointer',
+                                    opacity: 0,
+                                    position: 'absolute',
+                                    zIndex: 0,
+                                  }}
+                                />
+                              </>
+                            }
+                            style={{ marginRight: '1em', display: key <= 1 ? 'flex' : 'none' }}
+                            onClick={handleView}
                           />
-                        ),
-                    )}
+                        ))}
+                      </Stack>
+                    </div>
                     {ticketData?.data[0]?.fsSourceName?.length > 2 && (
                       <Stack direction={'column'} justifyContent={'center'}>
                         <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
@@ -313,7 +374,7 @@ const DetailBantuanPengguna = () => {
                         </Typography>
                       </Stack>
                     )}
-                  </div>
+                  </Stack>
                 ) : (
                   <Stack direction={'column'} justifyContent={'center'}>
                     <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
@@ -350,8 +411,8 @@ const DetailBantuanPengguna = () => {
                 <Box height={tab !== 'history' ? 250 : 420} overflow="auto">
                   {tab !== 'history' && ticketData?.data[0]?.detail?.length >= 1 ? (
                     <Stack direction="column" spacing={3}>
-                      {ticketData?.data[0]?.detail?.map((item, key) => (
-                        <Stack key={key} direction="row" spacing={2}>
+                      {ticketData?.data[0]?.detail?.map((item, ticketKey) => (
+                        <Stack key={ticketKey} direction="row" spacing={2}>
                           <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
                           <Stack direction="column" spacing={1} width="100%">
                             <Typography>
@@ -359,31 +420,60 @@ const DetailBantuanPengguna = () => {
                               <Typography variant="caption">{moment(item?.datetime).format('lll')}</Typography>
                             </Typography>
                             <Typography>{item?.body}</Typography>
-                            {item?.fsSourceUri?.length >= 1 ? (
-                              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                {item?.fsSourceUri?.map((item, key) => (
-                                  <Chip
-                                    key={key}
-                                    label={
-                                      <Typography
-                                        title={item}
-                                        style={{ width: 100, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 12 }}>
-                                        {item}
+
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                              <div>
+                                <Stack direction="row" id={`detail-images-${item?.type}-${ticketKey}`}>
+                                  {item?.fsSourceUri?.length >= 1 ? (
+                                    item?.fsSourceUri?.map((child, key) => (
+                                      <Chip
+                                        key={key}
+                                        label={
+                                          <Typography
+                                            title={child}
+                                            style={{
+                                              width: 100,
+                                              overflow: 'hidden',
+                                              textOverflow: 'ellipsis',
+                                              fontSize: 12,
+                                            }}>
+                                            {child}
+                                          </Typography>
+                                        }
+                                        avatar={
+                                          <>
+                                            <FolderShared style={{ marginLeft: 10, fontSize: 20 }} />
+                                            <Avatar
+                                              variant="rounded"
+                                              src={getFile(child, key, true)}
+                                              srcSet={getFile(child, key, true)}
+                                              alt="X"
+                                              style={{
+                                                borderRadius: 8,
+                                                height: '100%',
+                                                width: '100%',
+                                                cursor: 'pointer',
+                                                opacity: 0,
+                                                position: 'absolute',
+                                                zIndex: 0,
+                                              }}
+                                            />
+                                          </>
+                                        }
+                                        style={{ marginRight: '1em' }}
+                                        onClick={() => handleViewDetail(`detail-images-${item?.type}-${ticketKey}`)}
+                                      />
+                                    ))
+                                  ) : (
+                                    <Stack direction={'column'} justifyContent={'center'}>
+                                      <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
+                                        Tidak ada lampiran.
                                       </Typography>
-                                    }
-                                    avatar={<FolderShared />}
-                                    style={{ marginRight: '1em' }}
-                                    onClick={() => window.open(getFile(item, key, true))}
-                                  />
-                                ))}
+                                    </Stack>
+                                  )}
+                                </Stack>
                               </div>
-                            ) : (
-                              <Stack direction={'column'} justifyContent={'center'}>
-                                <Typography variant="subtitle2" style={{ color: 'rgba(0, 0, 0, 0.38)' }}>
-                                  Tidak ada lampiran.
-                                </Typography>
-                              </Stack>
-                            )}
+                            </div>
                           </Stack>
                         </Stack>
                       ))}

@@ -7,7 +7,7 @@ export const authApi = createApi({
   endpoints: (build) => ({
     login: build.mutation({
       query: (data) => ({
-        url: `/user/login`,
+        url: `/user/login/v2`,
         method: 'POST',
         body: data,
       }),
@@ -28,7 +28,7 @@ export const authApi = createApi({
     }),
     logout: build.mutation({
       query: (data) => ({
-        url: `/user/logout`,
+        url: `/user/logout/v2`,
         method: 'POST',
         body: data,
       }),

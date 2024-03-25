@@ -46,7 +46,7 @@ const CardStatus = ({ details }) => {
   };
 
   return (
-    <Card sx={{ p: 3, height: '100%' }}>
+    <Card sx={{ p: 3 }}>
       <Stack direction="column" alignItems="center" justifyContent="center" height="100%" gap={2}>
         <Button
           fullWidth
@@ -68,13 +68,15 @@ const CardStatus = ({ details }) => {
             details?.status !== 'UNDER_REVIEW' ||
             !access?.find((item) => item?.nameModule === 'ads_manage_list')?.acces?.updateAcces
           }>
-          <Typography style={{ fontWeight: 'bold' }}>Tidak Disetujui</Typography>
+          <Typography style={{ fontWeight: 'bold' }}>Tolak Iklan</Typography>
         </Button>
-        <Stack direction="row" style={{ backgroundColor: '#00000005', padding: '8px 16px' }}>
-          <Typography style={{ color: '#979797', fontSize: 12 }}>
-            Ketika Anda memilih tidak setuju, maka iklan akan otomatis tidak aktif.
-          </Typography>
-        </Stack>
+        {details?.status === 'UNDER_REVIEW' && (
+          <Stack direction="row" style={{ backgroundColor: '#00000005', padding: '8px 16px' }}>
+            <Typography style={{ color: '#979797', fontSize: 12 }}>
+              Ketika Anda memilih tidak setuju, maka iklan akan otomatis tidak aktif.
+            </Typography>
+          </Stack>
+        )}
       </Stack>
 
       <ModalChangeStatus

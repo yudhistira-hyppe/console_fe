@@ -192,9 +192,11 @@ const HeaderNotifications = () => {
                             <CmtMediaObject
                               subTitle={
                                 <Typography className={classes.textTruncate}>
-                                  {item?.notification?.title}
+                                  {item?.notification?.title || item?.data?.title}
                                   <br />
-                                  <span style={{ fontWeight: 'normal', fontSize: 12 }}>{item?.notification?.body}</span>
+                                  <span style={{ fontWeight: 'normal', fontSize: 12 }}>
+                                    {item?.notification?.body || item?.data?.body}
+                                  </span>
                                 </Typography>
                               }
                               style={{ width: '100%', flexGrow: 1 }}

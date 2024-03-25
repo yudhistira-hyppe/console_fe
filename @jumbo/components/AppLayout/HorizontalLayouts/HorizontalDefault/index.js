@@ -150,7 +150,9 @@ const HorizontalDefault = ({ className, children }) => {
       !accessModule.includes('utilitas_setting') &&
       !accessModule.includes('utilitas_bank') &&
       !accessModule.includes('utilitas_challenge_jenis') &&
-      !accessModule.includes('utilitas_challenge_badge')
+      !accessModule.includes('utilitas_challenge_badge') &&
+      !accessModule.includes('community_support') &&
+      !accessModule.includes('community_approval')
     ) {
       newMenu = newMenu.filter((item) => item.name !== 'Utilitas');
     }

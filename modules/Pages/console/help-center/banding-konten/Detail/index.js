@@ -120,6 +120,17 @@ const DetailBandingKonten = () => {
           padding: '8px 14px',
           borderRadius: 6,
         };
+      case 'DELETE':
+        return {
+          backgroundColor: '#676767',
+          color: 'white',
+          fontWeight: 'bold',
+          fontFamily: 'Normal',
+          width: 'fit-content',
+          marginTop: 'auto',
+          padding: '8px 14px',
+          borderRadius: 6,
+        };
       case 'TIDAK DITANGGUHKAN':
         return {
           backgroundColor: '#5D9405',
@@ -369,6 +380,8 @@ const DetailBandingKonten = () => {
                       ? 'Dipulihkan'
                       : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
                       ? 'Ditangguhkan'
+                      : detail?.data[0]?.reportStatusLast === 'DELETE'
+                      ? 'Dihapus'
                       : 'Baru'}
                   </Button>
                 ) : (
@@ -379,6 +392,8 @@ const DetailBandingKonten = () => {
                       ? 'Dipulihkan'
                       : detail?.data[0]?.reportStatusLast === 'DITANGGUHKAN'
                       ? 'Ditangguhkan'
+                      : detail?.data[0]?.reportStatusLast === 'DELETE'
+                      ? 'Dihapus'
                       : 'Baru'}
                   </Box>
                 )}

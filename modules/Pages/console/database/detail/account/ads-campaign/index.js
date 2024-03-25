@@ -53,7 +53,7 @@ const AdsCampaign = (props) => {
   return (
     <Card>
       <Stack direction="row" alignItems="center" justifyContent="space-between" padding={3}>
-        <Typography variant="h4">Kampanye Iklan</Typography>
+        <Typography variant="h4">Iklan</Typography>
         <CmtSearch
           onlyIcon
           border={false}

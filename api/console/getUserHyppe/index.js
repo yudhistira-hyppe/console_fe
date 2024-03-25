@@ -8,7 +8,7 @@ export const getUserHyppe = createApi({
   endpoints: (build) => ({
     getAnggota: build.query({
       query: (data) => ({
-        url: `/getuserhyppe`,
+        url: `/getuserhyppe/v2`,
         method: 'POST',
         body: data,
       }),
@@ -24,13 +24,13 @@ export const getUserHyppe = createApi({
     }),
     getDetailAnggota: build.query({
       query: ({ skip, limit, groupId }) => ({
-        url: `/getuserhyppe?skip=${skip}&limit=${limit}&groupId=${groupId}`,
+        url: `/getuserhyppe/v2?skip=${skip}&limit=${limit}&groupId=${groupId}`,
         method: 'GET',
       }),
     }),
     getProfileByUserEmail: build.query({
       query: (email) => ({
-        url: `/profile`,
+        url: `/profile/v2`,
         method: 'POST',
         body: { email },
       }),
@@ -38,7 +38,7 @@ export const getUserHyppe = createApi({
     }),
     getProfileByUserEmail2: build.mutation({
       query: (email) => ({
-        url: `/profile`,
+        url: `/profile/v2`,
         method: 'POST',
         body: { email },
       }),
@@ -53,7 +53,7 @@ export const getUserHyppe = createApi({
     }),
     updateStatusGroupUser: build.mutation({
       query: (payload) => ({
-        url: `/group/statususer`,
+        url: `/group/statususer/v2`,
         method: 'POST',
         body: payload,
       }),
@@ -61,7 +61,7 @@ export const getUserHyppe = createApi({
     }),
     updateGroupUser: build.mutation({
       query: (payload) => ({
-        url: `/group/user`,
+        url: `/group/user/v2`,
         method: 'POST',
         body: payload,
       }),
