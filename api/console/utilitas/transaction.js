@@ -6,6 +6,7 @@ export const transactionUtilityApi = createApi({
   baseQuery: customBaseQueryWithHandleReauth,
   tagTypes: ['listCategory', 'detailCategory', 'listCOA', 'detailCOA'],
   endpoints: (build) => ({
+    // Category
     getListCategory: build.query({
       query: (params) => ({
         url: `/transactions/v2/categorys${params || ''}`,
@@ -13,12 +14,28 @@ export const transactionUtilityApi = createApi({
       }),
       providesTags: ['listCategory'],
     }),
-    getListCOA: build.query({
-      query: (params) => ({
-        url: `/transactions/v2/coa${params || ''}`,
+    getDetailCategory: build.query({
+      query: (id) => ({
+        url: `/transactions/v2/categorys/${id}`,
         method: 'GET',
       }),
-      providesTags: ['listCOA'],
+      providesTags: ['detailCategory'],
+    }),
+    createCategory: build.mutation({
+      query: (data) => ({
+        url: '/transactions/v2/categorys/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listCategory'],
+    }),
+    updateCategory: build.mutation({
+      query: (data) => ({
+        url: '/transactions/v2/categorys/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listCategory', 'detailCategory'],
     }),
     deleteCategory: build.mutation({
       query: (data) => ({
@@ -26,9 +43,28 @@ export const transactionUtilityApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['listCategory'],
+      invalidatesTags: ['listCategory', 'detailCategory'],
+    }),
+
+    // COA
+    getListCOA: build.query({
+      query: (params) => ({
+        url: `/transactions/v2/coa${params || ''}`,
+        method: 'GET',
+      }),
+      providesTags: ['listCOA'],
     }),
   }),
 });
 
-export const { useGetListCategoryQuery, useGetListCOAQuery, useDeleteCategoryMutation } = transactionUtilityApi;
+export const {
+  // Category
+  useGetListCategoryQuery,
+  useGetDetailCategoryQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+
+  // COA
+  useGetListCOAQuery,
+} = transactionUtilityApi;
