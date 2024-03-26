@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import TableSection from './TableSection';
 import { useGetListCategoryQuery } from 'api/console/utilitas/transaction';
+import ModalCreateCategory from '../modal/modal-create-category';
 
 const TransactionCategory = () => {
   const [filter, setFilter] = useState({
@@ -11,6 +12,7 @@ const TransactionCategory = () => {
     limit: 5,
     descending: 'true',
   });
+  const [showModal, setShowModal] = useState(false);
 
   const getParams = useCallback(() => {
     let params = [];
@@ -33,22 +35,31 @@ const TransactionCategory = () => {
   };
 
   return (
-    <Stack direction="column" gap={2}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Kategori</Typography>
+    <>
+      {showModal && <ModalCreateCategory open={showModal} handleClose={() => setShowModal(!showModal)} type="create" />}
 
-        <Button variant="contained" color="secondary" startIcon={<Add fontSize="16px" />} style={{ padding: '8px 12px' }}>
-          <Typography variant="subtitle2">Tambah</Typography>
-        </Button>
+      <Stack direction="column" gap={2}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Kategori</Typography>
+
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<Add fontSize="16px" />}
+            onClick={() => setShowModal(!showModal)}
+            style={{ padding: '8px 12px' }}>
+            <Typography variant="subtitle2">Tambah</Typography>
+          </Button>
+        </Stack>
+
+        <TableSection
+          listCategory={listCategory}
+          loading={loadingCategory}
+          filter={filter}
+          handlePageChange={handlePageChange}
+        />
       </Stack>
-
-      <TableSection
-        listCategory={listCategory}
-        loading={loadingCategory}
-        filter={filter}
-        handlePageChange={handlePageChange}
-      />
-    </Stack>
+    </>
   );
 };
 

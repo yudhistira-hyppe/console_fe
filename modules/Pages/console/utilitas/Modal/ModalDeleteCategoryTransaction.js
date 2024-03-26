@@ -19,6 +19,8 @@ const style = {
 const ModalDeleteCategoryTransaction = ({ open, handleClose, idSelected }) => {
   const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
 
+  console.log(idSelected);
+
   const handleDelete = () => {
     deleteCategory({ _id: idSelected }).then((res) => {
       if (res?.data) {

@@ -19,10 +19,12 @@ import ScrollBar from 'react-perfect-scrollbar';
 import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import ModalDeleteCategoryTransaction from '../../../Modal/ModalDeleteCategoryTransaction';
+import ModalCreateCategory from '../../modal/modal-create-category';
 
 const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
   const [showModal, setShowModal] = useState({
     open: false,
+    update: false,
     selected: '',
   });
 
@@ -31,8 +33,17 @@ const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
       {showModal.open && (
         <ModalDeleteCategoryTransaction
           open={showModal.open}
-          idSelected={filter?.selected}
+          idSelected={showModal.selected}
           handleClose={() => setShowModal((prevVal) => ({ ...prevVal, open: false, selected: '' }))}
+        />
+      )}
+
+      {showModal.update && (
+        <ModalCreateCategory
+          open={showModal.update}
+          handleClose={() => setShowModal((prevVal) => ({ ...prevVal, update: false, selected: '' }))}
+          idSelected={showModal.selected}
+          type="update"
         />
       )}
 
@@ -53,12 +64,14 @@ const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
 
               <TableBody>
                 {loading ? (
-                  <TableCell colSpan={8}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                      <CircularProgress color="secondary" />
-                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                    </Stack>
-                  </TableCell>
+                  <TableRow>
+                    <TableCell colSpan={8}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                        <CircularProgress color="secondary" />
+                        <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
                 ) : listCategory?.data?.length >= 1 ? (
                   listCategory?.data?.map((item, i) => (
                     <TableRow key={i} hover>
@@ -90,7 +103,8 @@ const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
                       <TableCell align="left">
                         <Stack direction="row" justifyContent="flex-end">
                           <Stack direction="row">
-                            <IconButton onClick={() => Router.replace(`/utilitas?tab=bank&bankcode=${item?.bankcode}`)}>
+                            <IconButton
+                              onClick={() => setShowModal((prevVal) => ({ ...prevVal, update: true, selected: item?._id }))}>
                               <Edit />
                             </IconButton>
                           </Stack>
@@ -105,11 +119,13 @@ const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
                     </TableRow>
                   ))
                 ) : (
-                  <TableCell colSpan={8}>
-                    <Stack direction="column" alignItems="center" justifyContent="center" height={368} spacing={2}>
-                      <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data.</Typography>
-                    </Stack>
-                  </TableCell>
+                  <TableRow>
+                    <TableCell colSpan={8}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={368} spacing={2}>
+                        <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data.</Typography>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>
