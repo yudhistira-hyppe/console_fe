@@ -16,10 +16,8 @@ const style = {
   borderRadius: 3,
 };
 
-const ModalDeleteCategoryTransaction = ({ open, handleClose, idSelected }) => {
+const ModalDeleteCategory = ({ open, handleClose, idSelected }) => {
   const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
-
-  console.log(idSelected);
 
   const handleDelete = () => {
     deleteCategory({ _id: idSelected }).then((res) => {
@@ -70,4 +68,4 @@ const ModalDeleteCategoryTransaction = ({ open, handleClose, idSelected }) => {
   );
 };
 
-export default ModalDeleteCategoryTransaction;
+export default ModalDeleteCategory;

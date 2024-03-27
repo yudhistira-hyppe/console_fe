@@ -18,8 +18,8 @@ import Router from 'next/router';
 import ScrollBar from 'react-perfect-scrollbar';
 import { Typography } from '@material-ui/core';
 import moment from 'moment';
-import ModalDeleteCategoryTransaction from '../../../Modal/ModalDeleteCategoryTransaction';
 import ModalCreateCategory from '../../modal/modal-create-category';
+import ModalDeleteCategory from '../../modal/modal-delete-category';
 
 const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
   const [showModal, setShowModal] = useState({
@@ -31,7 +31,7 @@ const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
   return (
     <>
       {showModal.open && (
-        <ModalDeleteCategoryTransaction
+        <ModalDeleteCategory
           open={showModal.open}
           idSelected={showModal.selected}
           handleClose={() => setShowModal((prevVal) => ({ ...prevVal, open: false, selected: '' }))}
@@ -65,8 +65,8 @@ const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={8}>
-                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <TableCell colSpan={8} style={{ padding: 0 }}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={365} spacing={2}>
                         <CircularProgress color="secondary" />
                         <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                       </Stack>
@@ -120,8 +120,8 @@ const TableSection = ({ listCategory, loading, handlePageChange, filter }) => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={8}>
-                      <Stack direction="column" alignItems="center" justifyContent="center" height={368} spacing={2}>
+                    <TableCell colSpan={8} style={{ padding: 0 }}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={365} spacing={2}>
                         <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data.</Typography>
                       </Stack>
                     </TableCell>

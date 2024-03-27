@@ -373,69 +373,71 @@ const ModalCreateCategory = ({ open, handleClose, type, idSelected }) => {
                 </Button>
               </Stack>
 
-              {inputValue?.transaction?.length >= 1 ? (
-                inputValue?.transaction?.map((item, key) => (
-                  <Stack key={key} direction="row" alignItems="center" gap={1}>
-                    <TextField
-                      fullWidth
-                      label="Nama"
-                      placeholder="Masukan nama transaksi"
-                      color="secondary"
-                      value={item?.name}
-                      onChange={(e) => {
-                        const newArray = inputValue?.transaction?.map((da) => {
-                          if (da?.id === item?.id) {
-                            return {
-                              ...da,
-                              name: e.target.value,
-                            };
-                          } else {
-                            return da;
-                          }
-                        });
+              <Stack direction="column" gap={2}>
+                {inputValue?.transaction?.length >= 1 ? (
+                  inputValue?.transaction?.map((item, key) => (
+                    <Stack key={key} direction="row" alignItems="center" gap={1}>
+                      <TextField
+                        fullWidth
+                        label="Nama"
+                        placeholder="Masukan nama transaksi"
+                        color="secondary"
+                        value={item?.name}
+                        onChange={(e) => {
+                          const newArray = inputValue?.transaction?.map((da) => {
+                            if (da?.id === item?.id) {
+                              return {
+                                ...da,
+                                name: e.target.value,
+                              };
+                            } else {
+                              return da;
+                            }
+                          });
 
-                        setInputValue((prevVal) => ({ ...prevVal, transaction: [...newArray] }));
-                      }}
-                    />
-                    <TextField
-                      select
-                      fullWidth
-                      label="Status"
-                      placeholder="Masukan status transaksi"
-                      color="secondary"
-                      value={item?.Status}
-                      onChange={(e) => {
-                        const newArray = inputValue?.transaction?.map((da) => {
-                          if (da?.id === item?.id) {
-                            return {
-                              ...da,
-                              Status: e.target.value,
-                            };
-                          } else {
-                            return da;
-                          }
-                        });
+                          setInputValue((prevVal) => ({ ...prevVal, transaction: [...newArray] }));
+                        }}
+                      />
+                      <TextField
+                        select
+                        fullWidth
+                        label="Status"
+                        placeholder="Masukan status transaksi"
+                        color="secondary"
+                        value={item?.Status}
+                        onChange={(e) => {
+                          const newArray = inputValue?.transaction?.map((da) => {
+                            if (da?.id === item?.id) {
+                              return {
+                                ...da,
+                                Status: e.target.value,
+                              };
+                            } else {
+                              return da;
+                            }
+                          });
 
-                        setInputValue((prevVal) => ({ ...prevVal, transaction: [...newArray] }));
-                      }}>
-                      <MenuItem value="Kredit">Credit</MenuItem>
-                      <MenuItem value="Debet">Debet</MenuItem>
-                    </TextField>
-                    <IconButton
-                      style={{ width: 40, height: 40 }}
-                      onClick={() => {
-                        setInputValue((prevVal) => ({
-                          ...prevVal,
-                          transaction: inputValue?.transaction?.filter((nd) => nd?.id !== item?.id),
-                        }));
-                      }}>
-                      <Delete style={{ fontSize: 20 }} />
-                    </IconButton>
-                  </Stack>
-                ))
-              ) : (
-                <Typography style={{ fontSize: 14 }}>Tidak ada data</Typography>
-              )}
+                          setInputValue((prevVal) => ({ ...prevVal, transaction: [...newArray] }));
+                        }}>
+                        <MenuItem value="Kredit">Credit</MenuItem>
+                        <MenuItem value="Debet">Debet</MenuItem>
+                      </TextField>
+                      <IconButton
+                        style={{ width: 40, height: 40 }}
+                        onClick={() => {
+                          setInputValue((prevVal) => ({
+                            ...prevVal,
+                            transaction: inputValue?.transaction?.filter((nd) => nd?.id !== item?.id),
+                          }));
+                        }}>
+                        <Delete style={{ fontSize: 20 }} />
+                      </IconButton>
+                    </Stack>
+                  ))
+                ) : (
+                  <Typography style={{ fontSize: 14 }}>Tidak ada data</Typography>
+                )}
+              </Stack>
             </Stack>
           </Stack>
 

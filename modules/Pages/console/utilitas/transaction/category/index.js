@@ -18,6 +18,7 @@ const TransactionCategory = () => {
     let params = [];
     params.push(`?pageNumber=${filter.page}`);
     params.push(`pageRow=${filter.limit}`);
+    params.push(`sortBy=createdAt`);
     params.push(`order=${filter.descending === 'true' ? 'DESC' : 'ASC'}`);
 
     return params?.join('&');
