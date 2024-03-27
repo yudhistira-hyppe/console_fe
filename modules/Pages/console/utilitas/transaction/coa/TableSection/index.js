@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TableContainer,
   Table,
@@ -18,10 +18,35 @@ import Router from 'next/router';
 import ScrollBar from 'react-perfect-scrollbar';
 import { Typography } from '@material-ui/core';
 import moment from 'moment';
+import ModalDeleteCOA from '../../modal/modal-delete-coa';
+import ModalCreateCOA from '../../modal/modal-create-coa';
 
 const TableSection = ({ listCOA, loading, filter, handlePageChange }) => {
+  const [showModal, setShowModal] = useState({
+    open: false,
+    update: false,
+    selected: '',
+  });
+
   return (
     <>
+      {showModal.open && (
+        <ModalDeleteCOA
+          open={showModal.open}
+          idSelected={showModal.selected}
+          handleClose={() => setShowModal((prevVal) => ({ ...prevVal, open: false, selected: '' }))}
+        />
+      )}
+
+      {showModal.update && (
+        <ModalCreateCOA
+          open={showModal.update}
+          handleClose={() => setShowModal((prevVal) => ({ ...prevVal, update: false, selected: '' }))}
+          idSelected={showModal.selected}
+          type="update"
+        />
+      )}
+
       <Stack direction="column">
         <TableContainer component={Paper} style={{ minHeight: 422 }}>
           <ScrollBar>
@@ -38,8 +63,8 @@ const TableSection = ({ listCOA, loading, filter, handlePageChange }) => {
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={8}>
-                      <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <TableCell colSpan={8} style={{ padding: 0 }}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={365} spacing={2}>
                         <CircularProgress color="secondary" />
                         <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                       </Stack>
@@ -67,12 +92,14 @@ const TableSection = ({ listCOA, loading, filter, handlePageChange }) => {
                       <TableCell align="left">
                         <Stack direction="row" justifyContent="flex-end">
                           <Stack direction="row">
-                            <IconButton onClick={() => Router.replace(`/utilitas?tab=bank&bankcode=${item?.bankcode}`)}>
+                            <IconButton
+                              onClick={() => setShowModal((prevVal) => ({ ...prevVal, update: true, selected: item?._id }))}>
                               <Edit />
                             </IconButton>
                           </Stack>
                           <Stack direction="row">
-                            <IconButton onClick={() => setSelected(item)}>
+                            <IconButton
+                              onClick={() => setShowModal((prevVal) => ({ ...prevVal, open: true, selected: item?._id }))}>
                               <Delete />
                             </IconButton>
                           </Stack>
@@ -82,8 +109,8 @@ const TableSection = ({ listCOA, loading, filter, handlePageChange }) => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={8}>
-                      <Stack direction="column" alignItems="center" justifyContent="center" height={368} spacing={2}>
+                    <TableCell colSpan={8} style={{ padding: 0 }}>
+                      <Stack direction="column" alignItems="center" justifyContent="center" height={365} spacing={2}>
                         <Typography style={{ fontFamily: 'Normal' }}>Tidak ada data.</Typography>
                       </Stack>
                     </TableCell>
