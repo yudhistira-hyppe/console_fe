@@ -176,7 +176,8 @@ const ModalCreateCategory = ({ open, handleClose, type, idSelected }) => {
   const [tempKey, setTempKey] = useState(1);
   const [createCategory, { isLoading: loadingCreate }] = useCreateCategoryMutation();
   const [updateCategory, { isLoading: loadingUpdate }] = useUpdateCategoryMutation();
-  const { data: details, isLoading: loadingDetail } = useGetDetailCategoryQuery(idSelected);
+  const { data: details, isLoading: loadingDetail } =
+    type === 'update' ? useGetDetailCategoryQuery(idSelected) : { data: {}, isLoading: false };
 
   useEffect(() => {
     if (type === 'update') {
