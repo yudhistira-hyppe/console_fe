@@ -54,6 +54,37 @@ export const transactionUtilityApi = createApi({
       }),
       providesTags: ['listCOA'],
     }),
+    getDetailCOA: build.query({
+      query: (id) => ({
+        url: `/transactions/v2/coa/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['detailCOA'],
+    }),
+    createCOA: build.mutation({
+      query: (data) => ({
+        url: '/transactions/v2/coa/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listCOA'],
+    }),
+    updateCOA: build.mutation({
+      query: (data) => ({
+        url: '/transactions/v2/coa/update',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listCOA', 'detailCOA'],
+    }),
+    deleteCOA: build.mutation({
+      query: (data) => ({
+        url: '/transactions/v2/coa/delete',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['listCOA', 'detailCOA'],
+    }),
   }),
 });
 
@@ -67,4 +98,8 @@ export const {
 
   // COA
   useGetListCOAQuery,
+  useGetDetailCOAQuery,
+  useCreateCOAMutation,
+  useUpdateCOAMutation,
+  useDeleteCOAMutation,
 } = transactionUtilityApi;
