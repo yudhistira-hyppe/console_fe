@@ -58,30 +58,7 @@ const DetailBoostCenter = () => {
     page: 0,
     limit: 0,
   });
-
   const { data: detailBoost, isLoading: loadingDetail } = useGetDetailBoostPostQuery(payload);
-
-  const dataWilayah = () => {
-    let data = [];
-    const countWilayah = detailBoost?.data[0]?.wilayah?.map((item) => item.count).reduce((a, b) => a + b);
-
-    if (countWilayah < detailBoost?.data[0]?.total) {
-      for (let i = 0; i < detailBoost?.data[0]?.wilayah?.length; i++) {
-        data.push({
-          _id: detailBoost?.data[0]?.wilayah[i]?._id,
-          count: detailBoost?.data[0]?.wilayah[i]?.count,
-          persen: Number((detailBoost?.data[0]?.wilayah[i]?.count / detailBoost?.data[0]?.total) * 100).toFixed(2),
-        });
-      }
-      data.push({
-        _id: 'Lainnya',
-        count: detailBoost?.data[0]?.total - countWilayah,
-        persen: Number((countWilayah / detailBoost?.data[0]?.total) * 100).toFixed(2),
-      });
-    }
-
-    return data;
-  };
 
   return (
     <>
@@ -134,7 +111,7 @@ const DetailBoostCenter = () => {
               <CardWithIndicator title="Jenis Kelamin Penonton" data={detailBoost?.data?.[0]?.gender} />
             </Grid>
             <Grid item xs={12} sm={3}>
-              <CardWithIndicator title="Wilayah Penonton" data={dataWilayah()} />
+              <CardWithIndicator title="Wilayah Penonton" data={detailBoost?.data?.[0]?.wilayah} />
             </Grid>
             <Grid item xs={12} sm={3}>
               <Interest data={detailBoost?.data?.[0]?.data?.[0]?.kategori} />
