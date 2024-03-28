@@ -38,6 +38,7 @@ import {
   kycApi,
   announcementApi,
   communityUtilityApi,
+  transactionUtilityApi,
 } from 'api/console';
 import filterParams from 'redux/slice/filterParams';
 
@@ -82,4 +83,5 @@ export default combineReducers({
   [challengeUtilityApi.reducerPath]: challengeUtilityApi.reducer,
   [announcementApi.reducerPath]: announcementApi.reducer,
   [communityUtilityApi.reducerPath]: communityUtilityApi.reducer,
+  [transactionUtilityApi.reducerPath]: transactionUtilityApi.reducer,
 });
