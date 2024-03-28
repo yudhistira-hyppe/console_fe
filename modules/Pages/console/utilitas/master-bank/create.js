@@ -1,6 +1,6 @@
 import { AddPhotoAlternate } from '@material-ui/icons';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Box, Button, Card, Grid, Stack, TextField } from '@mui/material';
+import { Avatar, Box, Button, Card, Checkbox, FormControlLabel, Grid, Stack, TextField } from '@mui/material';
 import { Typography } from '@material-ui/core';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -40,6 +40,9 @@ const CreateMasterBank = () => {
     atm: '',
     m_banking: '',
     i_banking: '',
+    isActive: '',
+    cekDigit: false,
+    jmlDigit: '',
   });
   const [createBank, { isLoading: loadingCreate }] = useCreateMasterBankMutation();
 
@@ -65,7 +68,8 @@ const CreateMasterBank = () => {
       !inputValue?.e_banking ||
       !inputValue?.atm ||
       !inputValue?.i_banking ||
-      !inputValue?.m_banking
+      !inputValue?.m_banking ||
+      (inputValue?.cekDigit === 'true' && (!inputValue?.jmlDigit || inputValue?.jmlDigit < 1))
     ) {
       disable = true;
     }
@@ -93,6 +97,8 @@ const CreateMasterBank = () => {
     formData.append('mobileBanking', inputValue.m_banking);
     formData.append('atm', inputValue.atm);
     formData.append('isActive', true);
+    formData.append('cekDigit', inputValue.cekDigit);
+    formData.append('jmlDigit', inputValue.jmlDigit);
 
     createBank(formData).then((res) => {
       if (res?.error) {
@@ -119,13 +125,13 @@ const CreateMasterBank = () => {
         </Typography>
       </Stack>
 
-      <Card style={{ padding: 24 }}>
-        <form onSubmit={handleSubmit}>
-          <Stack direction="column" gap={3}>
-            <label htmlFor="upload_icon" style={{ width: 170 }}>
-              <Box className={classes.uploadBox} style={{ width: 170 }}>
+      <Stack direction="column" gap={3}>
+        <Card style={{ padding: 24 }}>
+          <Stack direction="row" gap={2}>
+            <label htmlFor="upload_icon" style={{ width: 270, height: 270 }}>
+              <Box className={classes.uploadBox} style={{ width: 270, height: 270 }}>
                 {inputValue?.image ? (
-                  <Avatar src={urlImage} alt="Thumbnail Music" variant="square" style={{ width: '100%', height: '100%' }} />
+                  <Avatar src={urlImage} alt="Thumbnail Music" variant="square" style={{ width: '80%', height: '80%' }} />
                 ) : (
                   <>
                     <AddPhotoAlternate style={{ fontSize: 64, color: '#DADADA' }} />
@@ -135,160 +141,195 @@ const CreateMasterBank = () => {
                 <input hidden id="upload_icon" type="file" accept="image/png" onChange={handleUploadImage} />
               </Box>
             </label>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
+
+            <Grid container spacing={3} style={{ height: 'fit-content', padding: '12px 0 0 12px' }}>
+              <Grid item xs={12} md={6}>
                 <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Nama Bank</Typography>
+                  <Typography style={{ fontWeight: 'bold' }}>
+                    Nama Bank<span style={{ color: 'red' }}>*</span>
+                  </Typography>
                   <TextField
                     placeholder="Input Nama Bank"
                     color="secondary"
                     value={inputValue.name}
                     onChange={(e) => setInputValue({ ...inputValue, name: e.target.value })}
-                    inputProps={{
-                      maxLength: 30,
-                    }}
-                    required
+                    inputProps={{ maxLength: 30 }}
+                    style={{ width: 350 }}
                   />
                 </Stack>
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid item xs={12} md={6}>
                 <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Kode Bank</Typography>
+                  <Typography style={{ fontWeight: 'bold' }}>
+                    Kode Bank<span style={{ color: 'red' }}>*</span>
+                  </Typography>
                   <TextField
                     placeholder="Input Kode Bank"
                     color="secondary"
                     value={inputValue.code}
                     onChange={(e) => setInputValue({ ...inputValue, code: e.target.value })}
+                    inputProps={{ maxLength: 30 }}
+                    style={{ width: 120 }}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Stack direction="column" gap={1}>
+                  <Stack direction="row" height={42} alignItems="center">
+                    <Typography style={{ fontWeight: 'bold' }}>URL E-Banking</Typography>
+                  </Stack>
+                  <TextField
+                    placeholder="Input Url E-Banking"
+                    color="secondary"
+                    value={inputValue.e_banking}
+                    onChange={(e) => setInputValue({ ...inputValue, e_banking: e.target.value })}
+                    style={{ width: 350 }}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Stack direction="column" gap={1}>
+                  <FormControlLabel
+                    label={<Typography style={{ fontWeight: 'bold' }}>Pengecekan Digit Rekening Bank</Typography>}
+                    control={<Checkbox color="secondary" checked={inputValue?.cekDigit === 'true'} />}
+                    onChange={(e) => setInputValue({ ...inputValue, cekDigit: e.target.checked ? 'true' : 'false' })}
+                  />
+                  <TextField
+                    placeholder="Input Jumlah Digit"
+                    color="secondary"
+                    value={inputValue.jmlDigit}
+                    onChange={(e) => setInputValue({ ...inputValue, jmlDigit: e.target.value })}
                     inputProps={{
-                      maxLength: 30,
                       onKeyPress: (event) => {
                         if (!/[0-9]/.test(event.key)) {
                           event.preventDefault();
                         }
                       },
+                      maxLength: 2,
                     }}
-                  />
-                </Stack>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Url E-Banking</Typography>
-                  <TextField
-                    placeholder="Input Url E-Banking"
-                    color="secondary"
-                    type="url"
-                    value={inputValue.e_banking}
-                    onChange={(e) => setInputValue({ ...inputValue, e_banking: e.target.value })}
-                    required
-                  />
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Deskripsi ATM</Typography>
-                  <Ckeditor
-                    name="atm"
-                    content={inputValue.atm}
-                    events={{
-                      change: (e) => onCkeditorChange(e, 'atm'),
-                    }}
-                    config={{
-                      toolbarLocation: 'bottom',
-                      toolbarGroups: [
-                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
-                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
-                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
-                        { name: 'forms', groups: ['forms'] },
-                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
-                        { name: 'links', groups: ['links'] },
-                        { name: 'insert', groups: ['Image', 'Table'] },
-                        { name: 'styles', groups: ['styles'] },
-                        { name: 'colors', groups: ['colors'] },
-                        { name: 'tools', groups: ['tools'] },
-                        { name: 'others', groups: ['others'] },
-                        { name: 'about', groups: ['about'] },
-                      ],
-                    }}
-                  />
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Deskripsi Mobile Banking</Typography>
-                  <Ckeditor
-                    content={inputValue.m_banking}
-                    events={{
-                      change: (e) => onCkeditorChange(e, 'm_banking'),
-                    }}
-                    config={{
-                      toolbarLocation: 'bottom',
-                      toolbarGroups: [
-                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
-                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
-                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
-                        { name: 'forms', groups: ['forms'] },
-                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
-                        { name: 'links', groups: ['links'] },
-                        { name: 'insert', groups: ['Image', 'Table'] },
-                        { name: 'styles', groups: ['styles'] },
-                        { name: 'colors', groups: ['colors'] },
-                        { name: 'tools', groups: ['tools'] },
-                        { name: 'others', groups: ['others'] },
-                        { name: 'about', groups: ['about'] },
-                      ],
-                    }}
-                  />
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack direction="column" gap={1}>
-                  <Typography variant="body1">Deskripsi Internet Banking</Typography>
-                  <Ckeditor
-                    content={inputValue.i_banking}
-                    events={{
-                      change: (e) => onCkeditorChange(e, 'i_banking'),
-                    }}
-                    config={{
-                      toolbarLocation: 'bottom',
-                      toolbarGroups: [
-                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
-                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
-                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
-                        { name: 'forms', groups: ['forms'] },
-                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
-                        { name: 'links', groups: ['links'] },
-                        { name: 'insert', groups: ['Image', 'Table'] },
-                        { name: 'styles', groups: ['styles'] },
-                        { name: 'colors', groups: ['colors'] },
-                        { name: 'tools', groups: ['tools'] },
-                        { name: 'others', groups: ['others'] },
-                        { name: 'about', groups: ['about'] },
-                      ],
-                    }}
+                    style={{ width: 120 }}
+                    disabled={inputValue.cekDigit === 'false'}
                   />
                 </Stack>
               </Grid>
             </Grid>
-            <Stack direction="row" justifyContent="flex-end" gap={2}>
-              <LoadingButton
-                loading={loadingCreate}
-                variant="contained"
-                color="secondary"
-                sx={{ height: 40 }}
-                type="submit"
-                // onClick={handleSubmit}
-                disabled={checkDisable()}>
-                <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
-                  Tambah Bank
-                </Typography>
-              </LoadingButton>
-            </Stack>
           </Stack>
-        </form>
-      </Card>
+        </Card>
+
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Card style={{ padding: 24 }}>
+              <Stack direction="column" gap={1}>
+                <Typography variant="body1">Deskripsi ATM</Typography>
+                <Ckeditor
+                  name="atm"
+                  content={inputValue.atm}
+                  events={{
+                    change: (e) => onCkeditorChange(e, 'atm'),
+                  }}
+                  config={{
+                    toolbarLocation: 'bottom',
+                    toolbarGroups: [
+                      { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                      { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                      { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                      { name: 'forms', groups: ['forms'] },
+                      { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                      { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                      { name: 'links', groups: ['links'] },
+                      { name: 'insert', groups: ['Image', 'Table'] },
+                      { name: 'styles', groups: ['styles'] },
+                      { name: 'colors', groups: ['colors'] },
+                      { name: 'tools', groups: ['tools'] },
+                      { name: 'others', groups: ['others'] },
+                      { name: 'about', groups: ['about'] },
+                    ],
+                  }}
+                />
+              </Stack>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card style={{ padding: 24 }}>
+              <Stack direction="column" gap={1}>
+                <Typography variant="body1">Deskripsi Mobile Banking</Typography>
+                <Ckeditor
+                  content={inputValue.m_banking}
+                  events={{
+                    change: (e) => onCkeditorChange(e, 'm_banking'),
+                  }}
+                  config={{
+                    toolbarLocation: 'bottom',
+                    toolbarGroups: [
+                      { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                      { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                      { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                      { name: 'forms', groups: ['forms'] },
+                      { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                      { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                      { name: 'links', groups: ['links'] },
+                      { name: 'insert', groups: ['Image', 'Table'] },
+                      { name: 'styles', groups: ['styles'] },
+                      { name: 'colors', groups: ['colors'] },
+                      { name: 'tools', groups: ['tools'] },
+                      { name: 'others', groups: ['others'] },
+                      { name: 'about', groups: ['about'] },
+                    ],
+                  }}
+                />
+              </Stack>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card style={{ padding: 24 }}>
+              <Stack direction="column" gap={1}>
+                <Typography variant="body1">Deskripsi Internet Banking</Typography>
+                <Ckeditor
+                  content={inputValue.i_banking}
+                  events={{
+                    change: (e) => onCkeditorChange(e, 'i_banking'),
+                  }}
+                  config={{
+                    toolbarLocation: 'bottom',
+                    toolbarGroups: [
+                      { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                      { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                      { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                      { name: 'forms', groups: ['forms'] },
+                      { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                      { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                      { name: 'links', groups: ['links'] },
+                      { name: 'insert', groups: ['Image', 'Table'] },
+                      { name: 'styles', groups: ['styles'] },
+                      { name: 'colors', groups: ['colors'] },
+                      { name: 'tools', groups: ['tools'] },
+                      { name: 'others', groups: ['others'] },
+                      { name: 'about', groups: ['about'] },
+                    ],
+                  }}
+                />
+              </Stack>
+            </Card>
+          </Grid>
+        </Grid>
+        <Stack direction="row" gap={2}>
+          <LoadingButton
+            loading={loadingCreate}
+            variant="contained"
+            color="secondary"
+            sx={{ height: 40, width: 120 }}
+            onClick={handleSubmit}
+            disabled={checkDisable()}>
+            Tambah
+          </LoadingButton>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => Router.replace({ pathname: '/utilitas', query: { tab: 'bank' } })}>
+            Batal
+          </Button>
+        </Stack>
+      </Stack>
     </Stack>
   );
 };
