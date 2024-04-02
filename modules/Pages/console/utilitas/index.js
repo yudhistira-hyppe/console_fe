@@ -102,7 +102,7 @@ const UtilitasComponent = () => {
           {access?.map((item) => item?.nameModule)?.includes('utilitas_setting') && (
             <Tab label="Maintenance" value="maintenance" className={classes.tab} />
           )}
-          <Tab label="Transaksi" value="transaction" className={classes.tab} />
+          {/* <Tab label="Transaksi" value="transaction" className={classes.tab} /> */}
         </TabList>
         <div style={{ marginTop: 30, height: '100%' }}>
           {access?.map((item) => item?.nameModule)?.includes('utilitas_interest') && (
@@ -173,13 +173,13 @@ const UtilitasComponent = () => {
               <Maintenance />
             </TabPanel>
           )}
-          <TabPanel value="transaction" style={{ padding: 0, height: '100%' }}>
+          {/* <TabPanel value="transaction" style={{ padding: 0, height: '100%' }}>
             <Stack direction="column" gap={3}>
               <TransactionCategory />
 
               <TransactionCOA />
             </Stack>
-          </TabPanel>
+          </TabPanel> */}
         </div>
       </TabContext>
     )
