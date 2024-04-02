@@ -18,6 +18,7 @@ import {
   masterBadgeApi,
   challengeUtilityApi,
   communityUtilityApi,
+  transactionUtilityApi,
 } from './utilitas';
 import { challengeApi } from './challenge';
 import { announcementApi } from './announcement';
@@ -52,4 +53,5 @@ export {
   challengeUtilityApi,
   announcementApi,
   communityUtilityApi,
+  transactionUtilityApi,
 };

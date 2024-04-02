@@ -84,9 +84,10 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ width: 160 }}>Image Bank</TableCell>
+                  <TableCell style={{ width: 160 }}>Thumbnails</TableCell>
                   <TableCell align="left">Nama Bank</TableCell>
                   <TableCell align="left">Kode Bank</TableCell>
+                  <TableCell align="left">Jumlah Digit</TableCell>
                   <TableCell align="left">Status</TableCell>
                   <TableCell align="left"></TableCell>
                 </TableRow>
@@ -109,18 +110,23 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                             src={item?.bankIcon + '?m=' + new Date().getTime() || new Error()}
                             variant="rounded"
                             alt="X"
-                            style={{ width: 80, height: '100%', minHeight: 60 }}
+                            style={{ width: 40, height: 'auto', marginLeft: 12 }}
                           />
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
                           {item?.bankname || '-'}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px', width: 200 }}>
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
                           {item?.bankcode || '-'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 120 }}>
+                          {item?.jmlDigit || 0}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
@@ -151,16 +157,16 @@ const TableSection = ({ filterList, handlePageChange, handleDeleteFilter, filter
                         </Stack>
                       </TableCell>
                       <TableCell align="left">
-                        <Stack direction="row" gap={1}>
+                        <Stack direction="row" justifyContent="flex-end">
                           {access?.find((item) => item?.nameModule === 'utilitas_bank')?.acces?.updateAcces && (
-                            <Stack direction="row" justifyContent="flex-end" gap={1} width="100%">
+                            <Stack direction="row">
                               <IconButton onClick={() => Router.replace(`/utilitas?tab=bank&bankcode=${item?.bankcode}`)}>
                                 <Edit />
                               </IconButton>
                             </Stack>
                           )}
                           {access?.find((item) => item?.nameModule === 'utilitas_bank')?.acces?.deleteAcces && (
-                            <Stack direction="row" justifyContent="flex-end" gap={1} width="100%">
+                            <Stack direction="row">
                               <IconButton onClick={() => setSelected(item)}>
                                 <Delete />
                               </IconButton>
