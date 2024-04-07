@@ -167,9 +167,6 @@ const DetailChallengeComponent = ({ detail }) => {
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
                     HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppePic || 0}
                   </Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppeDiary || 0}
-                  </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Suka</Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
                     HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeVid || 0}
@@ -177,15 +174,9 @@ const DetailChallengeComponent = ({ detail }) => {
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
                     HyppePic: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppePic || 0}
                   </Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeDiary || 0}
-                  </Typography>
                   <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>Tonton</Typography>
                   <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
                     HyppeVid: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeVid || 0}
-                  </Typography>
-                  <Typography style={{ color: '#00000061', fontWeight: 'bold', fontSize: 14 }}>
-                    HyppeDiary: {detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeDiary || 0}
                   </Typography>
                 </>
               )}
