@@ -67,7 +67,7 @@ const RewardsComponent = ({ detail }) => {
             <Stack direction="row" gap={1}>
               <Typography style={{ color: '#00000061', width: '100%', maxWidth: 130, fontSize: 14 }}>Penempatan:</Typography>
               <Typography style={{ color: '#00000099', fontWeight: 'bold', fontSize: 14 }}>
-                Profil, HyppeStory, HyppeVid, HyppePic, HyppeDiary, Direct Message, Komentar
+                Profil, HyppeStory, HyppeVid, HyppePic, Direct Message, Komentar
               </Typography>
             </Stack>
           </>
