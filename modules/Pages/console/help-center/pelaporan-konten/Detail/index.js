@@ -254,7 +254,7 @@ const DetailPelaporanKonten = () => {
   return (
     <>
       <Head>
-        <title key={'title'}>Hyppe-Console :: Detail Keluhan Pengguna</title>
+        <title key={'title'}>Hyppe-Console :: Detail Pelaporan Konten</title>
       </Head>
       <ModalConfirmation
         showModal={showModal.show && showModal.modalType === 'confirmation'}

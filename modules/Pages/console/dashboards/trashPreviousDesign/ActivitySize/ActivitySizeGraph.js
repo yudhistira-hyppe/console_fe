@@ -23,7 +23,6 @@ const ActivitySizeGraph = ({ data }) => {
         <XAxis dataKey="date" allowDataOverflow allowDecimals={false} />
         <YAxis allowDataOverflow allowDecimals={false} />
         <Tooltip />
-        <Line type="monotone" dataKey="diary" stroke="rgb(142, 73, 240)" />
         <Line type="monotone" dataKey="pict" stroke="rgb(255, 140, 0)" />
         <Line type="monotone" dataKey="vid" stroke="rgb(61, 76, 155)" />
         <Line type="monotone" dataKey="story" stroke="rgb(35, 173, 192)" />

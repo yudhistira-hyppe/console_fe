@@ -24,7 +24,7 @@ const BoostCenter = () => {
         {loadingAnalytic ? (
           <PageLoader />
         ) : (
-          <Grid container spacing={6}>
+          <Grid container spacing={3}>
             {access.map((item) => item?.nameModule).includes('boost_statistic') && (
               <Grid item xs={4} style={{ width: '100%' }}>
                 <ChartPost
@@ -51,7 +51,7 @@ const BoostCenter = () => {
               </Grid>
             )}
             {access.map((item) => item?.nameModule).includes('boost_table') && (
-              <Grid item xs={12} style={{ width: '100%' }}>
+              <Grid item xs={12} style={{ width: '100%', marginTop: 24 }}>
                 <TableList />
               </Grid>
             )}

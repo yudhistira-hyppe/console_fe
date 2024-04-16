@@ -19,7 +19,6 @@ import Link from 'next/link';
 const postsConfig = [
   { key: 'all', label: 'Semua' },
   { key: 'HyppePic', label: 'Hyppepic' },
-  { key: 'HyppeDiary', label: 'Hyppediary' },
   { key: 'HyppeVid', label: 'Hyppevid' },
 ];
 
