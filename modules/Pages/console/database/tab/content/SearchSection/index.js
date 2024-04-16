@@ -62,80 +62,6 @@ const SearchSection = ({ filter, handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270}>
-        {/* <Accordion elevation={0} defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
-            <Typography style={{ fontSize: '13px' }}>Tanggal Pengajuan</Typography>
-          </AccordionSummary>
-          <AccordionDetails style={{ padding: '0px' }}>
-            <Stack direction={'column'} spacing={1} mb={3}>
-              <Chip
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 7);
-                  setWeek(1), setValue([null, null]);
-                }}
-                label="7 Hari"
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week == 1 ? 'default' : 'outlined'}
-              />
-              <Chip
-                label="14 Hari"
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 14);
-                  setWeek(2), setValue([null, null]);
-                }}
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 2 ? 'default' : 'outlined'}
-              />
-              <Chip
-                label="1 Bulan"
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 30);
-                  setWeek(4), setValue([null, null]);
-                }}
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 4 ? 'default' : 'outlined'}
-              />
-              <Chip
-                label="3 Bulan"
-                clickable
-                onClick={() => {
-                  handleChange('ticket_date', 90);
-                  setWeek(12), setValue([null, null]);
-                }}
-                size="small"
-                style={{ width: 'fit-content', height: 35, padding: '0 8px' }}
-                variant={week === 12 ? 'default' : 'outlined'}
-              />
-            </Stack>
-
-            <LocalizationProvider dateAdapter={AdapterDayjs} localeText={{ start: 'Start Date', end: 'End Date' }}>
-              <DateRangePicker
-                value={value}
-                maxDate={getWeeksAfter(value[0], week)}
-                onChange={(newValue) => {
-                  handleChange('ticket_range', [newValue[0]?.format('YYYY-MM-DD'), newValue[1]?.format('YYYY-MM-DD')]);
-                  setValue(newValue);
-                  setWeek(null);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <Stack direction={'row'} spacing={1}>
-                      <TextField size="small" autoComplete="off" {...startProps} />
-                      <TextField size="small" autoComplete="off" {...endProps} />
-                    </Stack>
-                  </>
-                )}
-              />
-            </LocalizationProvider>
-          </AccordionDetails>
-        </Accordion> */}
-
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Deskripsi Konten</Typography>
@@ -342,11 +268,6 @@ const SearchSection = ({ filter, handleChange }) => {
                 label={'HyppeVid'}
                 value="HyppeVid"
                 control={<Checkbox defaultChecked={false} checked={filter.type.includes('HyppeVid')} color="secondary" />}
-              />
-              <FormControlLabel
-                label={'HyppeDiary'}
-                value="HyppeDiary"
-                control={<Checkbox defaultChecked={false} checked={filter.type.includes('HyppeDiary')} color="secondary" />}
               />
               <FormControlLabel
                 label={'HyppePic'}

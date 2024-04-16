@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Stack, Tooltip } from '@mui/material';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
@@ -32,7 +32,7 @@ const DatabaseTabContentComponent = () => {
   const [filterList, setFilterList] = useState([]);
   const router = useRouter();
 
-  const getParams = () => {
+  const getParams = useCallback(() => {
     let params = {};
     Object.assign(params, {
       page: filter.page,
@@ -43,7 +43,18 @@ const DatabaseTabContentComponent = () => {
     filter.description !== '' && Object.assign(params, { description: filter.description });
     filter.status.length >= 1 &&
       Object.assign(params, { kepemilikan: filter.status.map((item) => (item === 'terdaftar' ? 'YA' : 'TIDAK')) });
-    filter.type.length >= 1 && Object.assign(params, { postType: filter.type });
+    filter.type.length >= 1 &&
+      Object.assign(params, {
+        postType: filter.type
+          ?.map((item) => {
+            if (item === 'HyppeVid') {
+              return ['HyppeVid', 'HyppeDiary'];
+            } else {
+              return item;
+            }
+          })
+          .flat(1),
+      });
     filter.category.length >= 1 && Object.assign(params, { kategori: filter.category.map((item) => item?._id) });
     filter.is_sell.length >= 1 &&
       Object.assign(params, { statusjual: filter.is_sell.map((item) => (item === 'dijual' ? 'YA' : 'TIDAK')) });
@@ -54,7 +65,7 @@ const DatabaseTabContentComponent = () => {
     filter.hashtag.length >= 1 && Object.assign(params, { hashtag: filter.hashtag });
 
     return params;
-  };
+  }, [filter]);
 
   const { data: listContent, isFetching: loadingContent } = useGetListContentQuery(getParams());
 

@@ -89,17 +89,12 @@ const EditChallenge = ({ detailId, moreSlug }) => {
       hashtag: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tagar?.replace('#', ''),
       interaction_create_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppeVid,
       interaction_create_pic: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppePic,
-      interaction_create_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.buatKonten?.[0]?.HyppeDiary,
       interaction_like_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeVid,
       interaction_like_pic: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppePic,
-      interaction_like_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeDiary,
       interaction_view_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeVid,
-      interaction_view_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeDiary,
       content_like_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeVid,
       content_like_pic: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppePic,
-      content_like_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.suka?.[0]?.HyppeDiary,
       content_view_vid: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeVid,
-      content_view_diary: detail?.metrik?.[0]?.InteraksiKonten?.[0]?.tonton?.[0]?.HyppeDiary,
 
       account_type:
         detail?.peserta?.[0]?.tipeAkunTerverikasi === 'ALL'
@@ -285,18 +280,13 @@ const EditChallenge = ({ detailId, moreSlug }) => {
             inputValue?.metric === 'interaction' &&
             inputValue?.interaction_create_vid < 1 &&
             inputValue?.interaction_create_pic < 1 &&
-            inputValue?.interaction_create_diary < 1 &&
             inputValue?.interaction_like_vid < 1 &&
             inputValue?.interaction_like_pic < 1 &&
-            inputValue?.interaction_like_diary < 1 &&
-            inputValue?.interaction_view_vid < 1 &&
-            inputValue?.interaction_view_diary < 1) ||
+            inputValue?.interaction_view_vid < 1) ||
           (inputValue?.object === 'content' &&
             inputValue?.content_like_vid < 1 &&
             inputValue?.content_like_pic < 1 &&
-            inputValue?.content_like_diary < 1 &&
-            inputValue?.content_view_vid < 1 &&
-            inputValue?.content_view_diary < 1))
+            inputValue?.content_view_vid < 1))
       ) {
         disabled = true;
       } else if (

@@ -89,30 +89,20 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('konten_hyppevid_createpost', selectedItem?.interaction_create_vid);
       selectedItem?.interaction_create_pic >= 1 &&
         formData.append('konten_hyppepic_createpost', selectedItem?.interaction_create_pic);
-      selectedItem?.interaction_create_diary >= 1 &&
-        formData.append('konten_hyppediary_createpost', selectedItem?.interaction_create_diary);
 
       selectedItem?.interaction_like_vid >= 1 &&
         formData.append('konten_hyppevid_likepost', selectedItem?.interaction_like_vid);
       selectedItem?.interaction_like_pic >= 1 &&
         formData.append('konten_hyppepic_likepost', selectedItem?.interaction_like_pic);
-      selectedItem?.interaction_like_diary >= 1 &&
-        formData.append('konten_hyppediary_likepost', selectedItem?.interaction_like_diary);
 
       selectedItem?.interaction_view_vid >= 1 &&
         formData.append('konten_hyppevid_viewpost', selectedItem?.interaction_view_vid);
-      selectedItem?.interaction_view_diary >= 1 &&
-        formData.append('konten_hyppediary_viewpost', selectedItem?.interaction_view_diary);
     }
 
     if (selectedItem?.object === 'content') {
       selectedItem?.content_like_vid >= 1 && formData.append('konten_hyppevid_likepost', selectedItem?.content_like_vid);
       selectedItem?.content_like_pic >= 1 && formData.append('konten_hyppepic_likepost', selectedItem?.content_like_pic);
-      selectedItem?.content_like_diary >= 1 &&
-        formData.append('konten_hyppediary_likepost', selectedItem?.content_like_diary);
       selectedItem?.content_view_vid >= 1 && formData.append('konten_hyppevid_viewpost', selectedItem?.content_view_vid);
-      selectedItem?.content_view_diary >= 1 &&
-        formData.append('konten_hyppediary_viewpost', selectedItem?.content_view_diary);
     }
 
     formData.append('caraGabung', selectedItem?.type_invitation === 'all' ? 'SEMUA PENGGUNA' : 'DENGAN UNDANGAN');
@@ -313,30 +303,20 @@ export default function ModalConfirmation({ showModal, status, onClose, selected
         formData.append('konten_hyppevid_createpost', selectedItem?.interaction_create_vid);
       selectedItem?.interaction_create_pic >= 1 &&
         formData.append('konten_hyppepic_createpost', selectedItem?.interaction_create_pic);
-      selectedItem?.interaction_create_diary >= 1 &&
-        formData.append('konten_hyppediary_createpost', selectedItem?.interaction_create_diary);
 
       selectedItem?.interaction_like_vid >= 1 &&
         formData.append('konten_hyppevid_likepost', selectedItem?.interaction_like_vid);
       selectedItem?.interaction_like_pic >= 1 &&
         formData.append('konten_hyppepic_likepost', selectedItem?.interaction_like_pic);
-      selectedItem?.interaction_like_diary >= 1 &&
-        formData.append('konten_hyppediary_likepost', selectedItem?.interaction_like_diary);
 
       selectedItem?.interaction_view_vid >= 1 &&
         formData.append('konten_hyppevid_viewpost', selectedItem?.interaction_view_vid);
-      selectedItem?.interaction_view_diary >= 1 &&
-        formData.append('konten_hyppediary_viewpost', selectedItem?.interaction_view_diary);
     }
 
     if (selectedItem?.object === 'content') {
       selectedItem?.content_like_vid >= 1 && formData.append('konten_hyppevid_likepost', selectedItem?.content_like_vid);
       selectedItem?.content_like_pic >= 1 && formData.append('konten_hyppepic_likepost', selectedItem?.content_like_pic);
-      selectedItem?.content_like_diary >= 1 &&
-        formData.append('konten_hyppediary_likepost', selectedItem?.content_like_diary);
       selectedItem?.content_view_vid >= 1 && formData.append('konten_hyppevid_viewpost', selectedItem?.content_view_vid);
-      selectedItem?.content_view_diary >= 1 &&
-        formData.append('konten_hyppediary_viewpost', selectedItem?.content_view_diary);
     }
 
     formData.append('caraGabung', selectedItem?.type_invitation === 'all' ? 'SEMUA PENGGUNA' : 'DENGAN UNDANGAN');

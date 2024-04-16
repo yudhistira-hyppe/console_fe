@@ -86,18 +86,13 @@ const CreateChallenge = ({ moreSlug }) => {
           inputValue?.metric === 'interaction' &&
           inputValue?.interaction_create_vid < 1 &&
           inputValue?.interaction_create_pic < 1 &&
-          inputValue?.interaction_create_diary < 1 &&
           inputValue?.interaction_like_vid < 1 &&
           inputValue?.interaction_like_pic < 1 &&
-          inputValue?.interaction_like_diary < 1 &&
-          inputValue?.interaction_view_vid < 1 &&
-          inputValue?.interaction_view_diary < 1) ||
+          inputValue?.interaction_view_vid < 1) ||
         (inputValue?.object === 'content' &&
           inputValue?.content_like_vid < 1 &&
           inputValue?.content_like_pic < 1 &&
-          inputValue?.content_like_diary < 1 &&
-          inputValue?.content_view_vid < 1 &&
-          inputValue?.content_view_diary < 1))
+          inputValue?.content_view_vid < 1))
     ) {
       disabled = true;
     } else if (

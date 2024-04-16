@@ -73,11 +73,6 @@ const measuredActivityTitle = [
     // color: '#FF8C00',
   },
   {
-    label: 'HyppeDiary',
-    bgColor: 'rgba(142, 73, 240, 1)',
-    // color: '#0795F4',
-  },
-  {
     label: 'HyppePic',
     bgColor: 'rgba(255, 140, 0, 1)',
     // color: '#7F39FB',
@@ -175,7 +170,6 @@ const ActivitySize = () => {
               postAnalytic?.data?.map((item) => {
                 return {
                   date: item?.date,
-                  diary: item?.diary,
                   pict: item?.pict,
                   vid: item?.vid,
                   story: item?.story,
