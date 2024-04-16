@@ -1,23 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { Button, FormControl, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
-import Typography from '@mui/material/Typography';
+import { Typography } from '@material-ui/core';
 import Modal from '@mui/material/Modal';
-import { Divider, Stack, TextField } from '@mui/material';
+import { Button, Divider, FormControl, FormControlLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material';
 import { useGetReportReasonQuery } from 'api/console/helpCenter/konten';
 import { LoadingButton } from '@mui/lab';
+
+const reportReason = {
+  data: [
+    {
+      _id: '',
+      reason: 'Nomor KTP/ID sudah terdaftar pada akun lain',
+    },
+    {
+      _id: '',
+      reason: 'Foto KTP/ID berbeda dengan foto selfie (ada perubahan warna rambut/mata, bentuk wajah, dll)',
+    },
+    {
+      _id: '',
+      reason: 'Foto selfie terlalu buram sulit diidentifikasi',
+    },
+    {
+      _id: '',
+      reason: 'Foto KTP/ID tampak buram sulit diidentifikasi dengan foto selfie',
+    },
+  ],
+};
 
 export default function ModalReject({ showModal, onClose, onConfirm, loading }) {
   const [reason, setReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
-  const { data: reportReason } = useGetReportReasonQuery({ type: 'kyc' });
+  // const { data: reportReason } = useGetReportReasonQuery({ type: 'kyc' });
 
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
+    width: 450,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: '28px 24px',
@@ -42,27 +62,28 @@ export default function ModalReject({ showModal, onClose, onConfirm, loading }) 
       aria-describedby="modal-modal-description"
       disableAutoFocus>
       <Box sx={style}>
-        <Typography fontWeight={'bold'}>Kamu Akan Menolak Peningkatan Akun</Typography>
+        <Typography style={{ fontWeight: 'bold', fontSize: 18 }}>Kamu Menolak Verifikasi Akun</Typography>
         <Divider style={{ margin: '8px 0' }} />
-        <Typography variant="body2" color="#666666" style={{ marginBottom: 10 }}>
-          Berikan alasan penangguhan
-        </Typography>
+        <Typography style={{ fontSize: 14, color: '#666666', marginBottom: 10 }}>Berikan alasan penangguhan</Typography>
         <FormControl style={{ width: '100%' }}>
-          <RadioGroup value={reason} style={{ gap: 10 }}>
+          <RadioGroup value={reason} style={{ gap: 12 }}>
             {reportReason?.data?.map((item, key) => (
               <FormControlLabel
                 key={key}
                 value={JSON.stringify({ _id: item?._id, reason: item?.reason })}
-                control={<Radio size="small" color="primary" />}
+                control={<Radio color="secondary" />}
                 onChange={onChangeHandler}
-                label={
-                  <Typography color="#666666" variant="body2">
-                    {item?.reason || '-'}
-                  </Typography>
-                }
+                label={<Typography style={{ color: '#666666', fontSize: 14 }}>{item?.reason || '-'}</Typography>}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  '& .MuiRadio-root': { padding: '0 12px 0 8px' },
+                }}
               />
             ))}
           </RadioGroup>
+
           {reason !== '' && JSON.parse(reason)?.reason === 'Lainnya' && (
             <TextField
               multiline
@@ -83,7 +104,9 @@ export default function ModalReject({ showModal, onClose, onConfirm, loading }) 
             disabled={reason === '' || (JSON.parse(reason)?.reason === 'Lainnya' && otherReason === '')}>
             Konfirmasi
           </LoadingButton>
-          <Button onClick={onClose}>Batal</Button>
+          <Button color="secondary" onClick={onClose}>
+            Batal
+          </Button>
         </Stack>
       </Box>
     </Modal>
