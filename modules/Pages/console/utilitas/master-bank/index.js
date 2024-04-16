@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Stack } from '@mui/material';
+import { Button, Card, Stack } from '@mui/material';
 import SearchSection from './SearchSection';
 import TableSection from './TableSection';
 import { toast } from 'react-hot-toast';
@@ -17,7 +17,6 @@ const TableList = () => {
     name: '',
   });
   const [filterList, setFilterList] = useState([]);
-  const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
 
   const getParams = () => {
     let params = {};
@@ -109,20 +108,7 @@ const TableList = () => {
 
   return (
     <Stack direction={'row'} spacing={3}>
-      <Stack direction="column" height="100%" gap={3}>
-        <SearchSection filter={filter} handleChange={handleSearchChange} />
-        <Button
-          variant="contained"
-          color="secondary"
-          startIcon={<Add />}
-          onClick={() => Router.replace('/utilitas?tab=bank&create=true')}
-          sx={{ height: 40 }}
-          disabled={!access?.find((item) => item?.nameModule === 'utilitas_bank')?.acces?.createAcces}>
-          <Typography style={{ fontFamily: 'Lato', fontSize: 14, fontWeight: 'bold', textTransform: 'capitalize' }}>
-            Tambah Bank
-          </Typography>
-        </Button>
-      </Stack>
+      <SearchSection filter={filter} handleChange={handleSearchChange} />
       <TableSection
         filterList={filterList}
         filter={filter}
