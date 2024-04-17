@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@mui/material/TextField';
 import useStyles from '../../bantuan-pengguna/index.style';
 import { Box, Typography, Chip, FormGroup, FormControlLabel } from '@material-ui/core';
-import { Divider, IconButton, InputAdornment, Popover, Stack } from '@mui/material';
+import { Divider, IconButton, InputAdornment, Popover, Radio, RadioGroup, Stack } from '@mui/material';
 import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 import { DateRange as DateRangePicker } from 'react-date-range';
 import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
@@ -287,6 +287,100 @@ const SearchSection = ({ filter, handleChange }) => {
 
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Pendaftaran Rekening</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup onChange={(e) => handleChange('bank', e.target.value)}>
+              <FormControlLabel
+                label="Bank BCA"
+                value="BCA"
+                control={<Checkbox color="secondary" checked={filter.bank?.includes('BCA')} />}
+              />
+              <FormControlLabel
+                label="Bank BRI"
+                value="BRI"
+                control={<Checkbox color="secondary" checked={filter.bank?.includes('BRI')} />}
+              />
+              <FormControlLabel
+                label="Bank BNI"
+                value="BNI"
+                control={<Checkbox color="secondary" checked={filter.bank?.includes('BNI')} />}
+              />
+              <FormControlLabel
+                label="Bank Mandiri"
+                value="Mandiri"
+                control={<Checkbox color="secondary" checked={filter.bank?.includes('Mandiri')} />}
+              />
+            </FormGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Tingkat Kesamaan Nama</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <RadioGroup onChange={(e) => handleChange('similarity', e.target.value)}>
+              <FormControlLabel
+                label="< 50%"
+                value="< 50"
+                control={<Radio color="secondary" checked={filter.similarity === '< 50'} />}
+              />
+              <FormControlLabel
+                label="> 50%"
+                value="> 50"
+                control={<Radio color="secondary" checked={filter.similarity === '> 50'} />}
+              />
+            </RadioGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Dokumen Pendukung</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <RadioGroup onChange={(e) => handleChange('document', e.target.value)}>
+              <FormControlLabel
+                label="Ya"
+                value="ya"
+                control={<Radio color="secondary" checked={filter.document === 'ya'} />}
+              />
+              <FormControlLabel
+                label="Tidak"
+                value="tidak"
+                control={<Radio color="secondary" checked={filter.document === 'tidak'} />}
+              />
+            </RadioGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Sumber Pengajuan</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <RadioGroup onChange={(e) => handleChange('source', e.target.value)}>
+              <FormControlLabel
+                label="Penambahan Akun Bank"
+                value="add"
+                control={<Radio color="secondary" checked={filter.source === 'add'} />}
+              />
+              <FormControlLabel
+                label="Penarikan"
+                value="withdraw"
+                control={<Radio color="secondary" checked={filter.source === 'withdraw'} />}
+              />
+            </RadioGroup>
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Status</Typography>
           </AccordionSummary>
           <AccordionDetails style={{ padding: 0 }}>
@@ -294,19 +388,17 @@ const SearchSection = ({ filter, handleChange }) => {
               <FormControlLabel
                 label={'Baru'}
                 value="BARU"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('BARU')} />}
+                control={<Checkbox color="secondary" checked={filter.status?.includes('BARU')} />}
               />
               <FormControlLabel
                 label={'Disetujui'}
                 value="DISETUJUI"
-                control={
-                  <Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DISETUJUI')} />
-                }
+                control={<Checkbox color="secondary" checked={filter.status?.includes('DISETUJUI')} />}
               />
               <FormControlLabel
                 label={'Ditolak'}
                 value="DITOLAK"
-                control={<Checkbox defaultChecked={false} color="secondary" checked={filter.status?.includes('DITOLAK')} />}
+                control={<Checkbox color="secondary" checked={filter.status?.includes('DITOLAK')} />}
               />
             </FormGroup>
           </AccordionDetails>

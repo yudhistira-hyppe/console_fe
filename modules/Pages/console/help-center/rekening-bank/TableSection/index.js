@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Typography,
-  TableContainer,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper,
-  Avatar,
-  Chip,
-} from '@material-ui/core';
+import { Box, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, Avatar, Chip } from '@mui/material';
 import { CircularProgress, Divider, IconButton, Pagination, Stack } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -23,6 +11,7 @@ import { STREAM_URL } from 'authentication/auth-provider/config';
 import router from 'next/router';
 import ScrollBar from 'react-perfect-scrollbar';
 import { Delete, NavigateBefore, NavigateNext } from '@material-ui/icons';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   textTruncate: {
@@ -58,7 +47,12 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
                     key={key}
                     label={item.value}
                     onDelete={() => {
-                      if (item.parent === 'search') {
+                      if (
+                        item.parent === 'search' ||
+                        item.parent === 'similarity' ||
+                        item.parent === 'document' ||
+                        item.parent === 'source'
+                      ) {
                         handleDeleteFilter(item.parent, '');
                       } else if (item.parent === 'createdAt') {
                         handleDeleteFilter(item.parent, [null, null]);
@@ -101,109 +95,115 @@ const TableSection = ({ filterList, handleDeleteFilter, handleOrder, handlePageC
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="basic-table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Tanggal Pengajuan</TableCell>
-              <TableCell align="left">Akun Pemohon</TableCell>
-              <TableCell align="left">Status</TableCell>
-            </TableRow>
-          </TableHead>
+        <ScrollBar>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ th: { lineHeight: '1.3rem', fontSize: 14, fontFamily: 'Lato' } }}>
+                <TableCell style={{ width: 102 }}>Tanggal Pengajuan</TableCell>
+                <TableCell style={{ width: 212 }}>Akun</TableCell>
+                <TableCell style={{ width: 122 }}>Pendaftaran Rekening</TableCell>
+                <TableCell style={{ width: 142 }}>Tingkat Kesamaan Nama</TableCell>
+                <TableCell style={{ width: 102 }}>Dokumen Pendukung</TableCell>
+                <TableCell>Sumber Pengajuan</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {loading ? (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <CircularProgress color="secondary" />
-                  <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
-                </Stack>
-              </TableCell>
-            ) : listTickets?.data?.length >= 1 ? (
-              listTickets?.data?.map((item, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  hover
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    router.push({
-                      pathname: '/help-center/rekening-bank/detail',
-                      query: {
-                        _id: item?._id,
-                      },
-                    })
-                  }>
-                  <TableCell style={{ maxWidth: 130 }}>
-                    <Typography variant="body1" style={{ fontSize: '12px' }}>
-                      {moment(item?.tanggalPengajuan).utc().format('DD/MM/YYYY - HH:mm')} WIB
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" style={{ maxWidth: 180 }}>
-                    <Stack direction="row" alignItems="center" gap="15px">
-                      <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
-                      <Stack direction="column" gap="2px">
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '14px', color: '#00000099' }}
-                          className={classes.textTruncate}>
-                          {item?.username || '-'}
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: '12px', color: '#00000099' }}
-                          className={classes.textTruncate}>
-                          {item?.email || '-'}
-                        </Typography>
-                      </Stack>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                      <CircularProgress color="secondary" />
+                      <Typography style={{ fontFamily: 'Normal' }}>loading data...</Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell align="left">
-                    {item?.statusLast === 'BARU' && (
-                      <Chip
-                        label="Baru"
-                        style={{
-                          backgroundColor: '#E6094B1A',
-                          color: '#E6094BD9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.statusLast === 'DISETUJUI' && (
-                      <Chip
-                        label="Disetujui"
-                        style={{
-                          backgroundColor: '#71A5001A',
-                          color: '#71A500D9',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {item?.statusLast === 'DITOLAK' && (
-                      <Chip
-                        label="Ditolak"
-                        style={{
-                          backgroundColor: 'rgba(103, 103, 103, 0.1)',
-                          color: '#676767',
-                          fontWeight: 'bold',
-                          fontFamily: 'Normal',
-                        }}
-                      />
-                    )}
-                    {!item?.statusLast && '-'}
-                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableCell colSpan={8}>
-                <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
-                  <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Rekening Bank</Typography>
-                </Stack>
-              </TableCell>
-            )}
-          </TableBody>
-        </Table>
+              ) : listTickets?.data?.length >= 1 ? (
+                listTickets?.data?.map((item, i) => (
+                  <TableRow
+                    key={i}
+                    hover
+                    onClick={() => router.push({ pathname: '/help-center/rekening-bank/detail', query: { _id: item?._id } })}
+                    sx={{ cursor: 'pointer', '& .MuiTypography-root': { color: '#00000099' } }}>
+                    <TableCell>
+                      <Typography style={{ fontSize: '12px' }}>
+                        {moment(item?.tanggalPengajuan).utc().format('DD/MM/YY - HH:mm')} WIB
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Stack width={180} direction="row" alignItems="center" gap="15px" style={{ overflow: 'hidden' }}>
+                        <Avatar src={getMediaUri(item?.avatar?.mediaEndpoint)} />
+                        <Stack direction="column" gap="2px">
+                          <Typography style={{ fontSize: 14 }} className={classes.textTruncate}>
+                            {item?.username || '-'}
+                          </Typography>
+                          <Typography style={{ fontSize: 12 }} className={classes.textTruncate}>
+                            {item?.email || '-'}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </TableCell>
+                    <TableCell>
+                      <Typography style={{ fontSize: '12px' }}>Bank Mandiri</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography style={{ fontSize: '12px' }}>{'< 50%'}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography style={{ fontSize: '12px' }}>Tidak</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography style={{ fontSize: '12px' }}>Penambahan Akun Bank</Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      {item?.statusLast === 'BARU' && (
+                        <Chip
+                          label="Baru"
+                          style={{
+                            backgroundColor: '#E6094B1A',
+                            color: '#E6094BD9',
+                            fontWeight: 'bold',
+                            fontFamily: 'Normal',
+                          }}
+                        />
+                      )}
+                      {item?.statusLast === 'DISETUJUI' && (
+                        <Chip
+                          label="Disetujui"
+                          style={{
+                            backgroundColor: '#71A5001A',
+                            color: '#71A500D9',
+                            fontWeight: 'bold',
+                            fontFamily: 'Normal',
+                          }}
+                        />
+                      )}
+                      {item?.statusLast === 'DITOLAK' && (
+                        <Chip
+                          label="Ditolak"
+                          style={{
+                            backgroundColor: 'rgba(103, 103, 103, 0.1)',
+                            color: '#676767',
+                            fontWeight: 'bold',
+                            fontFamily: 'Normal',
+                          }}
+                        />
+                      )}
+                      {!item?.statusLast && '-'}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={8}>
+                  <Stack direction="column" alignItems="center" justifyContent="center" height={468} spacing={2}>
+                    <Typography style={{ fontFamily: 'Normal' }}>Tidak ada Riwayat Rekening Bank</Typography>
+                  </Stack>
+                </TableCell>
+              )}
+            </TableBody>
+          </Table>
+        </ScrollBar>
       </TableContainer>
       {!loading && (
         <Stack direction="row" alignItems="center" justifyContent="right" spacing={2} mt={2}>
