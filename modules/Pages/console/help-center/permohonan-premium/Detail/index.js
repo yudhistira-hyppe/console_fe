@@ -22,9 +22,8 @@ import { Typography } from '@material-ui/core';
 import router from 'next/router';
 import { Cake, DateRange, Email, HowToReg, LocationCity, LocationOn, PhoneIphone, Wc } from '@material-ui/icons';
 import GridContainer from '@jumbo/components/GridContainer';
-import ModalApprove from '../Modal/ModalApprove';
-import ModalReject from '../Modal/ModalReject';
-import ModalLampiran from '../Modal/ModalLampiran';
+import ModalApprove from '../modal/modal-approve';
+import ModalReject from '../modal/modal-reject';
 import { useApproveKYCMutation, useGetDetailKYCQuery } from 'api/console/helpCenter/kyc';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { STREAM_URL } from 'authentication/auth-provider/config';
@@ -173,14 +172,6 @@ const DetailPermohonanPremium = () => {
           setModal({ ...modal, reject: !modal.reject });
         }}
         onConfirm={(val) => handleConfirm(val)}
-      />
-      <ModalLampiran
-        showModal={modal.lampiran}
-        data={selectedLampiran}
-        onClose={() => {
-          setModal({ ...modal, lampiran: !modal.lampiran });
-          setSelectedLampiran({});
-        }}
       />
 
       <Stack direction={'column'} spacing={2} mb={3}>
