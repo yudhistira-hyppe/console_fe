@@ -9,25 +9,34 @@ const LabelStatus = ({ title, amount, color }) => {
   return (
     <Stack
       direction="column"
-      gap={1}
+      gap="6px"
       width="100%"
       height={84}
       justifyContent="center"
       style={{ borderLeft: `6px solid ${color}`, borderRadius: 8, paddingLeft: 26 }}>
-      <Typography style={{ fontWeight: 'bold' }}>{title || 'Title Here'}</Typography>
-      <Typography style={{ fontWeight: 'bold', fontSize: 24, color: color || '#B04FF6' }}>
-        {formatCurrency(amount || 0) || 0}
-      </Typography>
+      <Stack direction="row" alignItems="center" gap="6px">
+        <Typography style={{ fontWeight: 'bold', fontSize: 14, color: '#737373' }}>{title}</Typography>
+      </Stack>
+      <Typography style={{ fontWeight: 'bold', fontSize: 24 }}>{formatCurrency(amount || 0) || 0}</Typography>
     </Stack>
   );
 };
 
 const SummaryGraph = ({ data }) => {
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <LineChart data={data} margin={{ top: 0, right: 0, left: -40, bottom: 0 }}>
+    <ResponsiveContainer width="100%" height={350}>
+      <LineChart data={data} margin={{ top: 0, right: 24, left: 0, bottom: 0 }}>
         <CartesianGrid strokeDasharray="4 4" />
-        <XAxis dataKey="date" allowDataOverflow allowDecimals={false} />
+        <XAxis
+          dataKey="date"
+          tick={({ x, y, stroke, payload }) => (
+            <g transform={`translate(${x},${y})`}>
+              <text x={0} y={0} dy={16} fontSize={12} textAnchor="middle" fill="#666">
+                {payload?.value}
+              </text>
+            </g>
+          )}
+        />
         <YAxis allowDataOverflow allowDecimals={false} />
         <Tooltip />
         <Line type="monotone" dataKey="impresi" stroke="#B04FF6" />
@@ -59,7 +68,7 @@ const CardSummary = ({ totalCTA, totalImpresi, totalJangkauan, dataCTA, dataImpr
       <Stack direction="column" style={{ padding: 33 }}>
         <Typography style={{ fontWeight: 'bold', fontSize: 20 }}>Ringkasan</Typography>
 
-        <Stack direction="row" gap={3} my={4}>
+        <Stack direction="row" gap={3} style={{ margin: '32px 0 40px 8px' }}>
           <LabelStatus title="Total Impresi" amount={totalImpresi} color="#B04FF6" />
           <LabelStatus title="Total Jangkauan" amount={totalJangkauan} color="#7438CA" />
           <LabelStatus title="CTA" amount={totalCTA} color="#CB76CD" />
