@@ -65,7 +65,7 @@ export const useProvideAuth = () => {
       } else {
         localStorage.setItem('token_expired', 'true');
         if (localStorage.getItem('token_expired') === 'true' && !isEmpty(localStorage.getItem('access'))) {
-          toast.error('Mohon maaf sesi login anda sudah berakhir, silahkan login kembali', { id: 'token-expired' });
+          toast.error('Mohon maaf sesi login anda sudah berakhir, silahkan login kembali', { id: 'signin' });
         }
         setAuthUser();
       }

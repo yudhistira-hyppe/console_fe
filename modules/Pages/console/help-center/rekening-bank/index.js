@@ -6,8 +6,8 @@ import BackIconNav from '@material-ui/icons/ArrowBackIos';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import { Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import SearchSection from './SearchSection';
-import TableSection from './TableSection';
+import SearchSection from './search-section';
+import TableSection from './table-section';
 import { useGetListBankQuery } from 'api/console/helpCenter/bank';
 import { toast } from 'react-hot-toast';
 
@@ -21,24 +21,34 @@ const RekeningBank = () => {
     page: 0,
     limit: 10,
     descending: 'true',
+    search: '',
     labelTanggal: '',
     createdAt: [null, null],
+    bank: [],
+    similarity: '',
+    document: '',
+    source: '',
     status: [],
   });
   const [filterList, setFilterList] = useState([]);
   const router = useRouter();
 
   const getParams = () => {
-    let params = {};
-    Object.assign(params, {
+    let params = {
       page: filter.page,
       limit: filter.limit,
       descending: filter.descending === 'true' ? true : false,
-    });
+    };
+
     filter.search !== '' && Object.assign(params, { namapemohon: filter.search });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
+    filter.bank.length >= 1 && Object.assign(params, { bank: filter.bank });
+    filter.similarity !== '' && Object.assign(params, { similarity: filter.similarity });
+    filter.document !== '' && Object.assign(params, { document: filter.document });
+    filter.source !== '' && Object.assign(params, { source: filter.source });
     filter.status.length >= 1 && Object.assign(params, { statusLast: filter.status });
+
     return params;
   };
 
@@ -83,6 +93,24 @@ const RekeningBank = () => {
               ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Pemohon (${value})` }]
               : [...prevVal, { parent: kind, value: `Pemohon (${value})` }]
             : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'similarity':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Tingkat Kesamaan (${value})` }]
+              : [...prevVal, { parent: kind, value: `Tingkat Kesamaan (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'document':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Dokumen ? (${value})` }]
+              : [...prevVal, { parent: kind, value: `Dokumen ? (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
+        case 'source':
+          return value.length >= 1
+            ? prevVal.find((item) => item.parent === kind)
+              ? [...prevVal.filter((item) => item.parent !== kind), { parent: kind, value: `Sumber (${value})` }]
+              : [...prevVal, { parent: kind, value: `Sumber (${value})` }]
+            : [...prevVal.filter((item) => item.parent !== kind)];
         case 'createdAt':
           return value.length >= 1 && value[0]
             ? prevVal.find((item) => item.parent === kind)
@@ -104,6 +132,20 @@ const RekeningBank = () => {
     setFilter((prevVal) => {
       if (kind === 'search') {
         return { ...prevVal, search: value, page: 0 };
+      } else if (kind === 'bank') {
+        return {
+          ...prevVal,
+          bank: filter.bank.find((item) => item === value)
+            ? filter.bank.filter((item) => item !== value)
+            : [...filter.bank, value],
+          page: 0,
+        };
+      } else if (kind === 'similarity') {
+        return { ...prevVal, similarity: value, page: 0 };
+      } else if (kind === 'document') {
+        return { ...prevVal, document: value, page: 0 };
+      } else if (kind === 'source') {
+        return { ...prevVal, source: value, page: 0 };
       } else if (kind === 'status') {
         return {
           ...prevVal,
@@ -117,7 +159,19 @@ const RekeningBank = () => {
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
       } else if (kind === 'clearAll') {
-        return { page: 0, limit: 10, descending: 'true', labelTanggal: '', createdAt: [null, null], status: [] };
+        return {
+          page: 0,
+          limit: 10,
+          descending: 'true',
+          search: '',
+          labelTanggal: '',
+          createdAt: [null, null],
+          bank: [],
+          similarity: '',
+          document: '',
+          source: '',
+          status: [],
+        };
       } else {
         return { ...prevVal };
       }

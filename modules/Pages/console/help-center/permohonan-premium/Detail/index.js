@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PageContainer from '@jumbo/components/PageComponents/layouts/PageContainer';
 import {
   Avatar,
+  Box,
   Button,
   Chip,
   Divider,
@@ -21,9 +22,8 @@ import { Typography } from '@material-ui/core';
 import router from 'next/router';
 import { Cake, DateRange, Email, HowToReg, LocationCity, LocationOn, PhoneIphone, Wc } from '@material-ui/icons';
 import GridContainer from '@jumbo/components/GridContainer';
-import ModalApprove from '../Modal/ModalApprove';
-import ModalReject from '../Modal/ModalReject';
-import ModalLampiran from '../Modal/ModalLampiran';
+import ModalApprove from '../modal/modal-approve';
+import ModalReject from '../modal/modal-reject';
 import { useApproveKYCMutation, useGetDetailKYCQuery } from 'api/console/helpCenter/kyc';
 import PageLoader from '@jumbo/components/PageComponents/PageLoader';
 import { STREAM_URL } from 'authentication/auth-provider/config';
@@ -33,6 +33,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
 import moment from 'moment/moment';
+import { isEmpty } from 'lodash';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -52,6 +53,7 @@ const DetailPermohonanPremium = () => {
   const [inputValue, setInputValue] = useState({ name: '', noKtp: '', gender: '', dateBirth: null, placeBirth: '' });
   const access = localStorage.getItem('access') ? JSON.parse(localStorage.getItem('access')) : [];
   const [viewer, setViewer] = useState('');
+  const [dataView, setDataView] = useState([]);
 
   const { data: detail, isFetching: loadingDetail } = useGetDetailKYCQuery({ id: router.query?._id });
   const [approveKYC] = useApproveKYCMutation();
@@ -64,7 +66,26 @@ const DetailPermohonanPremium = () => {
       dateBirth: detail?.data[0]?.tglLahir ? moment(detail?.data[0]?.tglLahir) : null,
       placeBirth: detail?.data[0]?.tempatLahir || '',
     });
+
+    if (isEmpty(localStorage.getItem(`user-kyc-${router.query?._id}`)) && detail) {
+      setDataView(
+        detail?.data[0]?.FileEndpoint?.map((item) => {
+          return {
+            name: item,
+            isView: false,
+          };
+        }),
+      );
+    } else {
+      setDataView(JSON.parse(localStorage.getItem(`user-kyc-${router.query?._id}`)));
+    }
   }, [detail]);
+
+  useEffect(() => {
+    if (dataView?.length >= 1) {
+      localStorage.setItem(`user-kyc-${router.query?._id}`, JSON.stringify(dataView));
+    }
+  }, [dataView]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -113,10 +134,22 @@ const DetailPermohonanPremium = () => {
   };
 
   useEffect(() => {
-    !loadingDetail && setViewer(new Viewer(document.getElementById('images')));
+    !loadingDetail && setViewer(new Viewer(document.getElementById('images'), { toolbar: false, navbar: false }));
   }, [loadingDetail]);
 
-  const handleView = () => {
+  const handleView = (item) => {
+    let newDataView = dataView;
+
+    newDataView = newDataView?.map((dw) => {
+      if (dw?.name === item) {
+        return { ...dw, isView: true };
+      } else {
+        return { ...dw };
+      }
+    });
+
+    setDataView([...newDataView]);
+
     return viewer.toggle();
   };
 
@@ -139,14 +172,6 @@ const DetailPermohonanPremium = () => {
           setModal({ ...modal, reject: !modal.reject });
         }}
         onConfirm={(val) => handleConfirm(val)}
-      />
-      <ModalLampiran
-        showModal={modal.lampiran}
-        data={selectedLampiran}
-        onClose={() => {
-          setModal({ ...modal, lampiran: !modal.lampiran });
-          setSelectedLampiran({});
-        }}
       />
 
       <Stack direction={'column'} spacing={2} mb={3}>
@@ -528,16 +553,35 @@ const DetailPermohonanPremium = () => {
               <Stack direction="column" p="24px" gap="24px">
                 <div>
                   <Stack direction="row" id="images">
-                    <ImageList sx={{ width: '100%' }} cols={5} rowHeight={180}>
+                    <ImageList sx={{ width: '100%' }} gap={8} cols={6} rowHeight={180}>
                       {detail?.data[0]?.FileEndpoint?.map((item, key) => (
-                        <ImageListItem key={key} onClick={handleView}>
+                        <ImageListItem
+                          key={key}
+                          style={{
+                            position: 'relative',
+                            border: '1px solid #EEEEEE',
+                            borderRadius: 12,
+                            overflow: 'hidden',
+                          }}>
                           <Avatar
                             variant="rounded"
                             src={getImage(item, key)}
                             srcSet={getImage(item, key)}
+                            onClick={() => handleView(item)}
                             alt="X"
-                            style={{ borderRadius: 8, height: '100%', width: '100%', cursor: 'pointer' }}
+                            style={{ height: '100%', width: '100%', cursor: 'pointer' }}
                           />
+
+                          <Box sx={{ position: 'absolute', top: '8px', left: '8px' }}>
+                            <Chip
+                              label={
+                                <Typography style={{ fontSize: 12, letterSpacing: 0 }}>
+                                  {dataView?.find((dw) => dw?.name === item)?.isView ? 'Dilihat' : 'Belum dilihat'}
+                                </Typography>
+                              }
+                              style={{ color: 'white', height: '26px', borderRadius: 8 }}
+                            />
+                          </Box>
                         </ImageListItem>
                       ))}
                     </ImageList>
@@ -545,21 +589,7 @@ const DetailPermohonanPremium = () => {
                 </div>
               </Stack>
               {detail?.data[0]?.status === 'BARU' && (
-                <Stack direction="row" justifyContent="center" gap="8px" py="24px">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setModal({ ...modal, approve: !modal.approve })}
-                    disabled={
-                      !inputValue.name ||
-                      !inputValue.dateBirth ||
-                      !inputValue.gender ||
-                      !inputValue.noKtp ||
-                      !inputValue.placeBirth ||
-                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
-                    }>
-                    Setujui
-                  </Button>
+                <Stack direction="row" justifyContent="center" gap="8px" pb="24px">
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -570,9 +600,26 @@ const DetailPermohonanPremium = () => {
                       !inputValue.gender ||
                       !inputValue.noKtp ||
                       !inputValue.placeBirth ||
-                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces ||
+                      dataView?.map((item) => (item?.isView ? 'true' : 'false')).includes('false')
                     }>
                     Tolak
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setModal({ ...modal, approve: !modal.approve })}
+                    disabled={
+                      !inputValue.name ||
+                      !inputValue.dateBirth ||
+                      !inputValue.gender ||
+                      !inputValue.noKtp ||
+                      !inputValue.placeBirth ||
+                      !access.find((item) => item?.nameModule === 'help_kyc')?.acces?.updateAcces ||
+                      dataView?.map((item) => (item?.isView ? 'true' : 'false')).includes('false')
+                    }>
+                    Setujui
                   </Button>
                 </Stack>
               )}
