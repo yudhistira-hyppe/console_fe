@@ -64,7 +64,7 @@ const TopBoosted = (props) => {
           <Typography style={{ width: 200, fontSize: 14, fontWeight: 'bold' }}>Post</Typography>
           <Typography style={{ width: 270, fontSize: 14, fontWeight: 'bold' }}>ID Post</Typography>
           <Typography style={{ width: 100, fontSize: 14, fontWeight: 'bold' }}>Tipe Konten</Typography>
-          <Typography style={{ fontSize: 14, fontWeight: 'bold' }}>Jangkauan</Typography>
+          <Typography style={{ width: 80, fontSize: 14, fontWeight: 'bold', textAlign: 'right' }}>Jangkauan</Typography>
         </Stack>
         <Stack direction="column" mt={3} gap="12px">
           {loading ? (
@@ -112,9 +112,9 @@ const TopBoosted = (props) => {
                   {item?.postID || '-'}
                 </Typography>
                 <Typography style={{ width: 100, fontSize: 14, fontWeight: 'bold', color: '#00000099' }}>
-                  {item?.postType || '-'}
+                  {item?.type || '-'}
                 </Typography>
-                <Typography style={{ fontWeight: 'bold', fontSize: 14, color: '#00000099' }}>
+                <Typography style={{ width: 80, fontWeight: 'bold', fontSize: 14, color: '#00000099', textAlign: 'right' }}>
                   {numberWithCommas(item?.jangkauan)}
                 </Typography>
               </Stack>
