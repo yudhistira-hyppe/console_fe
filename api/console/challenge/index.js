@@ -62,7 +62,7 @@ export const challengeApi = createApi({
     }),
     createChallenge: build.mutation({
       query: (data) => ({
-        url: '/challenge',
+        url: '/challenge/v2',
         method: 'POST',
         body: data,
       }),
