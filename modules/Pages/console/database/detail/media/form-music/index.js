@@ -75,41 +75,51 @@ const FormMusic = (props) => {
 
     setLoading(true);
     const toastId = toast.loading('Loading create...', { id: 'create' });
-    handleApsaraMedia().then((res) => {
-      onMediaUpload(
-        res,
-        uploadFileMedia,
-        () => {
-          bodyData = { ...bodyData, apsaraMusic: res.VideoId };
-          handleApsaraImage().then((res) => {
-            onImageUpload(
-              res,
-              uploadFileImage,
-              () => {
-                bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
-                createMusic(bodyData).then((res) => {
-                  if (res?.error) {
-                    toast.error(res?.error?.data?.message, { id: toastId });
-                  } else if (res?.data) {
-                    router.push('/database/music');
-                    toast.success('Berhasil membuat musik', { id: toastId });
-                  }
-                  setLoading(false);
-                });
-              },
-              () => {
+    handleApsaraMedia()
+      .then((res) => {
+        onMediaUpload(
+          res,
+          uploadFileMedia,
+          () => {
+            bodyData = { ...bodyData, apsaraMusic: res.VideoId };
+            handleApsaraImage()
+              .then((res) => {
+                onImageUpload(
+                  res,
+                  uploadFileImage,
+                  () => {
+                    bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
+                    createMusic(bodyData).then((res) => {
+                      if (res?.error) {
+                        toast.error(res?.error?.data?.message, { id: toastId });
+                      } else if (res?.data) {
+                        router.push('/database/music');
+                        toast.success('Berhasil membuat musik', { id: toastId });
+                      }
+                      setLoading(false);
+                    });
+                  },
+                  () => {
+                    toast.error('upload thumnail ke apsara gagal', { id: toastId });
+                    setLoading(false);
+                  },
+                );
+              })
+              .catch((err) => {
                 toast.error('upload thumnail ke apsara gagal', { id: toastId });
                 setLoading(false);
-              },
-            );
-          });
-        },
-        () => {
-          toast.error('upload media ke apsara gagal', { id: toastId });
-          setLoading(false);
-        },
-      );
-    });
+              });
+          },
+          () => {
+            toast.error('upload media ke apsara gagal', { id: toastId });
+            setLoading(false);
+          },
+        );
+      })
+      .catch((err) => {
+        toast.error('upload media ke apsara gagal', { id: toastId });
+        setLoading(false);
+      });
 
     setModal({ ...modal, save: !modal.save });
   };
@@ -121,28 +131,33 @@ const FormMusic = (props) => {
     setLoading(true);
     const toastId = toast.loading('Loading update...', { id: 'update' });
     if (bodyData.apsaraThumnail !== data?.apsaraThumnail) {
-      handleApsaraImage().then((res) => {
-        onImageUpload(
-          res,
-          uploadFileImage,
-          () => {
-            bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
-            updateMusic(bodyData).then((res) => {
-              if (res?.error) {
-                toast.error(res?.error?.data?.message, { id: toastId });
-              } else if (res?.data) {
-                router.push('/database/music');
-                toast.success('Berhasil memperbarui musik', { id: toastId });
-              }
+      handleApsaraImage()
+        .then((res) => {
+          onImageUpload(
+            res,
+            uploadFileImage,
+            () => {
+              bodyData = { ...bodyData, apsaraThumnail: res.ImageId };
+              updateMusic(bodyData).then((res) => {
+                if (res?.error) {
+                  toast.error(res?.error?.data?.message, { id: toastId });
+                } else if (res?.data) {
+                  router.push('/database/music');
+                  toast.success('Berhasil memperbarui musik', { id: toastId });
+                }
+                setLoading(false);
+              });
+            },
+            () => {
+              toast.error('upload thumnail ke apsara gagal', { id: toastId });
               setLoading(false);
-            });
-          },
-          () => {
-            toast.error('upload thumnail ke apsara gagal', { id: toastId });
-            setLoading(false);
-          },
-        );
-      });
+            },
+          );
+        })
+        .catch((err) => {
+          toast.error('upload thumnail ke apsara gagal', { id: toastId });
+          setLoading(false);
+        });
     } else {
       updateMusic(bodyData).then((res) => {
         if (res?.error) {
