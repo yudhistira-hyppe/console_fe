@@ -11,6 +11,14 @@ const uploadMedia = (videoUploadDestination, file, onFinish, onFail) => {
       parallel: 5,
       retryCount: 3,
       retryDuration: 2,
+
+      onUploadSucceed: function (uploadInfo) {
+        onFinish();
+      },
+
+      onUploadFailed: function (uploadInfo, code, message) {
+        onFail();
+      },
     });
 
     uploader.setUploadAuthAndAddress(
@@ -19,10 +27,9 @@ const uploadMedia = (videoUploadDestination, file, onFinish, onFail) => {
       videoUploadDestination.uploadAddress,
       videoUploadDestination.videoId,
     );
+
     uploader.addFile(file, null, null, null, '{"Vod":{"TemplateGroupId":"718c22b61310ede75f3aa68b33c8db1d"}}');
     uploader.startUpload();
-
-    onFinish();
   } else {
     onFail();
   }
