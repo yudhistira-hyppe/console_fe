@@ -26,7 +26,7 @@ export default function ModalSave({ showModal, onClose, onConfirm }) {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Stack direction="column" alignItems="center" gap="8px">
-            <img src="/images/save-media.png" style={{ width: 150 }} />
+            <img src={'/images/music-media.png'} style={{ width: 150 }} />
             <Typography style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 24 }}>Simpan & Post Musik ?</Typography>
             <Typography style={{ textAlign: 'center' }}>
               Kamu akan menyimpan musik ini. Musik akan tersedia di aplikasi Hyppe untuk digunakan
