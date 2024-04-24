@@ -13,6 +13,7 @@ import { DateRange, RemoveCircleOutline } from '@material-ui/icons';
 import moment from 'moment';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import DelayedTextField from 'modules/Components/CommonComponent/DelayedTextField';
 
 const SearchSection = ({ filter, handleChange }) => {
   const classes = useStyles();
@@ -64,6 +65,24 @@ const SearchSection = ({ filter, handleChange }) => {
   return (
     <>
       <Box className={classes.inBuildAppCard} p={5} pt={2} maxWidth={270} style={{ height: 'fit-content' }}>
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Username / Email</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <DelayedTextField
+              fullWidth
+              waitForInput={true}
+              placeholder="Cari username / email"
+              name="search"
+              filterValue={filter.search}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+              color="secondary"
+            />
+          </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
         <Accordion elevation={0} defaultExpanded disableGutters>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px', minHeight: '0px' }}>
             <Typography style={{ fontSize: '13px' }}>Tanggal Penggunaan</Typography>

@@ -53,7 +53,9 @@ const TableSection = ({ filterList, handleDeleteFilter, listReferral, filter, ha
                       key={key}
                       label={item.value}
                       onDelete={() => {
-                        if (item.parent === 'createdAt') {
+                        if (item.parent === 'search') {
+                          handleDeleteFilter(item.parent, '');
+                        } else if (item.parent === 'createdAt') {
                           handleDeleteFilter(item.parent, [null, null]);
                         } else {
                           handleDeleteFilter(item.parent, item.value);
@@ -111,7 +113,16 @@ const TableSection = ({ filterList, handleDeleteFilter, listReferral, filter, ha
                             <Typography variant="body1" style={{ fontSize: 14, width: 120 }}>
                               {item?.childFullName || '-'}
                             </Typography>
-                            <Typography variant="body1" style={{ fontSize: 12, width: 120, color: '#00000099' }}>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                fontSize: 12,
+                                width: 120,
+                                color: '#00000099',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}>
                               {item?.children || '-'}
                             </Typography>
                           </Stack>
