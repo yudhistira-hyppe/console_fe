@@ -387,19 +387,19 @@ const SearchSection = ({ filter, handleChange }) => {
           <AccordionDetails style={{ padding: 0 }}>
             <FormGroup onChange={(e) => handleChange('type', e.target.value)}>
               <FormControlLabel
-                label={'Tamu'}
-                value="GUEST"
-                control={<Checkbox checked={filter.type.includes('GUEST')} color="secondary" />}
+                label="Tamu"
+                value="Tamu"
+                control={<Checkbox checked={filter.type.includes('Tamu')} color="secondary" />}
               />
               <FormControlLabel
-                label={'Basic'}
-                value="BASIC"
-                control={<Checkbox checked={filter.type.includes('BASIC')} color="secondary" />}
+                label="Terdaftar"
+                value="Terdaftar"
+                control={<Checkbox checked={filter.type.includes('Terdaftar')} color="secondary" />}
               />
               <FormControlLabel
-                label={'Premium'}
-                value="PREMIUM"
-                control={<Checkbox checked={filter.type.includes('PREMIUM')} color="secondary" />}
+                label="Terverifikasi"
+                value="Terverifikasi"
+                control={<Checkbox checked={filter.type.includes('Terverifikasi')} color="secondary" />}
               />
             </FormGroup>
           </AccordionDetails>
