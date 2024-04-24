@@ -14,6 +14,7 @@ const DetailDatabaseAccountReferralList = ({ email }) => {
     limit: 10,
     labelTanggal: '',
     createdAt: [null, null],
+    type: [],
   });
   const [filterList, setFilterList] = useState([]);
 
@@ -27,6 +28,10 @@ const DetailDatabaseAccountReferralList = ({ email }) => {
     });
     filter.createdAt[0] && Object.assign(params, { from: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { to: filter.createdAt[1] });
+    filter.type.length >= 1 &&
+      Object.assign(params, {
+        jenis: filter.type.map((item) => (item === 'Tamu' ? 'GUEST' : item === 'Terdaftar' ? 'BASIC' : 'PREMIUM')),
+      });
 
     return params;
   };
@@ -89,6 +94,14 @@ const DetailDatabaseAccountReferralList = ({ email }) => {
         return { ...prevVal, createdAt: value, page: 0 };
       } else if (kind === 'labelTanggal') {
         return { ...prevVal, labelTanggal: value, page: 0 };
+      } else if (kind === 'type') {
+        return {
+          ...prevVal,
+          type: filter.type.find((item) => item === value)
+            ? filter.type.filter((item) => item !== value)
+            : [...filter.type, value],
+          page: 0,
+        };
       } else if (kind === 'clearAll') {
         return {
           page: 0,
@@ -96,6 +109,7 @@ const DetailDatabaseAccountReferralList = ({ email }) => {
           descending: 'true',
           labelTanggal: '',
           createdAt: [null, null],
+          type: [],
         };
       } else {
         return { ...prevVal };

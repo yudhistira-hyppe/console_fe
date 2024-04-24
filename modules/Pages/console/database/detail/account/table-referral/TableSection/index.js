@@ -83,6 +83,7 @@ const TableSection = ({ filterList, handleDeleteFilter, listReferral, filter, ha
                   <TableCell align="left">Pengguna</TableCell>
                   <TableCell align="left">Umur</TableCell>
                   <TableCell align="left">Jenis Kelamin</TableCell>
+                  <TableCell align="left">Jenis Akun</TableCell>
                   <TableCell align="left">Lokasi</TableCell>
                 </TableRow>
               </TableHead>
@@ -122,11 +123,19 @@ const TableSection = ({ filterList, handleDeleteFilter, listReferral, filter, ha
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
-                        <Typography variant="body1" style={{ fontSize: '12px', width: 160 }}>
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
                           {item?.childGender === 'FEMALE' && 'Perempuan'}
                           {item?.childGender === 'MALE' && 'Laki-laki'}
                           {item?.childGender === 'OTHER' && 'Lainnya'}
                           {!item?.childGender && 'Lainnya'}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Typography variant="body1" style={{ fontSize: '12px', width: 80 }}>
+                          {item?.jenis === 'PREMIUM' && 'Terverifikasi'}
+                          {item?.jenis === 'BASIC' && 'Terdaftar'}
+                          {item?.jenis === 'GUEST' && 'Tamu'}
+                          {!item?.jenis && '-'}
                         </Typography>
                       </TableCell>
                       <TableCell align="left">
