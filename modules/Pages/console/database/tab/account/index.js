@@ -50,7 +50,10 @@ const DatabaseTabAccountComponent = () => {
       Object.assign(params, { gender: filter.gender.map((item) => (item === 'Perempuan' ? 'FEMALE' : 'MALE')) });
     filter.area.length >= 1 && Object.assign(params, { lokasi: filter.area.map((item) => item?._id) });
     filter.age !== '' && Object.assign(params, { startage: filter.rangeAge[0], endage: filter.rangeAge[1] });
-    filter.type.length >= 1 && Object.assign(params, { jenis: filter.type.map((item) => item) });
+    filter.type.length >= 1 &&
+      Object.assign(params, {
+        jenis: filter.type.map((item) => (item === 'Tamu' ? 'GUEST' : item === 'Terdaftar' ? 'BASIC' : 'PREMIUM')),
+      });
     filter.createdAt[0] && Object.assign(params, { startdate: filter.createdAt[0] });
     filter.createdAt[1] && Object.assign(params, { enddate: filter.createdAt[1] });
     filter.rangeOnline[0] && Object.assign(params, { startlogin: filter.rangeOnline[0] });

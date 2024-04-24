@@ -272,6 +272,32 @@ const SearchSection = ({ filter, handleChange }) => {
               />
             </Popover>
           </AccordionDetails>
+          <Divider style={{ marginTop: 16 }} />
+        </Accordion>
+
+        <Accordion elevation={0} defaultExpanded disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ padding: '0px' }}>
+            <Typography style={{ fontSize: '13px' }}>Tipe Akun</Typography>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: 0 }}>
+            <FormGroup onChange={(e) => handleChange('type', e.target.value)}>
+              <FormControlLabel
+                label="Tamu"
+                value="Tamu"
+                control={<Checkbox checked={filter.type.includes('Tamu')} color="secondary" />}
+              />
+              <FormControlLabel
+                label="Terdaftar"
+                value="Terdaftar"
+                control={<Checkbox checked={filter.type.includes('Terdaftar')} color="secondary" />}
+              />
+              <FormControlLabel
+                label="Terverifikasi"
+                value="Terverifikasi"
+                control={<Checkbox checked={filter.type.includes('Terverifikasi')} color="secondary" />}
+              />
+            </FormGroup>
+          </AccordionDetails>
         </Accordion>
       </Box>
     </>
