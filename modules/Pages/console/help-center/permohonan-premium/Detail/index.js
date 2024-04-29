@@ -34,6 +34,7 @@ import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
 import moment from 'moment/moment';
 import { isEmpty } from 'lodash';
+import toast from 'react-hot-toast';
 
 const breadcrumbs = [
   { label: 'Pusat Bantuan', link: '/help-center' },
@@ -119,9 +120,14 @@ const DetailPermohonanPremium = () => {
       status: val?.reason ? 'DITOLAK' : 'DISETUJUI',
     };
 
-    approveKYC(data).then(() => {
+    approveKYC(data).then((res) => {
+      if (res?.data) {
+        router.replace('/help-center/permohonan-premium');
+        toast.success(val?.reason ? 'Berhasil menolak permohonan premium' : 'Berhasil menyetujui permohonan premium');
+      } else {
+        toast.error(res?.error?.data?.message || 'Terjadi kesalahan, silahkan coba lagi');
+      }
       setLoading(false);
-      router.replace('/help-center/permohonan-premium');
       val?.reason ? setModal({ ...modal, reject: !modal.reject }) : setModal({ ...modal, approve: !modal.approve });
     });
   };
