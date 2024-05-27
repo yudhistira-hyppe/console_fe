@@ -56,7 +56,7 @@ export const kontenApi = createApi({
     }),
     deleteTicket: build.mutation({
       query: (data) => ({
-        url: '/reportuser/delete',
+        url: '/reportuser/delete/v2',
         method: 'POST',
         body: data,
       }),
