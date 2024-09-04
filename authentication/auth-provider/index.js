@@ -82,6 +82,7 @@ export const useProvideAuth = () => {
     login(user).then((result) => {
       if (result?.data) {
         if (result?.data?.data?.roles?.includes('ROLE_ADMIN')) {
+          console.log(result?.data);
           onHandleSuccessLogin(user, result?.data, isRememberUser);
           return toast.success('Login Berhasil', { id: 'signin' });
         } else {
